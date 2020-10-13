@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
 import com.mapbox.services.android.navigation.v5.milestone.MilestoneEventListener;
-import com.mapbox.services.android.navigation.v5.navigation.metrics.NavigationMetricListener;
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener;
 import com.mapbox.services.android.navigation.v5.route.FasterRouteListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener;
@@ -26,7 +25,6 @@ class NavigationEventDispatcher {
   private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
   private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
   private CopyOnWriteArrayList<FasterRouteListener> fasterRouteListeners;
-  private NavigationMetricListener metricEventListener;
   private RouteUtils routeUtils;
 
   NavigationEventDispatcher() {
@@ -140,7 +138,6 @@ class NavigationEventDispatcher {
   }
 
   void onProgressChange(Location location, RouteProgress routeProgress) {
-    sendMetricProgressUpdate(routeProgress);
     for (ProgressChangeListener progressChangeListener : progressChangeListeners) {
       progressChangeListener.onProgressChange(location, routeProgress);
     }
@@ -149,9 +146,6 @@ class NavigationEventDispatcher {
   void onUserOffRoute(Location location) {
     for (OffRouteListener offRouteListener : offRouteListeners) {
       offRouteListener.userOffRoute(location);
-    }
-    if (metricEventListener != null) {
-      metricEventListener.onOffRouteEvent(location);
     }
   }
 
@@ -167,25 +161,9 @@ class NavigationEventDispatcher {
     }
   }
 
-  void addMetricEventListeners(NavigationMetricListener eventListeners) {
-    if (metricEventListener == null) {
-      metricEventListener = eventListeners;
-    }
-  }
-
   private void checkForArrivalEvent(RouteProgress routeProgress, Milestone milestone) {
-    if (metricEventListener != null && routeUtils.isArrivalEvent(routeProgress, milestone)) {
-      metricEventListener.onArrival(routeProgress);
-      if (routeUtils.isLastLeg(routeProgress)) {
-        removeOffRouteListener(null);
-        metricEventListener = null;
-      }
-    }
-  }
-
-  private void sendMetricProgressUpdate(RouteProgress routeProgress) {
-    if (metricEventListener != null) {
-      metricEventListener.onRouteProgressUpdate(routeProgress);
+    if (routeUtils.isLastLeg(routeProgress)) {
+      removeOffRouteListener(null);
     }
   }
 }
