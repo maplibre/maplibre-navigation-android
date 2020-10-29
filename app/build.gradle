@@ -45,8 +45,6 @@ dependencies {
     // Flitsmeister Navigation SDK
     implementation project(':libandroid-navigation')
     implementation dependenciesList.mapboxMapSdk
-    api project(path: ':libandroid-core')
-    api project(path: ':libandroid-location')
 
     // Support libraries
     implementation dependenciesList.supportAppcompatV7
