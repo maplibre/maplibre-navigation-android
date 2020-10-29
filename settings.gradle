@@ -1,2 +1,4 @@
+include ':libandroid-location'
+include ':libandroid-core'
 include ':app'
 include ':libandroid-navigation'

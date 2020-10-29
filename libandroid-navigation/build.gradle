@@ -41,7 +41,8 @@ android {
 }
 
 dependencies {
-  api dependenciesList.mapboxSdkCore
+  api project(path: ':libandroid-core')
+  api project(path: ':libandroid-location')
   api dependenciesList.mapboxSdkServices
   api dependenciesList.mapboxSdkTurf
   implementation dependenciesList.mapboxMapSdk
