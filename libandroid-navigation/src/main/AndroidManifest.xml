@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.mapbox.services.android.navigation">
+          package="com.mapbox.services.android.navigation">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,6 +12,9 @@
             android:exported="false"
             android:initOrder="100"
             tools:node="remove" />
+        <service android:name="com.mapbox.services.android.navigation.v5.navigation.NavigationService"/>
+        <!-- Include the telemetry service to simplify set up (https://www.mapbox.com/telemetry) -->
+        <service android:name="com.mapbox.services.android.telemetry.service.TelemetryService"/>
     </application>
 
 </manifest>
