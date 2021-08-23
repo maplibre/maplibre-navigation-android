@@ -3,67 +3,68 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
-  compileSdkVersion androidVersions.compileSdkVersion
-  buildToolsVersion androidVersions.buildToolsVersion
+    compileSdkVersion androidVersions.compileSdkVersion
+    buildToolsVersion androidVersions.buildToolsVersion
 
-  defaultConfig {
-    minSdkVersion androidVersions.minSdkVersion
-    targetSdkVersion androidVersions.targetSdkVersion
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    defaultConfig {
+        minSdkVersion androidVersions.minSdkVersion
+        targetSdkVersion androidVersions.targetSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-    buildConfigField('String',
-        "MAPBOX_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "mapbox-navigation-android")
-    )
-    buildConfigField('String',
-        "MAPBOX_NAVIGATION_VERSION_NAME", String.format("\"%s\"", project.VERSION_NAME)
-    )
-    buildConfigField "String",
-        "MAPBOX_NAVIGATION_EVENTS_USER_AGENT", String.format("\"mapbox-navigation-android/%s\"",
-        project.VERSION_NAME
-    )
-    consumerProguardFiles 'proguard-consumer.pro'
-  }
-
-  configurations {
-    javadocDeps
-  }
-
-  buildTypes {
-    debug {
-      testCoverageEnabled = true
+        buildConfigField('String',
+                "MAPBOX_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "mapbox-navigation-android")
+        )
+        buildConfigField('String',
+                "MAPBOX_NAVIGATION_VERSION_NAME", String.format("\"%s\"", project.VERSION_NAME)
+        )
+        buildConfigField "String",
+                "MAPBOX_NAVIGATION_EVENTS_USER_AGENT", String.format("\"mapbox-navigation-android/%s\"",
+                project.VERSION_NAME
+        )
+        consumerProguardFiles 'proguard-consumer.pro'
     }
-  }
 
-  testOptions {
-    unitTests.returnDefaultValues = true
-    unitTests.includeAndroidResources = true
-  }
+    configurations {
+        javadocDeps
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
-  api dependenciesList.mapboxSdkCore
-  api dependenciesList.mapboxSdkServices
-  api dependenciesList.mapboxSdkTurf
-  implementation dependenciesList.mapboxMapSdk
+    api dependenciesList.mapboxSdkServices
+    api dependenciesList.mapboxSdkTurf
+    implementation dependenciesList.mapboxMapSdk
 
-  // Support
-  implementation dependenciesList.supportAppcompatV7
+    compileOnly "com.google.android.gms:play-services-location:17.1.0"
 
-  // Logging
-  implementation dependenciesList.timber
+    // Support
+    implementation dependenciesList.supportAppcompatV7
 
-  // AutoValues
-  annotationProcessor dependenciesList.autoValue
-  compileOnly dependenciesList.autoValue
+    // Logging
+    implementation dependenciesList.timber
 
-  // Unit testing
-  testImplementation dependenciesList.junit
-  testImplementation dependenciesList.mockito
-  testImplementation dependenciesList.hamcrest
-  testImplementation dependenciesList.commonsIO
-  testImplementation dependenciesList.robolectric
-  compile "androidx.core:core-ktx:+"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // AutoValues
+    annotationProcessor dependenciesList.autoValue
+    compileOnly dependenciesList.autoValue
+
+    // Unit testing
+    testImplementation dependenciesList.junit
+    testImplementation dependenciesList.mockito
+    testImplementation dependenciesList.hamcrest
+    testImplementation dependenciesList.commonsIO
+    testImplementation dependenciesList.robolectric
+    compile "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply from: 'javadoc.gradle'
@@ -73,5 +74,5 @@ apply from: "${rootDir}/gradle/jacoco.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
