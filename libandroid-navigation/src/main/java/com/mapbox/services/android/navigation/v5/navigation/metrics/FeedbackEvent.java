@@ -2,10 +2,9 @@ package com.mapbox.services.android.navigation.v5.navigation.metrics;
 
 import androidx.annotation.StringDef;
 
-import com.mapbox.android.telemetry.TelemetryUtils;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.UUID;
 
 public class FeedbackEvent implements TelemetryEvent {
 
@@ -62,7 +61,7 @@ public class FeedbackEvent implements TelemetryEvent {
     this.feedbackSessionState = sessionState;
     this.feedbackSource = feedbackSource;
     this.feedbackType = FEEDBACK_TYPE_GENERAL_ISSUE; // Default until updated
-    this.eventId = TelemetryUtils.obtainUniversalUniqueIdentifier();
+    this.eventId = UUID.randomUUID().toString();
     this.screenshot = "";
   }
 

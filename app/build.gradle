@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -43,8 +43,14 @@ android {
 
 dependencies {
     // Flitsmeister Navigation SDK
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation project(':libandroid-navigation')
-    implementation dependenciesList.mapboxMapSdk
+    implementation(dependenciesList.mapLibreVersion) {
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
+    }
+
+    implementation dependenciesList.mapLibreAnnotations
 
     // Support libraries
     implementation dependenciesList.supportAppcompatV7

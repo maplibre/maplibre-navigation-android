@@ -77,6 +77,11 @@ public class RouteUtils {
       .equals(directionsRoute.geometry());
   }
 
+
+  public boolean isArrivalEvent(@NonNull RouteProgress routeProgress) {
+    return false;
+  }
+
   /**
    * Looks at the current {@link RouteProgress} maneuverType for type "arrival", then
    * checks if the arrival meter threshold has been hit.

@@ -27,7 +27,7 @@ public abstract class FasterRoute {
    * be retrieved by {@link RouteFetcher}.
    * <p>
    * It will also be called every time
-   * the <tt>NavigationEngine</tt> gets a valid {@link Location} update.
+   * the <code>NavigationEngine</code> gets a valid {@link Location} update.
    * <p>
    * The most recent snapped location and route progress are provided.  Both can be used to
    * determine if a new route should be fetched or not.

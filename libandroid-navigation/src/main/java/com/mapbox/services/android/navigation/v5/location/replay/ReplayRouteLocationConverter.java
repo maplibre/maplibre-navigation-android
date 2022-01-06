@@ -1,7 +1,6 @@
 package com.mapbox.services.android.navigation.v5.location.replay;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.core.constants.Constants;
@@ -19,7 +18,8 @@ class ReplayRouteLocationConverter {
     private static final int ONE_SECOND_IN_MILLISECONDS = 1000;
     private static final double ONE_KM_IN_METERS = 1000d;
     private static final int ONE_HOUR_IN_SECONDS = 3600;
-    private static final String REPLAY_ROUTE = "ReplayRouteLocation";
+    private static final String REPLAY_ROUTE = "com.mapbox.services.android.navigation.v5.location.replay"
+            + ".ReplayRouteLocationEngine";
     private DirectionsRoute route;
     private int speed;
     private int delay;
@@ -51,6 +51,10 @@ class ReplayRouteLocationConverter {
         return mockedLocations;
     }
 
+    boolean isMultiLegRoute() {
+        return route.legs().size() > 1;
+    }
+
     void initializeTime() {
         time = System.currentTimeMillis();
     }
@@ -80,18 +84,18 @@ class ReplayRouteLocationConverter {
     }
 
     List<Location> calculateMockLocations(List<Point> points) {
+        List<Point> pointsToCopy = new ArrayList<>(points);
         List<Location> mockedLocations = new ArrayList<>();
-        for(int i = 0; i < points.size(); i++){
-            Location mockedLocation = createMockLocationFrom(points.get(i));
+        for (Point point : points) {
+            Location mockedLocation = createMockLocationFrom(point);
 
-            if (i - 1 >= 0) {
-                double bearing = TurfMeasurement.bearing(points.get(i - 1), points.get(i));
+            if (pointsToCopy.size() >= 2) {
+                double bearing = TurfMeasurement.bearing(point, pointsToCopy.get(1));
                 mockedLocation.setBearing((float) bearing);
-            }else{
-                mockedLocation.setBearing(0);
             }
             time += delay * ONE_SECOND_IN_MILLISECONDS;
             mockedLocations.add(mockedLocation);
+            pointsToCopy.remove(point);
         }
 
         return mockedLocations;

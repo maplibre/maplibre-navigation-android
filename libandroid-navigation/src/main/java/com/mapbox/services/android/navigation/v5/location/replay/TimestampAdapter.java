@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.v5.location.replay;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -13,6 +15,7 @@ import java.util.TimeZone;
 
 class TimestampAdapter extends TypeAdapter<Date> {
   private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+  @SuppressLint("SimpleDateFormat")
   private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
   private static final String UTC = "UTC";
 

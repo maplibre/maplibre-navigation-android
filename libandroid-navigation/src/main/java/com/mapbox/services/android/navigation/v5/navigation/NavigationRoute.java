@@ -20,6 +20,7 @@ import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Interceptor;
@@ -234,6 +235,17 @@ public final class NavigationRoute {
         }
 
         /**
+         * Enables a route to be refreshable
+         *
+         * @param enableRefresh whether or not to enable refresh
+         * @return this builder for chaining options together
+         */
+        public Builder enableRefresh(boolean enableRefresh) {
+            directionsBuilder.enableRefresh(enableRefresh);
+            return this;
+        }
+
+        /**
          * This can be used to set up to 23 additional in-between points which will act as pit-stops
          * along the users route. Note that if you are using the
          * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
@@ -321,7 +333,7 @@ public final class NavigationRoute {
         /**
          * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
          * dictates the angle of approach. This option should always be used in conjunction with the
-         * {@link #radiuses(double...)} parameter.
+         * {@link #radiuses(List)} } parameter.
          * <p>
          * The parameter takes two values per waypoint: the first is an angle clockwise from true north
          * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend
@@ -368,7 +380,7 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder radiuses(@FloatRange(from = 0) double... radiuses) {
+        public Builder radiuses(@NonNull List<Double> radiuses) {
             directionsBuilder.radiuses(radiuses);
             return this;
         }
@@ -455,11 +467,11 @@ public final class NavigationRoute {
 
         /**
          * Indicates from which side of the road to approach a waypoint.
-         * Accepts <tt>unrestricted</tt> (default), <tt>curb</tt> or <tt>null</tt>.
-         * If set to <tt>unrestricted</tt>, the route can approach waypoints
-         * from either side of the road. If set to <tt>curb</tt>, the route will be returned
+         * Accepts <code>unrestricted</code> (default), <code>curb</code> or <code>null</code>.
+         * If set to <code>unrestricted</code>, the route can approach waypoints
+         * from either side of the road. If set to <code>curb</code>, the route will be returned
          * so that on arrival, the waypoint will be found on the side that corresponds with the
-         * <tt>driving_side</tt> of the region in which the returned route is located.
+         * <code>driving_side</code> of the region in which the returned route is located.
          * If provided, the list of approaches must be the same length as the list of waypoints.
          *
          * @param approaches null if you'd like the default approaches,
@@ -475,9 +487,9 @@ public final class NavigationRoute {
 
         /**
          * Custom names for waypoints used for the arrival instruction,
-         * each separated by <tt>;</tt>. Values can be any string and total number of all characters cannot
-         * exceed 500. If provided, the list of <tt>waypointNames</tt> must be the same length as the list of
-         * coordinates, but you can skip a coordinate and show its position with the <tt>;</tt> separator.
+         * each separated by <code>;</code>. Values can be any string and total number of all characters cannot
+         * exceed 500. If provided, the list of <code>waypointNames</code> must be the same length as the list of
+         * coordinates, but you can skip a coordinate and show its position with the <code>;</code> separator.
          *
          * @param waypointNames Custom names for waypoints used for the arrival instruction.
          * @return this builder for chaining options together

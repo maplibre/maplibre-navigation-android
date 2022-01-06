@@ -1,5 +1,6 @@
 package com.mapbox.services.android.navigation.v5.location.replay;
 
+import android.annotation.SuppressLint;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ class GpxParser {
   private static final String GPX_LOCATION_NAME = "GPX Generated Location";
   private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+  @SuppressLint("SimpleDateFormat")
   private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
 
   @Nullable

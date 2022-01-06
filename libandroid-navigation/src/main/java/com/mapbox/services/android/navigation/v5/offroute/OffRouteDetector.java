@@ -48,7 +48,7 @@ public class OffRouteDetector extends OffRoute {
    * Checks if the user is close the upcoming step.  At this point, the user is considered off-route.
    * But, if the location update is within the {@link MapboxNavigationOptions#maneuverZoneRadius()} of the
    * upcoming step, this method will return false as well as send fire {@link OffRouteCallback#onShouldIncreaseIndex()}
-   * to let the <tt>NavigationEngine</tt> know that the
+   * to let the <code>NavigationEngine</code> know that the
    * step index should be increased on the next location update.
    *
    * @return true if the users off-route, else false.
@@ -162,7 +162,7 @@ public class OffRouteDetector extends OffRoute {
    * is within the maneuver radius.
    * <p>
    * If it is, fire {@link OffRouteCallback#onShouldIncreaseIndex()} to increase the step
-   * index in the <tt>NavigationEngine</tt> and return true.
+   * index in the <code>NavigationEngine</code> and return true.
    *
    * @param options      for maneuver zone radius
    * @param callback     to increase step index

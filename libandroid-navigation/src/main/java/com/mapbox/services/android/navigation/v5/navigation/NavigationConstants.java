@@ -17,6 +17,33 @@ public final class NavigationConstants {
   }
 
   /**
+   * Defines the minimum zoom level of the displayed map.
+   */
+  public static final double NAVIGATION_MINIMUM_MAP_ZOOM = 7d;
+
+  public static final double NAVIGATION_MAXIMUM_MAP_ZOOM = 18d;
+
+  /**
+   * Maximum duration of the zoom/tilt adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION = 1500L;
+
+  /**
+   * NavigationLauncher key for storing initial map position in Intent
+   */
+  public static final String NAVIGATION_VIEW_INITIAL_MAP_POSITION = "navigation_view_initial_map_position";
+
+  /**
+   * Minimum duration of the zoom adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION = 300L;
+
+  /**
+   * Minimum duration of the tilt adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION = 750L;
+
+  /**
    * If default voice instructions are enabled, this identifier will be used to differentiate them
    * from custom milestones in the
    * {@link com.mapbox.services.android.navigation.v5.milestone.MilestoneEventListener}.
@@ -225,6 +252,7 @@ public final class NavigationConstants {
   public static final String STEP_MANEUVER_TYPE_ROUNDABOUT = "roundabout";
   public static final String STEP_MANEUVER_TYPE_ROTARY = "rotary";
   public static final String STEP_MANEUVER_TYPE_EXIT_ROTARY = "exit rotary";
+  public static final String STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT = "exit roundabout";
   public static final String STEP_MANEUVER_TYPE_ROUNDABOUT_TURN = "roundabout turn";
   public static final String STEP_MANEUVER_TYPE_NOTIFICATION = "notification";
 
