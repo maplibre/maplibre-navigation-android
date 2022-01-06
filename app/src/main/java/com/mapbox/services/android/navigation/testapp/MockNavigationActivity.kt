@@ -220,7 +220,7 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
             }
 
             val navigationRouteBuilder = NavigationRoute.builder(this).apply {
-                this.accessToken(accesstoken)
+                this.accessToken("pk.0")
                 this.origin(origin)
                 this.destination(destination)
                 this.voiceUnits(DirectionsCriteria.METRIC)
