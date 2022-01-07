@@ -30,9 +30,6 @@ jobs:
           name: Check Java code style
           command: make checkstyle
       - run:
-          name: Run unit-test and generate Jacoco test report
-          command: ./gradlew createDebugUnitTestCoverageReport
-      - run:
           name: Build release to test ProGuard rules
           command: ./gradlew app:assembleRelease
       - run:

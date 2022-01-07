@@ -20,6 +20,7 @@ import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Interceptor;
@@ -321,7 +322,7 @@ public final class NavigationRoute {
         /**
          * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
          * dictates the angle of approach. This option should always be used in conjunction with the
-         * {@link #radiuses(double...)} parameter.
+         * {@link #radiuses} parameter.
          * <p>
          * The parameter takes two values per waypoint: the first is an angle clockwise from true north
          * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend
@@ -368,7 +369,7 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder radiuses(@FloatRange(from = 0) double... radiuses) {
+        public Builder radiuses(@FloatRange(from = 0) List<Double> radiuses) {
             directionsBuilder.radiuses(radiuses);
             return this;
         }
