@@ -9,13 +9,13 @@
   </a>
 </p>
 
-The Flitsmeister Navigation SDK for Android is built on a fork of the [Mapbox Navigation SDK v0.19](https://github.com/flitsmeister/flitsmeister-navigation-android/tree/v0.19.0) which is build on top of the [Mapbox Directions API](https://www.mapbox.com/directions) and contains logic needed to get timed navigation instructions.
+The Maplibre Navigation SDK for Android is built on a fork of the [Mapbox Navigation SDK v0.19](https://github.com/flitsmeister/flitsmeister-navigation-android/tree/v0.19.0) which is build on top of the [Mapbox Directions API](https://www.mapbox.com/directions) and contains logic needed to get timed navigation instructions.
 
 With this SDK you can implement turn by turn navigation in your own Android app while hosting your own Map tiles and Directions API.
 
 # Why have we forked
 
-1. Mapbox decided to put a closed source component to their navigation SDK and introduced a non open source license. Flitsmeister wants an open source solution.
+1. Mapbox decided to put a closed source component to their navigation SDK and introduced a non open source license. Maplibre wants an open source solution.
 2. Mapbox decided to put telemetry in their SDK. We couldn't turn this off without adjusting the source.
 3. We want to use the SDK without paying Mapbox for each MAU and without Mapbox API keys.
 
@@ -24,13 +24,12 @@ All issues are covered with this SDK.
 # What have we changed
 
 - We completely removed the UI part from the SDK so it will only contain the logics for navigation and not the visuals.
-- We upgraded the [Mapbox Map SDK](https://github.com/mapbox/mapbox-gl-native/tree/master/platform/android) to version 8.5.0.
-- We upgraded the [Mapbox Core](https://github.com/mapbox/mapbox-events-android) to version 1.3.0.
+- We upgraded the [Mapbox Map SDK](https://github.com/mapbox/mapbox-gl-native/tree/master/platform/android) to [maplibre SDK](https://github.com/maplibre/maplibre-gl-native/tree/master/platform/android) version 9.4.0.
 - We upgraded the [NavigationRoute](https://github.com/flitsmeister/flitsmeister-navigation-android/blob/master/libandroid-navigation/src/main/java/com/mapbox/services/android/navigation/v5/navigation/NavigationRoute.java#L425) 
  with the possibility to add an intercepter to the request.
 - We changed the [locationLayerPlugin](https://github.com/mapbox/mapbox-plugins-android) to the [location component](https://docs.mapbox.com/android/api/map-sdk/8.5.0/com/mapbox/mapboxsdk/location/LocationComponent.html)
 - We updated the logic around the implementation of the locationEngine so it can be used with the new locationEngine from the [Mapbox SDK](https://github.com/mapbox/mapbox-gl-native/tree/master/platform/android).
-- We removed the telemetry class from the project. Nothing is being send to Mapbox or Flitsmeister.
+- We removed the telemetry class from the project. Nothing is being send to Mapbox or Maplibre.
 
 # Getting Started
 
