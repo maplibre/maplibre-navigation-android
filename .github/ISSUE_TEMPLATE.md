@@ -7,7 +7,7 @@ Hello and thanks for contributing! To help us diagnose your problem quickly, ple
 -->
 
 **Android API:**
-**Flitsmeister Navigation SDK version:**
+**Maplibre Navigation SDK version:**
 
 ### Steps to trigger behavior
 

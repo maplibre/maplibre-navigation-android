@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -41,11 +41,14 @@ android {
 }
 
 dependencies {
-    api dependenciesList.mapboxSdkServices
-    api dependenciesList.mapboxSdkTurf
-    implementation dependenciesList.mapboxMapSdk
+    api dependenciesList.mapLibreServices
+    api dependenciesList.mapLibreTurf
+    implementation(dependenciesList.mapLibre){
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
+    }
 
-    compileOnly "com.google.android.gms:play-services-location:17.1.0"
+    compileOnly dependenciesList.gmsLocation
 
     // Support
     implementation dependenciesList.supportAppcompatV7
@@ -63,14 +66,13 @@ dependencies {
     testImplementation dependenciesList.hamcrest
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric
-    compile "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply from: 'javadoc.gradle'
 apply from: "${rootDir}/gradle/mvn-push-android.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/jacoco.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 repositories {
