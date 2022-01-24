@@ -1,5 +1,6 @@
 package com.mapbox.services.android.navigation.testapp
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,9 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
+import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest
+import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import com.mapbox.mapboxsdk.location.modes.CameraMode
 import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
@@ -40,6 +44,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.lang.Exception
 import java.lang.ref.WeakReference
 
 class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -57,6 +62,7 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     private var waypoint: Point? = null
     private var locationComponent: LocationComponent? = null
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mock_navigation)
@@ -138,7 +144,7 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         navigationMapRoute = NavigationMapRoute(navigation, mapView, mapboxMap)
 
         mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(findViewById(R.id.container), "Tap map to place waypoint", BaseTransientBottomBar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.container), "Tap map to place waypoint", Snackbar.LENGTH_LONG).show()
 
         newOrigin()
 
@@ -206,7 +212,7 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
-            this.accessToken(accesstoken)
+            this.accessToken("pk.0")
             this.origin(origin)
             this.destination(destination)
             this.voiceUnits(DirectionsCriteria.METRIC)

@@ -492,14 +492,16 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     private void updateArrowShaftWith(List<Point> points) {
         LineString shaft = LineString.fromLngLats(points);
         arrowShaftGeoJsonFeature = Feature.fromGeometry(shaft);
-        arrowShaftGeoJsonSource.setGeoJson(arrowShaftGeoJsonFeature);
+        if(arrowShaftGeoJsonSource != null)
+            arrowShaftGeoJsonSource.setGeoJson(arrowShaftGeoJsonFeature);
     }
 
     private void updateArrowHeadWith(List<Point> points) {
         double azimuth = TurfMeasurement.bearing(points.get(points.size() - 2), points.get(points.size() - 1));
         arrowHeadGeoJsonFeature = Feature.fromGeometry(points.get(points.size() - 1));
         arrowHeadGeoJsonFeature.addNumberProperty(ARROW_BEARING, (float) MathUtils.wrap(azimuth, 0, MAX_DEGREES));
-        arrowHeadGeoJsonSource.setGeoJson(arrowHeadGeoJsonFeature);
+        if(arrowHeadGeoJsonSource != null)
+            arrowHeadGeoJsonSource.setGeoJson(arrowHeadGeoJsonFeature);
     }
 
     private void initializeUpcomingManeuverArrow() {

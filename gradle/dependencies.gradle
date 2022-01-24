@@ -2,39 +2,40 @@ ext {
 
     androidVersions = [
             minSdkVersion    : 15,
-            targetSdkVersion : 28,
-            compileSdkVersion: 28,
-            buildToolsVersion: '28.0.3'
+            targetSdkVersion : 30,
+            compileSdkVersion: 31,
+            buildToolsVersion: '30.0.3'
     ]
 
     version = [
-            mapboxMapSdk     : '9.2.1',
-            mapboxSdkServices: '4.8.0',
-            autoValue        : '1.5.4',
-            autoValueParcel  : '0.2.5',
-            junit            : '4.12',
-            supportLibVersion: '27.1.1',
-            constraintLayout : '1.1.2',
-            mockito          : '2.21.0',
-            hamcrest         : '2.0.0.0',
-            errorprone       : '2.3.1',
-            butterknife      : '8.8.1',
-            leakCanaryVersion: '1.6.1',
-            timber           : '4.7.1',
-            testRunnerVersion: '1.0.1',
-            espressoVersion  : '3.0.2',
-            spoonRunner      : '1.6.2',
-            commonsIO        : '2.6',
-            robolectric      : '4.0',
-            lifecycle        : '1.1.1',
-            picasso          : '2.71828',
-            gmsLocation      : '15.0.1'
+            mapLibreVersion     : '9.4.0',
+            mapLibreService     : '5.9.0',
+            mapLibreTurf        : '5.9.0',
+            mapLibreAnnotations : '1.0.0',
+            autoValue           : '1.5.4',
+            autoValueParcel     : '0.2.5',
+            junit               : '4.12',
+            supportLibVersion   : '28.0.0',
+            constraintLayout    : '1.1.2',
+            mockito             : '2.21.0',
+            hamcrest            : '2.0.0.0',
+            errorprone          : '2.3.1',
+            butterknife         : '8.8.1',
+            leakCanaryVersion   : '1.6.1',
+            timber              : '4.7.1',
+            testRunnerVersion   : '1.0.1',
+            espressoVersion     : '3.0.2',
+            spoonRunner         : '1.6.2',
+            commonsIO           : '2.6',
+            robolectric         : '4.0',
+            lifecycle           : '1.1.1',
+            picasso             : '2.71828',
+            gmsLocation         : '16.0.0'
     ]
 
     pluginVersion = [
             checkstyle       : '8.2',
             pmd              : '5.8.1',
-            jacoco           : '0.8.1',
             errorprone       : '0.0.13',
             coveralls        : '2.8.1',
             spotbugs         : '1.3',
@@ -44,10 +45,11 @@ ext {
     ]
 
     dependenciesList = [
-            // mapbox
-            mapboxMapSdk           : "com.mapbox.mapboxsdk:mapbox-android-sdk:${version.mapboxMapSdk}",
-            mapboxSdkServices      : "com.mapbox.mapboxsdk:mapbox-sdk-services:${version.mapboxSdkServices}",
-            mapboxSdkTurf          : "com.mapbox.mapboxsdk:mapbox-sdk-turf:${version.mapboxSdkServices}",
+            // maplibre
+            mapLibre               : "org.maplibre.gl:android-sdk:${version.mapLibreVersion}",
+            mapLibreServices       : "org.maplibre.gl:android-sdk-services:${version.mapLibreService}",
+            mapLibreTurf           : "org.maplibre.gl:android-sdk-turf:${version.mapLibreTurf}",
+            mapLibreAnnotations    : "org.maplibre.gl:android-plugin-annotation-v9:${version.mapLibreAnnotations}",
 
             // AutoValue
             autoValue              : "com.google.auto.value:auto-value:${version.autoValue}",
