@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://github.com/flitsmeister/flitsmeister-navigation-android/blob/master/.github/splash-image-android.png" alt="Flitsmeister Navigation Android Splash">
+  <img src="https://github.com/maplibre/maplibre-navigation-android/blob/main/.github/splash-image-android.png" alt="MapLibre Navigation Android Splash">
 </div>
 <br>
 <p align="center">
-  <a href="https://jitpack.io/#flitsmeister/flitsmeister-navigation-android">
-    <img src="https://jitpack.io/v/flitsmeister/flitsmeister-navigation-android.svg"
+  <a href="https://jitpack.io/#maplibre/maplibre-navigation-android">
+    <img src="https://jitpack.io/v/maplibre/maplibre-navigation-android.svg"
          alt="Jitpack">
   </a>
 </p>
@@ -47,7 +47,7 @@ Step 1. Add it in your root `build.gradle` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  implementation 'com.github.flitsmeister:flitsmeister-navigation-android:v1.0.4'
+  implementation 'com.github.maplibre:maplibre-navigation-android:1.1.1'
 ```
 
 ## maven
@@ -63,10 +63,10 @@ Step 1. Add it in your root `build.gradle` at the end of repositories:
 Step 2. Add the dependency
 ```
   <dependency>
-     <groupId>com.github.flitsmeister</groupId>
-     <artifactId>flitsmeister-navigation-android</artifactId>
-     <version>v1.0.0</version>
-  </dependency>
+	    <groupId>com.github.maplibre</groupId>
+	    <artifactId>maplibre-navigation-android</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
 ```
 
 ## sbt
@@ -76,7 +76,7 @@ Step 1. Add it in your `build.sbt` at the end of resolvers:
 ```
 Step 2. Add the dependency
 ```
-  libraryDependencies += "com.github.flitsmeister" % "flitsmeister-navigation-android" % "v1.0.4"	
+  libraryDependencies += "com.github.maplibre" % "maplibre-navigation-android" % "1.1.1"
 ```
 
 ## leiningen
@@ -86,19 +86,20 @@ Step 1. Add it in your `project.clj` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  :dependencies [[com.github.flitsmeister/flitsmeister-navigation-android "v1.0.4"]]
+  :dependencies [[com.github.maplibre/maplibre-navigation-android "1.1.1"]]	
 ```
 
+Optional (you can also leave it as an empty String):
 To run the [sample code](#sample-code) on a device or emulator, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in `developer-config.xml` found in the project. 
 
 # Getting Help
 
-- **Have a bug to report?** [Open an issue](https://github.com/flitsmeister/flitsmeister-navigation-android/issues). If possible, include the version of Flitsmeister Services, a full log, and a project that shows the issue.
-- **Have a feature request?** [Open an issue](https://github.com/flitsmeister/flitsmeister-navigation-android/issues/new). Tell us what the feature should do and why you want the feature.
+- **Have a bug to report?** [Open an issue](https://github.com/maplibre/maplibre-navigation-android/issues). If possible, include the version of MapLibre Services, a full log, and a project that shows the issue.
+- **Have a feature request?** [Open an issue](https://github.com/maplibre/maplibre-navigation-android/issues/new). Tell us what the feature should do and why you want the feature.
 
 ## <a name="sample-code">Sample code
 
-We've added one [navigation example](https://github.com/flitsmeister/flitsmeister-navigation-android/tree/master/app/src/main/java/com/mapbox/services/android/navigation/testapp/) to this repo's test app. We are planning to add more to help you get started with the SDK and to inspire you.
+We've added one [navigation example](https://github.com/maplibre/maplibre-navigation-android/tree/main/app/src/main/java/com/mapbox/services/android/navigation/testapp/) to this repo's test app. We are planning to add more to help you get started with the SDK and to inspire you.
 
 In order to see the map or calculate a route you need your own Maptile and Direction services.
 
