@@ -100,8 +100,12 @@ public class ReplayRouteLocationEngine implements LocationEngine, Runnable {
     public void run() {
         List<Location> nextMockedLocations = converter.toLocations();
         if (nextMockedLocations.isEmpty()) {
-            handler.removeCallbacks(this);
-            return;
+            if (converter.isMultiLegRoute()) {
+                nextMockedLocations = converter.toLocations();
+            } else {
+                handler.removeCallbacks(this);
+                return;
+            }
         }
         dispatcher.add(nextMockedLocations);
         mockedLocations.addAll(nextMockedLocations);
