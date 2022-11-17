@@ -2,9 +2,8 @@
   <img src="https://github.com/maplibre/maplibre-navigation-android/blob/main/.github/splash-image-android.png" alt="MapLibre Navigation Android Splash">
 </div>
 <br>
-<p align="center">
-  [![](https://jitpack.io/v/boldtrn/maplibre-navigation-android.svg)](https://jitpack.io/#boldtrn/maplibre-navigation-android)
-</p>
+
+[![](https://jitpack.io/v/boldtrn/maplibre-navigation-android.svg)](https://jitpack.io/#boldtrn/maplibre-navigation-android)
 
 The Maplibre Navigation SDK for Android is built on a fork of the [Mapbox Navigation SDK v0.19](https://github.com/flitsmeister/flitsmeister-navigation-android/tree/v0.19.0) which is build on top of the [Mapbox Directions API](https://www.mapbox.com/directions) and contains logic needed to get timed navigation instructions.
 
