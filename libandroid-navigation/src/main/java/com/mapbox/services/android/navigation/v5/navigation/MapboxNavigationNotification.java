@@ -37,6 +37,7 @@ import static com.mapbox.services.android.navigation.v5.utils.time.TimeFormatter
 class MapboxNavigationNotification implements NavigationNotification {
 
   private static final String END_NAVIGATION_ACTION = "com.mapbox.intent.action.END_NAVIGATION";
+  public static final String OPEN_NAVIGATION_ACTION = "com.mapbox.intent.action.OPEN_NAVIGATION";
   private NotificationCompat.Builder notificationBuilder;
   private NotificationManager notificationManager;
   private Notification notification;
@@ -142,6 +143,7 @@ class MapboxNavigationNotification implements NavigationNotification {
     PackageManager pm = context.getPackageManager();
     Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
     intent.setPackage(null);
+    intent.setAction(OPEN_NAVIGATION_ACTION);
     return PendingIntent.getActivity(context, 0, intent, 0);
   }
 
