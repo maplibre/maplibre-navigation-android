@@ -12,6 +12,9 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
  */
 public interface NavigationNotification {
 
+  String END_NAVIGATION_ACTION = "com.mapbox.intent.action.END_NAVIGATION";
+  String OPEN_NAVIGATION_ACTION = "com.mapbox.intent.action.OPEN_NAVIGATION";
+
   /**
    * Provides a custom {@link Notification} to launch
    * with the {@link com.mapbox.services.android.navigation.v5.navigation.NavigationService}, specifically
