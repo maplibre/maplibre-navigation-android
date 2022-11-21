@@ -14,12 +14,12 @@ import com.mapbox.geojson.Point;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static com.mapbox.services.android.navigation.v5.BaseTest.ACCESS_TOKEN;
-import static okhttp3.internal.Util.UTF_8;
 
 class TestRouteBuilder {
 
@@ -28,7 +28,7 @@ class TestRouteBuilder {
   String loadJsonFixture(String filename) throws IOException {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);
-    Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
+    Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8.name()).useDelimiter("\\A");
     return scanner.hasNext() ? scanner.next() : "";
   }
 

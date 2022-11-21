@@ -108,6 +108,7 @@ public class GpxParserTest {
 
   private InputStream buildTestGpxInputStream(String gpxFileName) {
     ClassLoader classLoader = getClass().getClassLoader();
+    assert classLoader != null;
     return classLoader.getResourceAsStream(gpxFileName);
   }
 }

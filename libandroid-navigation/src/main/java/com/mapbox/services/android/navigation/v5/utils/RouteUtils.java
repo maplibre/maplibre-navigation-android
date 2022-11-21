@@ -39,14 +39,12 @@ public class RouteUtils {
   private static final int FIRST_POSITION = 0;
   private static final int SECOND_POSITION = 1;
   private static final String SEMICOLON = ";";
-  private static final Set<String> VALID_PROFILES = new HashSet<String>() {
-    {
-      add(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
-      add(DirectionsCriteria.PROFILE_DRIVING);
-      add(DirectionsCriteria.PROFILE_CYCLING);
-      add(DirectionsCriteria.PROFILE_WALKING);
-    }
-  };
+  private static final Set<String> VALID_PROFILES = new HashSet<String>(Arrays.asList(
+          DirectionsCriteria.PROFILE_DRIVING_TRAFFIC,
+          DirectionsCriteria.PROFILE_DRIVING,
+          DirectionsCriteria.PROFILE_CYCLING,
+          DirectionsCriteria.PROFILE_WALKING
+  ));
 
   /**
    * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
