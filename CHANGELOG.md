@@ -1,6 +1,24 @@
-## Changelog for the Mapbox Navigation SDK for Android
+## Changelog for the Maplibre Navigation SDK for Android
 
-Mapbox welcomes participation and contributions from everyone.
+Maplibre welcomes participation and contributions from everyone.
+
+### v1.2.0 - unreleased
+
+- Fixed unit tests and updated some build dependencies. 
+
+### v1.1.1 and prior version - October 21, 2022
+
+- We completely removed the UI part from the SDK so it will only contain the logics for navigation and not the visuals.
+- We upgraded the [Mapbox Map SDK](https://github.com/mapbox/mapbox-gl-native/tree/master/platform/android) to [maplibre SDK](https://github.com/maplibre/maplibre-gl-native/tree/master/platform/android) version 9.4.0.
+- We upgraded the [NavigationRoute](https://github.com/flitsmeister/flitsmeister-navigation-android/blob/master/libandroid-navigation/src/main/java/com/mapbox/services/android/navigation/v5/navigation/NavigationRoute.java#L425)
+  with the possibility to add an intercepter to the request.
+- We changed the [locationLayerPlugin](https://github.com/mapbox/mapbox-plugins-android) to the [location component](https://docs.mapbox.com/android/api/map-sdk/8.5.0/com/mapbox/mapboxsdk/location/LocationComponent.html)
+- We updated the logic around the implementation of the locationEngine so it can be used with the new locationEngine from the [Mapbox SDK](https://github.com/mapbox/mapbox-gl-native/tree/master/platform/android).
+- We removed the telemetry class from the project. Nothing is being send to Mapbox or Maplibre.
+
+___
+
+Below you can find the changelog from the Mapbox Navigation SDK for Android, before this repository was forked.
 
 ### v0.19.0 - September 24, 2018
 

@@ -1,0 +1,21 @@
+name: "Run tests"
+
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Gradle # TODO cache
+        uses: gradle/gradle-build-action@v2.3.3
+        with:
+          gradle-version: current
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+          configuration-cache-enabled: true
+          # TODO Lint currently fails
+          #- name: Run lint checks
+          #  run: ./gradlew libandroid-navigation:lint
+      - name: Run Unit Tests
+        run: ./gradlew libandroid-navigation:test
