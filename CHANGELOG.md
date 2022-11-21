@@ -2,9 +2,11 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v1.2.0 - unreleased
+### v1.2.0 - November 21, 2022 
 
 - Fixed unit tests and updated some build dependencies. 
+- Added Flags for pending intents which are required in Android 31+
+- Added an action name to pending intent to identify it externally
 
 ### v1.1.1 and prior version - October 21, 2022
 

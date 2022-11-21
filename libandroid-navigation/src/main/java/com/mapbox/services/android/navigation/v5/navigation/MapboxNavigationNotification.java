@@ -36,7 +36,10 @@ import static com.mapbox.services.android.navigation.v5.utils.time.TimeFormatter
  */
 class MapboxNavigationNotification implements NavigationNotification {
 
-  private static final String END_NAVIGATION_ACTION = "com.mapbox.intent.action.END_NAVIGATION";
+  private static final int INTENT_FLAGS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE :
+          PendingIntent.FLAG_UPDATE_CURRENT;
+
   private NotificationCompat.Builder notificationBuilder;
   private NotificationManager notificationManager;
   private Notification notification;
@@ -142,7 +145,8 @@ class MapboxNavigationNotification implements NavigationNotification {
     PackageManager pm = context.getPackageManager();
     Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
     intent.setPackage(null);
-    return PendingIntent.getActivity(context, 0, intent, 0);
+    intent.setAction(OPEN_NAVIGATION_ACTION);
+    return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS);
   }
 
   private void registerReceiver(Context context) {
@@ -235,7 +239,7 @@ class MapboxNavigationNotification implements NavigationNotification {
 
   private PendingIntent createPendingCloseIntent(Context context) {
     Intent endNavigationBtn = new Intent(END_NAVIGATION_ACTION);
-    return PendingIntent.getBroadcast(context, 0, endNavigationBtn, 0);
+    return PendingIntent.getBroadcast(context, 0, endNavigationBtn, INTENT_FLAGS);
   }
 
   private void onEndNavigationBtnClick() {
