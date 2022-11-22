@@ -1,6 +1,8 @@
 name: "Validate Gradle Wrapper"
 
-on: push
+on:
+ push:
+ pull_request:
 
 jobs:
   validation:
