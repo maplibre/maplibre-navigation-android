@@ -269,13 +269,13 @@ public class MapboxNavigationTest extends BaseTest {
   private MapboxNavigation buildMapboxNavigation() {
     Context context = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(context);
-    return new MapboxNavigation(context, ACCESS_TOKEN,  mock(LocationEngine.class));
+    return new MapboxNavigation(context, mock(LocationEngine.class));
   }
 
   private MapboxNavigation buildMapboxNavigationWithOptions(MapboxNavigationOptions options) {
     Context context = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(context);
-    return new MapboxNavigation(context, ACCESS_TOKEN, options, mock(LocationEngine.class));
+    return new MapboxNavigation(context, options, mock(LocationEngine.class));
   }
 
   private int searchForVoiceInstructionMilestone(MapboxNavigation navigation) {

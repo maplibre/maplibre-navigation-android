@@ -67,7 +67,7 @@ dependencies {
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric
     implementation "androidx.core:core-ktx:1.7.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation dependenciesList.kotlinstdlib
 }
 
 apply from: 'javadoc.gradle'
@@ -77,4 +77,5 @@ apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 repositories {
     mavenCentral()
+    jcenter()
 }

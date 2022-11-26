@@ -92,18 +92,16 @@ public class NavigationService extends Service {
 
     private void initialize(MapboxNavigation mapboxNavigation) {
         NavigationEventDispatcher dispatcher = mapboxNavigation.getEventDispatcher();
-        String accessToken = mapboxNavigation.obtainAccessToken();
-        initializeRouteFetcher(dispatcher, accessToken, mapboxNavigation.retrieveEngineProvider());
+        initializeRouteFetcher(dispatcher, mapboxNavigation.retrieveEngineProvider());
         initializeNotificationProvider(mapboxNavigation);
         initializeRouteProcessorThread(dispatcher, routeFetcher, notificationProvider);
         initializeLocationProvider(mapboxNavigation);
     }
 
-    private void initializeRouteFetcher(NavigationEventDispatcher dispatcher, String accessToken,
-                                        NavigationEngineFactory engineProvider) {
+    private void initializeRouteFetcher(NavigationEventDispatcher dispatcher, NavigationEngineFactory engineProvider) {
         FasterRoute fasterRouteEngine = engineProvider.retrieveFasterRouteEngine();
         NavigationFasterRouteListener listener = new NavigationFasterRouteListener(dispatcher, fasterRouteEngine);
-        routeFetcher = new RouteFetcher(getApplication(), accessToken);
+        routeFetcher = new RouteFetcher(getApplication());
         routeFetcher.addRouteListener(listener);
     }
 

@@ -84,7 +84,7 @@ dependencies {
     })
   implementation "androidx.core:core-ktx:1.7.0"
   implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation dependenciesList.kotlinstdlib
 
     implementation 'androidx.multidex:multidex:2.0.1'
 }

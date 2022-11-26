@@ -56,7 +56,6 @@ public class MapboxNavigation implements ServiceConnection {
   private MapboxNavigationOptions options;
   private LocationEngine locationEngine = null;
   private Set<Milestone> milestones;
-  private final String accessToken;
   private Context applicationContext;
   private boolean isBound;
 
@@ -71,11 +70,10 @@ public class MapboxNavigation implements ServiceConnection {
    * </p>
    *
    * @param context     required in order to create and bind the navigation service
-   * @param accessToken a valid Mapbox access token
    * @since 0.5.0
    */
-  public MapboxNavigation(@NonNull Context context, @NonNull String accessToken) {
-    this(context, accessToken, MapboxNavigationOptions.builder().build());
+  public MapboxNavigation(@NonNull Context context) {
+    this(context, MapboxNavigationOptions.builder().build());
   }
 
   /**
@@ -92,14 +90,11 @@ public class MapboxNavigation implements ServiceConnection {
    *
    * @param context     required in order to create and bind the navigation service
    * @param options     a custom built {@code MapboxNavigationOptions} class
-   * @param accessToken a valid Mapbox access token
    * @see MapboxNavigationOptions
    * @since 0.5.0
    */
-  public MapboxNavigation(@NonNull Context context, @NonNull String accessToken,
-                          @NonNull MapboxNavigationOptions options) {
+  public MapboxNavigation(@NonNull Context context, @NonNull MapboxNavigationOptions options) {
     initializeContext(context);
-    this.accessToken = accessToken;
     this.options = options;
     initialize();
   }
@@ -111,26 +106,21 @@ public class MapboxNavigation implements ServiceConnection {
    * through the options class cannot be modified.
    *
    * @param context        required in order to create and bind the navigation service
-   * @param accessToken    a valid Mapbox access token
    * @param options        a custom built {@code MapboxNavigationOptions} class
    * @param locationEngine a LocationEngine to provide Location updates
    * @see MapboxNavigationOptions
    * @since 0.19.0
    */
-  public MapboxNavigation(@NonNull Context context, @NonNull String accessToken,
-                          @NonNull MapboxNavigationOptions options, @NonNull LocationEngine locationEngine) {
+  public MapboxNavigation(@NonNull Context context, @NonNull MapboxNavigationOptions options, @NonNull LocationEngine locationEngine) {
     initializeContext(context);
-    this.accessToken = accessToken;
     this.options = options;
     this.locationEngine = locationEngine;
     initialize();
   }
 
   // Package private (no modifier) for testing purposes
-  MapboxNavigation(@NonNull Context context, @NonNull String accessToken,
-                   LocationEngine locationEngine) {
+  MapboxNavigation(@NonNull Context context, LocationEngine locationEngine) {
     initializeContext(context);
-    this.accessToken = accessToken;
     this.options = MapboxNavigationOptions.builder().build();
     this.locationEngine = locationEngine;
     initialize();
@@ -693,10 +683,6 @@ public class MapboxNavigation implements ServiceConnection {
   @NonNull
   public FasterRoute getFasterRouteEngine() {
     return navigationEngineFactory.retrieveFasterRouteEngine();
-  }
-
-  String obtainAccessToken() {
-    return accessToken;
   }
 
   DirectionsRoute getRoute() {

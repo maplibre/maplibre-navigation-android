@@ -31,7 +31,7 @@ public class NavigationRouteProcessorTest extends BaseTest {
     MapboxNavigationOptions options = MapboxNavigationOptions.builder().build();
     Context context = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(context);
-    navigation = new MapboxNavigation(context, ACCESS_TOKEN, options, mock(LocationEngine.class));
+    navigation = new MapboxNavigation(context, options, mock(LocationEngine.class));
     navigation.startNavigation(buildTestDirectionsRoute());
   }
 

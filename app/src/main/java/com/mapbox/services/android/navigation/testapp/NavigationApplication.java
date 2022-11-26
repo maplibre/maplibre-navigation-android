@@ -35,7 +35,7 @@ public class NavigationApplication extends Application {
       Log.w(LOG_TAG, "Warning: access token isn't set.");
     }
 
-    Mapbox.getInstance(getApplicationContext(), mapboxAccessToken);
+    Mapbox.getInstance(getApplicationContext());
   }
 
 }
