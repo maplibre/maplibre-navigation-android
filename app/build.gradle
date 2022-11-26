@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -34,6 +33,10 @@ android {
         maxProcessCount 8
         javaMaxHeapSize "2g"
         preDexLibraries true
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     lintOptions {
