@@ -2,7 +2,13 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
+### v1.2.1 - November 26, 2022
+
+- Fixed Jitpack Build
+
 ### v1.2.0 - November 21, 2022 
+
+(Please use v1.2.1, as the Release Build failed at Jitpack)
 
 - Fixed unit tests and updated some build dependencies. 
 - Added Flags for pending intents which are required in Android 31+
