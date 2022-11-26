@@ -51,14 +51,14 @@ dependencies {
     compileOnly dependenciesList.gmsLocation
 
     // Support
-    implementation dependenciesList.appcompat
+    implementation dependenciesList.androidxAppcompat
 
     // Logging
     implementation dependenciesList.timber
 
     // AutoValues
     annotationProcessor dependenciesList.autoValue
-    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueAnnotations
 
     // Unit testing
     testImplementation dependenciesList.junit
