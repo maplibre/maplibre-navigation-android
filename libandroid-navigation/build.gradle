@@ -51,7 +51,7 @@ dependencies {
     compileOnly dependenciesList.gmsLocation
 
     // Support
-    implementation dependenciesList.supportAppcompatV7
+    implementation dependenciesList.appcompat
 
     // Logging
     implementation dependenciesList.timber
@@ -66,16 +66,14 @@ dependencies {
     testImplementation dependenciesList.hamcrest
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric
-    implementation "androidx.core:core-ktx:1.7.0"
+    implementation dependenciesList.androidxCore
     implementation dependenciesList.kotlinstdlib
 }
 
 apply from: 'javadoc.gradle'
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
 repositories {
     mavenCentral()
-    jcenter()
 }

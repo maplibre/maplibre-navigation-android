@@ -5,7 +5,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath pluginDependencies.dependencyUpdates
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.44.0'
     }
 }
 
