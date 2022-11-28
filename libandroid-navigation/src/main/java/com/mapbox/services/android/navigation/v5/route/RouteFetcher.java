@@ -154,7 +154,6 @@ public class RouteFetcher {
 
   private void executeRouteCall(NavigationRoute.Builder builder) {
     if (builder != null) {
-      builder.accessToken("pk.0");
       builder.build().getRoute(directionsResponseCallback);
     }
   }

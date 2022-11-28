@@ -1,9 +1,6 @@
 package com.mapbox.services.android.navigation.testapp;
 
 import android.app.Application;
-import android.app.NotificationChannel;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.mapbox.mapboxsdk.Mapbox;
 
@@ -20,12 +17,6 @@ public class NavigationApplication extends Application {
 
     if (BuildConfig.DEBUG) {
       Timber.plant(new Timber.DebugTree());
-    }
-
-    // Set access token
-    String mapboxAccessToken = Utils.getMapboxAccessToken(getApplicationContext());
-    if (TextUtils.isEmpty(mapboxAccessToken) || mapboxAccessToken.equals(DEFAULT_MAPBOX_ACCESS_TOKEN)) {
-      Log.w(LOG_TAG, "Warning: access token isn't set.");
     }
 
     Mapbox.getInstance(getApplicationContext());
