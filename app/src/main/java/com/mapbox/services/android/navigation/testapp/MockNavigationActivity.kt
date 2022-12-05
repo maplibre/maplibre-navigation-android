@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -68,7 +69,7 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockNavigationBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_mock_navigation)
+        setContentView(binding.root)
         binding.mapView.apply {
             onCreate(savedInstanceState)
             getMapAsync(this@MockNavigationActivity)
@@ -148,7 +149,6 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         Snackbar.make(findViewById(R.id.container), "Tap map to place waypoint", Snackbar.LENGTH_LONG).show()
 
         newOrigin()
-
     }
 
     @SuppressWarnings("MissingPermission")
