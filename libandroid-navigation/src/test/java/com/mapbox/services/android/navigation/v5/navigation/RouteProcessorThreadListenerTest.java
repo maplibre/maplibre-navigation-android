@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class RouteProcessorThreadListenerTest {
 
@@ -93,7 +93,7 @@ public class RouteProcessorThreadListenerTest {
 
     listener.onUserOffRoute(mock(Location.class), false);
 
-    verifyZeroInteractions(dispatcher);
+    verifyNoInteractions (dispatcher);
   }
 
   @Test
@@ -115,7 +115,7 @@ public class RouteProcessorThreadListenerTest {
 
     listener.onCheckFasterRoute(mock(Location.class), mock(RouteProgress.class), false);
 
-    verifyZeroInteractions(dispatcher);
+    verifyNoInteractions (dispatcher);
   }
 
   private RouteProcessorThreadListener buildListener(NavigationNotificationProvider provider) {

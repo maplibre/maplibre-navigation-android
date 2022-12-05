@@ -2,8 +2,11 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v1.2.1 - November 26, 2022
+### v1.3.0 - unreleased
 
+- Update Maplibre to 9.5.2
+- Updated dependencies of used libs and build tools
+- Removed AccessToken usage
 - Fixed Jitpack Build
 
 ### v1.2.0 - November 21, 2022 

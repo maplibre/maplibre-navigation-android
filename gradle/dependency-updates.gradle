@@ -1,13 +1,15 @@
+import com.github.benmanes.gradle.versions.VersionsPlugin
+
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath pluginDependencies.dependencyUpdates
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.44.0'
     }
 }
 
-apply plugin: "com.github.ben-manes.versions"
+apply plugin: VersionsPlugin
 
 // disallow release candidates as upgradable versions
 dependencyUpdates.resolutionStrategy {

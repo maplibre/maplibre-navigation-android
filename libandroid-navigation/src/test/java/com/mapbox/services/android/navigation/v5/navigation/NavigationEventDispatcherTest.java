@@ -65,7 +65,7 @@ public class NavigationEventDispatcherTest extends BaseTest {
         MockitoAnnotations.initMocks(this);
         Context context = mock(Context.class);
         when(context.getApplicationContext()).thenReturn(mock(Context.class));
-        navigation = new MapboxNavigation(context, ACCESS_TOKEN, mock(LocationEngine.class));
+        navigation = new MapboxNavigation(context, mock(LocationEngine.class));
         navigationEventDispatcher = navigation.getEventDispatcher();
 
         Gson gson = new GsonBuilder()

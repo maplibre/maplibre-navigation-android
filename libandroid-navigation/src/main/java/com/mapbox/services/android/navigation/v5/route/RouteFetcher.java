@@ -38,14 +38,12 @@ public class RouteFetcher {
   private static final int SECOND_POSITION = 1;
 
   private final List<RouteListener> routeListeners = new CopyOnWriteArrayList<>();
-  private final String accessToken;
   private final WeakReference<Context> contextWeakReference;
 
   private RouteProgress routeProgress;
   private RouteUtils routeUtils;
 
-  public RouteFetcher(Context context, String accessToken) {
-    this.accessToken = accessToken;
+  public RouteFetcher(Context context) {
     contextWeakReference = new WeakReference<>(context);
     routeUtils = new RouteUtils();
   }
@@ -156,7 +154,6 @@ public class RouteFetcher {
 
   private void executeRouteCall(NavigationRoute.Builder builder) {
     if (builder != null) {
-      builder.accessToken(accessToken);
       builder.build().getRoute(directionsResponseCallback);
     }
   }

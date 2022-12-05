@@ -15,7 +15,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class NavigationFasterRouteListenerTest {
@@ -43,7 +43,7 @@ public class NavigationFasterRouteListenerTest {
 
     listener.onResponseReceived(response, routeProgress);
 
-    verifyZeroInteractions(eventDispatcher);
+    verifyNoInteractions (eventDispatcher);
   }
 
   @NonNull
