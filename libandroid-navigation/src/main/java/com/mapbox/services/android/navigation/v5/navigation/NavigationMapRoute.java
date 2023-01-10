@@ -130,7 +130,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     private static final String LAYER_ABOVE_UPCOMING_MANEUVER_ARROW = "com.mapbox.annotations.points";
 
     @StyleRes
-    private int styleRes;
+    protected int styleRes;
     @ColorInt
     private int routeDefaultColor;
     @ColorInt
@@ -156,17 +156,17 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     @DrawableRes
     private int destinationWaypointIcon;
 
-    private MapboxNavigation navigation;
-    private final MapboxMap mapboxMap;
-    private final HashMap<LineString, DirectionsRoute> routeLineStrings;
-    private final List<FeatureCollection> featureCollections;
-    private final List<DirectionsRoute> directionsRoutes;
-    private final List<String> layerIds;
-    private final MapView mapView;
+    protected MapboxNavigation navigation;
+    protected final MapboxMap mapboxMap;
+    protected final HashMap<LineString, DirectionsRoute> routeLineStrings;
+    protected final List<FeatureCollection> featureCollections;
+    protected final List<DirectionsRoute> directionsRoutes;
+    protected final List<String> layerIds;
+    protected final MapView mapView;
     private int primaryRouteIndex;
     private float routeScale;
     private float alternativeRouteScale;
-    private String belowLayer;
+    protected String belowLayer;
     private boolean alternativesVisible;
     private OnRouteSelectionChangeListener onRouteSelectionChangeListener;
     private List<Layer> arrowLayers;
