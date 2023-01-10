@@ -929,7 +929,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                                 stop(10f, 0.8f),
                                 stop(0f, 0.6f)
                         )),
-                        PropertyFactory.iconPitchAlignment(Property.ANCHOR_MAP),
+                        PropertyFactory.iconPitchAlignment(Property.ICON_PITCH_ALIGNMENT_MAP),
                         iconAllowOverlap(true),
                         iconIgnorePlacement(true)
                 );
@@ -951,14 +951,14 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
         return feature;
     }
 
-    private void initialize() {
+    protected void initialize() {
         alternativesVisible = true;
         getAttributes();
         placeRouteBelow();
         initializeUpcomingManeuverArrow();
     }
 
-    private void addListeners() {
+    protected void addListeners() {
         mapboxMap.addOnMapClickListener(this);
         if (navigation != null) {
             navigation.addProgressChangeListener(progressChangeListener);
