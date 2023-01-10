@@ -48,6 +48,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
   private NavigationIndices indices;
   private double stepDistanceRemaining;
   private boolean shouldIncreaseIndex;
+  private NavigationIndices shouldUpdateToIndex;
   private RouteUtils routeUtils;
 
   NavigationRouteProcessor() {
@@ -58,6 +59,12 @@ class NavigationRouteProcessor implements OffRouteCallback {
   @Override
   public void onShouldIncreaseIndex() {
     shouldIncreaseIndex = true;
+  }
+
+  @Override
+  public void onShouldUpdateToIndex(int legIndex, int stepIndex) {
+    shouldUpdateToIndex = NavigationIndices.create(legIndex, stepIndex);
+    onShouldIncreaseIndex();
   }
 
   /**
@@ -102,6 +109,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
     if (shouldIncreaseIndex) {
       advanceIndices(navigation);
       shouldIncreaseIndex = false;
+      shouldUpdateToIndex = null;
     }
   }
 
@@ -156,7 +164,11 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * @param mapboxNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
    */
   private void advanceIndices(MapboxNavigation mapboxNavigation) {
-    indices = increaseIndex(routeProgress, indices);
+    if(shouldUpdateToIndex != null){
+      indices = shouldUpdateToIndex;
+    }else{
+      indices = increaseIndex(routeProgress, indices);
+    }
     processNewIndex(mapboxNavigation);
   }
 
@@ -183,6 +195,11 @@ class NavigationRouteProcessor implements OffRouteCallback {
     int legIndex = indices.legIndex();
     int stepIndex = indices.stepIndex();
     int upcomingStepIndex = stepIndex + ONE_INDEX;
+    if(route.legs().size() > legIndex || route.legs().get(legIndex).steps().size() > stepIndex){
+      // This catches a potential race condition when the route is changed, before the new index is processed
+      createFirstIndices(mapboxNavigation);
+      return;
+    }
     updateSteps(route, legIndex, stepIndex, upcomingStepIndex);
     updateStepPoints(route, legIndex, stepIndex, upcomingStepIndex);
     updateIntersections();
