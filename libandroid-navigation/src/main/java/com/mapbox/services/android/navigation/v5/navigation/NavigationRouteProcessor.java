@@ -195,7 +195,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
     int legIndex = indices.legIndex();
     int stepIndex = indices.stepIndex();
     int upcomingStepIndex = stepIndex + ONE_INDEX;
-    if(route.legs().size() > legIndex || route.legs().get(legIndex).steps().size() > stepIndex){
+    if(route.legs().size() <= legIndex || route.legs().get(legIndex).steps().size() <= stepIndex){
       // This catches a potential race condition when the route is changed, before the new index is processed
       createFirstIndices(mapboxNavigation);
       return;
