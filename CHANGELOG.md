@@ -2,9 +2,9 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v1.3.0 - unreleased
+### v2.0.0 - unreleased
 
-- Update Maplibre to 9.5.2
+- Update Maplibre to 9.6.0
 - Updated dependencies of used libs and build tools
 - Removed AccessToken usage
 - Fixed Jitpack Build
