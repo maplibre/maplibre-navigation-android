@@ -929,7 +929,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                                 stop(10f, 0.8f),
                                 stop(0f, 0.6f)
                         )),
-                        PropertyFactory.iconPitchAlignment(Property.ICON_PITCH_ALIGNMENT_MAP),
+                        PropertyFactory.iconPitchAlignment(Property.ANCHOR_MAP),
                         iconAllowOverlap(true),
                         iconIgnorePlacement(true)
                 );
