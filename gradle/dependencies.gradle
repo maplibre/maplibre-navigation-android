@@ -9,7 +9,7 @@ ext {
     ]
 
     version = [
-            mapLibreVersion        : '9.5.2',
+            mapLibreVersion        : '9.6.0',
             mapLibreService        : '5.9.0',
             mapLibreTurf           : '5.9.0',
             mapLibreAnnotations    : '1.0.0',
