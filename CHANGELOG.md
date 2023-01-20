@@ -8,10 +8,11 @@ Maplibre welcomes participation and contributions from everyone.
 - Updated dependencies of used libs and build tools
 - Removed AccessToken usage
 - Fixed Jitpack Build
+- Use the navigation options instead of constants in ToleranceUtils (used in the offroute detection), if you haven't modified rerouting values in the navigation options, nothing should change
 
-### v1.2.0 - November 21, 2022 
+### v1.2.0 - November 21, 2022
 
-(Please use v1.2.1, as the Release Build failed at Jitpack)
+(Please use a recent commit from Jitpack see [#40](https://github.com/maplibre/maplibre-navigation-android/issues/40), as the Release Build failed at Jitpack)
 
 - Fixed unit tests and updated some build dependencies. 
 - Added Flags for pending intents which are required in Android 31+
