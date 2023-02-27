@@ -951,14 +951,14 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
         return feature;
     }
 
-    private void initialize() {
+    protected void initialize() {
         alternativesVisible = true;
         getAttributes();
         placeRouteBelow();
         initializeUpcomingManeuverArrow();
     }
 
-    private void addListeners() {
+    protected void addListeners() {
         mapboxMap.addOnMapClickListener(this);
         if (navigation != null) {
             navigation.addProgressChangeListener(progressChangeListener);
