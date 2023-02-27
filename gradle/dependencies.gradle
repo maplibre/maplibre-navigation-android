@@ -1,7 +1,7 @@
 ext {
 
     androidVersions = [
-            minSdkVersion    : 15,
+            minSdkVersion    : 21,
             targetSdkVersion : 33,
             compileSdkVersion: 33,
             buildToolsVersion: '33.0.1',
@@ -9,7 +9,7 @@ ext {
     ]
 
     version = [
-            mapLibreVersion        : '9.5.2',
+            mapLibreVersion        : '10.0.2',
             mapLibreService        : '5.9.0',
             mapLibreTurf           : '5.9.0',
             mapLibreAnnotations    : '1.0.0',
@@ -37,7 +37,7 @@ ext {
             lifecycle              : '1.1.1',
             lifecycleVersion       : '2.2.0',
             picasso                : '2.71828',
-            gmsLocation            : '16.0.0',
+            gmsLocation            : '21.0.1',
             testRulesVersion       : '1.5.0'
     ]
 

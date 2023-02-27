@@ -142,7 +142,7 @@ public class OffRouteDetector extends OffRoute {
 
   private double createOffRouteRadius(Location location, RouteProgress routeProgress,
                                       MapboxNavigationOptions options, Point currentPoint) {
-    double dynamicTolerance = dynamicRerouteDistanceTolerance(currentPoint, routeProgress);
+    double dynamicTolerance = dynamicRerouteDistanceTolerance(currentPoint, routeProgress, options);
     double accuracyTolerance = location.getAccuracy() * options.deadReckoningTimeInterval();
     return Math.max(dynamicTolerance, accuracyTolerance);
   }
