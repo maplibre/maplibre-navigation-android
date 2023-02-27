@@ -2,17 +2,12 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v2.0.0 - unreleased - February 25, 2023
+### v2.0.0 - February 27, 2023
 
--Updated Maplibre version to v10.0.2.
+-Updated Maplibre version to v10.0.2 - see [49](https://github.com/maplibre/maplibre-navigation-android/pull/49).
 -Incremented minSdk version from 15 to 21 to work same as maplibre implementation.
 -Created custom classes for `GoogleLocationEngineImpl`, `Utils`, `LocationEngineProvider` which were removed from default implementation maplibre to provide working with GSM location.
 -Corrected resource calls due to renamed res files in maplibre (from `mapbox_` to `maplibre_`).
--All changes are included in this pull request [49](https://github.com/maplibre/maplibre-navigation-android/pull/49)
-
-### v2.0.0 - unreleased
-
-- Update Maplibre to 9.6.0
 - Updated dependencies of used libs and build tools
 - Removed AccessToken usage
 - Fixed Jitpack Build
