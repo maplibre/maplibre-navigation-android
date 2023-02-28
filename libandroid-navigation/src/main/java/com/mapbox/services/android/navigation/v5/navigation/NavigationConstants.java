@@ -51,6 +51,13 @@ public final class NavigationConstants {
    */
   public static final int NAVIGATION_NOTIFICATION_ID = 5678;
 
+
+
+  /**
+   * NavigationLauncher key for storing initial map position in Intent
+   */
+  public static final String NAVIGATION_VIEW_INITIAL_MAP_POSITION = "navigation_view_initial_map_position";
+
   /**
    * Threshold user must be within to count as completing a step. One of two heuristics used to know
    * when a user completes a step, see {@link #MANEUVER_ZONE_RADIUS}. The users heading and the
@@ -128,16 +135,6 @@ public final class NavigationConstants {
   public static final long ALERT_VIEW_PROBLEM_DURATION = 10000;
 
   /**
-   * Duration in which the feedback BottomSheet is shown.
-   */
-  public static final long FEEDBACK_BOTTOM_SHEET_DURATION = 10000;
-
-  /**
-   * Shown in AlertView after a particular feedback item has been selected.
-   */
-  public static final String FEEDBACK_SUBMITTED = "Feedback Submitted";
-
-  /**
    * If a set of light / dark themes been set in {@link android.content.SharedPreferences}
    */
   public static final String NAVIGATION_VIEW_PREFERENCE_SET_THEME = "navigation_view_theme_preference";
@@ -151,6 +148,28 @@ public final class NavigationConstants {
    * Key for the set dark theme in preferences
    */
   public static final String NAVIGATION_VIEW_DARK_THEME = "navigation_view_dark_theme";
+
+
+
+  /**
+   * Defines the minimum zoom level of the displayed map.
+   */
+  public static final double NAVIGATION_MINIMUM_MAP_ZOOM = 7d;
+
+  /**
+   * Maximum duration of the zoom/tilt adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION = 1500L;
+
+  /**
+   * Minimum duration of the zoom adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION = 300L;
+
+  /**
+   * Minimum duration of the tilt adjustment animation while tracking.
+   */
+  public static final long NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION = 750L;
 
   /**
    * In seconds, how quickly {@link com.mapbox.services.android.navigation.v5.route.FasterRouteDetector}

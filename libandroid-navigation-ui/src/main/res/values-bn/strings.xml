@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Indicates that rerouting is in progress -->
+    <string name="rerouting">রুট পরিবর্তন করা</string>
+
+    <!-- Button title for re-centering tracking -->
+    <string name="re_center">আবার কেন্দ্রে আনুন</string>
+
+    <!-- Indicates voice instructions are muted -->
+    <string name="muted">নিঃশব্দ করা</string>
+
+    <!-- Indicates voice instructions are unmuted -->
+    <string name="unmuted">সশব্দ</string>
+
+    <!-- Test app dialog text -->
+    <string name="dropoff_dialog_text">আপনি কি পরবর্তী গন্তব্যস্থানে যেতে চান?</string>
+
+    <!-- Test app dialog text start next route -->
+    <string name="dropoff_dialog_positive_text">পরবর্তী শুরু</string>
+
+    <!-- Test app dialog text cancel navigation -->
+    <string name="dropoff_dialog_negative_text">বাতিল করুন</string>
+
+    </resources>
