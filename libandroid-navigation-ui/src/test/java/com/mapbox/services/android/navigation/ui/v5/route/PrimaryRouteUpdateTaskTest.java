@@ -18,6 +18,7 @@ import java.util.List;
 
 public class PrimaryRouteUpdateTaskTest {
 
+  @SuppressWarnings("DoNotCall")
   @Test
   public void run_onPrimaryRouteUpdatedIsCalled() {
     int primaryRouteIndex = 0;
@@ -33,7 +34,7 @@ public class PrimaryRouteUpdateTaskTest {
     ArgumentCaptor<Runnable> runnable = ArgumentCaptor.forClass(Runnable.class);
     PrimaryRouteUpdateTask task = new PrimaryRouteUpdateTask(primaryRouteIndex, routeFeatureCollections, callback, mockedHandler);
 
-    task.start();
+    task.run();
 
     verify(mockedHandler).post(runnable.capture());
     runnable.getValue().run();
