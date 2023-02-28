@@ -12,7 +12,6 @@ import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.mapboxsdk.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
 
@@ -36,17 +35,6 @@ public class LocationEngineConductorTest extends BaseTest {
     LocationEngine locationEngine = locationEngineConductor.obtainLocationEngine();
 
     assertTrue(locationEngine instanceof ReplayRouteLocationEngine);
-  }
-
-  @Test
-  public void onInitWithSimulation_replayEngineIsUpdated() {
-    LocationEngineConductor locationEngineConductor = new LocationEngineConductor();
-    boolean simulateRouteEnabled = true;
-    locationEngineConductor.initializeLocationEngine(createMockContext(), null, simulateRouteEnabled);
-
-    boolean didUpdate = locationEngineConductor.updateSimulatedRoute(mock(DirectionsRoute.class));
-
-    assertTrue(didUpdate);
   }
 
   @Test

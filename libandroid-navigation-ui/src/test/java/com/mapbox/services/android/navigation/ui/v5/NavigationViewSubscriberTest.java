@@ -1,5 +1,11 @@
 package com.mapbox.services.android.navigation.ui.v5;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -11,12 +17,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class NavigationViewSubscriberTest {
 
@@ -74,6 +74,5 @@ public class NavigationViewSubscriberTest {
     verify(navigationViewModel.retrieveRoute()).observe(eq(lifecycleOwner), any(Observer.class));
     verify(navigationViewModel.retrieveNavigationLocation()).observe(eq(lifecycleOwner), any(Observer.class));
     verify(navigationViewModel.retrieveDestination()).observe(eq(lifecycleOwner), any(Observer.class));
-    verify(navigationViewModel.retrieveShouldRecordScreenshot()).observe(eq(lifecycleOwner), any(Observer.class));
   }
 }

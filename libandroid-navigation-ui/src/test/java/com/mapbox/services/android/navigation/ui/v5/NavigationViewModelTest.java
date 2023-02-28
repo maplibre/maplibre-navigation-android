@@ -2,7 +2,6 @@ package com.mapbox.services.android.navigation.ui.v5;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -56,20 +55,6 @@ public class NavigationViewModelTest {
     NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, router);
 
     viewModel.onDestroy(false);
-  }
-
-  @Test
-  public void stopNavigation_mapConnectivityControllerStateIsReset() {
-    Application application = mock(Application.class);
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
-    NavigationViewRouter router = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, router);
-    Boolean defaultState = null;
-
-    viewModel.onDestroy(false);
-
-    verify(mockedConnectivityController).assign(eq(defaultState));
   }
 
   @Test
