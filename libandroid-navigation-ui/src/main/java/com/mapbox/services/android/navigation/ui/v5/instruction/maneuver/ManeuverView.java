@@ -9,6 +9,7 @@ import static com.mapbox.services.android.navigation.v5.navigation.NavigationCon
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_UTURN;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROTARY;
+import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_FORK;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_OFF_RAMP;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROTARY;
@@ -52,8 +53,8 @@ public class ManeuverView extends View {
 
     private static final Set<String> SHOULD_FLIP_MODIFIERS = ImmutableSet.of(STEP_MANEUVER_MODIFIER_SLIGHT_LEFT, STEP_MANEUVER_MODIFIER_LEFT, STEP_MANEUVER_MODIFIER_SHARP_LEFT, STEP_MANEUVER_MODIFIER_UTURN);
 
-    private static final Set<String> ROUNDABOUT_MANEUVER_TYPES = ImmutableSet.of(STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_EXIT_ROTARY);
-    private static final Set<String> MANEUVER_TYPES_WITH_NULL_MODIFIERS = ImmutableSet.of(STEP_MANEUVER_TYPE_OFF_RAMP,STEP_MANEUVER_TYPE_FORK,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_EXIT_ROTARY);
+    private static final Set<String> ROUNDABOUT_MANEUVER_TYPES = ImmutableSet.of(STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_EXIT_ROTARY, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
+    private static final Set<String> MANEUVER_TYPES_WITH_NULL_MODIFIERS = ImmutableSet.of(STEP_MANEUVER_TYPE_OFF_RAMP,STEP_MANEUVER_TYPE_FORK,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_EXIT_ROTARY, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
 
     @ManeuverType
     private String maneuverType = null;
