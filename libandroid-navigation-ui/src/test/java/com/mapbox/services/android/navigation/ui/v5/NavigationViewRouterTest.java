@@ -1,6 +1,14 @@
 package com.mapbox.services.android.navigation.ui.v5;
 
+import static junit.framework.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -21,14 +29,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static junit.framework.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class NavigationViewRouterTest extends BaseTest {
 
@@ -95,12 +95,11 @@ public class NavigationViewRouterTest extends BaseTest {
   public void findRouteFrom_fastConnectionGoesToOnline() {
     RouteFetcher onlineRouter = mock(RouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
-    when(onlineRouter.buildRequestFrom(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
+    when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
     when(status.isConnectedFast()).thenReturn(true);
     NavigationViewRouter router = new NavigationViewRouter(
       onlineRouter,
-      null, // Null offline (simulate no data)
       status,
       mock(RouteComparator.class),
       mock(ViewRouteListener.class),
@@ -118,7 +117,7 @@ public class NavigationViewRouterTest extends BaseTest {
   public void findRouteFrom_secondRequestIgnored() {
     RouteFetcher onlineRouter = mock(RouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
-    when(onlineRouter.buildRequestFrom(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
+    when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
     when(status.isConnectedFast()).thenReturn(false);
     NavigationViewRouter router = new NavigationViewRouter(

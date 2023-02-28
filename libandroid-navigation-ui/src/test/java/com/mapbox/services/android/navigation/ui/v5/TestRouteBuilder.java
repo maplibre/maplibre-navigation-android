@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5;
 
+import static com.google.common.base.Charsets.UTF_8;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static okhttp3.internal.Util.UTF_8;
 
 class TestRouteBuilder {
 

@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5;
 
+import static com.mapbox.core.constants.Constants.PRECISION_6;
+
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegStep;
 import com.mapbox.geojson.Point;
@@ -7,8 +9,6 @@ import com.mapbox.geojson.utils.PolylineUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;
-
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 
 class TestRouteProgressBuilder {
 
@@ -35,15 +35,12 @@ class TestRouteProgressBuilder {
     return RouteProgress.builder()
       .stepDistanceRemaining(stepDistanceRemaining)
       .legDistanceRemaining(legDistanceRemaining)
-      .legDurationRemaining(legDurationRemaining)
       .distanceRemaining(distanceRemaining)
       .directionsRoute(route)
-      .currentStep(currentStep)
       .currentStepPoints(currentStepPoints)
       .upcomingStepPoints(upcomingStepPoints)
       .stepIndex(stepIndex)
       .legIndex(legIndex)
-      .inTunnel(false)
       .build();
   }
 

@@ -1,24 +1,12 @@
 package com.mapbox.services.android.navigation.ui.v5.voice;
 
-import org.junit.Test;
-
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.Test;
+
 public class NavigationSpeechPlayerTest {
-
-  @Test
-  public void onPlayAnnouncement_mapboxSpeechPlayerIsGivenAnnouncement() {
-    MapboxSpeechPlayer speechPlayer = mock(MapboxSpeechPlayer.class);
-    NavigationSpeechPlayer navigationSpeechPlayer = buildNavigationSpeechPlayer(speechPlayer);
-    SpeechAnnouncement announcement = mock(SpeechAnnouncement.class);
-
-    navigationSpeechPlayer.play(announcement);
-
-    verify(speechPlayer).play(announcement);
-  }
 
   @Test
   public void onPlayAnnouncement_androidSpeechPlayerIsGivenAnnouncement() {
@@ -29,16 +17,6 @@ public class NavigationSpeechPlayerTest {
     navigationSpeechPlayer.play(announcement);
 
     verify(speechPlayer).play(announcement);
-  }
-
-  @Test
-  public void onIsMuted_returnsCorrectBooleanMuteValue() {
-    MapboxSpeechPlayer speechPlayer = mock(MapboxSpeechPlayer.class);
-    NavigationSpeechPlayer navigationSpeechPlayer = buildNavigationSpeechPlayer(speechPlayer);
-
-    navigationSpeechPlayer.setMuted(true);
-
-    assertTrue(navigationSpeechPlayer.isMuted());
   }
 
   @Test

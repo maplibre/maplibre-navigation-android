@@ -1,5 +1,10 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.os.Handler;
 
 import com.mapbox.geojson.Feature;
@@ -10,15 +15,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.emory.mathcs.backport.java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class PrimaryRouteUpdateTaskTest {
 
@@ -37,7 +33,7 @@ public class PrimaryRouteUpdateTaskTest {
     ArgumentCaptor<Runnable> runnable = ArgumentCaptor.forClass(Runnable.class);
     PrimaryRouteUpdateTask task = new PrimaryRouteUpdateTask(primaryRouteIndex, routeFeatureCollections, callback, mockedHandler);
 
-    task.run();
+    task.start();
 
     verify(mockedHandler).post(runnable.capture());
     runnable.getValue().run();

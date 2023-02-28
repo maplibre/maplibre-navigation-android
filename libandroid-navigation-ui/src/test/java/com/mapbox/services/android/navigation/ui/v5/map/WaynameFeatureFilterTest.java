@@ -1,6 +1,10 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
+import static com.google.common.base.Charsets.UTF_8;
+import static org.mockito.Mockito.mock;
+
 import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 import com.mapbox.geojson.Feature;
@@ -11,13 +15,9 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-
-import edu.emory.mathcs.backport.java.util.Collections;
-
-import static okhttp3.internal.Util.UTF_8;
-import static org.mockito.Mockito.mock;
 
 public class WaynameFeatureFilterTest {
 
