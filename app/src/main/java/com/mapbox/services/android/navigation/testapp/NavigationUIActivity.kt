@@ -2,6 +2,9 @@ package com.mapbox.services.android.navigation.testapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +54,8 @@ class NavigationUIActivity :
 
     private lateinit var binding: ActivityNavigationUiBinding
 
+    private var simulateRoute = true
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,18 +68,21 @@ class NavigationUIActivity :
 
         binding.startRouteButton.setOnClickListener {
             route?.let { route ->
-                binding.startRouteButton.visibility = View.INVISIBLE
                 val userLocation = mapboxMap.locationComponent.lastKnownLocation ?: return@let
 
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
-                    .shouldSimulateRoute(true)
+                    .shouldSimulateRoute(simulateRoute)
                     .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.longitude, userLocation.latitude)).build())
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
                 NavigationLauncher.startNavigation(this@NavigationUIActivity, options)
             }
+        }
+
+        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
+            simulateRoute = checked
         }
 
 
@@ -129,7 +137,7 @@ class NavigationUIActivity :
             it.cameraMode = CameraMode.TRACKING_GPS_NORTH
 
             // Set the component's render mode
-            it.renderMode = RenderMode.GPS
+            it.renderMode = RenderMode.NORMAL
         }
     }
 
@@ -149,7 +157,7 @@ class NavigationUIActivity :
         }
         binding.clearPoints.visibility = View.VISIBLE
 
-        binding.startRouteButton.visibility = View.VISIBLE
+        binding.startRouteLayout.visibility = View.VISIBLE
         calculateRoute()
         return true
     }
@@ -169,7 +177,7 @@ class NavigationUIActivity :
 
         val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
         if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
-            binding.startRouteButton.visibility = View.GONE
+            binding.startRouteLayout.visibility = View.GONE
             return
         }
 
