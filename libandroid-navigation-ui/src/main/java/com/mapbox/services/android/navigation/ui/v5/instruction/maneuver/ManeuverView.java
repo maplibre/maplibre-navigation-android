@@ -33,10 +33,9 @@ import androidx.core.util.Pair;
 
 import com.mapbox.services.android.navigation.ui.v5.R;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import autovalue.shaded.com.google.common.collect.ImmutableSet;
 
 
 /**
@@ -44,6 +43,7 @@ import autovalue.shaded.com.google.common.collect.ImmutableSet;
  *
  * @since 0.6.0
  */
+@SuppressWarnings("DoubleBraceInitialization")
 public class ManeuverView extends View {
 
     private static final float TOP_ROUNDABOUT_ANGLE_LIMIT = 300f;
@@ -51,11 +51,34 @@ public class ManeuverView extends View {
     private static final float DEFAULT_ROUNDABOUT_ANGLE = 180f;
     private static final Map<Pair<String, String>, ManeuverViewUpdate> MANEUVER_VIEW_UPDATE_MAP = new ManeuverViewMap();
 
-    private static final Set<String> SHOULD_FLIP_MODIFIERS = ImmutableSet.of(STEP_MANEUVER_MODIFIER_SLIGHT_LEFT, STEP_MANEUVER_MODIFIER_LEFT, STEP_MANEUVER_MODIFIER_SHARP_LEFT, STEP_MANEUVER_MODIFIER_UTURN);
-
-    private static final Set<String> ROUNDABOUT_MANEUVER_TYPES = ImmutableSet.of(STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_EXIT_ROTARY, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
-    private static final Set<String> MANEUVER_TYPES_WITH_NULL_MODIFIERS = ImmutableSet.of(STEP_MANEUVER_TYPE_OFF_RAMP,STEP_MANEUVER_TYPE_FORK,STEP_MANEUVER_TYPE_ROUNDABOUT,STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,STEP_MANEUVER_TYPE_ROTARY,STEP_MANEUVER_TYPE_EXIT_ROTARY, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
-
+    private static final Set<String> SHOULD_FLIP_MODIFIERS = new HashSet<String>() {
+        {
+            add(STEP_MANEUVER_MODIFIER_SLIGHT_LEFT);
+            add(STEP_MANEUVER_MODIFIER_LEFT);
+            add(STEP_MANEUVER_MODIFIER_SHARP_LEFT);
+            add(STEP_MANEUVER_MODIFIER_UTURN);
+        }
+    };
+    private static final Set<String> ROUNDABOUT_MANEUVER_TYPES = new HashSet<String>() {
+        {
+            add(STEP_MANEUVER_TYPE_ROTARY);
+            add(STEP_MANEUVER_TYPE_ROUNDABOUT);
+            add(STEP_MANEUVER_TYPE_ROUNDABOUT_TURN);
+            add(STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
+            add(STEP_MANEUVER_TYPE_EXIT_ROTARY);
+        }
+    };
+    private static final Set<String> MANEUVER_TYPES_WITH_NULL_MODIFIERS = new HashSet<String>() {
+        {
+            add(STEP_MANEUVER_TYPE_OFF_RAMP);
+            add(STEP_MANEUVER_TYPE_FORK);
+            add(STEP_MANEUVER_TYPE_ROUNDABOUT);
+            add(STEP_MANEUVER_TYPE_ROUNDABOUT_TURN);
+            add(STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT);
+            add(STEP_MANEUVER_TYPE_ROTARY);
+            add(STEP_MANEUVER_TYPE_EXIT_ROTARY);
+        }
+    };
     @ManeuverType
     private String maneuverType = null;
     @ManeuverModifier
