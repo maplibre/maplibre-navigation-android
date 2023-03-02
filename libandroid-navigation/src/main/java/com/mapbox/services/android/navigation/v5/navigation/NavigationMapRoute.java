@@ -1,5 +1,22 @@
 package com.mapbox.services.android.navigation.v5.navigation;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.linear;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.match;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.step;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
+import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -53,23 +70,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.linear;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.match;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.step;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
-import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 /**
  * Provide a route using {@link NavigationMapRoute#addRoutes(List)} and a route will be drawn using
@@ -929,7 +929,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                                 stop(10f, 0.8f),
                                 stop(0f, 0.6f)
                         )),
-                        PropertyFactory.iconPitchAlignment(Property.ANCHOR_MAP),
+                        PropertyFactory.iconPitchAlignment(Property.ICON_PITCH_ALIGNMENT_MAP),
                         iconAllowOverlap(true),
                         iconIgnorePlacement(true)
                 );
