@@ -96,6 +96,7 @@ class NavigationUIActivity :
             destination = null
             waypoint = null
             it.visibility = View.GONE
+            binding.startRouteLayout.visibility = View.GONE
 
             navigationMapRoute?.removeRoute()
         }
@@ -155,15 +156,14 @@ class NavigationUIActivity :
 
         if (addMarker) {
             mapboxMap.addMarker(MarkerOptions().position(point))
+            binding.clearPoints.visibility = View.VISIBLE
         }
-        binding.clearPoints.visibility = View.VISIBLE
-
-        binding.startRouteLayout.visibility = View.VISIBLE
         calculateRoute()
         return true
     }
 
     private fun calculateRoute() {
+        binding.startRouteLayout.visibility = View.GONE
         val userLocation = mapboxMap.locationComponent.lastKnownLocation
         val destination = destination
         if (userLocation == null) {
@@ -202,6 +202,7 @@ class NavigationUIActivity :
                         val directionsRoute = response.routes().first()
                         this@NavigationUIActivity.route = directionsRoute
                         navigationMapRoute?.addRoutes(response.routes())
+                        binding.startRouteLayout.visibility = View.VISIBLE
                     }
                 }
 
