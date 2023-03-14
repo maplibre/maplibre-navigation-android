@@ -11,7 +11,3 @@
 
 # --- Mapbox ---
 -dontwarn com.mapbox.services.android.navigation.ui.v5.**
-
-# Temporarily adding this explicitly here as we were seeing Maps events being obfuscated
-# --- Maps SDK Telemetry ---
--keep class com.mapbox.mapboxsdk.module.telemetry.**
