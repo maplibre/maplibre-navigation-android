@@ -244,7 +244,6 @@ public final class NavigationConstants {
     public static final String STEP_MANEUVER_TYPE_EXIT_ROTARY = "exit rotary";
     public static final String STEP_MANEUVER_TYPE_ROUNDABOUT_TURN = "roundabout turn";
     public static final String STEP_MANEUVER_TYPE_NOTIFICATION = "notification";
-
     public static final String STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT = "exit roundabout";
 
     @StringDef({
