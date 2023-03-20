@@ -2,7 +2,7 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v2.0.0 - unreleased - March 30, 2023
+### v2.0.0 - unreleased - March 20, 2023
 
 - Initial release of Navigation UI package.
 - We adapted Navigation module (mostly `RouteFetcher`) to be aligned with the implementation we need in the Navigation-UI package.
