@@ -2,6 +2,13 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
+### v2.0.0 - unreleased - March 30, 2023
+
+- Initial release of Navigation UI package.
+- We adapted Navigation module (mostly `RouteFetcher`) to be aligned with the implementation we need in the Navigation-UI package.
+- Move Style-Url, Routing-Url and Access-Token to NavigationSettings in sample app.
+- Remove unused code (mostly Mapbox Speech Service related classes).
+
 ### v2.0.0 - unreleased - February 25, 2023
 
 -Updated Maplibre version to v10.0.2.
