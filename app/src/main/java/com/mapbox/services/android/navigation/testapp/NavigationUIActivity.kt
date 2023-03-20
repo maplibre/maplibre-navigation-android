@@ -55,7 +55,7 @@ class NavigationUIActivity :
 
     private lateinit var binding: ActivityNavigationUiBinding
 
-    private var simulateRoute = true
+    private var simulateRoute = false
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
