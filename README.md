@@ -47,7 +47,7 @@ Step 1. Add it in your root `build.gradle` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  implementation 'com.github.maplibre:maplibre-navigation-android:1.1.1'
+  implementation 'com.github.maplibre:maplibre-navigation-android:2.0.0'
 ```
 
 ## maven
@@ -65,7 +65,7 @@ Step 2. Add the dependency
   <dependency>
 	    <groupId>com.github.maplibre</groupId>
 	    <artifactId>maplibre-navigation-android</artifactId>
-	    <version>1.1.1</version>
+	    <version>2.0.0</version>
 	</dependency>
 ```
 
@@ -76,7 +76,7 @@ Step 1. Add it in your `build.sbt` at the end of resolvers:
 ```
 Step 2. Add the dependency
 ```
-  libraryDependencies += "com.github.maplibre" % "maplibre-navigation-android" % "1.1.1"
+  libraryDependencies += "com.github.maplibre" % "maplibre-navigation-android" % "2.0.0"
 ```
 
 ## leiningen
@@ -86,7 +86,7 @@ Step 1. Add it in your `project.clj` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  :dependencies [[com.github.maplibre/maplibre-navigation-android "1.1.1"]]	
+  :dependencies [[com.github.maplibre/maplibre-navigation-android "2.0.0"]]	
 ```
 
 Optional (you can also leave it as an empty String):
