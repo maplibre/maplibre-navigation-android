@@ -4,7 +4,6 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegStep;
 import com.mapbox.api.directions.v5.models.VoiceInstructions;
 import com.mapbox.services.android.navigation.v5.instruction.Instruction;
-import com.mapbox.services.android.navigation.v5.navigation.VoiceInstructionLoader;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.utils.RouteUtils;
 
@@ -30,9 +29,6 @@ public class VoiceInstructionMilestone extends Milestone {
 
   @Override
   public boolean isOccurring(RouteProgress previousRouteProgress, RouteProgress routeProgress) {
-    if (isNewRoute(routeProgress)) {
-      cacheInstructions(routeProgress, true);
-    }
     LegStep currentStep = routeProgress.currentLegProgress().currentStep();
     double stepDistanceRemaining = routeProgress.currentLegProgress().currentStepProgress().distanceRemaining();
     VoiceInstructions instructions = routeUtils.findCurrentVoiceInstructions(currentStep, stepDistanceRemaining);
@@ -113,23 +109,10 @@ public class VoiceInstructionMilestone extends Milestone {
   }
 
   private boolean updateInstructions(RouteProgress routeProgress, VoiceInstructions instructions) {
-    cacheInstructions(routeProgress, false);
     this.instructions = instructions;
     return true;
   }
 
-  /**
-   * Caches the instructions in the VoiceInstructionLoader if it has been initialized
-   *
-   * @param routeProgress containing the instructions
-   * @param isFirst       whether it's the first routeProgress of the route
-   */
-  private void cacheInstructions(RouteProgress routeProgress, boolean isFirst) {
-    VoiceInstructionLoader voiceInstructionLoader = VoiceInstructionLoader.getInstance();
-    if (voiceInstructionLoader != null) {
-      voiceInstructionLoader.cacheInstructions(routeProgress, isFirst);
-    }
-  }
 
   public static final class Builder extends Milestone.Builder {
 

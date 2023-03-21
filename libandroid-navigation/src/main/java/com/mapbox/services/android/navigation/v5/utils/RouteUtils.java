@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.v5.utils;
 
+import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
+
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -26,8 +28,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
 
 public class RouteUtils {
 

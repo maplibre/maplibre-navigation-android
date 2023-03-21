@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin_bottom">8dp</dimen>
+    <dimen name="wayname_bottom_padding">8dp</dimen>
+    <dimen name="wayname_padding">16dp</dimen>
+    <dimen name="wayname_padding_bottom">2dp</dimen>
+</resources>

@@ -25,6 +25,9 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.services.android.navigation.testapp.NavigationSettings.ACCESS_TOKEN
+import com.mapbox.services.android.navigation.testapp.NavigationSettings.BASE_URL
+import com.mapbox.services.android.navigation.testapp.NavigationSettings.STYLE_URL
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
 import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
@@ -205,14 +208,13 @@ class MockNavigationActivity :
 
     private fun calculateRoute() {
         val userLocation = locationEngine.lastLocation
-        val accesstoken = "pk.0"
         val destination = destination
         if (userLocation == null) {
             Timber.d("calculateRoute: User location is null, therefore, origin can't be set.")
             return
         }
 
-        if (destination == null || accesstoken == null) {
+        if (destination == null) {
             return
         }
 
@@ -223,7 +225,7 @@ class MockNavigationActivity :
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
-            this.accessToken("pk.0")
+            this.accessToken(ACCESS_TOKEN)
             this.origin(origin)
             this.destination(destination)
             this.voiceUnits(DirectionsCriteria.METRIC)
@@ -331,10 +333,5 @@ class MockNavigationActivity :
             )
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0))
         }
-    }
-
-    companion object{
-        private const val STYLE_URL = "YOUR STYLE URL HERE"
-        private const val BASE_URL = "YOUR BASE URL HERE"
     }
 }

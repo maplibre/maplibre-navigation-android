@@ -9,36 +9,37 @@ ext {
     ]
 
     version = [
-            mapLibreVersion        : '10.0.2',
-            mapLibreService        : '5.9.0',
-            mapLibreTurf           : '5.9.0',
-            mapLibreAnnotations    : '1.0.0',
-            autoValue              : '1.10.1',
-            autoValueParcel        : '0.2.5',
-            junit                  : '4.13.2',
-            androidxCoreVersion    : '1.9.0',
-            appcompatVersion       : '1.5.1',
-            cardViewVersion        : '1.0.0',
-            supportLibVersion      : '28.0.0',
-            constraintLayoutVersion: '2.1.4',
-            materialVersion        : '1.7.0',
-            recyclerViewVersion    : '1.2.1',
-            mockito                : '4.9.0',
-            hamcrest               : '2.0.0.0',
-            errorprone             : '2.16',
-            butterknife            : '10.2.3',
-            leakCanaryVersion      : '2.10',
-            timber                 : '5.0.1',
-            testRunnerVersion      : '1.0.1',
-            espressoVersion        : '3.5.0',
-            spoonRunner            : '1.6.2',
-            commonsIO              : '2.6',
-            robolectric            : '4.9',
-            lifecycle              : '1.1.1',
-            lifecycleVersion       : '2.2.0',
-            picasso                : '2.71828',
-            gmsLocation            : '21.0.1',
-            testRulesVersion       : '1.5.0'
+            mapLibreVersion             : '10.0.2',
+            mapLibreService             : '5.9.0',
+            mapLibreTurf                : '5.9.0',
+            mapLibreAnnotations         : '1.0.0',
+            autoValue                   : '1.10.1',
+            autoValueParcel             : '0.2.5',
+            junit                       : '4.13.2',
+            androidxCoreVersion         : '1.9.0',
+            appcompatVersion            : '1.5.1',
+            cardViewVersion             : '1.0.0',
+            androidxAnnotationVersion   : '1.6.0',
+            constraintLayoutVersion     : '2.1.4',
+            materialVersion             : '1.7.0',
+            recyclerViewVersion         : '1.2.1',
+            mockito                     : '4.9.0',
+            hamcrest                    : '2.0.0.0',
+            errorprone                  : '2.16',
+            butterknife                 : '10.2.3',
+            leakCanaryVersion           : '2.10',
+            timber                      : '5.0.1',
+            testRunnerVersion           : '1.0.1',
+            espressoVersion             : '3.5.0',
+            spoonRunner                 : '1.6.2',
+            commonsIO                   : '2.6',
+            robolectric                 : '4.9',
+            lifecycle                   : '1.1.1',
+            lifecycleVersion            : '2.2.0',
+            picasso                     : '2.71828',
+            gmsLocation                 : '21.0.1',
+            testRulesVersion            : '1.5.0',
+            jsonVersion                 : '20180813'
     ]
 
     pluginVersion = [
@@ -73,8 +74,7 @@ ext {
             // support
             androidxAppcompat       : "androidx.appcompat:appcompat:${version.appcompatVersion}",
             androidxCore            : "androidx.core:core-ktx:${version.androidxCoreVersion}",
-            supportAnnotation       : "com.android.support:support-annotations:${version.supportLibVersion}",
-            supportV4               : "com.android.support:support-v4:${version.supportLibVersion}",
+            androidxAnnotation      : "androidx.annotation:annotation:1.6.0",
             materialDesign          : "com.google.android.material:material:${version.materialVersion}",
             androidxRecyclerView    : "androidx.recyclerview:recyclerview:${version.recyclerViewVersion}",
             androidxCardView        : "androidx.cardview:cardview:${version.cardViewVersion}",
@@ -83,7 +83,7 @@ ext {
 
             // architecture
             lifecycleExtensions     : "androidx.lifecycle:lifecycle-extensions:${version.lifecycleVersion}",
-            lifecycleCompiler       : "android.arch.lifecycle:compiler:${version.lifecycle}",
+            lifecycleCompiler       : "androidx.lifecycle:lifecycle-compiler:${version.lifecycleVersion}",
 
             // square crew
             timber                  : "com.jakewharton.timber:timber:${version.timber}",
@@ -105,6 +105,7 @@ ext {
             hamcrest                : "org.hamcrest:hamcrest-junit:${version.hamcrest}",
             commonsIO               : "commons-io:commons-io:${version.commonsIO}",
             robolectric             : "org.robolectric:robolectric:${version.robolectric}",
+            json                   : "org.json:json:${version.jsonVersion}",
 
             // play services
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",

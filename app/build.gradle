@@ -47,6 +47,7 @@ android {
 dependencies {
     // Flitsmeister Navigation SDK
     implementation project(':libandroid-navigation')
+    implementation project(':libandroid-navigation-ui')
     implementation(dependenciesList.mapLibre) {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
@@ -73,8 +74,6 @@ dependencies {
 
     // Leak Canary
     debugImplementation dependenciesList.leakCanaryDebug
-    releaseImplementation dependenciesList.leakCanaryRelease
-    androidTestImplementation dependenciesList.leakCanaryTest
 
     // Unit Testing
     testImplementation dependenciesList.junit
