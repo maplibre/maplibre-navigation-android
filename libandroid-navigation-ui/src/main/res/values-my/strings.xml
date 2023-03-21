@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Indicates that rerouting is in progress -->
+    <string name="rerouting">လမ်းကြောင်းပြန်ရှာနေသည်.....</string>
+
+    <!-- Button title for re-centering tracking -->
+    <string name="re_center">အလယ်သို့ပြန်ထားမည်</string>
+
+    <!-- Indicates voice instructions are muted -->
+    <string name="muted">အသံပိတ်</string>
+
+    <!-- Indicates voice instructions are unmuted -->
+    <string name="unmuted">အသံပြန်ဖွင့်</string>
+
+    <!-- Test app dialog text -->
+    <string name="dropoff_dialog_text">နောက်ထပ်နေရာကိုလမ်းညွန်ချက်လိုချင်ပါသလား</string>
+
+    <!-- Test app dialog text start next route -->
+    <string name="dropoff_dialog_positive_text">နောက်ထပ်တစ်ခု</string>
+
+    <!-- Test app dialog text cancel navigation -->
+    <string name="dropoff_dialog_negative_text">ပယ်ဖျက်သည်</string>
+
+    </resources>

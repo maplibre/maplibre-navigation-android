@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Indicates that rerouting is in progress -->
+    <string name="rerouting">Atunjade ...</string>
+
+    <!-- Button title for re-centering tracking -->
+    <string name="re_center">Tun-ile-iṣẹ</string>
+
+    <!-- Indicates voice instructions are muted -->
+    <string name="muted">Muted</string>
+
+    <!-- Indicates voice instructions are unmuted -->
+    <string name="unmuted">Unmuted</string>
+
+    <!-- Shown in off-route scenarios to provide feedback -->
+    <string name="report_problem">Sọkọ Iṣoro</string>
+
+    <!-- Test app dialog text -->
+    <string name="dropoff_dialog_text">Ṣe o fẹ lati lilö kiri si ibi-atẹle miiran?</string>
+
+    <!-- Test app dialog text start next route -->
+    <string name="dropoff_dialog_positive_text">Bẹrẹ tókàn</string>
+
+    <!-- Test app dialog text cancel navigation -->
+    <string name="dropoff_dialog_negative_text">Fagilee</string>
+
+    </resources>

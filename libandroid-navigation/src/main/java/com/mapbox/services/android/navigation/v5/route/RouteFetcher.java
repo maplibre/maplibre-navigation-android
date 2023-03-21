@@ -43,6 +43,8 @@ public class RouteFetcher {
   private RouteProgress routeProgress;
   private RouteUtils routeUtils;
 
+  private NavigationRoute navigationRoute;
+
   public RouteFetcher(Context context) {
     contextWeakReference = new WeakReference<>(context);
     routeUtils = new RouteUtils();
@@ -70,18 +72,15 @@ public class RouteFetcher {
    * @since 0.13.0
    */
   public void findRouteFromRouteProgress(Location location, RouteProgress routeProgress) {
-    if (isInvalidProgress(location, routeProgress)) {
-      return;
-    }
     this.routeProgress = routeProgress;
-    NavigationRoute.Builder builder = buildRequestFromLocation(location, routeProgress);
-    executeRouteCall(builder);
+    NavigationRoute.Builder builder = buildRequest(location, routeProgress);
+    findRouteWith(builder);
   }
 
   @Nullable
-  private NavigationRoute.Builder buildRequestFromLocation(Location location, RouteProgress progress) {
+  public NavigationRoute.Builder buildRequest(Location location, RouteProgress progress) {
     Context context = contextWeakReference.get();
-    if (context == null) {
+    if (invalid(context, location, routeProgress)) {
       return null;
     }
     Point origin = Point.fromLngLat(location.getLongitude(), location.getLatitude());
@@ -152,14 +151,34 @@ public class RouteFetcher {
     return approaches;
   }
 
-  private void executeRouteCall(NavigationRoute.Builder builder) {
+  /**
+   * Cancels the Directions API call if it has not been executed yet.
+   */
+  public void cancelRouteCall() {
+    if (navigationRoute != null) {
+      navigationRoute.cancelCall();
+    }
+  }
+
+  /**
+   * Executes the given NavigationRoute builder, eventually triggering
+   * any {@link RouteListener} that has been added via {@link RouteFetcher#addRouteListener(RouteListener)}.
+   *
+   * @param builder to be executed
+   */
+  public void findRouteWith(NavigationRoute.Builder builder) {
     if (builder != null) {
-      builder.build().getRoute(directionsResponseCallback);
+      navigationRoute = builder.build();
+      navigationRoute.getRoute(directionsResponseCallback);
     }
   }
 
   private boolean isInvalidProgress(Location location, RouteProgress routeProgress) {
     return location == null || routeProgress == null;
+  }
+
+  private boolean invalid(Context context, Location location, RouteProgress routeProgress) {
+    return context == null || location == null || routeProgress == null;
   }
 
   private Callback<DirectionsResponse> directionsResponseCallback = new Callback<DirectionsResponse>() {

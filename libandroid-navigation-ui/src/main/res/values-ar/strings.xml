@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Indicates that rerouting is in progress -->
+    <string name="rerouting">اعادة توجيه...</string>
+
+    <!-- Button title for re-centering tracking -->
+    <string name="re_center">اعادة التمركز</string>
+
+    <!-- Indicates voice instructions are muted -->
+    <string name="muted">صامت</string>
+
+    <!-- Indicates voice instructions are unmuted -->
+    <string name="unmuted">غير صامت</string>
+
+    <!-- Test app dialog text -->
+    <string name="dropoff_dialog_text">هل تود التنقل للمكان التالي؟</string>
+
+    <!-- Test app dialog text start next route -->
+    <string name="dropoff_dialog_positive_text">ابدأ</string>
+
+    <!-- Test app dialog text cancel navigation -->
+    <string name="dropoff_dialog_negative_text">إلغاء</string>
+
+    </resources>

@@ -1,0 +1,88 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion androidVersions.compileSdkVersion
+  buildToolsVersion androidVersions.buildToolsVersion
+
+  defaultConfig {
+    minSdkVersion androidVersions.minSdkVersion
+    targetSdkVersion androidVersions.targetSdkVersion
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    vectorDrawables.useSupportLibrary = true
+
+    buildConfigField('String',
+        "MAPBOX_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "mapbox-navigation-ui-android")
+    )
+    buildConfigField 'String',
+        "MAPBOX_NAVIGATION_EVENTS_USER_AGENT", String.format("\"mapbox-navigation-ui-android/%s\"",
+        project.VERSION_NAME
+    )
+    consumerProguardFiles 'proguard-consumer.pro'
+  }
+
+  configurations {
+    javadocDeps
+  }
+
+  buildTypes {
+    debug {
+      testCoverageEnabled = true
+    }
+  }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+    unitTests.includeAndroidResources = true
+    unitTests.all {
+      jacoco {
+        includeNoLocationClasses = true
+        excludes = ['jdk.internal.*']
+      }
+    }
+  }
+}
+
+dependencies {
+  // Navigation SDK
+  api project(':libandroid-navigation')
+
+  // Maplibre Maps SDK
+  api dependenciesList.mapLibreServices
+  api dependenciesList.mapLibreTurf
+  api dependenciesList.mapLibreAnnotations
+  implementation(dependenciesList.mapLibre){
+    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
+    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
+  }
+
+  // Support libraries
+  implementation dependenciesList.materialDesign
+  implementation dependenciesList.androidxRecyclerView
+  implementation dependenciesList.androidxConstraintLayout
+  implementation dependenciesList.androidxCardView
+
+  // AutoValues
+  annotationProcessor dependenciesList.autoValue
+  implementation dependenciesList.autoValueAnnotations
+
+  // AutoValues
+  annotationProcessor dependenciesList.autoValue
+  compileOnly dependenciesList.autoValue
+
+  // Picasso
+  implementation dependenciesList.picasso
+
+  // Timber
+  implementation dependenciesList.timber
+
+  // Unit testing
+  testImplementation dependenciesList.junit
+  testImplementation dependenciesList.mockito
+  testImplementation dependenciesList.robolectric
+  testImplementation dependenciesList.json
+}
+
+apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/dependencies-graph.gradle"
+apply from: "${rootDir}/gradle/dependency-updates.gradle"
