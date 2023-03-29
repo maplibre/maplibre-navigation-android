@@ -718,6 +718,10 @@ public class MapboxNavigation implements ServiceConnection {
     Timber.d("Connected to service.");
     NavigationService.LocalBinder binder = (NavigationService.LocalBinder) service;
     navigationService = binder.getService();
+    if(navigationService == null){
+      //Since this is called when the Service is ready, the binder should always return a valid Service.
+      throw new IllegalStateException("NavigationService must not be null");
+    }
     navigationService.startNavigation(this);
     isBound = true;
   }

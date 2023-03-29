@@ -16,6 +16,8 @@ import com.mapbox.services.android.navigation.v5.navigation.notification.Navigat
 import com.mapbox.services.android.navigation.v5.route.FasterRoute;
 import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 
+import java.lang.ref.WeakReference;
+
 import timber.log.Timber;
 
 /**
@@ -31,7 +33,7 @@ import timber.log.Timber;
  */
 public class NavigationService extends Service {
 
-    private final IBinder localBinder = new LocalBinder();
+    private final IBinder localBinder = new LocalBinder(this);
     private RouteProcessorBackgroundThread thread;
     private NavigationLocationEngineUpdater locationEngineUpdater;
     private RouteFetcher routeFetcher;
@@ -134,10 +136,18 @@ public class NavigationService extends Service {
         startForeground(notificationId, notification);
     }
 
-    class LocalBinder extends Binder {
+    final static class LocalBinder extends Binder {
+
+        private final WeakReference<NavigationService> serviceRef;
+
+        private LocalBinder(final NavigationService service) {
+            this.serviceRef = new WeakReference<>(service);
+        }
+
+        @Nullable
         NavigationService getService() {
             Timber.d("Local binder called.");
-            return NavigationService.this;
+            return serviceRef.get();
         }
     }
 }
