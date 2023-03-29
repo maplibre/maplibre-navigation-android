@@ -144,6 +144,7 @@ public class NavigationService extends Service {
             this.serviceRef = new WeakReference<>(service);
         }
 
+        @Nullable
         NavigationService getService() {
             Timber.d("Local binder called.");
             return serviceRef.get();
