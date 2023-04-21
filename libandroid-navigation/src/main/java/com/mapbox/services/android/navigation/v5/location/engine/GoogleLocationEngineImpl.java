@@ -88,12 +88,13 @@ class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
     }
 
     private static LocationRequest toGMSLocationRequest(LocationEngineRequest request) {
-        LocationRequest.Builder builder = new LocationRequest.Builder(request.getInterval());
-        builder.setMinUpdateIntervalMillis(request.getFastestInterval());
-        builder.setMinUpdateDistanceMeters(request.getDisplacement());
-        builder.setMaxUpdateDelayMillis(request.getMaxWaitTime());
-        builder.setPriority(toGMSLocationPriority(request.getPriority()));
-        return builder.build();
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(request.getInterval());
+        locationRequest.setFastestInterval(request.getFastestInterval());
+        locationRequest.setSmallestDisplacement(request.getDisplacement());
+        locationRequest.setMaxWaitTime(request.getMaxWaitTime());
+        locationRequest.setPriority(toGMSLocationPriority(request.getPriority()));
+        return locationRequest;
     }
 
     private static int toGMSLocationPriority(int enginePriority) {
