@@ -100,14 +100,14 @@ class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
     private static int toGMSLocationPriority(int enginePriority) {
         switch (enginePriority) {
             case LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY:
-                return Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+                return LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
             case LocationEngineRequest.PRIORITY_LOW_POWER:
-                return Priority.PRIORITY_LOW_POWER;
+                return LocationRequest.PRIORITY_LOW_POWER;
             case LocationEngineRequest.PRIORITY_NO_POWER:
-                return Priority.PRIORITY_PASSIVE;
+                return LocationRequest.PRIORITY_NO_POWER;
             case LocationEngineRequest.PRIORITY_HIGH_ACCURACY:
             default:
-                return Priority.PRIORITY_HIGH_ACCURACY;
+                return LocationRequest.PRIORITY_HIGH_ACCURACY;
         }
     }
 
