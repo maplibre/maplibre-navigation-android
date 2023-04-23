@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback;
@@ -29,7 +28,7 @@ import java.util.List;
 /**
  * Wraps implementation of Fused Location Provider
  */
-class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
+public class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
     private final FusedLocationProviderClient fusedLocationProviderClient;
 
     @VisibleForTesting
