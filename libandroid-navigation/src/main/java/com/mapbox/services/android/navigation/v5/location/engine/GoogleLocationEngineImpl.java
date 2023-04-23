@@ -36,7 +36,7 @@ public class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCall
         this.fusedLocationProviderClient = fusedLocationProviderClient;
     }
 
-    GoogleLocationEngineImpl(@NonNull Context context) {
+    public GoogleLocationEngineImpl(@NonNull Context context) {
         this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
