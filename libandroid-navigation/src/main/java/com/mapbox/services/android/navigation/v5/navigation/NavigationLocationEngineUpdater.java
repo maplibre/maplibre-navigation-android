@@ -13,24 +13,34 @@ import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest;
 import com.mapbox.mapboxsdk.location.engine.LocationEngineResult;
 import com.mapbox.services.android.navigation.v5.utils.RouteUtils;
 
+import timber.log.Timber;
+
 class NavigationLocationEngineUpdater {
+
+    private static final int LOCATION_ENGINE_INTERVAL = 1000;
 
     private final NavigationLocationEngineListener listener;
     private RouteUtils routeUtils;
     private LocationEngine locationEngine;
 
-    @SuppressLint("MissingPermission")
-    NavigationLocationEngineUpdater(LocationEngine locationEngine, NavigationLocationEngineListener listener) {
+    NavigationLocationEngineUpdater(LocationEngine locationEngine,
+            NavigationLocationEngineListener listener) {
         this.locationEngine = locationEngine;
         this.listener = listener;
-        locationEngine.requestLocationUpdates(new LocationEngineRequest.Builder(1000).build(), listener, Looper.getMainLooper());
+        requestLocationUpdates();
     }
 
-    @SuppressLint("MissingPermission")
     void updateLocationEngine(LocationEngine locationEngine) {
         removeLocationEngineListener();
         this.locationEngine = locationEngine;
-        locationEngine.requestLocationUpdates(new LocationEngineRequest.Builder(1000).build(), listener, Looper.getMainLooper());
+        requestLocationUpdates();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestLocationUpdates() {
+        this.locationEngine.requestLocationUpdates(
+                new LocationEngineRequest.Builder(LOCATION_ENGINE_INTERVAL).setFastestInterval(
+                        LOCATION_ENGINE_INTERVAL).build(), listener, Looper.getMainLooper());
     }
 
     @SuppressWarnings("MissingPermission")
@@ -48,6 +58,7 @@ class NavigationLocationEngineUpdater {
 
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Timber.w(exception, "Cannot get a forced location update");
             }
         });
 

@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Wraps implementation of Fused Location Provider
  */
-class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
+public class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
     private final FusedLocationProviderClient fusedLocationProviderClient;
 
     @VisibleForTesting
@@ -37,7 +37,7 @@ class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
     }
 
-    GoogleLocationEngineImpl(@NonNull Context context) {
+    public GoogleLocationEngineImpl(@NonNull Context context) {
         this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
@@ -73,6 +73,8 @@ class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
 
     @Override
     public void removeLocationUpdates(@NonNull LocationCallback listener) {
+        // The listener is annotated with @NonNull, but there seems to be cases where a null
+        // listener is somehow passed into this method.
         if (listener != null) {
             fusedLocationProviderClient.removeLocationUpdates(listener);
         }
@@ -90,22 +92,21 @@ class GoogleLocationEngineImpl implements LocationEngineImpl<LocationCallback> {
         builder.setMinUpdateIntervalMillis(request.getFastestInterval());
         builder.setMinUpdateDistanceMeters(request.getDisplacement());
         builder.setMaxUpdateDelayMillis(request.getMaxWaitTime());
-        builder.setWaitForAccurateLocation(true);
         builder.setPriority(toGMSLocationPriority(request.getPriority()));
         return builder.build();
     }
 
     private static int toGMSLocationPriority(int enginePriority) {
         switch (enginePriority) {
-            case LocationEngineRequest.PRIORITY_HIGH_ACCURACY:
-                return Priority.PRIORITY_HIGH_ACCURACY;
             case LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY:
                 return Priority.PRIORITY_BALANCED_POWER_ACCURACY;
             case LocationEngineRequest.PRIORITY_LOW_POWER:
                 return Priority.PRIORITY_LOW_POWER;
             case LocationEngineRequest.PRIORITY_NO_POWER:
-            default:
                 return Priority.PRIORITY_PASSIVE;
+            case LocationEngineRequest.PRIORITY_HIGH_ACCURACY:
+            default:
+                return Priority.PRIORITY_HIGH_ACCURACY;
         }
     }
 
