@@ -47,16 +47,10 @@
     </style>
 
     <style name="TestNavigationViewDark" parent="NavigationViewDark">
-        <!-- Map style URL -->
-        <item name="navigationViewMapStyle">
-            YOUR STYLE URL HERE
-        </item>
+        <item name="navigationViewMapStyle">@string/map_style_dark</item>
     </style>
 
     <style name="TestNavigationViewLight" parent="NavigationViewLight">
-        <!-- Map style URL -->
-        <item name="navigationViewMapStyle">
-            YOUR STYLE URL HERE
-        </item>
+        <item name="navigationViewMapStyle">@string/map_style_light</item>
     </style>
 </resources>

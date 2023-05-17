@@ -23,9 +23,6 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.services.android.navigation.testapp.NavigationSettings.ACCESS_TOKEN
-import com.mapbox.services.android.navigation.testapp.NavigationSettings.BASE_URL
-import com.mapbox.services.android.navigation.testapp.NavigationSettings.STYLE_URL
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
@@ -104,7 +101,7 @@ class NavigationUIActivity :
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.Builder().fromUri(STYLE_URL)) { style ->
+        mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
         }
 
@@ -182,13 +179,13 @@ class NavigationUIActivity :
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
-            this.accessToken(ACCESS_TOKEN)
+            this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
             this.voiceUnits(DirectionsCriteria.METRIC)
             this.alternatives(true)
             this.profile("fastest")
-            this.baseUrl(BASE_URL)
+            this.baseUrl(getString(R.string.base_url))
         }
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
