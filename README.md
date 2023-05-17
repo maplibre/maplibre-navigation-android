@@ -89,8 +89,7 @@ Step 2. Add the dependency
   :dependencies [[com.github.maplibre/maplibre-navigation-android "2.0.0"]]	
 ```
 
-Optional (you can also leave it as an empty String):
-To run the [sample code](#sample-code) on a device or emulator, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in `developer-config.xml` found in the project. 
+To run the [sample code](#sample-code) on a device or emulator, include your [Mapbox access token](https://www.mapbox.com/help/define-access-token/) and map tile provider URL in `developer-config.xml` found in the project. 
 
 # Getting Help
 
