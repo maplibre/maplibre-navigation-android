@@ -5,7 +5,7 @@ Maplibre welcomes participation and contributions from everyone.
 ### v2.0.1 - unreleased
 
 - Sample app: Moved all configurations to a central place [#57](https://github.com/maplibre/maplibre-navigation-android/pull/57)
-  > **Note**
+  > **Note**  
   > Please delete your existing `app/main/res/values/developer-config.xml` to generate the new one or copy following content to your existing file:
   ```xml
   <?xml version="1.0" encoding="utf-8"?>
