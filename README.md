@@ -13,7 +13,7 @@ With this SDK you can implement turn-by-turn navigation in your own Android app 
 
 
 <div align="center">
-  <img src="https://github.com/birkskyum/maplibre-navigation-android/blob/adjust-readme/.github/preview.png" style="max-height: 350px" alt="MapLibre Navigation Android">
+  <img src="https://github.com/birkskyum/maplibre-navigation-android/blob/adjust-readme/.github/preview.png" style="max-height: 350px;" alt="MapLibre Navigation Android">
 </div>
 
 ## License
