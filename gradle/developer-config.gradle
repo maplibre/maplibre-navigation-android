@@ -3,21 +3,28 @@
 //
 
 task accessToken {
-  def tokenFile = new File("${projectDir}/src/main/res/values/developer-config.xml")
-  if (!tokenFile.exists()) {
-    String mapboxAccessToken = "$System.env.MAPBOX_ACCESS_TOKEN"
-    if (mapboxAccessToken == "null") {
-      System.out.println("You should set the MAPBOX_ACCESS_TOKEN environment variable.")
-      mapboxAccessToken = "YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE"
+    def tokenFile = new File("${projectDir}/src/main/res/values/developer-config.xml")
+    if (!tokenFile.exists()) {
+        String mapboxAccessToken = "$System.env.MAPBOX_ACCESS_TOKEN"
+        if (mapboxAccessToken == "null") {
+            System.out.println("You should set the MAPBOX_ACCESS_TOKEN environment variable.")
+            mapboxAccessToken = "YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE"
+        }
+        String tokenFileContents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<resources>\n" +
+                "    <!-- Your navigation base url (example: https://api.mapbox.com) (-->\n" +
+                "    <string name=\"base_url\" translatable=\"false\">https://api.mapbox.com</string>\n" +
+                "    <!-- Your Mapbox access token (example: pk.abc...) -->\n" +
+                "    <string name=\"mapbox_access_token\" translatable=\"false\">" + mapboxAccessToken + "</string>\n" +
+                "    <!-- Map tile provider for light design (example: https://api.maptiler.com/maps/basic-v2/style.json?key=...) -->\n" +
+                "    <string name=\"map_style_light\" translatable=\"false\"></string>\n" +
+                "    <!-- Map tile provider for dark design (example: \"https://api.maptiler.com/maps/basic-v2-dark/style.json?key=...) -->\n" +
+                "    <string name=\"map_style_dark\" translatable=\"false\"></string>\n" +
+                "</resources>"
+        tokenFile.write(tokenFileContents)
     }
-    String tokenFileContents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-      "<resources>\n" +
-      "    <string name=\"mapbox_access_token\">" + mapboxAccessToken + "</string>\n" +
-      "</resources>"
-    tokenFile.write(tokenFileContents)
-  }
 }
 
 gradle.projectsEvaluated {
-  preBuild.dependsOn('accessToken')
+    preBuild.dependsOn('accessToken')
 }

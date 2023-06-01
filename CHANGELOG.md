@@ -4,6 +4,22 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### v2.0.1 - unreleased
 
+- Sample app: Moved all configurations to a central place [#57](https://github.com/maplibre/maplibre-navigation-android/pull/57)
+  > **Note**  
+  > Please delete your existing `app/main/res/values/developer-config.xml` to generate the new one or copy following content to your existing file:
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <resources>
+      <!-- Your navigation base url (example: https://api.mapbox.com) (-->
+      <string name="base_url" translatable="false">https://api.mapbox.com</string>
+      <!-- Your Mapbox access token (example: pk.abc...) -->
+      <string name="mapbox_access_token" translatable="false">YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE</string>
+      <!-- Map tile provider for light design (example: https://api.maptiler.com/maps/basic-v2/style.json?key=...) -->
+      <string name="map_style_light" translatable="false"></string>
+      <!-- Map tile provider for dark design (example: "https://api.maptiler.com/maps/basic-v2-dark/style.json?key=...) -->
+      <string name="map_style_dark" translatable="false"></string>
+  </resources>
+  ```
 - Fix memory leak in Navigation Service
 
 ### v2.0.0 - March 21, 2023
