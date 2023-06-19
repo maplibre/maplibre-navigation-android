@@ -199,6 +199,57 @@ public class OffRouteDetectorTest extends BaseTest {
   }
 
   @Test
+  public void isUserOffRoute_AssertFalseWhenOnRouteMovingAwayButNotFarEnoughFromManeuver() throws Exception {
+    RouteProgress routeProgress = buildDefaultTestRouteProgress();
+    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
+
+    LineString lineString = LineString.fromPolyline(currentStep.geometry(), Constants.PRECISION_6);
+    List<Point> coordinates = lineString.coordinates();
+
+    Location firstLocationUpdate = buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637);
+    offRouteDetector.isUserOffRoute(firstLocationUpdate, routeProgress, options);
+
+    Point lastPointInCurrentStep = coordinates.get(7);
+    Location secondLocationUpdate = buildDefaultLocationUpdate(
+            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+    );
+    boolean isUserOffRouteFirstTry = offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteFirstTry);
+
+    Point pointSix = coordinates.get(6);
+    Location thirdLocationUpdate = buildDefaultLocationUpdate(
+            pointSix.longitude(), pointSix.latitude()
+    );
+    boolean isUserOffRouteSecondTry = offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteSecondTry);
+
+    Location fourthLocationUpdate = buildDefaultLocationUpdate(
+            pointSix.longitude(), pointSix.latitude()
+    );
+    boolean isUserOffRouteThirdTry = offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteThirdTry);
+
+    Location fifthLocationUpdate = buildDefaultLocationUpdate(
+            pointSix.longitude(), pointSix.latitude()
+    );
+    boolean isUserOffRouteFourthTry = offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteFourthTry);
+
+    Location sixthLocationUpdate = buildDefaultLocationUpdate(
+            pointSix.longitude(), pointSix.latitude()
+    );
+    boolean isUserOffRouteFifthTry = offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteFifthTry);
+
+    Point pointFive = coordinates.get(5);
+    Location seventhLocationUpdate = buildDefaultLocationUpdate(
+            pointFive.longitude(), pointFive.latitude()
+    );
+    boolean isUserOffRouteSixthTry = offRouteDetector.isUserOffRoute(seventhLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteSixthTry);
+  }
+
+  @Test
   public void isUserOffRoute_AssertFalseTwoUpdatesAwayFromManeuverThenOneTowards() throws Exception {
     RouteProgress routeProgress = buildDefaultTestRouteProgress();
     LegStep currentStep = routeProgress.currentLegProgress().currentStep();
