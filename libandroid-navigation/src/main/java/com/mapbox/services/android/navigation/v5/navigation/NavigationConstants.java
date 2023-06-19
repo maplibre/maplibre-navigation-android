@@ -80,8 +80,10 @@ public final class NavigationConstants {
      * Maximum number of meters the user can travel away from step before the
      * {@link OffRouteListener}'s called.
      *
+     * @deprecated has no effect and will be removed in a future release.
      * @since 0.2.0
      */
+    @Deprecated
     static final double MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE = 20;
 
     /**

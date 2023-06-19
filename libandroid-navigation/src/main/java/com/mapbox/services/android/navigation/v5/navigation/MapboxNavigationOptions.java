@@ -18,6 +18,10 @@ public abstract class MapboxNavigationOptions {
 
   public abstract double maneuverZoneRadius();
 
+  /**
+   * @deprecated has no effect and will be removed in a future release. Use {@link #minimumDistanceBeforeRerouting()} instead.
+   */
+  @Deprecated
   public abstract double maximumDistanceOffRoute();
 
   public abstract double deadReckoningTimeInterval();
@@ -66,6 +70,10 @@ public abstract class MapboxNavigationOptions {
 
     public abstract Builder maneuverZoneRadius(double maneuverZoneRadius);
 
+    /**
+     * @deprecated has no effect and will be removed in a future release. Use {@link #minimumDistanceBeforeRerouting()} instead.
+     */
+    @Deprecated
     public abstract Builder maximumDistanceOffRoute(double maximumDistanceOffRoute);
 
     public abstract Builder deadReckoningTimeInterval(double deadReckoningTimeInterval);
