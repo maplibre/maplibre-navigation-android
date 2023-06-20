@@ -247,6 +247,13 @@ public class OffRouteDetectorTest extends BaseTest {
     );
     boolean isUserOffRouteSixthTry = offRouteDetector.isUserOffRoute(seventhLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteSixthTry);
+
+    Point pointFour = coordinates.get(4);
+    Location eighthLocationUpdate = buildDefaultLocationUpdate(
+        pointFour.longitude(), pointFour.latitude()
+    );
+    boolean isUserOffRouteSeventhTry = offRouteDetector.isUserOffRoute(eighthLocationUpdate, routeProgress, options);
+    assertFalse(isUserOffRouteSeventhTry);
   }
 
   @Test
