@@ -211,39 +211,39 @@ public class OffRouteDetectorTest extends BaseTest {
 
     Point lastPointInCurrentStep = coordinates.get(7);
     Location secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+      lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
     );
     boolean isUserOffRouteFirstTry = offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteFirstTry);
 
     Point pointSix = coordinates.get(6);
     Location thirdLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+      pointSix.longitude(), pointSix.latitude()
     );
     boolean isUserOffRouteSecondTry = offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteSecondTry);
 
     Location fourthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+      pointSix.longitude(), pointSix.latitude()
     );
     boolean isUserOffRouteThirdTry = offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteThirdTry);
 
     Location fifthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+      pointSix.longitude(), pointSix.latitude()
     );
     boolean isUserOffRouteFourthTry = offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteFourthTry);
 
     Location sixthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+      pointSix.longitude(), pointSix.latitude()
     );
     boolean isUserOffRouteFifthTry = offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteFifthTry);
 
     Point pointFive = coordinates.get(5);
     Location seventhLocationUpdate = buildDefaultLocationUpdate(
-            pointFive.longitude(), pointFive.latitude()
+      pointFive.longitude(), pointFive.latitude()
     );
     boolean isUserOffRouteSixthTry = offRouteDetector.isUserOffRoute(seventhLocationUpdate, routeProgress, options);
     assertFalse(isUserOffRouteSixthTry);
