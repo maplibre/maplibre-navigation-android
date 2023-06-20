@@ -23,7 +23,7 @@ public class OffRouteDetector extends OffRoute {
 
   private Point lastReroutePoint;
   private OffRouteCallback callback;
-  private final List<Integer> distancesAwayFromManeuver = new ArrayList<>();
+  private final RingBuffer<Integer> distancesAwayFromManeuver = new RingBuffer<>(3);
   private static final int TWO_POINTS = 2;
 
   /**
@@ -149,7 +149,7 @@ public class OffRouteDetector extends OffRoute {
   }
 
   private boolean isMovingAwayFromManeuver(Location location, RouteProgress routeProgress,
-                                           List<Integer> distancesAwayFromManeuver, Point currentPoint) {
+                                           RingBuffer<Integer> distancesAwayFromManeuver, Point currentPoint) {
     List<Point> stepPoints = routeProgress.currentStepPoints();
     if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint)) {
       updateLastReroutePoint(location);
@@ -204,7 +204,7 @@ public class OffRouteDetector extends OffRoute {
    * @return true if moving away from maneuver, false if not
    */
   private static boolean movingAwayFromManeuver(RouteProgress routeProgress,
-                                                List<Integer> distancesAwayFromManeuver,
+                                                RingBuffer<Integer> distancesAwayFromManeuver,
                                                 List<Point> stepPoints,
                                                 Point currentPoint) {
     boolean invalidUpcomingStep = routeProgress.currentLegProgress().upComingStep() == null;
@@ -227,10 +227,15 @@ public class OffRouteDetector extends OffRoute {
     if (distancesAwayFromManeuver.isEmpty()) {
       // No move-away positions before, add the current one to history stack
       distancesAwayFromManeuver.add((int) userDistanceToManeuver);
-    } else if ((int) userDistanceToManeuver > distancesAwayFromManeuver.get(distancesAwayFromManeuver.size() - 1)) {
+    } else if ((int) userDistanceToManeuver > distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver increased (wrong way), add new position to history stack
+
+      if (distancesAwayFromManeuver.size() >= 3) {
+        // We replace the first one, in order to keep the history with the last one
+        distancesAwayFromManeuver.removeLast();
+      }
       distancesAwayFromManeuver.add((int) userDistanceToManeuver);
-    } else if ((int) userDistanceToManeuver < distancesAwayFromManeuver.get(distancesAwayFromManeuver.size() - 1)) {
+    } else if ((int) userDistanceToManeuver < distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
     }
@@ -238,8 +243,7 @@ public class OffRouteDetector extends OffRoute {
     // Minimum 3 position updates in the wrong way are required before an off-route can occur
     if (distancesAwayFromManeuver.size() >= 3) {
       // Check for minimum distance traveled
-      return (distancesAwayFromManeuver.get(distancesAwayFromManeuver.size() - 1) -
-          distancesAwayFromManeuver.get(0)) > MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
+      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
     }
 
     return false;
