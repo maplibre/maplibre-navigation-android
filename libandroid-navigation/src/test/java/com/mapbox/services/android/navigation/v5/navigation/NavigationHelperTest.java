@@ -130,14 +130,27 @@ public class NavigationHelperTest extends BaseTest {
     @Test
     public void stepDistanceRemaining_returnsZeroWhenPositionsEqualEachOther() throws Exception {
         DirectionsRoute route = buildMultiLegRoute();
-        Point snappedPoint = Point.fromLngLat(-77.062996, 38.798405);
+        Location location = buildDefaultLocationUpdate(-77.062996, 38.798405);
         List<Point> coordinates = PolylineUtils.decode(
                 route.legs().get(0).steps().get(1).geometry(), Constants.PRECISION_6
         );
 
-        double distance = NavigationHelper.stepDistanceRemaining(snappedPoint, 0, 1, route, coordinates);
+        double distance = NavigationHelper.stepDistanceRemaining(location, 0, 1, route, coordinates);
 
         assertEquals(0.0, distance);
+    }
+
+    @Test
+    public void stepDistanceRemaining_returnsFullLengthForLargeDistance() throws Exception {
+        DirectionsRoute route = buildMultiLegRoute();
+        Location location = buildDefaultLocationUpdate(0, 0);
+        List<Point> coordinates = PolylineUtils.decode(
+                route.legs().get(0).steps().get(1).geometry(), Constants.PRECISION_6
+        );
+
+        double distance = NavigationHelper.stepDistanceRemaining(location, 0, 1, route, coordinates);
+
+        assertEquals(25.0, distance, 1);
     }
 
     @Test

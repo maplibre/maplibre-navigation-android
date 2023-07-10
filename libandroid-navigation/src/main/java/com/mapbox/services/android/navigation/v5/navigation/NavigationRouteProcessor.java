@@ -28,7 +28,6 @@ import static com.mapbox.services.android.navigation.v5.navigation.NavigationHel
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.legDistanceRemaining;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.routeDistanceRemaining;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining;
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.userSnappedToRoutePosition;
 
 class NavigationRouteProcessor implements OffRouteCallback {
 
@@ -135,9 +134,8 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * @return distance remaining in meters
    */
   private double calculateStepDistanceRemaining(Location location, DirectionsRoute directionsRoute) {
-    Point snappedPosition = userSnappedToRoutePosition(location, currentStepPoints);
     return stepDistanceRemaining(
-      snappedPosition, indices.legIndex(), indices.stepIndex(), directionsRoute, currentStepPoints
+      location, indices.legIndex(), indices.stepIndex(), directionsRoute, currentStepPoints
     );
   }
 
