@@ -225,7 +225,7 @@ public class OffRouteDetector extends OffRoute {
 
     if (distancesAwayFromManeuver.isEmpty()) {
       // No move-away positions before, add the current one to history stack
-      distancesAwayFromManeuver.add((int) userDistanceToManeuver);
+      distancesAwayFromManeuver.addLast((int) userDistanceToManeuver);
     } else if ((int) userDistanceToManeuver > distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver increased (wrong way), add new position to history stack
 
@@ -233,7 +233,7 @@ public class OffRouteDetector extends OffRoute {
         // We replace the first one, in order to keep the history with the last one
         distancesAwayFromManeuver.removeLast();
       }
-      distancesAwayFromManeuver.add((int) userDistanceToManeuver);
+      distancesAwayFromManeuver.addLast((int) userDistanceToManeuver);
     } else if ((int) userDistanceToManeuver < distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
