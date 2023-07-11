@@ -221,20 +221,20 @@ public class OffRouteDetector extends OffRoute {
     }
 
     LineString remainingStepLineString = TurfMisc.lineSlice(userPointOnStep, maneuverPoint, stepLineString);
-    double userDistanceToManeuver = TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS);
+    int userDistanceToManeuver = (int) TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS);
 
     if (distancesAwayFromManeuver.isEmpty()) {
       // No move-away positions before, add the current one to history stack
-      distancesAwayFromManeuver.addLast((int) userDistanceToManeuver);
-    } else if ((int) userDistanceToManeuver > distancesAwayFromManeuver.getLast()) {
+      distancesAwayFromManeuver.addLast(userDistanceToManeuver);
+    } else if (userDistanceToManeuver > distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver increased (wrong way), add new position to history stack
 
       if (distancesAwayFromManeuver.size() >= 3) {
         // We replace the first one, in order to keep the history with the last one
         distancesAwayFromManeuver.removeLast();
       }
-      distancesAwayFromManeuver.addLast((int) userDistanceToManeuver);
-    } else if ((int) userDistanceToManeuver < distancesAwayFromManeuver.getLast()) {
+      distancesAwayFromManeuver.addLast(userDistanceToManeuver);
+    } else if (userDistanceToManeuver < distancesAwayFromManeuver.getLast()) {
       // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
     }
