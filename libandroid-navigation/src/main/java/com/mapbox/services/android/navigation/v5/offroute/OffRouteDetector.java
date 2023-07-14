@@ -14,7 +14,6 @@ import com.mapbox.turf.TurfMisc;
 
 import java.util.List;
 
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
 import static com.mapbox.services.android.navigation.v5.utils.MeasurementUtils.userTrueDistanceFromStep;
 import static com.mapbox.services.android.navigation.v5.utils.ToleranceUtils.dynamicRerouteDistanceTolerance;
 
@@ -247,7 +246,7 @@ public class OffRouteDetector extends OffRoute {
     // Minimum 3 position updates in the wrong way are required before an off-route can occur
     if (distancesAwayFromManeuver.size() >= 3) {
       // Check for minimum distance traveled
-      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
+      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection();
     }
 
     return false;

@@ -121,7 +121,11 @@ public final class NavigationConstants {
      */
     public static final double METERS_REMAINING_TILL_ARRIVAL = 40;
 
-    public static final double MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE = 50;
+    /**
+     * Minimum distance in meters that the user must travel in the wrong direction before the
+     * off-route logic recognizes the user is moving away from upcoming maneuver
+     */
+    public static final double OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION = 50;
 
     /**
      * Minimum distance in meters that the user must travel in the correct direction before the
