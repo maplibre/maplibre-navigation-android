@@ -68,7 +68,8 @@ public class OffRouteDetector extends OffRoute {
     boolean isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint);
 
     if (!isOffRoute) {
-      return isMovingAwayFromManeuver(location, routeProgress, distancesAwayFromManeuver, currentPoint);
+      return isMovingAwayFromManeuver(location, routeProgress, distancesAwayFromManeuver,
+        currentPoint, options);
     }
 
     LegStep upComingStep = routeProgress.currentLegProgress().upComingStep();
@@ -147,10 +148,13 @@ public class OffRouteDetector extends OffRoute {
     return Math.max(dynamicTolerance, accuracyTolerance);
   }
 
-  private boolean isMovingAwayFromManeuver(Location location, RouteProgress routeProgress,
-                                           RingBuffer<Integer> distancesAwayFromManeuver, Point currentPoint) {
+  private boolean isMovingAwayFromManeuver(Location location,
+                                           RouteProgress routeProgress,
+                                           RingBuffer<Integer> distancesAwayFromManeuver,
+                                           Point currentPoint,
+                                           MapboxNavigationOptions options) {
     List<Point> stepPoints = routeProgress.currentStepPoints();
-    if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint)) {
+    if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint, options)) {
       updateLastReroutePoint(location);
       return true;
     }
@@ -205,7 +209,8 @@ public class OffRouteDetector extends OffRoute {
   private static boolean movingAwayFromManeuver(RouteProgress routeProgress,
                                                 RingBuffer<Integer> distancesAwayFromManeuver,
                                                 List<Point> stepPoints,
-                                                Point currentPoint) {
+                                                Point currentPoint,
+                                                MapboxNavigationOptions options) {
     boolean invalidUpcomingStep = routeProgress.currentLegProgress().upComingStep() == null;
     boolean invalidStepPointSize = stepPoints.size() < TWO_POINTS;
     if (invalidUpcomingStep || invalidStepPointSize) {
@@ -230,11 +235,11 @@ public class OffRouteDetector extends OffRoute {
       // If distance to maneuver increased (wrong way), add new position to history stack
 
       if (distancesAwayFromManeuver.size() >= 3) {
-        // We replace the first one, in order to keep the history with the last one
+        // Replace the latest position with newest one, for keeping first position
         distancesAwayFromManeuver.removeLast();
       }
       distancesAwayFromManeuver.addLast(userDistanceToManeuver);
-    } else if (userDistanceToManeuver < distancesAwayFromManeuver.getLast()) {
+    } else if ((distancesAwayFromManeuver.getLast() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection()) {
       // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
     }

@@ -48,6 +48,12 @@ public abstract class MapboxNavigationOptions {
 
   public abstract double minimumDistanceBeforeRerouting();
 
+  /**
+   * Minimum distance in meters that the user must travel in the correct direction before the
+   * off-route logic recognizes the user is back on the right direction
+   */
+  public abstract double offRouteMinimumDistanceMetersBeforeRightDirection();
+
   public abstract boolean isDebugLoggingEnabled();
 
   @Nullable
@@ -100,6 +106,12 @@ public abstract class MapboxNavigationOptions {
 
     public abstract Builder minimumDistanceBeforeRerouting(double distanceInMeters);
 
+    /**
+     * Minimum distance in meters that the user must travel in the correct direction before the
+     * off-route logic recognizes the user is back on the right direction
+     */
+    public abstract Builder offRouteMinimumDistanceMetersBeforeRightDirection(double distanceInMeters);
+
     public abstract Builder isDebugLoggingEnabled(boolean debugLoggingEnabled);
 
     public abstract Builder navigationNotification(NavigationNotification notification);
@@ -128,6 +140,7 @@ public abstract class MapboxNavigationOptions {
       .manuallyEndNavigationUponCompletion(false)
       .defaultMilestonesEnabled(true)
       .minimumDistanceBeforeRerouting(NavigationConstants.MINIMUM_DISTANCE_BEFORE_REROUTING)
+      .offRouteMinimumDistanceMetersBeforeRightDirection(NavigationConstants.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION)
       .metersRemainingTillArrival(NavigationConstants.METERS_REMAINING_TILL_ARRIVAL)
       .isFromNavigationUi(false)
       .isDebugLoggingEnabled(false)

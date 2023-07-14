@@ -123,6 +123,12 @@ public final class NavigationConstants {
 
     public static final double MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE = 50;
 
+    /**
+     * Minimum distance in meters that the user must travel in the correct direction before the
+     * off-route logic recognizes the user is back on the right direction
+     */
+    public static final double OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION = 20;
+
     public static final double MINIMUM_DISTANCE_BEFORE_REROUTING = 50;
 
     /**
