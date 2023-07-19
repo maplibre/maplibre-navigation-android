@@ -170,4 +170,36 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         // Update own location with the snapped location
         locationComponent?.forceLocationUpdate(location)
     }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        navigation.onDestroy()
+        binding.mapView.onDestroy()
+    }
+
 }
