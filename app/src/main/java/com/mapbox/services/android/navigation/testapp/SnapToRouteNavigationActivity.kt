@@ -1,26 +1,12 @@
 package com.mapbox.services.android.navigation.testapp
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.OnLocationCameraTransitionListener
@@ -29,27 +15,28 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
 import com.mapbox.services.android.navigation.testapp.databinding.ActivitySnapToRouteNavigationBinding
-import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.navigation.*
-import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
-import com.mapbox.turf.TurfConstants
-import com.mapbox.turf.TurfMeasurement
+import com.mapbox.services.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
-//TODO: describe what this needed for enable route snapping
 /**
+ * This activity shows you simulated navigation with enabled route snapping.
  *
+ * You need to do the following steps to enable route snapping:
+ * 1. Disable default location engine by set [LocationComponentActivationOptions.useDefaultLocationEngine] to false.
+ * 2. Get snapped location from [ProgressChangeListener] callback and set it to [LocationComponent] by [LocationComponent.forceLocationUpdate] method.
+ * 3. Activate route snapping by set [MapboxNavigationOptions.snapToRoute] to true.
+ *
+ * By default [SnapToRoute] is used. If you want to use your own snapping logic, you can set with [MapboxNavigation.setSnapEngine] for your own implementation.
  */
 class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     ProgressChangeListener {
@@ -72,6 +59,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
                 .snapToRoute(true)
                 .build()
         ).apply {
+            snapEngine
             addProgressChangeListener(this@SnapToRouteNavigationActivity)
         }
 
@@ -80,10 +68,8 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
             getMapAsync(this@SnapToRouteNavigationActivity)
         }
 
-        //TODO: hide when started ?! start automatically..
-        //TODO: follow again button
-        binding.btnStartNavigation.setOnClickListener {
-            startRouting()
+        binding.btnFollow.setOnClickListener {
+            followLocation()
         }
     }
 
@@ -96,7 +82,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
-        calculateRoute()
+        calculateRouteAndStartNavigation()
     }
 
     @SuppressWarnings("MissingPermission")
@@ -129,24 +115,6 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
                 override fun onLocationCameraTransitionFinished(cameraMode: Int) {
                     mapboxMap.locationComponent.zoomWhileTracking(17.0)
                     mapboxMap.locationComponent.tiltWhileTracking(60.0)
-
-//                    binding.btnFollow.animate()
-//                        .alpha(0f)
-//                        .setDuration(300)
-//                        .setListener(object : AnimatorListenerAdapter() {
-//                            override fun onAnimationEnd(
-//                                animation: Animator,
-//                                isReverse: Boolean
-//                            ) {
-//                                super.onAnimationEnd(animation, isReverse)
-//                                binding.btnFollow.isVisible = false
-//                            }
-//
-//                            override fun onAnimationEnd(animation: Animator) {
-//                                super.onAnimationEnd(animation)
-//                                binding.btnFollow.isVisible = false
-//                            }
-//                        })
                 }
 
                 override fun onLocationCameraTransitionCanceled(cameraMode: Int) {}
@@ -154,7 +122,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         )
     }
 
-    private fun calculateRoute() {
+    private fun calculateRouteAndStartNavigation() {
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(Point.fromLngLat(9.7536318, 52.3717979))
@@ -171,11 +139,13 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
                 response: Response<DirectionsResponse>,
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
-                response.body()?.let { response ->
-                    if (response.routes().isNotEmpty()) {
-                        val directionsRoute = response.routes().first()
+                response.body()?.let { responseBody ->
+                    if (responseBody.routes().isNotEmpty()) {
+                        val directionsRoute = responseBody.routes().first()
                         this@SnapToRouteNavigationActivity.route = directionsRoute
-                        navigationMapRoute?.addRoutes(response.routes())
+                        navigationMapRoute?.addRoutes(responseBody.routes())
+
+                        startNavigation()
                     }
                 }
             }
@@ -186,7 +156,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         })
     }
 
-    fun startRouting() {
+    fun startNavigation() {
         route?.let { route ->
             locationEngine.also { locationEngine ->
                 locationEngine.assign(route)
@@ -197,7 +167,6 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
-        Log.d("debug", "bearing: ${location.bearing}")
         // Update own location with the snapped location
         locationComponent?.forceLocationUpdate(location)
     }
