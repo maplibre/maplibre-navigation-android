@@ -24,6 +24,9 @@
             android:name=".NavigationUIActivity"
             android:label="@string/title_navigation_ui" />
         <activity
+            android:name=".SnapToRouteNavigationActivity"
+            android:label="@string/title_snap_to_route" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
