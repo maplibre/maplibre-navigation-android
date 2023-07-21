@@ -2,7 +2,7 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v2.0.1 - unreleased
+### v2.1.0 - unreleased
 
 - Sample app: Moved all configurations to a central place [#57](https://github.com/maplibre/maplibre-navigation-android/pull/57)
   > **Note**  
@@ -21,6 +21,7 @@ Maplibre welcomes participation and contributions from everyone.
   </resources>
   ```
 - Fix memory leak in Navigation Service
+- Only progress the user along the step / route if the user is close to the route (currently 1km), [#75](https://github.com/maplibre/maplibre-navigation-android/pull/75)
 
 ### v2.0.0 - March 21, 2023
 

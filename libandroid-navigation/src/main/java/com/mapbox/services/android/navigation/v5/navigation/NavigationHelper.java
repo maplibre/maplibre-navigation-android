@@ -13,7 +13,6 @@ import com.mapbox.api.directions.v5.models.MaxSpeed;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.StepIntersection;
 import com.mapbox.api.directions.v5.models.StepManeuver;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -83,6 +82,8 @@ public class NavigationHelper {
   /**
    * Calculates the distance remaining in the step from the current users snapped position, to the
    * next maneuver position.
+   *
+   * If the user is more than 1km away from the route, we are returning the total step distance.
    */
   static double stepDistanceRemaining(Location location, int legIndex, int stepIndex,
                                       DirectionsRoute directionsRoute, List<Point> stepPoints) {
