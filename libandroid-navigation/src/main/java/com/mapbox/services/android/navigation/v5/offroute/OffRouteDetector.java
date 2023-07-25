@@ -14,7 +14,6 @@ import com.mapbox.turf.TurfMisc;
 
 import java.util.List;
 
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
 import static com.mapbox.services.android.navigation.v5.utils.MeasurementUtils.userTrueDistanceFromStep;
 import static com.mapbox.services.android.navigation.v5.utils.ToleranceUtils.dynamicRerouteDistanceTolerance;
 
@@ -22,7 +21,7 @@ public class OffRouteDetector extends OffRoute {
 
   private Point lastReroutePoint;
   private OffRouteCallback callback;
-  private RingBuffer<Integer> distancesAwayFromManeuver = new RingBuffer<>(3);
+  private final RingBuffer<Integer> distancesAwayFromManeuver = new RingBuffer<>(3);
   private static final int TWO_POINTS = 2;
 
   /**
@@ -68,7 +67,8 @@ public class OffRouteDetector extends OffRoute {
     boolean isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint);
 
     if (!isOffRoute) {
-      return isMovingAwayFromManeuver(location, routeProgress, distancesAwayFromManeuver, currentPoint);
+      return isMovingAwayFromManeuver(location, routeProgress, distancesAwayFromManeuver,
+        currentPoint, options);
     }
 
     LegStep upComingStep = routeProgress.currentLegProgress().upComingStep();
@@ -147,10 +147,13 @@ public class OffRouteDetector extends OffRoute {
     return Math.max(dynamicTolerance, accuracyTolerance);
   }
 
-  private boolean isMovingAwayFromManeuver(Location location, RouteProgress routeProgress,
-                                           RingBuffer<Integer> distancesAwayFromManeuver, Point currentPoint) {
+  private boolean isMovingAwayFromManeuver(Location location,
+                                           RouteProgress routeProgress,
+                                           RingBuffer<Integer> distancesAwayFromManeuver,
+                                           Point currentPoint,
+                                           MapboxNavigationOptions options) {
     List<Point> stepPoints = routeProgress.currentStepPoints();
-    if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint)) {
+    if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint, options)) {
       updateLastReroutePoint(location);
       return true;
     }
@@ -193,11 +196,8 @@ public class OffRouteDetector extends OffRoute {
   /**
    * Checks to see if the current point is moving away from the maneuver.
    * <p>
-   * If the current point is farther away from the maneuver than the last point in the
-   * stack, add it to the stack.
-   * <p>
-   * If the stack if >= 3 distances, return true to fire an off-route event as it
-   * can be considered that the user is no longer going in the right direction.
+   * Minimum three location updates and minimum of 50 meters away from the maneuver are required
+   * to fire an off-route event. This parameters be considered that the user is no longer going in the right direction.
    *
    * @param routeProgress             for the upcoming step maneuver
    * @param distancesAwayFromManeuver current stack of distances away
@@ -208,7 +208,8 @@ public class OffRouteDetector extends OffRoute {
   private static boolean movingAwayFromManeuver(RouteProgress routeProgress,
                                                 RingBuffer<Integer> distancesAwayFromManeuver,
                                                 List<Point> stepPoints,
-                                                Point currentPoint) {
+                                                Point currentPoint,
+                                                MapboxNavigationOptions options) {
     boolean invalidUpcomingStep = routeProgress.currentLegProgress().upComingStep() == null;
     boolean invalidStepPointSize = stepPoints.size() < TWO_POINTS;
     if (invalidUpcomingStep || invalidStepPointSize) {
@@ -224,26 +225,30 @@ public class OffRouteDetector extends OffRoute {
     }
 
     LineString remainingStepLineString = TurfMisc.lineSlice(userPointOnStep, maneuverPoint, stepLineString);
-    double userDistanceToManeuver = TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS);
+    int userDistanceToManeuver = (int) TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS);
 
-    boolean hasDistances = !distancesAwayFromManeuver.isEmpty();
-    boolean validOffRouteDistanceTraveled = hasDistances && distancesAwayFromManeuver.peekLast()
-      - distancesAwayFromManeuver.peekFirst() < MINIMUM_BACKUP_DISTANCE_FOR_OFF_ROUTE;
-    boolean exceedsManeuverDistancesThreshold = validOffRouteDistanceTraveled
-      && distancesAwayFromManeuver.size() >= 3;
-
-    if (exceedsManeuverDistancesThreshold) {
-      // User's moving away from maneuver position, thus offRoute.
-      return true;
-    }
     if (distancesAwayFromManeuver.isEmpty()) {
-      distancesAwayFromManeuver.push((int) userDistanceToManeuver);
-    } else if (userDistanceToManeuver > distancesAwayFromManeuver.peek()) {
-      distancesAwayFromManeuver.push((int) userDistanceToManeuver);
-    } else {
-      // If we get a descending distance, reset the counter
+      // No move-away positions before, add the current one to history stack
+      distancesAwayFromManeuver.addLast(userDistanceToManeuver);
+    } else if (userDistanceToManeuver > distancesAwayFromManeuver.getLast()) {
+      // If distance to maneuver increased (wrong way), add new position to history stack
+
+      if (distancesAwayFromManeuver.size() >= 3) {
+        // Replace the latest position with newest one, for keeping first position
+        distancesAwayFromManeuver.removeLast();
+      }
+      distancesAwayFromManeuver.addLast(userDistanceToManeuver);
+    } else if ((distancesAwayFromManeuver.getLast() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection()) {
+      // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
     }
+
+    // Minimum 3 position updates in the wrong way are required before an off-route can occur
+    if (distancesAwayFromManeuver.size() >= 3) {
+      // Check for minimum distance traveled
+      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection();
+    }
+
     return false;
   }
 

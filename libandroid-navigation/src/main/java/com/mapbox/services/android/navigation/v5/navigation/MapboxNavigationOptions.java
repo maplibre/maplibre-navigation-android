@@ -18,6 +18,10 @@ public abstract class MapboxNavigationOptions {
 
   public abstract double maneuverZoneRadius();
 
+  /**
+   * @deprecated has no effect and will be removed in a future release. Use {@link #minimumDistanceBeforeRerouting()} instead.
+   */
+  @Deprecated
   public abstract double maximumDistanceOffRoute();
 
   public abstract double deadReckoningTimeInterval();
@@ -44,6 +48,18 @@ public abstract class MapboxNavigationOptions {
 
   public abstract double minimumDistanceBeforeRerouting();
 
+  /**
+   * Minimum distance in meters that the user must travel in the wrong direction before the
+   * off-route logic recognizes the user is moving away from upcoming maneuver
+   */
+  public abstract double offRouteMinimumDistanceMetersBeforeWrongDirection();
+
+  /**
+   * Minimum distance in meters that the user must travel in the correct direction before the
+   * off-route logic recognizes the user is back on the right direction
+   */
+  public abstract double offRouteMinimumDistanceMetersBeforeRightDirection();
+
   public abstract boolean isDebugLoggingEnabled();
 
   @Nullable
@@ -66,6 +82,10 @@ public abstract class MapboxNavigationOptions {
 
     public abstract Builder maneuverZoneRadius(double maneuverZoneRadius);
 
+    /**
+     * @deprecated has no effect and will be removed in a future release. Use {@link #minimumDistanceBeforeRerouting()} instead.
+     */
+    @Deprecated
     public abstract Builder maximumDistanceOffRoute(double maximumDistanceOffRoute);
 
     public abstract Builder deadReckoningTimeInterval(double deadReckoningTimeInterval);
@@ -91,6 +111,18 @@ public abstract class MapboxNavigationOptions {
     public abstract Builder isFromNavigationUi(boolean isFromNavigationUi);
 
     public abstract Builder minimumDistanceBeforeRerouting(double distanceInMeters);
+
+    /**
+     * Minimum distance in meters that the user must travel in the wrong direction before the
+     * off-route logic recognizes the user is moving away from upcoming maneuver
+     */
+    public abstract Builder offRouteMinimumDistanceMetersBeforeWrongDirection(double distanceInMeters);
+
+    /**
+     * Minimum distance in meters that the user must travel in the correct direction before the
+     * off-route logic recognizes the user is back on the right direction
+     */
+    public abstract Builder offRouteMinimumDistanceMetersBeforeRightDirection(double distanceInMeters);
 
     public abstract Builder isDebugLoggingEnabled(boolean debugLoggingEnabled);
 
@@ -120,6 +152,8 @@ public abstract class MapboxNavigationOptions {
       .manuallyEndNavigationUponCompletion(false)
       .defaultMilestonesEnabled(true)
       .minimumDistanceBeforeRerouting(NavigationConstants.MINIMUM_DISTANCE_BEFORE_REROUTING)
+      .offRouteMinimumDistanceMetersBeforeWrongDirection(NavigationConstants.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION)
+      .offRouteMinimumDistanceMetersBeforeRightDirection(NavigationConstants.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION)
       .metersRemainingTillArrival(NavigationConstants.METERS_REMAINING_TILL_ARRIVAL)
       .isFromNavigationUi(false)
       .isDebugLoggingEnabled(false)

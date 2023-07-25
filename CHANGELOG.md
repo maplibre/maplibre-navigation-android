@@ -4,6 +4,8 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### v2.0.1 - unreleased
 
+- Mark unused option `maximumDistanceOffRoute` as deprecated [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
+- Fix move-away-from-maneuver logic of `OffRouteDetector` [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
 - Sample app: Moved all configurations to a central place [#57](https://github.com/maplibre/maplibre-navigation-android/pull/57)
   > **Note**  
   > Please delete your existing `app/main/res/values/developer-config.xml` to generate the new one or copy following content to your existing file:
