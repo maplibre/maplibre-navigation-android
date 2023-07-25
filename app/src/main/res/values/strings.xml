@@ -7,6 +7,9 @@
     <string name="title_navigation_ui">Navigation UI</string>
     <string name="description_navigation_ui">Showcase a Navigation UI session. Optional with simulation.</string>
 
+    <string name="title_snap_to_route">Snap to route</string>
+    <string name="description_snap_to_route">Use snap to route option to show smoother location updates.</string>
+
     <string name="title_off_route_detection">Off route detection</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
 
