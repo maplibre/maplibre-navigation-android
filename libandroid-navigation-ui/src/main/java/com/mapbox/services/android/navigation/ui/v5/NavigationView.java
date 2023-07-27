@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
@@ -331,6 +332,9 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    */
   @Override
   public void updateWayNameVisibility(boolean isVisible) {
+    if (TextUtils.isEmpty(wayNameView.retrieveWayNameText())) {
+      isVisible = false;
+    }
     wayNameView.updateVisibility(isVisible);
     if (navigationMap != null) {
       navigationMap.updateWaynameQueryMap(isVisible);
