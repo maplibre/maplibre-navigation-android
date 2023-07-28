@@ -4,7 +4,7 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### v2.0.1 - unreleased
 
-- Support multiple legs by snap to route engine [#78](https://github.com/maplibre/maplibre-navigation-android/pull/78)
+- Support multiple legs by snap to route engine [#77](https://github.com/maplibre/maplibre-navigation-android/pull/77)
 - Mark unused option `maximumDistanceOffRoute` as deprecated [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
 - Fix move-away-from-maneuver logic of `OffRouteDetector` [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
 - Sample app: Moved all configurations to a central place [#57](https://github.com/maplibre/maplibre-navigation-android/pull/57)
