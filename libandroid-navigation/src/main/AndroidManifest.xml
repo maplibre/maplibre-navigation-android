@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application>
-        <service android:name="com.mapbox.services.android.navigation.v5.navigation.NavigationService" />
+        <service
+            android:name="com.mapbox.services.android.navigation.v5.navigation.NavigationService"
+            android:foregroundServiceType="location" />
         <provider
             android:name="com.mapbox.android.telemetry.provider.MapboxTelemetryInitProvider"
             android:authorities="${applicationId}.mapboxtelemetryinitprovider"
