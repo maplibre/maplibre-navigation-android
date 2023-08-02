@@ -2,15 +2,15 @@ package com.mapbox.services.android.navigation.v5.snap;
 
 import android.location.Location;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mapbox.api.directions.v5.models.LegStep;
+import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteLegProgress;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteStepProgress;
 import com.mapbox.services.android.navigation.v5.utils.MathUtils;
 import com.mapbox.turf.TurfConstants;
 import com.mapbox.turf.TurfMeasurement;
@@ -30,6 +30,13 @@ import static com.mapbox.core.constants.Constants.PRECISION_6;
  */
 public class SnapToRoute extends Snap {
 
+  /**
+   * Calculate a snapped location along the route. Latitude, longitude and bearing are provided.
+   *
+   * @param location Current raw user location
+   * @param routeProgress Current route progress
+   * @return Snapped location along route
+   */
   @Override
   public Location getSnappedLocation(Location location, RouteProgress routeProgress) {
     Location snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints());
@@ -38,8 +45,7 @@ public class SnapToRoute extends Snap {
   }
 
   /**
-   * Logic used to snap the users location coordinates to the closest position along the current
-   * step.
+   * Snap coordinates of user's location to the closest position along the current step.
    *
    * @param location        the raw location
    * @param stepCoordinates the list of step geometry coordinates
@@ -54,9 +60,11 @@ public class SnapToRoute extends Snap {
     // Point on the LineString.
     if (stepCoordinates.size() > 1) {
       Feature feature = TurfMisc.nearestPointOnLine(locationToPoint, stepCoordinates);
-      Point point = ((Point) feature.geometry());
-      snappedLocation.setLongitude(point.longitude());
-      snappedLocation.setLatitude(point.latitude());
+      if (feature.geometry() != null) {
+        Point point = ((Point) feature.geometry());
+        snappedLocation.setLongitude(point.longitude());
+        snappedLocation.setLatitude(point.latitude());
+      }
     }
     return snappedLocation;
   }
@@ -67,68 +75,110 @@ public class SnapToRoute extends Snap {
    * This is done by measuring 1 meter ahead of the current step distance traveled and
    * creating a {@link Point} with this distance using {@link TurfMeasurement#along(LineString, double, String)}.
    * <p>
-   * If the step distance remaining is zero, the distance ahead is 1 meter into the upcoming step.
-   * This way, an accurate bearing is upheld transitioning between steps.
+   * If the step distance remaining is zero, the distance ahead is the first point of upcoming leg.
+   * This way, an accurate bearing is upheld transitioning between legs.
    *
-   * @param routeProgress for all current progress values
-   * @return float bearing snapped to route
+   * @param routeProgress Current route progress
+   * @return Float bearing snapped to route
    */
   private static float snapLocationBearing(RouteProgress routeProgress) {
-
-    RouteLegProgress legProgress = routeProgress.currentLegProgress();
-    RouteStepProgress stepProgress = legProgress.currentStepProgress();
-    double distanceTraveled = stepProgress.distanceTraveled();
-    double distanceRemaining = stepProgress.distanceRemaining();
-    boolean distanceRemainingZero = distanceRemaining == 0;
-
-    // Either want to measure our current step distance traveled + 1 or 1 meter into the upcoming step
-    double distanceAhead = distanceRemainingZero ? 1 : distanceTraveled + 1;
-    // Create the step linestring from the geometry
-    LineString upcomingLineString = createUpcomingLineString(legProgress, distanceRemainingZero);
-    LineString currentLineString = createCurrentLineString(legProgress);
-
-    // Measure 1 meter ahead of the users current location, only if the distance remaining isn't zero
-    Point futurePoint = createFuturePoint(distanceAhead, upcomingLineString, currentLineString);
-    Point currentPoint = null;
-    if (currentLineString.coordinates().size() > 0)
-      currentPoint = TurfMeasurement.along(currentLineString, distanceTraveled, TurfConstants.UNIT_METERS);
-
-    if (currentPoint != null && futurePoint != null) {
-      // Get bearing and convert azimuth to degrees
-      double azimuth = TurfMeasurement.bearing(currentPoint, futurePoint);
-      return (float) MathUtils.wrap(azimuth, 0, 360);
-    } else {
+    Point currentPoint = getCurrentPoint(routeProgress);
+    if (currentPoint == null) {
       return 0f;
     }
-  }
 
-  @NonNull
-  private static LineString createCurrentLineString(RouteLegProgress legProgress) {
-    String currentGeometry = legProgress.currentStep().geometry();
-    return LineString.fromPolyline(currentGeometry, PRECISION_6);
-  }
-
-  @Nullable
-  private static LineString createUpcomingLineString(RouteLegProgress legProgress, boolean distanceRemainingZero) {
-    LineString upcomingLineString = null;
-    if (distanceRemainingZero && legProgress.upComingStep() != null) {
-      String upcomingGeometry = legProgress.upComingStep().geometry();
-      upcomingLineString = LineString.fromPolyline(upcomingGeometry, PRECISION_6);
+    Point futurePoint = getFuturePoint(routeProgress);
+    if (futurePoint == null) {
+      return 0f;
     }
-    return upcomingLineString;
+
+    // Get bearing and convert azimuth to degrees
+    double azimuth = TurfMeasurement.bearing(currentPoint, futurePoint);
+    return (float) MathUtils.wrap(azimuth, 0, 360);
   }
 
+  /**
+   * Current step point. If no current leg process is available, null is returned.
+   *
+   * @param routeProgress Current route progress
+   * @return Current step point or null if no current leg process is available
+   */
   @Nullable
-  private static Point createFuturePoint(double distanceAhead, LineString upcomingLineString,
-                                         LineString currentLineString) {
-    Point futurePoint;
-    if (upcomingLineString != null && upcomingLineString.coordinates().size() > 0) {
-      futurePoint = TurfMeasurement.along(upcomingLineString, distanceAhead, TurfConstants.UNIT_METERS);
-    } else if(currentLineString != null && currentLineString.coordinates().size() > 0){
-      futurePoint = TurfMeasurement.along(currentLineString, distanceAhead, TurfConstants.UNIT_METERS);
+  private static Point getCurrentPoint(RouteProgress routeProgress) {
+    return getCurrentStepPoint(routeProgress, 0);
+  }
+
+  /**
+   * Get future point. This might be the upcoming step or the following leg. If none of them are
+   * available, null is returned.
+   *
+   * @param routeProgress Current route progress
+   * @return Future point or null if no following point is available
+   */
+  @Nullable
+  private static Point getFuturePoint(RouteProgress routeProgress) {
+    if (routeProgress.currentLegProgress().distanceRemaining() > 1) {
+      // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
+      return getCurrentStepPoint(routeProgress, 1);
     } else {
+      // User has reached the end of steps. Use upcoming leg for future point if available.
+      return getUpcomingLegPoint(routeProgress);
+    }
+  }
+
+  /**
+   * Current step point plus additional distance value. If no current leg process is available,
+   * null is returned.
+   *
+   * @param routeProgress Current route progress
+   * @param additionalDistance Additional distance to add to current step point
+   * @return Current step point + additional distance or null if no current leg process is available
+   */
+  @Nullable
+  private static Point getCurrentStepPoint(RouteProgress routeProgress, double additionalDistance) {
+    RouteLegProgress legProgress = routeProgress.currentLegProgress();
+    if (legProgress == null || legProgress.currentStep().geometry() == null) {
       return null;
     }
-    return futurePoint;
+
+    LineString currentStepLineString = LineString.fromPolyline(legProgress.currentStep().geometry(), PRECISION_6);
+    if (currentStepLineString.coordinates().isEmpty()) {
+      return null;
+    }
+
+    return TurfMeasurement.along(currentStepLineString, legProgress.currentStepProgress().distanceTraveled() + additionalDistance, TurfConstants.UNIT_METERS);
+  }
+
+  /**
+   * Get next leg's start point. The second step of next leg is used as start point to avoid
+   * returning the same coordinates as the end point of the leg before. If no next leg is available,
+   * null is returned.
+   *
+   * @param routeProgress Current route progress
+   * @return Next leg's start point or null if no next leg is available
+   */
+  @Nullable
+  private static Point getUpcomingLegPoint(RouteProgress routeProgress) {
+    if (routeProgress.directionsRoute().legs() != null && routeProgress.directionsRoute().legs().size() - 1 <= routeProgress.legIndex()) {
+      return null;
+    }
+
+    RouteLeg upcomingLeg = routeProgress.directionsRoute().legs().get(routeProgress.legIndex() + 1);
+    if (upcomingLeg.steps() == null || upcomingLeg.steps().size() < 1) {
+      return null;
+    }
+
+    // While first step is the same point as the last point of the current step, use the second one.
+    LegStep firstStep = upcomingLeg.steps().get(1);
+    if (firstStep.geometry() == null) {
+      return null;
+    }
+
+    LineString currentStepLineString = LineString.fromPolyline(firstStep.geometry(), PRECISION_6);
+    if (currentStepLineString.coordinates().isEmpty()) {
+      return null;
+    }
+
+    return TurfMeasurement.along(currentStepLineString, 1, TurfConstants.UNIT_METERS);
   }
 }
