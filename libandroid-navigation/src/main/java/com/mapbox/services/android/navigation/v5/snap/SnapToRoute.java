@@ -146,27 +146,6 @@ public class SnapToRoute extends Snap {
     return TurfMeasurement.along(currentStepLineString, legProgress.currentStepProgress().distanceTraveled() + additionalDistance, TurfConstants.UNIT_METERS);
   }
 
-  /**
-   * Return point of upcoming step. If no upcoming step is available, null is returned.
-   *
-   * @param routeProgress Current route progress
-   * @return Next step point or null if no upcoming step is available
-   */
-  @Nullable
-  private static Point getUpcomingStepPoint(RouteProgress routeProgress) {
-    RouteLegProgress legProgress = routeProgress.currentLegProgress();
-    if (legProgress == null || legProgress.upComingStep() == null || legProgress.upComingStep().geometry() == null) {
-      return null;
-    }
-
-    LineString currentStepLineString = LineString.fromPolyline(legProgress.upComingStep().geometry(), PRECISION_6);
-    if (currentStepLineString.coordinates().isEmpty()) {
-      return null;
-    }
-
-    return TurfMeasurement.along(currentStepLineString, 1, TurfConstants.UNIT_METERS);
-  }
-
 
   /**
    * Get next leg's start point. The second step of next leg is used as start point to avoid
