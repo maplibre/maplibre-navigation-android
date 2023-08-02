@@ -83,15 +83,18 @@ public class SnapToRoute extends Snap {
    */
   private static float snapLocationBearing(RouteProgress routeProgress) {
     Point currentPoint = getCurrentPoint(routeProgress);
-    Point futurePoint = getFuturePoint(routeProgress);
-
-    if (currentPoint != null && futurePoint != null) {
-      // Get bearing and convert azimuth to degrees
-      double azimuth = TurfMeasurement.bearing(currentPoint, futurePoint);
-      return (float) MathUtils.wrap(azimuth, 0, 360);
-    } else {
+    if (currentPoint == null) {
       return 0f;
     }
+
+    Point futurePoint = getFuturePoint(routeProgress);
+    if (futurePoint == null) {
+      return 0f;
+    }
+
+    // Get bearing and convert azimuth to degrees
+    double azimuth = TurfMeasurement.bearing(currentPoint, futurePoint);
+    return (float) MathUtils.wrap(azimuth, 0, 360);
   }
 
   /**
@@ -145,7 +148,6 @@ public class SnapToRoute extends Snap {
 
     return TurfMeasurement.along(currentStepLineString, legProgress.currentStepProgress().distanceTraveled() + additionalDistance, TurfConstants.UNIT_METERS);
   }
-
 
   /**
    * Get next leg's start point. The second step of next leg is used as start point to avoid
