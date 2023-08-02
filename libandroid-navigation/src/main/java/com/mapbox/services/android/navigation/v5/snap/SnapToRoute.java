@@ -118,7 +118,7 @@ public class SnapToRoute extends Snap {
   @Nullable
   private static Point getFuturePoint(RouteProgress routeProgress) {
     if (routeProgress.currentLegProgress().distanceRemaining() > 1) {
-      // User has not reaching the end of current step. Use traveled distance + 1 meter for future point
+      // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
       return getCurrentStepPoint(routeProgress, 1);
     } else {
       // User has reached the end of steps. Use upcoming leg for future point if available.
