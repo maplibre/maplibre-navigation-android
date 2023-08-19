@@ -2,7 +2,7 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v2.0.1 - unreleased
+### v2.1.0 - unreleased
 
 - Support multiple legs by snap to route engine [#77](https://github.com/maplibre/maplibre-navigation-android/pull/77)
 - Mark unused option `maximumDistanceOffRoute` as deprecated [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
@@ -24,6 +24,7 @@ Maplibre welcomes participation and contributions from everyone.
   </resources>
   ```
 - Fix memory leak in Navigation Service
+- Only progress the user along the step / route if the user is close to the route (currently 1km), [#75](https://github.com/maplibre/maplibre-navigation-android/pull/75)
 
 ### v2.0.0 - March 21, 2023
 

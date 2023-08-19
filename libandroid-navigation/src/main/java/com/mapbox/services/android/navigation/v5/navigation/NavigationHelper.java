@@ -13,7 +13,6 @@ import com.mapbox.api.directions.v5.models.MaxSpeed;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.StepIntersection;
 import com.mapbox.api.directions.v5.models.StepManeuver;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -37,6 +36,8 @@ import java.util.List;
 
 import static com.mapbox.core.constants.Constants.PRECISION_6;
 
+import timber.log.Timber;
+
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
  * calculations need to be performed on it.
@@ -53,24 +54,6 @@ public class NavigationHelper {
 
   private NavigationHelper() {
     // Empty private constructor to prevent users creating an instance of this class.
-  }
-
-  /**
-   * Takes in a raw location, converts it to a point, and snaps it to the closest point along the
-   * route. This is isolated as separate logic from the snap logic provided because we will always
-   * need to snap to the route in order to get the most accurate information.
-   */
-  static Point userSnappedToRoutePosition(Location location, List<Point> coordinates) {
-    if (coordinates.size() < 2) {
-      return Point.fromLngLat(location.getLongitude(), location.getLatitude());
-    }
-
-    Point locationToPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
-
-    // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
-    // Point on the LineString.
-    Feature feature = TurfMisc.nearestPointOnLine(locationToPoint, coordinates);
-    return ((Point) feature.geometry());
   }
 
   static Location buildSnappedLocation(MapboxNavigation mapboxNavigation, boolean snapToRouteEnabled,
@@ -99,25 +82,45 @@ public class NavigationHelper {
   /**
    * Calculates the distance remaining in the step from the current users snapped position, to the
    * next maneuver position.
+   *
+   * If the user is more than 1km away from the route, we are returning the total step distance.
    */
-  static double stepDistanceRemaining(Point snappedPosition, int legIndex, int stepIndex,
-                                      DirectionsRoute directionsRoute, List<Point> coordinates) {
+  static double stepDistanceRemaining(Location location, int legIndex, int stepIndex,
+                                      DirectionsRoute directionsRoute, List<Point> stepPoints) {
+    // If the linestring coordinate size is less than 2,the distance remaining is zero.
+    if (stepPoints.size() < 2) {
+      return 0;
+    }
+
+    Point locationToPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
+
+    // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
+    // Point on the LineString.
+    Feature feature = TurfMisc.nearestPointOnLine(locationToPoint, stepPoints, TurfConstants.UNIT_KILOMETERS);
+
+    // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
+    Number distance = feature.getNumberProperty("dist");
+    if(distance != null && distance.doubleValue() > 1){
+      Timber.i("Distance to step is larger than 1km, so we won't advance the step, distance: %s km",distance.doubleValue());
+      return TurfMeasurement.length(stepPoints, TurfConstants.UNIT_METERS);
+    }
+
+    Point snappedPosition = ((Point) feature.geometry());
+
     List<LegStep> steps = directionsRoute.legs().get(legIndex).steps();
-    Point nextManeuverPosition = nextManeuverPosition(stepIndex, steps, coordinates);
+    Point nextManeuverPosition = nextManeuverPosition(stepIndex, steps, stepPoints);
 
     // When the coordinates are empty, no distance can be calculated
     if(nextManeuverPosition == null) {
       return 0;
     }
 
-    LineString lineString = LineString.fromPolyline(steps.get(stepIndex).geometry(),
-      Constants.PRECISION_6);
-    // If the users snapped position equals the next maneuver
-    // position or the linestring coordinate size is less than 2,the distance remaining is zero.
-    if (snappedPosition.equals(nextManeuverPosition) || lineString.coordinates().size() < 2) {
+    // If the users snapped position equals the next maneuver position
+    if (snappedPosition.equals(nextManeuverPosition)) {
       return 0;
     }
-    LineString slicedLine = TurfMisc.lineSlice(snappedPosition, nextManeuverPosition, lineString);
+
+    LineString slicedLine = TurfMisc.lineSlice(snappedPosition, nextManeuverPosition, LineString.fromLngLats(stepPoints));
     return TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS);
   }
 
