@@ -71,7 +71,7 @@ class NavigationUIActivity :
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
                     .shouldSimulateRoute(simulateRoute)
-                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.longitude, userLocation.latitude)).build())
+                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng( userLocation.latitude,userLocation.longitude)).build())
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
