@@ -80,7 +80,7 @@ public class RouteFetcher {
   @Nullable
   public NavigationRoute.Builder buildRequest(Location location, RouteProgress progress) {
     Context context = contextWeakReference.get();
-    if (invalid(context, location, routeProgress)) {
+    if (invalid(context, location, progress)) {
       return null;
     }
     Point origin = Point.fromLngLat(location.getLongitude(), location.getLatitude());
