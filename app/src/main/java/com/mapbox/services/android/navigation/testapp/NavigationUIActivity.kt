@@ -2,9 +2,6 @@ package com.mapbox.services.android.navigation.testapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +20,6 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
@@ -57,6 +53,11 @@ class NavigationUIActivity :
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.mapView.apply {
@@ -184,7 +185,6 @@ class NavigationUIActivity :
             this.destination(destination)
             this.voiceUnits(DirectionsCriteria.METRIC)
             this.alternatives(true)
-            this.profile("fastest")
             this.baseUrl(getString(R.string.base_url))
         }
 
