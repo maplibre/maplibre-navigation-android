@@ -5,8 +5,8 @@ import android.text.Spannable;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
-import com.mapbox.api.directions.v5.models.BannerComponents;
-import com.mapbox.api.directions.v5.models.BannerText;
+import com.mapbox.services.android.navigation.v5.models.BannerComponents;
+import com.mapbox.services.android.navigation.v5.models.BannerText;
 import com.squareup.picasso.Picasso;
 
 /**

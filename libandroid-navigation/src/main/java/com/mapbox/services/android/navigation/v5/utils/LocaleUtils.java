@@ -5,7 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
 
 import java.util.Locale;
 

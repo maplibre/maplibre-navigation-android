@@ -12,11 +12,11 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.services.android.navigation.testapp.R;
 import com.mapbox.services.android.navigation.ui.v5.NavigationView;
 import com.mapbox.services.android.navigation.ui.v5.NavigationViewOptions;
 import com.mapbox.services.android.navigation.ui.v5.OnNavigationReadyCallback;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute;
 
 import java.lang.reflect.Field;
 
@@ -89,7 +89,7 @@ public class OnNavigationReadyIdlingResource implements IdlingResource, Callback
     Point origin = Point.fromLngLat(-77.033987, 38.900123);
     Point destination = Point.fromLngLat(-77.044818, 38.848942);
     NavigationRoute.builder(context)
-      .accessToken(Mapbox.getAccessToken())
+      .accessToken(context.getString(R.string.mapbox_access_token))
       .origin(origin)
       .destination(destination)
       .build().getRoute(this);
@@ -105,7 +105,7 @@ public class OnNavigationReadyIdlingResource implements IdlingResource, Callback
 
   private NavigationViewOptions buildTestNavigationViewOptions() {
     return NavigationViewOptions.builder()
-      .directionsRoute(testRoute)
+      .directionsRoute(com.mapbox.services.android.navigation.v5.models.DirectionsRoute.fromJson(testRoute.toJson()))
       .shouldSimulateRoute(true)
       .build();
   }

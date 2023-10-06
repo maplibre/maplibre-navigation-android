@@ -3,7 +3,7 @@ package com.mapbox.services.android.navigation.ui.v5.camera;
 import android.location.Location;
 import androidx.annotation.NonNull;
 
-import com.mapbox.api.directions.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;

@@ -1,18 +1,20 @@
 package com.mapbox.services.android.navigation.v5.navigation;
 
+import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISION_6;
+
 import android.location.Location;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.LegAnnotation;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.MaxSpeed;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.StepIntersection;
-import com.mapbox.api.directions.v5.models.StepManeuver;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegAnnotation;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.MaxSpeed;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.StepIntersection;
+import com.mapbox.services.android.navigation.v5.models.StepManeuver;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -33,8 +35,6 @@ import com.mapbox.turf.TurfMisc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 
 import timber.log.Timber;
 

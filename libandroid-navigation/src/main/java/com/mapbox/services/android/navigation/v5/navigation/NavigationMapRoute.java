@@ -35,9 +35,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.core.constants.Constants;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
@@ -59,6 +58,7 @@ import com.mapbox.services.android.navigation.v5.route.MapRouteProgressChangeLis
 import com.mapbox.services.android.navigation.v5.route.OnRouteSelectionChangeListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
+import com.mapbox.services.android.navigation.v5.utils.Constants;
 import com.mapbox.services.android.navigation.v5.utils.MapImageUtils;
 import com.mapbox.services.android.navigation.v5.utils.MapUtils;
 import com.mapbox.turf.TurfConstants;

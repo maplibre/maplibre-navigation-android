@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.listeners;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
 
 /**
@@ -57,7 +57,7 @@ public interface RouteListener {
   /**
    * Will trigger when a user has arrived at a given waypoint along a {@link DirectionsRoute}.
    * <p>
-   * For example, if there are two {@link com.mapbox.api.directions.v5.models.LegStep}s, this callback
+   * For example, if there are two {@link LegStep}s, this callback
    * will be triggered twice, once for each waypoint.
    *
    * @since 0.14.0

@@ -1,11 +1,13 @@
 package com.mapbox.services.android.navigation.v5.snap;
 
+import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISION_6;
+
 import android.location.Location;
 
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -17,8 +19,6 @@ import com.mapbox.turf.TurfMeasurement;
 import com.mapbox.turf.TurfMisc;
 
 import java.util.List;
-
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 
 /**
  * This attempts to snap the user to the closest position along the route. Prior to snapping the

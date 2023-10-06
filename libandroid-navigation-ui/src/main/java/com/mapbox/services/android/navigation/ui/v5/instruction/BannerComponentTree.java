@@ -3,8 +3,8 @@ package com.mapbox.services.android.navigation.ui.v5.instruction;
 import androidx.annotation.NonNull;
 import android.widget.TextView;
 
-import com.mapbox.api.directions.v5.models.BannerComponents;
-import com.mapbox.api.directions.v5.models.BannerText;
+import com.mapbox.services.android.navigation.v5.models.BannerComponents;
+import com.mapbox.services.android.navigation.v5.models.BannerText;
 
 import java.util.ArrayList;
 import java.util.List;

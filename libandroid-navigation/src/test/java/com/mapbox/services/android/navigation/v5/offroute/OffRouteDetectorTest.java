@@ -2,13 +2,13 @@ package com.mapbox.services.android.navigation.v5.offroute;
 
 import android.location.Location;
 
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.core.constants.Constants;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
+import com.mapbox.services.android.navigation.v5.utils.Constants;
 
 import org.junit.Before;
 import org.junit.Test;

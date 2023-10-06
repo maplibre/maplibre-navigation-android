@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.v5.route;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 
 /**
  * Listener that can be added to monitor faster routes retrieved

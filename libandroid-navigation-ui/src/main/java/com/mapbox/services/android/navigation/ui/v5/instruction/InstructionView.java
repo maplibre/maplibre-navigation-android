@@ -31,10 +31,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.mapbox.api.directions.v5.models.BannerComponents;
-import com.mapbox.api.directions.v5.models.BannerInstructions;
-import com.mapbox.api.directions.v5.models.BannerText;
-import com.mapbox.api.directions.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.BannerComponents;
+import com.mapbox.services.android.navigation.v5.models.BannerInstructions;
+import com.mapbox.services.android.navigation.v5.models.BannerText;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.ui.v5.NavigationButton;
 import com.mapbox.services.android.navigation.ui.v5.NavigationViewModel;
 import com.mapbox.services.android.navigation.ui.v5.R;

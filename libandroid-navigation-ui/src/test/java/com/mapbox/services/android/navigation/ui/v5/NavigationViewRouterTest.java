@@ -13,15 +13,15 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
-import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsAdapterFactory;
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsWaypoint;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
-import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import org.junit.Test;
@@ -93,7 +93,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void findRouteFrom_fastConnectionGoesToOnline() {
-    RouteFetcher onlineRouter = mock(RouteFetcher.class);
+    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
     when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
@@ -115,7 +115,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void findRouteFrom_secondRequestIgnored() {
-    RouteFetcher onlineRouter = mock(RouteFetcher.class);
+    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
     when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
@@ -135,7 +135,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void onDestroy_clearsListeners() {
-    RouteFetcher onlineRouter = mock(RouteFetcher.class);
+    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
     NavigationViewRouter router = new NavigationViewRouter(
       onlineRouter,
       mock(ConnectivityStatusProvider.class),
@@ -151,7 +151,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void onDestroy_cancelsOnlineRouteCall() {
-    RouteFetcher onlineRouter = mock(RouteFetcher.class);
+    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
     NavigationViewRouter router = new NavigationViewRouter(
       onlineRouter,
       mock(ConnectivityStatusProvider.class),
@@ -167,7 +167,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @NonNull
   private NavigationViewRouter buildRouteEngine(ViewRouteListener routeEngineListener) {
-    return new NavigationViewRouter(mock(RouteFetcher.class), mock(ConnectivityStatusProvider.class),
+    return new NavigationViewRouter(mock(MapboxRouteFetcher.class), mock(ConnectivityStatusProvider.class),
       routeEngineListener);
   }
 

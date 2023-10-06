@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.listeners;
 
-import com.mapbox.api.directions.v5.models.BannerInstructions;
+import com.mapbox.services.android.navigation.v5.models.BannerInstructions;
 
 /**
  * This listener will be triggered when a {@link BannerInstructions} is about to be displayed.

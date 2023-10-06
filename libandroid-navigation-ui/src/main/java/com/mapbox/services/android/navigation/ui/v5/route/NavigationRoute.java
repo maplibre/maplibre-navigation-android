@@ -1,4 +1,4 @@
-package com.mapbox.services.android.navigation.v5.navigation;
+package com.mapbox.services.android.navigation.ui.v5.route;
 
 import android.content.Context;
 
@@ -7,18 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.ExcludeCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.core.utils.TextUtils;
+import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.geojson.Point;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
+import com.mapbox.services.android.navigation.v5.utils.TextUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +28,7 @@ import retrofit2.Callback;
 /**
  * The NavigationRoute class wraps the {@link MapboxDirections} class with parameters which
  * <u>must</u> be set inorder for a navigation session to successfully begin. While it is possible
- * to pass in any {@link com.mapbox.api.directions.v5.models.DirectionsRoute} into
+ * to pass in any {@link DirectionsRoute} into
  * {@link MapboxNavigation#startNavigation(DirectionsRoute)}, using this class will ensure your
  * request includes all the proper information needed for the navigation session to begin.
  * <p>
@@ -140,11 +137,11 @@ public final class NavigationRoute {
          * origin to the final destination. The options include driving, driving considering traffic,
          * walking, and cycling. Using each of these profiles will result in different routing biases.
          *
-         * @param profile required to be one of the String values found in the {@link ProfileCriteria}
+         * @param profile required to be one of the String values found in the {@link com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria}
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder profile(@NonNull @ProfileCriteria String profile) {
+        public Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile) {
             directionsBuilder.profile(profile);
             return this;
         }
@@ -223,7 +220,7 @@ public final class NavigationRoute {
          * in the request is currently limited to 1.
          *
          * @param waypoint a {@link Point} which represents the pit-stop or waypoint where you'd like
-         *                 one of the {@link com.mapbox.api.directions.v5.models.RouteLeg} to
+         *                 one of the {@link RouteLeg} to
          *                 navigate the user to
          * @return this builder for chaining options together
          * @since 0.5.0
@@ -241,7 +238,7 @@ public final class NavigationRoute {
          * in the request is currently limited to 1.
          *
          * @param waypoint  a {@link Point} which represents the pit-stop or waypoint where you'd like
-         *                  one of the {@link com.mapbox.api.directions.v5.models.RouteLeg} to
+         *                  one of the {@link RouteLeg} to
          *                  navigate the user to
          * @param angle     double value used for setting the corresponding coordinate's angle of travel
          *                  when determining the route
@@ -314,7 +311,7 @@ public final class NavigationRoute {
          * documentation</a>
          * @since 0.5.0
          */
-        public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
+        public Builder annotations(@Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
             directionsBuilder.annotations(annotations);
             return this;
         }
@@ -376,14 +373,14 @@ public final class NavigationRoute {
 
         /**
          * Change the units used for voice announcements, this does not change the units provided in
-         * other fields outside of the {@link com.mapbox.api.directions.v5.models.VoiceInstructions}
+         * other fields outside of the {@link VoiceInstructions}
          * object.
          *
          * @param voiceUnits one of the values found inside the {@link VoiceUnitCriteria}
          * @return this builder for chaining options together
          * @since 0.8.0
          */
-        public Builder voiceUnits(@VoiceUnitCriteria String voiceUnits) {
+        public Builder voiceUnits(@DirectionsCriteria.VoiceUnitCriteria String voiceUnits) {
             directionsBuilder.voiceUnits(voiceUnits);
             return this;
         }
@@ -396,11 +393,11 @@ public final class NavigationRoute {
         /**
          * Exclude specific road classes such as highways, tolls, and more.
          *
-         * @param exclude one of the values found inside the {@link ExcludeCriteria}
+         * @param exclude one of the values found inside the {@link DirectionsCriteria.ExcludeCriteria}
          * @return this builder for chaining options together
          * @since 0.8.0
          */
-        public Builder exclude(@Nullable @ExcludeCriteria String exclude) {
+        public Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude) {
             directionsBuilder.exclude(exclude);
             return this;
         }
@@ -465,7 +462,7 @@ public final class NavigationRoute {
          *
          * @param approaches null if you'd like the default approaches,
          *                   else one of the options found in
-         *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+         *                   {@link DirectionsCriteria.ApproachesCriteria}.
          * @return this builder for chaining options together
          * @since 0.15.0
          */

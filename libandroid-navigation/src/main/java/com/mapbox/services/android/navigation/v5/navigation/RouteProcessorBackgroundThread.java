@@ -51,7 +51,5 @@ class RouteProcessorBackgroundThread extends HandlerThread {
     void onMilestoneTrigger(List<Milestone> triggeredMilestones, RouteProgress routeProgress);
 
     void onUserOffRoute(Location location, boolean userOffRoute);
-
-    void onCheckFasterRoute(Location location, RouteProgress routeProgress, boolean checkFasterRoute);
   }
 }

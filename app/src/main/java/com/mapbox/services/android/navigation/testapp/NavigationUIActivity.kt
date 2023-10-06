@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -23,7 +22,9 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
@@ -183,8 +184,10 @@ class NavigationUIActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(DirectionsCriteria.METRIC)
+            this.voiceUnits(DirectionsCriteria.IMPERIAL)
             this.alternatives(true)
+            //this.user("gh")
+            //this.profile("car")
             this.baseUrl(getString(R.string.base_url))
         }
 
@@ -196,9 +199,9 @@ class NavigationUIActivity :
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
                     if (response.routes().isNotEmpty()) {
-                        val directionsRoute = response.routes().first()
-                        this@NavigationUIActivity.route = directionsRoute
-                        navigationMapRoute?.addRoutes(response.routes())
+                        val maplibreResponse = com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(response.toJson());
+                        this@NavigationUIActivity.route = maplibreResponse.routes().first()
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
                         binding.startRouteLayout.visibility = View.VISIBLE
                     }
                 }

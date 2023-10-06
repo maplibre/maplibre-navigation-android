@@ -5,8 +5,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.LocaleList;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.android.navigation.R;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
 
 import junit.framework.Assert;
 

@@ -5,7 +5,7 @@ import android.location.Location;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 /**
