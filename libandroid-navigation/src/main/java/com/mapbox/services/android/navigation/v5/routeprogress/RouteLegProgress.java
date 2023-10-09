@@ -181,8 +181,8 @@ public abstract class RouteLegProgress {
    * Provides the current annotation data for a leg segment determined by
    * the distance traveled along the route.
    * <p>
-   * This object will only be present when a {@link DirectionsRoute}
-   * requested with {@link DirectionsCriteria#ANNOTATION_DISTANCE}.
+   * This object will only be present when a {@link DirectionsRoute} is requested
+   * with {@link DirectionsCriteria#ANNOTATION_DISTANCE}.
    * <p>
    * This will be provided by default with {@link NavigationRoute#builder(Context)}.
    *

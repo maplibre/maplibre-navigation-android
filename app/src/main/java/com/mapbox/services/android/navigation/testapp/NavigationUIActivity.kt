@@ -184,8 +184,9 @@ class NavigationUIActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(DirectionsCriteria.IMPERIAL)
+            this.voiceUnits(DirectionsCriteria.METRIC)
             this.alternatives(true)
+            // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
             //this.user("gh")
             //this.profile("car")
             this.baseUrl(getString(R.string.base_url))
