@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.mapbox.api.directions.v5.DirectionsCriteria.METRIC
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
@@ -225,7 +226,7 @@ class MockNavigationActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(com.mapbox.services.android.navigation.v5.models.DirectionsCriteria.METRIC)
+            this.voiceUnits(METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }
