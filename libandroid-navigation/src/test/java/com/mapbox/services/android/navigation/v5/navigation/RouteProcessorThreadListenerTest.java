@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import com.mapbox.services.android.navigation.v5.instruction.Instruction;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
 import com.mapbox.services.android.navigation.v5.milestone.StepMilestone;
-import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import org.junit.Test;
@@ -96,44 +95,14 @@ public class RouteProcessorThreadListenerTest {
     verifyNoInteractions (dispatcher);
   }
 
-  @Test
-  public void onCheckFasterRouteTrue_eventDispatcherSendsEvent() {
-    RouteFetcher routeFetcher = mock(RouteFetcher.class);
-    RouteProcessorThreadListener listener = buildListener(routeFetcher);
-    Location location = mock(Location.class);
-    RouteProgress routeProgress = mock(RouteProgress.class);
-
-    listener.onCheckFasterRoute(location, routeProgress, true);
-
-    verify(routeFetcher).findRouteFromRouteProgress(eq(location), eq(routeProgress));
-  }
-
-  @Test
-  public void onCheckFasterRouteFalse_eventDispatcherDoesNotSendEvent() {
-    NavigationEventDispatcher dispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(dispatcher);
-
-    listener.onCheckFasterRoute(mock(Location.class), mock(RouteProgress.class), false);
-
-    verifyNoInteractions (dispatcher);
-  }
-
   private RouteProcessorThreadListener buildListener(NavigationNotificationProvider provider) {
-    RouteFetcher routeFetcher = mock(RouteFetcher.class);
     NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    return new RouteProcessorThreadListener(eventDispatcher, routeFetcher, provider);
-  }
-
-  private RouteProcessorThreadListener buildListener(RouteFetcher routeFetcher) {
-    NavigationNotificationProvider provider = mock(NavigationNotificationProvider.class);
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    return new RouteProcessorThreadListener(eventDispatcher, routeFetcher, provider);
+    return new RouteProcessorThreadListener(eventDispatcher, provider);
   }
 
   private RouteProcessorThreadListener buildListener(NavigationEventDispatcher eventDispatcher) {
     NavigationNotificationProvider provider = mock(NavigationNotificationProvider.class);
-    RouteFetcher routeFetcher = mock(RouteFetcher.class);
-    return new RouteProcessorThreadListener(eventDispatcher, routeFetcher, provider);
+    return new RouteProcessorThreadListener(eventDispatcher, provider);
   }
 
   @NonNull

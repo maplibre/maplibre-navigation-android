@@ -8,7 +8,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import com.mapbox.api.directions.v5.models.BannerComponents;
+import com.mapbox.services.android.navigation.v5.models.BannerComponents;
 
 /**
  * Use this view to render turn lane data.

@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.ui.v5.instruction;
 
 import android.widget.TextView;
 
-import com.mapbox.api.directions.v5.models.BannerComponents;
+import com.mapbox.services.android.navigation.v5.models.BannerComponents;
 
 import java.util.List;
 

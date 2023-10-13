@@ -9,12 +9,10 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.mapboxsdk.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.location.LocationValidator;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.navigation.notification.NavigationNotification;
-import com.mapbox.services.android.navigation.v5.route.FasterRoute;
-import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 
 import java.lang.ref.WeakReference;
 
@@ -36,7 +34,6 @@ public class NavigationService extends Service {
     private final IBinder localBinder = new LocalBinder(this);
     private RouteProcessorBackgroundThread thread;
     private NavigationLocationEngineUpdater locationEngineUpdater;
-    private RouteFetcher routeFetcher;
     private NavigationNotificationProvider notificationProvider;
 
     @Nullable
@@ -76,7 +73,6 @@ public class NavigationService extends Service {
      * Removes the location / route listeners and  quits the thread.
      */
     void endNavigation() {
-        routeFetcher.clearListeners();
         locationEngineUpdater.removeLocationEngineListener();
         notificationProvider.shutdown(getApplication());
         thread.quit();
@@ -94,28 +90,17 @@ public class NavigationService extends Service {
 
     private void initialize(MapboxNavigation mapboxNavigation) {
         NavigationEventDispatcher dispatcher = mapboxNavigation.getEventDispatcher();
-        initializeRouteFetcher(dispatcher, mapboxNavigation.retrieveEngineProvider());
         initializeNotificationProvider(mapboxNavigation);
-        initializeRouteProcessorThread(dispatcher, routeFetcher, notificationProvider);
+        initializeRouteProcessorThread(dispatcher, notificationProvider);
         initializeLocationProvider(mapboxNavigation);
-    }
-
-    private void initializeRouteFetcher(NavigationEventDispatcher dispatcher, NavigationEngineFactory engineProvider) {
-        FasterRoute fasterRouteEngine = engineProvider.retrieveFasterRouteEngine();
-        NavigationFasterRouteListener listener = new NavigationFasterRouteListener(dispatcher, fasterRouteEngine);
-        routeFetcher = new RouteFetcher(getApplication());
-        routeFetcher.addRouteListener(listener);
     }
 
     private void initializeNotificationProvider(MapboxNavigation mapboxNavigation) {
         notificationProvider = new NavigationNotificationProvider(getApplication(), mapboxNavigation);
     }
 
-    private void initializeRouteProcessorThread(NavigationEventDispatcher dispatcher, RouteFetcher routeFetcher,
-                                                NavigationNotificationProvider notificationProvider) {
-        RouteProcessorThreadListener listener = new RouteProcessorThreadListener(
-                dispatcher, routeFetcher, notificationProvider
-        );
+    private void initializeRouteProcessorThread(NavigationEventDispatcher dispatcher, NavigationNotificationProvider notificationProvider) {
+        RouteProcessorThreadListener listener = new RouteProcessorThreadListener(dispatcher, notificationProvider);
         thread = new RouteProcessorBackgroundThread(new Handler(), listener);
     }
 

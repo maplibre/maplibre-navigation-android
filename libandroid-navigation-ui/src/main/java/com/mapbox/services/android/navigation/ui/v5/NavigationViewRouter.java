@@ -4,12 +4,12 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
-import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 import com.mapbox.services.android.navigation.v5.route.RouteListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
@@ -18,7 +18,7 @@ import java.util.List;
 
 class NavigationViewRouter implements RouteListener {
 
-  private final RouteFetcher onlineRouter;
+  private final MapboxRouteFetcher onlineRouter;
   private final ConnectivityStatusProvider connectivityStatus;
   private final RouteComparator routeComparator;
   private final ViewRouteListener listener;
@@ -28,7 +28,7 @@ class NavigationViewRouter implements RouteListener {
   private Location location;
   private RouteCallStatus callStatus;
 
-  NavigationViewRouter(RouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
+  NavigationViewRouter(MapboxRouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
                        ViewRouteListener listener) {
     this.onlineRouter = onlineRouter;
     this.connectivityStatus = connectivityStatus;
@@ -38,7 +38,7 @@ class NavigationViewRouter implements RouteListener {
   }
 
   // Extra fields for testing purposes
-  NavigationViewRouter(RouteFetcher onlineRouter,
+  NavigationViewRouter(MapboxRouteFetcher onlineRouter,
                        ConnectivityStatusProvider connectivityStatus, RouteComparator routeComparator,
                        ViewRouteListener listener, RouteCallStatus callStatus) {
     this.onlineRouter = onlineRouter;

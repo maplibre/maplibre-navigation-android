@@ -3,9 +3,9 @@ package com.mapbox.services.android.navigation.ui.v5;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package com.mapbox.services.android.navigation.v5.utils;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.core.constants.Constants;
+import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISION_6;
+
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.utils.PolylineUtils;
@@ -15,7 +16,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 import static junit.framework.Assert.assertEquals;
 
 public class ToleranceUtilsTest extends BaseTest {
@@ -38,7 +38,7 @@ public class ToleranceUtilsTest extends BaseTest {
     DirectionsRoute route = buildTestDirectionsRoute();
     RouteProgress routeProgress = buildDefaultTestRouteProgress();
     double distanceToIntersection = route.distance() - 39;
-    LineString lineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+    LineString lineString = LineString.fromPolyline(route.geometry(), PRECISION_6);
     Point closePoint = TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS);
 
     double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapboxNavigationOptions.builder().build());
@@ -51,7 +51,7 @@ public class ToleranceUtilsTest extends BaseTest {
     DirectionsRoute route = buildTestDirectionsRoute();
     RouteProgress routeProgress = buildDefaultTestRouteProgress();
     double distanceToIntersection = route.distance();
-    LineString lineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+    LineString lineString = LineString.fromPolyline(route.geometry(), PRECISION_6);
     Point closePoint = TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS);
 
     double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapboxNavigationOptions.builder().build());

@@ -1,9 +1,6 @@
 package com.mapbox.services.android.navigation.v5.utils;
 
-
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.core.constants.Constants;
-import com.mapbox.core.utils.TextUtils;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;

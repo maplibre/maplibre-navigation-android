@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.ui.v5;
 
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 
 public abstract class NavigationUiOptions {
 

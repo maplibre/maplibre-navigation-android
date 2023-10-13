@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import android.text.SpannableString;
 import android.view.View;
 
-import com.mapbox.api.directions.v5.models.BannerInstructions;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.BannerInstructions;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteLegProgress;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.utils.DistanceFormatter;

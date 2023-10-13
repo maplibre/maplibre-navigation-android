@@ -1,11 +1,11 @@
-package com.mapbox.services.android.navigation.v5.navigation;
+package com.mapbox.services.android.navigation.ui.v5.route;
 
 import android.content.Context;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.services.android.navigation.ui.v5.BaseTest;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.android.navigation.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class NavigationRouteTest extends BaseTest {
   @Test
   public void sanityTest() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0))
       .destination(Point.fromLngLat(1.0, 5.0))
       .build();
@@ -50,7 +50,7 @@ public class NavigationRouteTest extends BaseTest {
   @Test
   public void changingDefaultValueToCustomWorksProperly() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0))
       .destination(Point.fromLngLat(1.0, 5.0))
       .profile(DirectionsCriteria.PROFILE_CYCLING)
@@ -63,7 +63,7 @@ public class NavigationRouteTest extends BaseTest {
   @Test
   public void addApproachesIncludedInRequest() {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0))
       .destination(Point.fromLngLat(1.0, 5.0))
       .profile(DirectionsCriteria.PROFILE_CYCLING)
@@ -77,7 +77,7 @@ public class NavigationRouteTest extends BaseTest {
   @Test
   public void addWaypointNamesIncludedInRequest() {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0))
       .destination(Point.fromLngLat(1.0, 5.0))
       .profile(DirectionsCriteria.PROFILE_CYCLING)
@@ -91,7 +91,7 @@ public class NavigationRouteTest extends BaseTest {
   @Test
   public void addingPointAndBearingKeepsCorrectOrder() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .addBearing(2.0, 3.0)
       .destination(Point.fromLngLat(1.0, 5.0))
@@ -105,7 +105,7 @@ public class NavigationRouteTest extends BaseTest {
   @Ignore
   public void reverseOriginDestinationDoesntMessUpBearings() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .destination(Point.fromLngLat(1.0, 5.0), 1d, 5d)
       .origin(Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .build();
@@ -121,7 +121,7 @@ public class NavigationRouteTest extends BaseTest {
     coordinates.add(Point.fromLngLat(1.0, 5.0));
 
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(ACCESS_TOKEN)
+      .accessToken(BaseTest.ACCESS_TOKEN)
       .baseUrl("https://api-directions-traf.com")
       .requestUuid("XYZ_UUID")
       .alternatives(true)
@@ -144,7 +144,7 @@ public class NavigationRouteTest extends BaseTest {
     String request = navigationRoute.getCall().request().url().toString();
     assertThat(request, containsString("https://api-directions-traf.com"));
     assertThat(request, containsString("alternatives=true"));
-    assertThat(request, containsString(ACCESS_TOKEN));
+    assertThat(request, containsString(BaseTest.ACCESS_TOKEN));
     assertThat(request, containsString("voice_units=metric"));
     assertThat(request, containsString("example_user"));
     assertThat(request, containsString("language=en"));

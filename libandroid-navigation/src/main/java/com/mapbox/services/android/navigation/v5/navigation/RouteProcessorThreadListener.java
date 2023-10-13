@@ -2,9 +2,7 @@ package com.mapbox.services.android.navigation.v5.navigation;
 
 import android.location.Location;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
-import com.mapbox.services.android.navigation.v5.route.RouteFetcher;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;
@@ -14,13 +12,10 @@ import static com.mapbox.services.android.navigation.v5.navigation.NavigationHel
 class RouteProcessorThreadListener implements RouteProcessorBackgroundThread.Listener {
 
   private final NavigationEventDispatcher eventDispatcher;
-  private final RouteFetcher routeFetcher;
   private final NavigationNotificationProvider notificationProvider;
 
-  RouteProcessorThreadListener(NavigationEventDispatcher eventDispatcher, RouteFetcher routeFetcher,
-                               NavigationNotificationProvider notificationProvider) {
+  RouteProcessorThreadListener(NavigationEventDispatcher eventDispatcher, NavigationNotificationProvider notificationProvider) {
     this.eventDispatcher = eventDispatcher;
-    this.routeFetcher = routeFetcher;
     this.notificationProvider = notificationProvider;
   }
 
@@ -55,21 +50,6 @@ class RouteProcessorThreadListener implements RouteProcessorBackgroundThread.Lis
   public void onUserOffRoute(Location location, boolean userOffRoute) {
     if (userOffRoute) {
       eventDispatcher.onUserOffRoute(location);
-    }
-  }
-
-  /**
-   * RouteListener from the {@link RouteProcessorBackgroundThread} - if fired with checkFasterRoute set
-   * to true, a new {@link DirectionsRoute} should be fetched with {@link RouteFetcher}.
-   *
-   * @param location         to create a new origin
-   * @param routeProgress    for various {@link com.mapbox.api.directions.v5.models.LegStep} data
-   * @param checkFasterRoute true if should check for faster route, false otherwise
-   */
-  @Override
-  public void onCheckFasterRoute(Location location, RouteProgress routeProgress, boolean checkFasterRoute) {
-    if (checkFasterRoute) {
-      routeFetcher.findRouteFromRouteProgress(location, routeProgress);
     }
   }
 }

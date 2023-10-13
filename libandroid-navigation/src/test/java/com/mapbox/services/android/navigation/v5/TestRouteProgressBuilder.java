@@ -4,20 +4,20 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.StepIntersection;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.StepIntersection;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.utils.PolylineUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;
 
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.createDistancesToIntersections;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.createIntersectionsList;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.findCurrentIntersection;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.findUpcomingIntersection;
+import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISION_6;
 
 class TestRouteProgressBuilder {
 

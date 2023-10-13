@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import android.app.Application;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.ui.v5.voice.SpeechPlayer;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 

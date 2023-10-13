@@ -2,8 +2,16 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v2.1.0 - unreleased
+### v3.0.0 - unreleased
 
+- BREAKING CHANGES:
+  - The navigation models DirectionsResponse and the classes used within this class have been moved the Maplibre-Java to the navigation-core. So the core does not need a dependency to the outdated Maplibre-Java dependency anymore.
+  - When you pass a DirectionsResponse or DirectionsRoute to the navigation-core, please be aware that you convert it to the local model first. If you are using Mapbox or the GraphHopper navigation endpoint, you can simply use fromJson for parsing.
+    - You could use something like this: `com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(JSON_STRING_FROM_API_RESPONSE);`
+  - `RouteFetcher` has been split to `RouteFetcher` and `MapboxRouteFetcher`. The latter is in the ui module now.
+  - `NavigationRoute` has been moved to the ui module.
+  - `RouteProcessorBackgroundThread.Listener#onCheckFasterRoute` was removed as this relied on parts of the RouteFetcher that don't work anymore in the core. If you need this feature, you implement this in the UI code. 
+    - This resulted in some smaller API changes that don't require the RouteFetcher as parameter anymore.
 - Support multiple legs by snap to route engine [#77](https://github.com/maplibre/maplibre-navigation-android/pull/77)
 - Mark unused option `maximumDistanceOffRoute` as deprecated [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)
 - Fix move-away-from-maneuver logic of `OffRouteDetector` [#65](https://github.com/maplibre/maplibre-navigation-android/pull/65)

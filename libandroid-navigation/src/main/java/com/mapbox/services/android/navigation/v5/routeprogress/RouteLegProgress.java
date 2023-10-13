@@ -7,11 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.StepIntersection;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.StepIntersection;
 
 import java.util.List;
 
@@ -180,8 +181,8 @@ public abstract class RouteLegProgress {
    * Provides the current annotation data for a leg segment determined by
    * the distance traveled along the route.
    * <p>
-   * This object will only be present when a {@link com.mapbox.api.directions.v5.models.DirectionsRoute}
-   * requested with {@link com.mapbox.api.directions.v5.DirectionsCriteria#ANNOTATION_DISTANCE}.
+   * This object will only be present when a {@link DirectionsRoute} is requested
+   * with {@link DirectionsCriteria#ANNOTATION_DISTANCE}.
    * <p>
    * This will be provided by default with {@link NavigationRoute#builder(Context)}.
    *

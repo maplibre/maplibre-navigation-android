@@ -6,14 +6,13 @@ import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.LegAnnotation;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.StepIntersection;
-import com.mapbox.core.constants.Constants;
+import com.mapbox.services.android.navigation.v5.models.DirectionsAdapterFactory;
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegAnnotation;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.StepIntersection;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.utils.PolylineUtils;
 import com.mapbox.mapboxsdk.location.engine.LocationEngine;
@@ -27,6 +26,7 @@ import com.mapbox.services.android.navigation.v5.routeprogress.CurrentLegAnnotat
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteLegProgress;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteStepProgress;
+import com.mapbox.services.android.navigation.v5.utils.Constants;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

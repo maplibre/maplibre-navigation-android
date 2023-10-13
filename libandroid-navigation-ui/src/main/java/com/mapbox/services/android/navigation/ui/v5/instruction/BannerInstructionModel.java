@@ -2,8 +2,8 @@ package com.mapbox.services.android.navigation.ui.v5.instruction;
 
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.BannerInstructions;
-import com.mapbox.api.directions.v5.models.BannerText;
+import com.mapbox.services.android.navigation.v5.models.BannerInstructions;
+import com.mapbox.services.android.navigation.v5.models.BannerText;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.utils.DistanceFormatter;
 

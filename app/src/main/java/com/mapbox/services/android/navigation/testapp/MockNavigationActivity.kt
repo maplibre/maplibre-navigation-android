@@ -11,9 +11,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.mapbox.api.directions.v5.DirectionsCriteria
+import com.mapbox.api.directions.v5.DirectionsCriteria.METRIC
 import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -26,9 +25,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
@@ -225,7 +226,7 @@ class MockNavigationActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(DirectionsCriteria.METRIC)
+            this.voiceUnits(METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }
@@ -238,9 +239,10 @@ class MockNavigationActivity :
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
                     if (response.routes().isNotEmpty()) {
-                        val directionsRoute = response.routes().first()
+                        val maplibreResponse = com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(response.toJson());
+                        val directionsRoute = DirectionsRoute.fromJson(maplibreResponse.routes().first().toJson())
                         this@MockNavigationActivity.route = directionsRoute
-                        navigationMapRoute?.addRoutes(response.routes())
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
                     }
                 }
             }

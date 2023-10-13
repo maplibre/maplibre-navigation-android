@@ -1,9 +1,11 @@
 package com.mapbox.services.android.navigation.v5;
 
+import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISION_6;
+
 import android.location.Location;
 import androidx.annotation.NonNull;
 
-import com.mapbox.api.directions.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
@@ -12,7 +14,6 @@ import com.mapbox.turf.TurfMeasurement;
 
 import java.util.List;
 
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
