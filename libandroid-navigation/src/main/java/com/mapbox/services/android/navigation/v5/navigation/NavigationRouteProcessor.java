@@ -90,7 +90,8 @@ class NavigationRouteProcessor implements OffRouteCallback {
     if (!newRoute && routeProgress != null) {
       checkManeuverCompletion(navigation, location, directionsRoute, completionOffset, maneuverZoneRadius);
     }
-    return assembleRouteProgress(directionsRoute);
+    routeProgress = assembleRouteProgress(directionsRoute);
+    return routeProgress;
   }
 
   RouteProgress getRouteProgress() {
