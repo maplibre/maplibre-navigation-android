@@ -29,6 +29,8 @@ import static com.mapbox.services.android.navigation.v5.navigation.NavigationHel
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.routeDistanceRemaining;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining;
 
+import androidx.annotation.NonNull;
+
 class NavigationRouteProcessor implements OffRouteCallback {
 
   private static final int FIRST_LEG_INDEX = 0;
@@ -83,9 +85,11 @@ class NavigationRouteProcessor implements OffRouteCallback {
     MapboxNavigationOptions options = navigation.options();
     double completionOffset = options.maxTurnCompletionOffset();
     double maneuverZoneRadius = options.maneuverZoneRadius();
-    checkNewRoute(navigation);
+    boolean newRoute = checkNewRoute(navigation);
     stepDistanceRemaining = calculateStepDistanceRemaining(location, directionsRoute);
-    checkManeuverCompletion(navigation, location, directionsRoute, completionOffset, maneuverZoneRadius);
+    if (!newRoute && routeProgress != null) {
+      checkManeuverCompletion(navigation, location, directionsRoute, completionOffset, maneuverZoneRadius);
+    }
     return assembleRouteProgress(directionsRoute);
   }
 
@@ -117,14 +121,16 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * data and {@link NavigationIndices} needs to be reset.
    *
    * @param mapboxNavigation to get the current route and off-route engine
+   * @return Whether or not a route progress is already set and {@link RouteUtils} determines this is a new route
    */
-  private void checkNewRoute(MapboxNavigation mapboxNavigation) {
+  private boolean checkNewRoute(@NonNull MapboxNavigation mapboxNavigation) {
     DirectionsRoute directionsRoute = mapboxNavigation.getRoute();
-    if (routeUtils.isNewRoute(routeProgress, directionsRoute)) {
+    boolean newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute);
+    if (newRoute) {
       createFirstIndices(mapboxNavigation);
       currentLegAnnotation = null;
-      routeProgress = assembleRouteProgress(directionsRoute);
     }
+    return newRoute;
   }
 
   /**
