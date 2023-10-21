@@ -122,6 +122,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
     DirectionsRoute directionsRoute = mapboxNavigation.getRoute();
     if (routeUtils.isNewRoute(routeProgress, directionsRoute)) {
       createFirstIndices(mapboxNavigation);
+      currentLegAnnotation = null;
       routeProgress = assembleRouteProgress(directionsRoute);
     }
   }
