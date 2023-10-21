@@ -170,11 +170,16 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * @param mapboxNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
    */
   private void advanceIndices(MapboxNavigation mapboxNavigation) {
-    if(shouldUpdateToIndex != null){
-      indices = shouldUpdateToIndex;
-    }else{
-      indices = increaseIndex(routeProgress, indices);
+    NavigationIndices newIndices;
+    if (shouldUpdateToIndex != null) {
+      newIndices = shouldUpdateToIndex;
+    } else {
+      newIndices = increaseIndex(routeProgress, indices);
     }
+    if (newIndices.legIndex() != indices.legIndex()) {
+      currentLegAnnotation = null;
+    }
+    indices = newIndices;
     processNewIndex(mapboxNavigation);
   }
 
