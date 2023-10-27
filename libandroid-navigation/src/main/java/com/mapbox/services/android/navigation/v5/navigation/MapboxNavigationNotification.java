@@ -151,7 +151,7 @@ class MapboxNavigationNotification implements NavigationNotification {
 
   private void registerReceiver(Context context) {
     if (context != null) {
-      context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION));
+      context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION), Context.RECEIVER_NOT_EXPORTED);
     }
   }
 
