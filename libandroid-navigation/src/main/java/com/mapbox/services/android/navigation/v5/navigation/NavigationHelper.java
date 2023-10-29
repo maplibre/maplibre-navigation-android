@@ -526,7 +526,7 @@ public class NavigationHelper {
     for (int i = distanceIndex; i < legDistances.size(); i++) {
       Double distance = legDistances.get(i);
       annotationDistancesTraveled += distance;
-      if (annotationDistancesTraveled > distanceTraveled) {
+      if (annotationDistancesTraveled > distanceTraveled || i == legDistances.size() -1 ) {
         double distanceToAnnotation = annotationDistancesTraveled - distance;
         annotationBuilder.distanceToAnnotation(distanceToAnnotation);
         return i;
