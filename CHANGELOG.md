@@ -33,6 +33,7 @@ Maplibre welcomes participation and contributions from everyone.
   ```
 - Fix memory leak in Navigation Service
 - Only progress the user along the step / route if the user is close to the route (currently 1km), [#75](https://github.com/maplibre/maplibre-navigation-android/pull/75)
+- Compatibility fixes for API 34 [#90](https://github.com/maplibre/maplibre-navigation-android/pull/90)
 
 ### v2.0.0 - March 21, 2023
 
