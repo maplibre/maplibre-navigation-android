@@ -1,6 +1,6 @@
 package testapp;
 
-import com.mapbox.services.android.navigation.testapp.test.TestNavigationActivity;
+import com.mapbox.services.android.navigation.testapp.NavigationUIActivity;
 import com.mapbox.services.android.navigation.ui.v5.map.NavigationMapboxMap;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
@@ -14,7 +14,7 @@ public class NavigationViewTest extends BaseNavigationActivityTest {
 
   @Override
   protected Class getActivityClass() {
-    return TestNavigationActivity.class;
+    return NavigationUIActivity.class;
   }
 
   @Test
