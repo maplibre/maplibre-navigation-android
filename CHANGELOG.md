@@ -33,6 +33,7 @@ Maplibre welcomes participation and contributions from everyone.
   ```
 - Fix memory leak in Navigation Service
 - Only progress the user along the step / route if the user is close to the route (currently 1km), [#75](https://github.com/maplibre/maplibre-navigation-android/pull/75)
+- Compatibility fixes for API 34 [#90](https://github.com/maplibre/maplibre-navigation-android/pull/90)
 - When setting a new route or advancing to the next leg, we reset the `currentLegAnnotation` in `NavigationRouteProcessor`, fixes legs don't reset on rerouting.
 - Make sure step distance remaining is set correctly before first routeProgress is calculated, only calculate maneuverCompletion when routeProgress is set. This fixes annotation Index set to wrong values
 
