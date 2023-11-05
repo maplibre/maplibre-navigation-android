@@ -2,7 +2,10 @@
 
 Maplibre welcomes participation and contributions from everyone.
 
-### v3.0.0 - unreleased
+### unreleased
+
+
+### v3.0.0 - November 5, 2023
 
 - BREAKING CHANGES:
   - The navigation models DirectionsResponse and the classes used within this class have been moved the Maplibre-Java to the navigation-core. So the core does not need a dependency to the outdated Maplibre-Java dependency anymore.
