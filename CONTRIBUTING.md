@@ -4,13 +4,20 @@ If you have a usage question pertaining to the Maplibre Navigation SDK for Andro
 
 If you want to contribute code:
 
-1. Please familiarize yourself with the [install process](https://www.mapbox.com/android-docs/navigation/overview/#install-the-navigation-sdk).
+1. Please familiarize yourself with the [install process](README.md).
 
-2. Ensure that existing [pull requests](https://github.com/mapbox/mapbox-navigation-android/pulls) and [issues](https://github.com/mapbox/mapbox-navigation-android/issues) don’t already cover your contribution or question.
+2. Ensure that existing [pull requests](https://github.com/maplibre/maplibre-navigation-android/pulls) and [issues](https://github.com/maplibre/maplibre-navigation-android/issues) don’t already cover your contribution or question.
 
 3. Pull requests are gladly accepted. If there are any changes that developers should be aware of, please update the [change log](CHANGELOG.md)
 
-4. Mapbox uses checkstyle to enforce good Java code standards, Make sure to read the [wiki entry](https://github.com/mapbox/mapbox-navigation-android/wiki/Setting-up-Mapbox-checkstyle) and setup. CI will fail if your PR contains any mistakes.
+4. ~~We use checkstyle to enforce good coding standards. CI will fail if your PR contains any issues.~~ Lints are currently disabled; PRs welcome to improve the situation. Unit tests still run though!
+
+## Getting started building
+
+You can check out the repo and build locally using Android Studio or the gradle wrapper CLI,
+just as with any other Kotlin/Java project.
+Do note however that currently the lints fail, so you should run build excluding lints.
+For example: `./gradlew build -x lint`.
 
 ## Adding or updating a localization
 
