@@ -4,6 +4,9 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+- Android manifest cleanup for `libnavigation-android`
+  - Explicitly add `android.permission.ACCESS_NETWORK_STATE`, as this is needed for `com.mapbox.services.android.core.connectivity.ConnectivityReceiver`
+  - Remove Mapbox telemetry provider references (the references to code have already been removed)
 
 ### v3.0.0 - November 5, 2023
 
