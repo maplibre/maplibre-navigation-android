@@ -254,6 +254,11 @@ public final class NavigationRoute {
             return this;
         }
 
+        public Builder waypointIndices(@NonNull List<Integer> waypointIndices) {
+            directionsBuilder.waypointIndices(waypointIndices);
+            return this;
+        }
+        
         /**
          * Optionally set whether to try to return alternative routes. An alternative is classified as a
          * route that is significantly different then the fastest route, but also still reasonably fast.
