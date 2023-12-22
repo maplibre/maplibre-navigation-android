@@ -77,7 +77,6 @@ class NavigationUIActivity :
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
-
                 NavigationLauncher.startNavigation(this@NavigationUIActivity, options)
             }
         }
