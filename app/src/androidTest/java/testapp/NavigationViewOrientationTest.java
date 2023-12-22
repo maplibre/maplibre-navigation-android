@@ -3,8 +3,8 @@ package testapp;
 import android.content.res.Configuration;
 import androidx.test.espresso.ViewAction;
 
-import com.mapbox.services.android.navigation.testapp.NavigationUIActivity;
 import com.mapbox.services.android.navigation.testapp.R;
+import com.mapbox.services.android.navigation.testapp.test.TestNavigationActivity;
 import com.mapbox.services.android.navigation.ui.v5.map.NavigationMapboxMap;
 
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class NavigationViewOrientationTest extends BaseNavigationActivityTest {
 
   @Override
   protected Class getActivityClass() {
-    return NavigationUIActivity.class;
+    return TestNavigationActivity.class;
   }
 
   @Test
@@ -76,21 +76,20 @@ public class NavigationViewOrientationTest extends BaseNavigationActivityTest {
     assertFalse(isTrackingEnabled);
   }
 
-  // TODO: Correct
-//  @Test
-//  public void onOrientationChange_waynameVisibilityIsRestored() {
-//    if (checkOrientation(Configuration.ORIENTATION_LANDSCAPE)) {
-//      return;
-//    }
-//    validateTestSetup();
-//
-//    onView(withId(R.id.navigationMapView)).perform(swipeUp());
-//    changeOrientation(orientationLandscape());
-//
-//    NavigationMapboxMap navigationMapboxMap = getNavigationView().retrieveNavigationMapboxMap();
-//    boolean isWaynameVisible = navigationMapboxMap.isWaynameVisible();
-//    assertFalse(isWaynameVisible);
-//  }
+  @Test
+  public void onOrientationChange_waynameVisibilityIsRestored() {
+    if (checkOrientation(Configuration.ORIENTATION_LANDSCAPE)) {
+      return;
+    }
+    validateTestSetup();
+
+    onView(withId(R.id.navigationMapView)).perform(swipeUp());
+    changeOrientation(orientationLandscape());
+
+    NavigationMapboxMap navigationMapboxMap = getNavigationView().retrieveNavigationMapboxMap();
+    boolean isWaynameVisible = navigationMapboxMap.isWaynameVisible();
+    assertFalse(isWaynameVisible);
+  }
 
   // TODO create test rule for this to conditionally ignore
   private boolean checkOrientation(int testedOrientation) {
