@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 
 import androidx.annotation.UiThread;
 
@@ -127,7 +128,11 @@ public class ConnectivityReceiver extends BroadcastReceiver {
     @UiThread
     public void requestConnectivityUpdates() {
         if (activationCounter == 0) {
-            context.registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"), Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                context.registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+            }
         }
         activationCounter++;
     }

@@ -28,6 +28,10 @@ class MapBatteryMonitor {
 
   private static Intent registerBatteryUpdates(Context context) {
     IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-    return context.registerReceiver(null, filter);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      return context.registerReceiver(null, filter, Context.RECEIVER_NOT_EXPORTED);
+    } else {
+      return context.registerReceiver(null, filter);
+    }
   }
 }

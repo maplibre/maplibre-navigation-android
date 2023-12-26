@@ -68,7 +68,12 @@ public class CustomNavigationNotification implements NavigationNotification {
 
     public void register(BroadcastReceiver stopNavigationReceiver, Context applicationContext) {
         this.stopNavigationReceiver = stopNavigationReceiver;
-        applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION));
+        }
     }
 
     private PendingIntent createPendingStopIntent(Context context) {
