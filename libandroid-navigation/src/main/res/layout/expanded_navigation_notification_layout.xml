@@ -3,7 +3,7 @@
     style="@android:style/TextAppearance.StatusBar.EventContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_blue_dark"
+    android:background="@color/mapbox_navigation_view_color_banner_background"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:orientation="vertical">
@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:id="@+id/endNavigationBtn"
         android:gravity="center_vertical"
-        android:layout_marginLeft="56dp"
+        android:layout_marginLeft="8dp"
         android:padding="8dp">
 
         <ImageView
