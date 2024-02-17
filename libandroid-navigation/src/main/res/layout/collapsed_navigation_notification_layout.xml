@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@android:style/TextAppearance.StatusBar.EventContent"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:background="@android:color/holo_blue_dark"
+    android:layout_height="wrap_content"
+    android:background="@color/mapbox_navigation_view_color_banner_background"
     android:id="@+id/relativeLayout">
 
     <ImageView

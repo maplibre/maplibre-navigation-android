@@ -113,7 +113,7 @@ class MapboxNavigationNotification implements NavigationNotification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel notificationChannel = new NotificationChannel(
         NAVIGATION_NOTIFICATION_CHANNEL, context.getString(R.string.channel_name),
-        NotificationManager.IMPORTANCE_LOW);
+        NotificationManager.IMPORTANCE_HIGH);
       notificationManager.createNotificationChannel(notificationChannel);
     }
   }
@@ -132,11 +132,14 @@ class MapboxNavigationNotification implements NavigationNotification {
     // Sets up the top bar notification
     notificationBuilder = new NotificationCompat.Builder(context, NAVIGATION_NOTIFICATION_CHANNEL)
       .setContentIntent(pendingOpenIntent)
+      .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
       .setCategory(NotificationCompat.CATEGORY_SERVICE)
       .setPriority(NotificationCompat.PRIORITY_MAX)
       .setSmallIcon(R.drawable.ic_navigation)
       .setCustomContentView(collapsedNotificationRemoteViews)
       .setCustomBigContentView(expandedNotificationRemoteViews)
+      .setColor(context.getResources().getColor(R.color.mapbox_navigation_view_color_banner_background))
+      .setColorized(true)
       .setOngoing(true);
 
     notification = notificationBuilder.build();
@@ -153,7 +156,7 @@ class MapboxNavigationNotification implements NavigationNotification {
   private void registerReceiver(Context context) {
     if (context != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION), Context.RECEIVER_EXPORTED);
       } else {
         context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION));
       }

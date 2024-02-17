@@ -1,9 +1,12 @@
 package com.mapbox.services.android.navigation.v5.navigation;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
+
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 
@@ -118,7 +121,11 @@ public class NavigationService extends Service {
         Notification notification = navigationNotification.getNotification();
         int notificationId = navigationNotification.getNotificationId();
         notification.flags = Notification.FLAG_FOREGROUND_SERVICE;
-        startForeground(notificationId, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(notificationId, notification, FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            startForeground(notificationId, notification);
+        }
     }
 
     final static class LocalBinder extends Binder {
