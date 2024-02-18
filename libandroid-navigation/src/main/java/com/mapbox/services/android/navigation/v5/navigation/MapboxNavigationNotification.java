@@ -113,7 +113,7 @@ class MapboxNavigationNotification implements NavigationNotification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel notificationChannel = new NotificationChannel(
         NAVIGATION_NOTIFICATION_CHANNEL, context.getString(R.string.channel_name),
-        NotificationManager.IMPORTANCE_HIGH);
+        NotificationManager.IMPORTANCE_LOW);
       notificationManager.createNotificationChannel(notificationChannel);
     }
   }
