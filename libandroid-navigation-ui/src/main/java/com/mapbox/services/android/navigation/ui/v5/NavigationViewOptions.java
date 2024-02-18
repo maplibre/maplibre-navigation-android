@@ -94,6 +94,8 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
 
     public abstract Builder locationEngine(LocationEngine locationEngine);
 
+    public abstract Builder alertViewEnabled(Boolean alertViewEnabled);
+
     public abstract NavigationViewOptions build();
   }
 
