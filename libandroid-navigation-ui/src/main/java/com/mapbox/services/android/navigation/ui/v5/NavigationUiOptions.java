@@ -17,4 +17,7 @@ public abstract class NavigationUiOptions {
   public abstract boolean shouldSimulateRoute();
 
   public abstract boolean waynameChipEnabled();
+
+  public abstract boolean alertViewEnabled();
+
 }

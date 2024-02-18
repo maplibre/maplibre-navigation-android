@@ -25,6 +25,8 @@ public abstract class NavigationLauncherOptions extends NavigationUiOptions {
 
     public abstract Builder waynameChipEnabled(boolean waynameChipEnabled);
 
+    public abstract Builder alertViewEnabled(boolean alertViewEnabled);
+
     public abstract Builder initialMapCameraPosition(@Nullable CameraPosition initialMapCameraPosition);
 
     public abstract NavigationLauncherOptions build();

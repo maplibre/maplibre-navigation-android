@@ -621,6 +621,11 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     navigationViewModel.initialize(options);
     initializeNavigationListeners(options, navigationViewModel);
     setupNavigationMapboxMap(options);
+    if (!options.alertViewEnabled()) {
+        instructionView.retrieveAlertView().setVisibility(GONE);
+    } else {
+        instructionView.retrieveAlertView().setVisibility(VISIBLE);
+    }
 
     if (!isSubscribed) {
       initializeClickListeners();
