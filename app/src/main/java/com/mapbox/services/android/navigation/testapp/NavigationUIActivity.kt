@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.turf.TurfConstants
@@ -72,7 +73,10 @@ class NavigationUIActivity :
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
                     .shouldSimulateRoute(simulateRoute)
-                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
+                    .initialMapCameraPosition(
+                        CameraPosition.Builder()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                    )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
@@ -104,19 +108,19 @@ class NavigationUIActivity :
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
+
+            navigationMapRoute = NavigationMapRoute(
+                binding.mapView,
+                mapboxMap
+            )
+
+            mapboxMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
         }
-
-        navigationMapRoute = NavigationMapRoute(
-            binding.mapView,
-            mapboxMap
-        )
-
-        mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
     }
 
     @SuppressWarnings("MissingPermission")

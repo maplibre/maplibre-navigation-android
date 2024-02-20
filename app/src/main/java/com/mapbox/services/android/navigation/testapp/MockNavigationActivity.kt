@@ -26,6 +26,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
@@ -144,18 +145,18 @@ class MockNavigationActivity :
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
+
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+
+            mapboxMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
+
+            newOrigin()
         }
-
-        navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
-
-        mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
-
-        newOrigin()
     }
 
     @SuppressWarnings("MissingPermission")

@@ -16,6 +16,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivitySnapToRouteNavigationBinding
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.navigation.*
@@ -79,10 +80,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            calculateRouteAndStartNavigation()
         }
-
-        navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
-        calculateRouteAndStartNavigation()
     }
 
     @SuppressWarnings("MissingPermission")
