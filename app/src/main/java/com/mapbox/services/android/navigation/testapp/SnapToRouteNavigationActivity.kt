@@ -79,10 +79,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            calculateRouteAndStartNavigation()
         }
-
-        navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
-        calculateRouteAndStartNavigation()
     }
 
     @SuppressWarnings("MissingPermission")
