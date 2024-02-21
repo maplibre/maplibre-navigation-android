@@ -51,6 +51,12 @@ class MapRouteLine {
   @ColorInt
   private int routeSevereColor;
   @ColorInt
+  private int routeShieldColor;
+  @ColorInt
+  private int drivenRouteColor;
+  @ColorInt
+  private int drivenRouteShieldColor;
+  @ColorInt
   private int alternativeRouteDefaultColor;
   @ColorInt
   private int alternativeRouteModerateColor;
@@ -58,8 +64,6 @@ class MapRouteLine {
   private int alternativeRouteSevereColor;
   @ColorInt
   private int alternativeRouteShieldColor;
-  @ColorInt
-  private int routeShieldColor;
   private float routeScale;
   private float alternativeRouteScale;
   private boolean roundedLineCap;
@@ -128,7 +132,7 @@ class MapRouteLine {
     this.style = style;
 
     TypedArray typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
-    // Primary Route attributes
+    // Primary route attributes
     routeDefaultColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
       ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_blue));
     routeModerateColor = typedArray.getColor(
@@ -142,7 +146,13 @@ class MapRouteLine {
     routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
     roundedLineCap = typedArray.getBoolean(R.styleable.NavigationMapRoute_roundedLineCap, true);
 
-    // Secondary Routes attributes
+    // Driven route attributes
+    drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
+            ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
+    drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
+            ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
+
+    // Alternative routes attributes
     alternativeRouteDefaultColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_alternativeRouteColor,
       ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
@@ -427,14 +437,14 @@ class MapRouteLine {
                                 String belowLayer) {
     LineLayer routeShieldLayer = layerProvider.initializeRouteShieldLayer(
       style, routeScale, alternativeRouteScale,
-      routeShieldColor, alternativeRouteShieldColor
+      routeShieldColor, drivenRouteShieldColor, alternativeRouteShieldColor
     );
     MapUtils.addLayerToMap(style, routeShieldLayer, belowLayer);
     routeLayerIds.add(routeShieldLayer.getId());
 
     LineLayer routeLayer = layerProvider.initializeRouteLayer(
       style, roundedLineCap, routeScale, alternativeRouteScale,
-      routeDefaultColor, routeModerateColor, routeSevereColor,
+      routeDefaultColor, drivenRouteColor, routeModerateColor, routeSevereColor,
       alternativeRouteDefaultColor, alternativeRouteModerateColor,
       alternativeRouteSevereColor
     );

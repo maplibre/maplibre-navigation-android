@@ -41,6 +41,7 @@ class RouteConstants {
   static final String WAYPOINT_ORIGIN_VALUE = "origin";
   static final String WAYPOINT_DESTINATION_VALUE = "destination";
   static final String PRIMARY_ROUTE_PROPERTY_KEY = "primary-route";
+  static final String PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY = "primary-driven-route";
   static final String MODERATE_CONGESTION_VALUE = "moderate";
   static final String HEAVY_CONGESTION_VALUE = "heavy";
   static final String SEVERE_CONGESTION_VALUE = "severe";

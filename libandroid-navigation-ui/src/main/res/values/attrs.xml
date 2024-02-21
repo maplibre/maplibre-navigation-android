@@ -7,6 +7,10 @@
     <attr name="routeSevereCongestionColor" format="color"/>
     <attr name="routeShieldColor" format="color"/>
 
+    <!-- Primary driven route colors -->
+    <attr name="drivenRouteColor" format="color"/>
+    <attr name="drivenRouteShieldColor" format="color"/>
+
     <!-- Alternative route colors -->
     <attr name="alternativeRouteColor" format="color"/>
     <attr name="alternativeRouteModerateCongestionColor" format="color"/>

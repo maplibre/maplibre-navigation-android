@@ -32,6 +32,7 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ORIGIN_MARKER_NAME;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SHIELD_LAYER_ID;
@@ -46,7 +47,7 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 class MapRouteLayerProvider {
 
   LineLayer initializeRouteShieldLayer(Style style, float routeScale, float alternativeRouteScale,
-                                       int routeShieldColor, int alternativeRouteShieldColor) {
+                                       int routeShieldColor, int drivenRouteShieldColor, int alternativeRouteShieldColor) {
     LineLayer shieldLayer = style.getLayerAs(ROUTE_SHIELD_LAYER_ID);
     if (shieldLayer != null) {
       style.removeLayer(shieldLayer);
@@ -79,6 +80,7 @@ class MapRouteLayerProvider {
       ),
       lineColor(
         switchCase(
+          get(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY), color(drivenRouteShieldColor),
           get(PRIMARY_ROUTE_PROPERTY_KEY), color(routeShieldColor),
           color(alternativeRouteShieldColor)
         )
@@ -88,8 +90,8 @@ class MapRouteLayerProvider {
   }
 
   LineLayer initializeRouteLayer(Style style, boolean roundedLineCap, float routeScale,
-                                 float alternativeRouteScale, int routeDefaultColor, int routeModerateColor,
-                                 int routeSevereColor, int alternativeRouteDefaultColor,
+                                 float alternativeRouteScale, int routeDefaultColor, int drivenRouteColor,
+                                 int routeModerateColor, int routeSevereColor, int alternativeRouteDefaultColor,
                                  int alternativeRouteModerateColor, int alternativeRouteSevereColor) {
     LineLayer routeLayer = style.getLayerAs(ROUTE_LAYER_ID);
     if (routeLayer != null) {
@@ -137,6 +139,7 @@ class MapRouteLayerProvider {
       ),
       lineColor(
         switchCase(
+          get(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY), color(drivenRouteColor),
           get(PRIMARY_ROUTE_PROPERTY_KEY), match(
             Expression.toString(get(RouteConstants.CONGESTION_KEY)),
             color(routeDefaultColor),
