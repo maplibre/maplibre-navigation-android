@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.FIRST_COLLECTION_INDEX;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_PROPERTY_KEY;
 
 class PrimaryRouteUpdateTask extends Thread {
@@ -54,6 +55,7 @@ class PrimaryRouteUpdateTask extends Thread {
         return;
       }
       feature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, true);
+      feature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, false);
     }
     // Update non-primary collections (not including the primary)
     for (FeatureCollection nonPrimaryCollection : updatedRouteCollections) {
@@ -69,6 +71,7 @@ class PrimaryRouteUpdateTask extends Thread {
           return;
         }
         feature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, false);
+        feature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, false);
       }
     }
     if (cancelThread.get()) {

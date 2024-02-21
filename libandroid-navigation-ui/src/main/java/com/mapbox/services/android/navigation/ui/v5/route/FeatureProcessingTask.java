@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_PROPERTY_KEY;
 
 class FeatureProcessingTask extends Thread {
@@ -74,6 +75,7 @@ class FeatureProcessingTask extends Thread {
     LineString routeGeometry = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
     Feature routeFeature = Feature.fromGeometry(routeGeometry);
     routeFeature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, isPrimary);
+    routeFeature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, false);
     features.add(routeFeature);
     routeLineStrings.put(routeGeometry, route);
 
@@ -100,6 +102,7 @@ class FeatureProcessingTask extends Thread {
             String congestionValue = leg.annotation().congestion().get(i);
             feature.addStringProperty(RouteConstants.CONGESTION_KEY, congestionValue);
             feature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, isPrimary);
+            feature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, false);
             features.add(feature);
           }
         }
