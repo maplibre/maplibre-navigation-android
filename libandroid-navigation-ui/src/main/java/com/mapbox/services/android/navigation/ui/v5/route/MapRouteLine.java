@@ -97,8 +97,10 @@ class MapRouteLine {
                MapRouteDrawableProvider drawableProvider,
                MapRouteSourceProvider sourceProvider,
                MapRouteLayerProvider layerProvider,
+               MapRouteLayerFactory mapRouteLayerFactory,
                Handler handler) {
     this(context, style, styleRes, belowLayer, drawableProvider, sourceProvider, layerProvider,
+            mapRouteLayerFactory,
       FeatureCollection.fromFeatures(new Feature[]{}),
       FeatureCollection.fromFeatures(new Feature[]{}),
       new ArrayList<DirectionsRoute>(),
@@ -117,6 +119,7 @@ class MapRouteLine {
                MapRouteDrawableProvider drawableProvider,
                MapRouteSourceProvider sourceProvider,
                MapRouteLayerProvider layerProvider,
+               MapRouteLayerFactory mapRouteLayerFactory,
                FeatureCollection routesFeatureCollection,
                FeatureCollection waypointsFeatureCollection,
                List<DirectionsRoute> directionsRoutes,
@@ -189,7 +192,7 @@ class MapRouteLine {
     Drawable destinationIcon = drawableProvider.retrieveDrawable(destinationWaypointIcon);
     belowLayer = findRouteBelowLayerId(belowLayer, style);
 
-    initializeLayers(style, layerProvider, originIcon, destinationIcon, belowLayer);
+    initializeLayers(style, layerProvider, mapRouteLayerFactory, originIcon, destinationIcon, belowLayer);
 
     this.directionsRoutes.addAll(directionsRoutes);
     this.routeFeatureCollections.addAll(routeFeatureCollections);
@@ -433,26 +436,29 @@ class MapRouteLine {
   }
 
   private void initializeLayers(Style style, MapRouteLayerProvider layerProvider,
+                                MapRouteLayerFactory mapRouteLayerFactory,
                                 Drawable originIcon, Drawable destinationIcon,
                                 String belowLayer) {
-    LineLayer routeShieldLayer = layerProvider.initializeRouteShieldLayer(
-      style, routeScale, alternativeRouteScale,
-      routeShieldColor, drivenRouteShieldColor, alternativeRouteShieldColor
-    );
-    MapUtils.addLayerToMap(style, routeShieldLayer, belowLayer);
-    routeLayerIds.add(routeShieldLayer.getId());
+    LineLayer alternativeRouteShieldLayer = mapRouteLayerFactory.createAlternativeRoutesShieldLayer(alternativeRouteScale, alternativeRouteShieldColor);
+    MapUtils.addLayerToMap(style, alternativeRouteShieldLayer, belowLayer);
+    routeLayerIds.add(alternativeRouteShieldLayer.getId());
 
-    LineLayer routeLayer = layerProvider.initializeRouteLayer(
-      style, roundedLineCap, routeScale, alternativeRouteScale,
-      routeDefaultColor, drivenRouteColor, routeModerateColor, routeSevereColor,
-      alternativeRouteDefaultColor, alternativeRouteModerateColor,
-      alternativeRouteSevereColor
-    );
-    MapUtils.addLayerToMap(style, routeLayer, belowLayer);
-    routeLayerIds.add(routeLayer.getId());
+    //TODO: show serve parts on alternative route
+    LineLayer alternativeRouteLayer = mapRouteLayerFactory.createAlternativeRouteLayer(alternativeRouteScale, alternativeRouteDefaultColor);
+    MapUtils.addLayerToMap(style, alternativeRouteLayer, belowLayer);
+    routeLayerIds.add(alternativeRouteLayer.getId());
+
+    LineLayer primaryRouteShieldLayer = mapRouteLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
+    MapUtils.addLayerToMap(style, primaryRouteShieldLayer, belowLayer);
+    routeLayerIds.add(primaryRouteShieldLayer.getId());
+
+    //TODO: show serve parts on primary route
+    LineLayer primaryRouteLayer = mapRouteLayerFactory.createPrimaryRouteLayer(routeScale, routeDefaultColor, drivenRouteColor);
+    MapUtils.addLayerToMap(style, primaryRouteLayer, belowLayer);
+    routeLayerIds.add(primaryRouteLayer.getId());
 
     SymbolLayer wayPointLayer = layerProvider.initializeWayPointLayer(
-      style, originIcon, destinationIcon
+        style, originIcon, destinationIcon
     );
     MapUtils.addLayerToMap(style, wayPointLayer, belowLayer);
     routeLayerIds.add(wayPointLayer.getId());

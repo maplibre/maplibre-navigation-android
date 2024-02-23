@@ -8,7 +8,7 @@
 
   <!-- Primary driven route colors -->
   <color name="mapbox_navigation_route_driven_color">#00ff00</color>
-  <color name="mapbox_navigation_route_driven_shield_color">#00ff00</color>
+  <color name="mapbox_navigation_route_driven_shield_color">#ff00ff</color>
 
   <!-- Alternative route colors -->
   <color name="mapbox_navigation_route_alternative_color">#8694A5</color>

@@ -33,7 +33,9 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ORIGIN_MARKER_NAME;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SOURCE_ID;
@@ -44,6 +46,7 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
 
+@Deprecated
 class MapRouteLayerProvider {
 
   LineLayer initializeRouteShieldLayer(Style style, float routeScale, float alternativeRouteScale,
@@ -53,7 +56,7 @@ class MapRouteLayerProvider {
       style.removeLayer(shieldLayer);
     }
 
-    shieldLayer = new LineLayer(ROUTE_SHIELD_LAYER_ID, ROUTE_SOURCE_ID).withProperties(
+    shieldLayer = new LineLayer("aaa", "aaaa").withProperties(
       lineCap(Property.LINE_CAP_ROUND),
       lineJoin(Property.LINE_JOIN_ROUND),
       lineWidth(
@@ -105,7 +108,7 @@ class MapRouteLayerProvider {
       lineJoin = Property.LINE_JOIN_BEVEL;
     }
 
-    routeLayer = new LineLayer(ROUTE_LAYER_ID, ROUTE_SOURCE_ID).withProperties(
+    routeLayer = new LineLayer("bbb", "bbbb").withProperties(
       lineCap(lineCap),
       lineJoin(lineJoin),
       lineWidth(
