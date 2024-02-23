@@ -39,7 +39,7 @@ import java.util.List;
  * @since 0.4.0
  */
 
-public class NavigationMapRoute implements LifecycleObserver {
+public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionChangeListener  {
 
   @StyleRes
   private final int styleRes;
@@ -56,6 +56,9 @@ public class NavigationMapRoute implements LifecycleObserver {
   private MapRouteArrow routeArrow;
   private MapPrimaryRouteDrawer primaryRouteDrawer;
   private MapAlternativeRouteDrawer alternativeRouteDrawer;
+  private List<DirectionsRoute> routes = new ArrayList<>();
+  private int primaryRouteIndex = 0;
+  private OnRouteSelectionChangeListener clientRouteSelectionChangeListener;
 
   /**
    * Construct an instance of {@link NavigationMapRoute}.
@@ -146,7 +149,7 @@ public class NavigationMapRoute implements LifecycleObserver {
     this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
     this.primaryRouteDrawer = new MapPrimaryRouteDrawer(mapboxMap.getStyle(), true);
     this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle());
-    this.mapRouteClickListener = new MapRouteClickListener(routeLine);
+    this.mapRouteClickListener = new MapRouteClickListener(this);
     this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, primaryRouteDrawer, routeArrow);
     initializeDidFinishLoadingStyleListener();
     addListeners();
@@ -212,13 +215,19 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @since 0.8.0
    */
   public void addRoutes(@NonNull @Size(min = 1) List<DirectionsRoute> directionsRoutes) {
-    routeLine.draw(directionsRoutes);
-    primaryRouteDrawer.setRoute(directionsRoutes.get(0)); //TODO: get selected primary instead of first
-    if (directionsRoutes.size() > 1) {
-      alternativeRouteDrawer.setRoutes(directionsRoutes.subList(1, directionsRoutes.size())); //TODO: get selected primary instead of first
-    } else {
-        alternativeRouteDrawer.setRoutes(new ArrayList<>());
+    routes.addAll(directionsRoutes);
+    mapRouteClickListener.addRoutes(directionsRoutes);
+
+    primaryRouteDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
+
+    List<DirectionsRoute> alternativeRoutes = new ArrayList<>();
+    for (DirectionsRoute route : directionsRoutes) {
+      String routeIndexString = directionsRoutes.get(primaryRouteIndex).routeIndex();
+      if (route.routeIndex() != null && routeIndexString != null && Integer.parseInt(route.routeIndex()) != Integer.parseInt(routeIndexString)) {
+          alternativeRoutes.add(route);
+      }
     }
+    alternativeRouteDrawer.setRoutes(alternativeRoutes);
   }
 
   /**
@@ -264,7 +273,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    */
   public void setOnRouteSelectionChangeListener(
     @Nullable OnRouteSelectionChangeListener onRouteSelectionChangeListener) {
-    mapRouteClickListener.setOnRouteSelectionChangeListener(onRouteSelectionChangeListener);
+//    mapRouteClickListener.setOnRouteSelectionChangeListener(onRouteSelectionChangeListener);
   }
 
   /**
@@ -277,7 +286,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @since 0.8.0
    */
   public void showAlternativeRoutes(boolean alternativesVisible) {
-    mapRouteClickListener.updateAlternativesVisible(alternativesVisible);
+//    mapRouteClickListener.updateAlternativesVisible(alternativesVisible);
     routeLine.toggleAlternativeVisibilityWith(alternativesVisible);
   }
 
@@ -387,6 +396,24 @@ public class NavigationMapRoute implements LifecycleObserver {
     recreateRouteLine(style);
   }
 
+  @Override
+  public void onNewPrimaryRouteSelected(DirectionsRoute directionsRoute) {
+    primaryRouteIndex = Integer.parseInt(directionsRoute.routeIndex()); //TODO: do we need the index?!?!?
+    primaryRouteDrawer.setRoute(directionsRoute);
+
+    List<DirectionsRoute> alternativeRoutes = new ArrayList<>();
+    for (DirectionsRoute route : routes) {
+      if (route.routeIndex() != null && Integer.parseInt(route.routeIndex()) != primaryRouteIndex) {
+        alternativeRoutes.add(route);
+      }
+    }
+    alternativeRouteDrawer.setRoutes(alternativeRoutes);
+
+    if (clientRouteSelectionChangeListener != null) {
+      clientRouteSelectionChangeListener.onNewPrimaryRouteSelected(directionsRoute);
+    }
+  }
+
   private void recreateRouteLine(Style style) {
     Context context = mapView.getContext();
     MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);
@@ -415,7 +442,7 @@ public class NavigationMapRoute implements LifecycleObserver {
             handler
     );
     mapboxMap.removeOnMapClickListener(mapRouteClickListener);
-    mapRouteClickListener = new MapRouteClickListener(routeLine);
+    mapRouteClickListener = new MapRouteClickListener(this);
     mapboxMap.addOnMapClickListener(mapRouteClickListener);
     mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, primaryRouteDrawer, routeArrow);
   }
