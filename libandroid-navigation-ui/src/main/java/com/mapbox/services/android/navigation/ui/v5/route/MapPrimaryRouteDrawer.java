@@ -90,8 +90,11 @@ public class MapPrimaryRouteDrawer {
             return;
         }
 
-        DirectionsRoute directionsRoute = routeProgress.directionsRoute();
-        String routeGeometry = directionsRoute.geometry();
+        if (route == null) {
+            return;
+        }
+
+        String routeGeometry = route.geometry();
         if (routeGeometry == null) {
             //TODO: when this can happen?!
             return;
