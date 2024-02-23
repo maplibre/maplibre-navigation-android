@@ -3,6 +3,13 @@ package com.mapbox.services.android.navigation.ui.v5.route;
 class RouteConstants {
   static final String MAPBOX_LOCATION_ID = "mapbox-location";
   static final String CONGESTION_KEY = "congestion";
+
+  static final String PRIMARY_ROUTE_SOURCE_ID = "maplibre-navigation-primary-route-source";
+  static final String PRIMARY_ROUTE_LAYER_ID = "maplibre-navigation-primary-route-layer";
+  static final String PRIMARY_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-primary-route-shield-layer";
+  static final String ALTERNATIVE_ROUTE_SOURCE_ID = "maplibre-navigation-alternative-route-source";
+  static final String ALTERNATIVE_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-alternative-route-shield-layer";
+  static final String ALTERNATIVE_ROUTE_LAYER_ID = "maplibre-navigation-alternative-route-layer";
   static final String ROUTE_SOURCE_ID = "mapbox-navigation-route-source";
   static final String ROUTE_LAYER_ID = "mapbox-navigation-route-layer";
   static final String ROUTE_SHIELD_LAYER_ID = "mapbox-navigation-route-shield-layer";

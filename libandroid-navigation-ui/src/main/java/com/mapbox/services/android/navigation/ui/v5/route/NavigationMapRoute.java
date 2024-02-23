@@ -54,6 +54,8 @@ public class NavigationMapRoute implements LifecycleObserver {
   private MapboxNavigation navigation;
   private MapRouteLine routeLine;
   private MapRouteArrow routeArrow;
+  private MapPrimaryRouteDrawer primaryRouteDrawer;
+  private MapAlternativeRouteDrawer alternativeRouteDrawer;
 
   /**
    * Construct an instance of {@link NavigationMapRoute}.
@@ -142,8 +144,10 @@ public class NavigationMapRoute implements LifecycleObserver {
     this.navigation = navigation;
     this.routeLine = buildMapRouteLine(mapView, mapboxMap, styleRes, belowLayer);
     this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
+    this.primaryRouteDrawer = new MapPrimaryRouteDrawer(mapboxMap.getStyle(), true);
+    this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle());
     this.mapRouteClickListener = new MapRouteClickListener(routeLine);
-    this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, routeArrow);
+    this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, primaryRouteDrawer, routeArrow);
     initializeDidFinishLoadingStyleListener();
     addListeners();
   }
@@ -209,6 +213,12 @@ public class NavigationMapRoute implements LifecycleObserver {
    */
   public void addRoutes(@NonNull @Size(min = 1) List<DirectionsRoute> directionsRoutes) {
     routeLine.draw(directionsRoutes);
+    primaryRouteDrawer.setRoute(directionsRoutes.get(0)); //TODO: get selected primary instead of first
+    if (directionsRoutes.size() > 1) {
+      alternativeRouteDrawer.setRoutes(directionsRoutes.subList(1, directionsRoutes.size())); //TODO: get selected primary instead of first
+    } else {
+        alternativeRouteDrawer.setRoutes(new ArrayList<>());
+    }
   }
 
   /**
@@ -323,9 +333,10 @@ public class NavigationMapRoute implements LifecycleObserver {
     MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);
     MapRouteSourceProvider sourceProvider = new MapRouteSourceProvider();
     MapRouteLayerProvider layerProvider = new MapRouteLayerProvider();
+    MapRouteLayerFactory layerFactory = new MapRouteLayerFactory();
     Handler handler = new Handler(context.getMainLooper());
     return new MapRouteLine(context, mapboxMap.getStyle(), styleRes, belowLayer,
-      drawableProvider, sourceProvider, layerProvider, handler
+      drawableProvider, sourceProvider, layerProvider, layerFactory, handler
     );
   }
 
@@ -381,6 +392,7 @@ public class NavigationMapRoute implements LifecycleObserver {
     MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);
     MapRouteSourceProvider sourceProvider = new MapRouteSourceProvider();
     MapRouteLayerProvider layerProvider = new MapRouteLayerProvider();
+    MapRouteLayerFactory layerFactory = new MapRouteLayerFactory();
     Handler handler = new Handler(context.getMainLooper());
 
     routeLine = new MapRouteLine(
@@ -391,6 +403,7 @@ public class NavigationMapRoute implements LifecycleObserver {
             drawableProvider,
             sourceProvider,
             layerProvider,
+            layerFactory,
             routeLine.retrieveDrawnRouteFeatureCollections(),
             routeLine.retrieveDrawnWaypointsFeatureCollections(),
             routeLine.retrieveDirectionsRoutes(),
@@ -404,6 +417,6 @@ public class NavigationMapRoute implements LifecycleObserver {
     mapboxMap.removeOnMapClickListener(mapRouteClickListener);
     mapRouteClickListener = new MapRouteClickListener(routeLine);
     mapboxMap.addOnMapClickListener(mapRouteClickListener);
-    mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, routeArrow);
+    mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, primaryRouteDrawer, routeArrow);
   }
 }

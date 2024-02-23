@@ -11,11 +11,13 @@ import java.util.List;
 class MapRouteProgressChangeListener implements ProgressChangeListener {
 
   private final MapRouteLine routeLine;
+  private final MapPrimaryRouteDrawer routeDrawer;
   private final MapRouteArrow routeArrow;
   private boolean isVisible = true;
 
-  MapRouteProgressChangeListener(MapRouteLine routeLine, MapRouteArrow routeArrow) {
+  MapRouteProgressChangeListener(MapRouteLine routeLine, MapPrimaryRouteDrawer routeDrawer, MapRouteArrow routeArrow) {
     this.routeLine = routeLine;
+    this.routeDrawer = routeDrawer;
     this.routeArrow = routeArrow;
   }
 
@@ -29,6 +31,7 @@ class MapRouteProgressChangeListener implements ProgressChangeListener {
     int primaryRouteIndex = routeLine.retrievePrimaryRouteIndex();
     addNewRoute(currentRoute, directionsRoutes, primaryRouteIndex);
     routeArrow.addUpcomingManeuverArrow(routeProgress);
+    routeDrawer.updateRouteProgress(location, routeProgress);
   }
 
   void updateVisibility(boolean isVisible) {
