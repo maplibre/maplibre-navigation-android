@@ -68,6 +68,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     private MapRouteArrow routeArrow;
     private MapPrimaryRouteDrawer primaryRouteDrawer;
     private MapAlternativeRouteDrawer alternativeRouteDrawer;
+    private MapWayPointDrawer wayPointDrawer;
     private List<DirectionsRoute> routes = new ArrayList<>();
     private int primaryRouteIndex = 0;
     private OnRouteSelectionChangeListener clientRouteSelectionChangeListener;
@@ -160,6 +161,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
 
         this.primaryRouteDrawer = new MapPrimaryRouteDrawer(mapboxMap.getStyle(), true, new MapRouteLayerFactory());
         this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
+        this.wayPointDrawer = new MapWayPointDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
         createLayers();
 
 //    this.routeLine = buildMapRouteLine(mapView, mapboxMap, styleRes, belowLayer);
@@ -239,49 +241,25 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                     ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
 
             primaryRouteDrawer.createLayers(routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor, belowLayerId);
+
+            // Waypoint
+            int originWaypointIcon = typedArray.getResourceId(
+                    R.styleable.NavigationMapRoute_originWaypointIcon, R.drawable.ic_route_origin);
+            int destinationWaypointIcon = typedArray.getResourceId(
+                    R.styleable.NavigationMapRoute_destinationWaypointIcon, R.drawable.ic_route_destination);
+
+            wayPointDrawer.createLayers(
+                    ContextCompat.getDrawable(context, originWaypointIcon),
+                    ContextCompat.getDrawable(context, destinationWaypointIcon),
+                    belowLayerId
+            );
+
         } finally {
             if (typedArray != null) {
                 typedArray.recycle();
             }
         }
 
-
-//    // Primary route attributes
-//    routeDefaultColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_blue));
-//    routeModerateColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_routeModerateCongestionColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_congestion_yellow));
-//    routeSevereColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_routeSevereCongestionColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_congestion_red));
-//    routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
-//    routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
-//    roundedLineCap = typedArray.getBoolean(R.styleable.NavigationMapRoute_roundedLineCap, true);
-//
-//    // Driven route attributes
-//    drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
-//    drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
-//
-//    // Alternative routes attributes
-//    alternativeRouteDefaultColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_alternativeRouteColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
-//    alternativeRouteModerateColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_alternativeRouteModerateCongestionColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_congestion_yellow));
-//    alternativeRouteSevereColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_alternativeRouteSevereCongestionColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_congestion_red));
-//    alternativeRouteShieldColor = typedArray.getColor(
-//            R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-//            ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
-//    alternativeRouteScale = typedArray.getFloat(
-//            R.styleable.NavigationMapRoute_alternativeRouteScale, 1.0f);
-//
 //    GeoJsonOptions wayPointGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
 //    drawnWaypointsFeatureCollection = waypointsFeatureCollection;
 //    wayPointSource = sourceProvider.build(WAYPOINT_SOURCE_ID, drawnWaypointsFeatureCollection, wayPointGeoJsonOptions);
@@ -313,7 +291,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
 //    updateRoutesFor(primaryRouteIndex);
 //    updateVisibilityTo(isVisible);
     }
-
     private String findRouteBelowLayerId(String belowLayer, Style style) {
         if (belowLayer == null || belowLayer.isEmpty()) {
             List<Layer> styleLayers = style.getLayers();
@@ -355,6 +332,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         mapRouteClickListener.addRoutes(directionsRoutes);
 
         primaryRouteDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
+        wayPointDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
 
         List<DirectionsRoute> alternativeRoutes = new ArrayList<>();
         for (DirectionsRoute route : directionsRoutes) {
@@ -537,6 +515,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     public void onNewPrimaryRouteSelected(DirectionsRoute directionsRoute) {
         primaryRouteIndex = Integer.parseInt(directionsRoute.routeIndex()); //TODO: do we need the index?!?!?
         primaryRouteDrawer.setRoute(directionsRoute);
+        wayPointDrawer.setRoute(directionsRoute);
 
         List<DirectionsRoute> alternativeRoutes = new ArrayList<>();
         for (DirectionsRoute route : routes) {
