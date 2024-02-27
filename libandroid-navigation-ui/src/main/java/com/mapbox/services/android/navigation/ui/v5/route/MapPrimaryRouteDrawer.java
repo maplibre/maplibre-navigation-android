@@ -80,12 +80,13 @@ public class MapPrimaryRouteDrawer {
                       @ColorInt int routeColor,
                       @ColorInt int routeShieldColor,
                       @ColorInt int drivenRouteColor,
-                      @ColorInt int drivenRouteShieldColor) {
+                      @ColorInt int drivenRouteShieldColor,
+                      String belowLayerId) {
         LineLayer shieldLineLayer = routeLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
-        MapUtils.addLayerToMap(style, shieldLineLayer, null);
+        MapUtils.addLayerToMap(style, shieldLineLayer, belowLayerId);
 
         LineLayer routeLineLayer = routeLayerFactory.createPrimaryRouteLayer(routeScale, routeColor, drivenRouteColor);
-        MapUtils.addLayerToMap(style, routeLineLayer, null);
+        MapUtils.addLayerToMap(style, routeLineLayer, belowLayerId);
     }
     
     /**

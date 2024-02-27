@@ -51,12 +51,13 @@ public class MapAlternativeRouteDrawer {
 
     void createLayers(float routeScale,
                       @ColorInt int routeColor,
-                      @ColorInt int routeShieldColor) {
+                      @ColorInt int routeShieldColor,
+                      String belowLayerId) {
         LineLayer shieldLineLayer = routeLayerFactory.createAlternativeRouteLayer(routeScale, routeShieldColor);
-        MapUtils.addLayerToMap(style, shieldLineLayer, null);
+        MapUtils.addLayerToMap(style, shieldLineLayer, belowLayerId);
 
         LineLayer routeLineLayer = routeLayerFactory.createAlternativeRoutesShieldLayer(routeScale, routeColor);
-        MapUtils.addLayerToMap(style, routeLineLayer, null);
+        MapUtils.addLayerToMap(style, routeLineLayer, belowLayerId);
     }
 
     /**
