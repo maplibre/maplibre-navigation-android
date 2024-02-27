@@ -9,12 +9,16 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.product;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 
 import android.animation.Animator;
@@ -33,6 +37,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
@@ -55,7 +60,7 @@ public class MapPrimaryRouteDrawer {
     private Style style;
     private boolean isRouteEatingEnabled;
 
-    private MapRouteLayerFactory routeLayerFactory;
+    private final MapRouteLayerFactory routeLayerFactory;
 
     @Nullable
     private DirectionsRoute route;
@@ -69,6 +74,8 @@ public class MapPrimaryRouteDrawer {
     private long lastUpdateTime = System.nanoTime();
 
     private long locationUpdateTimestamp;
+
+    private boolean isRouteVisible = true;
 
     MapPrimaryRouteDrawer(Style style, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory) {
         this.style = style;
@@ -115,9 +122,31 @@ public class MapPrimaryRouteDrawer {
         }
     }
 
+    void setVisibility(boolean isVisible) {
+        isRouteVisible = isVisible;
+
+        if (style == null || !style.isFullyLoaded()) {
+            return;
+        }
+
+        Layer shieldLayer = style.getLayer(PRIMARY_ROUTE_SHIELD_LAYER_ID);
+        if (shieldLayer != null) {
+            shieldLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
+        }
+
+        Layer routeLayer = style.getLayer(PRIMARY_ROUTE_LAYER_ID);
+        if (routeLayer != null) {
+            routeLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
+        }
+    }
+
     void updateRouteProgress(Location location, RouteProgress routeProgress) {
         if (!isRouteEatingEnabled) {
             // Route eating disabled, route will only drawn once. Skip progress updating.
+            return;
+        }
+
+        if (!isRouteVisible) {
             return;
         }
 

@@ -1,7 +1,14 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 
 import android.animation.Animator;
@@ -20,6 +27,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -90,6 +98,22 @@ public class MapAlternativeRouteDrawer {
         }
 
         drawRoutes(routeLines);
+    }
+
+    void setVisibility(boolean isVisible) {
+        if (style == null || !style.isFullyLoaded()) {
+            return;
+        }
+
+        Layer shieldLayer = style.getLayer(ALTERNATIVE_ROUTE_SHIELD_LAYER_ID);
+        if (shieldLayer != null) {
+            shieldLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
+        }
+
+        Layer routeLayer = style.getLayer(ALTERNATIVE_ROUTE_LAYER_ID);
+        if (routeLayer != null) {
+            routeLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
+        }
     }
 
     private void drawRoutes(List<LineString> routeLines) {
