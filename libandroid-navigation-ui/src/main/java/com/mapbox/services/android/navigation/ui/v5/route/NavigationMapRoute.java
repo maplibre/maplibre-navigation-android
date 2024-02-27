@@ -1,8 +1,5 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
-
 import android.app.Activity;
 
 import androidx.core.content.ContextCompat;
@@ -12,8 +9,6 @@ import androidx.lifecycle.OnLifecycleEvent;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +23,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
@@ -64,7 +58,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     private MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener;
     private boolean isDidFinishLoadingStyleListenerAdded = false;
     private MapboxNavigation navigation;
-    //  private MapRouteLine routeLine;
     private MapRouteArrow routeArrow;
     private MapPrimaryRouteDrawer primaryRouteDrawer;
     private MapAlternativeRouteDrawer alternativeRouteDrawer;
@@ -162,7 +155,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.primaryRouteDrawer = new MapPrimaryRouteDrawer(mapboxMap.getStyle(), true, new MapRouteLayerFactory());
         this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
         this.wayPointDrawer = new MapWayPointDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
-        createLayers();
+        createLayers(mapboxMap.getStyle());
 
         this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
         this.mapRouteClickListener = new MapRouteClickListener(this);
@@ -186,7 +179,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.didFinishLoadingStyleListener = didFinishLoadingStyleListener;
         this.mapRouteProgressChangeListener = progressChangeListener;
         addListeners();
-        createLayers();
+        createLayers(mapboxMap.getStyle());
     }
 
     // For testing only
@@ -206,12 +199,12 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapRouteProgressChangeListener = progressChangeListener;
         this.routeArrow = routeArrow;
 
-        createLayers();
+        createLayers(mapboxMap.getStyle());
     }
 
-    private void createLayers() {
+    private void createLayers(Style style) {
         Context context = mapView.getContext();
-        String belowLayerId = findRouteBelowLayerId(belowLayer, mapboxMap.getStyle());
+        String belowLayerId = findRouteBelowLayerId(belowLayer, style);
 
         TypedArray typedArray = null;
         try {
@@ -250,7 +243,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                     ContextCompat.getDrawable(context, destinationWaypointIcon),
                     belowLayerId
             );
-
         } finally {
             if (typedArray != null) {
                 typedArray.recycle();
@@ -353,9 +345,8 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      *                                       route which the user has selected
      * @since 0.8.0
      */
-    public void setOnRouteSelectionChangeListener(
-            @Nullable OnRouteSelectionChangeListener onRouteSelectionChangeListener) {
-//    mapRouteClickListener.setOnRouteSelectionChangeListener(onRouteSelectionChangeListener);
+    public void setOnRouteSelectionChangeListener(@Nullable OnRouteSelectionChangeListener onRouteSelectionChangeListener) {
+        clientRouteSelectionChangeListener = onRouteSelectionChangeListener;
     }
 
     /**
@@ -368,8 +359,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      * @since 0.8.0
      */
     public void showAlternativeRoutes(boolean alternativesVisible) {
-//    mapRouteClickListener.updateAlternativesVisible(alternativesVisible);
-//    routeLine.toggleAlternativeVisibilityWith(alternativesVisible);
+        alternativeRouteDrawer.setVisibility(alternativesVisible);
     }
 
     /**
@@ -385,7 +375,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.navigation = navigation;
         navigation.addProgressChangeListener(mapRouteProgressChangeListener);
     }
-
 
     /**
      * Should be called if {@link NavigationMapRoute#addProgressChangeListener(MapboxNavigation)} was
@@ -418,31 +407,8 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         removeListeners();
     }
 
-    private MapRouteLine buildMapRouteLine(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap,
-                                           @StyleRes int styleRes, @Nullable String belowLayer) {
-        Context context = mapView.getContext();
-        MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);
-        MapRouteSourceProvider sourceProvider = new MapRouteSourceProvider();
-        MapRouteLayerProvider layerProvider = new MapRouteLayerProvider();
-        MapRouteLayerFactory layerFactory = new MapRouteLayerFactory();
-        Handler handler = new Handler(context.getMainLooper());
-        return new MapRouteLine(context, mapboxMap.getStyle(), styleRes, belowLayer,
-                drawableProvider, sourceProvider, layerProvider, layerFactory, handler
-        );
-    }
-
     private void initializeDidFinishLoadingStyleListener() {
-        didFinishLoadingStyleListener = new MapView.OnDidFinishLoadingStyleListener() {
-            @Override
-            public void onDidFinishLoadingStyle() {
-                mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
-                        redraw(style);
-                    }
-                });
-            }
-        };
+        didFinishLoadingStyleListener = () -> mapboxMap.getStyle(this::drawWithStyle);
     }
 
     private void addListeners() {
@@ -473,10 +439,14 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         }
     }
 
-    private void redraw(Style style) {
-        createLayers();
+    private void drawWithStyle(Style style) {
+        createLayers(style);
+
+        primaryRouteDrawer.setStyle(style);
+        alternativeRouteDrawer.setStyle(style);
+        wayPointDrawer.setStyle(style);
+
         routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
-        recreateRouteLine(style);
     }
 
     @Override
@@ -496,38 +466,5 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         if (clientRouteSelectionChangeListener != null) {
             clientRouteSelectionChangeListener.onNewPrimaryRouteSelected(directionsRoute);
         }
-    }
-
-    private void recreateRouteLine(Style style) {
-//    Context context = mapView.getContext();
-//    MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);
-//    MapRouteSourceProvider sourceProvider = new MapRouteSourceProvider();
-//    MapRouteLayerProvider layerProvider = new MapRouteLayerProvider();
-//    MapRouteLayerFactory layerFactory = new MapRouteLayerFactory();
-//    Handler handler = new Handler(context.getMainLooper());
-//
-//    routeLine = new MapRouteLine(
-//            context,
-//            style,
-//            styleRes,
-//            belowLayer,
-//            drawableProvider,
-//            sourceProvider,
-//            layerProvider,
-//            layerFactory,
-//            routeLine.retrieveDrawnRouteFeatureCollections(),
-//            routeLine.retrieveDrawnWaypointsFeatureCollections(),
-//            routeLine.retrieveDirectionsRoutes(),
-//            routeLine.retrieveRouteFeatureCollections(),
-//            routeLine.retrieveRouteLineStrings(),
-//            routeLine.retrievePrimaryRouteIndex(),
-//            routeLine.retrieveVisibility(),
-//            routeLine.retrieveAlternativesVisible(),
-//            handler
-//    );
-//    mapboxMap.removeOnMapClickListener(mapRouteClickListener);
-//    mapRouteClickListener = new MapRouteClickListener(this);
-//    mapboxMap.addOnMapClickListener(mapRouteClickListener);
-//    mapRouteProgressChangeListener = new MapRouteProgressChangeListener(routeLine, primaryRouteDrawer, routeArrow);
     }
 }
