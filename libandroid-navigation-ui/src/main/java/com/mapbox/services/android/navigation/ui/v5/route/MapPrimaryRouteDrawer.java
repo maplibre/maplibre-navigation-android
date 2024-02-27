@@ -88,14 +88,17 @@ public class MapPrimaryRouteDrawer {
         LineLayer routeLineLayer = routeLayerFactory.createPrimaryRouteLayer(routeScale, routeColor, drivenRouteColor);
         MapUtils.addLayerToMap(style, routeLineLayer, belowLayerId);
     }
-    
-    /**
-     * Set a new style. All upcoming route events will be drawn on the new style.
-     *
-     * @param style the current map style
-     */
+
     void setStyle(Style style) {
         this.style = style;
+
+        if (route != null) {
+            String routeGeometry = route.geometry();
+            if (routeGeometry != null) {
+                LineString routeLineString = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
+                drawRoute(routeLineString);
+            }
+        }
     }
 
     void setRouteEatingEnabled(boolean isRouteEatingEnabled) {

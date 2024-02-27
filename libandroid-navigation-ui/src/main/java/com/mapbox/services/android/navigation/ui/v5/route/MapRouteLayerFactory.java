@@ -169,4 +169,32 @@ class MapRouteLayerFactory {
                         )
                 );
     }
+
+    SymbolLayer createWayPointLayer(Style style, Drawable originIcon, Drawable destinationIcon) {
+        Bitmap bitmap = MapImageUtils.getBitmapFromDrawable(originIcon);
+        style.addImage(ORIGIN_MARKER_NAME, bitmap);
+        bitmap = MapImageUtils.getBitmapFromDrawable(destinationIcon);
+        style.addImage(DESTINATION_MARKER_NAME, bitmap);
+
+        return new SymbolLayer(WAYPOINT_LAYER_ID, WAYPOINT_SOURCE_ID).withProperties(
+                iconImage(
+                        match(
+                                Expression.toString(get(WAYPOINT_PROPERTY_KEY)), literal(ORIGIN_MARKER_NAME),
+                                stop(WAYPOINT_ORIGIN_VALUE, literal(ORIGIN_MARKER_NAME)),
+                                stop(WAYPOINT_DESTINATION_VALUE, literal(DESTINATION_MARKER_NAME))
+                        )),
+                iconSize(
+                        interpolate(
+                                exponential(1.5f), zoom(),
+                                stop(0f, 0.6f),
+                                stop(10f, 0.8f),
+                                stop(12f, 1.3f),
+                                stop(22f, 2.8f)
+                        )
+                ),
+                iconPitchAlignment(Property.ICON_PITCH_ALIGNMENT_MAP),
+                iconAllowOverlap(true),
+                iconIgnorePlacement(true)
+        );
+    }
 }

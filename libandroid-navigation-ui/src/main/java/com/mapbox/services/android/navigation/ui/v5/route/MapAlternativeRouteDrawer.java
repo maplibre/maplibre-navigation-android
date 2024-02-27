@@ -60,13 +60,21 @@ public class MapAlternativeRouteDrawer {
         MapUtils.addLayerToMap(style, routeLineLayer, belowLayerId);
     }
 
-    /**
-     * Set a new style. All upcoming route events will be drawn on the new style.
-     *
-     * @param style the current map style
-     */
     void setStyle(Style style) {
         this.style = style;
+
+        if (routes != null) {
+            ArrayList<LineString> routeLines = new ArrayList<>();
+            for (DirectionsRoute route : routes) {
+                String routeGeometry = route.geometry();
+                if (routeGeometry != null) {
+                    LineString routeLineString = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
+                    routeLines.add(routeLineString);
+                }
+            }
+
+            drawRoutes(routeLines);
+        }
     }
 
     void setRoutes(List<DirectionsRoute> routes) {
