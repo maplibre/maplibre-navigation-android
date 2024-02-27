@@ -448,14 +448,14 @@ class MapRouteLine {
     MapUtils.addLayerToMap(style, alternativeRouteLayer, belowLayer);
     routeLayerIds.add(alternativeRouteLayer.getId());
 
-    LineLayer primaryRouteShieldLayer = mapRouteLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
-    MapUtils.addLayerToMap(style, primaryRouteShieldLayer, belowLayer);
-    routeLayerIds.add(primaryRouteShieldLayer.getId());
-
-    //TODO: show serve parts on primary route
-    LineLayer primaryRouteLayer = mapRouteLayerFactory.createPrimaryRouteLayer(routeScale, routeDefaultColor, drivenRouteColor);
-    MapUtils.addLayerToMap(style, primaryRouteLayer, belowLayer);
-    routeLayerIds.add(primaryRouteLayer.getId());
+//    LineLayer primaryRouteShieldLayer = mapRouteLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
+//    MapUtils.addLayerToMap(style, primaryRouteShieldLayer, belowLayer);
+//    routeLayerIds.add(primaryRouteShieldLayer.getId());
+//
+//    //TODO: show serve parts on primary route
+//    LineLayer primaryRouteLayer = mapRouteLayerFactory.createPrimaryRouteLayer(routeScale, routeDefaultColor, drivenRouteColor);
+//    MapUtils.addLayerToMap(style, primaryRouteLayer, belowLayer);
+//    routeLayerIds.add(primaryRouteLayer.getId());
 
     SymbolLayer wayPointLayer = layerProvider.initializeWayPointLayer(
         style, originIcon, destinationIcon

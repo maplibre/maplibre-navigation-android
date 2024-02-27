@@ -1,6 +1,20 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.product;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 
 import android.animation.Animator;
@@ -9,6 +23,7 @@ import android.animation.ValueAnimator;
 import android.location.Location;
 import android.os.SystemClock;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -18,8 +33,11 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.turf.TurfConstants;
 import com.mapbox.turf.TurfMeasurement;
@@ -35,6 +53,9 @@ import java.util.ArrayList;
 public class MapPrimaryRouteDrawer {
 
     private Style style;
+    private boolean isRouteEatingEnabled;
+
+    private MapRouteLayerFactory routeLayerFactory;
 
     @Nullable
     private DirectionsRoute route;
@@ -49,13 +70,24 @@ public class MapPrimaryRouteDrawer {
 
     private long locationUpdateTimestamp;
 
-    private boolean isRouteEatingEnabled;
-
-    MapPrimaryRouteDrawer(Style style, boolean isRouteEatingEnabled) {
+    MapPrimaryRouteDrawer(Style style, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory) {
         this.style = style;
         this.isRouteEatingEnabled = isRouteEatingEnabled;
+        this.routeLayerFactory = routeLayerFactory;
     }
 
+    void createLayers(float routeScale,
+                      @ColorInt int routeColor,
+                      @ColorInt int routeShieldColor,
+                      @ColorInt int drivenRouteColor,
+                      @ColorInt int drivenRouteShieldColor) {
+        LineLayer shieldLineLayer = routeLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
+        MapUtils.addLayerToMap(style, shieldLineLayer, null);
+
+        LineLayer routeLineLayer = routeLayerFactory.createPrimaryRouteLayer(routeScale, routeColor, drivenRouteColor);
+        MapUtils.addLayerToMap(style, routeLineLayer, null);
+    }
+    
     /**
      * Set a new style. All upcoming route events will be drawn on the new style.
      *
