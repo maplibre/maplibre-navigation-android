@@ -10,6 +10,7 @@ import android.animation.ValueAnimator;
 import android.location.Location;
 import android.os.SystemClock;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -19,8 +20,10 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.turf.TurfConstants;
 import com.mapbox.turf.TurfMeasurement;
@@ -36,11 +39,24 @@ public class MapAlternativeRouteDrawer {
 
     private Style style;
 
+    private  MapRouteLayerFactory routeLayerFactory;
+
     @Nullable
     private List<DirectionsRoute> routes;
 
-    MapAlternativeRouteDrawer(Style style) {
+    MapAlternativeRouteDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
         this.style = style;
+        this.routeLayerFactory = routeLayerFactory;
+    }
+
+    void createLayers(float routeScale,
+                      @ColorInt int routeColor,
+                      @ColorInt int routeShieldColor) {
+        LineLayer shieldLineLayer = routeLayerFactory.createAlternativeRouteLayer(routeScale, routeShieldColor);
+        MapUtils.addLayerToMap(style, shieldLineLayer, null);
+
+        LineLayer routeLineLayer = routeLayerFactory.createAlternativeRoutesShieldLayer(routeScale, routeColor);
+        MapUtils.addLayerToMap(style, routeLineLayer, null);
     }
 
     /**
