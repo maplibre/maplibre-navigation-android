@@ -164,7 +164,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.wayPointDrawer = new MapWayPointDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
         createLayers();
 
-//    this.routeLine = buildMapRouteLine(mapView, mapboxMap, styleRes, belowLayer);
         this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
         this.mapRouteClickListener = new MapRouteClickListener(this);
         this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(primaryRouteDrawer, routeArrow);
@@ -196,7 +195,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                        MapRouteClickListener mapClickListener,
                        MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
                        MapRouteProgressChangeListener progressChangeListener,
-                       MapRouteLine routeLine,
                        MapRouteArrow routeArrow) {
         this.styleRes = styleRes;
         this.belowLayer = belowLayer;
@@ -206,7 +204,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapRouteClickListener = mapClickListener;
         this.didFinishLoadingStyleListener = didFinishLoadingStyleListener;
         this.mapRouteProgressChangeListener = progressChangeListener;
-//    this.routeLine = routeLine;
         this.routeArrow = routeArrow;
 
         createLayers();
@@ -259,38 +256,8 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                 typedArray.recycle();
             }
         }
-
-//    GeoJsonOptions wayPointGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
-//    drawnWaypointsFeatureCollection = waypointsFeatureCollection;
-//    wayPointSource = sourceProvider.build(WAYPOINT_SOURCE_ID, drawnWaypointsFeatureCollection, wayPointGeoJsonOptions);
-//    style.addSource(wayPointSource);
-//
-//    GeoJsonOptions routeLineGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
-//    drawnRouteFeatureCollection = routesFeatureCollection;
-//    routeLineSource = sourceProvider.build(ROUTE_SOURCE_ID, drawnRouteFeatureCollection, routeLineGeoJsonOptions);
-//    style.addSource(routeLineSource);
-//
-//    // Waypoint attributes
-//    int originWaypointIcon = typedArray.getResourceId(
-//            R.styleable.NavigationMapRoute_originWaypointIcon, R.drawable.ic_route_origin);
-//    int destinationWaypointIcon = typedArray.getResourceId(
-//            R.styleable.NavigationMapRoute_destinationWaypointIcon, R.drawable.ic_route_destination);
-//    typedArray.recycle();
-//
-//    Drawable originIcon = drawableProvider.retrieveDrawable(originWaypointIcon);
-//    Drawable destinationIcon = drawableProvider.retrieveDrawable(destinationWaypointIcon);
-//    belowLayer = findRouteBelowLayerId(belowLayer, style);
-//
-//    initializeLayers(style, layerProvider, mapRouteLayerFactory, originIcon, destinationIcon, belowLayer);
-//
-//    this.directionsRoutes.addAll(directionsRoutes);
-//    this.routeFeatureCollections.addAll(routeFeatureCollections);
-//    this.routeLineStrings.putAll(routeLineStrings);
-//
-//    updateAlternativeVisibilityTo(alternativesVisible);
-//    updateRoutesFor(primaryRouteIndex);
-//    updateVisibilityTo(isVisible);
     }
+
     private String findRouteBelowLayerId(String belowLayer, Style style) {
         if (belowLayer == null || belowLayer.isEmpty()) {
             List<Layer> styleLayers = style.getLayers();
@@ -341,6 +308,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                 alternativeRoutes.add(route);
             }
         }
+
         alternativeRouteDrawer.setRoutes(alternativeRoutes);
     }
 
@@ -362,10 +330,10 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      * @param isVisible true to show routes, false to hide
      */
     public void updateRouteVisibilityTo(boolean isVisible) {
-//    routeLine.updateVisibilityTo(isVisible);
-        mapRouteProgressChangeListener.updateVisibility(isVisible);
+        primaryRouteDrawer.setVisibility(isVisible);
+        alternativeRouteDrawer.setVisibility(isVisible);
+        wayPointDrawer.setVisibility(isVisible);
     }
-
 
     /**
      * Hides the progress arrow on the map drawn by this class.
