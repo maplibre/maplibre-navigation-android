@@ -26,6 +26,8 @@ import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
@@ -155,15 +157,17 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapView = mapView;
         this.mapboxMap = mapboxMap;
         this.navigation = navigation;
-//    this.routeLine = buildMapRouteLine(mapView, mapboxMap, styleRes, belowLayer);
-        this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
+
         this.primaryRouteDrawer = new MapPrimaryRouteDrawer(mapboxMap.getStyle(), true, new MapRouteLayerFactory());
         this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
+        createLayers();
+
+//    this.routeLine = buildMapRouteLine(mapView, mapboxMap, styleRes, belowLayer);
+        this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
         this.mapRouteClickListener = new MapRouteClickListener(this);
         this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(primaryRouteDrawer, routeArrow);
         initializeDidFinishLoadingStyleListener();
         addListeners();
-        createLayers();
     }
 
     // For testing only
@@ -208,6 +212,8 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
 
     private void createLayers() {
         Context context = mapView.getContext();
+        String belowLayerId = findRouteBelowLayerId(belowLayer, mapboxMap.getStyle());
+
         TypedArray typedArray = null;
         try {
             typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
@@ -219,7 +225,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
                     ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
 
-            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor);
+            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
 
             // Primary route
             float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
@@ -232,9 +238,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             int drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
                     ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
 
-            primaryRouteDrawer.createLayers(routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor);
-
-
+            primaryRouteDrawer.createLayers(routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor, belowLayerId);
         } finally {
             if (typedArray != null) {
                 typedArray.recycle();
@@ -308,6 +312,20 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
 //    updateAlternativeVisibilityTo(alternativesVisible);
 //    updateRoutesFor(primaryRouteIndex);
 //    updateVisibilityTo(isVisible);
+    }
+
+    private String findRouteBelowLayerId(String belowLayer, Style style) {
+        if (belowLayer == null || belowLayer.isEmpty()) {
+            List<Layer> styleLayers = style.getLayers();
+            for (int i = 0; i < styleLayers.size(); i++) {
+                if (!(styleLayers.get(i) instanceof SymbolLayer)
+                        // Avoid placing the route on top of the user location layer
+                        && !styleLayers.get(i).getId().contains(RouteConstants.MAPBOX_LOCATION_ID)) {
+                    belowLayer = styleLayers.get(i).getId();
+                }
+            }
+        }
+        return belowLayer;
     }
 
     /**
