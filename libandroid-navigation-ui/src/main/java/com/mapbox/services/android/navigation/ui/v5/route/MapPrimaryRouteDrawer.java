@@ -52,9 +52,11 @@ import java.util.ArrayList;
 
 //TODO: public to be able to change logic?!
 //TODO: add as interface?!
-//TODO: `drawer` feels wrong, while we update the geo json and don't draw anything
 //TODO: FPS configuration (by zoom)
 //TODO: is route-eating the correct term?
+//TODO: traffic status colors
+//TODO: check if we also need the processing task
+//TODO: fix test
 public class MapPrimaryRouteDrawer {
 
     private Style style;
