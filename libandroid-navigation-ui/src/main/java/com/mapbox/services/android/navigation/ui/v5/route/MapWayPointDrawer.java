@@ -37,7 +37,8 @@ import java.util.List;
 
 //TODO: public to be able to change logic?!
 //TODO: add as interface?!
-//TODO: `drawer` feels wrong, while we update the geo json and don't draw anything
+//TODO: check if we also need the processing task
+//TODO: fix test
 public class MapWayPointDrawer {
 
     private Style style;
