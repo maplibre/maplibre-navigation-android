@@ -28,6 +28,7 @@ import android.location.Location;
 import android.os.SystemClock;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -52,7 +53,6 @@ import java.util.ArrayList;
 
 //TODO: public to be able to change logic?!
 //TODO: add as interface?!
-//TODO: FPS configuration (by zoom)
 //TODO: is route-eating the correct term?
 //TODO: traffic status colors
 //TODO: check if we also need the processing task
@@ -60,6 +60,7 @@ import java.util.ArrayList;
 public class MapPrimaryRouteDrawer {
 
     private Style style;
+
     private boolean isRouteEatingEnabled;
 
     private final MapRouteLayerFactory routeLayerFactory;
@@ -71,7 +72,7 @@ public class MapPrimaryRouteDrawer {
 
     private ValueAnimator valueAnimator;
 
-    private final double minUpdateIntervalNanoSeconds = 1E9 / Integer.MAX_VALUE; // Seconds to nano seconds
+    private double minUpdateIntervalNanoSeconds = 1E9 / Integer.MAX_VALUE; // Seconds to nano seconds
 
     private long lastUpdateTime = System.nanoTime();
 
@@ -140,6 +141,10 @@ public class MapPrimaryRouteDrawer {
         if (routeLayer != null) {
             routeLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
         }
+    }
+
+    public void setMaxAnimationFps(int maxAnimationFps) {
+        this.minUpdateIntervalNanoSeconds = 1E9 / maxAnimationFps;
     }
 
     void updateRouteProgress(Location location, RouteProgress routeProgress) {

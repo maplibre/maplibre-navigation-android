@@ -407,6 +407,10 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         removeListeners();
     }
 
+    public MapPrimaryRouteDrawer getPrimaryRouteDrawer() {
+        return primaryRouteDrawer;
+    }
+
     private void initializeDidFinishLoadingStyleListener() {
         didFinishLoadingStyleListener = () -> mapboxMap.getStyle(this::drawWithStyle);
     }
