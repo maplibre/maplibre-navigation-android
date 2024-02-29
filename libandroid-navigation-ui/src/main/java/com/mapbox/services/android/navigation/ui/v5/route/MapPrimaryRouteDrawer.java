@@ -1,20 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
-import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.product;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
@@ -176,10 +163,8 @@ public class MapPrimaryRouteDrawer {
             valueAnimator.cancel();
         }
 
-        valueAnimator = ValueAnimator.ofFloat(0f, 1f);
-
-//        animationDuration = (long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * durationMultiplier)
-//        /* make animation slightly longer with durationMultiplier, defaults to 1.1f */;
+        /* make animation slightly longer (with 1.1f) */;
+        valueAnimator = ValueAnimator.ofFloat(0f, 1.1f);
 
         Point startPoint = lastLocationPoint;
         Location target = location;
@@ -204,7 +189,6 @@ public class MapPrimaryRouteDrawer {
                 return;
             }
 
-//            lastLocationPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
             LineString drivenLine = TurfMisc.lineSlice(routeLineStartPoint, animatedPoint, routeLine);
             LineString upcomingLine = TurfMisc.lineSlice(animatedPoint, routeLineEndPoint, routeLine);
             drawRoute(drivenLine, upcomingLine);
@@ -268,93 +252,3 @@ public class MapPrimaryRouteDrawer {
         return primaryRouteSource;
     }
 }
-
-
-////    private Point lastLocationPoint;
-////    private ValueAnimator valueAnimator;
-////
-////    private final double minUpdateIntervalNanoSeconds = 1E9 / 0.5; // Seconds to nano seconds
-////
-////    private long lastUpdateTime = System.nanoTime();
-////
-////    public void updateRouteLine(Location location, RouteProgress routeProgress) {
-////        if (lastLocationPoint == null) {
-////            lastLocationPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
-////            return;
-////        }
-////
-////        if (valueAnimator != null) {
-////            valueAnimator.cancel();
-////        }
-////
-////        valueAnimator = ValueAnimator.ofFloat(0f, 1f);
-////        valueAnimator.setDuration(1100L); // 1.1 second
-////
-////        Point startPoint = lastLocationPoint;
-////        Location target = location;
-////        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-////
-////            @Override
-////            public void onAnimationUpdate(@NonNull ValueAnimator animation) {
-////                float fraction = animation.getAnimatedFraction();
-////                LineString routeLine = LineString.fromPolyline(directionsRoutes.get(primaryRouteIndex).geometry(), Constants.PRECISION_6);
-////
-////                Point routeLineStartPoint = TurfMeasurement.along(routeLine, 0, TurfConstants.UNIT_METERS);
-////                Point animatedPoint = Point.fromLngLat(
-////                        startPoint.longitude() + fraction * (target.getLongitude() - startPoint.longitude()),
-////                        startPoint.latitude() + fraction * (target.getLatitude() - startPoint.latitude())
-////                );
-////
-////                lastLocationPoint = animatedPoint;
-////
-////                if (animatedPoint.equals(routeLineStartPoint)) {
-////                    return;
-////                }
-////
-////                LineString drivenLine = TurfMisc.lineSlice(routeLineStartPoint, animatedPoint, routeLine);
-////                updateDrivenLine(drivenLine);
-////            }
-////        });
-////
-////        valueAnimator.addListener(new AnimatorListenerAdapter() {
-////            @Override
-////            public void onAnimationEnd(Animator animation) {
-////                LineString routeLine = LineString.fromPolyline(directionsRoutes.get(primaryRouteIndex).geometry(), Constants.PRECISION_6);
-////                Point routeLineStartPoint = TurfMeasurement.along(routeLine, 0, TurfConstants.UNIT_METERS);
-////
-////                lastLocationPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
-////                LineString drivenLine = TurfMisc.lineSlice(routeLineStartPoint, lastLocationPoint, routeLine);
-////                updateDrivenLine(drivenLine);
-////            }
-////        });
-////
-////        valueAnimator.start();
-////
-////    }
-////
-////    private void updateDrivenLine(LineString drivenLine) {
-////        if (mapboxMap.getStyle() == null)  {
-////            return;
-////        }
-////
-////        GeoJsonSource drivenRouteGeoJsonSource = (GeoJsonSource) mapboxMap.getStyle().getSource(DRIVEN_ROUTE_SOURCE_ID);
-////        if (drivenRouteGeoJsonSource == null) {
-////            drivenRouteGeoJsonSource = new GeoJsonSource(
-////                    DRIVEN_ROUTE_SOURCE_ID,
-////                    arrowShaftGeoJsonFeature,
-////                    new GeoJsonOptions().withMaxZoom(16)
-////            );
-////
-////            mapboxMap.getStyle().addSource(drivenRouteGeoJsonSource);
-////        }
-//////        Log.d("debug", "fabi: location " + location.getLatitude() + " " + location.getLongitude());
-//////        LineString drivenLine = TurfMisc.lineSliceAlong(routeLine, 0, routeProgress.distanceTraveled(), TurfConstants.UNIT_METERS);
-//////        LineString drivenLine = TurfMisc.lineSlice(routeLineStartPoint, animatedPoint, routeLine);
-////        Feature feature = Feature.fromGeometry(drivenLine);
-//////        feature.addStringProperty(CONGESTION_KEY, leg.annotation().congestion().get(i));
-////        feature.addStringProperty(SOURCE_KEY, String.format(Locale.US, ID_FORMAT,
-////                DRIVEN_ROUTE_SOURCE_ID, primaryRouteIndex));
-//////        feature.addNumberProperty(INDEX_KEY, index);
-////
-////        drivenRouteGeoJsonSource.setGeoJson(feature);
-////    }
