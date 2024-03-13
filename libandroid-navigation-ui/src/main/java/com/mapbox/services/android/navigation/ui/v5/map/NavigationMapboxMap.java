@@ -31,7 +31,8 @@ import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.ui.v5.ThemeSwitcher;
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera;
-import com.mapbox.services.android.navigation.ui.v5.route.MapPrimaryRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.PrimaryRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibrePrimaryRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
@@ -653,7 +654,7 @@ public class NavigationMapboxMap {
     mapCamera = new NavigationCamera(map, locationComponent);
   }
 
-  private void initializeLocationFpsDelegate(MapboxMap map, LocationComponent locationComponent, MapPrimaryRouteDrawer primaryRouteDrawer) {
+  private void initializeLocationFpsDelegate(MapboxMap map, LocationComponent locationComponent, PrimaryRouteDrawer primaryRouteDrawer) {
     locationFpsDelegate = new LocationFpsDelegate(map, locationComponent, primaryRouteDrawer);
   }
 

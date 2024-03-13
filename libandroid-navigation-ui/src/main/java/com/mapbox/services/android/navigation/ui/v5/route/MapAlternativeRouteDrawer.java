@@ -131,7 +131,7 @@ public class MapAlternativeRouteDrawer {
             routeLineFeatures.add(routeLineFeature);
         }
 
-        getSource(style).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
+//        getSource(style).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
     }
 
     private GeoJsonSource getSource(Style style) {
