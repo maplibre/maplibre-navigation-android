@@ -22,11 +22,14 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.DESTINATION_MARKER_NAME;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ORIGIN_MARKER_NAME;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_LAYER_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_SOURCE_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
@@ -42,6 +45,7 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import com.mapbox.mapboxsdk.maps.Style;
@@ -53,7 +57,7 @@ import com.mapbox.services.android.navigation.ui.v5.utils.MapImageUtils;
 
 //TODO: public to be able to change logic?!
 //TODO: add as interface?!
-class MapRouteLayerFactory {
+public class MapRouteLayerFactory {
 
     /**
      * Create a line layer for primary route drawings. This layer will draw the shield, inner line of
@@ -62,7 +66,7 @@ class MapRouteLayerFactory {
      *
      * @return a line layer for primary route drawings
      */
-    LineLayer createPrimaryRouteLayer(float routeScale, int routeColor, int drivenRouteColor) {
+    public LineLayer createPrimaryRouteLayer(float routeScale, int routeColor, int drivenRouteColor) {
         return new LineLayer(PRIMARY_ROUTE_LAYER_ID, PRIMARY_ROUTE_SOURCE_ID)
                 .withProperties(
                         lineJoin(
@@ -91,7 +95,7 @@ class MapRouteLayerFactory {
                 );
     }
 
-    LineLayer createPrimaryRouteShieldLayer(float routeScale, int routeShieldColor, int drivenRouteShieldColor) {
+    public LineLayer createPrimaryRouteShieldLayer(float routeScale, int routeShieldColor, int drivenRouteShieldColor) {
         return new LineLayer(PRIMARY_ROUTE_SHIELD_LAYER_ID, PRIMARY_ROUTE_SOURCE_ID)
                 .withProperties(
                         lineJoin(
@@ -114,6 +118,57 @@ class MapRouteLayerFactory {
                                 switchCase(
                                         get(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY), color(drivenRouteShieldColor),
                                         color(routeShieldColor)
+                                )
+                        )
+                );
+    }
+
+    public LineLayer createPrimaryRouteCongestion(float routeScale,
+                                                  int routeColor,
+                                                  int routeModerateColor,
+                                                  int routeHeavyColor,
+                                                  int routeSevereColor,
+                                                  int drivenRouteColor,
+                                                  int drivenRouteModerateColor,
+                                                  int drivenRouteHeavyColor,
+                                                  int drivenRouteSevereColor) {
+        return new LineLayer(PRIMARY_ROUTE_CONGESTION_LAYER_ID, PRIMARY_ROUTE_CONGESTION_SOURCE_ID)
+                .withProperties(
+                        lineJoin(
+                                Property.LINE_JOIN_ROUND
+                        ),
+                        lineCap(
+                                Property.LINE_CAP_BUTT
+                        ),
+                        lineWidth(
+                                interpolate(
+                                        exponential(1.5f), zoom(),
+                                        stop(4f, product(literal(3f), literal(routeScale))),
+                                        stop(10f, product(literal(4f), literal(routeScale))),
+                                        stop(13f, product(literal(6f), literal(routeScale))),
+                                        stop(16f, product(literal(10f), literal(routeScale))),
+                                        stop(19f, product(literal(14f), literal(routeScale))),
+                                        stop(22f, product(literal(18f), literal(routeScale)))
+                                )
+                        ),
+                        lineColor(
+                                switchCase(
+                                        get(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY), match(
+                                                Expression.toString(get(CONGESTION_KEY)),
+                                                color(drivenRouteColor),
+                                                stop("low", color(drivenRouteModerateColor)), //TODO: remove or add low color
+                                                stop(MODERATE_CONGESTION_VALUE, color(drivenRouteModerateColor)),
+                                                stop(HEAVY_CONGESTION_VALUE, color(drivenRouteHeavyColor)),
+                                                stop(SEVERE_CONGESTION_VALUE, color(drivenRouteSevereColor))
+                                        ),
+                                        match(
+                                                Expression.toString(get(CONGESTION_KEY)),
+                                                color(routeColor),
+                                                stop("low", color(routeModerateColor)), //TODO: remove or add low color
+                                                stop(MODERATE_CONGESTION_VALUE, color(routeModerateColor)),
+                                                stop(HEAVY_CONGESTION_VALUE, color(routeHeavyColor)),
+                                                stop(SEVERE_CONGESTION_VALUE, color(routeSevereColor))
+                                        )
                                 )
                         )
                 );

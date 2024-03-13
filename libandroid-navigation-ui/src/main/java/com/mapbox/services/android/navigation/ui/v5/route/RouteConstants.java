@@ -1,12 +1,14 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
-class RouteConstants {
+public class RouteConstants {
   static final String MAPBOX_LOCATION_ID = "mapbox-location";
-  static final String CONGESTION_KEY = "congestion";
+  public static final String CONGESTION_KEY = "congestion";
 
-  static final String PRIMARY_ROUTE_SOURCE_ID = "maplibre-navigation-primary-route-source";
-  static final String PRIMARY_ROUTE_LAYER_ID = "maplibre-navigation-primary-route-layer";
-  static final String PRIMARY_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-primary-route-shield-layer";
+  public static final String PRIMARY_ROUTE_SOURCE_ID = "maplibre-navigation-primary-route-source";
+  public static final String PRIMARY_ROUTE_LAYER_ID = "maplibre-navigation-primary-route-layer";
+  public static final String PRIMARY_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-primary-route-shield-layer";
+  public static final String PRIMARY_ROUTE_CONGESTION_SOURCE_ID = "maplibre-navigation-primary-route-congestion-source";
+  static final String PRIMARY_ROUTE_CONGESTION_LAYER_ID = "maplibre-navigation-primary-route-congestion-layer";
   static final String ALTERNATIVE_ROUTE_SOURCE_ID = "maplibre-navigation-alternative-route-source";
   static final String ALTERNATIVE_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-alternative-route-shield-layer";
   static final String ALTERNATIVE_ROUTE_LAYER_ID = "maplibre-navigation-alternative-route-layer";
@@ -48,10 +50,10 @@ class RouteConstants {
   static final String WAYPOINT_ORIGIN_VALUE = "origin";
   static final String WAYPOINT_DESTINATION_VALUE = "destination";
   static final String PRIMARY_ROUTE_PROPERTY_KEY = "primary-route";
-  static final String PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY = "primary-driven-route";
-  static final String MODERATE_CONGESTION_VALUE = "moderate";
-  static final String HEAVY_CONGESTION_VALUE = "heavy";
-  static final String SEVERE_CONGESTION_VALUE = "severe";
+  public static final String PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY = "primary-driven-route";
+  public static final String MODERATE_CONGESTION_VALUE = "moderate";
+  public static final String HEAVY_CONGESTION_VALUE = "heavy";
+  public static final String SEVERE_CONGESTION_VALUE = "severe";
   static final String ORIGIN_MARKER_NAME = "originMarker";
   static final String DESTINATION_MARKER_NAME = "destinationMarker";
 }
