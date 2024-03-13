@@ -174,7 +174,7 @@ public class MapRouteLayerFactory {
                 );
     }
 
-    LineLayer createAlternativeRouteLayer(float alternativeRouteScale, int alternativeRouteColor) {
+    public LineLayer createAlternativeRouteLayer(float alternativeRouteScale, int alternativeRouteColor) {
         return new LineLayer(ALTERNATIVE_ROUTE_LAYER_ID, ALTERNATIVE_ROUTE_SOURCE_ID)
                 .withProperties(
                         lineJoin(
@@ -200,7 +200,7 @@ public class MapRouteLayerFactory {
                 );
     }
 
-    LineLayer createAlternativeRoutesShieldLayer(float alternativeRouteScale, int alternativeRouteShieldColor) {
+    public LineLayer createAlternativeRoutesShieldLayer(float alternativeRouteScale, int alternativeRouteShieldColor) {
         return new LineLayer(ALTERNATIVE_ROUTE_SHIELD_LAYER_ID, ALTERNATIVE_ROUTE_SOURCE_ID)
                 .withProperties(
                         lineJoin(
@@ -225,7 +225,7 @@ public class MapRouteLayerFactory {
                 );
     }
 
-    SymbolLayer createWayPointLayer(Style style, Drawable originIcon, Drawable destinationIcon) {
+    public SymbolLayer createWayPointLayer(Style style, Drawable originIcon, Drawable destinationIcon) {
         Bitmap bitmap = MapImageUtils.getBitmapFromDrawable(originIcon);
         style.addImage(ORIGIN_MARKER_NAME, bitmap);
         bitmap = MapImageUtils.getBitmapFromDrawable(destinationIcon);

@@ -24,7 +24,10 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.services.android.navigation.ui.v5.R;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreAlternativeRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreCongestionPrimaryRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreRouteArrowDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreWayPointDrawer;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
 import java.util.ArrayList;
@@ -59,11 +62,10 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     private MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener;
     private boolean isDidFinishLoadingStyleListenerAdded = false;
     private MapboxNavigation navigation;
-    private MapRouteArrow routeArrow;
+    private RouteArrowDrawer routeArrowDrawer;
     private PrimaryRouteDrawer primaryRouteDrawer;
-    private MapAlternativeRouteDrawer alternativeRouteDrawer;
-//    private MapCongestionDrawer congestionDrawer;
-    private MapWayPointDrawer wayPointDrawer;
+    private AlternativeRouteDrawer alternativeRouteDrawer;
+    private WayPointDrawer wayPointDrawer;
     private List<DirectionsRoute> routes = new ArrayList<>();
     private int primaryRouteIndex = 0;
     private OnRouteSelectionChangeListener clientRouteSelectionChangeListener;
@@ -154,15 +156,14 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapboxMap = mapboxMap;
         this.navigation = navigation;
 
+        this.alternativeRouteDrawer = new MapLibreAlternativeRouteDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
         this.primaryRouteDrawer = new MapLibreCongestionPrimaryRouteDrawer(mapView, styleRes, true, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
-        this.alternativeRouteDrawer = new MapAlternativeRouteDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
-//        this.congestionDrawer = new MapCongestionDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
-        this.wayPointDrawer = new MapWayPointDrawer(mapboxMap.getStyle(), new MapRouteLayerFactory());
+        this.wayPointDrawer = new MapLibreWayPointDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
         createLayers(mapboxMap.getStyle());
 
-        this.routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
+        this.routeArrowDrawer = new MapLibreRouteArrowDrawer(mapView, mapboxMap, styleRes);
         this.mapRouteClickListener = new MapRouteClickListener(this);
-        this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(primaryRouteDrawer, routeArrow);
+        this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(primaryRouteDrawer, routeArrowDrawer);
         initializeDidFinishLoadingStyleListener();
         addListeners();
     }
@@ -191,7 +192,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
                        MapRouteClickListener mapClickListener,
                        MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
                        MapRouteProgressChangeListener progressChangeListener,
-                       MapRouteArrow routeArrow) {
+                       RouteArrowDrawer routeArrowDrawer) {
         this.styleRes = styleRes;
         this.belowLayer = belowLayer;
         this.mapView = mapView;
@@ -200,7 +201,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapRouteClickListener = mapClickListener;
         this.didFinishLoadingStyleListener = didFinishLoadingStyleListener;
         this.mapRouteProgressChangeListener = progressChangeListener;
-        this.routeArrow = routeArrow;
+        this.routeArrowDrawer = routeArrowDrawer;
 
         createLayers(mapboxMap.getStyle());
     }
@@ -220,7 +221,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
                     ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
 
-            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
+//            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
 
             // Primary route
             float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
@@ -244,11 +245,11 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             int destinationWaypointIcon = typedArray.getResourceId(
                     R.styleable.NavigationMapRoute_destinationWaypointIcon, R.drawable.ic_route_destination);
 
-            wayPointDrawer.createLayers(
-                    ContextCompat.getDrawable(context, originWaypointIcon),
-                    ContextCompat.getDrawable(context, destinationWaypointIcon),
-                    belowLayerId
-            );
+//            wayPointDrawer.createLayers(
+//                    ContextCompat.getDrawable(context, originWaypointIcon),
+//                    ContextCompat.getDrawable(context, destinationWaypointIcon),
+//                    belowLayerId
+//            );
         } finally {
             if (typedArray != null) {
                 typedArray.recycle();
@@ -297,7 +298,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         mapRouteClickListener.addRoutes(directionsRoutes);
 
         primaryRouteDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
-//        congestionDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
         wayPointDrawer.setRoute(directionsRoutes.get(primaryRouteIndex));
 
         List<DirectionsRoute> alternativeRoutes = new ArrayList<>();
@@ -340,7 +340,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      * @param isVisible true to show routes, false to hide
      */
     public void updateRouteArrowVisibilityTo(boolean isVisible) {
-        routeArrow.updateVisibilityTo(isVisible);
+        routeArrowDrawer.updateVisibilityTo(isVisible);
     }
 
     /**
@@ -454,11 +454,10 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         createLayers(style);
 
         primaryRouteDrawer.setStyle(style);
-//        congestionDrawer.setStyle(style);
         alternativeRouteDrawer.setStyle(style);
         wayPointDrawer.setStyle(style);
 
-        routeArrow = new MapRouteArrow(mapView, mapboxMap, styleRes);
+        routeArrowDrawer = new MapLibreRouteArrowDrawer(mapView, mapboxMap, styleRes);
     }
 
     @Override

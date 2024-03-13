@@ -1,35 +1,39 @@
-package com.mapbox.services.android.navigation.ui.v5.route;
+package com.mapbox.services.android.navigation.ui.v5.route.impl;
 
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_DESTINATION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_ORIGIN_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
 
+import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegStep;
 import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.android.navigation.ui.v5.R;
+import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import com.mapbox.services.android.navigation.ui.v5.route.WayPointDrawer;
 import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
 
 import java.util.ArrayList;
@@ -39,36 +43,73 @@ import java.util.List;
 //TODO: add as interface?!
 //TODO: check if we also need the processing task
 //TODO: fix test
-public class MapWayPointDrawer {
+public class MapLibreWayPointDrawer implements WayPointDrawer {
 
-    private Style style;
+    protected Style mapStyle;
+
+    @StyleRes
+    private final int styleResId;
 
     private MapRouteLayerFactory routeLayerFactory;
 
     @Nullable
     private DirectionsRoute route;
 
-    MapWayPointDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
-        this.style = style;
+
+//    public MapLibreWayPointDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
+
+    public MapLibreWayPointDrawer(MapView mapView, @StyleRes int styleResId, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
+        this.styleResId = styleResId;
         this.routeLayerFactory = routeLayerFactory;
+        mapView.getMapAsync(mapboxMap -> {
+            mapStyle = mapboxMap.getStyle();
+            //TODO: check for style availability and wait with callback for loading when not ready yet
+            initStyle(mapView.getContext(), mapStyle, styleResId, belowLayerId);
+        });
     }
 
-    void createLayers(Drawable originIcon, Drawable destinationIcon, String belowLayerId) {
+    /**
+     * @noinspection resource
+     */
+    protected void initStyle(Context context, Style mapStyle, @StyleRes int styleResId, @Nullable String belowLayerId) {
+        TypedArray typedArray = null;
+        try {
+            typedArray = context.obtainStyledAttributes(styleResId, R.styleable.NavigationMapRoute);
+
+            int originWaypointIcon = typedArray.getResourceId(
+                    R.styleable.NavigationMapRoute_originWaypointIcon, R.drawable.ic_route_origin);
+            int destinationWaypointIcon = typedArray.getResourceId(
+                    R.styleable.NavigationMapRoute_destinationWaypointIcon, R.drawable.ic_route_destination);
+
+            createLayers(
+                    mapStyle,
+                    ContextCompat.getDrawable(context, originWaypointIcon),
+                    ContextCompat.getDrawable(context, destinationWaypointIcon),
+                    belowLayerId
+            );
+        } finally {
+            if (typedArray != null) {
+                typedArray.recycle();
+            }
+        }
+    }
+
+    void createLayers(Style mapStyle, Drawable originIcon, Drawable destinationIcon, String belowLayerId) {
         SymbolLayer wayPointLayer = routeLayerFactory.createWayPointLayer(
-                style, originIcon, destinationIcon
+                mapStyle, originIcon, destinationIcon
         );
-        MapUtils.addLayerToMap(style, wayPointLayer, belowLayerId);
+        MapUtils.addLayerToMap(mapStyle, wayPointLayer, belowLayerId);
     }
 
-    void setStyle(Style style) {
-        this.style = style;
+    public void setStyle(Style style) {
+        this.mapStyle = style;
 
         if (route != null) {
             drawWayPoints(route.legs());
         }
     }
 
-    void setRoute(DirectionsRoute route) {
+    public void setRoute(DirectionsRoute route) {
         this.route = route;
 
         if (route != null) {
@@ -76,19 +117,20 @@ public class MapWayPointDrawer {
         }
     }
 
-    void setVisibility(boolean isVisible) {
-        if (style == null || !style.isFullyLoaded()) {
+    @Override
+    public void setVisibility(boolean isVisible) {
+        if (mapStyle == null || !mapStyle.isFullyLoaded()) {
             return;
         }
 
-        Layer wayPointLayer = style.getLayer(WAYPOINT_LAYER_ID);
+        Layer wayPointLayer = mapStyle.getLayer(WAYPOINT_LAYER_ID);
         if (wayPointLayer != null) {
             wayPointLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
         }
     }
 
     private void drawWayPoints(List<RouteLeg> legs) {
-        if (!style.isFullyLoaded()) {
+        if (!mapStyle.isFullyLoaded()) {
             // The style is not available anymore. Skip processing.
             return;
         }
@@ -108,7 +150,7 @@ public class MapWayPointDrawer {
             }
         }
 
-        getSource(style).setGeoJson(FeatureCollection.fromFeatures(wayPointFeatures));
+        getSource(mapStyle).setGeoJson(FeatureCollection.fromFeatures(wayPointFeatures));
     }
 
     @Nullable
