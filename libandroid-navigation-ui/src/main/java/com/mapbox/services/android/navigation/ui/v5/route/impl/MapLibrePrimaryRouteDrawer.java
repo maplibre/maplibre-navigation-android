@@ -46,9 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO: public to be able to change logic?!
-//TODO: add as interface?!
 //TODO: is route-eating the correct term?
-//TODO: traffic status colors
 //TODO: check if we also need the processing task
 //TODO: fix test
 public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {

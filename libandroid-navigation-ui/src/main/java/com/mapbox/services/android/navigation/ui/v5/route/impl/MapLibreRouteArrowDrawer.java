@@ -1,4 +1,4 @@
-package com.mapbox.services.android.navigation.ui.v5.route;
+package com.mapbox.services.android.navigation.ui.v5.route.impl;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -26,6 +26,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.MathUtils;
 import com.mapbox.services.android.navigation.ui.v5.R;
+import com.mapbox.services.android.navigation.ui.v5.route.RouteArrowDrawer;
 import com.mapbox.services.android.navigation.ui.v5.utils.MapImageUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.turf.TurfConstants;
@@ -78,7 +79,7 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.TRANSPARENT;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.TWO_POINTS;
 
-class MapRouteArrow {
+public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
 
   @ColorInt
   private final int arrowColor;
@@ -92,7 +93,7 @@ class MapRouteArrow {
   private final MapView mapView;
   private final MapboxMap mapboxMap;
 
-  MapRouteArrow(MapView mapView, MapboxMap mapboxMap, @StyleRes int styleRes) {
+  public MapLibreRouteArrowDrawer(MapView mapView, MapboxMap mapboxMap, @StyleRes int styleRes) {
     this.mapView = mapView;
     this.mapboxMap = mapboxMap;
 
@@ -107,7 +108,8 @@ class MapRouteArrow {
     initialize();
   }
 
-  void addUpcomingManeuverArrow(RouteProgress routeProgress) {
+  @Override
+  public void addUpcomingManeuverArrow(RouteProgress routeProgress) {
     boolean invalidUpcomingStepPoints = routeProgress.upcomingStepPoints() == null
       || routeProgress.upcomingStepPoints().size() < TWO_POINTS;
     boolean invalidCurrentStepPoints = routeProgress.currentStepPoints().size() < TWO_POINTS;
@@ -122,7 +124,8 @@ class MapRouteArrow {
     updateArrowHeadWith(maneuverPoints);
   }
 
-  void updateVisibilityTo(boolean visible) {
+  @Override
+  public void updateVisibilityTo(boolean visible) {
     Style style = mapboxMap.getStyle();
     if (style != null) {
       for (String layerId : arrowLayerIds) {

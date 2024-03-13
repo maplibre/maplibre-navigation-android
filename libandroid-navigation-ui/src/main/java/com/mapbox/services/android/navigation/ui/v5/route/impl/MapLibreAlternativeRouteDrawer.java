@@ -1,4 +1,4 @@
-package com.mapbox.services.android.navigation.ui.v5.route;
+package com.mapbox.services.android.navigation.ui.v5.route.impl;
 
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
@@ -6,36 +6,31 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.location.Location;
-import android.os.SystemClock;
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.view.SurfaceHolder;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.android.navigation.ui.v5.R;
+import com.mapbox.services.android.navigation.ui.v5.route.AlternativeRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
 import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,33 +40,73 @@ import java.util.List;
 //TODO: traffic status colors
 //TODO: check if we also need the processing task
 //TODO: fix test
-public class MapAlternativeRouteDrawer {
+public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
 
-    private Style style;
+    private Style mapStyle;
 
-    private  MapRouteLayerFactory routeLayerFactory;
+    @StyleRes
+    private int styleResId;
+
+    private MapRouteLayerFactory routeLayerFactory;
 
     @Nullable
     private List<DirectionsRoute> routes;
 
-    MapAlternativeRouteDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
-        this.style = style;
+//    public MapLibreAlternativeRouteDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
+//        this.style = style;
+//        this.routeLayerFactory = routeLayerFactory;
+//    }
+
+    public MapLibreAlternativeRouteDrawer(MapView mapView, @StyleRes int styleResId, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
+        this.styleResId = styleResId;
         this.routeLayerFactory = routeLayerFactory;
+        mapView.getMapAsync(mapboxMap -> {
+            mapStyle = mapboxMap.getStyle();
+            //TODO: check for style availability and wait with callback for loading when not ready yet
+            initStyle(mapView.getContext(), mapStyle, styleResId, belowLayerId);
+        });
     }
 
-    void createLayers(float routeScale,
+    /**
+     * @noinspection resource
+     */
+    protected void initStyle(Context context, Style mapStyle, @StyleRes int styleResId, @Nullable String belowLayerId) {
+        TypedArray typedArray = null;
+        try {
+            typedArray = context.obtainStyledAttributes(styleResId, R.styleable.NavigationMapRoute);
+
+            // Primary route
+            float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
+            int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
+            int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
+
+            createLayers(mapStyle, alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
+        } finally {
+            if (typedArray != null) {
+                typedArray.recycle();
+            }
+        }
+    }
+
+    void createLayers(
+            Style mapStyle,
+            float routeScale,
                       @ColorInt int routeColor,
                       @ColorInt int routeShieldColor,
-                      String belowLayerId) {
+                      String belowLayerId
+    ) {
         LineLayer shieldLineLayer = routeLayerFactory.createAlternativeRouteLayer(routeScale, routeShieldColor);
-        MapUtils.addLayerToMap(style, shieldLineLayer, belowLayerId);
+        MapUtils.addLayerToMap(mapStyle, shieldLineLayer, belowLayerId);
 
         LineLayer routeLineLayer = routeLayerFactory.createAlternativeRoutesShieldLayer(routeScale, routeColor);
-        MapUtils.addLayerToMap(style, routeLineLayer, belowLayerId);
+        MapUtils.addLayerToMap(mapStyle, routeLineLayer, belowLayerId);
     }
 
-    void setStyle(Style style) {
-        this.style = style;
+    @Override
+    public void setStyle(Style style) {
+        this.mapStyle = style;
 
         if (routes != null) {
             ArrayList<LineString> routeLines = new ArrayList<>();
@@ -87,7 +122,8 @@ public class MapAlternativeRouteDrawer {
         }
     }
 
-    void setRoutes(List<DirectionsRoute> routes) {
+    @Override
+    public void setRoutes(List<DirectionsRoute> routes) {
         this.routes = routes;
 
         ArrayList<LineString> routeLines = new ArrayList<>();
@@ -102,24 +138,25 @@ public class MapAlternativeRouteDrawer {
         drawRoutes(routeLines);
     }
 
-    void setVisibility(boolean isVisible) {
-        if (style == null || !style.isFullyLoaded()) {
+    @Override
+    public void setVisibility(boolean isVisible) {
+        if (mapStyle == null || !mapStyle.isFullyLoaded()) {
             return;
         }
 
-        Layer shieldLayer = style.getLayer(ALTERNATIVE_ROUTE_SHIELD_LAYER_ID);
+        Layer shieldLayer = mapStyle.getLayer(ALTERNATIVE_ROUTE_SHIELD_LAYER_ID);
         if (shieldLayer != null) {
             shieldLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
         }
 
-        Layer routeLayer = style.getLayer(ALTERNATIVE_ROUTE_LAYER_ID);
+        Layer routeLayer = mapStyle.getLayer(ALTERNATIVE_ROUTE_LAYER_ID);
         if (routeLayer != null) {
             routeLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
         }
     }
 
     private void drawRoutes(List<LineString> routeLines) {
-        if (!style.isFullyLoaded()) {
+        if (!mapStyle.isFullyLoaded()) {
             // The style is not available anymore. Skip processing.
             return;
         }
@@ -131,7 +168,7 @@ public class MapAlternativeRouteDrawer {
             routeLineFeatures.add(routeLineFeature);
         }
 
-//        getSource(style).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
+        getSource(mapStyle).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
     }
 
     private GeoJsonSource getSource(Style style) {
