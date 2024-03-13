@@ -12,6 +12,8 @@ public class RouteConstants {
   public static final String ALTERNATIVE_ROUTE_SOURCE_ID = "maplibre-navigation-alternative-route-source";
   public static final String ALTERNATIVE_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-alternative-route-shield-layer";
   public static final String ALTERNATIVE_ROUTE_LAYER_ID = "maplibre-navigation-alternative-route-layer";
+  static final String ALTERNATIVE_ROUTE_CONGESTION_LAYER_ID = "maplibre-navigation-alternative-route-congestion-layer";
+  public static final String ALTERNATIVE_ROUTE_CONGESTION_SOURCE_ID = "maplibre-navigation-alternative-route-source";
   static final String ROUTE_SOURCE_ID = "mapbox-navigation-route-source";
   static final String ROUTE_LAYER_ID = "mapbox-navigation-route-layer";
   static final String ROUTE_SHIELD_LAYER_ID = "mapbox-navigation-route-shield-layer";

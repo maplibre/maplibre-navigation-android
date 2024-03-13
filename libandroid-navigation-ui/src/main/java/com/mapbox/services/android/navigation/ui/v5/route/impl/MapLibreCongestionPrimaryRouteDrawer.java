@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//TODO: check if we also need the processing task
+//TODO: clean up
+//TODO: fix test
 public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDrawer {
 
     public MapLibreCongestionPrimaryRouteDrawer(MapView mapView, int styleResId, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {

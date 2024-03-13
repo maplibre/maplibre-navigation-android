@@ -15,10 +15,11 @@
   <color name="mapbox_navigation_route_driven_congestion_severe">#c16666</color>
 
   <!-- Alternative route colors -->
-  <color name="mapbox_navigation_route_alternative_color">#8694A5</color>
-  <color name="mapbox_navigation_route_alternative_congestion_yellow">#BEA087</color>
-  <color name="mapbox_navigation_route_alternative_congestion_red">#B58281</color>
-  <color name="mapbox_navigation_route_alternative_shield_color">#727E8D</color>
+  <color name="mapbox_navigation_alternative_route_color">#8694A5</color>
+  <color name="mapbox_navigation_alternative_route_shield_color">#727E8D</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_moderate">#BEA087</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_heavy">#B58281</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_severe">#7e5b5a</color>
 
   <color name="mapbox_navigation_route_upcoming_maneuver_arrow_color">#FFFFFF</color>
   <color name="mapbox_navigation_route_upcoming_maneuver_arrow_border_color">#2D3F53</color>
