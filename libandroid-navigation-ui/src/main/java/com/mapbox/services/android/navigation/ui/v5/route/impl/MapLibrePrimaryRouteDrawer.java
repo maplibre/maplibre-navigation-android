@@ -45,9 +45,9 @@ import com.mapbox.turf.TurfMisc;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: public to be able to change logic?!
 //TODO: is route-eating the correct term?
 //TODO: check if we also need the processing task
+//TODO: clean up
 //TODO: fix test
 public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 

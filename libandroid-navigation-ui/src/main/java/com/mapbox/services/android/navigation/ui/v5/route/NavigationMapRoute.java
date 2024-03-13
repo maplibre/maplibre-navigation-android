@@ -25,6 +25,7 @@ import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreAlternativeRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreCongestionAlternativeRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreCongestionPrimaryRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreRouteArrowDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreWayPointDrawer;
@@ -156,7 +157,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
         this.mapboxMap = mapboxMap;
         this.navigation = navigation;
 
-        this.alternativeRouteDrawer = new MapLibreAlternativeRouteDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
+        this.alternativeRouteDrawer = new MapLibreCongestionAlternativeRouteDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
         this.primaryRouteDrawer = new MapLibreCongestionPrimaryRouteDrawer(mapView, styleRes, true, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
         this.wayPointDrawer = new MapLibreWayPointDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
         createLayers(mapboxMap.getStyle());
@@ -217,9 +218,9 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             // Alternative routes
             float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
             int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_color));
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_shield_color));
 
 //            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
 

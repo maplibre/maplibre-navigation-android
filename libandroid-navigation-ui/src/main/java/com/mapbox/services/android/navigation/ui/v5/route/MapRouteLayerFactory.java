@@ -19,6 +19,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_CONGESTION_LAYER_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_CONGESTION_SOURCE_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
@@ -221,6 +223,45 @@ public class MapRouteLayerFactory {
                         ),
                         lineColor(
                                 color(alternativeRouteShieldColor)
+                        )
+                );
+    }
+
+    public LineLayer createAlternativeRouteCongestion(
+            float routeScale,
+            int routeColor,
+            int routeModerateColor,
+            int routeHeavyColor,
+            int routeSevereColor
+    ) {
+        return new LineLayer(ALTERNATIVE_ROUTE_CONGESTION_LAYER_ID, ALTERNATIVE_ROUTE_CONGESTION_SOURCE_ID)
+                .withProperties(
+                        lineJoin(
+                                Property.LINE_JOIN_ROUND
+                        ),
+                        lineCap(
+                                Property.LINE_CAP_BUTT
+                        ),
+                        lineWidth(
+                                interpolate(
+                                        exponential(1.5f), zoom(),
+                                        stop(4f, product(literal(3f), literal(routeScale))),
+                                        stop(10f, product(literal(4f), literal(routeScale))),
+                                        stop(13f, product(literal(6f), literal(routeScale))),
+                                        stop(16f, product(literal(10f), literal(routeScale))),
+                                        stop(19f, product(literal(14f), literal(routeScale))),
+                                        stop(22f, product(literal(18f), literal(routeScale)))
+                                )
+                        ),
+                        lineColor(
+                                match(
+                                        Expression.toString(get(CONGESTION_KEY)),
+                                        color(routeColor),
+                                        stop("low", color(routeModerateColor)), //TODO: remove or add low color
+                                        stop(MODERATE_CONGESTION_VALUE, color(routeModerateColor)),
+                                        stop(HEAVY_CONGESTION_VALUE, color(routeHeavyColor)),
+                                        stop(SEVERE_CONGESTION_VALUE, color(routeSevereColor))
+                                )
                         )
                 );
     }

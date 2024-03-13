@@ -6,6 +6,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -35,19 +36,17 @@ import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: public to be able to change logic?!
-//TODO: add as interface?!
-//TODO: traffic status colors
 //TODO: check if we also need the processing task
+//TODO: clean up
 //TODO: fix test
 public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
 
-    private Style mapStyle;
+    protected Style mapStyle;
 
     @StyleRes
     private int styleResId;
 
-    private MapRouteLayerFactory routeLayerFactory;
+    protected MapRouteLayerFactory routeLayerFactory;
 
     @Nullable
     private List<DirectionsRoute> routes;
@@ -75,12 +74,11 @@ public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
         try {
             typedArray = context.obtainStyledAttributes(styleResId, R.styleable.NavigationMapRoute);
 
-            // Primary route
-            float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
+            float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_alternativeRouteScale, 1.0f);
             int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_color));
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
+                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_shield_color));
 
             createLayers(mapStyle, alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
         } finally {
@@ -109,33 +107,14 @@ public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
         this.mapStyle = style;
 
         if (routes != null) {
-            ArrayList<LineString> routeLines = new ArrayList<>();
-            for (DirectionsRoute route : routes) {
-                String routeGeometry = route.geometry();
-                if (routeGeometry != null) {
-                    LineString routeLineString = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
-                    routeLines.add(routeLineString);
-                }
-            }
-
-            drawRoutes(routeLines);
+            drawRoutes(routes);
         }
     }
 
     @Override
     public void setRoutes(List<DirectionsRoute> routes) {
         this.routes = routes;
-
-        ArrayList<LineString> routeLines = new ArrayList<>();
-        for (DirectionsRoute route : routes) {
-            String routeGeometry = route.geometry();
-            if (routeGeometry != null) {
-                LineString routeLineString = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
-                routeLines.add(routeLineString);
-            }
-        }
-
-        drawRoutes(routeLines);
+        drawRoutes(routes);
     }
 
     @Override
@@ -155,20 +134,41 @@ public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
         }
     }
 
-    private void drawRoutes(List<LineString> routeLines) {
+    protected void drawRoutes(List<DirectionsRoute> routes) {
+        ArrayList<Feature> routeLineFeatures = new ArrayList<>();
+        for (DirectionsRoute route : routes) {
+            String routeGeometry = route.geometry();
+            if (routeGeometry != null) {
+                LineString routeLineString = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
+                Feature lineFeature = Feature.fromGeometry(routeLineString);
+                routeLineFeatures.add(lineFeature);
+            }
+        }
+
+        drawFeatures(routeLineFeatures);
+    }
+
+    private void drawFeatures(List<Feature> features) {
         if (!mapStyle.isFullyLoaded()) {
             // The style is not available anymore. Skip processing.
             return;
         }
 
-        ArrayList<Feature> routeLineFeatures = new ArrayList<>();
+        getSource(mapStyle).setGeoJson(FeatureCollection.fromFeatures(features));
 
-        for (LineString routeLine : routeLines) {
-            Feature routeLineFeature = Feature.fromGeometry(routeLine);
-            routeLineFeatures.add(routeLineFeature);
-        }
-
-        getSource(mapStyle).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
+//        if (!mapStyle.isFullyLoaded()) {
+//            // The style is not available anymore. Skip processing.
+//            return;
+//        }
+//
+//        ArrayList<Feature> routeLineFeatures = new ArrayList<>();
+//
+//        for (LineString routeLine : routeLines) {
+//            Feature routeLineFeature = Feature.fromGeometry(routeLine);
+//            routeLineFeatures.add(routeLineFeature);
+//        }
+//
+//        getSource(mapStyle).setGeoJson(FeatureCollection.fromFeatures(routeLineFeatures));
     }
 
     private GeoJsonSource getSource(Style style) {

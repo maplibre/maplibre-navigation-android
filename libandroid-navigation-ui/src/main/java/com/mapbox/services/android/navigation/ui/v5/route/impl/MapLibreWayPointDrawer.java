@@ -39,9 +39,8 @@ import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: public to be able to change logic?!
-//TODO: add as interface?!
 //TODO: check if we also need the processing task
+//TODO: clean up
 //TODO: fix test
 public class MapLibreWayPointDrawer implements WayPointDrawer {
 
