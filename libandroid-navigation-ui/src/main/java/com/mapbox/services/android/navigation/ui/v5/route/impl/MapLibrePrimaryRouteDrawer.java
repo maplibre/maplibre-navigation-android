@@ -51,12 +51,16 @@ import java.util.List;
 //TODO: fix test
 public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
+    protected MapView mapView;
+
     protected Style mapStyle;
 
     @StyleRes
     private final int styleResId;
 
     protected boolean isRouteEatingEnabled;
+
+    protected String belowLayerId;
 
     protected final MapRouteLayerFactory routeLayerFactory;
 
@@ -75,7 +79,6 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
     protected boolean isRouteVisible = true;
 
-    //    MapPrimaryRouteDrawer(Style mapStyle, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory) {
     public MapLibrePrimaryRouteDrawer(MapView mapView, @StyleRes int styleResId, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
         this.styleResId = styleResId;
         this.isRouteEatingEnabled = isRouteEatingEnabled;
@@ -133,6 +136,7 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
     public void setStyle(Style style) {
         this.mapStyle = style;
 
+        initStyle(mapView.getContext(), style, styleResId, belowLayerId);
         if (route != null) {
             drawRoute(route);
         }
@@ -203,8 +207,7 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             valueAnimator.cancel();
         }
 
-        /* make animation slightly longer (with 1.1f) */
-        valueAnimator = ValueAnimator.ofFloat(0f, 1.1f);
+        valueAnimator = ValueAnimator.ofFloat(0f, 1.0f);
 
         Point startPoint = lastLocationPoint;
         Location target = location;
@@ -250,7 +253,8 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         long previousUpdateTimeStamp = locationUpdateTimestamp;
         locationUpdateTimestamp = SystemClock.elapsedRealtime();
 
-        valueAnimator.setDuration((long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * 1.1)); // 1.1 second
+        /* make animation slightly longer (with 1.1f) */
+        valueAnimator.setDuration((long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * 1.1));
         valueAnimator.start();
     }
 
@@ -267,11 +271,20 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
         Point routeLineStartPoint = TurfMeasurement.along(routeLine, 0, TurfConstants.UNIT_METERS);
         if (location != null && !routeLineStartPoint.equals(location)) {
+            Point lineLocation = (Point) TurfMisc.nearestPointOnLine(location, routeLine.coordinates(), TurfConstants.UNIT_METERS).geometry();
+            if (lineLocation == null) {
+                return;
+            }
+
             // Route eating enabled and position data is available
             Point routeLineEndPoint = TurfMeasurement.along(routeLine, route.distance(), TurfConstants.UNIT_METERS);
 
-            LineString drivenLine = TurfMisc.lineSlice(routeLineStartPoint, location, routeLine);
-            LineString upcomingLine = TurfMisc.lineSlice(location, routeLineEndPoint, routeLine);
+            LineString drivenLine = null;
+            if (!routeLineStartPoint.equals(lineLocation)) {
+                drivenLine = TurfMisc.lineSlice(routeLineStartPoint, lineLocation, routeLine);
+            }
+
+            LineString upcomingLine = TurfMisc.lineSlice(lineLocation, routeLineEndPoint, routeLine);
             drawLineStrings(drivenLine, upcomingLine);
         } else {
             // Route eating disabled or position data is missing

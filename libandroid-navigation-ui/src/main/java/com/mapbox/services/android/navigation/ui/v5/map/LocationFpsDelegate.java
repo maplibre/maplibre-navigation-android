@@ -24,13 +24,14 @@ class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
   private final MapboxMap mapboxMap;
   private final LocationComponent locationComponent;
   @Nullable
-  private MapLibrePrimaryRouteDrawer primaryRouteDrawer;
+  private PrimaryRouteDrawer primaryRouteDrawer;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 
   LocationFpsDelegate(@NonNull MapboxMap mapboxMap, @NonNull LocationComponent locationComponent, @Nullable PrimaryRouteDrawer primaryRouteDrawer) {
     this.mapboxMap = mapboxMap;
     this.locationComponent = locationComponent;
+    this.primaryRouteDrawer = primaryRouteDrawer;
     mapboxMap.addOnCameraIdleListener(this);
   }
 

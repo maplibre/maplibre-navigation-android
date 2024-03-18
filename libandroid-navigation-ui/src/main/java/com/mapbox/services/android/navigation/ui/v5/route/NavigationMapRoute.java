@@ -2,13 +2,9 @@ package com.mapbox.services.android.navigation.ui.v5.route;
 
 import android.app.Activity;
 
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
-
-import android.content.Context;
-import android.content.res.TypedArray;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,9 +20,9 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreAlternativeRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreCongestionAlternativeRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreCongestionPrimaryRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibrePrimaryRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreRouteArrowDrawer;
 import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibreWayPointDrawer;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
@@ -46,19 +42,22 @@ import java.util.List;
  * applications {@code style.xml} file, you extend {@code <style name="NavigationMapRoute">} and
  * change some or all the options currently offered. If no style files provided in the constructor,
  * the default style will be used.
+ * <p>
+ * You can customize the logic for route drawing by passing in your own implementations of
+ * {@link PrimaryRouteDrawer}, {@link AlternativeRouteDrawer}, {@link RouteArrowDrawer}, and
+ * {@link WayPointDrawer} when constructing this class. If NULL is passed in for any of these
+ * classes, the default class will be used.
  *
  * @since 0.4.0
  */
-
 public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionChangeListener {
 
     @StyleRes
     private final int styleRes;
-    private final String belowLayer;
     private final MapboxMap mapboxMap;
     private final MapView mapView;
-    private MapRouteClickListener mapRouteClickListener;
-    private MapRouteProgressChangeListener mapRouteProgressChangeListener;
+    private final MapRouteClickListener mapRouteClickListener;
+    private final MapRouteProgressChangeListener mapRouteProgressChangeListener;
     private boolean isMapClickListenerAdded = false;
     private MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener;
     private boolean isDidFinishLoadingStyleListenerAdded = false;
@@ -67,7 +66,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     private PrimaryRouteDrawer primaryRouteDrawer;
     private AlternativeRouteDrawer alternativeRouteDrawer;
     private WayPointDrawer wayPointDrawer;
-    private List<DirectionsRoute> routes = new ArrayList<>();
+    private final List<DirectionsRoute> routes = new ArrayList<>();
     private int primaryRouteIndex = 0;
     private OnRouteSelectionChangeListener clientRouteSelectionChangeListener;
 
@@ -92,7 +91,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      */
     public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap,
                               @Nullable String belowLayer) {
-        this(null, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
+        this(null, mapView, mapboxMap, R.style.NavigationMapRoute, null, null, null, null, belowLayer);
     }
 
     /**
@@ -121,7 +120,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapboxMap mapboxMap, @Nullable String belowLayer) {
-        this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
+        this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, null, null, null, null, belowLayer);
     }
 
     /**
@@ -135,127 +134,63 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapboxMap mapboxMap, @StyleRes int styleRes) {
-        this(navigation, mapView, mapboxMap, styleRes, null);
+        this(navigation, mapView, mapboxMap, styleRes, null, null, null, null, null);
     }
 
     /**
      * Construct an instance of {@link NavigationMapRoute}.
      *
-     * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
-     *                   your route won't consider rerouting during a navigation session.
-     * @param mapView    the MapView to apply the route to
-     * @param mapboxMap  the MapboxMap to apply route with
-     * @param styleRes   a style resource with custom route colors, scale, etc.
-     * @param belowLayer optionally pass in a layer id to place the route line below
+     * @param navigation             an instance of the {@link MapboxNavigation} object. Passing in null means
+     *                               your route won't consider rerouting during a navigation session.
+     * @param mapView                the MapView to apply the route to
+     * @param mapboxMap              the MapboxMap to apply route with
+     * @param styleRes               a style resource with custom route colors, scale, etc.
+     * @param primaryRouteDrawer     a custom primary route drawer
+     * @param alternativeRouteDrawer a custom alternative route drawer
+     * @param routeArrowDrawer       a custom route arrow drawer
+     * @param wayPointDrawer         a custom way point drawer
+     * @param belowLayer             optionally pass in a layer id to place the route line below
      */
-    public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                              @NonNull MapboxMap mapboxMap, @StyleRes int styleRes,
-                              @Nullable String belowLayer) {
+    public NavigationMapRoute(
+            @Nullable MapboxNavigation navigation,
+            @NonNull MapView mapView,
+            @NonNull MapboxMap mapboxMap,
+            @StyleRes int styleRes,
+            @Nullable PrimaryRouteDrawer primaryRouteDrawer,
+            @Nullable AlternativeRouteDrawer alternativeRouteDrawer,
+            @Nullable RouteArrowDrawer routeArrowDrawer,
+            @Nullable WayPointDrawer wayPointDrawer,
+            @Nullable String belowLayer
+    ) {
         this.styleRes = styleRes;
-        this.belowLayer = belowLayer;
         this.mapView = mapView;
         this.mapboxMap = mapboxMap;
         this.navigation = navigation;
 
-        this.alternativeRouteDrawer = new MapLibreCongestionAlternativeRouteDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
-        this.primaryRouteDrawer = new MapLibreCongestionPrimaryRouteDrawer(mapView, styleRes, true, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
-        this.wayPointDrawer = new MapLibreWayPointDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
-        createLayers(mapboxMap.getStyle());
+        this.alternativeRouteDrawer = alternativeRouteDrawer;
+        if (alternativeRouteDrawer == null) {
+            this.alternativeRouteDrawer = new MapLibreCongestionAlternativeRouteDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
+        }
 
-        this.routeArrowDrawer = new MapLibreRouteArrowDrawer(mapView, mapboxMap, styleRes);
+        this.primaryRouteDrawer = primaryRouteDrawer;
+        if (primaryRouteDrawer == null) {
+            this.primaryRouteDrawer = new MapLibreCongestionPrimaryRouteDrawer(mapView, styleRes, false, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
+        }
+
+        this.wayPointDrawer = wayPointDrawer;
+        if (wayPointDrawer == null) {
+            this.wayPointDrawer = new MapLibreWayPointDrawer(mapView, styleRes, new MapRouteLayerFactory(), findRouteBelowLayerId(belowLayer, mapboxMap.getStyle()));
+        }
+
+        this.routeArrowDrawer = routeArrowDrawer;
+        if (routeArrowDrawer == null) {
+            this.routeArrowDrawer = new MapLibreRouteArrowDrawer(mapView, mapboxMap, styleRes);
+        }
+
         this.mapRouteClickListener = new MapRouteClickListener(this);
-        this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(primaryRouteDrawer, routeArrowDrawer);
+        this.mapRouteProgressChangeListener = new MapRouteProgressChangeListener(this.primaryRouteDrawer, this.routeArrowDrawer);
         initializeDidFinishLoadingStyleListener();
         addListeners();
-    }
-
-    // For testing only
-    NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                       @NonNull MapboxMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
-                       MapRouteClickListener mapClickListener,
-                       MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
-                       MapRouteProgressChangeListener progressChangeListener) {
-        this.styleRes = styleRes;
-        this.belowLayer = belowLayer;
-        this.mapView = mapView;
-        this.mapboxMap = mapboxMap;
-        this.navigation = navigation;
-        this.mapRouteClickListener = mapClickListener;
-        this.didFinishLoadingStyleListener = didFinishLoadingStyleListener;
-        this.mapRouteProgressChangeListener = progressChangeListener;
-        addListeners();
-        createLayers(mapboxMap.getStyle());
-    }
-
-    // For testing only
-    NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                       @NonNull MapboxMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
-                       MapRouteClickListener mapClickListener,
-                       MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
-                       MapRouteProgressChangeListener progressChangeListener,
-                       RouteArrowDrawer routeArrowDrawer) {
-        this.styleRes = styleRes;
-        this.belowLayer = belowLayer;
-        this.mapView = mapView;
-        this.mapboxMap = mapboxMap;
-        this.navigation = navigation;
-        this.mapRouteClickListener = mapClickListener;
-        this.didFinishLoadingStyleListener = didFinishLoadingStyleListener;
-        this.mapRouteProgressChangeListener = progressChangeListener;
-        this.routeArrowDrawer = routeArrowDrawer;
-
-        createLayers(mapboxMap.getStyle());
-    }
-
-    private void createLayers(Style style) {
-        Context context = mapView.getContext();
-        String belowLayerId = findRouteBelowLayerId(belowLayer, style);
-
-        TypedArray typedArray = null;
-        try {
-            typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
-
-            // Alternative routes
-            float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
-            int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_color));
-            int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_shield_color));
-
-//            alternativeRouteDrawer.createLayers(alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
-
-            // Primary route
-            float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
-            int routeColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_blue));
-            int routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
-            int drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
-            int drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
-
-//            primaryRouteDrawer.createLayers(routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor, belowLayerId);
-
-            // Congestion
-//            congestionDrawer.createLayers(routeScale, routeColor, Color.YELLOW, Color.RED, Color.DKGRAY, belowLayerId);
-
-            // Waypoint
-            int originWaypointIcon = typedArray.getResourceId(
-                    R.styleable.NavigationMapRoute_originWaypointIcon, R.drawable.ic_route_origin);
-            int destinationWaypointIcon = typedArray.getResourceId(
-                    R.styleable.NavigationMapRoute_destinationWaypointIcon, R.drawable.ic_route_destination);
-
-//            wayPointDrawer.createLayers(
-//                    ContextCompat.getDrawable(context, originWaypointIcon),
-//                    ContextCompat.getDrawable(context, destinationWaypointIcon),
-//                    belowLayerId
-//            );
-        } finally {
-            if (typedArray != null) {
-                typedArray.recycle();
-            }
-        }
     }
 
     private String findRouteBelowLayerId(String belowLayer, Style style) {
@@ -371,6 +306,15 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     }
 
     /**
+     * Toggle whether or not you'd like enable the primary route eating feature
+     * @param routeEatingEnabled true if you'd like to enable the primary route eating feature,
+     *                           else false
+     */
+    public void setRouteEatingEnabled(boolean routeEatingEnabled) {
+        primaryRouteDrawer.setRouteEatingEnabled(routeEatingEnabled);
+    }
+
+    /**
      * This method will allow this class to listen to new routes based on
      * the progress updates from {@link MapboxNavigation}.
      * <p>
@@ -452,8 +396,6 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     }
 
     private void drawWithStyle(Style style) {
-        createLayers(style);
-
         primaryRouteDrawer.setStyle(style);
         alternativeRouteDrawer.setStyle(style);
         wayPointDrawer.setStyle(style);
@@ -463,9 +405,10 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
 
     @Override
     public void onNewPrimaryRouteSelected(DirectionsRoute directionsRoute) {
-        primaryRouteIndex = Integer.parseInt(directionsRoute.routeIndex()); //TODO: do we need the index?!?!?
+        if (directionsRoute.routeIndex() != null) {
+            primaryRouteIndex = Integer.parseInt(directionsRoute.routeIndex());
+        }
         primaryRouteDrawer.setRoute(directionsRoute);
-//        congestionDrawer.setRoute(directionsRoute);
         wayPointDrawer.setRoute(directionsRoute);
 
         List<DirectionsRoute> alternativeRoutes = new ArrayList<>();

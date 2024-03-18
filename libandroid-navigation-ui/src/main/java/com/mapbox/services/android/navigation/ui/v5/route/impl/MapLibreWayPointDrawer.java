@@ -55,8 +55,6 @@ public class MapLibreWayPointDrawer implements WayPointDrawer {
     private DirectionsRoute route;
 
 
-//    public MapLibreWayPointDrawer(Style style, MapRouteLayerFactory routeLayerFactory) {
-
     public MapLibreWayPointDrawer(MapView mapView, @StyleRes int styleResId, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
         this.styleResId = styleResId;
         this.routeLayerFactory = routeLayerFactory;
