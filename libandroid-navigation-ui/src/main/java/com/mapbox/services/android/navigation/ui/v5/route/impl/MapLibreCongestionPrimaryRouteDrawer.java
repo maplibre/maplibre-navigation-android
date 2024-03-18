@@ -1,14 +1,20 @@
 package com.mapbox.services.android.navigation.ui.v5.route.impl;
 
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_SOURCE_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.SEVERE_CONGESTION_VALUE;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -24,6 +30,7 @@ import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -42,6 +49,10 @@ import java.util.List;
 //TODO: check if we also need the processing task
 //TODO: clean up
 //TODO: fix test
+
+/**
+ *
+ */
 public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDrawer {
 
     public MapLibreCongestionPrimaryRouteDrawer(MapView mapView, int styleResId, boolean isRouteEatingEnabled, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
@@ -97,6 +108,20 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
         }
     }
 
+    /**
+     * Create all needed layers for the primary route.
+     * @param mapStyle
+     * @param routeScale
+     * @param routeColor
+     * @param routeModerateColor
+     * @param routeHeavyColor
+     * @param routeSevereColor
+     * @param drivenRouteColor
+     * @param drivenRouteModerateColor
+     * @param drivenRouteHeavyColor
+     * @param drivenRouteSevereColor
+     * @param belowLayerId
+     */
     private void createLayers(Style mapStyle,
                               float routeScale,
                               @ColorInt int routeColor,
@@ -123,6 +148,20 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
     }
 
     @Override
+    public void setVisibility(boolean isVisible) {
+        super.setVisibility(isVisible);
+
+        if (mapStyle == null || !mapStyle.isFullyLoaded()) {
+            return;
+        }
+
+        Layer congestionRouteLayer = mapStyle.getLayer(PRIMARY_ROUTE_CONGESTION_LAYER_ID);
+        if (congestionRouteLayer != null) {
+            congestionRouteLayer.setProperties(visibility(isVisible ? VISIBLE : NONE));
+        }
+    }
+
+    @Override
     protected void drawRoute(DirectionsRoute route, @Nullable Point location, @Nullable RouteProgress routeProgress) {
         super.drawRoute(route, location, routeProgress);
 
@@ -133,7 +172,7 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
         LineString routeLineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
         List<Point> routeCoordinates = routeLineString.coordinates();
 
-        double drivenRouteMeters = 0;
+        Double drivenRouteMeters = null;
         if (location != null && !location.equals(routeCoordinates.get(0))) {
             LineString drivenRouteLine = TurfMisc.lineSlice(routeCoordinates.get(0), location, routeLineString);
             drivenRouteMeters = TurfMeasurement.length(drivenRouteLine.coordinates(), TurfConstants.UNIT_METERS);
@@ -156,14 +195,10 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
 
                 Point segmentStartPoint = routeCoordinates.get(routeLineCoordinatesIndex);
                 Point segmentEndPoint = routeCoordinates.get(routeLineCoordinatesIndex + 1);
-                double segmentStartDistance = 0;
-                double segmentEndDistance = 0;
-//                if (routeLineCoordinatesIndex > 0) {
-                segmentStartDistance = TurfMeasurement.length(routeCoordinates.subList(0, routeLineCoordinatesIndex + 1), TurfConstants.UNIT_METERS);
-                segmentEndDistance = TurfMeasurement.length(routeCoordinates.subList(0, routeLineCoordinatesIndex + 2), TurfConstants.UNIT_METERS);
-//                }
+                double segmentStartDistance = TurfMeasurement.length(routeCoordinates.subList(0, routeLineCoordinatesIndex + 1), TurfConstants.UNIT_METERS);
+                double segmentEndDistance = TurfMeasurement.length(routeCoordinates.subList(0, routeLineCoordinatesIndex + 2), TurfConstants.UNIT_METERS);
 
-                if (segmentEndDistance > drivenRouteMeters && segmentStartDistance < drivenRouteMeters) {
+                if (drivenRouteMeters != null && segmentEndDistance > drivenRouteMeters && segmentStartDistance < drivenRouteMeters) {
                     // Current passing segment
                     LineString drivenCongestionLineString = LineString.fromLngLats(Arrays.asList(segmentStartPoint, location));
                     Feature drivenFeature = Feature.fromGeometry(drivenCongestionLineString);
@@ -173,7 +208,6 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
 
                     String congestionValue = leg.annotation().congestion().get(i);
                     switch (congestionValue) {
-                        default:
                         case MODERATE_CONGESTION_VALUE:
                         case HEAVY_CONGESTION_VALUE:
                         case SEVERE_CONGESTION_VALUE:
@@ -192,13 +226,12 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
                     Feature feature = Feature.fromGeometry(congestionLineString);
                     String congestionValue = leg.annotation().congestion().get(i);
                     switch (congestionValue) {
-                        default:
                         case MODERATE_CONGESTION_VALUE:
                         case HEAVY_CONGESTION_VALUE:
                         case SEVERE_CONGESTION_VALUE:
                         case "low":
                             feature.addStringProperty(CONGESTION_KEY, congestionValue);
-                            feature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, segmentEndDistance < drivenRouteMeters);
+                            feature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, drivenRouteMeters != null && segmentEndDistance < drivenRouteMeters);
                             segmentFeatures.add(feature);
                     }
                 }

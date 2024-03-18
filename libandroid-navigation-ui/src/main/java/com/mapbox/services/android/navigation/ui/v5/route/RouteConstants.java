@@ -8,7 +8,7 @@ public class RouteConstants {
   public static final String PRIMARY_ROUTE_LAYER_ID = "maplibre-navigation-primary-route-layer";
   public static final String PRIMARY_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-primary-route-shield-layer";
   public static final String PRIMARY_ROUTE_CONGESTION_SOURCE_ID = "maplibre-navigation-primary-route-congestion-source";
-  static final String PRIMARY_ROUTE_CONGESTION_LAYER_ID = "maplibre-navigation-primary-route-congestion-layer";
+  public static final String PRIMARY_ROUTE_CONGESTION_LAYER_ID = "maplibre-navigation-primary-route-congestion-layer";
   public static final String ALTERNATIVE_ROUTE_SOURCE_ID = "maplibre-navigation-alternative-route-source";
   public static final String ALTERNATIVE_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-alternative-route-shield-layer";
   public static final String ALTERNATIVE_ROUTE_LAYER_ID = "maplibre-navigation-alternative-route-layer";

@@ -80,6 +80,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
             navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            navigationMapRoute?.setRouteEatingEnabled(true)
             calculateRouteAndStartNavigation()
         }
     }
