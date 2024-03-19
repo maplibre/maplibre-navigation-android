@@ -14,7 +14,11 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -44,6 +48,8 @@ import com.mapbox.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 //TODO: is route-eating the correct term?
 //TODO: check if we also need the processing task
@@ -208,9 +214,11 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         }
 
         valueAnimator = ValueAnimator.ofFloat(0f, 1.0f);
+        valueAnimator.setInterpolator(new LinearInterpolator());
 
         Point startPoint = lastLocationPoint;
-        Location target = location;
+        Point targetPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
+        LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
         valueAnimator.addUpdateListener(animation -> {
             if (System.nanoTime() - lastUpdateTime < minUpdateIntervalNanoSeconds) {
                 return;
@@ -220,17 +228,11 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
                 return;
             }
 
-            if (routeGeometry == null) {
-                return;
-            }
-
             float fraction = animation.getAnimatedFraction();
-            LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
+            LineString animatedSegment = TurfMisc.lineSlice(startPoint, targetPoint, routeLine);
 
-            Point animatedPoint = Point.fromLngLat(
-                    startPoint.longitude() + fraction * (target.getLongitude() - startPoint.longitude()),
-                    startPoint.latitude() + fraction * (target.getLatitude() - startPoint.latitude())
-            );
+            double segmentLength = TurfMeasurement.length(animatedSegment, TurfConstants.UNIT_METERS);
+            Point animatedPoint = TurfMeasurement.along(animatedSegment, segmentLength * fraction, TurfConstants.UNIT_METERS);
 
             lastLocationPoint = animatedPoint;
 
@@ -239,13 +241,20 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         });
 
         valueAnimator.addListener(new AnimatorListenerAdapter() {
+            boolean isCanceled = false;
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                isCanceled = true;
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (route == null) {
+                if (isCanceled || route == null) {
                     return;
                 }
 
-                lastLocationPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
+                lastLocationPoint = (Point) TurfMisc.nearestPointOnLine(targetPoint, routeLine.coordinates(), TurfConstants.UNIT_METERS).geometry();
                 drawRoute(route, lastLocationPoint, routeProgress);
             }
         });
@@ -254,7 +263,9 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         locationUpdateTimestamp = SystemClock.elapsedRealtime();
 
         /* make animation slightly longer (with 1.1f) */
-        valueAnimator.setDuration((long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * 1.1));
+        long duration = (long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * 1.1);
+        duration = Math.min(duration, 2000L); //TODO: outsource max duration as field
+        valueAnimator.setDuration(duration);
         valueAnimator.start();
     }
 
@@ -271,12 +282,12 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
         Point routeLineStartPoint = TurfMeasurement.along(routeLine, 0, TurfConstants.UNIT_METERS);
         if (location != null && !routeLineStartPoint.equals(location)) {
+            // Route eating enabled and position data is available
             Point lineLocation = (Point) TurfMisc.nearestPointOnLine(location, routeLine.coordinates(), TurfConstants.UNIT_METERS).geometry();
             if (lineLocation == null) {
                 return;
             }
 
-            // Route eating enabled and position data is available
             Point routeLineEndPoint = TurfMeasurement.along(routeLine, route.distance(), TurfConstants.UNIT_METERS);
 
             LineString drivenLine = null;
