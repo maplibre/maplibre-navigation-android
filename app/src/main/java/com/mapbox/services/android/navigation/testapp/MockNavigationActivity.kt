@@ -147,6 +147,7 @@ class MockNavigationActivity :
             enableLocationComponent(style)
 
             navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            navigationMapRoute?.setRouteEatingEnabled(true)
 
             mapboxMap.addOnMapClickListener(this)
             Snackbar.make(
