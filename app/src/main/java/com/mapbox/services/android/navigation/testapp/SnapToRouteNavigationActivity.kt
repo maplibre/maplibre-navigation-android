@@ -202,5 +202,4 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         navigation.onDestroy()
         binding.mapView.onDestroy()
     }
-
 }

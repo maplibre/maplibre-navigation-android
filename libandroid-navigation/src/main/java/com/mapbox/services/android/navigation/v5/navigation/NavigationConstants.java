@@ -236,6 +236,7 @@ public final class NavigationConstants {
     // Bundle variable keys
     public static final String NAVIGATION_VIEW_ROUTE_KEY = "route_json";
     public static final String NAVIGATION_VIEW_SIMULATE_ROUTE = "navigation_view_simulate_route";
+    public static final String NAVIGATION_VIEW_ROUTE_EATING = "navigation_view_route_eating_enabled";
     public static final String NAVIGATION_VIEW_ROUTE_PROFILE_KEY = "navigation_view_route_profile";
     public static final String NAVIGATION_VIEW_OFF_ROUTE_ENABLED_KEY = "navigation_view_off_route_enabled";
     public static final String NAVIGATION_VIEW_SNAP_ENABLED_KEY = "navigation_view_snap_enabled";

@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -24,7 +26,7 @@ class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
   private final MapboxMap mapboxMap;
   private final LocationComponent locationComponent;
   @Nullable
-  private PrimaryRouteDrawer primaryRouteDrawer;
+  private final PrimaryRouteDrawer primaryRouteDrawer;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 

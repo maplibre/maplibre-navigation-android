@@ -67,6 +67,7 @@ public class NavigationLauncher {
     editor
       .remove(NavigationConstants.NAVIGATION_VIEW_ROUTE_KEY)
       .remove(NavigationConstants.NAVIGATION_VIEW_SIMULATE_ROUTE)
+      .remove(NavigationConstants.NAVIGATION_VIEW_ROUTE_EATING)
       .remove(NavigationConstants.NAVIGATION_VIEW_PREFERENCE_SET_THEME)
       .remove(NavigationConstants.NAVIGATION_VIEW_PREFERENCE_SET_THEME)
       .remove(NavigationConstants.NAVIGATION_VIEW_LIGHT_THEME)
@@ -80,6 +81,7 @@ public class NavigationLauncher {
 
   private static void storeConfiguration(NavigationLauncherOptions options, SharedPreferences.Editor editor) {
     editor.putBoolean(NavigationConstants.NAVIGATION_VIEW_SIMULATE_ROUTE, options.shouldSimulateRoute());
+    editor.putBoolean(NavigationConstants.NAVIGATION_VIEW_ROUTE_EATING, options.routeEatingEnabled());
   }
 
   private static void storeThemePreferences(NavigationLauncherOptions options, SharedPreferences.Editor editor) {

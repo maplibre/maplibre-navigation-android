@@ -241,6 +241,10 @@ public class NavigationMapboxMap {
     }
   }
 
+  public void updateRouteEatingEnabled(boolean isEnabled) {
+    mapRoute.setRouteEatingEnabled(isEnabled);
+  }
+
   /**
    * Enabled by default, the navigation map will throttle frames per second of the location icon
    * based on the map zoom level.
