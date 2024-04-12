@@ -163,8 +163,18 @@ public class SnapToRoute extends Snap {
       return null;
     }
 
-    RouteLeg upcomingLeg = routeProgress.directionsRoute().legs().get(routeProgress.legIndex() + 1);
-    if (upcomingLeg.steps() == null || upcomingLeg.steps().size() < 1) {
+    // Search upcoming leg with at least two steps.
+    RouteLeg upcomingLeg = null;
+    List<RouteLeg> upcomingLegs = routeProgress.directionsRoute().legs()
+            .subList(routeProgress.legIndex() + 1, routeProgress.directionsRoute().legs().size());
+    for (RouteLeg leg : upcomingLegs) {
+      if (leg.steps() != null && leg.steps().size() >= 2) {
+        upcomingLeg = leg;
+        break;
+      }
+    }
+
+    if (upcomingLeg == null) {
       return null;
     }
 

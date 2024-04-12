@@ -20,6 +20,7 @@ import static junit.framework.Assert.assertEquals;
 public class SnapToRouteTest extends BaseTest {
 
   private static final String MULTI_LEG_ROUTE_FIXTURE = "directions_two_leg_route.json";
+  private static final String SINGLE_STEP_LEG = "directions_three_leg_single_step_route.json";
 
     @Test
     public void getSnappedLocation_returnsProviderNameCorrectly() throws Exception {
@@ -162,6 +163,27 @@ public class SnapToRouteTest extends BaseTest {
   }
 
   @Test
+  public void getSnappedLocation_bearingWithSingleStepLegBeforeNextLeg() throws Exception {
+    DirectionsRoute routeProgress = buildMultipleLegRoute(SINGLE_STEP_LEG);
+    Snap snap = new SnapToRoute();
+    Location location = new Location("test");
+    location.setLatitude(38.8943771);
+    location.setLongitude(-77.0782341);
+    location.setBearing(20);
+
+    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
+            routeProgress,
+            0.8,
+            0.8,
+            200,
+            21,
+            0
+    ));
+
+    assertEquals(358.19876f, snappedLocation.getBearing());
+  }
+
+  @Test
   public void getSnappedLocation_bearingEnd() throws Exception {
     DirectionsRoute routeProgress = buildMultipleLegRoute();
     Snap snap = new SnapToRoute();
@@ -183,7 +205,11 @@ public class SnapToRouteTest extends BaseTest {
   }
 
   private DirectionsRoute buildMultipleLegRoute() throws Exception {
-    String body = loadJsonFixture(MULTI_LEG_ROUTE_FIXTURE);
+    return buildMultipleLegRoute(MULTI_LEG_ROUTE_FIXTURE);
+  }
+
+  private DirectionsRoute buildMultipleLegRoute(String file) throws Exception {
+    String body = loadJsonFixture(file);
     Gson gson = new GsonBuilder().registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
     DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
     return response.routes().get(0);
