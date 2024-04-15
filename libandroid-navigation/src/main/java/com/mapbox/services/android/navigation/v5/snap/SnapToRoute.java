@@ -31,6 +31,13 @@ import java.util.List;
 public class SnapToRoute extends Snap {
 
   /**
+   * Last calculated snapped bearing. This will be re-used if bearing can not calculated.
+   * Is NULL if no bearing was calculated yet.
+   */
+  @Nullable
+  private Float lastSnappedBearing = null;
+
+  /**
    * Calculate a snapped location along the route. Latitude, longitude and bearing are provided.
    *
    * @param location Current raw user location
@@ -40,7 +47,7 @@ public class SnapToRoute extends Snap {
   @Override
   public Location getSnappedLocation(Location location, RouteProgress routeProgress) {
     Location snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints());
-    snappedLocation.setBearing(snapLocationBearing(routeProgress));
+    snappedLocation.setBearing(snapLocationBearing(location, routeProgress));
     return snappedLocation;
   }
 
@@ -78,23 +85,25 @@ public class SnapToRoute extends Snap {
    * If the step distance remaining is zero, the distance ahead is the first point of upcoming leg.
    * This way, an accurate bearing is upheld transitioning between legs.
    *
+   * @param location Current raw user location
    * @param routeProgress Current route progress
    * @return Float bearing snapped to route
    */
-  private static float snapLocationBearing(RouteProgress routeProgress) {
+  private float snapLocationBearing(Location location, RouteProgress routeProgress) {
     Point currentPoint = getCurrentPoint(routeProgress);
-    if (currentPoint == null) {
-      return 0f;
-    }
-
     Point futurePoint = getFuturePoint(routeProgress);
-    if (futurePoint == null) {
-      return 0f;
+    if (currentPoint == null || futurePoint == null) {
+      if (lastSnappedBearing != null) {
+        return lastSnappedBearing;
+      } else {
+        return location.getBearing();
+      }
     }
 
     // Get bearing and convert azimuth to degrees
     double azimuth = TurfMeasurement.bearing(currentPoint, futurePoint);
-    return (float) MathUtils.wrap(azimuth, 0, 360);
+    lastSnappedBearing = (float) MathUtils.wrap(azimuth, 0, 360);
+    return lastSnappedBearing;
   }
 
   /**
@@ -163,18 +172,8 @@ public class SnapToRoute extends Snap {
       return null;
     }
 
-    // Search upcoming leg with at least two steps.
-    RouteLeg upcomingLeg = null;
-    List<RouteLeg> upcomingLegs = routeProgress.directionsRoute().legs()
-            .subList(routeProgress.legIndex() + 1, routeProgress.directionsRoute().legs().size());
-    for (RouteLeg leg : upcomingLegs) {
-      if (leg.steps() != null && leg.steps().size() >= 2) {
-        upcomingLeg = leg;
-        break;
-      }
-    }
-
-    if (upcomingLeg == null) {
+    RouteLeg upcomingLeg = routeProgress.directionsRoute().legs().get(routeProgress.legIndex() + 1);
+    if (upcomingLeg.steps() == null || upcomingLeg.steps().size() <= 1) {
       return null;
     }
 
