@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.JsonObject;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
@@ -225,6 +226,9 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         }
 
         LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
+        LineString animatedSegment = TurfMisc.lineSlice(startPoint, targetPoint, routeLine);
+        double segmentLength = TurfMeasurement.length(animatedSegment, TurfConstants.UNIT_METERS);
+
         valueAnimator.addUpdateListener(animation -> {
             if (System.nanoTime() - lastUpdateTime < minUpdateIntervalNanoSeconds) {
                 return;
@@ -235,11 +239,7 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             }
 
             float fraction = animation.getAnimatedFraction();
-            LineString animatedSegment = TurfMisc.lineSlice(startPoint, targetPoint, routeLine);
-
-            double segmentLength = TurfMeasurement.length(animatedSegment, TurfConstants.UNIT_METERS);
             Point animatedPoint = TurfMeasurement.along(animatedSegment, segmentLength * fraction, TurfConstants.UNIT_METERS);
-
             lastLocationPoint = animatedPoint;
 
             drawRoute(route, animatedPoint, routeProgress);
@@ -286,22 +286,16 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         }
 
         LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
-        Point routeLineStartPoint = TurfMeasurement.along(routeLine, 0, TurfConstants.UNIT_METERS);
+        Point routeLineStartPoint = routeLine.coordinates().get(0);
         if (location != null && !routeLineStartPoint.equals(location)) {
             // Route eating enabled and position data is available
-            Point lineLocation = (Point) TurfMisc.nearestPointOnLine(location, routeLine.coordinates(), TurfConstants.UNIT_METERS).geometry();
-            if (lineLocation == null) {
-                return;
-            }
-
-            Point routeLineEndPoint = TurfMeasurement.along(routeLine, route.distance(), TurfConstants.UNIT_METERS);
 
             LineString drivenLine = null;
-            if (!routeLineStartPoint.equals(lineLocation)) {
-                drivenLine = TurfMisc.lineSlice(routeLineStartPoint, lineLocation, routeLine);
+            if (!routeLineStartPoint.equals(location)) {
+                drivenLine = TurfMisc.lineSlice(routeLineStartPoint, location, routeLine);
             }
 
-            LineString upcomingLine = TurfMisc.lineSlice(lineLocation, routeLineEndPoint, routeLine);
+            LineString upcomingLine = TurfMisc.lineSlice(location, routeLine.coordinates().get(routeLine.coordinates().size() - 1), routeLine);
             drawLineStrings(drivenLine, upcomingLine);
         } else {
             // Route eating disabled or position data is missing
@@ -313,12 +307,12 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         ArrayList<Feature> routeLineFeatures = new ArrayList<>();
 
         if (drivenLine != null) {
-            Feature drivenLineFeature = Feature.fromGeometry(drivenLine);
+            Feature drivenLineFeature = Feature.fromGeometry(drivenLine, new JsonObject(), "driven-line");
             drivenLineFeature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, true);
             routeLineFeatures.add(drivenLineFeature);
         }
 
-        Feature upcomingLineFeature = Feature.fromGeometry(upcomingLine);
+        Feature upcomingLineFeature = Feature.fromGeometry(upcomingLine, new JsonObject(), "upcoming-line");
         upcomingLineFeature.addBooleanProperty(PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY, false);
         routeLineFeatures.add(upcomingLineFeature);
 
