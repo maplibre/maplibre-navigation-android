@@ -26,7 +26,7 @@ import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
 import com.google.gson.JsonObject;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;

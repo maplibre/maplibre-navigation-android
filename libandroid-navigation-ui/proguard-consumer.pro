@@ -3,7 +3,7 @@
 # --- Picasso ---
 -dontwarn com.squareup.okhttp.**
 
-# --- com.mapbox.api.directions.v5.MapboxDirections ---
+# --- com.mapbox.services.android.navigation.v5.MapboxDirections ---
 -dontwarn com.sun.xml.internal.ws.spi.db.BindingContextFactory
 
 # --- com.amazonaws.util.json.JacksonFactory ---

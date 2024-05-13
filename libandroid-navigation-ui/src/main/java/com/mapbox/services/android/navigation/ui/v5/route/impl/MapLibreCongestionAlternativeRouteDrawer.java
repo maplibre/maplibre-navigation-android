@@ -22,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;

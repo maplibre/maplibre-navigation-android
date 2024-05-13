@@ -42,7 +42,7 @@ public abstract class BannerText extends DirectionsJsonObject {
   public abstract String text();
 
   /**
-   * A part or element of the {@link com.mapbox.api.directions.v5.models.BannerInstructions}.
+   * A part or element of the {@link com.mapbox.services.android.navigation.v5.models.BannerInstructions}.
    *
    * @return a {@link BannerComponents} specific to a {@link LegStep}
    * @since 3.0.0

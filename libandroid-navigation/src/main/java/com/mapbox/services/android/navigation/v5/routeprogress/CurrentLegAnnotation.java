@@ -32,7 +32,7 @@ public abstract class CurrentLegAnnotation implements Serializable {
 
   /**
    * The index used to retrieve the annotation values from each array in
-   * {@link com.mapbox.api.directions.v5.models.LegAnnotation}.
+   * {@link com.mapbox.services.android.navigation.v5.models.LegAnnotation}.
    *
    * @return index used to look up annotation values
    * @since 0.13.0
@@ -40,7 +40,7 @@ public abstract class CurrentLegAnnotation implements Serializable {
   public abstract int index();
 
   /**
-   * Distance along the {@link com.mapbox.api.directions.v5.models.RouteLeg} that adds
+   * Distance along the {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} that adds
    * up to this set of annotation data.
    *
    * @return distance to this set of annotation data
@@ -148,7 +148,7 @@ public abstract class CurrentLegAnnotation implements Serializable {
 
     /**
      * The index used to retrieve the annotation values from each array in
-     * {@link com.mapbox.api.directions.v5.models.LegAnnotation}.
+     * {@link com.mapbox.services.android.navigation.v5.models.LegAnnotation}.
      *
      * @return this builder for chaining options together
      * @since 0.13.0
@@ -156,7 +156,7 @@ public abstract class CurrentLegAnnotation implements Serializable {
     public abstract Builder index(int index);
 
     /**
-     * Distance along the {@link com.mapbox.api.directions.v5.models.RouteLeg} that adds
+     * Distance along the {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} that adds
      * up to this set of annotation data.
      *
      * @return this builder for chaining options together

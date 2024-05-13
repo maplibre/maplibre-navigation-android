@@ -63,10 +63,10 @@ public final class NavigationRoute {
 
     static Builder builder(Context context, LocaleUtils localeUtils) {
         return new Builder()
-                .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
-                .language(context, localeUtils)
-                .voiceUnits(context, localeUtils)
-                .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
+            .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
+            .language(context, localeUtils)
+            .voiceUnits(context, localeUtils)
+            .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
     }
 
     /**
@@ -254,24 +254,6 @@ public final class NavigationRoute {
             return this;
         }
 
-        /**
-         * Optionally, set which input coordinates should be treated as waypoints / separate legs.
-         * Note: coordinate indices not added here act as silent waypoints
-         * <p>
-         * Most useful in combination with  steps=true and requests based on traces
-         * with high sample rates. Can be an index corresponding to any of the input coordinates,
-         * but must contain the first ( 0 ) and last coordinates' indices.
-         * {@link #steps()}
-         * </p>
-         *
-         * @param waypointIndices a list of coordinate indices to be used as waypoints
-         * @return this builder for chaining options together
-         */
-        public Builder waypointIndices(@NonNull List<Integer> waypointIndices) {
-            directionsBuilder.waypointIndices(waypointIndices);
-            return this;
-        }
-        
         /**
          * Optionally set whether to try to return alternative routes. An alternative is classified as a
          * route that is significantly different then the fastest route, but also still reasonably fast.
@@ -577,13 +559,13 @@ public final class NavigationRoute {
         public NavigationRoute build() {
             // Set the default values which the user cannot alter.
             directionsBuilder
-                    .steps(true)
-                    .continueStraight(true)
-                    .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-                    .overview(DirectionsCriteria.OVERVIEW_FULL)
-                    .voiceInstructions(true)
-                    .bannerInstructions(true)
-                    .roundaboutExits(true);
+                .steps(true)
+                .continueStraight(true)
+                .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                .voiceInstructions(true)
+                .bannerInstructions(true)
+                .roundaboutExits(true);
             return new NavigationRoute(directionsBuilder.build());
         }
     }

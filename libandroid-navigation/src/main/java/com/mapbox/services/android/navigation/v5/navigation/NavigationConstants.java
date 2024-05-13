@@ -184,7 +184,7 @@ public final class NavigationConstants {
     /**
      * In seconds, how quickly {@link com.mapbox.services.android.navigation.v5.route.FasterRouteDetector}
      * will tell {@link RouteProcessorBackgroundThread} to check
-     * for a faster {@link com.mapbox.api.directions.v5.models.DirectionsRoute}.
+     * for a faster {@link com.mapbox.services.android.navigation.v5.models.DirectionsRoute}.
      *
      * @since 0.9.0
      */
@@ -192,7 +192,7 @@ public final class NavigationConstants {
 
     /**
      * 125 seconds remaining is considered a low alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -200,7 +200,7 @@ public final class NavigationConstants {
 
     /**
      * 70 seconds remaining is considered a medium alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -208,7 +208,7 @@ public final class NavigationConstants {
 
     /**
      * 15 seconds remaining is considered a high alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.10.1
      */
