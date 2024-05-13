@@ -218,6 +218,12 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
         Point startPoint = lastLocationPoint;
         Point targetPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
+
+        // Location not changed, nothing to process
+        if (startPoint.equals(targetPoint)) {
+            return;
+        }
+
         LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
         valueAnimator.addUpdateListener(animation -> {
             if (System.nanoTime() - lastUpdateTime < minUpdateIntervalNanoSeconds) {
