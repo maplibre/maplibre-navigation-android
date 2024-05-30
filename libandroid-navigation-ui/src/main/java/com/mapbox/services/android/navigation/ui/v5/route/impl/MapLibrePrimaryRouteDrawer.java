@@ -14,13 +14,11 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.location.Location;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
@@ -42,6 +40,8 @@ import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
 import com.mapbox.services.android.navigation.ui.v5.route.PrimaryRouteDrawer;
 import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.turf.TurfConstants;
 import com.mapbox.turf.TurfMeasurement;
@@ -49,8 +49,6 @@ import com.mapbox.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 //TODO: is route-eating the correct term?
 //TODO: check if we also need the processing task
@@ -73,6 +71,16 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
     @Nullable
     protected DirectionsRoute route;
+
+    /**
+     * Route separated into leg LineStrings
+     */
+    protected List<LineString> legLines;
+
+    /**
+     * Route separated into steps, grouped by legs
+     */
+    protected List<List<LineString>> stepLines;
 
     protected Point lastLocationPoint;
 
@@ -97,9 +105,6 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
         });
     }
 
-    /**
-     * @noinspection resource
-     */
     protected void initStyle(Context context, Style mapStyle, @StyleRes int styleResId, @Nullable String belowLayerId) {
         TypedArray typedArray = null;
         try {
@@ -108,13 +113,13 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             // Primary route
             float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
             int routeColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_blue));
+                ContextCompat.getColor(context, R.color.mapbox_navigation_route_blue));
             int routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
+                ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
             int drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
+                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
             int drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
+                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
 
             createLayers(mapStyle, routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor, belowLayerId);
         } finally {
@@ -125,13 +130,13 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
     }
 
     private void createLayers(
-            Style mapStyle,
-            float routeScale,
-            @ColorInt int routeColor,
-            @ColorInt int routeShieldColor,
-            @ColorInt int drivenRouteColor,
-            @ColorInt int drivenRouteShieldColor,
-            String belowLayerId) {
+        Style mapStyle,
+        float routeScale,
+        @ColorInt int routeColor,
+        @ColorInt int routeShieldColor,
+        @ColorInt int drivenRouteColor,
+        @ColorInt int drivenRouteShieldColor,
+        String belowLayerId) {
         LineLayer shieldLineLayer = routeLayerFactory.createPrimaryRouteShieldLayer(routeScale, routeShieldColor, drivenRouteShieldColor);
         MapUtils.addLayerToMap(mapStyle, shieldLineLayer, belowLayerId);
 
@@ -156,9 +161,44 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
     @Override
     public void setRoute(DirectionsRoute route) {
-        this.route = route;
+        // Clear route, and set new route, only if all other data are updated
+        // This prevents the background running `updateRouteProgress` using invalid data
+        this.route = null;
 
-        drawRoute(route);
+        if (route != null) {
+            // Draw full route
+            drawRoute(route, null, null);
+
+            ArrayList<LineString> legLines = new ArrayList<>();
+            ArrayList<List<LineString>> stepLines = new ArrayList<>();
+            if (route.legs() != null) {
+                for (RouteLeg leg : route.legs()) {
+                    ArrayList<Point> legCoordinates = new ArrayList<>();
+                    ArrayList<LineString> legSteps = new ArrayList<>();
+
+                    if (leg.steps() == null) {
+                        continue;
+                    }
+
+                    for (LegStep step : leg.steps()) {
+                        String geometry = step.geometry();
+                        if (geometry != null) {
+                            LineString lineString = LineString.fromPolyline(geometry, Constants.PRECISION_6);
+                            legCoordinates.addAll(lineString.coordinates());
+                            legSteps.add(lineString);
+                        }
+                    }
+
+                    stepLines.add(legSteps);
+                    legLines.add(LineString.fromLngLats(legCoordinates));
+                }
+            }
+
+            this.legLines = legLines;
+            this.stepLines = stepLines;
+
+            this.route = route;
+        }
     }
 
     @Override
@@ -225,9 +265,16 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             return;
         }
 
-        LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
-        LineString animatedSegment = TurfMisc.lineSlice(startPoint, targetPoint, routeLine);
-        double segmentLength = TurfMeasurement.length(animatedSegment, TurfConstants.UNIT_METERS);
+        List<Point> prevStepCoordinates = getPreviousStepCoordinates(routeProgress);
+        List<Point> currentStepCoordinates = stepLines.get(routeProgress.legIndex()).get(routeProgress.currentLegProgress().stepIndex()).coordinates();
+
+        ArrayList<Point> currentSegmentCoordinates = new ArrayList<>();
+        currentSegmentCoordinates.addAll(prevStepCoordinates);
+        currentSegmentCoordinates.addAll(currentStepCoordinates);
+
+        LineString currentSegmentLine = LineString.fromLngLats(currentSegmentCoordinates);
+        LineString animatedSegmentLine = TurfMisc.lineSlice(startPoint, targetPoint, currentSegmentLine);
+        double segmentLength = TurfMeasurement.length(animatedSegmentLine, TurfConstants.UNIT_METERS);
 
         valueAnimator.addUpdateListener(animation -> {
             if (System.nanoTime() - lastUpdateTime < minUpdateIntervalNanoSeconds) {
@@ -239,7 +286,7 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             }
 
             float fraction = animation.getAnimatedFraction();
-            Point animatedPoint = TurfMeasurement.along(animatedSegment, segmentLength * fraction, TurfConstants.UNIT_METERS);
+            Point animatedPoint = TurfMeasurement.along(animatedSegmentLine, segmentLength * fraction, TurfConstants.UNIT_METERS);
             lastLocationPoint = animatedPoint;
 
             drawRoute(route, animatedPoint, routeProgress);
@@ -256,11 +303,12 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (isCanceled || route == null) {
+                if (isCanceled) {
                     return;
                 }
 
-                lastLocationPoint = (Point) TurfMisc.nearestPointOnLine(targetPoint, routeLine.coordinates(), TurfConstants.UNIT_METERS).geometry();
+                lastLocationPoint = targetPoint;
+
                 drawRoute(route, lastLocationPoint, routeProgress);
             }
         });
@@ -285,25 +333,98 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             return;
         }
 
-        LineString routeLine = LineString.fromPolyline(routeGeometry, Constants.PRECISION_6);
-        Point routeLineStartPoint = routeLine.coordinates().get(0);
-        if (location != null && !routeLineStartPoint.equals(location)) {
-            // Route eating enabled and position data is available
-
-            LineString drivenLine = null;
-            if (!routeLineStartPoint.equals(location)) {
-                drivenLine = TurfMisc.lineSlice(routeLineStartPoint, location, routeLine);
-            }
-
-            LineString upcomingLine = TurfMisc.lineSlice(location, routeLine.coordinates().get(routeLine.coordinates().size() - 1), routeLine);
-            drawLineStrings(drivenLine, upcomingLine);
-        } else {
-            // Route eating disabled or position data is missing
-            drawLineStrings(null, routeLine);
+        if (location == null || routeProgress == null) {
+            // Draw full route
+            drawLineStrings(null, LineString.fromPolyline(routeGeometry, Constants.PRECISION_6));
+            return;
         }
+
+        List<Point> currentStepCoordinates = stepLines.get(routeProgress.legIndex())
+            .get(routeProgress.currentLegProgress().stepIndex())
+            .coordinates();
+
+        // Driven path
+        ArrayList<Point> drivenLineCoordinates = new ArrayList<>();
+        // Draw previous legs
+        if (routeProgress.legIndex() > 0) {
+            for (int i = 0; i < routeProgress.legIndex(); i++) {
+                drivenLineCoordinates.addAll(legLines.get(i).coordinates());
+            }
+        }
+
+        // Draw previous steps
+        if (routeProgress.currentLegProgress().stepIndex() > 0) {
+            for (int i = 0; i < routeProgress.currentLegProgress().stepIndex(); i++) {
+                drivenLineCoordinates.addAll(stepLines.get(routeProgress.legIndex()).get(i).coordinates());
+            }
+        }
+
+        // Draw current step
+        if (!currentStepCoordinates.get(0).equals(location)) {
+            LineString drivenCurrentStepLine = TurfMisc.lineSlice(
+                currentStepCoordinates.get(0),
+                location,
+                LineString.fromLngLats(currentStepCoordinates)
+            );
+
+            drivenLineCoordinates.addAll(drivenCurrentStepLine.coordinates());
+        }
+
+        // Upcoming path
+        ArrayList<Point> firstSegmentCoordinates = new ArrayList<>();
+        // Include previous step to have smooth transitions
+        firstSegmentCoordinates.addAll(getPreviousStepCoordinates(routeProgress));
+        firstSegmentCoordinates.addAll(currentStepCoordinates);
+
+        // Draw current step
+        LineString drivenCurrentStepLine;
+        Point firstSegmentEndPoint = firstSegmentCoordinates.get(firstSegmentCoordinates.size() - 1);
+        if (!location.equals(firstSegmentCoordinates.get(0)) && !location.equals(firstSegmentEndPoint)) {
+            drivenCurrentStepLine = TurfMisc.lineSlice(
+                location,
+                firstSegmentEndPoint,
+                LineString.fromLngLats(firstSegmentCoordinates)
+            );
+        } else {
+            drivenCurrentStepLine = LineString.fromLngLats(firstSegmentCoordinates);
+        }
+
+        ArrayList<Point> upcomingLineCoordinates = new ArrayList<>(drivenCurrentStepLine.coordinates());
+
+        // Draw upcoming steps
+        List<LineString> currentLegSteps = stepLines.get(routeProgress.legIndex());
+        for (int i = routeProgress.currentLegProgress().stepIndex() + 1; i < currentLegSteps.size(); i++) {
+            upcomingLineCoordinates.addAll(currentLegSteps.get(i).coordinates());
+        }
+
+        // Draw upcoming legs
+        if (routeProgress.legIndex() < legLines.size()) {
+            for (int i = routeProgress.legIndex() + 1; i < legLines.size(); i++) {
+                upcomingLineCoordinates.addAll(legLines.get(i).coordinates());
+            }
+        }
+
+        drawLineStrings(
+            LineString.fromLngLats(drivenLineCoordinates),
+            LineString.fromLngLats(upcomingLineCoordinates)
+        );
     }
 
-    private void drawLineStrings(LineString drivenLine, LineString upcomingLine) {
+    @NonNull
+    private List<Point> getPreviousStepCoordinates(@NonNull RouteProgress routeProgress) {
+        List<Point> prevStepCoordinates = new ArrayList<>();
+        if (routeProgress.currentLegProgress().stepIndex() > 0) {
+            List<LineString> steps = stepLines.get(routeProgress.legIndex());
+            prevStepCoordinates = steps.get(routeProgress.currentLegProgress().stepIndex() - 1).coordinates();
+        } else if (routeProgress.legIndex() > 0) {
+            List<LineString> steps = stepLines.get(routeProgress.legIndex() - 1);
+            prevStepCoordinates = steps.get(steps.size() - 1).coordinates();
+        }
+
+        return prevStepCoordinates;
+    }
+
+    private void drawLineStrings(@Nullable LineString drivenLine, LineString upcomingLine) {
         ArrayList<Feature> routeLineFeatures = new ArrayList<>();
 
         if (drivenLine != null) {
