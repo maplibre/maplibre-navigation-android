@@ -134,7 +134,7 @@ public class MapRouteLayerFactory {
                                                   int drivenRouteModerateColor,
                                                   int drivenRouteHeavyColor,
                                                   int drivenRouteSevereColor) {
-        return new LineLayer(PRIMARY_ROUTE_CONGESTION_LAYER_ID, PRIMARY_ROUTE_CONGESTION_SOURCE_ID)
+        return new LineLayer(PRIMARY_ROUTE_CONGESTION_LAYER_ID, PRIMARY_ROUTE_SOURCE_ID)
                 .withProperties(
                         lineJoin(
                                 Property.LINE_JOIN_ROUND
