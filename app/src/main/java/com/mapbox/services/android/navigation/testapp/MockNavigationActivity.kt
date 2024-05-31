@@ -148,19 +148,19 @@ class MockNavigationActivity :
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
-        }
 
-        navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
-        navigationMapRoute?.setRouteEatingEnabled(true)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            navigationMapRoute?.setRouteEatingEnabled(true)
 
-        mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
+            mapboxMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
 
-        newOrigin()
+            newOrigin()
+            }
     }
 
     @SuppressWarnings("MissingPermission")
