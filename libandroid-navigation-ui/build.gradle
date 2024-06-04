@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
+  namespace 'com.mapbox.services.android.navigation.ui.v5'
+
   compileSdkVersion androidVersions.compileSdkVersion
   buildToolsVersion androidVersions.buildToolsVersion
 
