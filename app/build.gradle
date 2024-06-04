@@ -75,17 +75,13 @@ dependencies {
     implementation dependenciesList.androidxRecyclerView
     implementation dependenciesList.androidxConstraintLayout
     implementation dependenciesList.androidxCardView
+    implementation dependenciesList.androidxAppcompat
+    implementation dependenciesList.androidxConstraintLayout
 
     implementation dependenciesList.gmsLocation
 
     // Logging
     implementation dependenciesList.timber
-
-    // Butter Knife
-    implementation dependenciesList.butterknife
-    annotationProcessor dependenciesList.butterknifeProcessor
-    implementation dependenciesList.androidxAppcompat
-    implementation dependenciesList.androidxConstraintLayout
 
     // Leak Canary
     debugImplementation dependenciesList.leakCanaryDebug
