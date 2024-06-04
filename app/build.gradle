@@ -74,8 +74,6 @@ dependencies {
     implementation dependenciesList.androidxRecyclerView
     implementation dependenciesList.androidxConstraintLayout
     implementation dependenciesList.androidxCardView
-    implementation dependenciesList.androidxAppcompat
-    implementation dependenciesList.androidxConstraintLayout
 
     implementation dependenciesList.gmsLocation
 
