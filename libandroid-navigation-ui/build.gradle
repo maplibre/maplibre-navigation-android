@@ -1,5 +1,11 @@
 apply plugin: 'com.android.library'
 
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
+}
+
 android {
   namespace 'com.mapbox.services.android.navigation.ui.v5'
 
