@@ -4,6 +4,7 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+- Update dependencies, build tools & configurations
 - Use last snapped bearing if no previous step is available
 - Fix crash on snap-to-route engine, caused by legs with only single step
 - Android manifest cleanup for `libnavigation-android`
