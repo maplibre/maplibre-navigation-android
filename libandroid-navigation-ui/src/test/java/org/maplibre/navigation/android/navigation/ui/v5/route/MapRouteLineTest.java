@@ -23,6 +23,7 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
+import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.FeatureCollection;
 import org.maplibre.geojson.LineString;
@@ -32,7 +33,6 @@ import org.maplibre.android.style.layers.SymbolLayer;
 import org.maplibre.android.style.sources.GeoJsonOptions;
 import org.maplibre.android.style.sources.GeoJsonSource;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
-import com.mapbox.services.android.navigation.ui.v5.R;
 
 import org.junit.Before;
 import org.junit.Test;
