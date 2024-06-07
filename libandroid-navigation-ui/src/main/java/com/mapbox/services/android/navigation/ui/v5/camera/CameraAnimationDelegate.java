@@ -1,18 +1,18 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.camera.CameraUpdate;
+import org.maplibre.android.location.modes.CameraMode;
+import org.maplibre.android.maps.MapLibreMap;
 
 class CameraAnimationDelegate {
 
-  private final MapboxMap mapboxMap;
+  private final MapLibreMap mapboxMap;
 
-  CameraAnimationDelegate(MapboxMap mapboxMap) {
+  CameraAnimationDelegate(MapLibreMap mapboxMap) {
     this.mapboxMap = mapboxMap;
   }
 
-  void render(NavigationCameraUpdate update, int durationMs, MapboxMap.CancelableCallback callback) {
+  void render(NavigationCameraUpdate update, int durationMs, MapLibreMap.CancelableCallback callback) {
     CameraUpdateMode mode = update.getMode();
     CameraUpdate cameraUpdate = update.getCameraUpdate();
     if (mode == CameraUpdateMode.OVERRIDE) {

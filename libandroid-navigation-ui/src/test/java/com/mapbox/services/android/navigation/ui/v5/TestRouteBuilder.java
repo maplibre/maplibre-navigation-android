@@ -12,7 +12,7 @@ import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 import java.io.IOException;
 import java.io.InputStream;

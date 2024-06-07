@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.v5.navigation.camera;
 
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
 package com.mapbox.services.android.navigation.ui.v5;
 
-import com.mapbox.mapboxsdk.Mapbox;
+import org.maplibre.android.MapLibre;
 
 class MapConnectivityController {
 
   void assign(Boolean state) {
-    Mapbox.setConnected(state);
+    MapLibre.setConnected(state);
   }
 }

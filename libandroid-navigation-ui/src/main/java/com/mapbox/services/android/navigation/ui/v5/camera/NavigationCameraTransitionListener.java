@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.location.OnLocationCameraTransitionListener;
+import org.maplibre.android.location.OnLocationCameraTransitionListener;
 
 class NavigationCameraTransitionListener implements OnLocationCameraTransitionListener {
 

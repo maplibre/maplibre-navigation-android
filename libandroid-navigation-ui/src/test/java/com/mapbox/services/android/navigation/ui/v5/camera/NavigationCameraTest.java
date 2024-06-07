@@ -1,11 +1,11 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.OnLocationCameraTransitionListener;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.camera.CameraPosition;
+import org.maplibre.android.camera.CameraUpdate;
+import org.maplibre.android.location.LocationComponent;
+import org.maplibre.android.location.OnLocationCameraTransitionListener;
+import org.maplibre.android.location.modes.CameraMode;
+import org.maplibre.android.maps.MapLibreMap;
 import com.mapbox.services.android.navigation.ui.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.camera.RouteInformation;
@@ -86,7 +86,7 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void onResetCamera_dynamicCameraIsReset() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(mock(CameraPosition.class));
     MapboxNavigation navigation = mock(MapboxNavigation.class);
     DynamicCamera dynamicCamera = mock(DynamicCamera.class);
@@ -123,12 +123,12 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void update_defaultIsIgnoredWhileTracking() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     when(locationComponent.getCameraMode()).thenReturn(CameraMode.TRACKING_GPS);
     when(mapboxMap.getLocationComponent()).thenReturn(locationComponent);
     CameraUpdate cameraUpdate = mock(CameraUpdate.class);
-    MapboxMap.CancelableCallback callback = mock(MapboxMap.CancelableCallback.class);
+    MapLibreMap.CancelableCallback callback = mock(MapLibreMap.CancelableCallback.class);
     NavigationCameraUpdate navigationCameraUpdate = new NavigationCameraUpdate(cameraUpdate);
     NavigationCamera camera = buildCamera(mapboxMap);
 
@@ -139,12 +139,12 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void update_defaultIsAcceptedWithNoTracking() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     when(locationComponent.getCameraMode()).thenReturn(CameraMode.NONE);
     when(mapboxMap.getLocationComponent()).thenReturn(locationComponent);
     CameraUpdate cameraUpdate = mock(CameraUpdate.class);
-    MapboxMap.CancelableCallback callback = mock(MapboxMap.CancelableCallback.class);
+    MapLibreMap.CancelableCallback callback = mock(MapLibreMap.CancelableCallback.class);
     NavigationCameraUpdate navigationCameraUpdate = new NavigationCameraUpdate(cameraUpdate);
     NavigationCamera camera = buildCamera(mapboxMap);
 
@@ -155,12 +155,12 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void update_overrideIsAcceptedWhileTracking() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     when(locationComponent.getCameraMode()).thenReturn(CameraMode.TRACKING_GPS);
     when(mapboxMap.getLocationComponent()).thenReturn(locationComponent);
     CameraUpdate cameraUpdate = mock(CameraUpdate.class);
-    MapboxMap.CancelableCallback callback = mock(MapboxMap.CancelableCallback.class);
+    MapLibreMap.CancelableCallback callback = mock(MapLibreMap.CancelableCallback.class);
     NavigationCameraUpdate navigationCameraUpdate = new NavigationCameraUpdate(cameraUpdate);
     navigationCameraUpdate.setMode(CameraUpdateMode.OVERRIDE);
     NavigationCamera camera = buildCamera(mapboxMap);
@@ -172,12 +172,12 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void update_overrideSetsLocationComponentCameraModeNone() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     when(locationComponent.getCameraMode()).thenReturn(CameraMode.TRACKING_GPS);
     when(mapboxMap.getLocationComponent()).thenReturn(locationComponent);
     CameraUpdate cameraUpdate = mock(CameraUpdate.class);
-    MapboxMap.CancelableCallback callback = mock(MapboxMap.CancelableCallback.class);
+    MapLibreMap.CancelableCallback callback = mock(MapLibreMap.CancelableCallback.class);
     NavigationCameraUpdate navigationCameraUpdate = new NavigationCameraUpdate(cameraUpdate);
     navigationCameraUpdate.setMode(CameraUpdateMode.OVERRIDE);
     NavigationCamera camera = buildCamera(mapboxMap);
@@ -188,23 +188,23 @@ public class NavigationCameraTest extends BaseTest {
   }
 
   private NavigationCamera buildCamera() {
-    return new NavigationCamera(mock(MapboxMap.class), mock(MapboxNavigation.class), mock(LocationComponent.class));
+    return new NavigationCamera(mock(MapLibreMap.class), mock(MapboxNavigation.class), mock(LocationComponent.class));
   }
 
-  private NavigationCamera buildCamera(MapboxMap mapboxMap) {
+  private NavigationCamera buildCamera(MapLibreMap mapboxMap) {
     return new NavigationCamera(mapboxMap, mock(MapboxNavigation.class), mock(LocationComponent.class));
   }
 
   private NavigationCamera buildCamera(LocationComponent locationComponent) {
-    return new NavigationCamera(mock(MapboxMap.class), mock(MapboxNavigation.class), locationComponent);
+    return new NavigationCamera(mock(MapLibreMap.class), mock(MapboxNavigation.class), locationComponent);
   }
 
   private NavigationCamera buildCamera(MapboxNavigation navigation, ProgressChangeListener listener) {
-    return new NavigationCamera(mock(MapboxMap.class), navigation, listener,
+    return new NavigationCamera(mock(MapLibreMap.class), navigation, listener,
       mock(LocationComponent.class), mock(RouteInformation.class));
   }
 
-  private NavigationCamera buildCamera(MapboxMap mapboxMap, MapboxNavigation navigation,
+  private NavigationCamera buildCamera(MapLibreMap mapboxMap, MapboxNavigation navigation,
                                        RouteInformation routeInformation) {
     return new NavigationCamera(mapboxMap, navigation, mock(ProgressChangeListener.class),
       mock(LocationComponent.class), routeInformation);

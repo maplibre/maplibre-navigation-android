@@ -15,7 +15,7 @@ import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.services.android.navigation.v5.models.VoiceInstructions;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.milestone.BannerInstructionMilestone;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;

@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.mapbox.mapboxsdk.location.engine.LocationEngine;
-import com.mapbox.mapboxsdk.location.engine.LocationEngineProxy;
-import com.mapbox.mapboxsdk.location.engine.MapboxFusedLocationEngineImpl;
+import org.maplibre.android.location.engine.LocationEngine;
+import org.maplibre.android.location.engine.LocationEngineProxy;
+import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl;
 
 
 /**
@@ -61,6 +61,6 @@ public final class LocationEngineProvider {
 
     private static LocationEngine getLocationEngine(Context context, boolean isGoogle) {
         return isGoogle ? new LocationEngineProxy<>(new GoogleLocationEngineImpl(context.getApplicationContext())) :
-                new LocationEngineProxy<>(new MapboxFusedLocationEngineImpl(context.getApplicationContext()));
+                new LocationEngineProxy<>(new MapLibreFusedLocationEngineImpl(context.getApplicationContext()));
     }
 }

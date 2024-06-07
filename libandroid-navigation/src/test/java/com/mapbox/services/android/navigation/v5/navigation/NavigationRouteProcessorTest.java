@@ -3,9 +3,9 @@ package com.mapbox.services.android.navigation.v5.navigation;
 import android.content.Context;
 import android.location.Location;
 
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.utils.PolylineUtils;
-import com.mapbox.mapboxsdk.location.engine.LocationEngine;
+import org.maplibre.geojson.Point;
+import org.maplibre.geojson.utils.PolylineUtils;
+import org.maplibre.android.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;

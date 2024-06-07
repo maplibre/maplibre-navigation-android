@@ -5,8 +5,8 @@ import android.location.Location;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
 import java.util.ArrayList;

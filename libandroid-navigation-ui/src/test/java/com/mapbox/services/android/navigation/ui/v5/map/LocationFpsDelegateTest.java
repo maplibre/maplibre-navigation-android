@@ -1,8 +1,8 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.camera.CameraPosition;
+import org.maplibre.android.location.LocationComponent;
+import org.maplibre.android.maps.MapLibreMap;
 
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom16() {
     double zoom = 16d;
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
@@ -31,7 +31,7 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom14() {
     double zoom = 14d;
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
@@ -44,7 +44,7 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom10() {
     double zoom = 10d;
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
@@ -57,7 +57,7 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSet5() {
     double zoom = 5d;
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
@@ -69,7 +69,7 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void onStart_idleListenerAdded() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
 
@@ -80,7 +80,7 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void onStop_idleListenerRemoved() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
 
@@ -91,7 +91,7 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void updateEnabled_falseResetsToMax() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
 
@@ -102,7 +102,7 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void isEnabled_returnsFalseWhenSet() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
     LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
 

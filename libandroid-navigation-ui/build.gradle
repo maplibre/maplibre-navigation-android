@@ -66,13 +66,15 @@ dependencies {
   api project(':libandroid-navigation')
 
   // Maplibre Maps SDK
-  api dependenciesList.mapLibreServices
   api dependenciesList.mapLibreTurf
   api dependenciesList.mapLibreAnnotations
   implementation(dependenciesList.mapLibre){
     exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
     exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
   }
+
+  // Mapbox SDKs (needed for requests)
+  api dependenciesList.mapboxGeoJson
 
   // Support libraries
   implementation dependenciesList.materialDesign

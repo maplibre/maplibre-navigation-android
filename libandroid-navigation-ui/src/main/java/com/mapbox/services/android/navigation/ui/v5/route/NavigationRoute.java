@@ -6,23 +6,27 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.geojson.Point;
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 import com.mapbox.services.android.navigation.v5.utils.TextUtils;
 
+import com.mapbox.geojson.Point;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Interceptor;
+import okhttp3.Request;
+import okio.Timeout;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -77,7 +81,68 @@ public final class NavigationRoute {
      * @since 0.5.0
      */
     public void getRoute(Callback<DirectionsResponse> callback) {
-        mapboxDirections.enqueueCall(callback);
+        mapboxDirections.enqueueCall(toMapboxCallback(callback));
+    }
+
+    private Callback<com.mapbox.api.directions.v5.models.DirectionsResponse> toMapboxCallback(Callback<DirectionsResponse> callback) {
+        return new Callback<>() {
+            @Override
+            public void onResponse(Call<com.mapbox.api.directions.v5.models.DirectionsResponse> call, Response<com.mapbox.api.directions.v5.models.DirectionsResponse> response) {
+                callback.onResponse(toMapLibreCall(call), toMapLibreResponse(response));
+            }
+
+            @Override
+            public void onFailure(Call<com.mapbox.api.directions.v5.models.DirectionsResponse> call, Throwable t) {
+                callback.onFailure(toMapLibreCall(call), t);
+            }
+        };
+    }
+
+    private Response<DirectionsResponse> toMapLibreResponse(Response<com.mapbox.api.directions.v5.models.DirectionsResponse> response) {
+        if (response.isSuccessful()) {
+           return Response.success(response.code(), toMapLibreDirectionsResponse(response.body()));
+        } else {
+            return Response.error(response.errorBody(), response.raw());
+        }
+    }
+
+    private Call<DirectionsResponse> toMapLibreCall(Call<com.mapbox.api.directions.v5.models.DirectionsResponse> call) {
+        return new Call<>() {
+            @Override
+            public Response<DirectionsResponse> execute() throws IOException {
+                return toMapLibreResponse(call.execute());
+            }
+
+            @Override
+            public void enqueue(Callback<DirectionsResponse> callback) {
+                call.enqueue(toMapboxCallback(callback));
+            }
+
+            @Override
+            public boolean isExecuted() {
+                return call.isExecuted();
+            }
+
+            @Override
+            public void cancel() {
+                call.cancel();
+            }
+
+            @Override
+            public boolean isCanceled() {
+                return call.isCanceled();
+            }
+
+            @Override
+            public Call<DirectionsResponse> clone() {
+                return toMapLibreCall(call.clone());
+            }
+
+            @Override
+            public Request request() {
+                return call.request();
+            }
+        };
     }
 
     /**
@@ -88,7 +153,7 @@ public final class NavigationRoute {
      * @since 1.0.0
      */
     public Call<DirectionsResponse> getCall() {
-        return mapboxDirections.cloneCall();
+        return toMapLibreCall(mapboxDirections.cloneCall());
     }
 
     public void cancelCall() {
@@ -154,8 +219,8 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder origin(@NonNull Point origin) {
-            origin(origin, null, null);
+        public Builder origin(@NonNull org.maplibre.geojson.Point origin) {
+            origin(toMapboxPoint(origin), null, null);
             return this;
         }
 
@@ -172,7 +237,7 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder origin(@NonNull Point origin, @Nullable Double angle,
+        public Builder origin(@NonNull com.mapbox.geojson.Point origin, @Nullable Double angle,
                               @Nullable Double tolerance) {
             directionsBuilder.origin(origin);
             directionsBuilder.addBearing(angle, tolerance);
@@ -188,8 +253,8 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.50
          */
-        public Builder destination(@NonNull Point destination) {
-            destination(destination, null, null);
+        public Builder destination(@NonNull org.maplibre.geojson.Point destination) {
+            destination(toMapboxPoint(destination), null, null);
             return this;
         }
 
@@ -225,8 +290,8 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder addWaypoint(@NonNull Point waypoint) {
-            directionsBuilder.addWaypoint(waypoint);
+        public Builder addWaypoint(@NonNull org.maplibre.geojson.Point waypoint) {
+            directionsBuilder.addWaypoint(toMapboxPoint(waypoint));
             directionsBuilder.addBearing(null, null);
             return this;
         }
@@ -271,7 +336,7 @@ public final class NavigationRoute {
             directionsBuilder.waypointIndices(waypointIndices);
             return this;
         }
-        
+
         /**
          * Optionally set whether to try to return alternative routes. An alternative is classified as a
          * route that is significantly different then the fastest route, but also still reasonably fast.
@@ -586,5 +651,17 @@ public final class NavigationRoute {
                     .roundaboutExits(true);
             return new NavigationRoute(directionsBuilder.build());
         }
+    }
+
+    private static com.mapbox.services.android.navigation.v5.models.DirectionsResponse toMapLibreDirectionsResponse(com.mapbox.api.directions.v5.models.DirectionsResponse directionsResponse) {
+        return com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(directionsResponse.toJson());
+    }
+
+    private static com.mapbox.api.directions.v5.models.DirectionsResponse toMapboxDirectionsResponse(com.mapbox.services.android.navigation.v5.models.DirectionsResponse directionsResponse) {
+        return com.mapbox.api.directions.v5.models.DirectionsResponse.fromJson(directionsResponse.toJson());
+    }
+
+    private static Point toMapboxPoint(org.maplibre.geojson.Point point) {
+        return Point.fromLngLat(point.longitude(), point.latitude());
     }
 }

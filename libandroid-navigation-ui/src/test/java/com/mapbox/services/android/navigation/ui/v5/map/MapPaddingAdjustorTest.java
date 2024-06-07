@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.maps.MapLibreMap;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void adjustLocationIconWith_customPaddingIsSet() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
@@ -26,7 +26,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void isUsingDefault_falseAfterCustomPaddingIsSet() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
@@ -38,7 +38,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void isUsingDefault_trueWithoutCustomPadding() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
 
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
@@ -48,7 +48,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void updatePaddingWithZero_updatesMapToZeroPadding() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
 
@@ -59,7 +59,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void updatePaddingWithZero_retainsCustomPadding() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 350, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
@@ -73,7 +73,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void updatePaddingWithDefault_defaultIsRestoredAfterCustom() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
@@ -86,7 +86,7 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void retrieveCurrentPadding_returnsCurrentMapPadding() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
 

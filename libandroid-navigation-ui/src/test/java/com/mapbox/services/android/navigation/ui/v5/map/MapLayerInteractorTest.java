@@ -1,21 +1,21 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.HeatmapLayer;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyValue;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.CircleLayer;
+import org.maplibre.android.style.layers.HeatmapLayer;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.layers.Property;
+import org.maplibre.android.style.layers.PropertyValue;
+import org.maplibre.android.style.layers.SymbolLayer;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +31,7 @@ public class MapLayerInteractorTest {
     LineLayer anySymbolOrLineLayer = mock(LineLayer.class);
     when(anySymbolOrLineLayer.getSourceLayer()).thenReturn("any");
     List<Layer> layers = buildLayerListWith(anySymbolOrLineLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);
@@ -46,7 +46,7 @@ public class MapLayerInteractorTest {
     SymbolLayer anySymbolOrLineLayer = mock(SymbolLayer.class);
     when(anySymbolOrLineLayer.getSourceLayer()).thenReturn("any");
     List<Layer> layers = buildLayerListWith(anySymbolOrLineLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);
@@ -60,7 +60,7 @@ public class MapLayerInteractorTest {
   public void updateLayerVisibility_visibilityIsNotSetIfInvalidLayer() {
     CircleLayer invalidLayer = mock(CircleLayer.class);
     List<Layer> layers = buildLayerListWith(invalidLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);
@@ -76,7 +76,7 @@ public class MapLayerInteractorTest {
     when(anySymbolOrLineLayer.getSourceLayer()).thenReturn("any");
     when(anySymbolOrLineLayer.getVisibility()).thenReturn(visibility(Property.VISIBLE));
     List<Layer> layers = buildLayerListWith(anySymbolOrLineLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);
@@ -92,7 +92,7 @@ public class MapLayerInteractorTest {
     when(anySymbolOrLineLayer.getSourceLayer()).thenReturn("any");
     when(anySymbolOrLineLayer.getVisibility()).thenReturn(visibility(Property.NONE));
     List<Layer> layers = buildLayerListWith(anySymbolOrLineLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);
@@ -106,7 +106,7 @@ public class MapLayerInteractorTest {
   public void isLayerVisible_visibleReturnsFalseIfInvalidLayer() {
     HeatmapLayer invalidLayer = mock(HeatmapLayer.class);
     List<Layer> layers = buildLayerListWith(invalidLayer);
-    MapboxMap map = mock(MapboxMap.class);
+    MapLibreMap map = mock(MapLibreMap.class);
     when(map.getStyle()).thenReturn(mock(Style.class));
     when(map.getStyle().getLayers()).thenReturn(layers);
     MapLayerInteractor layerInteractor = new MapLayerInteractor(map);

@@ -13,7 +13,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import org.maplibre.android.utils.BitmapUtils;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationConstants;
 
 /**

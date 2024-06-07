@@ -3,21 +3,21 @@ package com.mapbox.services.android.navigation.ui.v5.route;
 import androidx.annotation.NonNull;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.geometry.LatLng;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-class MapRouteClickListener implements MapboxMap.OnMapClickListener {
+class MapRouteClickListener implements MapLibreMap.OnMapClickListener {
 
   private final MapRouteLine routeLine;
 

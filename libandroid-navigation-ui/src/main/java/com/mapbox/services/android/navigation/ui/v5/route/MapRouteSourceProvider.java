@@ -1,8 +1,8 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
 
 class MapRouteSourceProvider {
 

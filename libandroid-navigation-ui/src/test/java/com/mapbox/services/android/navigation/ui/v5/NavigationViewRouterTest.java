@@ -13,18 +13,18 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute;
 import com.mapbox.services.android.navigation.v5.models.DirectionsAdapterFactory;
 import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.DirectionsWaypoint;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import org.junit.Test;
+import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute;
 
 import java.io.IOException;
 import java.util.ArrayList;

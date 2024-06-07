@@ -1,10 +1,10 @@
 package com.mapbox.services.android.navigation.v5.navigation.camera;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.utils.Constants;
-import com.mapbox.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;
 import java.util.Collections;

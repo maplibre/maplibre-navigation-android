@@ -2,16 +2,16 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 
 import android.graphics.PointF;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.geojson.Feature;
+import org.maplibre.android.maps.MapLibreMap;
 
 import java.util.List;
 
 class WaynameFeatureFinder {
 
-  private MapboxMap mapboxMap;
+  private MapLibreMap mapboxMap;
 
-  WaynameFeatureFinder(MapboxMap mapboxMap) {
+  WaynameFeatureFinder(MapLibreMap mapboxMap) {
     this.mapboxMap = mapboxMap;
   }
 

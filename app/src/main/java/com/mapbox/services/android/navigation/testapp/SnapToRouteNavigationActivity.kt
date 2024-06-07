@@ -3,20 +3,19 @@ package com.mapbox.services.android.navigation.testapp
 import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.OnLocationCameraTransitionListener
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.geojson.Point
+import org.maplibre.android.location.LocationComponent
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.OnLocationCameraTransitionListener
+import org.maplibre.android.location.modes.CameraMode
+import org.maplibre.android.location.modes.RenderMode
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.OnMapReadyCallback
+import org.maplibre.android.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivitySnapToRouteNavigationBinding
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
-import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
@@ -42,7 +41,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     ProgressChangeListener {
 
     private lateinit var binding: ActivitySnapToRouteNavigationBinding
-    private lateinit var mapboxMap: MapboxMap
+    private lateinit var mapboxMap: MapLibreMap
     private var locationEngine: ReplayRouteLocationEngine = ReplayRouteLocationEngine()
     private lateinit var navigation: MapboxNavigation
     private var route: DirectionsRoute? = null
@@ -75,7 +74,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private var locationComponent: LocationComponent? = null
 
-    override fun onMapReady(mapboxMap: MapboxMap) {
+    override fun onMapReady(mapboxMap: MapLibreMap) {
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)

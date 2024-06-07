@@ -2,10 +2,10 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.location.LocationComponent;
+import org.maplibre.android.maps.MapLibreMap;
 
-class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
+class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
 
   private static final int ZOOM_LEVEL_FIVE = 5;
   private static final int ZOOM_LEVEL_TEN = 10;
@@ -18,12 +18,12 @@ class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
   private static final int MAX_ANIMATION_FPS_FIFTEEN = 15;
   private static final int MAX_ANIMATION_FPS_TWENTY_FIVE = 25;
   private static final int MAX_ANIMATION_FPS = Integer.MAX_VALUE;
-  private final MapboxMap mapboxMap;
+  private final MapLibreMap mapboxMap;
   private final LocationComponent locationComponent;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 
-  LocationFpsDelegate(@NonNull MapboxMap mapboxMap, @NonNull LocationComponent locationComponent) {
+  LocationFpsDelegate(@NonNull MapLibreMap mapboxMap, @NonNull LocationComponent locationComponent) {
     this.mapboxMap = mapboxMap;
     this.locationComponent = locationComponent;
     mapboxMap.addOnCameraIdleListener(this);

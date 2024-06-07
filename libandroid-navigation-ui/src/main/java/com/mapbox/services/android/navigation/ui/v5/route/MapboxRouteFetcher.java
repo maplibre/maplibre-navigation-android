@@ -17,6 +17,7 @@ import com.mapbox.services.android.navigation.v5.utils.RouteUtils;
 import com.mapbox.services.android.navigation.v5.utils.TextUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
                 .origin(origin, bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<Point> remainingWaypoints = routeUtils.calculateRemainingWaypoints(progress);
+        List<Point> remainingWaypoints = toMapboxPointList(routeUtils.calculateRemainingWaypoints(progress));
         if (remainingWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;
@@ -94,7 +95,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
 
     private void addDestination(List<Point> remainingWaypoints, NavigationRoute.Builder builder) {
         if (!remainingWaypoints.isEmpty()) {
-            builder.destination(retrieveDestinationWaypoint(remainingWaypoints));
+            builder.destination(toMapLibrePoint(retrieveDestinationWaypoint(remainingWaypoints)));
         }
     }
 
@@ -106,7 +107,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
     private void addWaypoints(List<Point> remainingCoordinates, NavigationRoute.Builder builder) {
         if (!remainingCoordinates.isEmpty()) {
             for (Point coordinate : remainingCoordinates) {
-                builder.addWaypoint(coordinate);
+                builder.addWaypoint(toMapLibrePoint(coordinate));
             }
         }
     }
@@ -167,10 +168,10 @@ public class MapboxRouteFetcher extends RouteFetcher {
         return context == null || location == null || routeProgress == null;
     }
 
-    private Callback<com.mapbox.api.directions.v5.models.DirectionsResponse> directionsResponseCallback = new Callback<com.mapbox.api.directions.v5.models.DirectionsResponse>() {
+    private Callback<DirectionsResponse> directionsResponseCallback = new Callback<>() {
         @Override
-        public void onResponse(@NonNull Call<com.mapbox.api.directions.v5.models.DirectionsResponse> call,
-                @NonNull Response<com.mapbox.api.directions.v5.models.DirectionsResponse> response) {
+        public void onResponse(@NonNull Call<DirectionsResponse> call,
+                @NonNull Response<DirectionsResponse> response) {
             if (!response.isSuccessful()) {
                 return;
             }
@@ -184,7 +185,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
         }
 
         @Override
-        public void onFailure(@NonNull Call<com.mapbox.api.directions.v5.models.DirectionsResponse> call, @NonNull Throwable throwable) {
+        public void onFailure(@NonNull Call<DirectionsResponse> call, @NonNull Throwable throwable) {
             updateListenersWithError(throwable);
         }
     };
@@ -199,5 +200,29 @@ public class MapboxRouteFetcher extends RouteFetcher {
         for (RouteListener listener : routeListeners) {
             listener.onErrorReceived(throwable);
         }
+    }
+
+    private List<Point> toMapboxPointList(List<org.maplibre.geojson.Point> pointList) {
+        List<Point> mapboxPointList = new ArrayList<>();
+        for (org.maplibre.geojson.Point point : pointList) {
+            mapboxPointList.add(toMapboxPoint(point));
+        }
+        return mapboxPointList;
+    }
+
+    private Point toMapboxPoint(org.maplibre.geojson.Point point) {
+        return Point.fromLngLat(point.longitude(), point.latitude());
+    }
+
+    private List<org.maplibre.geojson.Point> toMapLibrePointList(List<Point> pointList) {
+        List<org.maplibre.geojson.Point> mapboxPointList = new ArrayList<>();
+        for (Point point : pointList) {
+            mapboxPointList.add(toMapLibrePoint(point));
+        }
+        return mapboxPointList;
+    }
+
+    private org.maplibre.geojson.Point toMapLibrePoint(Point point) {
+        return org.maplibre.geojson.Point.fromLngLat(point.longitude(), point.latitude());
     }
 }

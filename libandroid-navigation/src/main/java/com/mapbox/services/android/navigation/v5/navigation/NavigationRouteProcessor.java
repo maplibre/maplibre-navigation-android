@@ -7,7 +7,7 @@ import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.models.StepIntersection;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.offroute.OffRoute;
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteCallback;
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteDetector;

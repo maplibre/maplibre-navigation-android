@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.models.StepIntersection;

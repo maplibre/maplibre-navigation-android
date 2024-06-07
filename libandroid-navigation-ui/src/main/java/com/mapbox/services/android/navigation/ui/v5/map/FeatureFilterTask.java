@@ -3,8 +3,8 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 import android.location.Location;
 import android.os.AsyncTask;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.Point;
 
 import java.util.List;
 

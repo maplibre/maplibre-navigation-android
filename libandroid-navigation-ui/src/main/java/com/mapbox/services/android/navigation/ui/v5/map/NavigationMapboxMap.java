@@ -13,21 +13,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
-import com.mapbox.mapboxsdk.location.LocationComponentOptions;
-import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.mapbox.mapboxsdk.style.sources.Source;
-import com.mapbox.mapboxsdk.style.sources.VectorSource;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.geometry.LatLng;
+import org.maplibre.android.location.LocationComponent;
+import org.maplibre.android.location.LocationComponentActivationOptions;
+import org.maplibre.android.location.LocationComponentOptions;
+import org.maplibre.android.location.OnCameraTrackingChangedListener;
+import org.maplibre.android.location.modes.RenderMode;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.OnMapReadyCallback;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.plugins.annotation.SymbolManager;
+import org.maplibre.android.plugins.annotation.SymbolOptions;
+import org.maplibre.android.style.sources.Source;
+import org.maplibre.android.style.sources.VectorSource;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.ui.v5.ThemeSwitcher;
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera;
@@ -42,7 +42,7 @@ import static com.mapbox.services.android.navigation.ui.v5.map.NavigationSymbolM
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 /**
- * Wrapper class for {@link MapboxMap}.
+ * Wrapper class for {@link MapLibreMap}.
  * <p>
  * This class initializes various map-related components and plugins that are
  * useful for providing a navigation-driven map experience.
@@ -67,7 +67,7 @@ public class NavigationMapboxMap {
     = new MapWayNameChangedListener(onWayNameChangedListeners);
   private NavigationMapSettings settings = new NavigationMapSettings();
   private MapView mapView;
-  private MapboxMap mapboxMap;
+  private MapLibreMap mapboxMap;
   private LocationComponent locationComponent;
   private MapPaddingAdjustor mapPaddingAdjustor;
   private NavigationSymbolManager navigationSymbolManager;
@@ -87,7 +87,7 @@ public class NavigationMapboxMap {
    * @param mapView   for map size and Context
    * @param mapboxMap for APIs to interact with the map
    */
-  public NavigationMapboxMap(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap) {
+  public NavigationMapboxMap(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap) {
     this.mapView = mapView;
     this.mapboxMap = mapboxMap;
     initializeLocationComponent(mapView, mapboxMap);
@@ -137,7 +137,7 @@ public class NavigationMapboxMap {
   }
 
   // Package private (no modifier) for testing purposes
-  NavigationMapboxMap(MapboxMap mapboxMap, MapLayerInteractor layerInteractor, MapPaddingAdjustor adjustor) {
+  NavigationMapboxMap(MapLibreMap mapboxMap, MapLayerInteractor layerInteractor, MapPaddingAdjustor adjustor) {
     this.layerInteractor = layerInteractor;
     initializeWayName(mapboxMap, adjustor);
   }
@@ -176,7 +176,7 @@ public class NavigationMapboxMap {
    * Please note, the map will manage all markers added.  Calling {@link NavigationMapboxMap#clearMarkers()}
    * will clear all destination / custom markers that have been added to the map.
    *
-   * @param options for the custom {@link com.mapbox.mapboxsdk.plugins.annotation.Symbol}
+   * @param options for the custom {@link org.maplibre.android.plugins.annotation.Symbol}
    */
   public void addCustomMarker(SymbolOptions options) {
     navigationSymbolManager.addCustomSymbolFor(options);
@@ -491,13 +491,13 @@ public class NavigationMapboxMap {
   }
 
   /**
-   * Provides the {@link MapboxMap} originally given in the constructor.
+   * Provides the {@link MapLibreMap} originally given in the constructor.
    * <p>
    * This method gives access to all map-related APIs.
    *
    * @return map provided in the constructor
    */
-  public MapboxMap retrieveMap() {
+  public MapLibreMap retrieveMap() {
     return mapboxMap;
   }
 
@@ -596,7 +596,7 @@ public class NavigationMapboxMap {
   }
 
   @SuppressLint("MissingPermission")
-  private void initializeLocationComponent(MapView mapView, MapboxMap map) {
+  private void initializeLocationComponent(MapView mapView, MapLibreMap map) {
     locationComponent = map.getLocationComponent();
     map.setMinZoomPreference(NAVIGATION_MINIMUM_MAP_ZOOM);
     map.setMaxZoomPreference(NAVIGATION_MAXIMUM_MAP_ZOOM);
@@ -625,11 +625,11 @@ public class NavigationMapboxMap {
     return resId != -1 && (resId & 0xff000000) != 0 && (resId & 0x00ff0000) != 0;
   }
 
-  private void initializeMapPaddingAdjustor(MapView mapView, MapboxMap mapboxMap) {
+  private void initializeMapPaddingAdjustor(MapView mapView, MapLibreMap mapboxMap) {
     mapPaddingAdjustor = new MapPaddingAdjustor(mapView, mapboxMap);
   }
 
-  private void initializeNavigationSymbolManager(MapView mapView, MapboxMap mapboxMap) {
+  private void initializeNavigationSymbolManager(MapView mapView, MapLibreMap mapboxMap) {
     Bitmap markerBitmap = ThemeSwitcher.retrieveThemeMapMarker(mapView.getContext());
     mapboxMap.getStyle().addImage(MAPBOX_NAVIGATION_MARKER_NAME, markerBitmap);
     SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, mapboxMap.getStyle());
@@ -638,25 +638,25 @@ public class NavigationMapboxMap {
     mapView.addOnDidFinishLoadingStyleListener(onStyleLoadedListener);
   }
 
-  private void initializeMapLayerInteractor(MapboxMap mapboxMap) {
+  private void initializeMapLayerInteractor(MapLibreMap mapboxMap) {
     layerInteractor = new MapLayerInteractor(mapboxMap);
   }
 
-  private void initializeRoute(MapView mapView, MapboxMap map) {
+  private void initializeRoute(MapView mapView, MapLibreMap map) {
     Context context = mapView.getContext();
     int routeStyleRes = ThemeSwitcher.retrieveNavigationViewStyle(context, R.attr.navigationViewRouteStyle);
     mapRoute = new NavigationMapRoute(null, mapView, map, routeStyleRes);
   }
 
-  private void initializeCamera(MapboxMap map, LocationComponent locationComponent) {
+  private void initializeCamera(MapLibreMap map, LocationComponent locationComponent) {
     mapCamera = new NavigationCamera(map, locationComponent);
   }
 
-  private void initializeLocationFpsDelegate(MapboxMap map, LocationComponent locationComponent) {
+  private void initializeLocationFpsDelegate(MapLibreMap map, LocationComponent locationComponent) {
     locationFpsDelegate = new LocationFpsDelegate(map, locationComponent);
   }
 
-  private void initializeWayName(MapboxMap mapboxMap, MapPaddingAdjustor paddingAdjustor) {
+  private void initializeWayName(MapLibreMap mapboxMap, MapPaddingAdjustor paddingAdjustor) {
     if (mapWayName != null) {
       return;
     }
@@ -667,7 +667,7 @@ public class NavigationMapboxMap {
     mapWayName.addOnWayNameChangedListener(internalWayNameChangedListener);
   }
 
-  private void initializeStreetsSource(MapboxMap mapboxMap) {
+  private void initializeStreetsSource(MapLibreMap mapboxMap) {
     List<Source> sources = mapboxMap.getStyle().getSources();
     Source sourceV7 = findSourceByUrl(sources, MAPBOX_STREETS_V7_URL);
     Source sourceV8 = findSourceByUrl(sources, MAPBOX_STREETS_V8_URL);

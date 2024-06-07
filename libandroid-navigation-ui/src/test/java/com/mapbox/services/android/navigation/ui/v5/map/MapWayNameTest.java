@@ -4,10 +4,10 @@ import android.graphics.PointF;
 import android.location.Location;
 import androidx.annotation.NonNull;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.style.layers.PropertyValue;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.style.layers.PropertyValue;
+import org.maplibre.android.style.layers.SymbolLayer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

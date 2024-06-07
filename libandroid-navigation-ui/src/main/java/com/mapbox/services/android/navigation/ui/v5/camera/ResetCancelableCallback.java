@@ -1,8 +1,8 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.maps.MapLibreMap;
 
-class ResetCancelableCallback implements MapboxMap.CancelableCallback {
+class ResetCancelableCallback implements MapLibreMap.CancelableCallback {
 
   private final NavigationCamera camera;
 

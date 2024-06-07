@@ -11,31 +11,31 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.mapbox.api.directions.v5.DirectionsCriteria.METRIC
-import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.geojson.Point
+import org.maplibre.android.annotations.MarkerOptions
+import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.location.LocationComponent
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.modes.CameraMode
+import org.maplibre.android.location.modes.RenderMode
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.OnMapReadyCallback
+import org.maplibre.android.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
-import com.mapbox.turf.TurfConstants
-import com.mapbox.turf.TurfMeasurement
+import org.maplibre.turf.TurfConstants
+import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,13 +46,13 @@ import java.lang.ref.WeakReference
 class MockNavigationActivity :
     AppCompatActivity(),
     OnMapReadyCallback,
-    MapboxMap.OnMapClickListener,
+    MapLibreMap.OnMapClickListener,
     ProgressChangeListener,
     NavigationEventListener,
     MilestoneEventListener,
     OffRouteListener {
     private val BEGIN_ROUTE_MILESTONE = 1001
-    private lateinit var mapboxMap: MapboxMap
+    private lateinit var mapboxMap: MapLibreMap
 
     // Navigation related variables
     private var locationEngine: ReplayRouteLocationEngine = ReplayRouteLocationEngine()
@@ -141,7 +141,7 @@ class MockNavigationActivity :
         }
     }
 
-    override fun onMapReady(mapboxMap: MapboxMap) {
+    override fun onMapReady(mapboxMap: MapLibreMap) {
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
@@ -226,7 +226,7 @@ class MockNavigationActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(METRIC)
+            this.voiceUnits(DirectionsCriteria.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }
@@ -239,8 +239,8 @@ class MockNavigationActivity :
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
                     if (response.routes().isNotEmpty()) {
-                        val maplibreResponse = com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(response.toJson());
-                        val directionsRoute = DirectionsRoute.fromJson(maplibreResponse.routes().first().toJson())
+                        val maplibreResponse = DirectionsResponse.fromJson(response.toJson());
+                        val directionsRoute = maplibreResponse.routes().first()
                         this@MockNavigationActivity.route = directionsRoute
                         navigationMapRoute?.addRoutes(maplibreResponse.routes())
                     }

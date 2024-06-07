@@ -1,9 +1,9 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.plugins.annotation.Symbol;
+import org.maplibre.android.plugins.annotation.SymbolManager;
+import org.maplibre.android.plugins.annotation.SymbolOptions;
 
 import org.junit.Test;
 

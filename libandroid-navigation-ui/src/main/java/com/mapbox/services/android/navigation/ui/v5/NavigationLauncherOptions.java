@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
+import org.maplibre.android.camera.CameraPosition;
 
 @AutoValue
 public abstract class NavigationLauncherOptions extends NavigationUiOptions {

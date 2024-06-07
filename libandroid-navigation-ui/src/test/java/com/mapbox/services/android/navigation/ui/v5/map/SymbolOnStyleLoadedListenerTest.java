@@ -2,8 +2,8 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 
 import android.graphics.Bitmap;
 
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.Style;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class SymbolOnStyleLoadedListenerTest {
 
   @Test
   public void onDidFinishLoadingStyle_markerIsAdded() {
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     Style style = mock(Style.class);
     when(mapboxMap.getStyle()).thenReturn(style);
     Bitmap markerBitmap = mock(Bitmap.class);

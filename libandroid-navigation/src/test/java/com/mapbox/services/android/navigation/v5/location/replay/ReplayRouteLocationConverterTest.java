@@ -1,7 +1,7 @@
 package com.mapbox.services.android.navigation.v5.location.replay;
 
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
 
 import org.junit.Test;
 

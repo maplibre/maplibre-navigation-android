@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 
 import android.content.Context;
 
-import com.mapbox.mapboxsdk.maps.MapView;
+import org.maplibre.android.maps.MapView;
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera;
 import com.mapbox.services.android.navigation.ui.v5.camera.OnTrackingModeChangedListener;
 import com.mapbox.services.android.navigation.ui.v5.camera.OnTrackingModeTransitionListener;

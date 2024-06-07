@@ -18,10 +18,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback;
-import com.mapbox.mapboxsdk.location.engine.LocationEngineImpl;
-import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest;
-import com.mapbox.mapboxsdk.location.engine.LocationEngineResult;
+import org.maplibre.android.location.engine.LocationEngineCallback;
+import org.maplibre.android.location.engine.LocationEngineImpl;
+import org.maplibre.android.location.engine.LocationEngineRequest;
+import org.maplibre.android.location.engine.LocationEngineResult;
 
 import java.util.Collections;
 import java.util.List;

@@ -9,10 +9,9 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
+import org.maplibre.android.annotations.Icon;
+import org.maplibre.android.annotations.IconFactory;
+import org.maplibre.android.geometry.LatLng;
 
 import java.util.Random;
 

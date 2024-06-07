@@ -6,11 +6,11 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import com.mapbox.services.android.navigation.v5.models.LegStep;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
 
 import java.util.List;
 

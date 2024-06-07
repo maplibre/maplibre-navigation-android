@@ -8,8 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
+import org.maplibre.geojson.Point;
+import org.maplibre.geojson.PointAsCoordinatesTypeAdapter;
 
 import java.util.List;
 

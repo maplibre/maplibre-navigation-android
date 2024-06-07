@@ -1,21 +1,21 @@
 package com.mapbox.services.android.navigation.v5.navigation;
 
-import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.linear;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.match;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.step;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
-import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static org.maplibre.android.style.expressions.Expression.color;
+import static org.maplibre.android.style.expressions.Expression.exponential;
+import static org.maplibre.android.style.expressions.Expression.get;
+import static org.maplibre.android.style.expressions.Expression.interpolate;
+import static org.maplibre.android.style.expressions.Expression.linear;
+import static org.maplibre.android.style.expressions.Expression.literal;
+import static org.maplibre.android.style.expressions.Expression.match;
+import static org.maplibre.android.style.expressions.Expression.step;
+import static org.maplibre.android.style.expressions.Expression.stop;
+import static org.maplibre.android.style.expressions.Expression.zoom;
+import static org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap;
+import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -37,22 +37,22 @@ import androidx.lifecycle.OnLifecycleEvent;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.style.expressions.Expression;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.utils.MathUtils;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.geometry.LatLng;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.style.expressions.Expression;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.layers.Property;
+import org.maplibre.android.style.layers.PropertyFactory;
+import org.maplibre.android.style.layers.SymbolLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.android.utils.MathUtils;
 import com.mapbox.services.android.navigation.R;
 import com.mapbox.services.android.navigation.v5.route.MapRouteProgressChangeListener;
 import com.mapbox.services.android.navigation.v5.route.OnRouteSelectionChangeListener;
@@ -61,9 +61,9 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.utils.Constants;
 import com.mapbox.services.android.navigation.v5.utils.MapImageUtils;
 import com.mapbox.services.android.navigation.v5.utils.MapUtils;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,7 +88,7 @@ import java.util.Locale;
  * @since 0.4.0
  */
 public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListener,
-        MapboxMap.OnMapClickListener, LifecycleObserver {
+        MapLibreMap.OnMapClickListener, LifecycleObserver {
 
     private static final String CONGESTION_KEY = "congestion";
     private static final String SOURCE_KEY = "source";
@@ -157,7 +157,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     private int destinationWaypointIcon;
 
     private MapboxNavigation navigation;
-    private final MapboxMap mapboxMap;
+    private final MapLibreMap mapboxMap;
     private final HashMap<LineString, DirectionsRoute> routeLineStrings;
     private final List<FeatureCollection> featureCollections;
     private final List<DirectionsRoute> directionsRoutes;
@@ -183,7 +183,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @param mapboxMap the MapboxMap to apply route with
      * @since 0.4.0
      */
-    public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap) {
+    public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap) {
         this(null, mapView, mapboxMap, R.style.NavigationMapRoute);
     }
 
@@ -195,7 +195,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @param belowLayer optionally pass in a layer id to place the route line below
      * @since 0.4.0
      */
-    public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap,
+    public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap,
                               @Nullable String belowLayer) {
         this(null, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
     }
@@ -210,7 +210,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @since 0.4.0
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                              @NonNull MapboxMap mapboxMap) {
+                              @NonNull MapLibreMap mapboxMap) {
         this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute);
     }
 
@@ -225,7 +225,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @since 0.4.0
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                              @NonNull MapboxMap mapboxMap, @Nullable String belowLayer) {
+                              @NonNull MapLibreMap mapboxMap, @Nullable String belowLayer) {
         this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
     }
 
@@ -239,7 +239,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @param styleRes   a style resource with custom route colors, scale, etc.
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                              @NonNull MapboxMap mapboxMap, @StyleRes int styleRes) {
+                              @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes) {
         this(navigation, mapView, mapboxMap, styleRes, null);
     }
 
@@ -254,7 +254,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * @param belowLayer optionally pass in a layer id to place the route line below
      */
     public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                              @NonNull MapboxMap mapboxMap, @StyleRes int styleRes,
+                              @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes,
                               @Nullable String belowLayer) {
         this.styleRes = styleRes;
         this.mapView = mapView;
@@ -901,7 +901,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
         showAlternativeRoutes(alternativesVisible);
     }
 
-    private void drawWaypointMarkers(@NonNull MapboxMap mapboxMap, @Nullable Drawable originMarker,
+    private void drawWaypointMarkers(@NonNull MapLibreMap mapboxMap, @Nullable Drawable originMarker,
                                      @Nullable Drawable destinationMarker) {
         if (originMarker == null || destinationMarker == null) {
             return;
@@ -1068,7 +1068,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * into the constructor.
      * <p>
      * This method will add the {@link ProgressChangeListener} that was originally added so updates
-     * to the {@link MapboxMap} continue.
+     * to the {@link MapLibreMap} continue.
      *
      * @since 0.15.0
      */
@@ -1084,7 +1084,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      * into the constructor.
      * <p>
      * This method will remove the {@link ProgressChangeListener} that was originally added so updates
-     * to the {@link MapboxMap} discontinue.
+     * to the {@link MapLibreMap} discontinue.
      *
      * @since 0.15.0
      */

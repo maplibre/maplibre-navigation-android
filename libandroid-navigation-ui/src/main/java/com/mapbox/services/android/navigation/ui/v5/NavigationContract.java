@@ -4,7 +4,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 public interface NavigationContract {
 

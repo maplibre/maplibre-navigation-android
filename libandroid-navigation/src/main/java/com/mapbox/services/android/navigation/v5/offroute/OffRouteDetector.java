@@ -3,14 +3,14 @@ package com.mapbox.services.android.navigation.v5.offroute;
 import android.location.Location;
 
 import com.mapbox.services.android.navigation.v5.models.LegStep;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import com.mapbox.services.android.navigation.v5.utils.RingBuffer;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 import java.util.List;
 

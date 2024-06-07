@@ -14,9 +14,9 @@ import androidx.annotation.StyleRes;
 import androidx.fragment.app.Fragment;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.Style;
 import com.mapbox.services.android.navigation.ui.v5.R;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
@@ -44,7 +44,7 @@ public class NavigationMapRoute implements LifecycleObserver {
   @StyleRes
   private final int styleRes;
   private final String belowLayer;
-  private final MapboxMap mapboxMap;
+  private final MapLibreMap mapboxMap;
   private final MapView mapView;
   private MapRouteClickListener mapRouteClickListener;
   private MapRouteProgressChangeListener mapRouteProgressChangeListener;
@@ -62,7 +62,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @param mapboxMap the MapboxMap to apply route with
    * @since 0.4.0
    */
-  public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap) {
+  public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap) {
     this(null, mapView, mapboxMap, R.style.NavigationMapRoute);
   }
 
@@ -74,7 +74,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @param belowLayer optionally pass in a layer id to place the route line below
    * @since 0.4.0
    */
-  public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap,
+  public NavigationMapRoute(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap,
                             @Nullable String belowLayer) {
     this(null, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
   }
@@ -89,7 +89,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @since 0.4.0
    */
   public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                            @NonNull MapboxMap mapboxMap) {
+                            @NonNull MapLibreMap mapboxMap) {
     this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute);
   }
 
@@ -104,7 +104,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @since 0.4.0
    */
   public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                            @NonNull MapboxMap mapboxMap, @Nullable String belowLayer) {
+                            @NonNull MapLibreMap mapboxMap, @Nullable String belowLayer) {
     this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
   }
 
@@ -118,7 +118,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @param styleRes   a style resource with custom route colors, scale, etc.
    */
   public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                            @NonNull MapboxMap mapboxMap, @StyleRes int styleRes) {
+                            @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes) {
     this(navigation, mapView, mapboxMap, styleRes, null);
   }
 
@@ -133,7 +133,7 @@ public class NavigationMapRoute implements LifecycleObserver {
    * @param belowLayer optionally pass in a layer id to place the route line below
    */
   public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                            @NonNull MapboxMap mapboxMap, @StyleRes int styleRes,
+                            @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes,
                             @Nullable String belowLayer) {
     this.styleRes = styleRes;
     this.belowLayer = belowLayer;
@@ -150,7 +150,7 @@ public class NavigationMapRoute implements LifecycleObserver {
 
   // For testing only
   NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                     @NonNull MapboxMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
+                     @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
                      MapRouteClickListener mapClickListener,
                      MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
                      MapRouteProgressChangeListener progressChangeListener) {
@@ -167,7 +167,7 @@ public class NavigationMapRoute implements LifecycleObserver {
 
   // For testing only
   NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
-                     @NonNull MapboxMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
+                     @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
                      MapRouteClickListener mapClickListener,
                      MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
                      MapRouteProgressChangeListener progressChangeListener,
@@ -317,7 +317,7 @@ public class NavigationMapRoute implements LifecycleObserver {
     removeListeners();
   }
 
-  private MapRouteLine buildMapRouteLine(@NonNull MapView mapView, @NonNull MapboxMap mapboxMap,
+  private MapRouteLine buildMapRouteLine(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap,
                                          @StyleRes int styleRes, @Nullable String belowLayer) {
     Context context = mapView.getContext();
     MapRouteDrawableProvider drawableProvider = new MapRouteDrawableProvider(context);

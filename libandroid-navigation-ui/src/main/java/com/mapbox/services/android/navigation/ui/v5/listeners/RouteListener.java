@@ -1,7 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5.listeners;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 /**
  * A listener that can be implemented and added to {@link com.mapbox.services.android.navigation.ui.v5.NavigationViewOptions} to

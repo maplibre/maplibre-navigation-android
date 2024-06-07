@@ -8,7 +8,7 @@ import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.models.StepManeuver;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 public class MetricsRouteProgress {
 

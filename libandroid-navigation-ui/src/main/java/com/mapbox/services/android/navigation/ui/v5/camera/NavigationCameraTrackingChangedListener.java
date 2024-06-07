@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
+import org.maplibre.android.location.OnCameraTrackingChangedListener;
 
 class NavigationCameraTrackingChangedListener implements OnCameraTrackingChangedListener {
 

@@ -1,16 +1,16 @@
 package com.mapbox.services.android.navigation.ui.v5.camera;
 
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.camera.CameraUpdate;
+import org.maplibre.android.maps.MapLibreMap;
 
-class CameraOverviewCancelableCallback implements MapboxMap.CancelableCallback {
+class CameraOverviewCancelableCallback implements MapLibreMap.CancelableCallback {
 
   private static final int OVERVIEW_UPDATE_DURATION_IN_MILLIS = 750;
 
   private CameraUpdate overviewUpdate;
-  private MapboxMap mapboxMap;
+  private MapLibreMap mapboxMap;
 
-  CameraOverviewCancelableCallback(CameraUpdate overviewUpdate, MapboxMap mapboxMap) {
+  CameraOverviewCancelableCallback(CameraUpdate overviewUpdate, MapLibreMap mapboxMap) {
     this.overviewUpdate = overviewUpdate;
     this.mapboxMap = mapboxMap;
   }

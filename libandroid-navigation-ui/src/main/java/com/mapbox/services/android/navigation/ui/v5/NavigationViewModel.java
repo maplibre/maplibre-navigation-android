@@ -9,12 +9,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.location.engine.LocationEngine;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.ui.v5.camera.DynamicCamera;
 import com.mapbox.services.android.navigation.ui.v5.instruction.BannerInstructionModel;
 import com.mapbox.services.android.navigation.ui.v5.instruction.InstructionModel;
-import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
 import com.mapbox.services.android.navigation.ui.v5.summary.SummaryModel;
 import com.mapbox.services.android.navigation.ui.v5.voice.NavigationSpeechPlayer;
 import com.mapbox.services.android.navigation.ui.v5.voice.SpeechAnnouncement;
@@ -40,6 +39,7 @@ import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 import com.mapbox.services.android.navigation.v5.utils.RouteUtils;
 
 import org.jetbrains.annotations.TestOnly;
+import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher;
 
 import java.util.List;
 

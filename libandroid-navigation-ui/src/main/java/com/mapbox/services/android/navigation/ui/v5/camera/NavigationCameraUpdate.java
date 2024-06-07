@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.ui.v5.camera;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import org.maplibre.android.camera.CameraUpdate;
 
 /**
  * Used with {@link NavigationCamera#update(NavigationCameraUpdate)}.

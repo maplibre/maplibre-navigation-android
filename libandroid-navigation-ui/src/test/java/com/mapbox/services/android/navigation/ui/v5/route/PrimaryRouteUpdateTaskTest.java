@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import android.os.Handler;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

@@ -1,6 +1,6 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
-import com.mapbox.geojson.FeatureCollection;
+import org.maplibre.geojson.FeatureCollection;
 
 import java.util.List;
 

@@ -4,8 +4,8 @@ import static com.mapbox.services.android.navigation.v5.utils.Constants.PRECISIO
 
 import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.v5.models.StepManeuver;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.utils.PolylineUtils;
+import org.maplibre.geojson.Point;
+import org.maplibre.geojson.utils.PolylineUtils;
 import com.mapbox.services.android.navigation.v5.BaseTest;
 
 import org.junit.Test;

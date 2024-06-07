@@ -1,12 +1,12 @@
 package com.mapbox.services.android.navigation.v5.utils;
 
 import com.mapbox.services.android.navigation.v5.models.StepIntersection;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfClassification;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
+import org.maplibre.turf.TurfClassification;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;
 import java.util.List;

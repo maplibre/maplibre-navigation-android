@@ -10,24 +10,24 @@ import android.text.style.StyleSpan;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import com.mapbox.services.android.navigation.R;
 import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationConstants;
 import com.mapbox.services.android.navigation.v5.routeprogress.MetricsRouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfConversion;
-import com.mapbox.turf.TurfMeasurement;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfConversion;
+import org.maplibre.turf.TurfMeasurement;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.mapbox.turf.TurfConstants.UNIT_FEET;
-import static com.mapbox.turf.TurfConstants.UNIT_KILOMETERS;
-import static com.mapbox.turf.TurfConstants.UNIT_METERS;
-import static com.mapbox.turf.TurfConstants.UNIT_MILES;
+import static org.maplibre.turf.TurfConstants.UNIT_FEET;
+import static org.maplibre.turf.TurfConstants.UNIT_KILOMETERS;
+import static org.maplibre.turf.TurfConstants.UNIT_METERS;
+import static org.maplibre.turf.TurfConstants.UNIT_MILES;
 
 public class DistanceFormatter {
 

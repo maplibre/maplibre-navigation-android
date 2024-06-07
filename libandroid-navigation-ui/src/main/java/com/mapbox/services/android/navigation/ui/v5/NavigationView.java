@@ -24,13 +24,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.core.utils.TextUtils;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.camera.CameraPosition;
+import org.maplibre.android.location.modes.RenderMode;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.OnMapReadyCallback;
+import org.maplibre.android.maps.Style;
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera;
 import com.mapbox.services.android.navigation.ui.v5.instruction.ImageCreator;
 import com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView;
@@ -231,7 +231,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * @since 0.6.0
    */
   @Override
-  public void onMapReady(final MapboxMap mapboxMap) {
+  public void onMapReady(final MapLibreMap mapboxMap) {
     mapboxMap.setStyle(ThemeSwitcher.retrieveMapStyle(getContext()), new Style.OnStyleLoaded() {
       @Override
       public void onStyleLoaded(@NonNull Style style) {
@@ -542,7 +542,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
       navigationViewEventDispatcher));
   }
 
-  private void initializeNavigationMap(MapView mapView, MapboxMap map) {
+  private void initializeNavigationMap(MapView mapView, MapLibreMap map) {
     if (initialMapCameraPosition != null) {
       map.setCameraPosition(initialMapCameraPosition);
     }

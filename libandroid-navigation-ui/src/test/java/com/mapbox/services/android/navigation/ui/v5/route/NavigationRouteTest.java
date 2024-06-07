@@ -5,7 +5,8 @@ import android.content.Context;
 import com.mapbox.services.android.navigation.ui.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
 import com.mapbox.services.android.navigation.v5.models.RouteOptions;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
+
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils;
 
 import org.junit.Before;
@@ -92,7 +93,7 @@ public class NavigationRouteTest extends BaseTest {
   public void addingPointAndBearingKeepsCorrectOrder() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
       .accessToken(BaseTest.ACCESS_TOKEN)
-      .origin(Point.fromLngLat(1.0, 2.0), 90d, 90d)
+      .origin(com.mapbox.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .addBearing(2.0, 3.0)
       .destination(Point.fromLngLat(1.0, 5.0))
       .build();
@@ -106,8 +107,8 @@ public class NavigationRouteTest extends BaseTest {
   public void reverseOriginDestinationDoesntMessUpBearings() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
       .accessToken(BaseTest.ACCESS_TOKEN)
-      .destination(Point.fromLngLat(1.0, 5.0), 1d, 5d)
-      .origin(Point.fromLngLat(1.0, 2.0), 90d, 90d)
+      .destination(com.mapbox.geojson.Point.fromLngLat(1.0, 5.0), 1d, 5d)
+      .origin(com.mapbox.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .build();
 
     assertThat(navigationRoute.getCall().request().url().toString(),

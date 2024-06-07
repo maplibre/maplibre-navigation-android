@@ -3,8 +3,8 @@ package com.mapbox.services.android.navigation.ui.v5.map;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
 import com.mapbox.services.android.navigation.ui.v5.R;
 
 class MapPaddingAdjustor {
@@ -12,17 +12,17 @@ class MapPaddingAdjustor {
   private static final int BOTTOMSHEET_PADDING_MULTIPLIER = 4;
   private static final int WAYNAME_PADDING_MULTIPLIER = 2;
 
-  private final MapboxMap mapboxMap;
+  private final MapLibreMap mapboxMap;
   private final int[] defaultPadding;
   private int[] customPadding;
 
-  MapPaddingAdjustor(MapView mapView, MapboxMap mapboxMap) {
+  MapPaddingAdjustor(MapView mapView, MapLibreMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     defaultPadding = calculateDefaultPadding(mapView);
   }
 
   // Testing only
-  MapPaddingAdjustor(MapboxMap mapboxMap, int[] defaultPadding) {
+  MapPaddingAdjustor(MapLibreMap mapboxMap, int[] defaultPadding) {
     this.mapboxMap = mapboxMap;
     this.defaultPadding = defaultPadding;
   }

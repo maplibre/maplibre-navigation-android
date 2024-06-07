@@ -4,22 +4,22 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.MultiLineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.turf.TurfMeasurement;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.Geometry;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.MultiLineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.mapbox.turf.TurfConstants.UNIT_METRES;
-import static com.mapbox.turf.TurfMeasurement.along;
-import static com.mapbox.turf.TurfMisc.lineSlice;
-import static com.mapbox.turf.TurfMisc.lineSliceAlong;
+import static org.maplibre.turf.TurfConstants.UNIT_METRES;
+import static org.maplibre.turf.TurfMeasurement.along;
+import static org.maplibre.turf.TurfMisc.lineSlice;
+import static org.maplibre.turf.TurfMisc.lineSliceAlong;
 
 class WaynameFeatureFilter {
 

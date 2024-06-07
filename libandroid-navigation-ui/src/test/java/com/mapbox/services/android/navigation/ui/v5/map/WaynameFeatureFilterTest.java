@@ -7,9 +7,9 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
 
 import org.junit.Test;
 

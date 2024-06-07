@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.v5.models.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;

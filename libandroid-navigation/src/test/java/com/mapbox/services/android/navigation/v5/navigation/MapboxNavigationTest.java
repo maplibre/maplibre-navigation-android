@@ -2,7 +2,7 @@ package com.mapbox.services.android.navigation.v5.navigation;
 
 import android.content.Context;
 
-import com.mapbox.mapboxsdk.location.engine.LocationEngine;
+import org.maplibre.android.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.milestone.BannerInstructionMilestone;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;

@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mapbox.mapboxsdk.location.permissions.PermissionsListener;
-import com.mapbox.mapboxsdk.location.permissions.PermissionsManager;
+import org.maplibre.android.location.permissions.PermissionsListener;
+import org.maplibre.android.location.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;

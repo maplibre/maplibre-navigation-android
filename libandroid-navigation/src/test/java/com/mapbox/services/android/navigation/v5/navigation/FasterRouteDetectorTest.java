@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.services.android.navigation.v5.models.DirectionsAdapterFactory;
 import com.mapbox.services.android.navigation.v5.models.DirectionsResponse;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.mapboxsdk.location.engine.LocationEngine;
+import org.maplibre.android.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.BaseTest;
 import com.mapbox.services.android.navigation.v5.route.FasterRoute;
 import com.mapbox.services.android.navigation.v5.route.FasterRouteDetector;

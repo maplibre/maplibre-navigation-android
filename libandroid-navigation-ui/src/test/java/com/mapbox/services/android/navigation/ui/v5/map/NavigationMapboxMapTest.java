@@ -1,15 +1,15 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.style.sources.Source;
-import com.mapbox.mapboxsdk.style.sources.VectorSource;
+import org.maplibre.geojson.Point;
+import org.maplibre.android.location.LocationComponent;
+import org.maplibre.android.location.modes.RenderMode;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.plugins.annotation.SymbolOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.android.style.sources.Source;
+import org.maplibre.android.style.sources.VectorSource;
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
@@ -228,7 +228,7 @@ public class NavigationMapboxMapTest {
     String urlV7 = "mapbox://mapbox.mapbox-streets-v7";
     List<Source> sources = buildMockSourcesWith(urlV7);
     when(style.getSources()).thenReturn(sources);
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getStyle()).thenReturn(style);
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);
@@ -289,7 +289,7 @@ public class NavigationMapboxMapTest {
     String urlV7 = "mapbox://mapbox.mapbox-streets-v8";
     List<Source> sources = buildMockSourcesWith(urlV7);
     when(style.getSources()).thenReturn(sources);
-    MapboxMap mapboxMap = mock(MapboxMap.class);
+    MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getStyle()).thenReturn(style);
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);

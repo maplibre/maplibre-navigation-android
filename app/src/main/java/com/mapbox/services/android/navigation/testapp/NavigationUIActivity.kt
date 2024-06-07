@@ -6,28 +6,27 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.mapbox.api.directions.v5.DirectionsCriteria
-import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.geojson.Point
+import org.maplibre.android.annotations.MarkerOptions
+import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.location.LocationComponent
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.modes.CameraMode
+import org.maplibre.android.location.modes.RenderMode
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.OnMapReadyCallback
+import org.maplibre.android.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
-import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.navigation.*
-import com.mapbox.turf.TurfConstants
-import com.mapbox.turf.TurfMeasurement
+import org.maplibre.turf.TurfConstants
+import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,8 +36,8 @@ import timber.log.Timber
 class NavigationUIActivity :
     AppCompatActivity(),
     OnMapReadyCallback,
-    MapboxMap.OnMapClickListener {
-    private lateinit var mapboxMap: MapboxMap
+    MapLibreMap.OnMapClickListener {
+    private lateinit var mapboxMap: MapLibreMap
 
     // Navigation related variables
     private var route: DirectionsRoute? = null
@@ -101,7 +100,7 @@ class NavigationUIActivity :
         }
     }
 
-    override fun onMapReady(mapboxMap: MapboxMap) {
+    override fun onMapReady(mapboxMap: MapLibreMap) {
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
@@ -200,7 +199,7 @@ class NavigationUIActivity :
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
                     if (response.routes().isNotEmpty()) {
-                        val maplibreResponse = com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(response.toJson());
+                        val maplibreResponse = DirectionsResponse.fromJson(response.toJson());
                         this@NavigationUIActivity.route = maplibreResponse.routes().first()
                         navigationMapRoute?.addRoutes(maplibreResponse.routes())
                         binding.startRouteLayout.visibility = View.VISIBLE

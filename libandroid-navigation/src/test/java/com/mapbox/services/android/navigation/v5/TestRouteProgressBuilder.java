@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.LegStep;
 import com.mapbox.services.android.navigation.v5.models.StepIntersection;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.utils.PolylineUtils;
+import org.maplibre.geojson.Point;
+import org.maplibre.geojson.utils.PolylineUtils;
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;

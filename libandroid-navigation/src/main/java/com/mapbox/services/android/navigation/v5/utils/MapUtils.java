@@ -3,12 +3,14 @@ package com.mapbox.services.android.navigation.v5.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+
+import org.maplibre.android.maps.MapLibreMap;
 
 /**
  * Utils class useful for performing map operations such as adding sources, layers, and more.
@@ -30,7 +32,7 @@ public final class MapUtils {
      * @param sourceId   the source's id for identifying it when adding layers
      * @since 0.8.0
      */
-    public static void updateMapSourceFromFeatureCollection(@NonNull MapboxMap mapboxMap,
+    public static void updateMapSourceFromFeatureCollection(@NonNull MapLibreMap mapboxMap,
                                                             @Nullable FeatureCollection collection,
                                                             @NonNull String sourceId) {
         if (collection == null) {
@@ -57,7 +59,7 @@ public final class MapUtils {
      * @param idBelowLayer optionally providing the layer which the new layer should be placed below
      * @since 0.8.0
      */
-    public static void addLayerToMap(@NonNull MapboxMap mapboxMap, @NonNull Layer layer,
+    public static void addLayerToMap(@NonNull MapLibreMap mapboxMap, @NonNull Layer layer,
                                      @Nullable String idBelowLayer) {
         try {
             if (mapboxMap.getStyle().getLayer(layer.getId()) != null) {

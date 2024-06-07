@@ -3,7 +3,7 @@ package com.mapbox.services.android.navigation.ui.v5;
 import androidx.lifecycle.MutableLiveData;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
 
 import org.junit.Test;
 

@@ -1,8 +1,8 @@
 package com.mapbox.services.android.navigation.v5.models;
 
 import com.google.gson.GsonBuilder;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
+import org.maplibre.geojson.Point;
+import org.maplibre.geojson.PointAsCoordinatesTypeAdapter;
 
 import java.io.Serializable;
 
