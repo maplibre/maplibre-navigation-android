@@ -7,7 +7,7 @@ java {
 }
 
 android {
-  namespace 'com.mapbox.services.android.navigation.ui.v5'
+  namespace 'org.maplibre.navigation.android.navigation.ui.v5'
 
   compileSdkVersion androidVersions.compileSdkVersion
   buildToolsVersion androidVersions.buildToolsVersion

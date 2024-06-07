@@ -12,7 +12,7 @@ kotlin {
 }
 
 android {
-    namespace 'com.mapbox.services.android.navigation.testapp'
+    namespace 'org.maplibre.navigation.android.example'
 
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
