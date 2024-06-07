@@ -3,14 +3,14 @@ package org.maplibre.navigation.android.navigation.v5.navigation.notification;
 import android.app.Notification;
 import android.content.Context;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationService;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 
 /**
  * Defines a contract in which a custom notification must adhere to when
- * given to {@link MapboxNavigationOptions}.
+ * given to {@link MapLibreNavigationOptions}.
  */
 public interface NavigationNotification {
 
@@ -47,7 +47,7 @@ public interface NavigationNotification {
   void updateNotification(RouteProgress routeProgress);
 
   /**
-   * Callback for when navigation is stopped via {@link MapboxNavigation#stopNavigation()}.
+   * Callback for when navigation is stopped via {@link MapLibreNavigation#stopNavigation()}.
    * <p>
    * This callback may be used to clean up any listeners or receivers, preventing leaks.
    *

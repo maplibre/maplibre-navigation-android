@@ -10,9 +10,6 @@ import static org.mockito.Mockito.when;
 
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewEventDispatcher;
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewOptions;
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
@@ -23,7 +20,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.listeners.RouteListener;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.SpeechAnnouncementListener;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
 
 import org.junit.Test;
@@ -266,7 +263,7 @@ public class NavigationViewEventDispatcherTest {
     NavigationViewOptions options = mock(NavigationViewOptions.class);
     ProgressChangeListener progressChangeListener = setupProgressChangeListener(options);
     NavigationViewModel navigationViewModel = mock(NavigationViewModel.class);
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     when(navigationViewModel.retrieveNavigation()).thenReturn(navigation);
 
     eventDispatcher.initializeListeners(options, navigationViewModel);
@@ -280,7 +277,7 @@ public class NavigationViewEventDispatcherTest {
     NavigationViewOptions options = mock(NavigationViewOptions.class);
     ProgressChangeListener progressChangeListener = setupProgressChangeListener(options);
     NavigationViewModel navigationViewModel = mock(NavigationViewModel.class);
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     when(navigationViewModel.retrieveNavigation()).thenReturn(navigation);
     eventDispatcher.initializeListeners(options, navigationViewModel);
 
@@ -295,7 +292,7 @@ public class NavigationViewEventDispatcherTest {
     NavigationViewOptions options = mock(NavigationViewOptions.class);
     MilestoneEventListener milestoneEventListener = setupMilestoneEventListener(options);
     NavigationViewModel navigationViewModel = mock(NavigationViewModel.class);
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     when(navigationViewModel.retrieveNavigation()).thenReturn(navigation);
 
     eventDispatcher.initializeListeners(options, navigationViewModel);
@@ -309,7 +306,7 @@ public class NavigationViewEventDispatcherTest {
     NavigationViewOptions options = mock(NavigationViewOptions.class);
     MilestoneEventListener milestoneEventListener = setupMilestoneEventListener(options);
     NavigationViewModel navigationViewModel = mock(NavigationViewModel.class);
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     when(navigationViewModel.retrieveNavigation()).thenReturn(navigation);
     eventDispatcher.initializeListeners(options, navigationViewModel);
 

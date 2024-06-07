@@ -1,16 +1,16 @@
 package org.maplibre.navigation.android.navigation.v5.navigation.camera;
 
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 
 import java.util.List;
 
 /**
  * This class handles calculating all properties necessary to configure the camera position while
- * routing. The {@link MapboxNavigation} uses
+ * routing. The {@link MapLibreNavigation} uses
  * a {@link SimpleCamera} by default. If you would like to customize the camera position, create a
  * concrete implementation of this class or subclass {@link SimpleCamera} and update
- * {@link MapboxNavigation#setCameraEngine(Camera)}.
+ * {@link MapLibreNavigation#setCameraEngine(Camera)}.
  *
  * @since 0.10.0
  */

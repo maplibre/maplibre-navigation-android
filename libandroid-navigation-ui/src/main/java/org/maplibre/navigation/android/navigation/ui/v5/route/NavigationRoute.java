@@ -11,7 +11,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
 import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
@@ -32,7 +32,7 @@ import retrofit2.Response;
  * The NavigationRoute class wraps the {@link MapboxDirections} class with parameters which
  * <u>must</u> be set inorder for a navigation session to successfully begin. While it is possible
  * to pass in any {@link DirectionsRoute} into
- * {@link MapboxNavigation#startNavigation(DirectionsRoute)}, using this class will ensure your
+ * {@link MapLibreNavigation#startNavigation(DirectionsRoute)}, using this class will ensure your
  * request includes all the proper information needed for the navigation session to begin.
  * <p>
  * <p>

@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Note: this handler is not capturing full application's stacktrace!
  */
-public class MapboxUncaughtExceptionHanlder implements Thread.UncaughtExceptionHandler,
+public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler,
         SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String MAPBOX_PREF_ENABLE_CRASH_REPORTER = "mapbox.crash.enable";
     public static final String MAPBOX_CRASH_REPORTER_PREFERENCES = "MapboxCrashReporterPrefs";
@@ -43,11 +43,11 @@ public class MapboxUncaughtExceptionHanlder implements Thread.UncaughtExceptionH
     private int exceptionChainDepth;
 
     @VisibleForTesting
-    MapboxUncaughtExceptionHanlder(@NonNull Context applicationContext,
-                                   @NonNull SharedPreferences sharedPreferences,
-                                   @NonNull String mapboxPackage,
-                                   @NonNull String version,
-                                   Thread.UncaughtExceptionHandler defaultExceptionHandler) {
+    MapLibreUncaughtExceptionHandler(@NonNull Context applicationContext,
+                                     @NonNull SharedPreferences sharedPreferences,
+                                     @NonNull String mapboxPackage,
+                                     @NonNull String version,
+                                     Thread.UncaughtExceptionHandler defaultExceptionHandler) {
         if (TextUtils.isEmpty(mapboxPackage) || TextUtils.isEmpty(version)) {
             throw new IllegalArgumentException("Invalid package name: " + mapboxPackage + " or version: " + version);
         }

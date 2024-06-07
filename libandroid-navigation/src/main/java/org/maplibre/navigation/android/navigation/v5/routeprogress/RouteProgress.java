@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import org.maplibre.geojson.Point;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
 import org.maplibre.navigation.android.navigation.v5.models.StepIntersection;
@@ -35,7 +35,7 @@ public abstract class RouteProgress {
    * Get the route the navigation session is currently using. When a reroute occurs and a new
    * directions route gets obtained, with the next location update this directions route should
    * reflect the new route. All direction route get passed in through
-   * {@link MapboxNavigation#startNavigation(DirectionsRoute)}.
+   * {@link MapLibreNavigation#startNavigation(DirectionsRoute)}.
    *
    * @return a {@link DirectionsRoute} currently being used for the navigation session
    * @since 0.1.0

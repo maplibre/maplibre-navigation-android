@@ -6,7 +6,7 @@ import org.maplibre.navigation.android.navigation.v5.BaseTest;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
@@ -34,13 +34,13 @@ public class OffRouteDetectorTest extends BaseTest {
   @Mock
   private OffRouteCallback mockCallback;
   private OffRouteDetector offRouteDetector;
-  private MapboxNavigationOptions options;
+  private MapLibreNavigationOptions options;
 
   @Before
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
 
-    options = MapboxNavigationOptions.builder().build();
+    options = MapLibreNavigationOptions.builder().build();
 
     offRouteDetector = new OffRouteDetector();
     offRouteDetector.setOffRouteCallback(mockCallback);
@@ -311,7 +311,7 @@ public class OffRouteDetectorTest extends BaseTest {
 
   @Test
   public void isUserOffRoute_AssertTrueWhenOnRouteMovingAwayWithNotEnoughRightDirectionTraveling() throws Exception {
-    MapboxNavigationOptions options = this.options.toBuilder()
+    MapLibreNavigationOptions options = this.options.toBuilder()
       .offRouteMinimumDistanceMetersBeforeRightDirection(60)
       .build();
 

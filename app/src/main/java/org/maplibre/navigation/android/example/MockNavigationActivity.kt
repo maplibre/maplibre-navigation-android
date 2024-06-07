@@ -40,8 +40,8 @@ import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventLis
 import org.maplibre.navigation.android.navigation.v5.milestone.RouteMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Trigger
 import org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
@@ -64,7 +64,7 @@ class MockNavigationActivity :
     // Navigation related variables
     private var locationEngine: ReplayRouteLocationEngine =
         ReplayRouteLocationEngine()
-    private lateinit var navigation: MapboxNavigation
+    private lateinit var navigation: MapLibreNavigation
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
     private var destination: Point? = null
@@ -91,12 +91,12 @@ class MockNavigationActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             customNotification.createNotificationChannel(this)
         }
-        val options = MapboxNavigationOptions.builder()
+        val options = MapLibreNavigationOptions.builder()
             .navigationNotification(customNotification)
             .build()
 
         navigation =
-            MapboxNavigation(
+            MapLibreNavigation(
                 this,
                 options
             )
@@ -338,9 +338,9 @@ class MockNavigationActivity :
         binding.mapView.onSaveInstanceState(outState)
     }
 
-    private class MyBroadcastReceiver internal constructor(navigation: MapboxNavigation) :
+    private class MyBroadcastReceiver internal constructor(navigation: MapLibreNavigation) :
         BroadcastReceiver() {
-        private val weakNavigation: WeakReference<MapboxNavigation> = WeakReference(navigation)
+        private val weakNavigation: WeakReference<MapLibreNavigation> = WeakReference(navigation)
 
         override fun onReceive(context: Context, intent: Intent) {
             weakNavigation.get()?.stopNavigation()

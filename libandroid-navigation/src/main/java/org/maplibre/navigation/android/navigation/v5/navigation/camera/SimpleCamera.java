@@ -3,8 +3,8 @@ package org.maplibre.navigation.android.navigation.v5.navigation.camera;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.utils.Constants;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
 import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The default camera used by {@link MapboxNavigation}.
+ * The default camera used by {@link MapLibreNavigation}.
  *
  * @since 0.10.0
  */

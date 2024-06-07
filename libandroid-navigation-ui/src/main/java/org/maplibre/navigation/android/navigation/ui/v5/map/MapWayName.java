@@ -7,14 +7,14 @@ import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapboxMap.STREETS_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap.STREETS_LAYER_ID;
 
 class MapWayName {
 
@@ -25,7 +25,7 @@ class MapWayName {
   private WaynameFeatureFinder featureInteractor;
   private List<Point> currentStepPoints = new ArrayList<>();
   private Location currentLocation = null;
-  private MapboxNavigation navigation;
+  private MapLibreNavigation navigation;
   private boolean isAutoQueryEnabled;
   private FeatureFilterTask filterTask;
   private String wayName = EMPTY_CURRENT_WAY_NAME;
@@ -61,7 +61,7 @@ class MapWayName {
     isAutoQueryEnabled = isEnabled;
   }
 
-  void addProgressChangeListener(MapboxNavigation navigation) {
+  void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
     navigation.addProgressChangeListener(progressChangeListener);
   }

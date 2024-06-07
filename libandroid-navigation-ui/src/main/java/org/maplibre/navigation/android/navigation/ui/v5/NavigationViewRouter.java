@@ -4,7 +4,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
@@ -19,7 +19,7 @@ import java.util.List;
 
 class NavigationViewRouter implements RouteListener {
 
-  private final MapboxRouteFetcher onlineRouter;
+  private final MapLibreRouteFetcher onlineRouter;
   private final ConnectivityStatusProvider connectivityStatus;
   private final RouteComparator routeComparator;
   private final ViewRouteListener listener;
@@ -29,7 +29,7 @@ class NavigationViewRouter implements RouteListener {
   private Location location;
   private RouteCallStatus callStatus;
 
-  NavigationViewRouter(MapboxRouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
+  NavigationViewRouter(MapLibreRouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
                        ViewRouteListener listener) {
     this.onlineRouter = onlineRouter;
     this.connectivityStatus = connectivityStatus;
@@ -39,7 +39,7 @@ class NavigationViewRouter implements RouteListener {
   }
 
   // Extra fields for testing purposes
-  NavigationViewRouter(MapboxRouteFetcher onlineRouter,
+  NavigationViewRouter(MapLibreRouteFetcher onlineRouter,
                        ConnectivityStatusProvider connectivityStatus, RouteComparator routeComparator,
                        ViewRouteListener listener, RouteCallStatus callStatus) {
     this.onlineRouter = onlineRouter;

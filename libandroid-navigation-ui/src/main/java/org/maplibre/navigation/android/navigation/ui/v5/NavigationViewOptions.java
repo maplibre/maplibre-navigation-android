@@ -15,7 +15,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.android.location.engine.LocationEngine;
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
 @AutoValue
 public abstract class NavigationViewOptions extends NavigationUiOptions {
 
-  public abstract MapboxNavigationOptions navigationOptions();
+  public abstract MapLibreNavigationOptions navigationOptions();
 
   @Nullable
   public abstract RouteListener routeListener();
@@ -71,7 +71,7 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
 
     public abstract Builder waynameChipEnabled(boolean waynameChipEnabled);
 
-    public abstract Builder navigationOptions(MapboxNavigationOptions navigationOptions);
+    public abstract Builder navigationOptions(MapLibreNavigationOptions navigationOptions);
 
     public abstract Builder routeListener(RouteListener routeListener);
 
@@ -100,7 +100,7 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
 
   public static Builder builder() {
     return new AutoValue_NavigationViewOptions.Builder()
-      .navigationOptions(MapboxNavigationOptions.builder().build())
+      .navigationOptions(MapLibreNavigationOptions.builder().build())
       .shouldSimulateRoute(false)
       .waynameChipEnabled(true);
   }

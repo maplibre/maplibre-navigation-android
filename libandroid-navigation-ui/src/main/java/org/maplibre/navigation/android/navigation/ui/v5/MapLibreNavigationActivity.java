@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationListener;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.android.camera.CameraPosition;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
 
 /**
@@ -18,7 +18,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConsta
  * <p>
  * Demonstrates the proper setup and usage of the view, including all lifecycle methods.
  */
-public class MapboxNavigationActivity extends AppCompatActivity implements OnNavigationReadyCallback,
+public class MapLibreNavigationActivity extends AppCompatActivity implements OnNavigationReadyCallback,
     NavigationListener {
 
   private NavigationView navigationView;
@@ -95,7 +95,7 @@ public class MapboxNavigationActivity extends AppCompatActivity implements OnNav
     options.navigationListener(this);
     extractRoute(options);
     extractConfiguration(options);
-    options.navigationOptions(MapboxNavigationOptions.builder().build());
+    options.navigationOptions(MapLibreNavigationOptions.builder().build());
     navigationView.startNavigation(options.build());
   }
 

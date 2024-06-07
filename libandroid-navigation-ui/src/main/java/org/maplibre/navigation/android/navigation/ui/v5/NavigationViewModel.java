@@ -19,7 +19,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.voice.NavigationSpeechPl
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayerProvider;
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
@@ -27,8 +27,8 @@ import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionM
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera;
@@ -58,7 +58,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> shouldRecordScreenshot = new MutableLiveData<>();
     private final MutableLiveData<Point> destination = new MutableLiveData<>();
 
-    private MapboxNavigation navigation;
+    private MapLibreNavigation navigation;
     private NavigationViewRouter router;
     private LocationEngineConductor locationEngineConductor;
     private NavigationViewEventDispatcher navigationViewEventDispatcher;
@@ -88,7 +88,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @TestOnly
         // Package private (no modifier) for testing purposes
-    NavigationViewModel(Application application, MapboxNavigation navigation,
+    NavigationViewModel(Application application, MapLibreNavigation navigation,
                         MapConnectivityController connectivityController,
                         NavigationViewRouter router) {
         super(application);
@@ -99,7 +99,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @TestOnly
         // Package private (no modifier) for testing purposes
-    NavigationViewModel(Application application, MapboxNavigation navigation,
+    NavigationViewModel(Application application, MapLibreNavigation navigation,
                         LocationEngineConductor conductor, NavigationViewEventDispatcher dispatcher, SpeechPlayer speechPlayer) {
         super(application);
         this.navigation = navigation;
@@ -131,12 +131,12 @@ public class NavigationViewModel extends AndroidViewModel {
 
 
     /**
-     * Returns the current instance of {@link MapboxNavigation}.
+     * Returns the current instance of {@link MapLibreNavigation}.
      * <p>
      * Will be null if navigation has not been initialized.
      */
     @Nullable
-    public MapboxNavigation retrieveNavigation() {
+    public MapLibreNavigation retrieveNavigation() {
         return navigation;
     }
 
@@ -145,13 +145,13 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     /**
-     * This method will pass {@link MapboxNavigationOptions} from the {@link NavigationViewOptions}
-     * to this view model to be used to initialize {@link MapboxNavigation}.
+     * This method will pass {@link MapLibreNavigationOptions} from the {@link NavigationViewOptions}
+     * to this view model to be used to initialize {@link MapLibreNavigation}.
      *
      * @param options to init MapboxNavigation
      */
     void initialize(NavigationViewOptions options) {
-        MapboxNavigationOptions navigationOptions = options.navigationOptions();
+        MapLibreNavigationOptions navigationOptions = options.navigationOptions();
         navigationOptions = navigationOptions.toBuilder().isFromNavigationUi(true).build();
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);
@@ -236,7 +236,7 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeRouter() {
-        MapboxRouteFetcher onlineRouter = new MapboxRouteFetcher(getApplication());
+        MapLibreRouteFetcher onlineRouter = new MapLibreRouteFetcher(getApplication());
         Context applicationContext = getApplication().getApplicationContext();
         ConnectivityStatusProvider connectivityStatus = new ConnectivityStatusProvider(applicationContext);
         router = new NavigationViewRouter(onlineRouter, connectivityStatus, routeEngineListener);
@@ -263,12 +263,12 @@ public class NavigationViewModel extends AndroidViewModel {
         return unitType;
     }
 
-    private void initializeTimeFormat(MapboxNavigationOptions options) {
+    private void initializeTimeFormat(MapLibreNavigationOptions options) {
         timeFormatType = options.timeFormatType();
     }
 
     private int initializeRoundingIncrement(NavigationViewOptions options) {
-        MapboxNavigationOptions navigationOptions = options.navigationOptions();
+        MapLibreNavigationOptions navigationOptions = options.navigationOptions();
         return navigationOptions.roundingIncrement();
     }
 
@@ -301,8 +301,8 @@ public class NavigationViewModel extends AndroidViewModel {
         return locationEngineConductor.obtainLocationEngine();
     }
 
-    private void initializeNavigation(Context context, MapboxNavigationOptions options, LocationEngine locationEngine) {
-        navigation = new MapboxNavigation(context, options, locationEngine);
+    private void initializeNavigation(Context context, MapLibreNavigationOptions options, LocationEngine locationEngine) {
+        navigation = new MapLibreNavigation(context, options, locationEngine);
         addNavigationListeners();
     }
 

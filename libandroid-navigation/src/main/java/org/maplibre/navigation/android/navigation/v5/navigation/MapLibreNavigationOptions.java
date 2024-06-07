@@ -7,10 +7,10 @@ import com.google.auto.value.AutoValue;
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
 
 /**
- * Immutable and can't be changed after passing into {@link MapboxNavigation}.
+ * Immutable and can't be changed after passing into {@link MapLibreNavigation}.
  */
 @AutoValue
-public abstract class MapboxNavigationOptions {
+public abstract class MapLibreNavigationOptions {
 
   public abstract double maxTurnCompletionOffset();
 
@@ -132,11 +132,11 @@ public abstract class MapboxNavigationOptions {
 
     public abstract Builder locationAcceptableAccuracyInMetersThreshold(int accuracyInMetersThreshold);
 
-    public abstract MapboxNavigationOptions build();
+    public abstract MapLibreNavigationOptions build();
   }
 
   public static Builder builder() {
-    return new AutoValue_MapboxNavigationOptions.Builder()
+    return new AutoValue_MapLibreNavigationOptions.Builder()
       .maxTurnCompletionOffset(NavigationConstants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION)
       .maneuverZoneRadius(NavigationConstants.MANEUVER_ZONE_RADIUS)
       .maximumDistanceOffRoute(NavigationConstants.MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE)

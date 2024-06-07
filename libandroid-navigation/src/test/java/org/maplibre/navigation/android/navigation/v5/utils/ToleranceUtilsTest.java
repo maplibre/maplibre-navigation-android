@@ -7,7 +7,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
 import org.maplibre.geojson.utils.PolylineUtils;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.turf.TurfConstants;
 import org.maplibre.turf.TurfMeasurement;
@@ -27,7 +27,7 @@ public class ToleranceUtilsTest extends BaseTest {
     List<Point> stepPoints = PolylineUtils.decode(route.geometry(), PRECISION_6);
     Point midPoint = TurfMeasurement.midpoint(stepPoints.get(0), stepPoints.get(1));
 
-    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(midPoint, routeProgress, MapboxNavigationOptions.builder().build());
+    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(midPoint, routeProgress, MapLibreNavigationOptions.builder().build());
 
     assertEquals(25.0, tolerance, DELTA);
   }
@@ -41,7 +41,7 @@ public class ToleranceUtilsTest extends BaseTest {
     LineString lineString = LineString.fromPolyline(route.geometry(), PRECISION_6);
     Point closePoint = TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS);
 
-    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapboxNavigationOptions.builder().build());
+    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapLibreNavigationOptions.builder().build());
 
     assertEquals(50.0, tolerance, DELTA);
   }
@@ -54,7 +54,7 @@ public class ToleranceUtilsTest extends BaseTest {
     LineString lineString = LineString.fromPolyline(route.geometry(), PRECISION_6);
     Point closePoint = TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS);
 
-    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapboxNavigationOptions.builder().build());
+    double tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(closePoint, routeProgress, MapLibreNavigationOptions.builder().build());
 
     assertEquals(50.0, tolerance, DELTA);
   }

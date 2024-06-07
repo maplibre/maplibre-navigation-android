@@ -18,7 +18,7 @@ import org.maplibre.android.maps.MapView;
 import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class NavigationMapRoute implements LifecycleObserver {
   private boolean isMapClickListenerAdded = false;
   private MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener;
   private boolean isDidFinishLoadingStyleListenerAdded = false;
-  private MapboxNavigation navigation;
+  private MapLibreNavigation navigation;
   private MapRouteLine routeLine;
   private MapRouteArrow routeArrow;
 
@@ -82,13 +82,13 @@ public class NavigationMapRoute implements LifecycleObserver {
   /**
    * Construct an instance of {@link NavigationMapRoute}.
    *
-   * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+   * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
    *                   your route won't consider rerouting during a navigation session.
    * @param mapView    the MapView to apply the route to
    * @param mapboxMap  the MapboxMap to apply route with
    * @since 0.4.0
    */
-  public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                             @NonNull MapLibreMap mapboxMap) {
     this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute);
   }
@@ -96,14 +96,14 @@ public class NavigationMapRoute implements LifecycleObserver {
   /**
    * Construct an instance of {@link NavigationMapRoute}.
    *
-   * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+   * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
    *                   your route won't consider rerouting during a navigation session.
    * @param mapView    the MapView to apply the route to
    * @param mapboxMap  the MapboxMap to apply route with
    * @param belowLayer optionally pass in a layer id to place the route line below
    * @since 0.4.0
    */
-  public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                             @NonNull MapLibreMap mapboxMap, @Nullable String belowLayer) {
     this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
   }
@@ -111,13 +111,13 @@ public class NavigationMapRoute implements LifecycleObserver {
   /**
    * Construct an instance of {@link NavigationMapRoute}.
    *
-   * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+   * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
    *                   your route won't consider rerouting during a navigation session.
    * @param mapView    the MapView to apply the route to
    * @param mapboxMap  the MapboxMap to apply route with
    * @param styleRes   a style resource with custom route colors, scale, etc.
    */
-  public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                             @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes) {
     this(navigation, mapView, mapboxMap, styleRes, null);
   }
@@ -125,14 +125,14 @@ public class NavigationMapRoute implements LifecycleObserver {
   /**
    * Construct an instance of {@link NavigationMapRoute}.
    *
-   * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+   * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
    *                   your route won't consider rerouting during a navigation session.
    * @param mapView    the MapView to apply the route to
    * @param mapboxMap  the MapboxMap to apply route with
    * @param styleRes   a style resource with custom route colors, scale, etc.
    * @param belowLayer optionally pass in a layer id to place the route line below
    */
-  public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                             @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes,
                             @Nullable String belowLayer) {
     this.styleRes = styleRes;
@@ -149,7 +149,7 @@ public class NavigationMapRoute implements LifecycleObserver {
   }
 
   // For testing only
-  NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                      @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
                      MapRouteClickListener mapClickListener,
                      MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
@@ -166,7 +166,7 @@ public class NavigationMapRoute implements LifecycleObserver {
   }
 
   // For testing only
-  NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+  NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                      @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes, @Nullable String belowLayer,
                      MapRouteClickListener mapClickListener,
                      MapView.OnDidFinishLoadingStyleListener didFinishLoadingStyleListener,
@@ -273,26 +273,26 @@ public class NavigationMapRoute implements LifecycleObserver {
 
   /**
    * This method will allow this class to listen to new routes based on
-   * the progress updates from {@link MapboxNavigation}.
+   * the progress updates from {@link MapLibreNavigation}.
    * <p>
-   * If a new route is given to {@link MapboxNavigation#startNavigation(DirectionsRoute)}, this
+   * If a new route is given to {@link MapLibreNavigation#startNavigation(DirectionsRoute)}, this
    * class will automatically draw the new route.
    *
    * @param navigation to add the progress change listener
    */
-  public void addProgressChangeListener(MapboxNavigation navigation) {
+  public void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
     navigation.addProgressChangeListener(mapRouteProgressChangeListener);
   }
 
 
   /**
-   * Should be called if {@link NavigationMapRoute#addProgressChangeListener(MapboxNavigation)} was
+   * Should be called if {@link NavigationMapRoute#addProgressChangeListener(MapLibreNavigation)} was
    * called to prevent leaking.
    *
    * @param navigation to remove the progress change listener
    */
-  public void removeProgressChangeListener(MapboxNavigation navigation) {
+  public void removeProgressChangeListener(MapLibreNavigation navigation) {
     if (navigation != null) {
       navigation.removeProgressChangeListener(mapRouteProgressChangeListener);
     }

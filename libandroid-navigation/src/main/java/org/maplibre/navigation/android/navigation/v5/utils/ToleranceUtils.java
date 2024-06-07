@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.v5.utils;
 
 import org.maplibre.navigation.android.navigation.v5.models.StepIntersection;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.turf.TurfClassification;
 import org.maplibre.turf.TurfConstants;
@@ -23,7 +23,7 @@ public final class ToleranceUtils {
    */
   public static double dynamicRerouteDistanceTolerance(Point snappedPoint,
                                                        RouteProgress routeProgress,
-                                                       MapboxNavigationOptions navigationOptions) {
+                                                       MapLibreNavigationOptions navigationOptions) {
     List<StepIntersection> intersections
       = routeProgress.currentLegProgress().currentStepProgress().intersections();
 

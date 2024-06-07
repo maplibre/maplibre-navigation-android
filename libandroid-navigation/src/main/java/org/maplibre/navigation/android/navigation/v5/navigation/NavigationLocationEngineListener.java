@@ -14,12 +14,12 @@ class NavigationLocationEngineListener implements LocationEngineCallback<Locatio
     private final RouteProcessorBackgroundThread thread;
     private final LocationValidator validator;
     private final LocationEngine locationEngine;
-    private MapboxNavigation mapboxNavigation;
+    private MapLibreNavigation mapLibreNavigation;
 
-    NavigationLocationEngineListener(RouteProcessorBackgroundThread thread, MapboxNavigation mapboxNavigation,
+    NavigationLocationEngineListener(RouteProcessorBackgroundThread thread, MapLibreNavigation mapLibreNavigation,
                                      LocationEngine locationEngine, LocationValidator validator) {
         this.thread = thread;
-        this.mapboxNavigation = mapboxNavigation;
+        this.mapLibreNavigation = mapLibreNavigation;
         this.locationEngine = locationEngine;
         this.validator = validator;
     }
@@ -35,7 +35,7 @@ class NavigationLocationEngineListener implements LocationEngineCallback<Locatio
      * @param location to be processed
      */
     void queueLocationUpdate(Location location) {
-        thread.queueUpdate(NavigationLocationUpdate.create(location, mapboxNavigation));
+        thread.queueUpdate(NavigationLocationUpdate.create(location, mapLibreNavigation));
     }
 
     @Override

@@ -14,7 +14,7 @@ import static org.maplibre.android.style.layers.Property.VISIBLE;
 import static org.maplibre.android.style.layers.PropertyFactory.lineColor;
 import static org.maplibre.android.style.layers.PropertyFactory.lineWidth;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapboxMap.STREETS_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap.STREETS_LAYER_ID;
 
 class MapLayerInteractor {
 

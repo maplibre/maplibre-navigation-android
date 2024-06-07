@@ -30,7 +30,7 @@ import timber.log.Timber;
  * This class can be used to fetch new routes given a {@link Location} origin and
  * {@link RouteOptions} provided by a {@link RouteProgress}.
  */
-public class MapboxRouteFetcher extends RouteFetcher {
+public class MapLibreRouteFetcher extends RouteFetcher {
 
     private static final double BEARING_TOLERANCE = 90d;
     private static final String SEMICOLON = ";";
@@ -45,7 +45,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
 
     private NavigationRoute navigationRoute;
 
-    public MapboxRouteFetcher(Context context) {
+    public MapLibreRouteFetcher(Context context) {
         contextWeakReference = new WeakReference<>(context);
         routeUtils = new RouteUtils();
     }
@@ -153,7 +153,7 @@ public class MapboxRouteFetcher extends RouteFetcher {
 
     /**
      * Executes the given NavigationRoute builder, eventually triggering
-     * any {@link RouteListener} that has been added via {@link MapboxRouteFetcher#addRouteListener(RouteListener)}.
+     * any {@link RouteListener} that has been added via {@link MapLibreRouteFetcher#addRouteListener(RouteListener)}.
      *
      * @param builder to be executed
      */

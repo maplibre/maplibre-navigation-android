@@ -7,11 +7,11 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 abstract class NavigationLocationUpdate {
 
-  static NavigationLocationUpdate create(Location location, MapboxNavigation mapboxNavigation) {
-    return new AutoValue_NavigationLocationUpdate(location, mapboxNavigation);
+  static NavigationLocationUpdate create(Location location, MapLibreNavigation mapLibreNavigation) {
+    return new AutoValue_NavigationLocationUpdate(location, mapLibreNavigation);
   }
 
   abstract Location location();
 
-  abstract MapboxNavigation mapboxNavigation();
+  abstract MapLibreNavigation mapboxNavigation();
 }

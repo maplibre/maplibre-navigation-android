@@ -6,7 +6,7 @@ import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeChangedListener;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeTransitionListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
@@ -23,7 +23,7 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
   private final MapView mapView;
   private final MapBatteryMonitor batteryMonitor;
   private final ProgressChangeListener fpsProgressListener = new FpsDelegateProgressChangeListener(this);
-  private MapboxNavigation navigation;
+  private MapLibreNavigation navigation;
   private int maxFpsThreshold = DEFAULT_MAX_FPS_THRESHOLD;
   private boolean isTracking = true;
   private boolean isEnabled = true;
@@ -51,7 +51,7 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
     updateCameraTracking(trackingMode);
   }
 
-  void addProgressChangeListener(MapboxNavigation navigation) {
+  void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
     navigation.addProgressChangeListener(fpsProgressListener);
   }

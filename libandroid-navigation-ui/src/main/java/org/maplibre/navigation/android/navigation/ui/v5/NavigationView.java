@@ -25,8 +25,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.NavigationAlertView;
-import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapboxMap;
-import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapboxMapInstanceState;
+import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap;
+import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMapInstanceState;
 import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView;
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
@@ -41,8 +41,8 @@ import org.maplibre.android.maps.OnMapReadyCallback;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
 import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
@@ -57,7 +57,7 @@ import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
  * In the latter case, a new {@link DirectionsRoute} will be retrieved from {@link NavigationRoute}.
  * <p>
  * Once valid data is obtained, this activity will immediately begin navigation
- * with {@link MapboxNavigation}.
+ * with {@link MapLibreNavigation}.
  * <p>
  * If launched with the simulation boolean set to true, a {@link ReplayRouteLocationEngine}
  * will be initialized and begin pushing updates.
@@ -86,10 +86,10 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   private NavigationPresenter navigationPresenter;
   private NavigationViewEventDispatcher navigationViewEventDispatcher;
   private NavigationViewModel navigationViewModel;
-  private NavigationMapboxMap navigationMap;
+  private NavigationMapLibreMap navigationMap;
   private OnNavigationReadyCallback onNavigationReadyCallback;
   private NavigationOnCameraTrackingChangedListener onTrackingChangedListener;
-  private NavigationMapboxMapInstanceState mapInstanceState;
+  private NavigationMapLibreMapInstanceState mapInstanceState;
   private CameraPosition initialMapCameraPosition;
   private boolean isMapInitialized;
   private boolean isSubscribed;
@@ -311,7 +311,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * <p>
    * If you'd like to use this method without being overridden by the default way names
    * values we provide, please disabled auto-query with
-   * {@link NavigationMapboxMap#updateWaynameQueryMap(boolean)}.
+   * {@link NavigationMapLibreMap#updateWaynameQueryMap(boolean)}.
    *
    * @param wayName to update the view
    */
@@ -326,7 +326,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * <p>
    * If you'd like to use this method without being overridden by the default visibility values
    * values we provide, please disabled auto-query with
-   * {@link NavigationMapboxMap#updateWaynameQueryMap(boolean)}.
+   * {@link NavigationMapLibreMap#updateWaynameQueryMap(boolean)}.
    *
    * @param isVisible true to show, false to hide
    */
@@ -447,24 +447,24 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * Gives the ability to manipulate the map directly for anything that might not currently be
    * supported. This returns null until the view is initialized.
    * <p>
-   * The {@link NavigationMapboxMap} gives direct access to the map UI (location marker, route, etc.).
+   * The {@link NavigationMapLibreMap} gives direct access to the map UI (location marker, route, etc.).
    *
    * @return navigation mapbox map object, or null if view has not been initialized
    */
   @Nullable
-  public NavigationMapboxMap retrieveNavigationMapboxMap() {
+  public NavigationMapLibreMap retrieveNavigationMapboxMap() {
     return navigationMap;
   }
 
   /**
-   * Returns the instance of {@link MapboxNavigation} powering the {@link NavigationView}
+   * Returns the instance of {@link MapLibreNavigation} powering the {@link NavigationView}
    * once navigation has started.  Will return null if navigation has not been started with
    * {@link NavigationView#startNavigation(NavigationViewOptions)}.
    *
    * @return mapbox navigation, or null if navigation has not started
    */
   @Nullable
-  public MapboxNavigation retrieveMapboxNavigation() {
+  public MapLibreNavigation retrieveMapboxNavigation() {
     return navigationViewModel.retrieveNavigation();
   }
 
@@ -547,7 +547,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     if (initialMapCameraPosition != null) {
       map.setCameraPosition(initialMapCameraPosition);
     }
-    navigationMap = new NavigationMapboxMap(mapView, map);
+    navigationMap = new NavigationMapLibreMap(mapView, map);
     navigationMap.updateLocationLayerRenderMode(RenderMode.GPS);
     if (mapInstanceState != null) {
       navigationMap.restoreFrom(mapInstanceState);
@@ -658,8 +658,8 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   }
 
   private int establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
-    MapboxNavigationOptions mapboxNavigationOptions = navigationViewOptions.navigationOptions();
-    return mapboxNavigationOptions.roundingIncrement();
+    MapLibreNavigationOptions mapLibreNavigationOptions = navigationViewOptions.navigationOptions();
+    return mapLibreNavigationOptions.roundingIncrement();
   }
 
   private String establishLanguage(LocaleUtils localeUtils, NavigationViewOptions options) {

@@ -49,7 +49,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.summary.list.Instruction
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
@@ -69,7 +69,7 @@ import timber.log.Timber;
  * as the name of the destination / maneuver name / instruction based on what data is available
  * <p>
  * To automatically have this view update with information from
- * {@link MapboxNavigation},
+ * {@link MapLibreNavigation},
  * add the view as a {@link ProgressChangeListener} and / or {@link OffRouteListener}
  *
  * @since 0.6.0

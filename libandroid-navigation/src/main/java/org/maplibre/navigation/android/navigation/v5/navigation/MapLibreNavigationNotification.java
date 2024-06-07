@@ -32,7 +32,7 @@ import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter;
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
-class MapboxNavigationNotification implements NavigationNotification {
+class MapLibreNavigationNotification implements NavigationNotification {
 
   private static final int INTENT_FLAGS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
           PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE :
@@ -43,7 +43,7 @@ class MapboxNavigationNotification implements NavigationNotification {
   private Notification notification;
   private RemoteViews collapsedNotificationRemoteViews;
   private RemoteViews expandedNotificationRemoteViews;
-  private MapboxNavigation mapboxNavigation;
+  private MapLibreNavigation mapLibreNavigation;
   private SpannableString currentDistanceText;
   private DistanceFormatter distanceFormatter;
   private String instructionText;
@@ -54,12 +54,12 @@ class MapboxNavigationNotification implements NavigationNotification {
   private BroadcastReceiver endNavigationBtnReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(final Context context, final Intent intent) {
-      MapboxNavigationNotification.this.onEndNavigationBtnClick();
+      MapLibreNavigationNotification.this.onEndNavigationBtnClick();
     }
   };
 
-  MapboxNavigationNotification(Context context, MapboxNavigation mapboxNavigation) {
-    initialize(context, mapboxNavigation);
+  MapLibreNavigationNotification(Context context, MapLibreNavigation mapLibreNavigation) {
+    initialize(context, mapLibreNavigation);
   }
 
   @Override
@@ -82,10 +82,10 @@ class MapboxNavigationNotification implements NavigationNotification {
     unregisterReceiver(context);
   }
 
-  private void initialize(Context context, MapboxNavigation mapboxNavigation) {
-    this.mapboxNavigation = mapboxNavigation;
+  private void initialize(Context context, MapLibreNavigation mapLibreNavigation) {
+    this.mapLibreNavigation = mapLibreNavigation;
     etaFormat = context.getString(R.string.eta_format);
-    initializeDistanceFormatter(context, mapboxNavigation);
+    initializeDistanceFormatter(context, mapLibreNavigation);
     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     isTwentyFourHourFormat = DateFormat.is24HourFormat(context);
     createNotificationChannel(context);
@@ -93,8 +93,8 @@ class MapboxNavigationNotification implements NavigationNotification {
     registerReceiver(context);
   }
 
-  private void initializeDistanceFormatter(Context context, MapboxNavigation mapboxNavigation) {
-    RouteOptions routeOptions = mapboxNavigation.getRoute().routeOptions();
+  private void initializeDistanceFormatter(Context context, MapLibreNavigation mapLibreNavigation) {
+    RouteOptions routeOptions = mapLibreNavigation.getRoute().routeOptions();
     LocaleUtils localeUtils = new LocaleUtils();
     String language = localeUtils.inferDeviceLanguage(context);
     String unitType = localeUtils.getUnitTypeForDeviceLocale(context);
@@ -102,8 +102,8 @@ class MapboxNavigationNotification implements NavigationNotification {
       language = routeOptions.language();
       unitType = routeOptions.voiceUnits();
     }
-    MapboxNavigationOptions mapboxNavigationOptions = mapboxNavigation.options();
-    distanceFormatter = new DistanceFormatter(context, language, unitType, mapboxNavigationOptions.roundingIncrement());
+    MapLibreNavigationOptions mapLibreNavigationOptions = mapLibreNavigation.options();
+    distanceFormatter = new DistanceFormatter(context, language, unitType, mapLibreNavigationOptions.roundingIncrement());
   }
 
   private void createNotificationChannel(Context context) {
@@ -216,7 +216,7 @@ class MapboxNavigationNotification implements NavigationNotification {
   }
 
   private void updateArrivalTime(RouteProgress routeProgress) {
-    MapboxNavigationOptions options = mapboxNavigation.options();
+    MapLibreNavigationOptions options = mapLibreNavigation.options();
     Calendar time = Calendar.getInstance();
     double durationRemaining = routeProgress.durationRemaining();
     int timeFormatType = options.timeFormatType();
@@ -245,8 +245,8 @@ class MapboxNavigationNotification implements NavigationNotification {
   }
 
   private void onEndNavigationBtnClick() {
-    if (mapboxNavigation != null) {
-      mapboxNavigation.stopNavigation();
+    if (mapLibreNavigation != null) {
+      mapLibreNavigation.stopNavigation();
     }
   }
 }

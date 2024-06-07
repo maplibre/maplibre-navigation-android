@@ -57,7 +57,7 @@ public class NavigationEventDispatcherTest extends BaseTest {
     Milestone milestone;
 
     private NavigationEventDispatcher navigationEventDispatcher;
-    private MapboxNavigation navigation;
+    private MapLibreNavigation navigation;
     private DirectionsRoute route;
     private RouteProgress routeProgress;
 
@@ -66,7 +66,7 @@ public class NavigationEventDispatcherTest extends BaseTest {
         MockitoAnnotations.initMocks(this);
         Context context = mock(Context.class);
         when(context.getApplicationContext()).thenReturn(mock(Context.class));
-        navigation = new MapboxNavigation(context, mock(LocationEngine.class));
+        navigation = new MapLibreNavigation(context, mock(LocationEngine.class));
         navigationEventDispatcher = navigation.getEventDispatcher();
 
         Gson gson = new GsonBuilder()

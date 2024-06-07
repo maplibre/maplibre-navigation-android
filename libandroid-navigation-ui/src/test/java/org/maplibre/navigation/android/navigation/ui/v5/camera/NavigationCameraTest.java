@@ -8,7 +8,7 @@ import org.maplibre.android.location.modes.CameraMode;
 import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
 
@@ -89,7 +89,7 @@ public class NavigationCameraTest extends BaseTest {
   public void onResetCamera_dynamicCameraIsReset() {
     MapLibreMap mapboxMap = mock(MapLibreMap.class);
     when(mapboxMap.getCameraPosition()).thenReturn(mock(CameraPosition.class));
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     DynamicCamera dynamicCamera = mock(DynamicCamera.class);
     when(navigation.getCameraEngine()).thenReturn(dynamicCamera);
     RouteInformation currentRouteInformation = mock(RouteInformation.class);
@@ -102,7 +102,7 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void onStartWithNullRoute_progressListenerIsAdded() {
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     ProgressChangeListener listener = mock(ProgressChangeListener.class);
     NavigationCamera camera = buildCamera(navigation, listener);
 
@@ -113,7 +113,7 @@ public class NavigationCameraTest extends BaseTest {
 
   @Test
   public void onResumeWithNullLocation_progressListenerIsAdded() {
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     ProgressChangeListener listener = mock(ProgressChangeListener.class);
     NavigationCamera camera = buildCamera(navigation, listener);
 
@@ -189,23 +189,23 @@ public class NavigationCameraTest extends BaseTest {
   }
 
   private NavigationCamera buildCamera() {
-    return new NavigationCamera(mock(MapLibreMap.class), mock(MapboxNavigation.class), mock(LocationComponent.class));
+    return new NavigationCamera(mock(MapLibreMap.class), mock(MapLibreNavigation.class), mock(LocationComponent.class));
   }
 
   private NavigationCamera buildCamera(MapLibreMap mapboxMap) {
-    return new NavigationCamera(mapboxMap, mock(MapboxNavigation.class), mock(LocationComponent.class));
+    return new NavigationCamera(mapboxMap, mock(MapLibreNavigation.class), mock(LocationComponent.class));
   }
 
   private NavigationCamera buildCamera(LocationComponent locationComponent) {
-    return new NavigationCamera(mock(MapLibreMap.class), mock(MapboxNavigation.class), locationComponent);
+    return new NavigationCamera(mock(MapLibreMap.class), mock(MapLibreNavigation.class), locationComponent);
   }
 
-  private NavigationCamera buildCamera(MapboxNavigation navigation, ProgressChangeListener listener) {
+  private NavigationCamera buildCamera(MapLibreNavigation navigation, ProgressChangeListener listener) {
     return new NavigationCamera(mock(MapLibreMap.class), navigation, listener,
       mock(LocationComponent.class), mock(RouteInformation.class));
   }
 
-  private NavigationCamera buildCamera(MapLibreMap mapboxMap, MapboxNavigation navigation,
+  private NavigationCamera buildCamera(MapLibreMap mapboxMap, MapLibreNavigation navigation,
                                        RouteInformation routeInformation) {
     return new NavigationCamera(mapboxMap, navigation, mock(ProgressChangeListener.class),
       mock(LocationComponent.class), routeInformation);

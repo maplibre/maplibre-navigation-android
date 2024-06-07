@@ -19,10 +19,10 @@ import java.lang.ref.WeakReference;
 import timber.log.Timber;
 
 /**
- * Internal usage only, use navigation by initializing a new instance of {@link MapboxNavigation}
+ * Internal usage only, use navigation by initializing a new instance of {@link MapLibreNavigation}
  * and customizing the navigation experience through that class.
  * <p>
- * This class is first created and started when {@link MapboxNavigation#startNavigation(DirectionsRoute)}
+ * This class is first created and started when {@link MapLibreNavigation#startNavigation(DirectionsRoute)}
  * get's called and runs in the background until either the navigation sessions ends implicitly or
  * the hosting activity gets destroyed. Location updates are also tracked and handled inside this
  * service. Thread creation gets created in this service and maintains the thread until the service
@@ -60,13 +60,13 @@ public class NavigationService extends Service {
     }
 
     /**
-     * This gets called when {@link MapboxNavigation#startNavigation(DirectionsRoute)} is called and
+     * This gets called when {@link MapLibreNavigation#startNavigation(DirectionsRoute)} is called and
      * setups variables among other things on the Navigation Service side.
      */
-    void startNavigation(MapboxNavigation mapboxNavigation) {
-        initialize(mapboxNavigation);
+    void startNavigation(MapLibreNavigation mapLibreNavigation) {
+        initialize(mapLibreNavigation);
         startForegroundNotification(notificationProvider.retrieveNotification());
-        locationEngineUpdater.forceLocationUpdate(mapboxNavigation.getRoute());
+        locationEngineUpdater.forceLocationUpdate(mapLibreNavigation.getRoute());
     }
 
     /**
@@ -79,7 +79,7 @@ public class NavigationService extends Service {
     }
 
     /**
-     * Called with {@link MapboxNavigation#setLocationEngine(LocationEngine)}.
+     * Called with {@link MapLibreNavigation#setLocationEngine(LocationEngine)}.
      * Updates this service with the new {@link LocationEngine}.
      *
      * @param locationEngine to update the provider
@@ -88,15 +88,15 @@ public class NavigationService extends Service {
         locationEngineUpdater.updateLocationEngine(locationEngine);
     }
 
-    private void initialize(MapboxNavigation mapboxNavigation) {
-        NavigationEventDispatcher dispatcher = mapboxNavigation.getEventDispatcher();
-        initializeNotificationProvider(mapboxNavigation);
+    private void initialize(MapLibreNavigation mapLibreNavigation) {
+        NavigationEventDispatcher dispatcher = mapLibreNavigation.getEventDispatcher();
+        initializeNotificationProvider(mapLibreNavigation);
         initializeRouteProcessorThread(dispatcher, notificationProvider);
-        initializeLocationProvider(mapboxNavigation);
+        initializeLocationProvider(mapLibreNavigation);
     }
 
-    private void initializeNotificationProvider(MapboxNavigation mapboxNavigation) {
-        notificationProvider = new NavigationNotificationProvider(getApplication(), mapboxNavigation);
+    private void initializeNotificationProvider(MapLibreNavigation mapLibreNavigation) {
+        notificationProvider = new NavigationNotificationProvider(getApplication(), mapLibreNavigation);
     }
 
     private void initializeRouteProcessorThread(NavigationEventDispatcher dispatcher, NavigationNotificationProvider notificationProvider) {
@@ -104,12 +104,12 @@ public class NavigationService extends Service {
         thread = new RouteProcessorBackgroundThread(new Handler(), listener);
     }
 
-    private void initializeLocationProvider(MapboxNavigation mapboxNavigation) {
-        LocationEngine locationEngine = mapboxNavigation.getLocationEngine();
-        int accuracyThreshold = mapboxNavigation.options().locationAcceptableAccuracyInMetersThreshold();
+    private void initializeLocationProvider(MapLibreNavigation mapLibreNavigation) {
+        LocationEngine locationEngine = mapLibreNavigation.getLocationEngine();
+        int accuracyThreshold = mapLibreNavigation.options().locationAcceptableAccuracyInMetersThreshold();
         LocationValidator validator = new LocationValidator(accuracyThreshold);
         NavigationLocationEngineListener listener = new NavigationLocationEngineListener(
-                thread, mapboxNavigation, locationEngine, validator
+                thread, mapLibreNavigation, locationEngine, validator
         );
         locationEngineUpdater = new NavigationLocationEngineUpdater(locationEngine, listener);
     }

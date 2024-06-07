@@ -2,13 +2,13 @@ package org.maplibre.navigation.android.navigation.v5.milestone;
 
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
 
 /**
- * A default milestone that is added to {@link MapboxNavigation}
+ * A default milestone that is added to {@link MapLibreNavigation}
  * when default milestones are enabled.
  * <p>
  * Please note, this milestone has a custom trigger based on location progress along a route.  If you

@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
 @AutoValue
-public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
+public abstract class MapLibreStreetsV8 extends DirectionsJsonObject {
 
   /**
    * The road class of the road exiting the intersection as defined by the
@@ -35,16 +35,16 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @return this classes {@link Builder} for creating a new instance
    */
   public static Builder builder() {
-    return new AutoValue_MapboxStreetsV8.Builder();
+    return new AutoValue_MapLibreStreetsV8.Builder();
   }
 
   /**
-   * Convert the current {@link MapboxStreetsV8} to its builder holding the currently assigned
+   * Convert the current {@link MapLibreStreetsV8} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
-   * an updated and modified {@link MapboxStreetsV8}.
+   * an updated and modified {@link MapLibreStreetsV8}.
    *
    * @return a {@link Builder} with the same values set to match the ones defined in this {@link
-   * MapboxStreetsV8}
+   * MapLibreStreetsV8}
    */
   public abstract Builder toBuilder();
 
@@ -54,8 +54,8 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
    */
-  public static TypeAdapter<MapboxStreetsV8> typeAdapter(Gson gson) {
-    return new AutoValue_MapboxStreetsV8.GsonTypeAdapter(gson);
+  public static TypeAdapter<MapLibreStreetsV8> typeAdapter(Gson gson) {
+    return new AutoValue_MapLibreStreetsV8.GsonTypeAdapter(gson);
   }
 
   /**
@@ -64,14 +64,14 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining an Incident
    * @return a new instance of this class defined by the values passed in the method
    */
-  public static MapboxStreetsV8 fromJson(String json) {
+  public static MapLibreStreetsV8 fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, MapboxStreetsV8.class);
+    return gson.create().fromJson(json, MapLibreStreetsV8.class);
   }
 
   /**
-   * This builder can be used to set the values describing the {@link MapboxStreetsV8}.
+   * This builder can be used to set the values describing the {@link MapLibreStreetsV8}.
    */
   @AutoValue.Builder
   public abstract static class Builder {
@@ -85,10 +85,10 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
     public abstract Builder roadClass(@Nullable String roadClass);
 
     /**
-     * Build a new {@link MapboxStreetsV8} object.
+     * Build a new {@link MapLibreStreetsV8} object.
      *
-     * @return a new {@link MapboxStreetsV8} using the provided values in this builder
+     * @return a new {@link MapLibreStreetsV8} using the provided values in this builder
      */
-    public abstract MapboxStreetsV8 build();
+    public abstract MapLibreStreetsV8 build();
   }
 }

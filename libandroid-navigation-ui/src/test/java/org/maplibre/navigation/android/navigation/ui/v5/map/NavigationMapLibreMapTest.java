@@ -1,13 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import org.maplibre.navigation.android.navigation.ui.v5.map.LocationFpsDelegate;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapFpsDelegate;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapLayerInteractor;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapPaddingAdjustor;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapWayName;
-import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapboxMap;
-import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager;
-import org.maplibre.navigation.android.navigation.ui.v5.map.OnWayNameChangedListener;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.location.LocationComponent;
@@ -33,12 +25,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class NavigationMapboxMapTest {
+public class NavigationMapLibreMapTest {
 
   @Test
   public void updateIncidentsVisibility_layerIdentifierIsClosures() {
     MapLayerInteractor mockedMapLayerInteractor = mock(MapLayerInteractor.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mockedMapLayerInteractor);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mockedMapLayerInteractor);
     boolean anyVisibility = true;
 
     theNavigationMap.updateIncidentsVisibility(anyVisibility);
@@ -49,7 +41,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void isIncidentsVisible_layerIdentifierIsClosures() {
     MapLayerInteractor mockedMapLayerInteractor = mock(MapLayerInteractor.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mockedMapLayerInteractor);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mockedMapLayerInteractor);
 
     theNavigationMap.isIncidentsVisible();
 
@@ -59,7 +51,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void updateTrafficVisibility_layerIdentifierIsTraffic() {
     MapLayerInteractor mockedMapLayerInteractor = mock(MapLayerInteractor.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mockedMapLayerInteractor);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mockedMapLayerInteractor);
     boolean anyVisibility = false;
 
     theNavigationMap.updateTrafficVisibility(anyVisibility);
@@ -70,7 +62,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void isTrafficVisible_layerIdentifierIsTraffic() {
     MapLayerInteractor mockedMapLayerInteractor = mock(MapLayerInteractor.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mockedMapLayerInteractor);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mockedMapLayerInteractor);
 
     theNavigationMap.isTrafficVisible();
 
@@ -80,7 +72,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void updateRenderMode_locationComponentIsUpdatedWithRenderMode() {
     LocationComponent locationComponent = mock(LocationComponent.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(locationComponent);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(locationComponent);
     int renderMode = RenderMode.GPS;
 
     theNavigationMap.updateLocationLayerRenderMode(renderMode);
@@ -91,7 +83,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void drawRoutes_mapRoutesAreAdded() {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapRoute);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapRoute);
     List<DirectionsRoute> routes = new ArrayList<>();
 
     theNavigationMap.drawRoutes(routes);
@@ -102,7 +94,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void setOnRouteSelectionChangeListener_listenerIsSet() {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapRoute);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapRoute);
     OnRouteSelectionChangeListener listener = mock(OnRouteSelectionChangeListener.class);
 
     theNavigationMap.setOnRouteSelectionChangeListener(listener);
@@ -113,7 +105,7 @@ public class NavigationMapboxMapTest {
   @Test
   public void showAlternativeRoutes_correctVisibilityIsSet() {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapRoute);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapRoute);
     boolean notVisible = false;
 
     theNavigationMap.showAlternativeRoutes(notVisible);
@@ -125,7 +117,7 @@ public class NavigationMapboxMapTest {
   public void addOnWayNameChangedListener_listenerIsAddedToMapWayname() {
     MapWayName mapWayName = mock(MapWayName.class);
     MapFpsDelegate mapFpsDelegate = mock(MapFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate);
     OnWayNameChangedListener listener = mock(OnWayNameChangedListener.class);
 
     boolean isAdded = theNavigationMap.addOnWayNameChangedListener(listener);
@@ -137,7 +129,7 @@ public class NavigationMapboxMapTest {
   public void removeOnWayNameChangedListener_listenerIsRemovedFromMapWayname() {
     MapWayName mapWayName = mock(MapWayName.class);
     MapFpsDelegate mapFpsDelegate = mock(MapFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate);
     OnWayNameChangedListener listener = mock(OnWayNameChangedListener.class);
 
     theNavigationMap.addOnWayNameChangedListener(listener);
@@ -150,7 +142,7 @@ public class NavigationMapboxMapTest {
   public void updateMapFpsThrottle_mapFpsDelegateIsUpdated() {
     MapWayName mapWayName = mock(MapWayName.class);
     MapFpsDelegate mapFpsDelegate = mock(MapFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate);
     int maxFpsThreshold = 10;
 
     theNavigationMap.updateMapFpsThrottle(maxFpsThreshold);
@@ -162,7 +154,7 @@ public class NavigationMapboxMapTest {
   public void updateMapFpsThrottleEnabled_mapFpsDelegateIsEnabled() {
     MapWayName mapWayName = mock(MapWayName.class);
     MapFpsDelegate mapFpsDelegate = mock(MapFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate);
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate);
     boolean isEnabled = false;
 
     theNavigationMap.updateMapFpsThrottleEnabled(isEnabled);
@@ -177,7 +169,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStart();
@@ -192,7 +184,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStop();
@@ -207,7 +199,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStart();
@@ -222,7 +214,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStop();
@@ -241,7 +233,7 @@ public class NavigationMapboxMapTest {
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);
 
-    new NavigationMapboxMap(mapboxMap, layerInteractor, adjustor);
+    new NavigationMapLibreMap(mapboxMap, layerInteractor, adjustor);
 
     verify(layerInteractor).addStreetsLayer("composite", "road_label");
   }
@@ -253,7 +245,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.updateLocationFpsThrottleEnabled(false);
@@ -268,7 +260,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStart();
@@ -283,7 +275,7 @@ public class NavigationMapboxMapTest {
     NavigationMapRoute mapRoute = mock(NavigationMapRoute.class);
     NavigationCamera mapCamera = mock(NavigationCamera.class);
     LocationFpsDelegate locationFpsDelegate = mock(LocationFpsDelegate.class);
-    NavigationMapboxMap theNavigationMap = new NavigationMapboxMap(mapWayName, mapFpsDelegate,
+    NavigationMapLibreMap theNavigationMap = new NavigationMapLibreMap(mapWayName, mapFpsDelegate,
       mapRoute, mapCamera, locationFpsDelegate);
 
     theNavigationMap.onStop();
@@ -302,7 +294,7 @@ public class NavigationMapboxMapTest {
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);
 
-    new NavigationMapboxMap(mapboxMap, layerInteractor, adjustor);
+    new NavigationMapLibreMap(mapboxMap, layerInteractor, adjustor);
 
     verify(layerInteractor).addStreetsLayer("composite", "road");
   }
@@ -311,7 +303,7 @@ public class NavigationMapboxMapTest {
   public void addDestinationMarker_navigationSymbolManagerReceivesPosition() {
     Point position = mock(Point.class);
     NavigationSymbolManager navigationSymbolManager = mock(NavigationSymbolManager.class);
-    NavigationMapboxMap map = new NavigationMapboxMap(navigationSymbolManager);
+    NavigationMapLibreMap map = new NavigationMapLibreMap(navigationSymbolManager);
 
     map.addDestinationMarker(position);
 
@@ -322,7 +314,7 @@ public class NavigationMapboxMapTest {
   public void addCustomMarker_navigationSymbolManagerReceivesOptions() {
     SymbolOptions options = mock(SymbolOptions.class);
     NavigationSymbolManager navigationSymbolManager = mock(NavigationSymbolManager.class);
-    NavigationMapboxMap map = new NavigationMapboxMap(navigationSymbolManager);
+    NavigationMapLibreMap map = new NavigationMapLibreMap(navigationSymbolManager);
 
     map.addCustomMarker(options);
 

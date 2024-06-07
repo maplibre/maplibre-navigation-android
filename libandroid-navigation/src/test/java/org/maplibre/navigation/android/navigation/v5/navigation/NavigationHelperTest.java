@@ -94,19 +94,19 @@ public class NavigationHelperTest extends BaseTest {
     @Test
     public void checkMilestones_onlyTriggeredMilestonesGetReturned() throws Exception {
         RouteProgress routeProgress = buildMultiLegRouteProgress();
-        MapboxNavigationOptions options = MapboxNavigationOptions.builder()
+        MapLibreNavigationOptions options = MapLibreNavigationOptions.builder()
                 .defaultMilestonesEnabled(false).build();
         Context context = mock(Context.class);
         when(context.getApplicationContext()).thenReturn(mock(Context.class));
-        MapboxNavigation mapboxNavigation = new MapboxNavigation(context, options, mock(LocationEngine.class));
-        mapboxNavigation.addMilestone(new StepMilestone.Builder()
+        MapLibreNavigation mapLibreNavigation = new MapLibreNavigation(context, options, mock(LocationEngine.class));
+        mapLibreNavigation.addMilestone(new StepMilestone.Builder()
                 .setTrigger(Trigger.eq(TriggerProperty.STEP_INDEX, 0))
                 .setIdentifier(1001).build());
-        mapboxNavigation.addMilestone(new StepMilestone.Builder()
+        mapLibreNavigation.addMilestone(new StepMilestone.Builder()
                 .setTrigger(Trigger.eq(TriggerProperty.STEP_INDEX, 4))
                 .setIdentifier(1002).build());
 
-        List<Milestone> triggeredMilestones = checkMilestones(routeProgress, routeProgress, mapboxNavigation);
+        List<Milestone> triggeredMilestones = checkMilestones(routeProgress, routeProgress, mapLibreNavigation);
 
         assertEquals(1, triggeredMilestones.size());
         assertEquals(1001, triggeredMilestones.get(0).getIdentifier());
@@ -115,13 +115,13 @@ public class NavigationHelperTest extends BaseTest {
 
     @Test
     public void offRouteDetectionDisabled_isOffRouteReturnsFalse() throws Exception {
-        MapboxNavigationOptions options = MapboxNavigationOptions.builder()
+        MapLibreNavigationOptions options = MapLibreNavigationOptions.builder()
                 .enableOffRouteDetection(false)
                 .build();
         Context context = mock(Context.class);
         when(context.getApplicationContext()).thenReturn(mock(Context.class));
-        MapboxNavigation mapboxNavigation = new MapboxNavigation(context, options, mock(LocationEngine.class));
-        NavigationLocationUpdate model = NavigationLocationUpdate.create(mock(Location.class), mapboxNavigation);
+        MapLibreNavigation mapLibreNavigation = new MapLibreNavigation(context, options, mock(LocationEngine.class));
+        NavigationLocationUpdate model = NavigationLocationUpdate.create(mock(Location.class), mapLibreNavigation);
 
         boolean userOffRoute = isUserOffRoute(model, mock(RouteProgress.class), mock(OffRouteCallback.class));
 

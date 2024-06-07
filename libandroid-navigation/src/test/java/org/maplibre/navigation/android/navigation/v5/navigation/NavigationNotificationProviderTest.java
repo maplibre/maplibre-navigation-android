@@ -3,9 +3,6 @@ package org.maplibre.navigation.android.navigation.v5.navigation;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationNotificationProvider;
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 
@@ -22,9 +19,9 @@ public class NavigationNotificationProviderTest {
   @Test
   public void updateNavigationNotification() {
     NavigationNotification notification = mock(NavigationNotification.class);
-    MapboxNavigation mapboxNavigation = buildNavigationWithNotificationOptions(notification);
+    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
     Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapboxNavigation);
+    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
 
     RouteProgress routeProgress = mock(RouteProgress.class);
     provider.updateNavigationNotification(routeProgress);
@@ -35,9 +32,9 @@ public class NavigationNotificationProviderTest {
   @Test
   public void updateNavigationNotification_doesNotUpdateAfterShutdown() {
     NavigationNotification notification = mock(NavigationNotification.class);
-    MapboxNavigation mapboxNavigation = buildNavigationWithNotificationOptions(notification);
+    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
     Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapboxNavigation);
+    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
     RouteProgress routeProgress = mock(RouteProgress.class);
 
     provider.shutdown(context);
@@ -49,9 +46,9 @@ public class NavigationNotificationProviderTest {
   @Test
   public void onShutdown_onNavigationStoppedIsCalled() {
     NavigationNotification notification = mock(NavigationNotification.class);
-    MapboxNavigation mapboxNavigation = buildNavigationWithNotificationOptions(notification);
+    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
     Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapboxNavigation);
+    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
 
     provider.shutdown(context);
 
@@ -59,11 +56,11 @@ public class NavigationNotificationProviderTest {
   }
 
   @NonNull
-  private MapboxNavigation buildNavigationWithNotificationOptions(NavigationNotification notification) {
-    MapboxNavigation mapboxNavigation = mock(MapboxNavigation.class);
-    MapboxNavigationOptions options = mock(MapboxNavigationOptions.class);
+  private MapLibreNavigation buildNavigationWithNotificationOptions(NavigationNotification notification) {
+    MapLibreNavigation mapLibreNavigation = mock(MapLibreNavigation.class);
+    MapLibreNavigationOptions options = mock(MapLibreNavigationOptions.class);
     when(options.navigationNotification()).thenReturn(notification);
-    when(mapboxNavigation.options()).thenReturn(options);
-    return mapboxNavigation;
+    when(mapLibreNavigation.options()).thenReturn(options);
+    return mapLibreNavigation;
   }
 }

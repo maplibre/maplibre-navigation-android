@@ -24,7 +24,7 @@ import org.maplibre.geojson.Point;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 
 import org.junit.Test;
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapboxRouteFetcher;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
 
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void findRouteFrom_fastConnectionGoesToOnline() {
-    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
+    MapLibreRouteFetcher onlineRouter = mock(MapLibreRouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
     when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
@@ -116,7 +116,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void findRouteFrom_secondRequestIgnored() {
-    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
+    MapLibreRouteFetcher onlineRouter = mock(MapLibreRouteFetcher.class);
     NavigationRoute.Builder builder = mock(NavigationRoute.Builder.class);
     when(onlineRouter.buildRequest(any(Location.class), any(RouteProgress.class))).thenReturn(builder);
     ConnectivityStatusProvider status = mock(ConnectivityStatusProvider.class);
@@ -136,7 +136,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void onDestroy_clearsListeners() {
-    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
+    MapLibreRouteFetcher onlineRouter = mock(MapLibreRouteFetcher.class);
     NavigationViewRouter router = new NavigationViewRouter(
       onlineRouter,
       mock(ConnectivityStatusProvider.class),
@@ -152,7 +152,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @Test
   public void onDestroy_cancelsOnlineRouteCall() {
-    MapboxRouteFetcher onlineRouter = mock(MapboxRouteFetcher.class);
+    MapLibreRouteFetcher onlineRouter = mock(MapLibreRouteFetcher.class);
     NavigationViewRouter router = new NavigationViewRouter(
       onlineRouter,
       mock(ConnectivityStatusProvider.class),
@@ -168,7 +168,7 @@ public class NavigationViewRouterTest extends BaseTest {
 
   @NonNull
   private NavigationViewRouter buildRouteEngine(ViewRouteListener routeEngineListener) {
-    return new NavigationViewRouter(mock(MapboxRouteFetcher.class), mock(ConnectivityStatusProvider.class),
+    return new NavigationViewRouter(mock(MapLibreRouteFetcher.class), mock(ConnectivityStatusProvider.class),
       routeEngineListener);
   }
 

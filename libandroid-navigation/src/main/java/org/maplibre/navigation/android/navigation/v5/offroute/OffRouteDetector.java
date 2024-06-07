@@ -5,7 +5,7 @@ import android.location.Location;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.RingBuffer;
 import org.maplibre.turf.TurfConstants;
@@ -36,7 +36,7 @@ public class OffRouteDetector extends OffRoute {
    * Test #2:
    * Valid or invalid off-route.  An off-route check can only continue if the device has received
    * at least 1 location update (for comparison) and the user has traveled passed
-   * the {@link MapboxNavigationOptions#minimumDistanceBeforeRerouting()} checked against the last re-route location.
+   * the {@link MapLibreNavigationOptions#minimumDistanceBeforeRerouting()} checked against the last re-route location.
    * <p>
    * Test #3:
    * Distance from the step. This test is checked against the max of the dynamic rerouting tolerance or the
@@ -45,7 +45,7 @@ public class OffRouteDetector extends OffRoute {
    * <p>
    * Test #4:
    * Checks if the user is close the upcoming step.  At this point, the user is considered off-route.
-   * But, if the location update is within the {@link MapboxNavigationOptions#maneuverZoneRadius()} of the
+   * But, if the location update is within the {@link MapLibreNavigationOptions#maneuverZoneRadius()} of the
    * upcoming step, this method will return false as well as send fire {@link OffRouteCallback#onShouldIncreaseIndex()}
    * to let the <tt>NavigationEngine</tt> know that the
    * step index should be increased on the next location update.
@@ -54,7 +54,7 @@ public class OffRouteDetector extends OffRoute {
    * @since 0.2.0
    */
   @Override
-  public boolean isUserOffRoute(Location location, RouteProgress routeProgress, MapboxNavigationOptions options) {
+  public boolean isUserOffRoute(Location location, RouteProgress routeProgress, MapLibreNavigationOptions options) {
 
     if (checkDistanceRemaining(routeProgress)) {
       return true;
@@ -109,7 +109,7 @@ public class OffRouteDetector extends OffRoute {
   }
 
   /**
-   * Method to check if the user has passed either the set (in {@link MapboxNavigationOptions})
+   * Method to check if the user has passed either the set (in {@link MapLibreNavigationOptions})
    * minimum amount of seconds or minimum amount of meters since the last reroute.
    * <p>
    * If the user is above both thresholds, then the off-route can proceed.  Otherwise, ignore.
@@ -118,7 +118,7 @@ public class OffRouteDetector extends OffRoute {
    * @param options  for second (default 3) / distance (default 50m) minimums
    * @return true if valid, false if not
    */
-  private boolean validOffRoute(Location location, MapboxNavigationOptions options) {
+  private boolean validOffRoute(Location location, MapLibreNavigationOptions options) {
     // Check if minimum amount of distance has been passed since last reroute
     Point currentPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
     double distanceFromLastReroute = 0d;
@@ -133,7 +133,7 @@ public class OffRouteDetector extends OffRoute {
   }
 
   private boolean checkOffRouteRadius(Location location, RouteProgress routeProgress,
-                                      MapboxNavigationOptions options, Point currentPoint) {
+                                      MapLibreNavigationOptions options, Point currentPoint) {
     LegStep currentStep = routeProgress.currentLegProgress().currentStep();
     double distanceFromCurrentStep = userTrueDistanceFromStep(currentPoint, currentStep);
     double offRouteRadius = createOffRouteRadius(location, routeProgress, options, currentPoint);
@@ -141,7 +141,7 @@ public class OffRouteDetector extends OffRoute {
   }
 
   private double createOffRouteRadius(Location location, RouteProgress routeProgress,
-                                      MapboxNavigationOptions options, Point currentPoint) {
+                                      MapLibreNavigationOptions options, Point currentPoint) {
     double dynamicTolerance = dynamicRerouteDistanceTolerance(currentPoint, routeProgress, options);
     double accuracyTolerance = location.getAccuracy() * options.deadReckoningTimeInterval();
     return Math.max(dynamicTolerance, accuracyTolerance);
@@ -151,7 +151,7 @@ public class OffRouteDetector extends OffRoute {
                                            RouteProgress routeProgress,
                                            RingBuffer<Integer> distancesAwayFromManeuver,
                                            Point currentPoint,
-                                           MapboxNavigationOptions options) {
+                                           MapLibreNavigationOptions options) {
     List<Point> stepPoints = routeProgress.currentStepPoints();
     if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint, options)) {
       updateLastReroutePoint(location);
@@ -173,7 +173,7 @@ public class OffRouteDetector extends OffRoute {
    * @param upComingStep for distance from current point
    * @return true if close to upcoming step, false if not
    */
-  private static boolean closeToUpcomingStep(MapboxNavigationOptions options, OffRouteCallback callback,
+  private static boolean closeToUpcomingStep(MapLibreNavigationOptions options, OffRouteCallback callback,
                                              Point currentPoint, LegStep upComingStep) {
     if (callback == null) {
       return false;
@@ -209,7 +209,7 @@ public class OffRouteDetector extends OffRoute {
                                                 RingBuffer<Integer> distancesAwayFromManeuver,
                                                 List<Point> stepPoints,
                                                 Point currentPoint,
-                                                MapboxNavigationOptions options) {
+                                                MapLibreNavigationOptions options) {
     boolean invalidUpcomingStep = routeProgress.currentLegProgress().upComingStep() == null;
     boolean invalidStepPointSize = stepPoints.size() < TWO_POINTS;
     if (invalidUpcomingStep || invalidStepPointSize) {

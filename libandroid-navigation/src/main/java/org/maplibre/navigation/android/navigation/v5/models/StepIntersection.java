@@ -192,7 +192,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    */
   @Nullable
   @SerializedName("mapbox_streets_v8")
-  public abstract MapboxStreetsV8 mapboxStreetsV8();
+  public abstract MapLibreStreetsV8 mapboxStreetsV8();
 
   /**
    * Name of the tunnel. Value may be present if {@link #classes} contains "tunnel".
@@ -388,7 +388,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     @Nullable
-    public abstract Builder mapboxStreetsV8(@Nullable MapboxStreetsV8 street);
+    public abstract Builder mapboxStreetsV8(@Nullable MapLibreStreetsV8 street);
 
     /**
      * Name of the tunnel. Value is present only if class is tunnel.

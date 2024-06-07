@@ -2,14 +2,11 @@ package org.maplibre.navigation.android.navigation.ui.v5.map;
 
 import android.content.Context;
 
-import org.maplibre.navigation.android.navigation.ui.v5.map.FpsDelegateProgressChangeListener;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapBatteryMonitor;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapFpsDelegate;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
 import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
 import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation;
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProgress;
@@ -26,7 +23,7 @@ public class MapFpsDelegateTest {
 
   @Test
   public void addProgressChangeListener_navigationReceivesListener() {
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     MapFpsDelegate delegate = new MapFpsDelegate(mock(MapView.class), mock(MapBatteryMonitor.class));
 
     delegate.addProgressChangeListener(navigation);
@@ -56,7 +53,7 @@ public class MapFpsDelegateTest {
 
   @Test
   public void onStop_navigationListenerRemoved() {
-    MapboxNavigation navigation = mock(MapboxNavigation.class);
+    MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     MapFpsDelegate delegate = new MapFpsDelegate(mock(MapView.class), mock(MapBatteryMonitor.class));
     delegate.addProgressChangeListener(navigation);
 

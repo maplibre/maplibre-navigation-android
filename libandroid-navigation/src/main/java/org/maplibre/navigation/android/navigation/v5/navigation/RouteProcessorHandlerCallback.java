@@ -43,34 +43,34 @@ class RouteProcessorHandlerCallback implements Handler.Callback {
      * @param update hold location, navigation (with options), and distances away from maneuver
      */
     private void handleRequest(final NavigationLocationUpdate update) {
-        final MapboxNavigation mapboxNavigation = update.mapboxNavigation();
+        final MapLibreNavigation mapLibreNavigation = update.mapboxNavigation();
         final Location rawLocation = update.location();
-        RouteProgress routeProgress = routeProcessor.buildNewRouteProgress(mapboxNavigation, rawLocation);
+        RouteProgress routeProgress = routeProcessor.buildNewRouteProgress(mapLibreNavigation, rawLocation);
 
-        final boolean userOffRoute = determineUserOffRoute(update, mapboxNavigation, routeProgress);
-        final List<Milestone> milestones = findTriggeredMilestones(mapboxNavigation, routeProgress);
-        final Location location = findSnappedLocation(mapboxNavigation, rawLocation, routeProgress, userOffRoute);
+        final boolean userOffRoute = determineUserOffRoute(update, mapLibreNavigation, routeProgress);
+        final List<Milestone> milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress);
+        final Location location = findSnappedLocation(mapLibreNavigation, rawLocation, routeProgress, userOffRoute);
 
         final RouteProgress finalRouteProgress = updateRouteProcessorWith(routeProgress);
         sendUpdateToListener(userOffRoute, milestones, location, finalRouteProgress);
     }
 
-    private List<Milestone> findTriggeredMilestones(MapboxNavigation mapboxNavigation, RouteProgress routeProgress) {
+    private List<Milestone> findTriggeredMilestones(MapLibreNavigation mapLibreNavigation, RouteProgress routeProgress) {
         RouteProgress previousRouteProgress = routeProcessor.getRouteProgress();
-        return checkMilestones(previousRouteProgress, routeProgress, mapboxNavigation);
+        return checkMilestones(previousRouteProgress, routeProgress, mapLibreNavigation);
     }
 
-    private Location findSnappedLocation(MapboxNavigation mapboxNavigation, Location rawLocation,
-            RouteProgress routeProgress, boolean userOffRoute) {
-        boolean snapToRouteEnabled = mapboxNavigation.options().snapToRoute();
-        return buildSnappedLocation(mapboxNavigation, snapToRouteEnabled,
+    private Location findSnappedLocation(MapLibreNavigation mapLibreNavigation, Location rawLocation,
+                                         RouteProgress routeProgress, boolean userOffRoute) {
+        boolean snapToRouteEnabled = mapLibreNavigation.options().snapToRoute();
+        return buildSnappedLocation(mapLibreNavigation, snapToRouteEnabled,
                 rawLocation, routeProgress, userOffRoute);
     }
 
     private boolean determineUserOffRoute(NavigationLocationUpdate navigationLocationUpdate,
-            MapboxNavigation mapboxNavigation, RouteProgress routeProgress) {
+                                          MapLibreNavigation mapLibreNavigation, RouteProgress routeProgress) {
         final boolean userOffRoute = isUserOffRoute(navigationLocationUpdate, routeProgress, routeProcessor);
-        routeProcessor.checkIncreaseIndex(mapboxNavigation);
+        routeProcessor.checkIncreaseIndex(mapLibreNavigation);
         return userOffRoute;
     }
 

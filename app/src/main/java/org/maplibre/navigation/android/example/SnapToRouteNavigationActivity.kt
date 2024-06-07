@@ -22,8 +22,8 @@ import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigation
-import org.maplibre.navigation.android.navigation.v5.navigation.MapboxNavigationOptions
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,9 +36,9 @@ import timber.log.Timber
  * You need to do the following steps to enable route snapping:
  * 1. Disable default location engine by set [LocationComponentActivationOptions.useDefaultLocationEngine] to false.
  * 2. Get snapped location from [ProgressChangeListener] callback and set it to [LocationComponent] by [LocationComponent.forceLocationUpdate] method.
- * 3. Activate route snapping by set [MapboxNavigationOptions.snapToRoute] to true.
+ * 3. Activate route snapping by set [MapLibreNavigationOptions.snapToRoute] to true.
  *
- * By default [SnapToRoute] is used. If you want to use your own snapping logic, you can set with [MapboxNavigation.setSnapEngine] for your own implementation.
+ * By default [SnapToRoute] is used. If you want to use your own snapping logic, you can set with [MapLibreNavigation.setSnapEngine] for your own implementation.
  */
 class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     ProgressChangeListener {
@@ -47,7 +47,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mapboxMap: MapLibreMap
     private var locationEngine: ReplayRouteLocationEngine =
         ReplayRouteLocationEngine()
-    private lateinit var navigation: MapboxNavigation
+    private lateinit var navigation: MapLibreNavigation
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
 
@@ -57,9 +57,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         binding = ActivitySnapToRouteNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navigation = MapboxNavigation(
+        navigation = MapLibreNavigation(
             this,
-            MapboxNavigationOptions.builder()
+            MapLibreNavigationOptions.builder()
                 .snapToRoute(true)
                 .build()
         ).apply {

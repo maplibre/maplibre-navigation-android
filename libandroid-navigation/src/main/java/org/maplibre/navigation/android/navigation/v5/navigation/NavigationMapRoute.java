@@ -156,7 +156,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     @DrawableRes
     private int destinationWaypointIcon;
 
-    private MapboxNavigation navigation;
+    private MapLibreNavigation navigation;
     private final MapLibreMap mapboxMap;
     private final HashMap<LineString, DirectionsRoute> routeLineStrings;
     private final List<FeatureCollection> featureCollections;
@@ -203,13 +203,13 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     /**
      * Construct an instance of {@link NavigationMapRoute}.
      *
-     * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+     * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
      *                   your route won't consider rerouting during a navigation session.
      * @param mapView    the MapView to apply the route to
      * @param mapboxMap  the MapboxMap to apply route with
      * @since 0.4.0
      */
-    public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+    public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapLibreMap mapboxMap) {
         this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute);
     }
@@ -217,14 +217,14 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     /**
      * Construct an instance of {@link NavigationMapRoute}.
      *
-     * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+     * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
      *                   your route won't consider rerouting during a navigation session.
      * @param mapView    the MapView to apply the route to
      * @param mapboxMap  the MapboxMap to apply route with
      * @param belowLayer optionally pass in a layer id to place the route line below
      * @since 0.4.0
      */
-    public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+    public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapLibreMap mapboxMap, @Nullable String belowLayer) {
         this(navigation, mapView, mapboxMap, R.style.NavigationMapRoute, belowLayer);
     }
@@ -232,13 +232,13 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     /**
      * Construct an instance of {@link NavigationMapRoute}.
      *
-     * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+     * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
      *                   your route won't consider rerouting during a navigation session.
      * @param mapView    the MapView to apply the route to
      * @param mapboxMap  the MapboxMap to apply route with
      * @param styleRes   a style resource with custom route colors, scale, etc.
      */
-    public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+    public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes) {
         this(navigation, mapView, mapboxMap, styleRes, null);
     }
@@ -246,14 +246,14 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     /**
      * Construct an instance of {@link NavigationMapRoute}.
      *
-     * @param navigation an instance of the {@link MapboxNavigation} object. Passing in null means
+     * @param navigation an instance of the {@link MapLibreNavigation} object. Passing in null means
      *                   your route won't consider rerouting during a navigation session.
      * @param mapView    the MapView to apply the route to
      * @param mapboxMap  the MapboxMap to apply route with
      * @param styleRes   a style resource with custom route colors, scale, etc.
      * @param belowLayer optionally pass in a layer id to place the route line below
      */
-    public NavigationMapRoute(@Nullable MapboxNavigation navigation, @NonNull MapView mapView,
+    public NavigationMapRoute(@Nullable MapLibreNavigation navigation, @NonNull MapView mapView,
                               @NonNull MapLibreMap mapboxMap, @StyleRes int styleRes,
                               @Nullable String belowLayer) {
         this.styleRes = styleRes;
@@ -329,12 +329,12 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
         toggleAlternativeVisibility(alternativesVisible);
     }
 
-    public void addProgressChangeListener(MapboxNavigation navigation) {
+    public void addProgressChangeListener(MapLibreNavigation navigation) {
         this.navigation = navigation;
         navigation.addProgressChangeListener(progressChangeListener);
     }
 
-    public void removeProgressChangeListener(MapboxNavigation navigation) {
+    public void removeProgressChangeListener(MapLibreNavigation navigation) {
         if (navigation != null) {
             navigation.removeProgressChangeListener(progressChangeListener);
         }
@@ -1064,7 +1064,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     }
 
     /**
-     * This method should be called only if you have passed {@link MapboxNavigation}
+     * This method should be called only if you have passed {@link MapLibreNavigation}
      * into the constructor.
      * <p>
      * This method will add the {@link ProgressChangeListener} that was originally added so updates
@@ -1080,7 +1080,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     }
 
     /**
-     * This method should be called only if you have passed {@link MapboxNavigation}
+     * This method should be called only if you have passed {@link MapLibreNavigation}
      * into the constructor.
      * <p>
      * This method will remove the {@link ProgressChangeListener} that was originally added so updates

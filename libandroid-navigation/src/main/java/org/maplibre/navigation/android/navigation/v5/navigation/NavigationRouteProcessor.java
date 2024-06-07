@@ -73,16 +73,16 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * based on our calculations of the distances remaining.
    * <p>
    * Also in charge of detecting if a step / leg has finished and incrementing the
-   * indices if needed ({@link NavigationRouteProcessor#advanceIndices(MapboxNavigation)} handles
+   * indices if needed ({@link NavigationRouteProcessor#advanceIndices(MapLibreNavigation)} handles
    * the decoding of the next step point list).
    *
    * @param navigation for the current route / options
    * @param location   for step / leg / route distance remaining
    * @return new route progress along the route
    */
-  RouteProgress buildNewRouteProgress(MapboxNavigation navigation, Location location) {
+  RouteProgress buildNewRouteProgress(MapLibreNavigation navigation, Location location) {
     DirectionsRoute directionsRoute = navigation.getRoute();
-    MapboxNavigationOptions options = navigation.options();
+    MapLibreNavigationOptions options = navigation.options();
     double completionOffset = options.maxTurnCompletionOffset();
     double maneuverZoneRadius = options.maneuverZoneRadius();
     boolean newRoute = checkNewRoute(navigation);
@@ -109,7 +109,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
    *
    * @param navigation to get the next {@link LegStep#geometry()} and off-route engine
    */
-  void checkIncreaseIndex(MapboxNavigation navigation) {
+  void checkIncreaseIndex(MapLibreNavigation navigation) {
     if (shouldIncreaseIndex) {
       advanceIndices(navigation);
       shouldIncreaseIndex = false;
@@ -121,14 +121,14 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * Checks if the route provided is a new route.  If it is, all {@link RouteProgress}
    * data and {@link NavigationIndices} needs to be reset.
    *
-   * @param mapboxNavigation to get the current route and off-route engine
+   * @param mapLibreNavigation to get the current route and off-route engine
    * @return Whether or not a route progress is already set and {@link RouteUtils} determines this is a new route
    */
-  private boolean checkNewRoute(@NonNull MapboxNavigation mapboxNavigation) {
-    DirectionsRoute directionsRoute = mapboxNavigation.getRoute();
+  private boolean checkNewRoute(@NonNull MapLibreNavigation mapLibreNavigation) {
+    DirectionsRoute directionsRoute = mapLibreNavigation.getRoute();
     boolean newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute);
     if (newRoute) {
-      createFirstIndices(mapboxNavigation);
+      createFirstIndices(mapLibreNavigation);
       currentLegAnnotation = null;
     }
     return newRoute;
@@ -147,7 +147,7 @@ class NavigationRouteProcessor implements OffRouteCallback {
     );
   }
 
-  private void checkManeuverCompletion(MapboxNavigation navigation, Location location, DirectionsRoute directionsRoute,
+  private void checkManeuverCompletion(MapLibreNavigation navigation, Location location, DirectionsRoute directionsRoute,
                                        double completionOffset, double maneuverZoneRadius) {
     boolean withinManeuverRadius = stepDistanceRemaining < maneuverZoneRadius;
     boolean bearingMatchesManeuver = checkBearingForStepCompletion(
@@ -167,9 +167,9 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * Decodes the step points for the new step and clears the distances from
    * maneuver stack, as the maneuver has now changed.
    *
-   * @param mapboxNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
+   * @param mapLibreNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
    */
-  private void advanceIndices(MapboxNavigation mapboxNavigation) {
+  private void advanceIndices(MapLibreNavigation mapLibreNavigation) {
     NavigationIndices newIndices;
     if (shouldUpdateToIndex != null) {
       newIndices = shouldUpdateToIndex;
@@ -180,17 +180,17 @@ class NavigationRouteProcessor implements OffRouteCallback {
       currentLegAnnotation = null;
     }
     indices = newIndices;
-    processNewIndex(mapboxNavigation);
+    processNewIndex(mapLibreNavigation);
   }
 
   /**
    * Initializes or resets the {@link NavigationIndices} for a new route received.
    *
-   * @param mapboxNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
+   * @param mapLibreNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
    */
-  private void createFirstIndices(MapboxNavigation mapboxNavigation) {
+  private void createFirstIndices(MapLibreNavigation mapLibreNavigation) {
     indices = NavigationIndices.create(FIRST_LEG_INDEX, FIRST_STEP_INDEX);
-    processNewIndex(mapboxNavigation);
+    processNewIndex(mapLibreNavigation);
   }
 
   /**
@@ -199,22 +199,22 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * Processes all new index-based data that is
    * needed for {@link NavigationRouteProcessor#assembleRouteProgress(DirectionsRoute)}.
    *
-   * @param mapboxNavigation for the current route
+   * @param mapLibreNavigation for the current route
    */
-  private void processNewIndex(MapboxNavigation mapboxNavigation) {
-    DirectionsRoute route = mapboxNavigation.getRoute();
+  private void processNewIndex(MapLibreNavigation mapLibreNavigation) {
+    DirectionsRoute route = mapLibreNavigation.getRoute();
     int legIndex = indices.legIndex();
     int stepIndex = indices.stepIndex();
     int upcomingStepIndex = stepIndex + ONE_INDEX;
     if(route.legs().size() <= legIndex || route.legs().get(legIndex).steps().size() <= stepIndex){
       // This catches a potential race condition when the route is changed, before the new index is processed
-      createFirstIndices(mapboxNavigation);
+      createFirstIndices(mapLibreNavigation);
       return;
     }
     updateSteps(route, legIndex, stepIndex, upcomingStepIndex);
     updateStepPoints(route, legIndex, stepIndex, upcomingStepIndex);
     updateIntersections();
-    clearManeuverDistances(mapboxNavigation.getOffRouteEngine());
+    clearManeuverDistances(mapLibreNavigation.getOffRouteEngine());
   }
 
   private RouteProgress assembleRouteProgress(DirectionsRoute route) {
