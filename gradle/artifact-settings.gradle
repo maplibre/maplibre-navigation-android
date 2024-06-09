@@ -1,11 +1,11 @@
 ext {
-    navigationArtifactGroupId = 'com.mapbox.mapboxsdk'
+    navigationArtifactGroupId = 'org.maplibre.navigation'
     navigationArtifactId = 'android'
     navigationArtifactTitle = 'MapLibre Navigation SDK for Android'
     navigationArtifactDescription = 'MapLibre Navigation SDK for Android'
     navigationDeveloperName = 'MapLibre'
     navigationDeveloperId = 'maplibre'
-    mavogatopmDeveloperMail = 'maplibre@maplibre.org'
+    navigationDeveloperMail = 'maplibre@maplibre.org'
     navigationArtifactUrl = 'https://github.com/maplibre/maplibre-navigation-android'
     navigationArtifactScmUrl = 'scm:git@github.com:maplibre/maplibre-navigation-android.git'
     navigationArtifactLicenseName = 'MIT'
