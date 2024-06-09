@@ -33,7 +33,7 @@ afterEvaluate {
   publishing {
     publications {
       release(MavenPublication) {
-        groupId GROUP
+        groupId project.ext.navigationArtifactGroupId
         artifactId project.ext.navigationArtifactId
         version VERSION_NAME
 

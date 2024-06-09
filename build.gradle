@@ -28,9 +28,6 @@ allprojects {
     google()
     maven { url 'https://plugins.gradle.org/m2' }
   }
-
-  group = GROUP
-  version = VERSION_NAME
 }
 
 subprojects {
