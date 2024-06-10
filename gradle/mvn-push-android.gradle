@@ -3,74 +3,77 @@ apply plugin: 'signing'
 apply from: "${rootDir}/gradle/artifact-settings.gradle"
 
 task androidJavadocs(type: Javadoc) {
-  source = android.sourceSets.main.java.sourceFiles
-  classpath = files(android.bootClasspath)
-  failOnError = false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath = files(android.bootClasspath)
+    failOnError = false
 }
 
 task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-  archiveClassifier.set('javadoc')
-  from androidJavadocs.destinationDir
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
 }
 
 task androidSourcesJar(type: Jar) {
-  archiveClassifier.set('sources')
-  from android.sourceSets.main.java.sourceFiles
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.sourceFiles
 }
 
 tasks.withType(Javadoc) {
-  options.addStringOption('encoding', 'UTF-8')
-  options.addStringOption('docencoding', 'UTF-8')
-  options.addStringOption('charset', 'UTF-8')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('docencoding', 'UTF-8')
+    options.addStringOption('charset', 'UTF-8')
 }
 
 artifacts {
-  archives androidSourcesJar
-  archives androidJavadocsJar
+    archives androidSourcesJar
+    archives androidJavadocsJar
 }
 
-afterEvaluate {
-  publishing {
+publishing {
     publications {
-      release(MavenPublication) {
-        groupId project.ext.navigationArtifactGroupId
-        artifactId project.name
-        version VERSION_NAME
+        release(MavenPublication) {
+            groupId project.ext.navigationArtifactGroupId
+            artifactId project.name
+            version VERSION_NAME
 
-        pom {
-          name = project.ext.navigationArtifactTitle
-          description = project.ext.navigationArtifactTitle
-          url = project.ext.navigationArtifactUrl
-          licenses {
-            license {
-              name = project.ext.navigationArtifactLicenseName
-              url = project.ext.navigationArtifactLicenseUrl
+            pom {
+                name = project.ext.navigationArtifactTitle
+                description = project.ext.navigationArtifactTitle
+                url = project.ext.navigationArtifactUrl
+                licenses {
+                    license {
+                        name = project.ext.navigationArtifactLicenseName
+                        url = project.ext.navigationArtifactLicenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id = project.ext.navigationDeveloperId
+                        name = project.ext.navigationDeveloperName
+                        email = project.ext.mavogatopmDeveloperMail
+                    }
+                }
+                scm {
+                    connection = project.ext.navigationArtifactScmUrl
+                    developerConnection = project.ext.navigationArtifactScmUrl
+                    url = project.ext.navigationArtifactUrl
+                }
             }
-          }
-          developers {
-            developer {
-              id = project.ext.navigationDeveloperId
-              name = project.ext.navigationDeveloperName
-              email = project.ext.mavogatopmDeveloperMail
+
+            afterEvaluate {
+                from components.release
             }
-          }
-          scm {
-            connection = project.ext.navigationArtifactScmUrl
-            developerConnection = project.ext.navigationArtifactScmUrl
-            url = project.ext.navigationArtifactUrl
-          }
         }
-      }
     }
-  }
 }
+
 
 afterEvaluate { project ->
-  android.libraryVariants.all { variant ->
-    tasks.androidJavadocs.doFirst {
-      classpath += files(variant.javaCompileProvider.get().classpath.files)
+    android.libraryVariants.all { variant ->
+        tasks.androidJavadocs.doFirst {
+            classpath += files(variant.javaCompileProvider.get().classpath.files)
+        }
     }
-  }
 }
 
 //TODO: currently not used, while only published with JitPack
