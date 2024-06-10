@@ -1,5 +1,5 @@
 ext {
-    navigationArtifactGroupId = 'com.mapbox.mapboxsdk'
+    navigationArtifactGroupId = 'org.maplibre.navigation'
     navigationArtifactId = 'android'
     navigationArtifactTitle = 'MapLibre Navigation SDK for Android'
     navigationArtifactDescription = 'MapLibre Navigation SDK for Android'
