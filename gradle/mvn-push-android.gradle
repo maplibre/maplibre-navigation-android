@@ -34,7 +34,7 @@ afterEvaluate {
     publications {
       release(MavenPublication) {
         groupId project.ext.navigationArtifactGroupId
-        artifactId project.ext.navigationArtifactId
+        artifactId project.name
         version VERSION_NAME
 
         pom {
