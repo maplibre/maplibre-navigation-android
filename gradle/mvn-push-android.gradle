@@ -51,7 +51,7 @@ afterEvaluate {
             developer {
               id = project.ext.navigationDeveloperId
               name = project.ext.navigationDeveloperName
-              email = 'maplibre@maplibre.org'
+              email = project.ext.mavogatopmDeveloperMail
             }
           }
           scm {

@@ -5,6 +5,7 @@ ext {
     navigationArtifactDescription = 'MapLibre Navigation SDK for Android'
     navigationDeveloperName = 'MapLibre'
     navigationDeveloperId = 'maplibre'
+    mavogatopmDeveloperMail = 'maplibre@maplibre.org'
     navigationArtifactUrl = 'https://github.com/maplibre/maplibre-navigation-android'
     navigationArtifactScmUrl = 'scm:git@github.com:maplibre/maplibre-navigation-android.git'
     navigationArtifactLicenseName = 'MIT'
