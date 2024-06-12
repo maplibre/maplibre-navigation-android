@@ -1,13 +1,25 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
+    namespace 'com.mapbox.services.android.navigation.testapp'
+
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -29,6 +41,10 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig true
+    }
+
     dexOptions {
         maxProcessCount 8
         javaMaxHeapSize "2g"
@@ -45,7 +61,6 @@ android {
 }
 
 dependencies {
-    // Flitsmeister Navigation SDK
     implementation project(':libandroid-navigation')
     implementation project(':libandroid-navigation-ui')
     implementation(dependenciesList.mapLibre) {
@@ -59,18 +74,13 @@ dependencies {
     implementation dependenciesList.androidxRecyclerView
     implementation dependenciesList.androidxConstraintLayout
     implementation dependenciesList.androidxCardView
-    implementation dependenciesList.lifecycleExtensions
+    implementation dependenciesList.androidxAppcompat
+    implementation dependenciesList.androidxConstraintLayout
 
     implementation dependenciesList.gmsLocation
 
     // Logging
     implementation dependenciesList.timber
-
-    // Butter Knife
-    implementation dependenciesList.butterknife
-    annotationProcessor dependenciesList.butterknifeProcessor
-    implementation dependenciesList.androidxAppcompat
-    implementation dependenciesList.androidxConstraintLayout
 
     // Leak Canary
     debugImplementation dependenciesList.leakCanaryDebug
@@ -88,7 +98,7 @@ dependencies {
     implementation dependenciesList.kotlinstdlib
 
     // Separate dependencies of the app that don't need to be in the public dependencies API
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1"
     implementation 'androidx.multidex:multidex:2.0.1'
 }
 

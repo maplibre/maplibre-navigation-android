@@ -2,54 +2,52 @@ ext {
 
     androidVersions = [
             minSdkVersion    : 21,
-            targetSdkVersion : 33,
-            compileSdkVersion: 33,
-            buildToolsVersion: '33.0.1',
-            kotlinVersion    : '1.7.20'
+            targetSdkVersion : 34,
+            compileSdkVersion: 34,
+            buildToolsVersion: '34.0.0',
+            kotlinVersion    : '2.0.0'
     ]
 
     version = [
-            mapLibreVersion             : '10.0.2',
+            mapLibreVersion             : '10.3.1',
             mapLibreService             : '5.9.0',
             mapLibreTurf                : '5.9.0',
             mapLibreAnnotations         : '1.0.0',
-            annotation                  : '1.7.0',
-            autoValue                   : '1.10.4',
+            annotation                  : '1.8.0',
+            autoValue                   : '1.11.0',
             autoValueGson               : '1.3.1',
             junit                       : '4.13.2',
-            androidxCoreVersion         : '1.9.0',
-            appcompatVersion            : '1.6.1',
+            androidxCoreVersion         : '1.13.1',
+            appcompatVersion            : '1.7.0',
             cardViewVersion             : '1.0.0',
             androidxAnnotationVersion   : '1.6.0',
             constraintLayoutVersion     : '2.1.4',
-            materialVersion             : '1.7.0',
-            recyclerViewVersion         : '1.3.1',
-            mockito                     : '4.9.0',
+            materialVersion             : '1.12.0',
+            recyclerViewVersion         : '1.3.2',
+            mockito                     : '5.12.0',
             hamcrest                    : '2.0.0.0',
-            errorprone                  : '2.22.0',
-            butterknife                 : '10.2.3',
-            leakCanaryVersion           : '2.12',
+            errorprone                  : '2.28.0',
+            leakCanaryVersion           : '2.14',
             timber                      : '5.0.1',
             testRunnerVersion           : '1.0.1',
             espressoVersion             : '3.5.1',
             spoonRunner                 : '1.6.2',
-            commonsIO                   : '2.14.0',
-            robolectric                 : '4.10.3',
-            lifecycle                   : '1.1.1',
-            lifecycleVersion            : '2.2.0',
+            commonsIO                   : '20030203.000550',
+            robolectric                 : '4.12.2',
+            lifecycleVersion            : '2.8.1',
             picasso                     : '2.71828',
-            gmsLocation                 : '21.0.1',
+            gmsLocation                 : '21.3.0',
             testRulesVersion            : '1.5.0',
-            jsonVersion                 : '20230618'
+            jsonVersion                 : '20240303'
     ]
 
     pluginVersion = [
             checkstyle       : '8.2',
             pmd              : '5.8.1',
-            errorprone       : '2.0.2',
+            errorprone       : '4.0.0',
             coveralls        : '2.8.1',
             spotbugs         : '1.3',
-            gradle           : '7.4.2',
+            gradle           : '8.3.1',
             kotlinGradle     : '1.9.10',
             dependencyGraph  : '0.3.0',
             dependencyUpdates: '0.44.0',
@@ -65,11 +63,7 @@ ext {
             // AutoValue
             autoValue               : "com.google.auto.value:auto-value:${version.autoValue}",
             autoValueAnnotations    : "com.google.auto.value:auto-value-annotations:${version.autoValue}",
-            autoValueGson       : "com.ryanharter.auto.value:auto-value-gson:${version.autoValueGson}",
-
-            // butterknife
-            butterknife             : "com.jakewharton:butterknife:${version.butterknife}",
-            butterknifeProcessor    : "com.jakewharton:butterknife-compiler:${version.butterknife}",
+            autoValueGson           : "com.ryanharter.auto.value:auto-value-gson:${version.autoValueGson}",
 
             // support
             androidxAppcompat       : "androidx.appcompat:appcompat:${version.appcompatVersion}",
@@ -83,7 +77,6 @@ ext {
             supportAnnotation       : "androidx.annotation:annotation:${version.annotation}",
 
             // architecture
-            lifecycleExtensions     : "androidx.lifecycle:lifecycle-extensions:${version.lifecycleVersion}",
             lifecycleCompiler       : "androidx.lifecycle:lifecycle-compiler:${version.lifecycleVersion}",
 
             // square crew
@@ -106,7 +99,7 @@ ext {
             hamcrest                : "org.hamcrest:hamcrest-junit:${version.hamcrest}",
             commonsIO               : "commons-io:commons-io:${version.commonsIO}",
             robolectric             : "org.robolectric:robolectric:${version.robolectric}",
-            json                   : "org.json:json:${version.jsonVersion}",
+            json                    : "org.json:json:${version.jsonVersion}",
 
             // play services
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",

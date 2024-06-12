@@ -15,3 +15,4 @@
 # --- AutoValue ---
 # AutoValue annotations are retained but dependency is compileOnly.
 -dontwarn com.google.auto.value.**
+-dontwarn com.ryanharter.auto.value.**

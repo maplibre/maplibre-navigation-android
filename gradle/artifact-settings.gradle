@@ -1,0 +1,14 @@
+ext {
+    navigationArtifactGroupId = 'com.mapbox.mapboxsdk'
+    navigationArtifactId = 'android'
+    navigationArtifactTitle = 'MapLibre Navigation SDK for Android'
+    navigationArtifactDescription = 'MapLibre Navigation SDK for Android'
+    navigationDeveloperName = 'MapLibre'
+    navigationDeveloperId = 'maplibre'
+    mavogatopmDeveloperMail = 'maplibre@maplibre.org'
+    navigationArtifactUrl = 'https://github.com/maplibre/maplibre-navigation-android'
+    navigationArtifactScmUrl = 'scm:git@github.com:maplibre/maplibre-navigation-android.git'
+    navigationArtifactLicenseName = 'MIT'
+    navigationArtifactLicenseUrl = 'https://opensource.org/license/MIT'
+    versionName = project.hasProperty('VERSION_NAME') ? project.property('VERSION_NAME') : System.getenv('VERSION_NAME')
+}

@@ -1,7 +1,20 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
 
 android {
+    namespace 'com.mapbox.services.android.navigation'
+
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
 
@@ -33,9 +46,20 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig true
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -72,9 +96,8 @@ dependencies {
 }
 
 apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/mvn-push-android.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
-repositories {
-    mavenCentral()
-}
+

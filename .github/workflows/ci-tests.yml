@@ -19,5 +19,11 @@ jobs:
           # TODO Lint currently fails
           #- name: Run lint checks
           #  run: ./gradlew libandroid-navigation:lint
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Run Unit Tests
         run: ./gradlew libandroid-navigation:test
