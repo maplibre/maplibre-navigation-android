@@ -59,7 +59,7 @@ class MockNavigationActivity :
     MilestoneEventListener,
     OffRouteListener {
     private val BEGIN_ROUTE_MILESTONE = 1001
-    private lateinit var mapboxMap: MapLibreMap
+    private lateinit var mapLibreMap: MapLibreMap
 
     // Navigation related variables
     private var locationEngine: ReplayRouteLocationEngine =
@@ -134,8 +134,8 @@ class MockNavigationActivity :
                     it.assign(route)
                     navigation.locationEngine = it
                     navigation.startNavigation(route)
-                    if (::mapboxMap.isInitialized) {
-                        mapboxMap.removeOnMapClickListener(this)
+                    if (::mapLibreMap.isInitialized) {
+                        mapLibreMap.removeOnMapClickListener(this)
                     }
                 }
             }
@@ -146,9 +146,9 @@ class MockNavigationActivity :
         }
 
         binding.clearPoints.setOnClickListener {
-            if (::mapboxMap.isInitialized) {
-                mapboxMap.markers.forEach {
-                    mapboxMap.removeMarker(it)
+            if (::mapLibreMap.isInitialized) {
+                mapLibreMap.markers.forEach {
+                    mapLibreMap.removeMarker(it)
                 }
             }
             destination = null
@@ -159,9 +159,9 @@ class MockNavigationActivity :
         }
     }
 
-    override fun onMapReady(mapboxMap: MapLibreMap) {
-        this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+    override fun onMapReady(mapLibreMap: MapLibreMap) {
+        this.mapLibreMap = mapLibreMap
+        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
         }
 
@@ -169,10 +169,10 @@ class MockNavigationActivity :
             NavigationMapRoute(
                 navigation,
                 binding.mapView,
-                mapboxMap
+                mapLibreMap
             )
 
-        mapboxMap.addOnMapClickListener(this)
+        mapLibreMap.addOnMapClickListener(this)
         Snackbar.make(
             findViewById(R.id.container),
             "Tap map to place waypoint",
@@ -185,7 +185,7 @@ class MockNavigationActivity :
     @SuppressWarnings("MissingPermission")
     private fun enableLocationComponent(style: Style) {
         // Get an instance of the component
-        locationComponent = mapboxMap.locationComponent
+        locationComponent = mapLibreMap.locationComponent
 
         locationComponent?.let {
             // Activate with a built LocationComponentActivationOptions object
@@ -218,7 +218,7 @@ class MockNavigationActivity :
         }
 
         if (addMarker) {
-            mapboxMap.addMarker(MarkerOptions().position(point))
+            mapLibreMap.addMarker(MarkerOptions().position(point))
         }
         binding.clearPoints.visibility = View.VISIBLE
 
@@ -327,8 +327,8 @@ class MockNavigationActivity :
     override fun onDestroy() {
         super.onDestroy()
         navigation.onDestroy()
-        if (::mapboxMap.isInitialized) {
-            mapboxMap.removeOnMapClickListener(this)
+        if (::mapLibreMap.isInitialized) {
+            mapLibreMap.removeOnMapClickListener(this)
         }
         binding.mapView.onDestroy()
     }
@@ -348,7 +348,7 @@ class MockNavigationActivity :
     }
 
     private fun newOrigin() {
-        mapboxMap.let {
+        mapLibreMap.let {
             val latLng = LatLng(52.039176, 5.550339)
             locationEngine.assignLastLocation(
                 Point.fromLngLat(latLng.longitude, latLng.latitude),

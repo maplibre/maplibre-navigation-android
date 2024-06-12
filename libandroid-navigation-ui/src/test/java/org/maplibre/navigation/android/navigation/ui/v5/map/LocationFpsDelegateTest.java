@@ -19,10 +19,10 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom16() {
     double zoom = 16d;
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onCameraIdle();
 
@@ -32,10 +32,10 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom14() {
     double zoom = 14d;
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onCameraIdle();
 
@@ -45,10 +45,10 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSetZoom10() {
     double zoom = 10d;
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onCameraIdle();
 
@@ -58,10 +58,10 @@ public class LocationFpsDelegateTest {
   @Test
   public void onCameraIdle_newFpsIsSet5() {
     double zoom = 5d;
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getCameraPosition()).thenReturn(buildCameraPosition(zoom));
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onCameraIdle();
 
@@ -70,31 +70,31 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void onStart_idleListenerAdded() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onStart();
 
-    verify(mapboxMap, times(2)).addOnCameraIdleListener(eq(locationFpsDelegate));
+    verify(mapLibreMap, times(2)).addOnCameraIdleListener(eq(locationFpsDelegate));
   }
 
   @Test
   public void onStop_idleListenerRemoved() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.onStop();
 
-    verify(mapboxMap).removeOnCameraIdleListener(eq(locationFpsDelegate));
+    verify(mapLibreMap).removeOnCameraIdleListener(eq(locationFpsDelegate));
   }
 
   @Test
   public void updateEnabled_falseResetsToMax() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.updateEnabled(false);
 
@@ -103,9 +103,9 @@ public class LocationFpsDelegateTest {
 
   @Test
   public void isEnabled_returnsFalseWhenSet() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     LocationComponent locationComponent = mock(LocationComponent.class);
-    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapboxMap, locationComponent);
+    LocationFpsDelegate locationFpsDelegate = new LocationFpsDelegate(mapLibreMap, locationComponent);
 
     locationFpsDelegate.updateEnabled(false);
 

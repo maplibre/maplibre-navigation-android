@@ -66,7 +66,7 @@ public class NavigationMapLibreMap {
     = new MapWayNameChangedListener(onWayNameChangedListeners);
   private NavigationMapSettings settings = new NavigationMapSettings();
   private MapView mapView;
-  private MapLibreMap mapboxMap;
+  private MapLibreMap mapLibreMap;
   private LocationComponent locationComponent;
   private MapPaddingAdjustor mapPaddingAdjustor;
   private NavigationSymbolManager navigationSymbolManager;
@@ -80,22 +80,22 @@ public class NavigationMapLibreMap {
   private LocationFpsDelegate locationFpsDelegate;
 
   /**
-   * Constructor that can be used once {@link com.mapbox.mapboxsdk.maps.OnMapReadyCallback}
+   * Constructor that can be used once {@link OnMapReadyCallback}
    * has been called via {@link MapView#getMapAsync(OnMapReadyCallback)}.
    *
    * @param mapView   for map size and Context
-   * @param mapboxMap for APIs to interact with the map
+   * @param mapLibreMap for APIs to interact with the map
    */
-  public NavigationMapLibreMap(@NonNull MapView mapView, @NonNull MapLibreMap mapboxMap) {
+  public NavigationMapLibreMap(@NonNull MapView mapView, @NonNull MapLibreMap mapLibreMap) {
     this.mapView = mapView;
-    this.mapboxMap = mapboxMap;
-    initializeLocationComponent(mapView, mapboxMap);
-    initializeMapPaddingAdjustor(mapView, mapboxMap);
-    initializeNavigationSymbolManager(mapView, mapboxMap);
-    initializeMapLayerInteractor(mapboxMap);
-    initializeRoute(mapView, mapboxMap);
-    initializeCamera(mapboxMap, locationComponent);
-    initializeLocationFpsDelegate(mapboxMap, locationComponent);
+    this.mapLibreMap = mapLibreMap;
+    initializeLocationComponent(mapView, mapLibreMap);
+    initializeMapPaddingAdjustor(mapView, mapLibreMap);
+    initializeNavigationSymbolManager(mapView, mapLibreMap);
+    initializeMapLayerInteractor(mapLibreMap);
+    initializeRoute(mapView, mapLibreMap);
+    initializeCamera(mapLibreMap, locationComponent);
+    initializeLocationFpsDelegate(mapLibreMap, locationComponent);
   }
 
   // Package private (no modifier) for testing purposes
@@ -136,9 +136,9 @@ public class NavigationMapLibreMap {
   }
 
   // Package private (no modifier) for testing purposes
-  NavigationMapLibreMap(MapLibreMap mapboxMap, MapLayerInteractor layerInteractor, MapPaddingAdjustor adjustor) {
+  NavigationMapLibreMap(MapLibreMap mapLibreMap, MapLayerInteractor layerInteractor, MapPaddingAdjustor adjustor) {
     this.layerInteractor = layerInteractor;
-    initializeWayName(mapboxMap, adjustor);
+    initializeWayName(mapLibreMap, adjustor);
   }
 
   /**
@@ -272,7 +272,7 @@ public class NavigationMapLibreMap {
    * @param navigation to add the progress listeners
    */
   public void addProgressChangeListener(@NonNull MapLibreNavigation navigation) {
-    initializeWayName(mapboxMap, mapPaddingAdjustor);
+    initializeWayName(mapLibreMap, mapPaddingAdjustor);
     initializeFpsDelegate(mapView);
     mapRoute.addProgressChangeListener(navigation);
     mapCamera.addProgressChangeListener(navigation);
@@ -497,7 +497,7 @@ public class NavigationMapLibreMap {
    * @return map provided in the constructor
    */
   public MapLibreMap retrieveMap() {
-    return mapboxMap;
+    return mapLibreMap;
   }
 
   /**
@@ -624,21 +624,21 @@ public class NavigationMapLibreMap {
     return resId != -1 && (resId & 0xff000000) != 0 && (resId & 0x00ff0000) != 0;
   }
 
-  private void initializeMapPaddingAdjustor(MapView mapView, MapLibreMap mapboxMap) {
-    mapPaddingAdjustor = new MapPaddingAdjustor(mapView, mapboxMap);
+  private void initializeMapPaddingAdjustor(MapView mapView, MapLibreMap mapLibreMap) {
+    mapPaddingAdjustor = new MapPaddingAdjustor(mapView, mapLibreMap);
   }
 
-  private void initializeNavigationSymbolManager(MapView mapView, MapLibreMap mapboxMap) {
+  private void initializeNavigationSymbolManager(MapView mapView, MapLibreMap mapLibreMap) {
     Bitmap markerBitmap = ThemeSwitcher.retrieveThemeMapMarker(mapView.getContext());
-    mapboxMap.getStyle().addImage(NavigationSymbolManager.MAPBOX_NAVIGATION_MARKER_NAME, markerBitmap);
-    SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, mapboxMap.getStyle());
+    mapLibreMap.getStyle().addImage(NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME, markerBitmap);
+    SymbolManager symbolManager = new SymbolManager(mapView, mapLibreMap, mapLibreMap.getStyle());
     navigationSymbolManager = new NavigationSymbolManager(symbolManager);
-    SymbolOnStyleLoadedListener onStyleLoadedListener = new SymbolOnStyleLoadedListener(mapboxMap, markerBitmap);
+    SymbolOnStyleLoadedListener onStyleLoadedListener = new SymbolOnStyleLoadedListener(mapLibreMap, markerBitmap);
     mapView.addOnDidFinishLoadingStyleListener(onStyleLoadedListener);
   }
 
-  private void initializeMapLayerInteractor(MapLibreMap mapboxMap) {
-    layerInteractor = new MapLayerInteractor(mapboxMap);
+  private void initializeMapLayerInteractor(MapLibreMap mapLibreMap) {
+    layerInteractor = new MapLayerInteractor(mapLibreMap);
   }
 
   private void initializeRoute(MapView mapView, MapLibreMap map) {
@@ -655,19 +655,19 @@ public class NavigationMapLibreMap {
     locationFpsDelegate = new LocationFpsDelegate(map, locationComponent);
   }
 
-  private void initializeWayName(MapLibreMap mapboxMap, MapPaddingAdjustor paddingAdjustor) {
+  private void initializeWayName(MapLibreMap mapLibreMap, MapPaddingAdjustor paddingAdjustor) {
     if (mapWayName != null) {
       return;
     }
-    initializeStreetsSource(mapboxMap);
-    WaynameFeatureFinder featureFinder = new WaynameFeatureFinder(mapboxMap);
+    initializeStreetsSource(mapLibreMap);
+    WaynameFeatureFinder featureFinder = new WaynameFeatureFinder(mapLibreMap);
     mapWayName = new MapWayName(featureFinder, paddingAdjustor);
     mapWayName.updateWayNameQueryMap(settings.isMapWayNameEnabled());
     mapWayName.addOnWayNameChangedListener(internalWayNameChangedListener);
   }
 
-  private void initializeStreetsSource(MapLibreMap mapboxMap) {
-    List<Source> sources = mapboxMap.getStyle().getSources();
+  private void initializeStreetsSource(MapLibreMap mapLibreMap) {
+    List<Source> sources = mapLibreMap.getStyle().getSources();
     Source sourceV7 = findSourceByUrl(sources, MAPBOX_STREETS_V7_URL);
     Source sourceV8 = findSourceByUrl(sources, MAPBOX_STREETS_V8_URL);
 
@@ -677,7 +677,7 @@ public class NavigationMapLibreMap {
       layerInteractor.addStreetsLayer(sourceV8.getId(), STREETS_V8_ROAD_LABEL);
     } else {
       VectorSource streetSource = new VectorSource(STREETS_SOURCE_ID, MAPBOX_STREETS_V8_URL);
-      mapboxMap.getStyle().addSource(streetSource);
+      mapLibreMap.getStyle().addSource(streetSource);
       layerInteractor.addStreetsLayer(STREETS_SOURCE_ID, STREETS_V8_ROAD_LABEL);
     }
   }
@@ -722,7 +722,7 @@ public class NavigationMapLibreMap {
       return;
     }
     LatLng latLng = new LatLng(location);
-    PointF mapPoint = mapboxMap.getProjection().toScreenLocation(latLng);
+    PointF mapPoint = mapLibreMap.getProjection().toScreenLocation(latLng);
     mapWayName.updateWayNameWithPoint(mapPoint);
   }
 

@@ -40,11 +40,10 @@ import static org.maplibre.navigation.android.navigation.v5.navigation.Navigatio
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID;
 
 /**
- * A MapboxNavigation class for interacting with and customizing a navigation session.
+ * A MapLibreNavigation class for interacting with and customizing a navigation session.
  * <p>
  * Instance of this class are used to setup, customize, start, and end a navigation session.
  *
- * @see <a href="https://www.mapbox.com/android-docs/navigation/">Navigation documentation</a>
  * @since 0.1.0
  */
 public class MapLibreNavigation implements ServiceConnection {
@@ -61,7 +60,7 @@ public class MapLibreNavigation implements ServiceConnection {
 
   /**
    * Constructs a new instance of this class using the default options. This should be used over
-   * {@link #MapboxNavigation(Context, String, MapLibreNavigationOptions)} if all the default options
+   * {@link MapLibreNavigation(Context, String, MapLibreNavigationOptions)} if all the default options
    * fit your needs.
    * <p>
    * Initialization will also add the default milestones and create a new location engine
@@ -89,7 +88,7 @@ public class MapLibreNavigation implements ServiceConnection {
    * </p>
    *
    * @param context     required in order to create and bind the navigation service
-   * @param options     a custom built {@code MapboxNavigationOptions} class
+   * @param options     a custom built {@code MapLibreNavigationOptions} class
    * @see MapLibreNavigationOptions
    * @since 0.5.0
    */
@@ -106,7 +105,7 @@ public class MapLibreNavigation implements ServiceConnection {
    * through the options class cannot be modified.
    *
    * @param context        required in order to create and bind the navigation service
-   * @param options        a custom built {@code MapboxNavigationOptions} class
+   * @param options        a custom built {@code MapLibreNavigationOptions} class
    * @param locationEngine a LocationEngine to provide Location updates
    * @see MapLibreNavigationOptions
    * @since 0.19.0
@@ -333,7 +332,7 @@ public class MapLibreNavigation implements ServiceConnection {
   public void startNavigation(@NonNull DirectionsRoute directionsRoute) {
     ValidationUtils.validDirectionsRoute(directionsRoute, options.defaultMilestonesEnabled());
     this.directionsRoute = directionsRoute;
-    Timber.d("MapboxNavigation startNavigation called.");
+    Timber.d("MapLibreNavigation startNavigation called.");
     if (!isBound) {
       // Start the NavigationService
       Intent intent = getServiceIntent();
@@ -364,7 +363,7 @@ public class MapLibreNavigation implements ServiceConnection {
    * @since 0.1.0
    */
   public void stopNavigation() {
-    Timber.d("MapboxNavigation stopNavigation called");
+    Timber.d("MapLibreNavigation stopNavigation called");
     if (isServiceAvailable()) {
       applicationContext.unbindService(this);
       isBound = false;

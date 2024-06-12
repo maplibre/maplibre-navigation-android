@@ -188,7 +188,7 @@ public final class NavigationConstants {
     /**
      * In seconds, how quickly {@link FasterRouteDetector}
      * will tell {@link RouteProcessorBackgroundThread} to check
-     * for a faster {@link com.mapbox.api.directions.v5.models.DirectionsRoute}.
+     * for a faster {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute}.
      *
      * @since 0.9.0
      */
@@ -196,7 +196,7 @@ public final class NavigationConstants {
 
     /**
      * 125 seconds remaining is considered a low alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -204,7 +204,7 @@ public final class NavigationConstants {
 
     /**
      * 70 seconds remaining is considered a medium alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -212,7 +212,7 @@ public final class NavigationConstants {
 
     /**
      * 15 seconds remaining is considered a high alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
      *
      * @since 0.10.1
      */
@@ -233,9 +233,9 @@ public final class NavigationConstants {
     static final String NON_NULL_APPLICATION_CONTEXT_REQUIRED = "Non-null application context required.";
 
     public static final Float[] WAYNAME_OFFSET = {0.0f, 40.0f};
-    public static final String MAPBOX_LOCATION_SOURCE = "mapbox-location-source";
-    public static final String MAPBOX_WAYNAME_LAYER = "mapbox-wayname-layer";
-    public static final String MAPBOX_WAYNAME_ICON = "mapbox-wayname-icon";
+    public static final String MAPLIBRE_LOCATION_SOURCE = "maplibre-location-source";
+    public static final String MAPLIBRE_WAYNAME_LAYER = "maplibre-wayname-layer";
+    public static final String MAPLIBRE_WAYNAME_ICON = "maplibre-wayname-icon";
 
     // Bundle variable keys
     public static final String NAVIGATION_VIEW_ROUTE_KEY = "route_json";

@@ -18,15 +18,15 @@ class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
   private static final int MAX_ANIMATION_FPS_FIFTEEN = 15;
   private static final int MAX_ANIMATION_FPS_TWENTY_FIVE = 25;
   private static final int MAX_ANIMATION_FPS = Integer.MAX_VALUE;
-  private final MapLibreMap mapboxMap;
+  private final MapLibreMap mapLibreMap;
   private final LocationComponent locationComponent;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 
-  LocationFpsDelegate(@NonNull MapLibreMap mapboxMap, @NonNull LocationComponent locationComponent) {
-    this.mapboxMap = mapboxMap;
+  LocationFpsDelegate(@NonNull MapLibreMap mapLibreMap, @NonNull LocationComponent locationComponent) {
+    this.mapLibreMap = mapLibreMap;
     this.locationComponent = locationComponent;
-    mapboxMap.addOnCameraIdleListener(this);
+    mapLibreMap.addOnCameraIdleListener(this);
   }
 
   @Override
@@ -38,11 +38,11 @@ class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
   }
 
   void onStart() {
-    mapboxMap.addOnCameraIdleListener(this);
+    mapLibreMap.addOnCameraIdleListener(this);
   }
 
   void onStop() {
-    mapboxMap.removeOnCameraIdleListener(this);
+    mapLibreMap.removeOnCameraIdleListener(this);
   }
 
   void updateEnabled(boolean isEnabled) {
@@ -55,7 +55,7 @@ class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
   }
 
   private void updateMaxFps() {
-    double zoom = mapboxMap.getCameraPosition().zoom;
+    double zoom = mapLibreMap.getCameraPosition().zoom;
     int maxAnimationFps = buildFpsFrom(zoom);
     if (currentFps != maxAnimationFps) {
       locationComponent.setMaxAnimationFps(maxAnimationFps);

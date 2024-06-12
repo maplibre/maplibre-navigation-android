@@ -130,31 +130,31 @@ class MapRouteLine {
     TypedArray typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
     // Primary Route attributes
     routeDefaultColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_blue));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_layer_blue));
     routeModerateColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_routeModerateCongestionColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_congestion_yellow));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_layer_congestion_yellow));
     routeSevereColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_routeSevereCongestionColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_layer_congestion_red));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_layer_congestion_red));
     routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_shield_layer_color));
     routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
     roundedLineCap = typedArray.getBoolean(R.styleable.NavigationMapRoute_roundedLineCap, true);
 
     // Secondary Routes attributes
     alternativeRouteDefaultColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_alternativeRouteColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_alternative_color));
     alternativeRouteModerateColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_alternativeRouteModerateCongestionColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_congestion_yellow));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_alternative_congestion_yellow));
     alternativeRouteSevereColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_alternativeRouteSevereCongestionColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_congestion_red));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_alternative_congestion_red));
     alternativeRouteShieldColor = typedArray.getColor(
       R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_alternative_shield_color));
     alternativeRouteScale = typedArray.getFloat(
       R.styleable.NavigationMapRoute_alternativeRouteScale, 1.0f);
 
@@ -414,7 +414,7 @@ class MapRouteLine {
       for (int i = 0; i < styleLayers.size(); i++) {
         if (!(styleLayers.get(i) instanceof SymbolLayer)
           // Avoid placing the route on top of the user location layer
-          && !styleLayers.get(i).getId().contains(RouteConstants.MAPBOX_LOCATION_ID)) {
+          && !styleLayers.get(i).getId().contains(RouteConstants.MAPLIBRE_LOCATION_ID)) {
           belowLayer = styleLayers.get(i).getId();
         }
       }

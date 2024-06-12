@@ -1,7 +1,9 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
+import org.maplibre.android.constants.MapLibreConstants;
+
 class RouteConstants {
-  static final String MAPBOX_LOCATION_ID = "mapbox-location";
+  static final String MAPLIBRE_LOCATION_ID = "maplibre-location";
   static final String CONGESTION_KEY = "congestion";
   static final String ROUTE_SOURCE_ID = "mapbox-navigation-route-source";
   static final String ROUTE_LAYER_ID = "mapbox-navigation-route-layer";
@@ -35,7 +37,7 @@ class RouteConstants {
   static final float OPAQUE = 0.0f;
   static final int ARROW_HIDDEN_ZOOM_LEVEL = 14;
   static final float TRANSPARENT = 1.0f;
-  static final String LAYER_ABOVE_UPCOMING_MANEUVER_ARROW = "com.mapbox.annotations.points";
+  static final String LAYER_ABOVE_UPCOMING_MANEUVER_ARROW = MapLibreConstants.LAYER_ID_ANNOTATIONS;
   static final int FIRST_COLLECTION_INDEX = 0;
   static final String WAYPOINT_PROPERTY_KEY = "wayPoint";
   static final String WAYPOINT_ORIGIN_VALUE = "origin";

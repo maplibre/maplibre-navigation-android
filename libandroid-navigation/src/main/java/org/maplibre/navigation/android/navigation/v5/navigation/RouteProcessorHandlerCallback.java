@@ -43,7 +43,7 @@ class RouteProcessorHandlerCallback implements Handler.Callback {
      * @param update hold location, navigation (with options), and distances away from maneuver
      */
     private void handleRequest(final NavigationLocationUpdate update) {
-        final MapLibreNavigation mapLibreNavigation = update.mapboxNavigation();
+        final MapLibreNavigation mapLibreNavigation = update.mapLibreNavigation();
         final Location rawLocation = update.location();
         RouteProgress routeProgress = routeProcessor.buildNewRouteProgress(mapLibreNavigation, rawLocation);
 

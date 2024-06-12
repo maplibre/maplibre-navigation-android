@@ -62,18 +62,18 @@ class MapRouteArrow {
   private GeoJsonSource arrowHeadGeoJsonSource;
 
   private final MapView mapView;
-  private final MapLibreMap mapboxMap;
+  private final MapLibreMap mapLibreMap;
 
-  MapRouteArrow(MapView mapView, MapLibreMap mapboxMap, @StyleRes int styleRes) {
+  MapRouteArrow(MapView mapView, MapLibreMap mapLibreMap, @StyleRes int styleRes) {
     this.mapView = mapView;
-    this.mapboxMap = mapboxMap;
+    this.mapLibreMap = mapLibreMap;
 
     Context context = mapView.getContext();
     TypedArray typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
     arrowColor = typedArray.getColor(R.styleable.NavigationMapRoute_upcomingManeuverArrowColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_upcoming_maneuver_arrow_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_upcoming_maneuver_arrow_color));
     arrowBorderColor = typedArray.getColor(R.styleable.NavigationMapRoute_upcomingManeuverArrowBorderColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_upcoming_maneuver_arrow_border_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_upcoming_maneuver_arrow_border_color));
     typedArray.recycle();
 
     initialize();
@@ -95,7 +95,7 @@ class MapRouteArrow {
   }
 
   void updateVisibilityTo(boolean visible) {
-    Style style = mapboxMap.getStyle();
+    Style style = mapLibreMap.getStyle();
     if (style != null) {
       for (String layerId : arrowLayerIds) {
         Layer layer = style.getLayer(layerId);
@@ -152,11 +152,11 @@ class MapRouteArrow {
     SymbolLayer headLayer = createArrowHeadLayer();
     SymbolLayer headCasingLayer = createArrowHeadCasingLayer();
 
-    mapboxMap.getStyle().addLayerBelow(shaftCasingLayer, RouteConstants.LAYER_ABOVE_UPCOMING_MANEUVER_ARROW);
-    mapboxMap.getStyle().addLayerAbove(headCasingLayer, shaftCasingLayer.getId());
+    mapLibreMap.getStyle().addLayerBelow(shaftCasingLayer, RouteConstants.LAYER_ABOVE_UPCOMING_MANEUVER_ARROW);
+    mapLibreMap.getStyle().addLayerAbove(headCasingLayer, shaftCasingLayer.getId());
 
-    mapboxMap.getStyle().addLayerAbove(shaftLayer, headCasingLayer.getId());
-    mapboxMap.getStyle().addLayerAbove(headLayer, shaftLayer.getId());
+    mapLibreMap.getStyle().addLayerAbove(shaftLayer, headCasingLayer.getId());
+    mapLibreMap.getStyle().addLayerAbove(headLayer, shaftLayer.getId());
 
     createArrowLayerList(shaftLayer, shaftCasingLayer, headLayer, headCasingLayer);
   }
@@ -167,7 +167,7 @@ class MapRouteArrow {
       FeatureCollection.fromFeatures(new Feature[]{}),
       new GeoJsonOptions().withMaxZoom(16)
     );
-    mapboxMap.getStyle().addSource(arrowShaftGeoJsonSource);
+    mapLibreMap.getStyle().addSource(arrowShaftGeoJsonSource);
   }
 
   private void initializeArrowHead() {
@@ -176,7 +176,7 @@ class MapRouteArrow {
       FeatureCollection.fromFeatures(new Feature[]{}),
       new GeoJsonOptions().withMaxZoom(16)
     );
-    mapboxMap.getStyle().addSource(arrowHeadGeoJsonSource);
+    mapLibreMap.getStyle().addSource(arrowHeadGeoJsonSource);
   }
 
   private void addArrowHeadIcon() {
@@ -188,7 +188,7 @@ class MapRouteArrow {
     Drawable head = DrawableCompat.wrap(arrowHead);
     DrawableCompat.setTint(head.mutate(), arrowColor);
     Bitmap icon = MapImageUtils.getBitmapFromDrawable(head);
-    mapboxMap.getStyle().addImage(RouteConstants.ARROW_HEAD_ICON, icon);
+    mapLibreMap.getStyle().addImage(RouteConstants.ARROW_HEAD_ICON, icon);
   }
 
   private void addArrowHeadIconCasing() {
@@ -200,13 +200,13 @@ class MapRouteArrow {
     Drawable headCasing = DrawableCompat.wrap(arrowHeadCasing);
     DrawableCompat.setTint(headCasing.mutate(), arrowBorderColor);
     Bitmap icon = MapImageUtils.getBitmapFromDrawable(headCasing);
-    mapboxMap.getStyle().addImage(RouteConstants.ARROW_HEAD_ICON_CASING, icon);
+    mapLibreMap.getStyle().addImage(RouteConstants.ARROW_HEAD_ICON_CASING, icon);
   }
 
   private LineLayer createArrowShaftLayer() {
-    LineLayer shaftLayer = (LineLayer) mapboxMap.getStyle().getLayer(RouteConstants.ARROW_SHAFT_LINE_LAYER_ID);
+    LineLayer shaftLayer = (LineLayer) mapLibreMap.getStyle().getLayer(RouteConstants.ARROW_SHAFT_LINE_LAYER_ID);
     if (shaftLayer != null) {
-      mapboxMap.getStyle().removeLayer(shaftLayer);
+      mapLibreMap.getStyle().removeLayer(shaftLayer);
     }
     return new LineLayer(RouteConstants.ARROW_SHAFT_LINE_LAYER_ID, RouteConstants.ARROW_SHAFT_SOURCE_ID).withProperties(
       PropertyFactory.lineColor(color(arrowColor)),
@@ -230,9 +230,9 @@ class MapRouteArrow {
   }
 
   private LineLayer createArrowShaftCasingLayer() {
-    LineLayer shaftCasingLayer = (LineLayer) mapboxMap.getStyle().getLayer(RouteConstants.ARROW_SHAFT_CASING_LINE_LAYER_ID);
+    LineLayer shaftCasingLayer = (LineLayer) mapLibreMap.getStyle().getLayer(RouteConstants.ARROW_SHAFT_CASING_LINE_LAYER_ID);
     if (shaftCasingLayer != null) {
-      mapboxMap.getStyle().removeLayer(shaftCasingLayer);
+      mapLibreMap.getStyle().removeLayer(shaftCasingLayer);
     }
     return new LineLayer(RouteConstants.ARROW_SHAFT_CASING_LINE_LAYER_ID, RouteConstants.ARROW_SHAFT_SOURCE_ID).withProperties(
       PropertyFactory.lineColor(color(arrowBorderColor)),
@@ -256,9 +256,9 @@ class MapRouteArrow {
   }
 
   private SymbolLayer createArrowHeadLayer() {
-    SymbolLayer headLayer = (SymbolLayer) mapboxMap.getStyle().getLayer(RouteConstants.ARROW_HEAD_LAYER_ID);
+    SymbolLayer headLayer = (SymbolLayer) mapLibreMap.getStyle().getLayer(RouteConstants.ARROW_HEAD_LAYER_ID);
     if (headLayer != null) {
-      mapboxMap.getStyle().removeLayer(headLayer);
+      mapLibreMap.getStyle().removeLayer(headLayer);
     }
     return new SymbolLayer(RouteConstants.ARROW_HEAD_LAYER_ID, RouteConstants.ARROW_HEAD_SOURCE_ID)
       .withProperties(
@@ -285,9 +285,9 @@ class MapRouteArrow {
   }
 
   private SymbolLayer createArrowHeadCasingLayer() {
-    SymbolLayer headCasingLayer = (SymbolLayer) mapboxMap.getStyle().getLayer(RouteConstants.ARROW_HEAD_CASING_LAYER_ID);
+    SymbolLayer headCasingLayer = (SymbolLayer) mapLibreMap.getStyle().getLayer(RouteConstants.ARROW_HEAD_CASING_LAYER_ID);
     if (headCasingLayer != null) {
-      mapboxMap.getStyle().removeLayer(headCasingLayer);
+      mapLibreMap.getStyle().removeLayer(headCasingLayer);
     }
     return new SymbolLayer(RouteConstants.ARROW_HEAD_CASING_LAYER_ID, RouteConstants.ARROW_HEAD_SOURCE_ID).withProperties(
       PropertyFactory.iconImage(RouteConstants.ARROW_HEAD_ICON_CASING),

@@ -148,7 +148,7 @@ public class NavigationViewModel extends AndroidViewModel {
      * This method will pass {@link MapLibreNavigationOptions} from the {@link NavigationViewOptions}
      * to this view model to be used to initialize {@link MapLibreNavigation}.
      *
-     * @param options to init MapboxNavigation
+     * @param options to init NavigationView
      */
     void initialize(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();

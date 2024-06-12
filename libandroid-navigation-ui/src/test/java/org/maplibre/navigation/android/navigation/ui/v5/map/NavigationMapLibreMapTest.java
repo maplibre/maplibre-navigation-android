@@ -228,12 +228,12 @@ public class NavigationMapLibreMapTest {
     String urlV7 = "mapbox://mapbox.mapbox-streets-v7";
     List<Source> sources = buildMockSourcesWith(urlV7);
     when(style.getSources()).thenReturn(sources);
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getStyle()).thenReturn(style);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getStyle()).thenReturn(style);
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);
 
-    new NavigationMapLibreMap(mapboxMap, layerInteractor, adjustor);
+    new NavigationMapLibreMap(mapLibreMap, layerInteractor, adjustor);
 
     verify(layerInteractor).addStreetsLayer("composite", "road_label");
   }
@@ -289,12 +289,12 @@ public class NavigationMapLibreMapTest {
     String urlV7 = "mapbox://mapbox.mapbox-streets-v8";
     List<Source> sources = buildMockSourcesWith(urlV7);
     when(style.getSources()).thenReturn(sources);
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    when(mapboxMap.getStyle()).thenReturn(style);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    when(mapLibreMap.getStyle()).thenReturn(style);
     MapLayerInteractor layerInteractor = mock(MapLayerInteractor.class);
     MapPaddingAdjustor adjustor = mock(MapPaddingAdjustor.class);
 
-    new NavigationMapLibreMap(mapboxMap, layerInteractor, adjustor);
+    new NavigationMapLibreMap(mapLibreMap, layerInteractor, adjustor);
 
     verify(layerInteractor).addStreetsLayer("composite", "road");
   }

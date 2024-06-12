@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.instruction;
 
 import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
-import com.mapbox.core.utils.TextUtils;
+import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 class AbbreviationVerifier implements NodeVerifier {
   @Override

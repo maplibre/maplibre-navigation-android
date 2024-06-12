@@ -26,7 +26,7 @@ public class DynamicCamera extends SimpleCamera {
   private static final double MAX_CAMERA_ZOOM = 16d;
   private static final double MIN_CAMERA_ZOOM = 12d;
 
-  private MapLibreMap mapboxMap;
+  private MapLibreMap mapLibreMap;
   private LegStep currentStep;
   private boolean hasPassedLowAlertLevel;
   private boolean hasPassedMediumAlertLevel;
@@ -34,8 +34,8 @@ public class DynamicCamera extends SimpleCamera {
   private boolean forceUpdateZoom;
   private boolean isShutdown = false;
 
-  public DynamicCamera(@NonNull MapLibreMap mapboxMap) {
-    this.mapboxMap = mapboxMap;
+  public DynamicCamera(@NonNull MapLibreMap mapLibreMap) {
+    this.mapLibreMap = mapLibreMap;
   }
 
   @Override
@@ -63,7 +63,7 @@ public class DynamicCamera extends SimpleCamera {
     } else if (routeInformation.route() != null) {
       return super.zoom(routeInformation);
     }
-    return mapboxMap.getCameraPosition().zoom;
+    return mapLibreMap.getCameraPosition().zoom;
   }
 
 
@@ -77,7 +77,7 @@ public class DynamicCamera extends SimpleCamera {
 
   public void clearMap() {
     isShutdown = true;
-    mapboxMap = null;
+    mapLibreMap = null;
   }
 
   /**
@@ -142,7 +142,7 @@ public class DynamicCamera extends SimpleCamera {
       latLngs.add(maneuverLatLng);
 
       if (latLngs.size() < 1 || currentLatLng.equals(maneuverLatLng)) {
-        return mapboxMap.getCameraPosition();
+        return mapLibreMap.getCameraPosition();
       }
 
       LatLngBounds cameraBounds = new LatLngBounds.Builder()
@@ -150,9 +150,9 @@ public class DynamicCamera extends SimpleCamera {
         .build();
 
       int[] padding = {0, 0, 0, 0};
-      return mapboxMap.getCameraForLatLngBounds(cameraBounds, padding);
+      return mapLibreMap.getCameraForLatLngBounds(cameraBounds, padding);
     }
-    return mapboxMap.getCameraPosition();
+    return mapLibreMap.getCameraPosition();
   }
 
   private boolean isForceUpdate() {

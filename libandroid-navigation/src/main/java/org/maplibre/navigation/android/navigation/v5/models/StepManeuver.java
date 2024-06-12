@@ -16,7 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Gives maneuver information about one {@link com.mapbox.api.directions.v5.models.LegStep}.
+ * Gives maneuver information about one {@link LegStep}.
  *
  * @since 1.0.0
  */

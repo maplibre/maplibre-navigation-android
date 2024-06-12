@@ -1,14 +1,11 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteClickListener;
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLine;
-import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.core.constants.Constants;
 import org.maplibre.geojson.LineString;
 import org.maplibre.android.geometry.LatLng;
 
 import org.junit.Test;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;

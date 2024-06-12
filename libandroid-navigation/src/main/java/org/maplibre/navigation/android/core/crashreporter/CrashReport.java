@@ -17,7 +17,7 @@ import java.util.Locale;
  * Crash report data model
  */
 public class CrashReport {
-    private static final String TAG = "MapboxCrashReport";
+    private static final String TAG = "MapLibreCrashReport";
     private static final String CRASH_EVENT = "mobile.crash";
     private final JSONObject content;
 

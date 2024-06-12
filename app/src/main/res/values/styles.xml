@@ -9,27 +9,27 @@
     </style>
 
     <style name="CustomInstructionView" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="navigationViewPrimary">@color/mapbox_navigation_view_color_primary</item>
-        <item name="navigationViewSecondary">@color/mapbox_navigation_view_color_secondary</item>
-        <item name="navigationViewAccent">@color/mapbox_navigation_view_color_accent</item>
-        <item name="navigationViewPrimaryText">@color/mapbox_navigation_view_color_secondary</item>
-        <item name="navigationViewSecondaryText">@color/mapbox_navigation_view_color_accent_text</item>
-        <item name="navigationViewDivider">@color/mapbox_navigation_view_color_divider</item>
+        <item name="navigationViewPrimary">@color/maplibre_navigation_view_color_primary</item>
+        <item name="navigationViewSecondary">@color/maplibre_navigation_view_color_secondary</item>
+        <item name="navigationViewAccent">@color/maplibre_navigation_view_color_accent</item>
+        <item name="navigationViewPrimaryText">@color/maplibre_navigation_view_color_secondary</item>
+        <item name="navigationViewSecondaryText">@color/maplibre_navigation_view_color_accent_text</item>
+        <item name="navigationViewDivider">@color/maplibre_navigation_view_color_divider</item>
 
-        <item name="navigationViewListBackground">@color/mapbox_navigation_view_color_list_background</item>
+        <item name="navigationViewListBackground">@color/maplibre_navigation_view_color_list_background</item>
 
-        <item name="navigationViewBannerBackground">@color/mapbox_navigation_view_color_banner_background</item>
-        <item name="navigationViewBannerPrimaryText">@color/mapbox_navigation_view_color_banner_primary_text</item>
-        <item name="navigationViewBannerSecondaryText">@color/mapbox_navigation_view_color_banner_secondary_text</item>
-        <item name="navigationViewBannerManeuverPrimary">@color/mapbox_navigation_view_color_banner_maneuver_primary</item>
-        <item name="navigationViewBannerManeuverSecondary">@color/mapbox_navigation_view_color_banner_maneuver_secondary</item>
+        <item name="navigationViewBannerBackground">@color/maplibre_navigation_view_color_banner_background</item>
+        <item name="navigationViewBannerPrimaryText">@color/maplibre_navigation_view_color_banner_primary_text</item>
+        <item name="navigationViewBannerSecondaryText">@color/maplibre_navigation_view_color_banner_secondary_text</item>
+        <item name="navigationViewBannerManeuverPrimary">@color/maplibre_navigation_view_color_banner_maneuver_primary</item>
+        <item name="navigationViewBannerManeuverSecondary">@color/maplibre_navigation_view_color_banner_maneuver_secondary</item>
 
-        <item name="navigationViewProgress">@color/mapbox_navigation_view_color_progress</item>
-        <item name="navigationViewProgressBackground">@color/mapbox_navigation_view_color_progress_background</item>
+        <item name="navigationViewProgress">@color/maplibre_navigation_view_color_progress</item>
+        <item name="navigationViewProgressBackground">@color/maplibre_navigation_view_color_progress_background</item>
 
         <item name="navigationViewRouteStyle">@style/NavigationMapRoute</item>
 
-        <item name="navigationViewLocationLayerStyle">@style/mapbox_LocationLayer</item>
+        <item name="navigationViewLocationLayerStyle">@style/maplibre_LocationLayer</item>
 
         <item name="navigationViewDestinationMarker">@drawable/map_marker_light</item>
 

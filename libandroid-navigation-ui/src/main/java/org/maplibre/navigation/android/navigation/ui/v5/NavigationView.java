@@ -31,7 +31,6 @@ import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView;
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import com.mapbox.core.utils.TextUtils;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
 import org.maplibre.android.location.modes.RenderMode;
@@ -46,6 +45,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 /**
  * View that creates the drop-in UI.
@@ -228,15 +228,15 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * <p>
    * Also, we check for launch data (coordinates or route).
    *
-   * @param mapboxMap used for route, camera, and location UI
+   * @param mapLibreMap used for route, camera, and location UI
    * @since 0.6.0
    */
   @Override
-  public void onMapReady(final MapLibreMap mapboxMap) {
-    mapboxMap.setStyle(ThemeSwitcher.retrieveMapStyle(getContext()), new Style.OnStyleLoaded() {
+  public void onMapReady(final MapLibreMap mapLibreMap) {
+    mapLibreMap.setStyle(ThemeSwitcher.retrieveMapStyle(getContext()), new Style.OnStyleLoaded() {
       @Override
       public void onStyleLoaded(@NonNull Style style) {
-        initializeNavigationMap(mapView, mapboxMap);
+        initializeNavigationMap(mapView, mapLibreMap);
         initializeWayNameListener();
         onNavigationReadyCallback.onNavigationReady(navigationViewModel.isRunning());
         isMapInitialized = true;
@@ -449,10 +449,10 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * <p>
    * The {@link NavigationMapLibreMap} gives direct access to the map UI (location marker, route, etc.).
    *
-   * @return navigation mapbox map object, or null if view has not been initialized
+   * @return navigation MapLibre map object, or null if view has not been initialized
    */
   @Nullable
-  public NavigationMapLibreMap retrieveNavigationMapboxMap() {
+  public NavigationMapLibreMap retrieveNavigationmapLibreMap() {
     return navigationMap;
   }
 
@@ -461,10 +461,10 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * once navigation has started.  Will return null if navigation has not been started with
    * {@link NavigationView#startNavigation(NavigationViewOptions)}.
    *
-   * @return mapbox navigation, or null if navigation has not started
+   * @return MapLibre navigation, or null if navigation has not started
    */
   @Nullable
-  public MapLibreNavigation retrieveMapboxNavigation() {
+  public MapLibreNavigation retrieveMapLibreNavigation() {
     return navigationViewModel.retrieveNavigation();
   }
 
@@ -621,7 +621,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     establish(options);
     navigationViewModel.initialize(options);
     initializeNavigationListeners(options, navigationViewModel);
-    setupNavigationMapboxMap(options);
+    setupNavigationmapLibreMap(options);
 
     if (!isSubscribed) {
       initializeClickListeners();
@@ -683,7 +683,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     navigationViewEventDispatcher.initializeListeners(options, navigationViewModel);
   }
 
-  private void setupNavigationMapboxMap(NavigationViewOptions options) {
+  private void setupNavigationmapLibreMap(NavigationViewOptions options) {
     navigationMap.updateWaynameQueryMap(options.waynameChipEnabled());
   }
 

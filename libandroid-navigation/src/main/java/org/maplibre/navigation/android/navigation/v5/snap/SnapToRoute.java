@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * This attempts to snap the user to the closest position along the route. Prior to snapping the
  * user, their location's checked to ensure that the user didn't veer off-route. If your application
- * uses the Mapbox Map SDK, querying the map and snapping the user to the road grid might be a
+ * uses the MapLibre Map SDK, querying the map and snapping the user to the road grid might be a
  * better solution.
  *
  * @since 0.4.0

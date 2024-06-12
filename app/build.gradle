@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mapbox.services.android.navigation.testapp"
+        applicationId "org.maplibre.navigation.android.example"
         minSdkVersion androidVersions.minSdkVersion
         targetSdkVersion androidVersions.targetSdkVersion
         versionCode 1
@@ -63,10 +63,7 @@ android {
 dependencies {
     implementation project(':libandroid-navigation')
     implementation project(':libandroid-navigation-ui')
-    implementation(dependenciesList.mapLibre) {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
-    }
+    implementation dependenciesList.mapLibre
 
     // Support libraries
     implementation dependenciesList.androidxAppcompat

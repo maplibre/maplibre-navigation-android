@@ -8,10 +8,10 @@ import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
 /**
  * Used to play {@link SpeechAnnouncement}s.
  * <p>
- * Takes a {@link SpeechPlayerProvider} which will provide either a {@link MapboxSpeechPlayer}
+ * Takes a {@link SpeechPlayerProvider} which will provide either a {@link MapLibreSpeechPlayer}
  * or {@link AndroidSpeechPlayer} based on the given language - if it is supported by our Voice API.
  * <p>
- * {@link MapboxSpeechPlayer} requires Internet connectivity.  In cases where a connection is not
+ * {@link MapLibreSpeechPlayer} requires Internet connectivity.  In cases where a connection is not
  * available, the provider will fall back to the {@link AndroidSpeechPlayer}.
  *
  * @since 0.16.0

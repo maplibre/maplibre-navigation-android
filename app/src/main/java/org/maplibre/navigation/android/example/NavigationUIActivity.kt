@@ -37,7 +37,7 @@ class NavigationUIActivity :
     AppCompatActivity(),
     OnMapReadyCallback,
     MapLibreMap.OnMapClickListener {
-    private lateinit var mapboxMap: MapLibreMap
+    private lateinit var mapLibreMap: MapLibreMap
 
     // Navigation related variables
     private var route: DirectionsRoute? = null
@@ -67,7 +67,7 @@ class NavigationUIActivity :
 
         binding.startRouteButton.setOnClickListener {
             route?.let { route ->
-                val userLocation = mapboxMap.locationComponent.lastKnownLocation ?: return@let
+                val userLocation = mapLibreMap.locationComponent.lastKnownLocation ?: return@let
 
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
@@ -86,9 +86,9 @@ class NavigationUIActivity :
 
 
         binding.clearPoints.setOnClickListener {
-            if (::mapboxMap.isInitialized) {
-                mapboxMap.markers.forEach {
-                    mapboxMap.removeMarker(it)
+            if (::mapLibreMap.isInitialized) {
+                mapLibreMap.markers.forEach {
+                    mapLibreMap.removeMarker(it)
                 }
             }
             destination = null
@@ -100,19 +100,19 @@ class NavigationUIActivity :
         }
     }
 
-    override fun onMapReady(mapboxMap: MapLibreMap) {
-        this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+    override fun onMapReady(mapLibreMap: MapLibreMap) {
+        this.mapLibreMap = mapLibreMap
+        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
         }
 
         navigationMapRoute =
             NavigationMapRoute(
                 binding.mapView,
-                mapboxMap
+                mapLibreMap
             )
 
-        mapboxMap.addOnMapClickListener(this)
+        mapLibreMap.addOnMapClickListener(this)
         Snackbar.make(
             findViewById(R.id.container),
             "Tap map to place waypoint",
@@ -123,7 +123,7 @@ class NavigationUIActivity :
     @SuppressWarnings("MissingPermission")
     private fun enableLocationComponent(style: Style) {
         // Get an instance of the component
-        locationComponent = mapboxMap.locationComponent
+        locationComponent = mapLibreMap.locationComponent
 
         locationComponent?.let {
             // Activate with a built LocationComponentActivationOptions object
@@ -154,7 +154,7 @@ class NavigationUIActivity :
         }
 
         if (addMarker) {
-            mapboxMap.addMarker(MarkerOptions().position(point))
+            mapLibreMap.addMarker(MarkerOptions().position(point))
             binding.clearPoints.visibility = View.VISIBLE
         }
         calculateRoute()
@@ -163,7 +163,7 @@ class NavigationUIActivity :
 
     private fun calculateRoute() {
         binding.startRouteLayout.visibility = View.GONE
-        val userLocation = mapboxMap.locationComponent.lastKnownLocation
+        val userLocation = mapLibreMap.locationComponent.lastKnownLocation
         val destination = destination
         if (userLocation == null) {
             Timber.d("calculateRoute: User location is null, therefore, origin can't be set.")
@@ -242,8 +242,8 @@ class NavigationUIActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::mapboxMap.isInitialized) {
-            mapboxMap.removeOnMapClickListener(this)
+        if (::mapLibreMap.isInitialized) {
+            mapLibreMap.removeOnMapClickListener(this)
         }
         binding.mapView.onDestroy()
     }

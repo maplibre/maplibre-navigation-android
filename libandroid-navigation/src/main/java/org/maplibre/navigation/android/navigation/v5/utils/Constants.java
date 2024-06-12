@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.utils;
 
 /**
- * Includes common variables used throughout the Mapbox Service modules.
+ * Includes common variables used throughout the MapLibre Service modules.
  *
  * @since 3.0.0
  */

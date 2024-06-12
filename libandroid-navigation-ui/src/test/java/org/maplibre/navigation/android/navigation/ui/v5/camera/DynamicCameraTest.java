@@ -10,7 +10,6 @@ import com.google.gson.GsonBuilder;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.core.constants.Constants;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
@@ -21,6 +20,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInfo
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 
 import org.junit.Test;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -67,12 +67,12 @@ public class DynamicCameraTest extends BaseTest {
 
   @Test
   public void onCameraPositionZoomGreaterThanMax_engineReturnsMaxCameraZoom() throws Exception {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     CameraPosition cameraPositionWithZoomGreaterThanMax = new CameraPosition.Builder()
       .zoom(20d)
       .build();
-    when(mapboxMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomGreaterThanMax);
-    DynamicCamera theCameraEngine = new DynamicCamera(mapboxMap);
+    when(mapLibreMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomGreaterThanMax);
+    DynamicCamera theCameraEngine = new DynamicCamera(mapLibreMap);
     RouteInformation anyRouteInformation = RouteInformation.create(null,
       buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637), buildDefaultRouteProgress(1000d));
 
@@ -83,12 +83,12 @@ public class DynamicCameraTest extends BaseTest {
 
   @Test
   public void onCameraPositionZoomLessThanMin_engineReturnsMinCameraZoom() throws Exception {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     CameraPosition cameraPositionWithZoomLessThanMin = new CameraPosition.Builder()
       .zoom(10d)
       .build();
-    when(mapboxMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomLessThanMin);
-    DynamicCamera theCameraEngine = new DynamicCamera(mapboxMap);
+    when(mapLibreMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomLessThanMin);
+    DynamicCamera theCameraEngine = new DynamicCamera(mapLibreMap);
     RouteInformation anyRouteInformation = RouteInformation.create(null,
       buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637), buildDefaultRouteProgress(1000d));
 
@@ -99,12 +99,12 @@ public class DynamicCameraTest extends BaseTest {
 
   @Test
   public void onCameraPositionZoomGreaterThanMinAndLessThanMax_engineReturnsCameraPositionZoom() throws Exception {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     CameraPosition cameraPositionWithZoomGreaterThanMinAndLessThanMax = new CameraPosition.Builder()
       .zoom(14d)
       .build();
-    when(mapboxMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomGreaterThanMinAndLessThanMax);
-    DynamicCamera theCameraEngine = new DynamicCamera(mapboxMap);
+    when(mapLibreMap.getCameraForLatLngBounds(any(LatLngBounds.class), any(int[].class))).thenReturn(cameraPositionWithZoomGreaterThanMinAndLessThanMax);
+    DynamicCamera theCameraEngine = new DynamicCamera(mapLibreMap);
     RouteInformation anyRouteInformation = RouteInformation.create(null,
       buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637), buildDefaultRouteProgress(1000d));
 
@@ -209,8 +209,8 @@ public class DynamicCameraTest extends BaseTest {
 
   @NonNull
   private DynamicCamera buildDynamicCamera() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    return new DynamicCamera(mapboxMap);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    return new DynamicCamera(mapLibreMap);
   }
 
   private Location buildDefaultLocationUpdate(double lng, double lat) {

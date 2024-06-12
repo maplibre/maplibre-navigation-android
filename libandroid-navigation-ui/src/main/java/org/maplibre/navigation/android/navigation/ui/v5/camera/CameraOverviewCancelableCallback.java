@@ -8,11 +8,11 @@ class CameraOverviewCancelableCallback implements MapLibreMap.CancelableCallback
   private static final int OVERVIEW_UPDATE_DURATION_IN_MILLIS = 750;
 
   private CameraUpdate overviewUpdate;
-  private MapLibreMap mapboxMap;
+  private MapLibreMap mapLibreMap;
 
-  CameraOverviewCancelableCallback(CameraUpdate overviewUpdate, MapLibreMap mapboxMap) {
+  CameraOverviewCancelableCallback(CameraUpdate overviewUpdate, MapLibreMap mapLibreMap) {
     this.overviewUpdate = overviewUpdate;
-    this.mapboxMap = mapboxMap;
+    this.mapLibreMap = mapLibreMap;
   }
 
   @Override
@@ -22,6 +22,6 @@ class CameraOverviewCancelableCallback implements MapLibreMap.CancelableCallback
 
   @Override
   public void onFinish() {
-    mapboxMap.animateCamera(overviewUpdate, OVERVIEW_UPDATE_DURATION_IN_MILLIS);
+    mapLibreMap.animateCamera(overviewUpdate, OVERVIEW_UPDATE_DURATION_IN_MILLIS);
   }
 }

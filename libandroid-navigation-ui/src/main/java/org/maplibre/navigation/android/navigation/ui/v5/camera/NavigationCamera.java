@@ -78,7 +78,7 @@ public class NavigationCamera implements LifecycleObserver {
     = new NavigationCameraTransitionListener(this);
   private final OnCameraTrackingChangedListener cameraTrackingChangedListener
     = new NavigationCameraTrackingChangedListener(this);
-  private MapLibreMap mapboxMap;
+  private MapLibreMap mapLibreMap;
   private LocationComponent locationComponent;
   private MapLibreNavigation navigation;
   private RouteInformation currentRouteInformation;
@@ -103,16 +103,16 @@ public class NavigationCamera implements LifecycleObserver {
   /**
    * Creates an instance of {@link NavigationCamera}.
    *
-   * @param mapboxMap         for moving the camera
+   * @param mapLibreMap         for moving the camera
    * @param navigation        for listening to location updates
    * @param locationComponent for managing camera mode
    */
-  public NavigationCamera(@NonNull MapLibreMap mapboxMap, @NonNull MapLibreNavigation navigation,
+  public NavigationCamera(@NonNull MapLibreMap mapLibreMap, @NonNull MapLibreNavigation navigation,
                           @NonNull LocationComponent locationComponent) {
-    this.mapboxMap = mapboxMap;
+    this.mapLibreMap = mapLibreMap;
     this.navigation = navigation;
     this.locationComponent = locationComponent;
-    this.animationDelegate = new CameraAnimationDelegate(mapboxMap);
+    this.animationDelegate = new CameraAnimationDelegate(mapLibreMap);
     this.locationComponent.addOnCameraTrackingChangedListener(cameraTrackingChangedListener);
     initializeWith(navigation);
   }
@@ -122,13 +122,13 @@ public class NavigationCamera implements LifecycleObserver {
    * <p>
    * Camera will start tracking current user location by default.
    *
-   * @param mapboxMap         for moving the camera
+   * @param mapLibreMap         for moving the camera
    * @param locationComponent for managing camera mode
    */
-  public NavigationCamera(@NonNull MapLibreMap mapboxMap, LocationComponent locationComponent) {
-    this.mapboxMap = mapboxMap;
+  public NavigationCamera(@NonNull MapLibreMap mapLibreMap, LocationComponent locationComponent) {
+    this.mapLibreMap = mapLibreMap;
     this.locationComponent = locationComponent;
-    this.animationDelegate = new CameraAnimationDelegate(mapboxMap);
+    this.animationDelegate = new CameraAnimationDelegate(mapLibreMap);
     this.locationComponent.addOnCameraTrackingChangedListener(cameraTrackingChangedListener);
     updateCameraTrackingMode(trackingCameraMode);
   }
@@ -136,9 +136,9 @@ public class NavigationCamera implements LifecycleObserver {
   /**
    * Used for testing only.
    */
-  NavigationCamera(MapLibreMap mapboxMap, MapLibreNavigation navigation, ProgressChangeListener progressChangeListener,
+  NavigationCamera(MapLibreMap mapLibreMap, MapLibreNavigation navigation, ProgressChangeListener progressChangeListener,
                    LocationComponent locationComponent, RouteInformation currentRouteInformation) {
-    this.mapboxMap = mapboxMap;
+    this.mapLibreMap = mapLibreMap;
     this.locationComponent = locationComponent;
     this.navigation = navigation;
     this.progressChangeListener = progressChangeListener;
@@ -304,7 +304,7 @@ public class NavigationCamera implements LifecycleObserver {
    */
   public void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
-    navigation.setCameraEngine(new DynamicCamera(mapboxMap));
+    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     navigation.addProgressChangeListener(progressChangeListener);
   }
 
@@ -387,7 +387,7 @@ public class NavigationCamera implements LifecycleObserver {
   }
 
   private void initializeWith(MapLibreNavigation navigation) {
-    navigation.setCameraEngine(new DynamicCamera(mapboxMap));
+    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     updateCameraTrackingMode(trackingCameraMode);
   }
 
@@ -437,18 +437,18 @@ public class NavigationCamera implements LifecycleObserver {
     Camera cameraEngine = navigation.getCameraEngine();
     List<Point> routePoints = cameraEngine.overview(routeInformation);
     if (!routePoints.isEmpty()) {
-      animateMapboxMapForRouteOverview(padding, routePoints);
+      animateMapLibreMapForRouteOverview(padding, routePoints);
     }
   }
 
-  private void animateMapboxMapForRouteOverview(int[] padding, List<Point> routePoints) {
+  private void animateMapLibreMapForRouteOverview(int[] padding, List<Point> routePoints) {
     if (routePoints.size() <= ONE_POINT) {
       return;
     }
     CameraUpdate resetUpdate = buildResetCameraUpdate();
     final CameraUpdate overviewUpdate = buildOverviewCameraUpdate(padding, routePoints);
-    mapboxMap.animateCamera(resetUpdate, 150,
-      new CameraOverviewCancelableCallback(overviewUpdate, mapboxMap)
+    mapLibreMap.animateCamera(resetUpdate, 150,
+      new CameraOverviewCancelableCallback(overviewUpdate, mapLibreMap)
     );
   }
 
@@ -537,7 +537,7 @@ public class NavigationCamera implements LifecycleObserver {
   }
 
   private long getZoomAnimationDuration(double zoom) {
-    double zoomDiff = Math.abs(mapboxMap.getCameraPosition().zoom - zoom);
+    double zoomDiff = Math.abs(mapLibreMap.getCameraPosition().zoom - zoom);
     return (long) MathUtils.clamp(
       500 * zoomDiff,
       NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION,
@@ -545,7 +545,7 @@ public class NavigationCamera implements LifecycleObserver {
   }
 
   private long getTiltAnimationDuration(double tilt) {
-    double tiltDiff = Math.abs(mapboxMap.getCameraPosition().tilt - tilt);
+    double tiltDiff = Math.abs(mapLibreMap.getCameraPosition().tilt - tilt);
     return (long) MathUtils.clamp(
       500 * tiltDiff,
       NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION,

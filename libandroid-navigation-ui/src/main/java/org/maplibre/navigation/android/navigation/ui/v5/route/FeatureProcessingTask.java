@@ -4,11 +4,11 @@ import android.os.Handler;
 
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
-import com.mapbox.core.constants.Constants;
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.FeatureCollection;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

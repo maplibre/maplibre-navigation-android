@@ -11,8 +11,8 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFac
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import com.mapbox.core.constants.Constants;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

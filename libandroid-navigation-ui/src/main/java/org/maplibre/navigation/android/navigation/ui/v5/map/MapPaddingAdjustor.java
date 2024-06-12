@@ -12,18 +12,18 @@ class MapPaddingAdjustor {
   private static final int BOTTOMSHEET_PADDING_MULTIPLIER = 4;
   private static final int WAYNAME_PADDING_MULTIPLIER = 2;
 
-  private final MapLibreMap mapboxMap;
+  private final MapLibreMap mapLibreMap;
   private final int[] defaultPadding;
   private int[] customPadding;
 
-  MapPaddingAdjustor(MapView mapView, MapLibreMap mapboxMap) {
-    this.mapboxMap = mapboxMap;
+  MapPaddingAdjustor(MapView mapView, MapLibreMap mapLibreMap) {
+    this.mapLibreMap = mapLibreMap;
     defaultPadding = calculateDefaultPadding(mapView);
   }
 
   // Testing only
-  MapPaddingAdjustor(MapLibreMap mapboxMap, int[] defaultPadding) {
-    this.mapboxMap = mapboxMap;
+  MapPaddingAdjustor(MapLibreMap mapLibreMap, int[] defaultPadding) {
+    this.mapLibreMap = mapLibreMap;
     this.defaultPadding = defaultPadding;
   }
 
@@ -38,7 +38,7 @@ class MapPaddingAdjustor {
   }
 
   int[] retrieveCurrentPadding() {
-    return mapboxMap.getPadding();
+    return mapLibreMap.getPadding();
   }
 
   boolean isUsingDefault() {
@@ -46,7 +46,7 @@ class MapPaddingAdjustor {
   }
 
   void updatePaddingWith(int[] padding) {
-    mapboxMap.setPadding(padding[0], padding[1], padding[2], padding[3]);
+    mapLibreMap.setPadding(padding[0], padding[1], padding[2], padding[3]);
   }
 
   void resetPadding() {

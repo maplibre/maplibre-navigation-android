@@ -1,8 +1,8 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import static com.mapbox.core.constants.Constants.PRECISION_6;
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createDistancesToIntersections;
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createIntersectionsList;
+import static org.maplibre.navigation.android.navigation.v5.utils.Constants.PRECISION_6;
 
 import android.util.Pair;
 

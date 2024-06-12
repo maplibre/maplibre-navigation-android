@@ -44,7 +44,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
     ProgressChangeListener {
 
     private lateinit var binding: ActivitySnapToRouteNavigationBinding
-    private lateinit var mapboxMap: MapLibreMap
+    private lateinit var mapLibreMap: MapLibreMap
     private var locationEngine: ReplayRouteLocationEngine =
         ReplayRouteLocationEngine()
     private lateinit var navigation: MapLibreNavigation
@@ -79,9 +79,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private var locationComponent: LocationComponent? = null
 
-    override fun onMapReady(mapboxMap: MapLibreMap) {
-        this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+    override fun onMapReady(mapLibreMap: MapLibreMap) {
+        this.mapLibreMap = mapLibreMap
+        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
         }
 
@@ -89,15 +89,15 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
             NavigationMapRoute(
                 navigation,
                 binding.mapView,
-                mapboxMap
+                mapLibreMap
             )
         calculateRouteAndStartNavigation()
     }
 
     @SuppressWarnings("MissingPermission")
     private fun enableLocationComponent(style: Style) {
-        locationComponent = mapboxMap.locationComponent
-        mapboxMap.locationComponent.activateLocationComponent(
+        locationComponent = mapLibreMap.locationComponent
+        mapLibreMap.locationComponent.activateLocationComponent(
             LocationComponentActivationOptions.builder(
                 this,
                 style,
@@ -108,22 +108,22 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
         followLocation()
 
-        mapboxMap.locationComponent.isLocationComponentEnabled = true
+        mapLibreMap.locationComponent.isLocationComponentEnabled = true
     }
 
     private fun followLocation() {
-        if (!mapboxMap.locationComponent.isLocationComponentActivated) {
+        if (!mapLibreMap.locationComponent.isLocationComponentActivated) {
             return
         }
 
-        mapboxMap.locationComponent.renderMode = RenderMode.GPS
-        mapboxMap.locationComponent.setCameraMode(
+        mapLibreMap.locationComponent.renderMode = RenderMode.GPS
+        mapLibreMap.locationComponent.setCameraMode(
             CameraMode.TRACKING_GPS,
             object :
                 OnLocationCameraTransitionListener {
                 override fun onLocationCameraTransitionFinished(cameraMode: Int) {
-                    mapboxMap.locationComponent.zoomWhileTracking(17.0)
-                    mapboxMap.locationComponent.tiltWhileTracking(60.0)
+                    mapLibreMap.locationComponent.zoomWhileTracking(17.0)
+                    mapLibreMap.locationComponent.tiltWhileTracking(60.0)
                 }
 
                 override fun onLocationCameraTransitionCanceled(cameraMode: Int) {}

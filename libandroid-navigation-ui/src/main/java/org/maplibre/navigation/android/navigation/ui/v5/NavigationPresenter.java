@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.core.utils.TextUtils;
+import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 import org.maplibre.geojson.Point;
 
 class NavigationPresenter {

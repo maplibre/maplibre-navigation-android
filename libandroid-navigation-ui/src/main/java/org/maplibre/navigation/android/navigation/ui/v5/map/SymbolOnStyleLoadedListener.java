@@ -1,24 +1,24 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
+import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME;
+
 import android.graphics.Bitmap;
 
 import org.maplibre.android.maps.MapView;
 import org.maplibre.android.maps.MapLibreMap;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPBOX_NAVIGATION_MARKER_NAME;
-
 class SymbolOnStyleLoadedListener implements MapView.OnDidFinishLoadingStyleListener {
 
-  private final MapLibreMap mapboxMap;
+  private final MapLibreMap mapLibreMap;
   private final Bitmap markerBitmap;
 
-  SymbolOnStyleLoadedListener(MapLibreMap mapboxMap, Bitmap markerBitmap) {
-    this.mapboxMap = mapboxMap;
+  SymbolOnStyleLoadedListener(MapLibreMap mapLibreMap, Bitmap markerBitmap) {
+    this.mapLibreMap = mapLibreMap;
     this.markerBitmap = markerBitmap;
   }
 
   @Override
   public void onDidFinishLoadingStyle() {
-    mapboxMap.getStyle().addImage(MAPBOX_NAVIGATION_MARKER_NAME, markerBitmap);
+    mapLibreMap.getStyle().addImage(MAPLIBRE_NAVIGATION_MARKER_NAME, markerBitmap);
   }
 }

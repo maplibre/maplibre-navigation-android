@@ -13,14 +13,14 @@ import static org.mockito.Mockito.verify;
 public class WaynameFeatureFinderTest {
 
   @Test
-  public void queryRenderedFeatures_mapboxMapIsCalled() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
-    WaynameFeatureFinder featureFinder = new WaynameFeatureFinder(mapboxMap);
+  public void queryRenderedFeatures_mapLibreMapIsCalled() {
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
+    WaynameFeatureFinder featureFinder = new WaynameFeatureFinder(mapLibreMap);
     PointF point = mock(PointF.class);
     String[] layerIds = {"id", "id"};
 
     featureFinder.queryRenderedFeatures(point, layerIds);
 
-    verify(mapboxMap).queryRenderedFeatures(point, layerIds);
+    verify(mapLibreMap).queryRenderedFeatures(point, layerIds);
   }
 }

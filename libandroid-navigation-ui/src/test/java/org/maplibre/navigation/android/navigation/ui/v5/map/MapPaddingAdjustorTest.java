@@ -15,22 +15,22 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void adjustLocationIconWith_customPaddingIsSet() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
 
     paddingAdjustor.adjustLocationIconWith(customPadding);
 
-    verify(mapboxMap).setPadding(0, 0, 0, 0);
+    verify(mapLibreMap).setPadding(0, 0, 0, 0);
   }
 
   @Test
   public void isUsingDefault_falseAfterCustomPaddingIsSet() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
 
     paddingAdjustor.adjustLocationIconWith(customPadding);
 
@@ -39,60 +39,60 @@ public class MapPaddingAdjustorTest {
 
   @Test
   public void isUsingDefault_trueWithoutCustomPadding() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
 
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
 
     assertTrue(paddingAdjustor.isUsingDefault());
   }
 
   @Test
   public void updatePaddingWithZero_updatesMapToZeroPadding() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
 
     paddingAdjustor.updatePaddingWith(new int[]{0, 0, 0, 0});
 
-    verify(mapboxMap).setPadding(0, 0, 0, 0);
+    verify(mapLibreMap).setPadding(0, 0, 0, 0);
   }
 
   @Test
   public void updatePaddingWithZero_retainsCustomPadding() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 350, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
     paddingAdjustor.adjustLocationIconWith(customPadding);
     paddingAdjustor.updatePaddingWith(new int[]{0, 0, 0, 0});
 
     paddingAdjustor.resetPadding();
 
-    verify(mapboxMap, times(2)).setPadding(0, 350, 0, 0);
+    verify(mapLibreMap, times(2)).setPadding(0, 350, 0, 0);
   }
 
   @Test
   public void updatePaddingWithDefault_defaultIsRestoredAfterCustom() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
     int[] customPadding = {0, 0, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
     paddingAdjustor.adjustLocationIconWith(customPadding);
 
     paddingAdjustor.updatePaddingWithDefault();
 
-    verify(mapboxMap).setPadding(0, 250, 0, 0);
+    verify(mapLibreMap).setPadding(0, 250, 0, 0);
   }
 
   @Test
   public void retrieveCurrentPadding_returnsCurrentMapPadding() {
-    MapLibreMap mapboxMap = mock(MapLibreMap.class);
+    MapLibreMap mapLibreMap = mock(MapLibreMap.class);
     int[] defaultPadding = {0, 250, 0, 0};
-    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapboxMap, defaultPadding);
+    MapPaddingAdjustor paddingAdjustor = new MapPaddingAdjustor(mapLibreMap, defaultPadding);
 
     paddingAdjustor.retrieveCurrentPadding();
 
-    verify(mapboxMap).getPadding();
+    verify(mapLibreMap).getPadding();
   }
 }

@@ -33,7 +33,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void sanityTest() {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     assertNotNull(navigation);
   }
@@ -41,14 +41,14 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void sanityTestWithOptions() {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
 
     assertNotNull(navigationWithOptions);
   }
 
   @Test
   public void voiceInstructionMilestone_onInitializationDoesGetAdded() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     int identifier = searchForVoiceInstructionMilestone(navigation);
 
@@ -57,7 +57,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void bannerInstructionMilestone_onInitializationDoesGetAdded() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     int identifier = searchForBannerInstructionMilestone(navigation);
 
@@ -67,28 +67,28 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void defaultMilestones_onInitializationDoNotGetAdded() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
 
     assertEquals(0, navigationWithOptions.getMilestones().size());
   }
 
   @Test
   public void defaultEngines_offRouteEngineDidGetInitialized() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     assertNotNull(navigation.getOffRouteEngine());
   }
 
   @Test
   public void defaultEngines_snapEngineDidGetInitialized() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     assertNotNull(navigation.getSnapEngine());
   }
 
   @Test
   public void addMilestone_milestoneDidGetAdded() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
     Milestone milestone = new StepMilestone.Builder().build();
 
     navigation.addMilestone(milestone);
@@ -99,7 +99,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void addMilestone_milestoneOnlyGetsAddedOnce() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
 
     Milestone milestone = new StepMilestone.Builder().build();
     navigationWithOptions.addMilestone(milestone);
@@ -111,7 +111,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void removeMilestone_milestoneDidGetRemoved() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
 
     Milestone milestone = new StepMilestone.Builder().build();
     navigationWithOptions.addMilestone(milestone);
@@ -123,7 +123,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void removeMilestone_milestoneDoesNotExist() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
 
     Milestone milestone = new StepMilestone.Builder().build();
     navigationWithOptions.addMilestone(new StepMilestone.Builder().build());
@@ -135,7 +135,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void removeMilestone_nullRemovesAllMilestones() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
     navigationWithOptions.addMilestone(new StepMilestone.Builder().build());
     navigationWithOptions.addMilestone(new StepMilestone.Builder().build());
     navigationWithOptions.addMilestone(new StepMilestone.Builder().build());
@@ -149,7 +149,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void removeMilestone_correctMilestoneWithIdentifierGetsRemoved() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
     int removedMilestoneIdentifier = 5678;
     Milestone milestone = new StepMilestone.Builder().setIdentifier(removedMilestoneIdentifier).build();
     navigationWithOptions.addMilestone(milestone);
@@ -162,7 +162,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void removeMilestone_noMilestoneWithIdentifierFound() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
     navigationWithOptions.addMilestone(new StepMilestone.Builder().build());
     int removedMilestoneIdentifier = 5678;
 
@@ -174,7 +174,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void addMilestoneList_duplicateIdentifiersAreIgnored() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
     int milestoneIdentifier = 5678;
     Milestone milestone = new StepMilestone.Builder().setIdentifier(milestoneIdentifier).build();
     navigationWithOptions.addMilestone(milestone);
@@ -191,7 +191,7 @@ public class MapLibreNavigationTest extends BaseTest {
   @Test
   public void addMilestoneList_allMilestonesAreAdded() throws Exception {
     MapLibreNavigationOptions options = MapLibreNavigationOptions.builder().defaultMilestonesEnabled(false).build();
-    MapLibreNavigation navigationWithOptions = buildMapboxNavigationWithOptions(options);
+    MapLibreNavigation navigationWithOptions = buildMapLibreNavigationWithOptions(options);
     int firstMilestoneId = 5678;
     int secondMilestoneId = 5679;
     Milestone firstMilestone = new StepMilestone.Builder().setIdentifier(firstMilestoneId).build();
@@ -207,7 +207,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void getLocationEngine_returnsCorrectLocationEngine() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
     LocationEngine locationEngine = mock(LocationEngine.class);
     LocationEngine locationEngineInstanceNotUsed = mock(LocationEngine.class);
 
@@ -219,7 +219,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void startNavigation_doesSendTrueToNavigationEvent() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
     NavigationEventListener navigationEventListener = mock(NavigationEventListener.class);
 
     navigation.addNavigationEventListener(navigationEventListener);
@@ -230,7 +230,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void setSnapEngine_doesReplaceDefaultEngine() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     Snap snap = mock(Snap.class);
     navigation.setSnapEngine(snap);
@@ -240,7 +240,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void setOffRouteEngine_doesReplaceDefaultEngine() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     OffRoute offRoute = mock(OffRoute.class);
     navigation.setOffRouteEngine(offRoute);
@@ -250,7 +250,7 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void getCameraEngine_returnsNonNullEngine() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     navigation.setOffRouteEngine(null);
 
@@ -259,20 +259,20 @@ public class MapLibreNavigationTest extends BaseTest {
 
   @Test
   public void getCameraEngine_returnsSimpleCameraWhenNull() throws Exception {
-    MapLibreNavigation navigation = buildMapboxNavigation();
+    MapLibreNavigation navigation = buildMapLibreNavigation();
 
     navigation.setCameraEngine(null);
 
     assertTrue(navigation.getCameraEngine() instanceof SimpleCamera);
   }
 
-  private MapLibreNavigation buildMapboxNavigation() {
+  private MapLibreNavigation buildMapLibreNavigation() {
     Context context = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(context);
     return new MapLibreNavigation(context, mock(LocationEngine.class));
   }
 
-  private MapLibreNavigation buildMapboxNavigationWithOptions(MapLibreNavigationOptions options) {
+  private MapLibreNavigation buildMapLibreNavigationWithOptions(MapLibreNavigationOptions options) {
     Context context = mock(Context.class);
     when(context.getApplicationContext()).thenReturn(context);
     return new MapLibreNavigation(context, options, mock(LocationEngine.class));

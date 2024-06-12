@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.exception;
 
 /**
- * Generic Exception for all things Mapbox Navigation.
+ * Generic Exception for all things MapLibre Navigation.
  *
  * @since 0.2.0
  */

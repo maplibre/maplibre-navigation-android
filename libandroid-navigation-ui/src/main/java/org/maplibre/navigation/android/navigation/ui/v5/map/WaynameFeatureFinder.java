@@ -9,13 +9,13 @@ import java.util.List;
 
 class WaynameFeatureFinder {
 
-  private MapLibreMap mapboxMap;
+  private MapLibreMap mapLibreMap;
 
-  WaynameFeatureFinder(MapLibreMap mapboxMap) {
-    this.mapboxMap = mapboxMap;
+  WaynameFeatureFinder(MapLibreMap mapLibreMap) {
+    this.mapLibreMap = mapLibreMap;
   }
 
   List<Feature> queryRenderedFeatures(PointF point, String[] layerIds) {
-    return mapboxMap.queryRenderedFeatures(point, layerIds);
+    return mapLibreMap.queryRenderedFeatures(point, layerIds);
   }
 }

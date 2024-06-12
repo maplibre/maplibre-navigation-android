@@ -19,15 +19,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Mapbox custom exception handler, which catches unhandled fatal exceptions
- * caused by Mapbox classes. This is an attempt to capture mapbox exceptions as reliably
+ * caused by MapLibre classes. This is an attempt to capture MapLibre exceptions as reliably
  * as possible with minimal false positives.
  * <p>
  * Note: this handler is not capturing full application's stacktrace!
  */
 public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler,
         SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final String MAPBOX_PREF_ENABLE_CRASH_REPORTER = "mapbox.crash.enable";
-    public static final String MAPBOX_CRASH_REPORTER_PREFERENCES = "MapboxCrashReporterPrefs";
+    public static final String MAPLIBRE_PREF_ENABLE_CRASH_REPORTER = "maplibre.crash.enable";
+    public static final String MAPLIBRE_CRASH_REPORTER_PREFERENCES = "MapLibreCrashReporterPrefs";
 
     private static final String TAG = "MbUncaughtExcHandler";
     private static final String CRASH_FILENAME_FORMAT = "%s/%s.crash";
@@ -37,7 +37,7 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
     private final Thread.UncaughtExceptionHandler defaultExceptionHandler;
     private final Context applicationContext;
     private final AtomicBoolean isEnabled = new AtomicBoolean(true);
-    private final String mapboxPackage;
+    private final String mapLibrePackage;
     private final String version;
 
     private int exceptionChainDepth;
@@ -45,14 +45,14 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
     @VisibleForTesting
     MapLibreUncaughtExceptionHandler(@NonNull Context applicationContext,
                                      @NonNull SharedPreferences sharedPreferences,
-                                     @NonNull String mapboxPackage,
+                                     @NonNull String mapLibrePackage,
                                      @NonNull String version,
                                      Thread.UncaughtExceptionHandler defaultExceptionHandler) {
-        if (TextUtils.isEmpty(mapboxPackage) || TextUtils.isEmpty(version)) {
-            throw new IllegalArgumentException("Invalid package name: " + mapboxPackage + " or version: " + version);
+        if (TextUtils.isEmpty(mapLibrePackage) || TextUtils.isEmpty(version)) {
+            throw new IllegalArgumentException("Invalid package name: " + mapLibrePackage + " or version: " + version);
         }
         this.applicationContext = applicationContext;
-        this.mapboxPackage = mapboxPackage;
+        this.mapLibrePackage = mapLibrePackage;
         this.version = version;
         this.exceptionChainDepth = DEFAULT_EXCEPTION_CHAIN_DEPTH;
         this.defaultExceptionHandler = defaultExceptionHandler;
@@ -64,16 +64,16 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
         // If we're not enabled or crash is not in Mapbox code
         // then just pass the Exception on to the defaultExceptionHandler.
         List<Throwable> causalChain;
-        if (isEnabled.get() && isMapboxCrash(causalChain = getCausalChain(throwable))) {
+        if (isEnabled.get() && isMapLibreCrash(causalChain = getCausalChain(throwable))) {
             try {
-                CrashReport report = CrashReportBuilder.setup(applicationContext, mapboxPackage, version)
+                CrashReport report = CrashReportBuilder.setup(applicationContext, mapLibrePackage, version)
                         .addExceptionThread(thread)
                         .addCausalChain(causalChain)
                         .build();
 
-                ensureDirectoryWritable(applicationContext, mapboxPackage);
+                ensureDirectoryWritable(applicationContext, mapLibrePackage);
 
-                File file = FileUtils.getFile(applicationContext, getReportFileName(mapboxPackage, report.getDateString()));
+                File file = FileUtils.getFile(applicationContext, getReportFileName(mapLibrePackage, report.getDateString()));
                 FileUtils.writeToFile(file, report.toJson());
             } catch (Exception ex) {
                 Log.e(TAG, ex.toString());
@@ -90,12 +90,12 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (!MAPBOX_PREF_ENABLE_CRASH_REPORTER.equals(key)) {
+        if (!MAPLIBRE_PREF_ENABLE_CRASH_REPORTER.equals(key)) {
             return;
         }
 
         try {
-            isEnabled.set(sharedPreferences.getBoolean(MAPBOX_PREF_ENABLE_CRASH_REPORTER, false));
+            isEnabled.set(sharedPreferences.getBoolean(MAPLIBRE_PREF_ENABLE_CRASH_REPORTER, false));
         } catch (Exception ex) {
             // In case of a ClassCastException
             Log.e(TAG, ex.toString());
@@ -118,11 +118,11 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
     }
 
     @VisibleForTesting
-    boolean isMapboxCrash(List<Throwable> throwables) {
+    boolean isMapLibreCrash(List<Throwable> throwables) {
         for (Throwable cause : throwables) {
             final StackTraceElement[] stackTraceElements = cause.getStackTrace();
             for (final StackTraceElement element : stackTraceElements) {
-                if (isMapboxStackTraceElement(element)) {
+                if (isMapLibreStackTraceElement(element)) {
                     return true;
                 }
             }
@@ -143,8 +143,8 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
         return Collections.unmodifiableList(causes);
     }
 
-    private boolean isMapboxStackTraceElement(@NonNull StackTraceElement element) {
-        return element.getClassName().startsWith(mapboxPackage);
+    private boolean isMapLibreStackTraceElement(@NonNull StackTraceElement element) {
+        return element.getClassName().startsWith(mapLibrePackage);
     }
 
     private boolean isMidOrLowLevelException(int level) {
@@ -167,14 +167,14 @@ public class MapLibreUncaughtExceptionHandler implements Thread.UncaughtExceptio
 
     @VisibleForTesting
     @NonNull
-    static String getReportFileName(@NonNull String mapboxPackage,
+    static String getReportFileName(@NonNull String mapLibrePackage,
                                     @NonNull String timestamp) {
-        return String.format(CRASH_FILENAME_FORMAT, mapboxPackage, timestamp);
+        return String.format(CRASH_FILENAME_FORMAT, mapLibrePackage, timestamp);
     }
 
     private void initializeSharedPreferences(SharedPreferences sharedPreferences) {
         try {
-            isEnabled.set(sharedPreferences.getBoolean(MAPBOX_PREF_ENABLE_CRASH_REPORTER, true));
+            isEnabled.set(sharedPreferences.getBoolean(MAPLIBRE_PREF_ENABLE_CRASH_REPORTER, true));
         } catch (Exception ex) {
             // In case of a ClassCastException
             Log.e(TAG, ex.toString());

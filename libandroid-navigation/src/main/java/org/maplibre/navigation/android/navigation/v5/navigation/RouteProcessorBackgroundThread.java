@@ -16,12 +16,12 @@ import java.util.List;
  */
 class RouteProcessorBackgroundThread extends HandlerThread {
 
-  private static final String MAPBOX_NAVIGATION_THREAD_NAME = "mapbox_navigation_thread";
+  private static final String MAPLIBRE_NAVIGATION_THREAD_NAME = "maplibre_navigation_thread";
   private static final int MSG_LOCATION_UPDATED = 1001;
   private Handler workerHandler;
 
   RouteProcessorBackgroundThread(Handler responseHandler, Listener listener) {
-    super(MAPBOX_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND);
+    super(MAPLIBRE_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND);
     start();
     initialize(responseHandler, listener);
   }
