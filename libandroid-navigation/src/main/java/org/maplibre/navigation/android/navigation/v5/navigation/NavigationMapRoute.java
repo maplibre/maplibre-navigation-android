@@ -95,25 +95,25 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
     private static final String SOURCE_KEY = "source";
     private static final String INDEX_KEY = "index";
 
-    private static final String GENERIC_ROUTE_SOURCE_ID = "maplibre-navigation-route-source";
-    private static final String GENERIC_ROUTE_LAYER_ID = "maplibre-navigation-route-layer";
-    private static final String WAYPOINT_SOURCE_ID = "maplibre-navigation-waypoint-source";
-    private static final String WAYPOINT_LAYER_ID = "maplibre-navigation-waypoint-layer";
+    private static final String GENERIC_ROUTE_SOURCE_ID = "mapbox-navigation-route-source";
+    private static final String GENERIC_ROUTE_LAYER_ID = "mapbox-navigation-route-layer";
+    private static final String WAYPOINT_SOURCE_ID = "mapbox-navigation-waypoint-source";
+    private static final String WAYPOINT_LAYER_ID = "mapbox-navigation-waypoint-layer";
     private static final String ID_FORMAT = "%s-%d";
-    private static final String GENERIC_ROUTE_SHIELD_LAYER_ID = "maplibre-navigation-route-shield-layer";
+    private static final String GENERIC_ROUTE_SHIELD_LAYER_ID = "mapbox-navigation-route-shield-layer";
     private static final int TWO_POINTS = 2;
     private static final int THIRTY = 30;
-    private static final String ARROW_BEARING = "maplibre-navigation-arrow-bearing";
-    private static final String ARROW_SHAFT_SOURCE_ID = "maplibre-navigation-arrow-shaft-source";
-    private static final String ARROW_HEAD_SOURCE_ID = "maplibre-navigation-arrow-head-source";
-    private static final String ARROW_SHAFT_CASING_LINE_LAYER_ID = "maplibre-navigation-arrow-shaft-casing-layer";
-    private static final String ARROW_SHAFT_LINE_LAYER_ID = "maplibre-navigation-arrow-shaft-layer";
-    private static final String ARROW_HEAD_ICON = "maplibre-navigation-arrow-head-icon";
-    private static final String ARROW_HEAD_ICON_CASING = "maplibre-navigation-arrow-head-icon-casing";
+    private static final String ARROW_BEARING = "mapbox-navigation-arrow-bearing";
+    private static final String ARROW_SHAFT_SOURCE_ID = "mapbox-navigation-arrow-shaft-source";
+    private static final String ARROW_HEAD_SOURCE_ID = "mapbox-navigation-arrow-head-source";
+    private static final String ARROW_SHAFT_CASING_LINE_LAYER_ID = "mapbox-navigation-arrow-shaft-casing-layer";
+    private static final String ARROW_SHAFT_LINE_LAYER_ID = "mapbox-navigation-arrow-shaft-layer";
+    private static final String ARROW_HEAD_ICON = "mapbox-navigation-arrow-head-icon";
+    private static final String ARROW_HEAD_ICON_CASING = "mapbox-navigation-arrow-head-icon-casing";
     private static final int MAX_DEGREES = 360;
-    private static final String ARROW_HEAD_CASING_LAYER_ID = "maplibre-navigation-arrow-head-casing-layer";
+    private static final String ARROW_HEAD_CASING_LAYER_ID = "mapbox-navigation-arrow-head-casing-layer";
     private static final Float[] ARROW_HEAD_CASING_OFFSET = {0f, -7f};
-    private static final String ARROW_HEAD_LAYER_ID = "maplibre-navigation-arrow-head-layer";
+    private static final String ARROW_HEAD_LAYER_ID = "mapbox-navigation-arrow-head-layer";
     private static final Float[] ARROW_HEAD_OFFSET = {0f, -7f};
     private static final int MIN_ARROW_ZOOM = 10;
     private static final int MAX_ARROW_ZOOM = 22;
@@ -883,7 +883,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                 for (int i = 0; i < styleLayers.size(); i++) {
                     if (!(styleLayers.get(i) instanceof SymbolLayer)
                             // Avoid placing the route on top of the user location layer
-                            && !styleLayers.get(i).getId().contains("maplibre-location")) {
+                            && !styleLayers.get(i).getId().contains("mapbox-location")) {
                         belowLayer = styleLayers.get(i).getId();
                     }
                 }
