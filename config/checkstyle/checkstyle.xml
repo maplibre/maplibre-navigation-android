@@ -332,7 +332,7 @@
                      value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
 
-        <!-- Require Mapbox standard indentation. -->
+        <!-- Require MapLibre standard indentation. -->
         <module name="Indentation">
             <property name="basicOffset" value="2"/>
             <property name="braceAdjustment" value="0"/>
