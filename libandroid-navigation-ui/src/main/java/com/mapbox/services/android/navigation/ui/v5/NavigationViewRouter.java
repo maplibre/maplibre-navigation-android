@@ -16,7 +16,7 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 import java.util.Date;
 import java.util.List;
 
-class NavigationViewRouter implements RouteListener {
+public class NavigationViewRouter implements RouteListener {
 
   private final MapboxRouteFetcher onlineRouter;
   private final ConnectivityStatusProvider connectivityStatus;
@@ -28,8 +28,8 @@ class NavigationViewRouter implements RouteListener {
   private Location location;
   private RouteCallStatus callStatus;
 
-  NavigationViewRouter(MapboxRouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
-                       ViewRouteListener listener) {
+  public NavigationViewRouter(MapboxRouteFetcher onlineRouter, ConnectivityStatusProvider connectivityStatus,
+                              ViewRouteListener listener) {
     this.onlineRouter = onlineRouter;
     this.connectivityStatus = connectivityStatus;
     this.listener = listener;
@@ -67,7 +67,7 @@ class NavigationViewRouter implements RouteListener {
     extractRouteFrom(options);
   }
 
-  void findRouteFrom(@Nullable RouteProgress routeProgress) {
+  public void findRouteFrom(@Nullable RouteProgress routeProgress) {
     if (isRouting()) {
       return;
     }
@@ -75,11 +75,11 @@ class NavigationViewRouter implements RouteListener {
     findOnlineRouteWith(builder);
   }
 
-  void updateLocation(@NonNull Location location) {
+  public void updateLocation(@NonNull Location location) {
     this.location = location;
   }
 
-  void updateCurrentRoute(DirectionsRoute currentRoute) {
+  public void updateCurrentRoute(DirectionsRoute currentRoute) {
     this.currentRoute = currentRoute;
     listener.onRouteUpdate(currentRoute);
   }
