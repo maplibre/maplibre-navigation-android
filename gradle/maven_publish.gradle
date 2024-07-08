@@ -1,0 +1,24 @@
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/HudHud-Maps/maplibre-navigation-android")
+                credentials {
+                    username = System.getenv("GITHUB_USER")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+        publications {
+            release(MavenPublication) {
+                from(components.getByName("release"))
+                groupId = "sa.hudhud.maplibre"
+                artifactId = project.name
+                version = "1.0.0"
+            }
+        }
+    }
+}
