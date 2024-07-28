@@ -79,7 +79,7 @@ public class NavigationViewRouter implements RouteListener {
     this.location = location;
   }
 
-  public void updateCurrentRoute(DirectionsRoute currentRoute) {
+  void updateCurrentRoute(DirectionsRoute currentRoute) {
     this.currentRoute = currentRoute;
     listener.onRouteUpdate(currentRoute);
   }
