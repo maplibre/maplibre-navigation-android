@@ -1,9 +1,14 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.services.android.navigation.ui.v5.route.PrimaryRouteDrawer;
+import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibrePrimaryRouteDrawer;
 
 class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
 
@@ -20,12 +25,15 @@ class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
   private static final int MAX_ANIMATION_FPS = Integer.MAX_VALUE;
   private final MapboxMap mapboxMap;
   private final LocationComponent locationComponent;
+  @Nullable
+  private final PrimaryRouteDrawer primaryRouteDrawer;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 
-  LocationFpsDelegate(@NonNull MapboxMap mapboxMap, @NonNull LocationComponent locationComponent) {
+  LocationFpsDelegate(@NonNull MapboxMap mapboxMap, @NonNull LocationComponent locationComponent, @Nullable PrimaryRouteDrawer primaryRouteDrawer) {
     this.mapboxMap = mapboxMap;
     this.locationComponent = locationComponent;
+    this.primaryRouteDrawer = primaryRouteDrawer;
     mapboxMap.addOnCameraIdleListener(this);
   }
 
@@ -59,6 +67,11 @@ class LocationFpsDelegate implements MapboxMap.OnCameraIdleListener {
     int maxAnimationFps = buildFpsFrom(zoom);
     if (currentFps != maxAnimationFps) {
       locationComponent.setMaxAnimationFps(maxAnimationFps);
+
+      if (primaryRouteDrawer != null) {
+        primaryRouteDrawer.setMaxAnimationFps(maxAnimationFps);
+      }
+
       currentFps = maxAnimationFps;
     }
   }

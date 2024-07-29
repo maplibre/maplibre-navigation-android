@@ -9,6 +9,10 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;
 
+/**
+ * @deprecated this class is outdated, use {@link com.mapbox.services.android.navigation.ui.v5.route.MapRouteProgressChangeListener} instead.
+ */
+@Deprecated
 public class MapRouteProgressChangeListener implements ProgressChangeListener {
 
   private final NavigationMapRoute mapRoute;

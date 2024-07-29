@@ -1,5 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5.route;
 
+import static com.mapbox.core.constants.Constants.PRECISION_6;
+
 import androidx.annotation.NonNull;
 
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
@@ -19,73 +21,71 @@ import java.util.List;
 
 class MapRouteClickListener implements MapboxMap.OnMapClickListener {
 
-  private final MapRouteLine routeLine;
+  private final List<DirectionsRoute> routes = new ArrayList<>();
 
-  private OnRouteSelectionChangeListener onRouteSelectionChangeListener;
-  private boolean alternativesVisible = true;
+  private final OnRouteSelectionChangeListener routeChangeListener;
 
-  MapRouteClickListener(MapRouteLine routeLine) {
-    this.routeLine = routeLine;
+  MapRouteClickListener(@NonNull OnRouteSelectionChangeListener routeChangeListener) {
+    this.routeChangeListener = routeChangeListener;
+  }
+
+  void addRoute(DirectionsRoute route) {
+    this.routes.add(route);
+  }
+
+  void addRoutes(List<DirectionsRoute> routes) {
+    this.routes.addAll(routes);
+  }
+
+  void setRoutes(List<DirectionsRoute> routes) {
+    this.routes.clear();
+    this.routes.addAll(routes);
+  }
+
+  void clearRoutes() {
+    routes.clear();
   }
 
   @Override
-  public boolean onMapClick(@NonNull LatLng point) {
-    if (!isRouteVisible()) {
-      return false;
-    }
-    HashMap<LineString, DirectionsRoute> routeLineStrings = routeLine.retrieveRouteLineStrings();
-    if (invalidMapClick(routeLineStrings)) {
-      return false;
-    }
-    List<DirectionsRoute> directionsRoutes = routeLine.retrieveDirectionsRoutes();
-    findClickedRoute(point, routeLineStrings, directionsRoutes);
-    return false;
+  public boolean onMapClick(@NonNull LatLng latLng) {
+    return findClickedRoute(Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude()), routes);
   }
 
-  void setOnRouteSelectionChangeListener(OnRouteSelectionChangeListener listener) {
-    onRouteSelectionChangeListener = listener;
-  }
-
-  void updateAlternativesVisible(boolean alternativesVisible) {
-    this.alternativesVisible = alternativesVisible;
-  }
-
-  private boolean invalidMapClick(HashMap<LineString, DirectionsRoute> routeLineStrings) {
-    return routeLineStrings == null || routeLineStrings.isEmpty() || !alternativesVisible;
-  }
-
-  private boolean isRouteVisible() {
-    return routeLine.retrieveVisibility();
-  }
-
-  private void findClickedRoute(@NonNull LatLng point, HashMap<LineString, DirectionsRoute> routeLineStrings,
-                                List<DirectionsRoute> directionsRoutes) {
-
-    HashMap<Double, DirectionsRoute> routeDistancesAwayFromClick = new HashMap<>();
-    Point clickPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-
-    calculateClickDistances(routeDistancesAwayFromClick, clickPoint, routeLineStrings);
+  private boolean findClickedRoute(@NonNull Point clickPoint, @NonNull List<DirectionsRoute> directionsRoutes) {
+    HashMap<Double, DirectionsRoute> routeDistancesAwayFromClick = calculateClickDistances(clickPoint, directionsRoutes);
     List<Double> distancesAwayFromClick = new ArrayList<>(routeDistancesAwayFromClick.keySet());
     Collections.sort(distancesAwayFromClick);
 
-    DirectionsRoute clickedRoute = routeDistancesAwayFromClick.get(distancesAwayFromClick.get(0));
-    int newPrimaryRouteIndex = directionsRoutes.indexOf(clickedRoute);
-    if (routeLine.updatePrimaryRouteIndex(newPrimaryRouteIndex) && onRouteSelectionChangeListener != null) {
-      DirectionsRoute selectedRoute = directionsRoutes.get(newPrimaryRouteIndex);
-      onRouteSelectionChangeListener.onNewPrimaryRouteSelected(selectedRoute);
+    //TODO: this will handle ALL clicks as route switching.. or not? We should limit the click
+    // distance to a certain threshold
+
+    if (distancesAwayFromClick.isEmpty()) {
+      return false;
     }
+
+    DirectionsRoute clickedRoute = routeDistancesAwayFromClick.get(distancesAwayFromClick.get(0));
+    routeChangeListener.onNewPrimaryRouteSelected(clickedRoute);
+    return true;
   }
 
-  private void calculateClickDistances(HashMap<Double, DirectionsRoute> routeDistancesAwayFromClick,
-                                       Point clickPoint, HashMap<LineString, DirectionsRoute> routeLineStrings) {
-    for (LineString lineString : routeLineStrings.keySet()) {
-      Point pointOnLine = findPointOnLine(clickPoint, lineString);
-      if (pointOnLine == null) {
-        return;
+  private HashMap<Double, DirectionsRoute> calculateClickDistances(Point clickPoint, List<DirectionsRoute> routes) {
+    HashMap<Double, DirectionsRoute> routeDistanceToClick = new HashMap<>();
+    for (DirectionsRoute route : routes) {
+      if (route.geometry() == null) {
+        continue;
       }
+
+      LineString routeLine = LineString.fromPolyline(route.geometry(), PRECISION_6);
+      Point pointOnLine = findPointOnLine(clickPoint, routeLine);
+      if (pointOnLine == null) {
+        continue;
+      }
+
       double distance = TurfMeasurement.distance(clickPoint, pointOnLine, TurfConstants.UNIT_METERS);
-      routeDistancesAwayFromClick.put(distance, routeLineStrings.get(lineString));
+      routeDistanceToClick.put(distance, route);
     }
+
+    return routeDistanceToClick;
   }
 
   private Point findPointOnLine(Point clickPoint, LineString lineString) {
