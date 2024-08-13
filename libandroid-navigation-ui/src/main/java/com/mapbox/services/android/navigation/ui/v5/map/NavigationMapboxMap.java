@@ -14,6 +14,7 @@ import android.os.PersistableBundle;
 import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.fragment.app.FragmentActivity;
 
 import com.mapbox.geojson.Point;
@@ -486,6 +487,7 @@ public class NavigationMapboxMap {
      * Should be used in {@link FragmentActivity#onDestroy()} to ensure proper
      * accounting for the lifecycle.
      */
+    @UiThread
     public void onDestroy() {
       if (navigationSymbolManager != null) {
         navigationSymbolManager.onDestroy();
