@@ -1,6 +1,7 @@
 package com.mapbox.services.android.navigation.ui.v5.map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -51,5 +52,10 @@ class NavigationSymbolManager {
   private void createSymbolFrom(SymbolOptions options) {
     Symbol symbol = symbolManager.create(options);
     mapMarkersSymbols.add(symbol);
+  }
+
+  @UiThread
+  public void onDestroy() {
+    symbolManager.onDestroy();
   }
 }

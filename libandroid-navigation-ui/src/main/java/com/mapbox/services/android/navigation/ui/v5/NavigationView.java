@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,6 @@ import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -40,6 +39,8 @@ import com.mapbox.services.android.navigation.ui.v5.map.NavigationMapboxMapInsta
 import com.mapbox.services.android.navigation.ui.v5.map.WayNameView;
 import com.mapbox.services.android.navigation.ui.v5.summary.SummaryBottomSheet;
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationTimeFormat;
@@ -186,6 +187,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * In a {@link Fragment}, this should
    * be in {@link Fragment#onDestroyView()}.
    */
+  @UiThread
   public void onDestroy() {
     shutdown();
     lifecycleRegistry.markState(Lifecycle.State.DESTROYED);
@@ -702,9 +704,11 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     isSubscribed = true;
   }
 
+  @UiThread
   private void shutdown() {
     if (navigationMap != null) {
       navigationMap.removeOnCameraTrackingChangedListener(onTrackingChangedListener);
+      navigationMap.onDestroy();
     }
     navigationViewEventDispatcher.onDestroy(navigationViewModel.retrieveNavigation());
     mapView.onDestroy();
