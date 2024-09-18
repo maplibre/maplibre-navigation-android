@@ -690,10 +690,6 @@ public class NavigationMapLibreMap {
       layerInteractor.addStreetsLayer(sourceV7.getId(), STREETS_V7_ROAD_LABEL);
     } else if (sourceV8 != null) {
       layerInteractor.addStreetsLayer(sourceV8.getId(), STREETS_V8_ROAD_LABEL);
-    } else {
-      VectorSource streetSource = new VectorSource(STREETS_SOURCE_ID, MAPBOX_STREETS_V8_URL);
-      mapLibreMap.getStyle().addSource(streetSource);
-      layerInteractor.addStreetsLayer(STREETS_SOURCE_ID, STREETS_V8_ROAD_LABEL);
     }
   }
 
