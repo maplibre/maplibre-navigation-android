@@ -15,8 +15,6 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
 import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
-import com.mapbox.geojson.Point;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -214,12 +212,12 @@ public final class NavigationRoute {
          * This sets the starting point on the map where the route will begin. It is one of the
          * required parameters which must be set for a successful directions response.
          *
-         * @param origin a GeoJson {@link Point} object representing the starting location for the route
+         * @param origin a GeoJson {@link org.maplibre.geojson.Point} object representing the starting location for the route
          * @return this builder for chaining options together
          * @since 0.5.0
          */
         public Builder origin(@NonNull org.maplibre.geojson.Point origin) {
-            origin(toMapboxPoint(origin), null, null);
+            origin(origin, null, null);
             return this;
         }
 
@@ -227,7 +225,7 @@ public final class NavigationRoute {
          * This sets the starting point on the map where the route will begin. It is one of the
          * required parameters which must be set for a successful directions response.
          *
-         * @param origin    a GeoJson {@link Point} object representing the starting location for the
+         * @param origin    a GeoJson {@link org.maplibre.geojson.Point} object representing the starting location for the
          *                  route
          * @param angle     double value used for setting the corresponding coordinate's angle of travel
          *                  when determining the route
@@ -236,9 +234,9 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder origin(@NonNull com.mapbox.geojson.Point origin, @Nullable Double angle,
+        public Builder origin(@NonNull org.maplibre.geojson.Point origin, @Nullable Double angle,
                               @Nullable Double tolerance) {
-            directionsBuilder.origin(origin);
+            directionsBuilder.origin(toMapboxPoint(origin));
             directionsBuilder.addBearing(angle, tolerance);
             return this;
         }
@@ -247,13 +245,13 @@ public final class NavigationRoute {
          * This sets the ending point on the map where the route will end. It is one of the required
          * parameters which must be set for a successful directions response.
          *
-         * @param destination a GeoJson {@link Point} object representing the starting location for the
+         * @param destination a GeoJson {@link org.maplibre.geojson.Point} object representing the starting location for the
          *                    route
          * @return this builder for chaining options together
          * @since 0.50
          */
         public Builder destination(@NonNull org.maplibre.geojson.Point destination) {
-            destination(toMapboxPoint(destination), null, null);
+            destination(destination, null, null);
             return this;
         }
 
@@ -261,7 +259,7 @@ public final class NavigationRoute {
          * This sets the ending point on the map where the route will end. It is one of the required
          * parameters which must be set for a successful directions response.
          *
-         * @param destination a GeoJson {@link Point} object representing the starting location for the
+         * @param destination a GeoJson {@link org.maplibre.geojson.Point} object representing the starting location for the
          *                    route
          * @param angle       double value used for setting the corresponding coordinate's angle of travel
          *                    when determining the route
@@ -270,9 +268,9 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder destination(@NonNull Point destination, @Nullable Double angle,
+        public Builder destination(@NonNull org.maplibre.geojson.Point destination, @Nullable Double angle,
                                    @Nullable Double tolerance) {
-            directionsBuilder.destination(destination);
+            directionsBuilder.destination(toMapboxPoint(destination));
             directionsBuilder.addBearing(angle, tolerance);
             return this;
         }
@@ -283,8 +281,8 @@ public final class NavigationRoute {
          * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
          * in the request is currently limited to 1.
          *
-         * @param waypoint a {@link Point} which represents the pit-stop or waypoint where you'd like
-         *                 one of the {@link RouteLeg} to
+         * @param waypoint a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
+         *                 one of the {@link org.maplibre.navigation.android.navigation.v5.models.RouteLeg} to
          *                 navigate the user to
          * @return this builder for chaining options together
          * @since 0.5.0
@@ -301,8 +299,8 @@ public final class NavigationRoute {
          * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
          * in the request is currently limited to 1.
          *
-         * @param waypoint  a {@link Point} which represents the pit-stop or waypoint where you'd like
-         *                  one of the {@link RouteLeg} to
+         * @param waypoint  a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
+         *                  one of the {@link org.maplibre.navigation.android.navigation.v5.models.RouteLeg} to
          *                  navigate the user to
          * @param angle     double value used for setting the corresponding coordinate's angle of travel
          *                  when determining the route
@@ -311,9 +309,9 @@ public final class NavigationRoute {
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder addWaypoint(@NonNull Point waypoint, @Nullable Double angle,
+        public Builder addWaypoint(@NonNull org.maplibre.geojson.Point waypoint, @Nullable Double angle,
                                    @Nullable Double tolerance) {
-            directionsBuilder.addWaypoint(waypoint);
+            directionsBuilder.addWaypoint(toMapboxPoint(waypoint));
             directionsBuilder.addBearing(angle, tolerance);
             return this;
         }
@@ -325,7 +323,6 @@ public final class NavigationRoute {
          * Most useful in combination with  steps=true and requests based on traces
          * with high sample rates. Can be an index corresponding to any of the input coordinates,
          * but must contain the first ( 0 ) and last coordinates' indices.
-         * {@link #steps()}
          * </p>
          *
          * @param waypointIndices a list of coordinate indices to be used as waypoints
@@ -386,7 +383,7 @@ public final class NavigationRoute {
          * </p>
          *
          * @param annotations string referencing one of the annotation direction criteria's. The strings
-         *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
+         *                    restricted to one or multiple values inside the {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria.AnnotationCriteria}
          *                    or null which will result in no annotations being used
          * @return this builder for chaining options together
          * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
@@ -455,10 +452,10 @@ public final class NavigationRoute {
 
         /**
          * Change the units used for voice announcements, this does not change the units provided in
-         * other fields outside of the {@link VoiceInstructions}
+         * other fields outside of the {@link org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions}
          * object.
          *
-         * @param voiceUnits one of the values found inside the {@link VoiceUnitCriteria}
+         * @param voiceUnits one of the values found inside the {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria.VoiceUnitCriteria}
          * @return this builder for chaining options together
          * @since 0.8.0
          */
@@ -509,7 +506,7 @@ public final class NavigationRoute {
 
         /**
          * Required to call when this is being built. If no access token provided,
-         * {@link ServicesException} will be thrown.
+         * {@link NullPointerException} will be thrown.
          *
          * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
          *                    the Optimization API
@@ -660,7 +657,7 @@ public final class NavigationRoute {
         return com.mapbox.api.directions.v5.models.DirectionsResponse.fromJson(directionsResponse.toJson());
     }
 
-    private static Point toMapboxPoint(org.maplibre.geojson.Point point) {
-        return Point.fromLngLat(point.longitude(), point.latitude());
+    private static com.mapbox.geojson.Point toMapboxPoint(org.maplibre.geojson.Point point) {
+        return com.mapbox.geojson.Point.fromLngLat(point.longitude(), point.latitude());
     }
 }

@@ -94,7 +94,7 @@ public class NavigationRouteTest extends BaseTest {
   public void addingPointAndBearingKeepsCorrectOrder() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
       .accessToken(BaseTest.ACCESS_TOKEN)
-      .origin(com.mapbox.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
+      .origin(org.maplibre.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .addBearing(2.0, 3.0)
       .destination(Point.fromLngLat(1.0, 5.0))
       .build();
@@ -108,8 +108,8 @@ public class NavigationRouteTest extends BaseTest {
   public void reverseOriginDestinationDoesntMessUpBearings() throws Exception {
     NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
       .accessToken(BaseTest.ACCESS_TOKEN)
-      .destination(com.mapbox.geojson.Point.fromLngLat(1.0, 5.0), 1d, 5d)
-      .origin(com.mapbox.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
+      .destination(org.maplibre.geojson.Point.fromLngLat(1.0, 5.0), 1d, 5d)
+      .origin(org.maplibre.geojson.Point.fromLngLat(1.0, 2.0), 90d, 90d)
       .build();
 
     assertThat(navigationRoute.getCall().request().url().toString(),

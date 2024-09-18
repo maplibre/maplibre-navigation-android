@@ -78,7 +78,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
         Double bearing = location.hasBearing() ? Float.valueOf(location.getBearing()).doubleValue() : null;
         RouteOptions options = progress.directionsRoute().routeOptions();
         NavigationRoute.Builder builder = NavigationRoute.builder(context)
-                .origin(origin, bearing, BEARING_TOLERANCE)
+                .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
         List<Point> remainingWaypoints = toMapboxPointList(routeUtils.calculateRemainingWaypoints(progress));
