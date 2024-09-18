@@ -9,9 +9,9 @@ ext {
     ]
 
     version = [
-            mapLibreVersion             : '11.0.0',
+            mapLibreVersion             : '11.4.0',
             mapLibreTurf                : '6.0.1',
-            mapLibreAnnotations         : '3.0.0',
+            mapLibreAnnotations         : '3.0.1',
             mapboxGeoJson               : '5.8.0',
             annotation                  : '1.8.0',
             autoValue                   : '1.11.0',
