@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -40,6 +41,8 @@ import org.maplibre.android.maps.OnMapReadyCallback;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
 import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
@@ -187,6 +190,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * In a {@link Fragment}, this should
    * be in {@link Fragment#onDestroyView()}.
    */
+  @UiThread
   public void onDestroy() {
     shutdown();
     lifecycleRegistry.markState(Lifecycle.State.DESTROYED);
@@ -703,9 +707,11 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     isSubscribed = true;
   }
 
+  @UiThread
   private void shutdown() {
     if (navigationMap != null) {
       navigationMap.removeOnCameraTrackingChangedListener(onTrackingChangedListener);
+      navigationMap.onDestroy();
     }
     navigationViewEventDispatcher.onDestroy(navigationViewModel.retrieveNavigation());
     mapView.onDestroy();

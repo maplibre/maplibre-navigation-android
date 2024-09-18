@@ -9,7 +9,7 @@ import static org.maplibre.navigation.android.navigation.v5.navigation.Navigatio
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.TURN_LANE_INDICATION_STRAIGHT;
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.TURN_LANE_INDICATION_UTURN;
 
-class TurnLaneViewData {
+public class TurnLaneViewData {
 
   static final String DRAW_LANE_SLIGHT_RIGHT = "draw_lane_slight_right";
   static final String DRAW_LANE_RIGHT = "draw_lane_right";
@@ -29,7 +29,7 @@ class TurnLaneViewData {
     return shouldFlip;
   }
 
-  String getDrawMethod() {
+  public String getDrawMethod() {
     return drawMethod;
   }
 

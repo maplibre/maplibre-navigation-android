@@ -1,5 +1,8 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
+import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME;
+import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,9 +10,11 @@ import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+
 import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.fragment.app.FragmentActivity;
 
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
@@ -33,12 +38,11 @@ import org.maplibre.android.style.sources.Source;
 import org.maplibre.android.style.sources.VectorSource;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 /**
  * Wrapper class for {@link MapLibreMap}.
@@ -479,6 +483,17 @@ public class NavigationMapLibreMap {
     handleFpsOnStop();
     locationFpsDelegate.onStop();
   }
+
+    /**
+     * Should be used in {@link FragmentActivity#onDestroy()} to ensure proper
+     * accounting for the lifecycle.
+     */
+    @UiThread
+    public void onDestroy() {
+      if (navigationSymbolManager != null) {
+        navigationSymbolManager.onDestroy();
+      }
+    }
 
   /**
    * Hide or show the location icon on the map.
