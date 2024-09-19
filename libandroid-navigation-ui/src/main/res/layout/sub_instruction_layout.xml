@@ -8,7 +8,7 @@
     android:background="?attr/navigationViewListBackground"
     android:elevation="2dp">
 
-    <com.mapbox.services.android.navigation.ui.v5.instruction.maneuver.ManeuverView
+    <org.maplibre.navigation.android.navigation.ui.v5.instruction.maneuver.ManeuverView
         android:id="@+id/subManeuverView"
         android:layout_width="24dp"
         android:layout_height="24dp"

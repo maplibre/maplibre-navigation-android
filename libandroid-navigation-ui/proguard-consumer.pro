@@ -9,5 +9,5 @@
 # --- com.amazonaws.util.json.JacksonFactory ---
 -dontwarn com.fasterxml.jackson.core.**
 
-# --- Mapbox ---
--dontwarn com.mapbox.services.android.navigation.ui.v5.**
+# --- MapLibre ---
+-dontwarn org.maplibre.navigation.android.ui.v5.**

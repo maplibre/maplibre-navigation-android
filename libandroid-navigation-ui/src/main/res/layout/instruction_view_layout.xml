@@ -45,7 +45,7 @@
 
     </LinearLayout>
 
-    <com.mapbox.services.android.navigation.ui.v5.instruction.NavigationAlertView
+    <org.maplibre.navigation.android.navigation.ui.v5.instruction.NavigationAlertView
         android:id="@+id/alertView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
 
-    <com.mapbox.services.android.navigation.ui.v5.SoundButton
+    <org.maplibre.navigation.android.navigation.ui.v5.SoundButton
         android:id="@+id/soundLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
