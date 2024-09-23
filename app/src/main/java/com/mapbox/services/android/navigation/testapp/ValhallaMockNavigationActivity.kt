@@ -21,7 +21,6 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
-import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria
 import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
 import com.mapbox.services.android.navigation.v5.models.RouteOptions
@@ -46,7 +45,6 @@ class ValhallaMockNavigationActivity :
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
     private var destination: Point? = null
-    private var waypoint: Point? = null
     private var locationComponent: LocationComponent? = null
 
     private lateinit var binding: ActivityNavigationUiBinding
@@ -93,7 +91,6 @@ class ValhallaMockNavigationActivity :
                 }
             }
             destination = null
-            waypoint = null
             it.visibility = View.GONE
             binding.startRouteLayout.visibility = View.GONE
 
@@ -115,7 +112,7 @@ class ValhallaMockNavigationActivity :
         mapboxMap.addOnMapClickListener(this)
         Snackbar.make(
             findViewById(R.id.container),
-            "Tap map to place waypoint",
+            "Tap map to place destination",
             Snackbar.LENGTH_LONG,
         ).show()
     }
@@ -143,20 +140,10 @@ class ValhallaMockNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        var addMarker = true
-        when {
-            destination == null -> destination = Point.fromLngLat(point.longitude, point.latitude)
-            waypoint == null -> waypoint = Point.fromLngLat(point.longitude, point.latitude)
-            else -> {
-                Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
-                addMarker = false
-            }
-        }
+        destination = Point.fromLngLat(point.longitude, point.latitude)
 
-        if (addMarker) {
-            mapboxMap.addMarker(MarkerOptions().position(point))
-            binding.clearPoints.visibility = View.VISIBLE
-        }
+        mapboxMap.addMarker(MarkerOptions().position(point))
+        binding.clearPoints.visibility = View.VISIBLE
         calculateRoute()
         return true
     }
@@ -203,7 +190,7 @@ class ValhallaMockNavigationActivity :
             ),
             "costing_options" to mapOf(
                 "auto" to mapOf(
-                    "shortest" to true
+                    "top_speed" to 130
                 )
             ),
             "locations" to listOf(
@@ -230,6 +217,7 @@ class ValhallaMockNavigationActivity :
         // Don't use this server in production, it is for demonstration purposes only:
         // <string name="valhalla_url" translatable="false">https://valhalla1.openstreetmap.de/route</string>
         val request = Request.Builder()
+            .header("User-Agent", "MapLibre Android Navigation SDK Demo App")
             .url(getString(R.string.valhalla_url))
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
@@ -253,17 +241,17 @@ class ValhallaMockNavigationActivity :
                             .first()
                             .toBuilder()
                             .routeOptions(
-                                // This is not used but currently necessary to start the navigation
-                                // and to use the voice Instructions
+                                // These dummy route options are not not used to create directions,
+                                // but currently they are necessary to start the navigation
+                                // and to use the voice instructions.
+                                // Again, this isn't ideal, but it is a requirement of the framework.
                                 RouteOptions.builder()
-                                    .accessToken("valhalla")
-                                    .voiceUnits(DirectionsCriteria.METRIC)
-                                    .voiceInstructions(true)
-                                    .bannerInstructions(true)
-                                    .alternatives(false)
                                     .baseUrl("https://valhalla.routing")
                                     .profile("valhalla")
                                     .user("valhalla")
+                                    .accessToken("valhalla")
+                                    .voiceInstructions(true)
+                                    .bannerInstructions(true)
                                     .language(language)
                                     .coordinates(listOf(origin, destination))
                                     .requestUuid("0000-0000-0000-0000")
