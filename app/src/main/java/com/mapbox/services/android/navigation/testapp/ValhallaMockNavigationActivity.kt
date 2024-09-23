@@ -1,6 +1,5 @@
 package com.mapbox.services.android.navigation.testapp
 
-//import com.mapbox.api.directions.v5.models.DirectionsResponse
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
@@ -8,8 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -24,8 +21,6 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
-import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria
 import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
