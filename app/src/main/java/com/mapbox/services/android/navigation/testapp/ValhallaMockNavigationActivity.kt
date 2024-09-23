@@ -26,8 +26,10 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria
 import com.mapbox.services.android.navigation.v5.models.DirectionsResponse
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
+import com.mapbox.services.android.navigation.v5.models.RouteOptions
 import com.mapbox.services.android.navigation.v5.navigation.*
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
@@ -249,7 +251,26 @@ class ValhallaMockNavigationActivity :
                         val jsonResponse = response.body!!.string()
                         Timber.d("calculateRoute ValhallaRouting response: %s", jsonResponse)
                         val maplibreResponse = DirectionsResponse.fromJson(jsonResponse);
-                        this@ValhallaMockNavigationActivity.route = maplibreResponse.routes().first()
+                        this@ValhallaMockNavigationActivity.route = maplibreResponse.routes()
+                            .first()
+                            .toBuilder()
+                            .routeOptions(
+                                // This is not used but currently necessary to start the navigation:
+                                RouteOptions.builder()
+                                    .accessToken("valhalla")
+                                    .voiceUnits(DirectionsCriteria.METRIC)
+                                    .voiceInstructions(true)
+                                    .bannerInstructions(true)
+                                    .alternatives(false)
+                                    .baseUrl(getString(R.string.base_url))
+                                    .profile("valhalla")
+                                    .user("valhalla")
+                                    .coordinates(listOf(origin, destination))
+                                    .requestUuid("0000-0000-0000-0000")
+                                    .build()
+                            )
+                            .build()
+
                         runOnUiThread {
                             navigationMapRoute?.addRoutes(maplibreResponse.routes())
                             binding.startRouteLayout.visibility = View.VISIBLE
