@@ -42,6 +42,7 @@ class ValhallaMockNavigationActivity :
     private lateinit var mapboxMap: MapboxMap
 
     // Navigation related variables
+    private var language = "en-US"
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
     private var destination: Point? = null
@@ -182,11 +183,21 @@ class ValhallaMockNavigationActivity :
         }
 
         // Construct the request body using mapOf
+        // The full API is documented here:
+        // https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/
+
+        // It would be better if there was a proper ValhallaService which uses retrofit to
+        // generate the API call similar to the DirectionsService for the Mapbox API:
+        // https://github.com/mapbox/mapbox-java/blob/main/services-directions/src/main/java/com/mapbox/api/directions/v5/DirectionsService.java
+        // That would allow us to skip adding fake attributes further down as well.
+        // But this is the first step to show how the newly added banner_instructions
+        // and voice_instructions of Valhalla can be used to generate directions directly:
         val requestBody = mapOf(
             "format" to "osrm",
             "costing" to "auto",
             "banner_instructions" to true,
             "voice_instructions" to true,
+            "language" to language,
             "directions_options" to mapOf(
                 "units" to "kilometers"
             ),
@@ -223,11 +234,7 @@ class ValhallaMockNavigationActivity :
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
 
-        Timber.d("calculateRoute request will be enqueued")
-        Timber.d(
-            "calculateRoute requestBodyJson: %s",
-            requestBodyJson
-        )
+        Timber.d("calculateRoute enqueued requestBodyJson: %s", requestBodyJson)
         client.newCall(request).enqueue(object : okhttp3.Callback {
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -238,28 +245,26 @@ class ValhallaMockNavigationActivity :
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 response.use {
                     if (response.isSuccessful) {
-                        Timber.e(
-                            "calculateRoute to ValhallaRouting successful with status code: %s",
-                            response.code
-                        )
-                        Timber.d("calculateRoute ValhallaRouting body: %s", response.body)
-                        val jsonResponse = response.body!!.string()
-                        Timber.d("calculateRoute ValhallaRouting response: %s", jsonResponse)
-                        val maplibreResponse = DirectionsResponse.fromJson(jsonResponse);
+                        Timber.e("calculateRoute to ValhallaRouting successful with status code: %s", response.code)
+                        val responseBodyJson = response.body!!.string()
+                        Timber.d("calculateRoute ValhallaRouting responseBodyJson: %s", responseBodyJson)
+                        val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
                         this@ValhallaMockNavigationActivity.route = maplibreResponse.routes()
                             .first()
                             .toBuilder()
                             .routeOptions(
-                                // This is not used but currently necessary to start the navigation:
+                                // This is not used but currently necessary to start the navigation
+                                // and to use the voice Instructions
                                 RouteOptions.builder()
                                     .accessToken("valhalla")
                                     .voiceUnits(DirectionsCriteria.METRIC)
                                     .voiceInstructions(true)
                                     .bannerInstructions(true)
                                     .alternatives(false)
-                                    .baseUrl(getString(R.string.base_url))
+                                    .baseUrl("https://valhalla.routing")
                                     .profile("valhalla")
                                     .user("valhalla")
+                                    .language(language)
                                     .coordinates(listOf(origin, destination))
                                     .requestUuid("0000-0000-0000-0000")
                                     .build()
