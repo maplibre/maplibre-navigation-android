@@ -3,7 +3,6 @@ package com.mapbox.services.android.navigation.testapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -33,6 +32,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 import java.io.IOException
+import java.util.Locale
 
 class ValhallaMockNavigationActivity :
     AppCompatActivity(),
@@ -41,7 +41,7 @@ class ValhallaMockNavigationActivity :
     private lateinit var mapboxMap: MapboxMap
 
     // Navigation related variables
-    private var language = "en-US"
+    private var language = Locale.getDefault().language
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
     private var destination: Point? = null
@@ -158,7 +158,7 @@ class ValhallaMockNavigationActivity :
         }
 
         if (destination == null) {
-            Timber.d("calculateRoute: destination is null, therefore, origin can't be set.")
+            Timber.d("calculateRoute: destination is null, therefore, destination can't be set.")
             return
         }
 
@@ -169,8 +169,7 @@ class ValhallaMockNavigationActivity :
             return
         }
 
-        // Construct the request body using mapOf
-        // The full API is documented here:
+        // The full Valhalla API is documented here:
         // https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/
 
         // It would be better if there was a proper ValhallaService which uses retrofit to
@@ -207,14 +206,11 @@ class ValhallaMockNavigationActivity :
             )
         )
 
-        // Convert the map to JSON using Gson
         val requestBodyJson = Gson().toJson(requestBody)
-
-        // Create OkHttp client
         val client = OkHttpClient()
 
         // Create request object. Requires valhalla_url to be set in developer-config.xml
-        // Don't use this server in production, it is for demonstration purposes only:
+        // Don't use the following server in production, it is for demonstration purposes only:
         // <string name="valhalla_url" translatable="false">https://valhalla1.openstreetmap.de/route</string>
         val request = Request.Builder()
             .header("User-Agent", "MapLibre Android Navigation SDK Demo App")
@@ -226,7 +222,6 @@ class ValhallaMockNavigationActivity :
         client.newCall(request).enqueue(object : okhttp3.Callback {
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                // Handle request failure
                 Timber.e(e, "calculateRoute Failed to get route from ValhallaRouting")
             }
 
