@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             MockNavigationActivity.class
         ));
         list.add(new SampleItem(
-            getString(R.string.title_valhalla_mock_navigation),
-            getString(R.string.description_vallhalla_mock_navigation),
-            ValhallaMockNavigationActivity.class
+            getString(R.string.title_valhalla_navigation),
+            getString(R.string.description_vallhalla_navigation),
+            ValhallaNavigationActivity.class
         ));
         list.add(new SampleItem(
             getString(R.string.title_navigation_ui),

@@ -34,7 +34,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
 
-class ValhallaMockNavigationActivity :
+class ValhallaNavigationActivity :
     AppCompatActivity(),
     OnMapReadyCallback,
     MapboxMap.OnMapClickListener {
@@ -63,7 +63,7 @@ class ValhallaMockNavigationActivity :
         setContentView(binding.root)
         binding.mapView.apply {
             onCreate(savedInstanceState)
-            getMapAsync(this@ValhallaMockNavigationActivity)
+            getMapAsync(this@ValhallaNavigationActivity)
         }
 
         binding.startRouteButton.setOnClickListener {
@@ -76,7 +76,7 @@ class ValhallaMockNavigationActivity :
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
-                NavigationLauncher.startNavigation(this@ValhallaMockNavigationActivity, options)
+                NavigationLauncher.startNavigation(this@ValhallaNavigationActivity, options)
             }
         }
 
@@ -232,7 +232,7 @@ class ValhallaMockNavigationActivity :
                         val responseBodyJson = response.body!!.string()
                         Timber.d("calculateRoute ValhallaRouting responseBodyJson: %s", responseBodyJson)
                         val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
-                        this@ValhallaMockNavigationActivity.route = maplibreResponse.routes()
+                        this@ValhallaNavigationActivity.route = maplibreResponse.routes()
                             .first()
                             .toBuilder()
                             .routeOptions(
