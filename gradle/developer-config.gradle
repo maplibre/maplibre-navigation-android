@@ -12,8 +12,11 @@ task accessToken {
         }
         String tokenFileContents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "<resources>\n" +
-                "    <!-- Your navigation base url (example: https://api.mapbox.com) (-->\n" +
+                "    <!-- Your navigation base url (example: https://api.mapbox.com) -->\n" +
                 "    <string name=\"base_url\" translatable=\"false\">https://api.mapbox.com</string>\n" +
+                "    <!-- Your valhalla url (example: https://valhalla1.openstreetmap.de/route) -->\n" +
+                "    <!-- Don't use the following server in production, it is for demonstration purposes only: -->\n" +
+                "    <string name=\"valhalla_url\" translatable=\"false\">https://valhalla1.openstreetmap.de/route</string>\n" +
                 "    <!-- Your Mapbox access token (example: pk.abc...) -->\n" +
                 "    <string name=\"mapbox_access_token\" translatable=\"false\">" + mapboxAccessToken + "</string>\n" +
                 "    <!-- Map tile provider for light design (example: https://api.maptiler.com/maps/basic-v2/style.json?key=...) -->\n" +

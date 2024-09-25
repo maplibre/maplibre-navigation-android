@@ -10,6 +10,9 @@
     <string name="title_snap_to_route">Snap to route</string>
     <string name="description_snap_to_route">Use snap to route option to show smoother location updates.</string>
 
+    <string name="title_valhalla_navigation">Valhalla Navigation</string>
+    <string name="description_vallhalla_navigation">Use Valhalla routing server to generate directions.</string>
+
     <string name="title_off_route_detection">Off route detection</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
 
@@ -58,4 +61,5 @@
     <string name="error_select_longer_route">Please select a longer route</string>
     <string name="error_valid_route_not_found">Valid route not found.</string>
     <string name="explanation_long_press_waypoint">Long press map to place waypoint</string>
+
 </resources>
