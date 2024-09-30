@@ -66,7 +66,7 @@
 
         <com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
             android:id="@+id/instructionView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

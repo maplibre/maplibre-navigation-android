@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="96dp"
     tools:background="?navigationViewBannerBackground">
 
@@ -24,9 +24,8 @@
 
         <com.mapbox.services.android.navigation.ui.v5.instruction.maneuver.ManeuverView
             android:id="@+id/maneuverView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toTopOf="@+id/stepDistanceText"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -43,11 +42,13 @@
             android:includeFontPadding="false"
             android:maxLines="1"
             android:textColor="?attr/navigationViewBannerSecondaryText"
-            android:textSize="22sp"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="302 mi"/>
+            app:layout_constraintStart_toEndOf="@id/maneuverView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="302 mi"
+            tools:ignore="NotSibling" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,8 +61,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.65">
 
         <TextView
@@ -74,7 +74,7 @@
             android:maxLines="1"
             android:minHeight="35dp"
             android:textColor="?attr/navigationViewBannerPrimaryText"
-            android:textSize="30sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="I-580 South"/>
 
@@ -89,7 +89,7 @@
             android:maxLines="1"
             android:minHeight="31dp"
             android:textColor="?attr/navigationViewBannerSecondaryText"
-            android:textSize="26sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             tools:text="San Jose / Cupertino"/>
 
