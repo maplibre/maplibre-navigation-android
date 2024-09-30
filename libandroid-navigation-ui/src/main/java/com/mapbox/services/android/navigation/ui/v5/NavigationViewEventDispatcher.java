@@ -183,6 +183,7 @@ class NavigationViewEventDispatcher {
   private void removeProgressChangeListener(MapboxNavigation navigation) {
     if (progressChangeListener != null) {
       navigation.removeProgressChangeListener(progressChangeListener);
+      progressChangeListener = null;
     }
   }
 }

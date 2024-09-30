@@ -31,10 +31,10 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:padding="16dp"
-        android:tint="?attr/navigationViewSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/divider"
         app:layout_constraintTop_toTopOf="parent"
+
         tools:src="@drawable/ic_route_preview"/>
 
     <View

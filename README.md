@@ -23,7 +23,7 @@ With this SDK you can implement turn-by-turn navigation in your own Android app 
 - No Telemetry
 
 
-## Why have we forked
+## Why have we forked¬
 
 1. Mapbox decided to put a closed-source component to their navigation SDK and introduced a non-open-source license. Maplibre wants an open-source solution.
 2. Mapbox decided to put telemetry in their SDK. We couldn't turn this off without adjusting the source.

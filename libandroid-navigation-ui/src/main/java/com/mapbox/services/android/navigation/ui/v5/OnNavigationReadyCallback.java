@@ -11,4 +11,6 @@ public interface OnNavigationReadyCallback {
    *                  a configuration change.
    */
   void onNavigationReady(boolean isRunning);
+
+  void onMapReadyCallback();
 }

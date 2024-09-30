@@ -1,3 +1,13 @@
+plugins {
+    id("com.gradle.develocity") version("3.17.3")
+}
 include ':app'
 include ':libandroid-navigation'
 include ':libandroid-navigation-ui'
+
+develocity {
+    buildScan {
+        termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+        termsOfUseAgree.set("yes")
+    }
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_url" translatable="false">https://graphhopper.com/api/1/navigate/</string>    <!-- Your GraphHopper API key -->
+    <string name="mapbox_access_token" translatable="false">pk.cb243ba3-cb94-41c4-a91f-5f3074824d3a</string>
+    <!-- The "day" style used for navigation, here mapilion is used but you can use maptiler too -->
+    <string name="map_style_light" translatable="false">https://api.maptiler.com/maps/streets-v2/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ</string>
+    <!-- The "night" style used for navigation -->
+    <string name="map_style_dark" translatable="false">https://api.maptiler.com/maps/streets-v2/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ</string>
+</resources>

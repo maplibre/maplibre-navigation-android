@@ -85,6 +85,11 @@ public class OnNavigationReadyIdlingResource implements IdlingResource, Callback
     transitionToIdle();
   }
 
+  @Override
+  public void onMapReadyCallback() {
+    // Intentional empty
+  }
+
   private void fetchRoute(Context context) {
     Point origin = Point.fromLngLat(-77.033987, 38.900123);
     Point destination = Point.fromLngLat(-77.044818, 38.848942);

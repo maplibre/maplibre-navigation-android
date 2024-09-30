@@ -308,6 +308,10 @@ public class NavigationCamera implements LifecycleObserver {
     navigation.addProgressChangeListener(progressChangeListener);
   }
 
+  public void removeProgressChangeListener(MapboxNavigation navigation) {
+    navigation.removeProgressChangeListener(progressChangeListener);
+  }
+
   /**
    * Adds given tracking mode transition listener for receiving notification of camera
    * transition updates.

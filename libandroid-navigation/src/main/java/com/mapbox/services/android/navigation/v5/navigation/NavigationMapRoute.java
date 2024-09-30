@@ -53,7 +53,7 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.MathUtils;
-import com.mapbox.services.android.navigation.R;
+import com.mapbox.services.android.R;
 import com.mapbox.services.android.navigation.v5.route.MapRouteProgressChangeListener;
 import com.mapbox.services.android.navigation.v5.route.OnRouteSelectionChangeListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener;

@@ -43,7 +43,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import java.util.List;
 
-public class NavigationViewModel extends AndroidViewModel {
+public class NavigationViewModel {
 
     private static final String EMPTY_STRING = "";
     private static final String OKHTTP_INSTRUCTION_CACHE = "okhttp-instruction-cache";
@@ -77,8 +77,10 @@ public class NavigationViewModel extends AndroidViewModel {
     private boolean isChangingConfigurations;
     private MapConnectivityController connectivityController;
 
-    public NavigationViewModel(Application application) {
-        super(application);
+    private Context context;
+
+    public NavigationViewModel(Context context) {
+        this.context = context;
         initializeLocationEngine();
         initializeRouter();
         this.routeUtils = new RouteUtils();
@@ -88,10 +90,9 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @TestOnly
         // Package private (no modifier) for testing purposes
-    NavigationViewModel(Application application, MapboxNavigation navigation,
+    NavigationViewModel(MapboxNavigation navigation,
                         MapConnectivityController connectivityController,
                         NavigationViewRouter router) {
-        super(application);
         this.navigation = navigation;
         this.router = router;
         this.connectivityController = connectivityController;
@@ -99,19 +100,12 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @TestOnly
         // Package private (no modifier) for testing purposes
-    NavigationViewModel(Application application, MapboxNavigation navigation,
+    NavigationViewModel(MapboxNavigation navigation,
                         LocationEngineConductor conductor, NavigationViewEventDispatcher dispatcher, SpeechPlayer speechPlayer) {
-        super(application);
         this.navigation = navigation;
         this.locationEngineConductor = conductor;
         this.navigationViewEventDispatcher = dispatcher;
         this.speechPlayer = speechPlayer;
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        destroyRouter();
     }
 
     public void onDestroy(boolean isChangingConfigurations) {
@@ -120,6 +114,7 @@ public class NavigationViewModel extends AndroidViewModel {
             endNavigation();
             deactivateInstructionPlayer();
             isRunning = false;
+            this.route.setValue(null);
         }
         clearDynamicCameraMap();
         navigationViewEventDispatcher = null;
@@ -158,7 +153,7 @@ public class NavigationViewModel extends AndroidViewModel {
         initializeDistanceFormatter(options);
         if (!isRunning()) {
             LocationEngine locationEngine = initializeLocationEngineFrom(options);
-            initializeNavigation(getApplication(), navigationOptions, locationEngine);
+            initializeNavigation(context, navigationOptions, locationEngine);
             addMilestones(options);
             initializeNavigationSpeechPlayer(options);
         }
@@ -205,7 +200,7 @@ public class NavigationViewModel extends AndroidViewModel {
         this.routeProgress = routeProgress;
         sendEventArrival(routeProgress, milestone);
         instructionModel.setValue(new InstructionModel(distanceFormatter, routeProgress));
-        summaryModel.setValue(new SummaryModel(getApplication(), distanceFormatter, routeProgress, timeFormatType));
+        summaryModel.setValue(new SummaryModel(context, distanceFormatter, routeProgress, timeFormatType));
     }
 
     void updateLocation(Location location) {
@@ -236,9 +231,8 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeRouter() {
-        MapboxRouteFetcher onlineRouter = new MapboxRouteFetcher(getApplication());
-        Context applicationContext = getApplication().getApplicationContext();
-        ConnectivityStatusProvider connectivityStatus = new ConnectivityStatusProvider(applicationContext);
+        MapboxRouteFetcher onlineRouter = new MapboxRouteFetcher(context);
+        ConnectivityStatusProvider connectivityStatus = new ConnectivityStatusProvider(context);
         router = new NavigationViewRouter(onlineRouter, connectivityStatus, routeEngineListener);
     }
 
@@ -248,7 +242,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private void initializeLanguage(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().routeOptions();
-        language = localeUtils.inferDeviceLanguage(getApplication());
+        language = localeUtils.inferDeviceLanguage(context);
         if (routeOptions != null) {
             language = routeOptions.language();
         }
@@ -256,7 +250,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private String initializeUnitType(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().routeOptions();
-        String unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
+        String unitType = localeUtils.getUnitTypeForDeviceLocale(context);
         if (routeOptions != null) {
             unitType = routeOptions.voiceUnits();
         }
@@ -275,7 +269,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private void initializeDistanceFormatter(NavigationViewOptions options) {
         String unitType = initializeUnitType(options);
         int roundingIncrement = initializeRoundingIncrement(options);
-        distanceFormatter = new DistanceFormatter(getApplication(), language, unitType, roundingIncrement);
+        distanceFormatter = new DistanceFormatter(context, language, unitType, roundingIncrement);
     }
 
     private void initializeNavigationSpeechPlayer(NavigationViewOptions options) {
@@ -291,13 +285,13 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @NonNull
     private SpeechPlayerProvider initializeSpeechPlayerProvider(boolean voiceLanguageSupported) {
-        return new SpeechPlayerProvider(getApplication(), language, voiceLanguageSupported);
+        return new SpeechPlayerProvider(context, language, voiceLanguageSupported);
     }
 
     private LocationEngine initializeLocationEngineFrom(NavigationViewOptions options) {
         LocationEngine locationEngine = options.locationEngine();
         boolean shouldReplayRoute = options.shouldSimulateRoute();
-        locationEngineConductor.initializeLocationEngine(getApplication(), locationEngine, shouldReplayRoute);
+        locationEngineConductor.initializeLocationEngine(context, locationEngine, shouldReplayRoute);
         return locationEngineConductor.obtainLocationEngine();
     }
 

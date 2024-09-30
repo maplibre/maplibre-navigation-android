@@ -114,6 +114,11 @@ public class MapboxNavigationActivity extends AppCompatActivity implements OnNav
     // Intentionally empty
   }
 
+  @Override
+  public void onMapReadyCallback() {
+    // Intentionally empty
+  }
+
   private void initialize() {
     Parcelable position = getIntent().getParcelableExtra(NavigationConstants.NAVIGATION_VIEW_INITIAL_MAP_POSITION);
     if (position != null) {

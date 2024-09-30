@@ -8,6 +8,7 @@ import android.os.Handler;
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
+import com.mapbox.services.android.navigation.ui.v5.BuildConfig;
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.geojson.Feature;
@@ -37,10 +38,13 @@ import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SHIELD_LAYER_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ROUTE_SOURCE_ID;
+import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_CUSTOM_ID;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_DESTINATION_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_ORIGIN_VALUE;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
 import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
+
+import timber.log.Timber;
 
 class MapRouteLine {
 
@@ -160,13 +164,22 @@ class MapRouteLine {
 
     GeoJsonOptions wayPointGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
     drawnWaypointsFeatureCollection = waypointsFeatureCollection;
-    wayPointSource = sourceProvider.build(WAYPOINT_SOURCE_ID, drawnWaypointsFeatureCollection, wayPointGeoJsonOptions);
-    style.addSource(wayPointSource);
+    wayPointSource = sourceProvider.build(WAYPOINT_CUSTOM_ID, drawnWaypointsFeatureCollection, wayPointGeoJsonOptions);
+
 
     GeoJsonOptions routeLineGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
     drawnRouteFeatureCollection = routesFeatureCollection;
     routeLineSource = sourceProvider.build(ROUTE_SOURCE_ID, drawnRouteFeatureCollection, routeLineGeoJsonOptions);
-    style.addSource(routeLineSource);
+
+
+    try {
+      style.addSource(wayPointSource);
+      style.addSource(routeLineSource);
+    } catch(Exception e) {
+      if (BuildConfig.DEBUG) {
+        Timber.d("Style Already exists");
+      }
+    }
 
     // Waypoint attributes
     int originWaypointIcon = typedArray.getResourceId(

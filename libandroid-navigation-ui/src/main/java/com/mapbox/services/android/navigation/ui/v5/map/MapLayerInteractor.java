@@ -16,6 +16,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.services.android.navigation.ui.v5.map.NavigationMapboxMap.STREETS_LAYER_ID;
 
+import timber.log.Timber;
+
 class MapLayerInteractor {
 
   private static final float DEFAULT_WIDTH = 20f;
@@ -46,7 +48,11 @@ class MapLayerInteractor {
         lineColor(Color.WHITE)
       )
       .withSourceLayer(sourceLayer);
-    mapboxMap.getStyle().addLayerAt(streetsLayer, LAST_INDEX);
+    try {
+      mapboxMap.getStyle().addLayerAt(streetsLayer, LAST_INDEX);
+    } catch (Exception e) {
+      Timber.d("Style already exists");
+    }
   }
 
   private void updateLayerWithVisibility(String layerIdentifier, List<Layer> layers, boolean isVisible) {
