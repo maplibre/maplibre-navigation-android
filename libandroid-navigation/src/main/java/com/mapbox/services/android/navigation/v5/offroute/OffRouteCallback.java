@@ -5,7 +5,7 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 public interface OffRouteCallback {
   /**
    * This callback will fire when the {@link OffRouteDetector} determines that the user
-   * location is close enough to the upcoming {@link com.mapbox.api.directions.v5.models.LegStep}.
+   * location is close enough to the upcoming {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
    * <p>
    * In this case, the step index needs to be increased for the next {@link RouteProgress} generation.
    */
@@ -13,7 +13,7 @@ public interface OffRouteCallback {
 
   /**
    * This callback will fire when the {@link OffRouteDetector} determines that the user
-   * location is close enough to a {@link com.mapbox.api.directions.v5.models.LegStep}.
+   * location is close enough to a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
    * <p>
    * This allows to the OffRouteDetector to either go steps back or multple steps forward.
    * <p>

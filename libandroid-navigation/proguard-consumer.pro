@@ -9,7 +9,7 @@
 # --- Java ---
 -dontwarn java.awt.Color
 
-# --- com.mapbox.api.directions.v5.MapboxDirections ---
+# --- com.mapbox.services.android.navigation.v5.MapboxDirections ---
 -dontwarn com.sun.xml.internal.ws.spi.db.BindingContextFactory
 
 # --- AutoValue ---

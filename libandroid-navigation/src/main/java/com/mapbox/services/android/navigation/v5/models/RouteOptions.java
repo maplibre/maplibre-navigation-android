@@ -81,7 +81,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * There can be between two and 25 coordinates for most requests, or up to three coordinates for
    * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
    * Note that these coordinates are different than the direction responses
-   * {@link com.mapbox.api.directions.v5.models.DirectionsWaypoint}s that these are the non-snapped coordinates.
+   * {@link com.mapbox.services.android.navigation.v5.models.DirectionsWaypoint}s that these are the non-snapped coordinates.
    *
    * @return a list of {@link Point}s which represent the route origin, destination,
    *   and optionally, waypoints
@@ -247,7 +247,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#ANNOTATION_SPEED}
    * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
    * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-   * See the {@link com.mapbox.api.directions.v5.models.RouteLeg} object for more details on what is included with annotations.
+   * See the {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} object for more details on what is included with annotations.
    * Must be used in conjunction with overview=full.
    *
    * @return a string containing any of the annotations that were used during the request
@@ -264,7 +264,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#ANNOTATION_SPEED}
    * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
    * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-   * See the {@link com.mapbox.api.directions.v5.models.RouteLeg} object for more details on what is included with annotations.
+   * See the {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} object for more details on what is included with annotations.
    * Must be used in conjunction with overview=full.
    *
    * @return a list of annotations that were used during the request
@@ -786,7 +786,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
      * You can include several annotations as a comma-separated list. See the
-     * {@link com.mapbox.api.directions.v5.models.RouteLeg} object for more details on what is included with annotations.
+     * {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} object for more details on what is included with annotations.
      * Must be used in conjunction with overview=full.
      *
      * @param annotations in string format and separated by commas if more than one annotation was
