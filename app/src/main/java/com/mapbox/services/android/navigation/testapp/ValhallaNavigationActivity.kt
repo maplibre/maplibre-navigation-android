@@ -55,47 +55,47 @@ class ValhallaNavigationActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-
-        binding = ActivityNavigationUiBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.mapView.apply {
-            onCreate(savedInstanceState)
-            getMapAsync(this@ValhallaNavigationActivity)
-        }
-
-        binding.startRouteButton.setOnClickListener {
-            route?.let { route ->
-                val userLocation = mapboxMap.locationComponent.lastKnownLocation ?: return@let
-                val options = NavigationLauncherOptions.builder()
-                    .directionsRoute(route)
-                    .shouldSimulateRoute(simulateRoute)
-                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
-                    .lightThemeResId(R.style.TestNavigationViewLight)
-                    .darkThemeResId(R.style.TestNavigationViewDark)
-                    .build()
-                NavigationLauncher.startNavigation(this@ValhallaNavigationActivity, options)
-            }
-        }
-
-        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
-            simulateRoute = checked
-        }
-
-        binding.clearPoints.setOnClickListener {
-            if (::mapboxMap.isInitialized) {
-                mapboxMap.markers.forEach {
-                    mapboxMap.removeMarker(it)
-                }
-            }
-            destination = null
-            it.visibility = View.GONE
-            binding.startRouteLayout.visibility = View.GONE
-
-            navigationMapRoute?.removeRoute()
-        }
+//        if (BuildConfig.DEBUG) {
+//            Timber.plant(Timber.DebugTree())
+//        }
+//
+//        binding = ActivityNavigationUiBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//        binding.mapView.apply {
+//            onCreate(savedInstanceState)
+//            getMapAsync(this@ValhallaNavigationActivity)
+//        }
+//
+//        binding.startRouteButton.setOnClickListener {
+//            route?.let { route ->
+//                val userLocation = mapboxMap.locationComponent.lastKnownLocation ?: return@let
+//                val options = NavigationLauncherOptions.builder()
+//                    .directionsRoute(route)
+//                    .shouldSimulateRoute(simulateRoute)
+//                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
+//                    .lightThemeResId(R.style.TestNavigationViewLight)
+//                    .darkThemeResId(R.style.TestNavigationViewDark)
+//                    .build()
+//                NavigationLauncher.startNavigation(this@ValhallaNavigationActivity, options)
+//            }
+//        }
+//
+//        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
+//            simulateRoute = checked
+//        }
+//
+//        binding.clearPoints.setOnClickListener {
+//            if (::mapboxMap.isInitialized) {
+//                mapboxMap.markers.forEach {
+//                    mapboxMap.removeMarker(it)
+//                }
+//            }
+//            destination = null
+//            it.visibility = View.GONE
+//            binding.startRouteLayout.visibility = View.GONE
+//
+//            navigationMapRoute?.removeRoute()
+//        }
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
@@ -103,11 +103,11 @@ class ValhallaNavigationActivity :
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
         }
-
-        navigationMapRoute = NavigationMapRoute(
-            binding.mapView,
-            mapboxMap
-        )
+//
+//        navigationMapRoute = NavigationMapRoute(
+//            binding.mapView,
+//            mapboxMap
+//        )
 
         mapboxMap.addOnMapClickListener(this)
         Snackbar.make(
@@ -143,7 +143,7 @@ class ValhallaNavigationActivity :
         destination = Point.fromLngLat(point.longitude, point.latitude)
 
         mapboxMap.addMarker(MarkerOptions().position(point))
-        binding.clearPoints.visibility = View.VISIBLE
+//        binding.clearPoints.visibility = View.VISIBLE
         calculateRoute()
         return true
     }
@@ -268,27 +268,27 @@ class ValhallaNavigationActivity :
 
     override fun onResume() {
         super.onResume()
-        binding.mapView.onResume()
+//        binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        binding.mapView.onPause()
+//        binding.mapView.onPause()
     }
 
     override fun onStart() {
         super.onStart()
-        binding.mapView.onStart()
+//        binding.mapView.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        binding.mapView.onStop()
+//        binding.mapView.onStop()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        binding.mapView.onLowMemory()
+//        binding.mapView.onLowMemory()
     }
 
     override fun onDestroy() {
@@ -296,11 +296,11 @@ class ValhallaNavigationActivity :
         if (::mapboxMap.isInitialized) {
             mapboxMap.removeOnMapClickListener(this)
         }
-        binding.mapView.onDestroy()
+//        binding.mapView.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        binding.mapView.onSaveInstanceState(outState)
+//        binding.mapView.onSaveInstanceState(outState)
     }
 }

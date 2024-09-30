@@ -4,20 +4,12 @@ plugins {
 apply plugin: 'com.android.library'
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
-}
-
-java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
 android {
-  namespace 'com.mapbox.services.android.navigation.ui.v5'
-
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
 
@@ -53,10 +45,6 @@ android {
         }
     }
 
-  buildFeatures {
-    buildConfig true
-  }
-
     buildFeatures {
         buildConfig = true
     }
@@ -64,17 +52,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
-  publishing {
-    singleVariant("release") {
-      withSourcesJar()
-      withJavadocJar()
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-  }
 
     publishing {
         singleVariant("release") {
@@ -126,7 +107,6 @@ dependencies {
 }
 
 apply from: 'javadoc.gradle'
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
