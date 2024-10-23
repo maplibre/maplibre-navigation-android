@@ -12,8 +12,8 @@
 
     <include
         layout="@layout/instruction_content_layout"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/instruction_layout_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/rerouteLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/navigationViewBannerBackground"
+        android:background="#ffffff"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="vertical"

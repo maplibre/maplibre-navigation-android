@@ -64,12 +64,19 @@
             app:layout_anchor="@id/summaryBottomSheet"
             app:layout_anchorGravity="center|top" />
 
-        <com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
-            android:id="@+id/instructionView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
+        android:id="@+id/instructionView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.2"
+        android:layout_marginStart="24dp"
+        />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/startRouteLayout"

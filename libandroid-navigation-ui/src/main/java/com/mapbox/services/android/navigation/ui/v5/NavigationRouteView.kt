@@ -40,6 +40,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Projection
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import com.mapbox.services.android.navigation.ui.v5.NavigationContract.View
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera
 import com.mapbox.services.android.navigation.ui.v5.instruction.ImageCreator
 import com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
@@ -326,9 +327,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     fun calculateRoute(routeList: List<Pair<Double, Double>>, userLocation: Pair<Double, Double>, accessToken: String) {
-        if (isMapReinitialized) {
-            onNavigationReadyCallback!!.onNavigationReady(navigationViewModel!!.isRunning)
-        } else {
             val startRouteButton = findViewById<Button>(R.id.routeButton)
 //        startRouteButton.setOnClickListener {
             val destination = Point.fromLngLat(76.930137, 43.230361)
@@ -381,13 +379,17 @@ class NavigationRouteView @JvmOverloads constructor(
                             baseCameraPosition = mapboxMap!!.cameraPosition
                             NavigationLauncher.startNavigation(context, options)
                             route?.let {
-                                isMapReinitialized = true
-                                if (options.initialMapCameraPosition() != null) {
-                                    initialize(
-                                        options.initialMapCameraPosition()!!
-                                    )
+                                if (isMapReinitialized) {
+                                    onNavigationReadyCallback!!.onNavigationReady(navigationViewModel!!.isRunning)
                                 } else {
-                                    initialize()
+                                    isMapReinitialized = true
+                                    if (options.initialMapCameraPosition() != null) {
+                                        initialize(
+                                            options.initialMapCameraPosition()!!
+                                        )
+                                    } else {
+                                        initialize()
+                                    }
                                 }
                             }
 //                        binding.startRouteLayout.visibility = View.VISIBLE
@@ -400,7 +402,6 @@ class NavigationRouteView @JvmOverloads constructor(
                     Timber.e(throwable, "onFailure: navigation.getRoute()")
                 }
             })
-        }
     }
 
     override fun setSummaryBehaviorState(state: Int) {
@@ -547,6 +548,7 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     @UiThread
     fun stopNavigation() {
+        instructionView!!.visibility = GONE
         navigationPresenter!!.onNavigationStopped()
         navigationViewModel!!.stopNavigation()
         baseCameraPosition?.let {
@@ -561,6 +563,7 @@ class NavigationRouteView @JvmOverloads constructor(
             mapboxMap!!.removeMarker(it)
         }
         navigationMapRoute?.removeRoute()
+
     }
 
     /**
@@ -809,6 +812,7 @@ class NavigationRouteView @JvmOverloads constructor(
             initializeOnCameraTrackingChangedListener()
             subscribeViewModels()
         }
+        instructionView!!.visibility = VISIBLE
     }
 
     private fun initializeClickListeners() {

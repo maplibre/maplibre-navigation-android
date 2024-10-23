@@ -500,17 +500,17 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
    * and use custom animations to hide and show the instructions /sound layout
    */
   private void initializePortraitListListener() {
-    instructionLayout.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View instructionView) {
-        boolean instructionsVisible = instructionListLayout.getVisibility() == VISIBLE;
-        if (!instructionsVisible) {
-          showInstructionList();
-        } else {
-          hideInstructionList();
-        }
-      }
-    });
+//    instructionLayout.setOnClickListener(new OnClickListener() {
+//      @Override
+//      public void onClick(View instructionView) {
+//        boolean instructionsVisible = instructionListLayout.getVisibility() == VISIBLE;
+//        if (!instructionsVisible) {
+//          showInstructionList();
+//        } else {
+//          hideInstructionList();
+//        }
+//      }
+//    });
   }
 
   /**

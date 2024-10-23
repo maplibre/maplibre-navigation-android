@@ -71,7 +71,7 @@ public class SoundButton extends ConstraintLayout implements NavigationButton {
    */
   @Override
   public void show() {
-    setVisibility(VISIBLE);
+    setVisibility(GONE);
   }
 
   /**
