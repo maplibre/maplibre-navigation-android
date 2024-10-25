@@ -240,7 +240,7 @@ public class ManeuverView extends View {
         if (ROUNDABOUT_MANEUVER_TYPES.contains(maneuverType)) {
             flip = STEP_MANEUVER_MODIFIER_LEFT.equals(drivingSide);
         }
-        if (STEP_MANEUVER_MODIFIER_LEFT.equals(drivingSide) && STEP_MANEUVER_MODIFIER_UTURN.contains(maneuverModifier)) {
+        if (STEP_MANEUVER_MODIFIER_LEFT.equals(drivingSide) && STEP_MANEUVER_MODIFIER_UTURN.equals(maneuverModifier)) {
             setScaleX(flip ? 1 : -1);
         } else {
             setScaleX(flip ? -1 : 1);
