@@ -16,6 +16,7 @@ Maplibre welcomes participation and contributions from everyone.
   ```xml
     <string name="valhalla_url" translatable="false">https://valhalla1.openstreetmap.de/route</string>
   ```
+- Fix crash on ManeuverView, caused by `contains` not being able to handle null values [#122](https://github.com/maplibre/maplibre-navigation-android/issues/122)
 
 ### v3.0.0 - November 5, 2023
 
