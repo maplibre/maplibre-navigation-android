@@ -25,12 +25,15 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
 import com.mapbox.services.android.navigation.v5.instruction.Instruction
 import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine
 import com.mapbox.services.android.navigation.v5.milestone.*
 import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
-import com.mapbox.services.android.navigation.v5.navigation.*
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
+import com.mapbox.services.android.navigation.v5.navigation.NavigationEventListener
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
@@ -145,18 +148,19 @@ class MockNavigationActivity :
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
-        }
 
-        navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
+            navigationMapRoute?.setRouteEatingEnabled(true)
 
-        mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
+            mapboxMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
 
-        newOrigin()
+            newOrigin()
+            }
     }
 
     @SuppressWarnings("MissingPermission")

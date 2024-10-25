@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- Primary route colors -->
-  <color name="mapbox_navigation_route_layer_blue">#56A8FB</color>
-  <color name="mapbox_navigation_route_layer_congestion_yellow">#F3A64F</color>
-  <color name="mapbox_navigation_route_layer_congestion_red">#E93340</color>
+  <color name="mapbox_navigation_route_blue">#56A8FB</color>
   <color name="mapbox_navigation_route_shield_layer_color">#2F7AC6</color>
+  <color name="mapbox_navigation_route_congestion_moderate">#F3A64F</color>
+  <color name="mapbox_navigation_route_congestion_heavy">#E93340</color>
+  <color name="mapbox_navigation_route_congestion_severe">#990000</color>
+
+  <!-- Primary driven route colors -->
+  <color name="mapbox_navigation_route_driven_color">#99cafc</color>
+  <color name="mapbox_navigation_route_driven_shield_color">#82afdc</color>
+  <color name="mapbox_navigation_route_driven_congestion_moderate">#f7c995</color>
+  <color name="mapbox_navigation_route_driven_congestion_heavy">#f1848c</color>
+  <color name="mapbox_navigation_route_driven_congestion_severe">#c16666</color>
 
   <!-- Alternative route colors -->
-  <color name="mapbox_navigation_route_alternative_color">#8694A5</color>
-  <color name="mapbox_navigation_route_alternative_congestion_yellow">#BEA087</color>
-  <color name="mapbox_navigation_route_alternative_congestion_red">#B58281</color>
-  <color name="mapbox_navigation_route_alternative_shield_color">#727E8D</color>
+  <color name="mapbox_navigation_alternative_route_color">#8694A5</color>
+  <color name="mapbox_navigation_alternative_route_shield_color">#727E8D</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_moderate">#BEA087</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_heavy">#B58281</color>
+  <color name="mapbox_navigation_alternative_route_driven_congestion_severe">#7e5b5a</color>
 
   <color name="mapbox_navigation_route_upcoming_maneuver_arrow_color">#FFFFFF</color>
   <color name="mapbox_navigation_route_upcoming_maneuver_arrow_border_color">#2D3F53</color>

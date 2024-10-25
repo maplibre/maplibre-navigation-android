@@ -184,7 +184,7 @@ public final class NavigationConstants {
     /**
      * In seconds, how quickly {@link com.mapbox.services.android.navigation.v5.route.FasterRouteDetector}
      * will tell {@link RouteProcessorBackgroundThread} to check
-     * for a faster {@link com.mapbox.api.directions.v5.models.DirectionsRoute}.
+     * for a faster {@link com.mapbox.services.android.navigation.v5.models.DirectionsRoute}.
      *
      * @since 0.9.0
      */
@@ -192,7 +192,7 @@ public final class NavigationConstants {
 
     /**
      * 125 seconds remaining is considered a low alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -200,7 +200,7 @@ public final class NavigationConstants {
 
     /**
      * 70 seconds remaining is considered a medium alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.9.0
      */
@@ -208,7 +208,7 @@ public final class NavigationConstants {
 
     /**
      * 15 seconds remaining is considered a high alert level when
-     * navigating along a {@link com.mapbox.api.directions.v5.models.LegStep}.
+     * navigating along a {@link com.mapbox.services.android.navigation.v5.models.LegStep}.
      *
      * @since 0.10.1
      */
@@ -236,6 +236,7 @@ public final class NavigationConstants {
     // Bundle variable keys
     public static final String NAVIGATION_VIEW_ROUTE_KEY = "route_json";
     public static final String NAVIGATION_VIEW_SIMULATE_ROUTE = "navigation_view_simulate_route";
+    public static final String NAVIGATION_VIEW_ROUTE_EATING = "navigation_view_route_eating_enabled";
     public static final String NAVIGATION_VIEW_ROUTE_PROFILE_KEY = "navigation_view_route_profile";
     public static final String NAVIGATION_VIEW_OFF_ROUTE_ENABLED_KEY = "navigation_view_off_route_enabled";
     public static final String NAVIGATION_VIEW_SNAP_ENABLED_KEY = "navigation_view_snap_enabled";

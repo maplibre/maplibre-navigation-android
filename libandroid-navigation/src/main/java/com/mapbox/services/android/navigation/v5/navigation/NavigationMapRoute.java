@@ -35,8 +35,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
@@ -54,6 +52,8 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.MathUtils;
 import com.mapbox.services.android.navigation.R;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
 import com.mapbox.services.android.navigation.v5.route.MapRouteProgressChangeListener;
 import com.mapbox.services.android.navigation.v5.route.OnRouteSelectionChangeListener;
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener;
@@ -86,7 +86,9 @@ import java.util.Locale;
  * the default style will be used.
  *
  * @since 0.4.0
+ * @deprecated this class is outdated, use {@link com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute} instead.
  */
+@Deprecated
 public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListener,
         MapboxMap.OnMapClickListener, LifecycleObserver {
 
@@ -642,8 +644,8 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                         iconAllowOverlap(true),
                         iconIgnorePlacement(true),
                         PropertyFactory.iconSize(interpolate(linear(), zoom(),
-                                stop(MIN_ARROW_ZOOM, MIN_ZOOM_ARROW_HEAD_SCALE),
-                                stop(MAX_ARROW_ZOOM, MAX_ZOOM_ARROW_HEAD_SCALE)
+                                        stop(MIN_ARROW_ZOOM, MIN_ZOOM_ARROW_HEAD_SCALE),
+                                        stop(MAX_ARROW_ZOOM, MAX_ZOOM_ARROW_HEAD_SCALE)
                                 )
                         ),
                         PropertyFactory.iconOffset(ARROW_HEAD_OFFSET),
@@ -673,8 +675,8 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                         iconAllowOverlap(true),
                         iconIgnorePlacement(true),
                         PropertyFactory.iconSize(interpolate(linear(), zoom(),
-                                stop(MIN_ARROW_ZOOM, MIN_ZOOM_ARROW_HEAD_CASING_SCALE),
-                                stop(MAX_ARROW_ZOOM, MAX_ZOOM_ARROW_HEAD_CASING_SCALE)
+                                        stop(MIN_ARROW_ZOOM, MIN_ZOOM_ARROW_HEAD_CASING_SCALE),
+                                        stop(MAX_ARROW_ZOOM, MAX_ZOOM_ARROW_HEAD_CASING_SCALE)
                                 )
                         ),
                         PropertyFactory.iconOffset(ARROW_HEAD_CASING_OFFSET),
@@ -710,11 +712,11 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
             if (layer != null) {
                 layer.setProperties(
                         PropertyFactory.lineColor(match(
-                                Expression.toString(get(CONGESTION_KEY)),
-                                color(index == primaryRouteIndex ? routeDefaultColor : alternativeRouteDefaultColor),
-                                stop("moderate", color(index == primaryRouteIndex ? routeModerateColor : alternativeRouteModerateColor)),
-                                stop("heavy", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor)),
-                                stop("severe", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor))
+                                        Expression.toString(get(CONGESTION_KEY)),
+                                        color(index == primaryRouteIndex ? routeDefaultColor : alternativeRouteDefaultColor),
+                                        stop("moderate", color(index == primaryRouteIndex ? routeModerateColor : alternativeRouteModerateColor)),
+                                        stop("heavy", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor)),
+                                        stop("severe", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor))
                                 )
                         )
                 );
@@ -750,21 +752,21 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                 PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
                 PropertyFactory.lineWidth(interpolate(
-                        exponential(1.5f), zoom(),
-                        stop(4f, 3f * scale),
-                        stop(10f, 4f * scale),
-                        stop(13f, 6f * scale),
-                        stop(16f, 10f * scale),
-                        stop(19f, 14f * scale),
-                        stop(22f, 18f * scale)
+                                exponential(1.5f), zoom(),
+                                stop(4f, 3f * scale),
+                                stop(10f, 4f * scale),
+                                stop(13f, 6f * scale),
+                                stop(16f, 10f * scale),
+                                stop(19f, 14f * scale),
+                                stop(22f, 18f * scale)
                         )
                 ),
                 PropertyFactory.lineColor(match(
-                        Expression.toString(get(CONGESTION_KEY)),
-                        color(index == primaryRouteIndex ? routeDefaultColor : alternativeRouteDefaultColor),
-                        stop("moderate", color(index == primaryRouteIndex ? routeModerateColor : alternativeRouteModerateColor)),
-                        stop("heavy", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor)),
-                        stop("severe", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor))
+                                Expression.toString(get(CONGESTION_KEY)),
+                                color(index == primaryRouteIndex ? routeDefaultColor : alternativeRouteDefaultColor),
+                                stop("moderate", color(index == primaryRouteIndex ? routeModerateColor : alternativeRouteModerateColor)),
+                                stop("heavy", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor)),
+                                stop("severe", color(index == primaryRouteIndex ? routeSevereColor : alternativeRouteSevereColor))
                         )
                 )
         );
@@ -804,12 +806,12 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
                 PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
                 PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
                 PropertyFactory.lineWidth(interpolate(
-                        exponential(1.5f), zoom(),
-                        stop(10f, 7f),
-                        stop(14f, 10.5f * scale),
-                        stop(16.5f, 15.5f * scale),
-                        stop(19f, 24f * scale),
-                        stop(22f, 29f * scale)
+                                exponential(1.5f), zoom(),
+                                stop(10f, 7f),
+                                stop(14f, 10.5f * scale),
+                                stop(16.5f, 15.5f * scale),
+                                stop(19f, 24f * scale),
+                                stop(22f, 29f * scale)
                         )
                 ),
                 PropertyFactory.lineColor(
@@ -917,9 +919,9 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
 
                 waypointLayer = new SymbolLayer(WAYPOINT_LAYER_ID, WAYPOINT_SOURCE_ID).withProperties(
                         PropertyFactory.iconImage(match(
-                                Expression.toString(get("waypoint")), literal("originMarker"),
-                                stop("origin", literal("originMarker")),
-                                stop("destination", literal("destinationMarker"))
+                                        Expression.toString(get("waypoint")), literal("originMarker"),
+                                        stop("origin", literal("originMarker")),
+                                        stop("destination", literal("destinationMarker"))
                                 )
                         ),
                         PropertyFactory.iconSize(interpolate(

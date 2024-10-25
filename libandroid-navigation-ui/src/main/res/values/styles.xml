@@ -2,8 +2,8 @@
 <resources>
     <style name="NavigationMapRoute">
         <!-- Colors -->
-        <item name="routeColor">@color/mapbox_navigation_route_layer_blue</item>
-        <item name="routeModerateCongestionColor">@color/mapbox_navigation_route_layer_congestion_yellow</item>
+        <item name="routeColor">@color/mapbox_navigation_route_blue</item>
+        <item name="routeModerateCongestionColor">@color/mapbox_navigation_route_congestion_moderate</item>
         <item name="routeSevereCongestionColor">@color/mapbox_navigation_route_layer_congestion_red</item>
         <item name="routeShieldColor">@color/mapbox_navigation_route_shield_layer_color</item>
 

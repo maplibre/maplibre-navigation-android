@@ -76,6 +76,7 @@ class NavigationUIActivity :
                     .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
+                    .routeEatingEnabled(true)
                     .build()
                 NavigationLauncher.startNavigation(this@NavigationUIActivity, options)
             }
