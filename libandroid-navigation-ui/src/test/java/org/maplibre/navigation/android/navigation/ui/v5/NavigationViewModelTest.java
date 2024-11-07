@@ -24,9 +24,8 @@ public class NavigationViewModelTest {
   public void stopNavigation_progressListenersAreRemoved() {
     Application application = mock(Application.class);
     MapLibreNavigation navigation = mock(MapLibreNavigation.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
     NavigationViewRouter router = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, router);
+    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, router);
 
     viewModel.stopNavigation();
 
@@ -37,9 +36,8 @@ public class NavigationViewModelTest {
   public void stopNavigation_milestoneListenersAreRemoved() {
     Application application = mock(Application.class);
     MapLibreNavigation navigation = mock(MapLibreNavigation.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
     NavigationViewRouter router = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, router);
+    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, router);
 
     viewModel.stopNavigation();
 
@@ -50,9 +48,8 @@ public class NavigationViewModelTest {
   public void stopNavigation_mapOfflineManagerOnDestroyIsCalledIfNotNull() {
     Application application = mock(Application.class);
     MapLibreNavigation navigation = mock(MapLibreNavigation.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
     NavigationViewRouter router = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, router);
+    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, router);
 
     viewModel.onDestroy(false);
   }
@@ -62,9 +59,8 @@ public class NavigationViewModelTest {
     Application application = mock(Application.class);
     MapLibreNavigation navigation = mock(MapLibreNavigation.class);
     DirectionsRoute route = mock(DirectionsRoute.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
     NavigationViewRouter router = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController,router);
+    NavigationViewModel viewModel = new NavigationViewModel(application, navigation,router);
     viewModel.onDestroy(true);
 
     viewModel.updateRoute(route);
@@ -76,9 +72,8 @@ public class NavigationViewModelTest {
   public void navigationRouter_onDestroyInvokedWhenViewModelIsDestroyed() {
     Application application = mock(Application.class);
     MapLibreNavigation navigation = mock(MapLibreNavigation.class);
-    MapConnectivityController mockedConnectivityController = mock(MapConnectivityController.class);
     NavigationViewRouter mockedRouter = mock(NavigationViewRouter.class);
-    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedConnectivityController, mockedRouter);
+    NavigationViewModel viewModel = new NavigationViewModel(application, navigation, mockedRouter);
     viewModel.onCleared();
     verify(mockedRouter).onDestroy();
   }

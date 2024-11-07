@@ -75,7 +75,6 @@ public class NavigationViewModel extends AndroidViewModel {
     private int timeFormatType;
     private boolean isRunning;
     private boolean isChangingConfigurations;
-    private MapConnectivityController connectivityController;
 
     public NavigationViewModel(Application application) {
         super(application);
@@ -83,18 +82,15 @@ public class NavigationViewModel extends AndroidViewModel {
         initializeRouter();
         this.routeUtils = new RouteUtils();
         this.localeUtils = new LocaleUtils();
-        this.connectivityController = new MapConnectivityController();
     }
 
     @TestOnly
         // Package private (no modifier) for testing purposes
     NavigationViewModel(Application application, MapLibreNavigation navigation,
-                        MapConnectivityController connectivityController,
                         NavigationViewRouter router) {
         super(application);
         this.navigation = navigation;
         this.router = router;
-        this.connectivityController = connectivityController;
     }
 
     @TestOnly
