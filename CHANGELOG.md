@@ -4,6 +4,8 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v3.0.1 - November 7, 2024
+
 - Update dependencies, build tools & configurations
 - Use last snapped bearing if no previous step is available
 - Fix crash on snap-to-route engine, caused by legs with only single step
