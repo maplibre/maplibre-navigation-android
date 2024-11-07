@@ -15,7 +15,6 @@ buildscript {
     classpath pluginDependencies.errorprone
     classpath pluginDependencies.dependencyUpdates
     classpath pluginDependencies.kotlinGradle
-      classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0'
   }
 }
 
