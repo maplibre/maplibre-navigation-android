@@ -4,62 +4,62 @@
     <style name="NavigationMapRoute">
 
         <!-- Colors -->
-        <item name="routeColor">@color/mapbox_navigation_route_layer_blue</item>
+        <item name="routeColor">@color/maplibre_navigation_route_layer_blue</item>
         <item name="routeModerateCongestionColor">
-            @color/mapbox_navigation_route_layer_congestion_yellow
+            @color/maplibre_navigation_route_layer_congestion_yellow
         </item>
         <item name="routeSevereCongestionColor">
-            @color/mapbox_navigation_route_layer_congestion_red
+            @color/maplibre_navigation_route_layer_congestion_red
         </item>
-        <item name="routeShieldColor">@color/mapbox_navigation_route_shield_layer_color</item>
+        <item name="routeShieldColor">@color/maplibre_navigation_route_shield_layer_color</item>
 
         <!-- Scales -->
         <item name="routeScale">1.0</item>
         <item name="upcomingManeuverArrowColor">
-            @color/mapbox_navigation_route_upcoming_maneuver_arrow_color
+            @color/maplibre_navigation_route_upcoming_maneuver_arrow_color
         </item>
         <item name="upcomingManeuverArrowBorderColor">
-            @color/mapbox_navigation_route_upcoming_maneuver_arrow_border_color
+            @color/maplibre_navigation_route_upcoming_maneuver_arrow_border_color
         </item>
     </style>
 
     <style name="NavigationViewLight" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="navigationViewPrimary">@color/mapbox_navigation_view_color_primary</item>
-        <item name="navigationViewSecondary">@color/mapbox_navigation_view_color_secondary</item>
-        <item name="navigationViewAccent">@color/mapbox_navigation_view_color_accent</item>
-        <item name="navigationViewPrimaryText">@color/mapbox_navigation_view_color_secondary</item>
-        <item name="navigationViewSecondaryText">@color/mapbox_navigation_view_color_accent_text
+        <item name="navigationViewPrimary">@color/maplibre_navigation_view_color_primary</item>
+        <item name="navigationViewSecondary">@color/maplibre_navigation_view_color_secondary</item>
+        <item name="navigationViewAccent">@color/maplibre_navigation_view_color_accent</item>
+        <item name="navigationViewPrimaryText">@color/maplibre_navigation_view_color_secondary</item>
+        <item name="navigationViewSecondaryText">@color/maplibre_navigation_view_color_accent_text
         </item>
-        <item name="navigationViewDivider">@color/mapbox_navigation_view_color_divider</item>
+        <item name="navigationViewDivider">@color/maplibre_navigation_view_color_divider</item>
 
         <item name="navigationViewListBackground">
-            @color/mapbox_navigation_view_color_list_background
+            @color/maplibre_navigation_view_color_list_background
         </item>
 
         <item name="navigationViewBannerBackground">
-            @color/mapbox_navigation_view_color_banner_background
+            @color/maplibre_navigation_view_color_banner_background
         </item>
         <item name="navigationViewBannerPrimaryText">
-            @color/mapbox_navigation_view_color_banner_primary_text
+            @color/maplibre_navigation_view_color_banner_primary_text
         </item>
         <item name="navigationViewBannerSecondaryText">
-            @color/mapbox_navigation_view_color_banner_secondary_text
+            @color/maplibre_navigation_view_color_banner_secondary_text
         </item>
         <item name="navigationViewBannerManeuverPrimary">
-            @color/mapbox_navigation_view_color_banner_maneuver_primary
+            @color/maplibre_navigation_view_color_banner_maneuver_primary
         </item>
         <item name="navigationViewBannerManeuverSecondary">
-            @color/mapbox_navigation_view_color_banner_maneuver_secondary
+            @color/maplibre_navigation_view_color_banner_maneuver_secondary
         </item>
 
-        <item name="navigationViewProgress">@color/mapbox_navigation_view_color_progress</item>
+        <item name="navigationViewProgress">@color/maplibre_navigation_view_color_progress</item>
         <item name="navigationViewProgressBackground">
-            @color/mapbox_navigation_view_color_progress_background
+            @color/maplibre_navigation_view_color_progress_background
         </item>
 
         <item name="navigationViewRouteStyle">@style/NavigationMapRoute</item>
 
-        <item name="navigationViewLocationLayerStyle">@style/mapbox_LocationLayer</item>
+        <item name="navigationViewLocationLayerStyle">@style/maplibre_LocationLayer</item>
 
         <item name="navigationViewDestinationMarker">@drawable/map_marker_light</item>
 
@@ -69,45 +69,45 @@
     </style>
 
     <style name="NavigationViewDark" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="navigationViewPrimary">@color/mapbox_navigation_view_color_primary_dark</item>
-        <item name="navigationViewSecondary">@color/mapbox_navigation_view_color_secondary_dark
+        <item name="navigationViewPrimary">@color/maplibre_navigation_view_color_primary_dark</item>
+        <item name="navigationViewSecondary">@color/maplibre_navigation_view_color_secondary_dark
         </item>
-        <item name="navigationViewAccent">@color/mapbox_navigation_view_color_accent_dark</item>
-        <item name="navigationViewPrimaryText">@color/mapbox_navigation_view_color_secondary_dark
+        <item name="navigationViewAccent">@color/maplibre_navigation_view_color_accent_dark</item>
+        <item name="navigationViewPrimaryText">@color/maplibre_navigation_view_color_secondary_dark
         </item>
         <item name="navigationViewSecondaryText">
-            @color/mapbox_navigation_view_color_accent_text_dark
+            @color/maplibre_navigation_view_color_accent_text_dark
         </item>
-        <item name="navigationViewDivider">@color/mapbox_navigation_view_color_divider_dark</item>
+        <item name="navigationViewDivider">@color/maplibre_navigation_view_color_divider_dark</item>
 
         <item name="navigationViewListBackground">
-            @color/mapbox_navigation_view_color_list_background_dark
+            @color/maplibre_navigation_view_color_list_background_dark
         </item>
 
         <item name="navigationViewBannerBackground">
-            @color/mapbox_navigation_view_color_banner_background_dark
+            @color/maplibre_navigation_view_color_banner_background_dark
         </item>
         <item name="navigationViewBannerPrimaryText">
-            @color/mapbox_navigation_view_color_banner_primary_text_dark
+            @color/maplibre_navigation_view_color_banner_primary_text_dark
         </item>
         <item name="navigationViewBannerSecondaryText">
-            @color/mapbox_navigation_view_color_banner_secondary_text_dark
+            @color/maplibre_navigation_view_color_banner_secondary_text_dark
         </item>
         <item name="navigationViewBannerManeuverPrimary">
-            @color/mapbox_navigation_view_color_banner_maneuver_primary_dark
+            @color/maplibre_navigation_view_color_banner_maneuver_primary_dark
         </item>
         <item name="navigationViewBannerManeuverSecondary">
-            @color/mapbox_navigation_view_color_banner_maneuver_secondary_dark
+            @color/maplibre_navigation_view_color_banner_maneuver_secondary_dark
         </item>
 
-        <item name="navigationViewProgress">@color/mapbox_navigation_view_color_progress_dark</item>
+        <item name="navigationViewProgress">@color/maplibre_navigation_view_color_progress_dark</item>
         <item name="navigationViewProgressBackground">
-            @color/mapbox_navigation_view_color_progress_background_dark
+            @color/maplibre_navigation_view_color_progress_background_dark
         </item>
 
         <item name="navigationViewRouteStyle">@style/NavigationMapRoute</item>
 
-        <item name="navigationViewLocationLayerStyle">@style/mapbox_LocationLayer</item>
+        <item name="navigationViewLocationLayerStyle">@style/maplibre_LocationLayer</item>
 
         <item name="navigationViewDestinationMarker">@drawable/map_marker_dark</item>
 
@@ -116,76 +116,76 @@
         <item name="navigationViewMapStyle">@string/navigation_guidance_night</item>
     </style>
 
-    <declare-styleable name="mapbox_LocationLayer">
-        <attr name="mapbox_foregroundDrawable" format="reference" />
-        <attr name="mapbox_foregroundTintColor" format="color" />
-        <attr name="mapbox_backgroundDrawable" format="reference" />
-        <attr name="mapbox_backgroundTintColor" format="color" />
-        <attr name="mapbox_bearingDrawable" format="reference" />
-        <attr name="mapbox_bearingTintColor" format="color" />
-        <attr name="mapbox_gpsDrawable" format="reference" />
-        <attr name="mapbox_foregroundDrawableStale" format="reference" />
-        <attr name="mapbox_foregroundStaleTintColor" format="color" />
-        <attr name="mapbox_backgroundDrawableStale" format="reference" />
-        <attr name="mapbox_backgroundStaleTintColor" format="color" />
-        <attr name="mapbox_accuracyAlpha" format="float" />
-        <attr name="mapbox_accuracyColor" format="color" />
-        <attr name="mapbox_elevation" format="dimension" />
-        <attr name="mapbox_enableStaleState" format="boolean" />
-        <attr name="mapbox_staleStateTimeout" format="integer" min="0" />
-        <attr name="mapbox_iconPaddingLeft" format="integer" />
-        <attr name="mapbox_iconPaddingTop" format="integer" />
-        <attr name="mapbox_iconPaddingRight" format="integer" />
-        <attr name="mapbox_iconPaddingBottom" format="integer" />
-        <attr name="mapbox_layer_below" format="string" />
-        <attr name="mapbox_maxZoom" format="float" />
-        <attr name="mapbox_minZoom" format="float" />
-        <attr name="mapbox_maxZoomIconScale" format="float" />
-        <attr name="mapbox_minZoomIconScale" format="float" />
-        <attr name="mapbox_trackingInitialMoveThreshold" format="dimension" />
-        <attr name="mapbox_trackingMultiFingerMoveThreshold" format="dimension" />
+    <declare-styleable name="maplibre_LocationLayer">
+        <attr name="maplibre_foregroundDrawable" format="reference" />
+        <attr name="maplibre_foregroundTintColor" format="color" />
+        <attr name="maplibre_backgroundDrawable" format="reference" />
+        <attr name="maplibre_backgroundTintColor" format="color" />
+        <attr name="maplibre_bearingDrawable" format="reference" />
+        <attr name="maplibre_bearingTintColor" format="color" />
+        <attr name="maplibre_gpsDrawable" format="reference" />
+        <attr name="maplibre_foregroundDrawableStale" format="reference" />
+        <attr name="maplibre_foregroundStaleTintColor" format="color" />
+        <attr name="maplibre_backgroundDrawableStale" format="reference" />
+        <attr name="maplibre_backgroundStaleTintColor" format="color" />
+        <attr name="maplibre_accuracyAlpha" format="float" />
+        <attr name="maplibre_accuracyColor" format="color" />
+        <attr name="maplibre_elevation" format="dimension" />
+        <attr name="maplibre_enableStaleState" format="boolean" />
+        <attr name="maplibre_staleStateTimeout" format="integer" min="0" />
+        <attr name="maplibre_iconPaddingLeft" format="integer" />
+        <attr name="maplibre_iconPaddingTop" format="integer" />
+        <attr name="maplibre_iconPaddingRight" format="integer" />
+        <attr name="maplibre_iconPaddingBottom" format="integer" />
+        <attr name="maplibre_layer_below" format="string" />
+        <attr name="maplibre_maxZoom" format="float" />
+        <attr name="maplibre_minZoom" format="float" />
+        <attr name="maplibre_maxZoomIconScale" format="float" />
+        <attr name="maplibre_minZoomIconScale" format="float" />
+        <attr name="maplibre_trackingInitialMoveThreshold" format="dimension" />
+        <attr name="maplibre_trackingMultiFingerMoveThreshold" format="dimension" />
     </declare-styleable>
-    <dimen name="mapbox_locationLayerTrackingInitialMoveThreshold">25dp</dimen>
-    <dimen name="mapbox_locationLayerTrackingMultiFingerMoveThreshold">125dp</dimen>
+    <dimen name="maplibre_locationLayerTrackingInitialMoveThreshold">25dp</dimen>
+    <dimen name="maplibre_locationLayerTrackingMultiFingerMoveThreshold">125dp</dimen>
 
-    <style name="mapbox_LocationLayer">
-        <item name="mapbox_foregroundDrawable">@drawable/maplibre_user_icon</item>
-        <item name="mapbox_backgroundDrawable">@drawable/maplibre_user_stroke_icon</item>
-        <item name="mapbox_bearingDrawable">@drawable/maplibre_user_bearing_icon</item>
-        <item name="mapbox_gpsDrawable">@drawable/maplibre_user_puck_icon</item>
+    <style name="maplibre_LocationLayer">
+        <item name="maplibre_foregroundDrawable">@drawable/maplibre_user_icon</item>
+        <item name="maplibre_backgroundDrawable">@drawable/maplibre_user_stroke_icon</item>
+        <item name="maplibre_bearingDrawable">@drawable/maplibre_user_bearing_icon</item>
+        <item name="maplibre_gpsDrawable">@drawable/maplibre_user_puck_icon</item>
 
-        <item name="mapbox_foregroundDrawableStale">@drawable/maplibre_user_icon_stale</item>
-        <item name="mapbox_backgroundDrawableStale">@drawable/maplibre_user_stroke_icon</item>
+        <item name="maplibre_foregroundDrawableStale">@drawable/maplibre_user_icon_stale</item>
+        <item name="maplibre_backgroundDrawableStale">@drawable/maplibre_user_stroke_icon</item>
 
-        <item name="mapbox_accuracyAlpha">0.15</item>
-        <item name="mapbox_accuracyColor">@color/maplibre_location_layer_blue</item>
+        <item name="maplibre_accuracyAlpha">0.15</item>
+        <item name="maplibre_accuracyColor">@color/maplibre_location_layer_blue</item>
 
-        <item name="mapbox_elevation">12dp</item>
+        <item name="maplibre_elevation">12dp</item>
 
-        <item name="mapbox_enableStaleState">true</item>
-        <item name="mapbox_staleStateTimeout">30000</item>
+        <item name="maplibre_enableStaleState">true</item>
+        <item name="maplibre_staleStateTimeout">30000</item>
 
 
         <!-- Location icon padding -->
-        <item name="mapbox_iconPaddingLeft">0</item>
-        <item name="mapbox_iconPaddingTop">0</item>
-        <item name="mapbox_iconPaddingRight">0</item>
-        <item name="mapbox_iconPaddingBottom">0</item>
+        <item name="maplibre_iconPaddingLeft">0</item>
+        <item name="maplibre_iconPaddingTop">0</item>
+        <item name="maplibre_iconPaddingRight">0</item>
+        <item name="maplibre_iconPaddingBottom">0</item>
 
         <!-- Map zoom levels -->
-        <item name="mapbox_maxZoom">18</item>
-        <item name="mapbox_minZoom">2</item>
+        <item name="maplibre_maxZoom">18</item>
+        <item name="maplibre_minZoom">2</item>
 
         <!-- Location icon scale based on map zoom levels -->
-        <item name="mapbox_maxZoomIconScale">1</item>
-        <item name="mapbox_minZoomIconScale">0.6</item>
+        <item name="maplibre_maxZoomIconScale">1</item>
+        <item name="maplibre_minZoomIconScale">0.6</item>
 
         <!-- Camera tracking settings -->
-        <item name="mapbox_trackingInitialMoveThreshold">
-            @dimen/mapbox_locationLayerTrackingInitialMoveThreshold
+        <item name="maplibre_trackingInitialMoveThreshold">
+            @dimen/maplibre_locationLayerTrackingInitialMoveThreshold
         </item>
-        <item name="mapbox_trackingMultiFingerMoveThreshold">
-            @dimen/mapbox_locationLayerTrackingMultiFingerMoveThreshold
+        <item name="maplibre_trackingMultiFingerMoveThreshold">
+            @dimen/maplibre_locationLayerTrackingMultiFingerMoveThreshold
         </item>
 
     </style>
