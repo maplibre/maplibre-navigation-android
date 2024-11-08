@@ -123,9 +123,11 @@ class NavigationRouteView @JvmOverloads constructor(
     private var navigationMapRoute: NavigationMapRoute? = null
     private var baseCameraPosition: CameraPosition? = null
     private var isMapReinitialized: Boolean = false
+    private var mapStyle: String? = null
+    private var attrs: AttributeSet? = null
 
     init {
-        ThemeSwitcher.setTheme(context, attrs)
+        this.attrs = attrs
     }
 
     /**
@@ -133,9 +135,10 @@ class NavigationRouteView @JvmOverloads constructor(
      *
      * @param savedInstanceState to restore state if not null
      */
-    fun onCreate(navigationCallback: OnNavigationReadyCallback, savedInstanceState: Bundle?, context: ComponentActivity) {
+    fun onCreate(navigationCallback: OnNavigationReadyCallback, savedInstanceState: Bundle?, context: ComponentActivity, style: String) {
         initializeNavigationViewModel(context)
         initializeView()
+        ThemeSwitcher.setTheme(context, attrs, style)
         mapView?.let {
             it.apply {
                 if (!isMapInitialized) {
@@ -150,6 +153,7 @@ class NavigationRouteView @JvmOverloads constructor(
         lifecycleRegistry = LifecycleRegistry(this)
         lifecycleRegistry!!.markState(Lifecycle.State.CREATED)
         this.onNavigationReadyCallback = navigationCallback
+        instructionView?.setupStyle(style)
     }
 
     /**
@@ -278,7 +282,7 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     override fun onMapReady(mapboxMap: MapboxMap) {
         val builder = Style.Builder().fromUri(
-            context.getString(R.string.map_style_light)
+            mapStyle!!
         )
         this.mapboxMap = mapboxMap
         if (!isMapInitialized) {
@@ -326,13 +330,13 @@ class NavigationRouteView @JvmOverloads constructor(
         }
     }
 
-    fun calculateRoute(routeList: List<Pair<Double, Double>>, userLocation: Pair<Double, Double>, accessToken: String) {
-            val startRouteButton = findViewById<Button>(R.id.routeButton)
+    fun calculateRoute(mapRouteData: MapRouteData) {
+            mapStyle = mapRouteData.mapStyle
 //        startRouteButton.setOnClickListener {
             val destination = Point.fromLngLat(76.930137, 43.230361)
-            val origin = Point.fromLngLat(userLocation.first, userLocation.second)
+            val origin = Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second)
             val navigationRouteBuilder = NavigationRoute.builder(context).apply {
-                this.accessToken(accessToken)
+                this.accessToken(mapRouteData.accessToken)
                 this.origin(origin)
 
                 this.voiceUnits(DirectionsCriteria.PROFILE_DRIVING)
@@ -342,7 +346,7 @@ class NavigationRouteView @JvmOverloads constructor(
                 this.profile("car")
                 this.baseUrl(context.getString(R.string.base_url))
             }
-            for (point in routeList) {
+            for (point in mapRouteData.routeList) {
                 navigationRouteBuilder.addWaypoint(
                     Point.fromLngLat(point.first, point.second)
                 )
@@ -368,8 +372,8 @@ class NavigationRouteView @JvmOverloads constructor(
                                 .initialMapCameraPosition(
                                     CameraPosition.Builder().target(
                                         LatLng(
-                                            userLocation.first,
-                                            userLocation.second
+                                            mapRouteData.userLocation.first,
+                                            mapRouteData.userLocation.second
                                         )
                                     ).build()
                                 )
