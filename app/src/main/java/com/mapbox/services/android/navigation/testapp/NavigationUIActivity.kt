@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
+import com.mapbox.services.android.navigation.ui.v5.MapRouteData
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.NavigationViewOptions
@@ -66,7 +67,7 @@ class NavigationUIActivity :
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.navigationView.onCreate(this, savedInstanceState, this)
+        binding.navigationView.onCreate(this, savedInstanceState, this, MapRouteData.LIGHT_THEME)
 
 //        binding.mapView.apply {
 //            onCreate(savedInstanceState)
@@ -82,7 +83,7 @@ class NavigationUIActivity :
             points.add(Pair(76.930137, 43.230361))
             points.add(Pair(76.928316, 43.236109))
             points.add(Pair(76.920187, 43.236783))
-            binding.navigationView.calculateRoute(points, Pair(76.930137, 43.230361), getString(R.string.mapbox_access_token))
+//            binding.navigationView.calculateRoute(points, Pair(76.930137, 43.230361), getString(R.string.mapbox_access_token))
         }
 //        binding.clearPoints.setOnClickListener {
 //            if (::mapboxMap.isInitialized) {
