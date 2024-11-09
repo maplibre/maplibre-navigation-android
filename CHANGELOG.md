@@ -4,7 +4,7 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
-### v4.0.0 - November 8, 2024
+### v4.0.0 - November 9, 2024
 
 **BREAKING CHANGES:**
 - Update naming and packages to MapLibre (`org.maplibre.navigation.android`)
