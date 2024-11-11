@@ -1,0 +1,15 @@
+org.maplibre.navigation.android.core.crashreporter.MapLibreUncaughtExceptionHandler --> Removed. Not used internally. Make for me no sense to keep this.
+
+org.maplibre.navigation.android.core.FileUtils --> Removed. Only used by CrashReport
+
+org.maplibre.navigation.android.core.crashreporter.CrashReport --> Removed. Not used internally. Make for me no sense to keep this.
+org.maplibre.navigation.android.core.crashreporter.CrashReportBuilder --> Removed. Only used to build CrashReport instance
+
+org.maplibre.navigation.android.navigation.v5.milestone.Milestone --> Remove Builder, use named arguments in constructor instead.
+org.maplibre.navigation.android.navigation.v5.routeprogress.* --> Convert all @AutoValue classes to Kotlin data classes. (Also Builder pattern is not used here anymore)
+
+----------------
+Refactore later:
+
+org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated
+

@@ -45,7 +45,7 @@ public class SnapToRoute extends Snap {
    */
   @Override
   public Location getSnappedLocation(Location location, RouteProgress routeProgress) {
-    Location snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints());
+    Location snappedLocation = snapLocationLatLng(location, routeProgress.getCurrentStepPoints());
     snappedLocation.setBearing(snapLocationBearing(location, routeProgress));
     return snappedLocation;
   }
@@ -125,7 +125,7 @@ public class SnapToRoute extends Snap {
    */
   @Nullable
   private static Point getFuturePoint(RouteProgress routeProgress) {
-    if (routeProgress.currentLegProgress().distanceRemaining() > 1) {
+    if (routeProgress.getCurrentLegProgress().getDistanceRemaining() > 1) {
       // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
       return getCurrentStepPoint(routeProgress, 1);
     } else {
@@ -144,17 +144,17 @@ public class SnapToRoute extends Snap {
    */
   @Nullable
   private static Point getCurrentStepPoint(RouteProgress routeProgress, double additionalDistance) {
-    RouteLegProgress legProgress = routeProgress.currentLegProgress();
-    if (legProgress == null || legProgress.currentStep().geometry() == null) {
+    RouteLegProgress legProgress = routeProgress.getCurrentLegProgress();
+    if (legProgress == null || legProgress.getCurrentStep().geometry() == null) {
       return null;
     }
 
-    LineString currentStepLineString = LineString.fromPolyline(legProgress.currentStep().geometry(), Constants.PRECISION_6);
+    LineString currentStepLineString = LineString.fromPolyline(legProgress.getCurrentStep().geometry(), Constants.PRECISION_6);
     if (currentStepLineString.coordinates().isEmpty()) {
       return null;
     }
 
-    return TurfMeasurement.along(currentStepLineString, legProgress.currentStepProgress().distanceTraveled() + additionalDistance, TurfConstants.UNIT_METERS);
+    return TurfMeasurement.along(currentStepLineString, legProgress.getCurrentStepProgress().getDistanceTraveled() + additionalDistance, TurfConstants.UNIT_METERS);
   }
 
   /**
@@ -167,11 +167,11 @@ public class SnapToRoute extends Snap {
    */
   @Nullable
   private static Point getUpcomingLegPoint(RouteProgress routeProgress) {
-    if (routeProgress.directionsRoute().legs() != null && routeProgress.directionsRoute().legs().size() - 1 <= routeProgress.legIndex()) {
+    if (routeProgress.getDirectionsRoute().legs() != null && routeProgress.getDirectionsRoute().legs().size() - 1 <= routeProgress.getLegIndex()) {
       return null;
     }
 
-    RouteLeg upcomingLeg = routeProgress.directionsRoute().legs().get(routeProgress.legIndex() + 1);
+    RouteLeg upcomingLeg = routeProgress.getDirectionsRoute().legs().get(routeProgress.getLegIndex() + 1);
     if (upcomingLeg.steps() == null || upcomingLeg.steps().size() <= 1) {
       return null;
     }

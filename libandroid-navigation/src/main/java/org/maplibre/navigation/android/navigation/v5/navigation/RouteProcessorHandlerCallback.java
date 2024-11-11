@@ -56,7 +56,7 @@ class RouteProcessorHandlerCallback implements Handler.Callback {
     }
 
     private List<Milestone> findTriggeredMilestones(MapLibreNavigation mapLibreNavigation, RouteProgress routeProgress) {
-        RouteProgress previousRouteProgress = routeProcessor.getRouteProgress();
+        RouteProgress previousRouteProgress = routeProcessor.routeProgress;
         return checkMilestones(previousRouteProgress, routeProgress, mapLibreNavigation);
     }
 
@@ -75,7 +75,7 @@ class RouteProcessorHandlerCallback implements Handler.Callback {
     }
 
     private RouteProgress updateRouteProcessorWith(RouteProgress routeProgress) {
-        routeProcessor.setRouteProgress(routeProgress);
+        routeProcessor.routeProgress = routeProgress;
         return routeProgress;
     }
 

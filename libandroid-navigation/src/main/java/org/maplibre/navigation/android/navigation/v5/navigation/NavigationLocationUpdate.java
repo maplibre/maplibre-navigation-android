@@ -5,7 +5,7 @@ import android.location.Location;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class NavigationLocationUpdate {
+public abstract class NavigationLocationUpdate {
 
   static NavigationLocationUpdate create(Location location, MapLibreNavigation mapLibreNavigation) {
     return new AutoValue_NavigationLocationUpdate(location, mapLibreNavigation);

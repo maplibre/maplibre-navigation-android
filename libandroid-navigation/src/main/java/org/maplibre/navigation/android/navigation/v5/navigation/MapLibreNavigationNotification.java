@@ -164,12 +164,12 @@ class MapLibreNavigationNotification implements NavigationNotification {
    * @param routeProgress the latest RouteProgress object
    */
   private void updateNotificationViews(RouteProgress routeProgress) {
-    updateInstructionText(routeProgress.currentLegProgress().currentStep());
+    updateInstructionText(routeProgress.getCurrentLegProgress().getCurrentStep());
     updateDistanceText(routeProgress);
     updateArrivalTime(routeProgress);
-    LegStep step = routeProgress.currentLegProgress().upComingStep() != null
-      ? routeProgress.currentLegProgress().upComingStep()
-      : routeProgress.currentLegProgress().currentStep();
+    LegStep step = routeProgress.getCurrentLegProgress().getUpComingStep() != null
+      ? routeProgress.getCurrentLegProgress().getUpComingStep()
+      : routeProgress.getCurrentLegProgress().getCurrentStep();
     updateManeuverImage(step);
 
     notificationManager.notify(NavigationConstants.NAVIGATION_NOTIFICATION_ID, notificationBuilder.build());
@@ -203,7 +203,7 @@ class MapLibreNavigationNotification implements NavigationNotification {
   private void updateDistanceText(RouteProgress routeProgress) {
     if (currentDistanceText == null || newDistanceText(routeProgress)) {
       currentDistanceText = distanceFormatter.formatDistance(
-        routeProgress.currentLegProgress().currentStepProgress().distanceRemaining());
+        routeProgress.getCurrentLegProgress().getCurrentStepProgress().getDistanceRemaining());
       collapsedNotificationRemoteViews.setTextViewText(R.id.notificationDistanceText, currentDistanceText);
       expandedNotificationRemoteViews.setTextViewText(R.id.notificationDistanceText, currentDistanceText);
     }
@@ -212,13 +212,13 @@ class MapLibreNavigationNotification implements NavigationNotification {
   private boolean newDistanceText(RouteProgress routeProgress) {
     return currentDistanceText != null
       && !currentDistanceText.toString().equals(distanceFormatter.formatDistance(
-      routeProgress.currentLegProgress().currentStepProgress().distanceRemaining()).toString());
+      routeProgress.getCurrentLegProgress().getCurrentStepProgress().getDistanceRemaining()).toString());
   }
 
   private void updateArrivalTime(RouteProgress routeProgress) {
     MapLibreNavigationOptions options = mapLibreNavigation.options();
     Calendar time = Calendar.getInstance();
-    double durationRemaining = routeProgress.durationRemaining();
+    double durationRemaining = routeProgress.getDurationRemaining();
     int timeFormatType = options.timeFormatType();
     String arrivalTime = TimeFormatter.formatTime(time, durationRemaining, timeFormatType, isTwentyFourHourFormat);
     String formattedArrivalTime = String.format(etaFormat, arrivalTime);

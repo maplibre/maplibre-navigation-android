@@ -14,7 +14,7 @@ import org.maplibre.geojson.Point;
 import org.maplibre.navigation.android.navigation.R;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.MetricsRouteProgress;
+//import org.maplibre.navigation.android.navigation.v5.routeprogress.MetricsRouteProgress;
 import org.maplibre.turf.TurfConstants;
 import org.maplibre.turf.TurfConversion;
 import org.maplibre.turf.TurfMeasurement;
@@ -163,10 +163,10 @@ public class DistanceFormatter {
     return spannableString;
   }
 
-  public static int calculateAbsoluteDistance(Location currentLocation, MetricsRouteProgress metricProgress) {
-    Point currentPoint = Point.fromLngLat(currentLocation.getLongitude(), currentLocation.getLatitude());
-    Point finalPoint = metricProgress.getDirectionsRouteDestination();
-
-    return (int) TurfMeasurement.distance(currentPoint, finalPoint, TurfConstants.UNIT_METERS);
-  }
+//  public static int calculateAbsoluteDistance(Location currentLocation, MetricsRouteProgress metricProgress) {
+//    Point currentPoint = Point.fromLngLat(currentLocation.getLongitude(), currentLocation.getLatitude());
+//    Point finalPoint = metricProgress.getDirectionsRouteDestination();
+//
+//    return (int) TurfMeasurement.distance(currentPoint, finalPoint, TurfConstants.UNIT_METERS);
+//  }
 }

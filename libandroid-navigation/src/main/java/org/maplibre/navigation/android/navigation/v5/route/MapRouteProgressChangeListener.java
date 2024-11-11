@@ -19,7 +19,7 @@ public class MapRouteProgressChangeListener implements ProgressChangeListener {
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-    DirectionsRoute currentRoute = routeProgress.directionsRoute();
+    DirectionsRoute currentRoute = routeProgress.getDirectionsRoute();
     List<DirectionsRoute> directionsRoutes = mapRoute.retrieveDirectionsRoutes();
     int primaryRouteIndex = mapRoute.retrievePrimaryRouteIndex();
     addNewRoute(currentRoute, directionsRoutes, primaryRouteIndex);

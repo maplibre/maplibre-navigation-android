@@ -401,7 +401,7 @@ public class NavigationHelperTest extends BaseTest {
                 null, routeProgress.currentLeg(), legDistanceRemaining
         );
 
-        assertEquals("moderate", newLegAnnotation.congestion());
+        assertEquals("moderate", newLegAnnotation.getCongestion());
     }
 
     @Test
@@ -413,8 +413,8 @@ public class NavigationHelperTest extends BaseTest {
                 null, routeProgress.currentLeg(), legDistanceRemaining
         );
 
-        assertTrue(newLegAnnotation.distanceToAnnotation() < legDistanceRemaining);
-        assertEquals("heavy", newLegAnnotation.congestion());
+        assertTrue(newLegAnnotation.getDistanceToAnnotation() < legDistanceRemaining);
+        assertEquals("heavy", newLegAnnotation.getCongestion());
     }
 
     @Test

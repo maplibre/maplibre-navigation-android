@@ -55,7 +55,7 @@ public class RouteUtils {
    */
   public boolean isNewRoute(@Nullable RouteProgress previousRouteProgress,
                             @NonNull RouteProgress routeProgress) {
-    return isNewRoute(previousRouteProgress, routeProgress.directionsRoute());
+    return isNewRoute(previousRouteProgress, routeProgress.getDirectionsRoute());
   }
 
   /**
@@ -69,7 +69,7 @@ public class RouteUtils {
    */
   public boolean isNewRoute(@Nullable RouteProgress previousRouteProgress,
                             @NonNull DirectionsRoute directionsRoute) {
-    return previousRouteProgress == null || !previousRouteProgress.directionsRoute().geometry()
+    return previousRouteProgress == null || !previousRouteProgress.getDirectionsRoute().geometry()
       .equals(directionsRoute.geometry());
   }
 
@@ -89,7 +89,7 @@ public class RouteUtils {
     boolean isValidArrivalManeuverType = upcomingStepIsArrivalManeuverType(routeProgress)
       || currentStepIsArrivalManeuverType(routeProgress);
     if (isValidArrivalManeuverType) {
-      LegStep currentStep = routeProgress.currentLegProgress().currentStep();
+      LegStep currentStep = routeProgress.getCurrentLegProgress().getCurrentStep();
       BannerInstructions currentInstructions = ((BannerInstructionMilestone) milestone).getBannerInstructions();
       List<BannerInstructions> bannerInstructions = currentStep.bannerInstructions();
       if (hasValidInstructions(bannerInstructions, currentInstructions)) {
@@ -110,8 +110,8 @@ public class RouteUtils {
    * @since 0.8.0
    */
   public boolean isLastLeg(RouteProgress routeProgress) {
-    List<RouteLeg> legs = routeProgress.directionsRoute().legs();
-    RouteLeg currentLeg = routeProgress.currentLeg();
+    List<RouteLeg> legs = routeProgress.getDirectionsRoute().legs();
+    RouteLeg currentLeg = routeProgress.getCurrentLeg();
     return currentLeg.equals(legs.get(legs.size() - 1));
   }
 
@@ -128,12 +128,12 @@ public class RouteUtils {
    */
   @Nullable
   public List<Point> calculateRemainingWaypoints(RouteProgress routeProgress) {
-    if (routeProgress.directionsRoute().routeOptions() == null) {
+    if (routeProgress.getDirectionsRoute().routeOptions() == null) {
       return null;
     }
-    List<Point> coordinates = new ArrayList<>(routeProgress.directionsRoute().routeOptions().coordinates());
+    List<Point> coordinates = new ArrayList<>(routeProgress.getDirectionsRoute().routeOptions().coordinates());
     int coordinatesSize = coordinates.size();
-    int remainingWaypoints = routeProgress.remainingWaypoints();
+    int remainingWaypoints = routeProgress.getRemainingWaypoints();
     if (coordinatesSize < remainingWaypoints) {
       return null;
     }
@@ -153,15 +153,15 @@ public class RouteUtils {
    */
   @Nullable
   public String[] calculateRemainingWaypointNames(RouteProgress routeProgress) {
-    RouteOptions routeOptions = routeProgress.directionsRoute().routeOptions();
+    RouteOptions routeOptions = routeProgress.getDirectionsRoute().routeOptions();
     if (routeOptions == null || TextUtils.isEmpty(routeOptions.waypointNames())) {
       return null;
     }
     String allWaypointNames = routeOptions.waypointNames();
     String[] names = allWaypointNames.split(SEMICOLON);
-    int coordinatesSize = routeProgress.directionsRoute().routeOptions().coordinates().size();
+    int coordinatesSize = routeProgress.getDirectionsRoute().routeOptions().coordinates().size();
     String[] remainingWaypointNames = Arrays.copyOfRange(names,
-      coordinatesSize - routeProgress.remainingWaypoints(), coordinatesSize);
+      coordinatesSize - routeProgress.getRemainingWaypoints(), coordinatesSize);
     String[] waypointNames = new String[remainingWaypointNames.length + ORIGIN_WAYPOINT_NAME_THRESHOLD];
     waypointNames[ORIGIN_WAYPOINT_NAME] = names[ORIGIN_WAYPOINT_NAME];
     System.arraycopy(remainingWaypointNames, FIRST_POSITION, waypointNames, SECOND_POSITION,
@@ -302,12 +302,12 @@ public class RouteUtils {
   }
 
   private boolean upcomingStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
-    return routeProgress.currentLegProgress().upComingStep() != null
-      && routeProgress.currentLegProgress().upComingStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
+    return routeProgress.getCurrentLegProgress().getUpComingStep() != null
+      && routeProgress.getCurrentLegProgress().getUpComingStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
   }
 
   private boolean currentStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
-    return routeProgress.currentLegProgress().currentStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
+    return routeProgress.getCurrentLegProgress().getCurrentStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
   }
 
   private boolean isValidStep(LegStep step) {

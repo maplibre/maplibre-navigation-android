@@ -25,7 +25,7 @@ public final class ToleranceUtils {
                                                        RouteProgress routeProgress,
                                                        MapLibreNavigationOptions navigationOptions) {
     List<StepIntersection> intersections
-      = routeProgress.currentLegProgress().currentStepProgress().intersections();
+      = routeProgress.getCurrentLegProgress().getCurrentStepProgress().getIntersections();
 
     if(!intersections.isEmpty()){
       List<Point> intersectionsPoints = new ArrayList<>();

@@ -2,7 +2,6 @@ package org.maplibre.navigation.android.navigation.v5.milestone
 
 import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
-import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone.Builder
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
@@ -21,7 +20,10 @@ class BannerInstructionMilestone(
     trigger: Trigger.Statement?
 ) : Milestone(identifier, instruction, trigger) {
 
-    @Deprecated("Use constructor with named arguments.", replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)"))
+    @Deprecated(
+        "Use constructor with named arguments.",
+        replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)")
+    )
     constructor(builder: Builder) : this(
         builder.identifier,
         builder.instruction,
@@ -43,16 +45,21 @@ class BannerInstructionMilestone(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean {
-        val legProgress = routeProgress.currentLegProgress()
-        val currentStep = legProgress.currentStep()
-        val stepDistanceRemaining = legProgress.currentStepProgress().distanceRemaining()
-        val instructions =
-            routeUtils.findCurrentBannerInstructions(currentStep, stepDistanceRemaining)
-        if (shouldBeShown(instructions, stepDistanceRemaining)) {
-            this.bannerInstructions = instructions
-            return true
-        }
-        return false
+        return routeProgress.currentLegProgress?.let { legProgress ->
+            legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
+                val instructions = routeUtils.findCurrentBannerInstructions(
+                    legProgress.currentStep,
+                    stepDistanceRemaining
+                )
+
+                return@currentStepLet if (shouldBeShown(instructions, stepDistanceRemaining)) {
+                    this.bannerInstructions = instructions
+                    true
+                } else {
+                    false
+                }
+            } ?: false
+        } ?: false
     }
 
     /**
@@ -80,7 +87,10 @@ class BannerInstructionMilestone(
      *
      * @since 0.4.0
      */
-    @Deprecated("Use BannerInstructionMilestone constructor with named arguments to create instance.", replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)"))
+    @Deprecated(
+        "Use BannerInstructionMilestone constructor with named arguments to create instance.",
+        replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)")
+    )
     class Builder : Milestone.Builder() {
 
         @Throws(NavigationException::class)

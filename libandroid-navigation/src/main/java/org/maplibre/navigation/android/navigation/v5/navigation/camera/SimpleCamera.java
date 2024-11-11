@@ -77,7 +77,7 @@ public class SimpleCamera extends Camera {
     if (routeInformation.route() != null) {
       setupLineStringAndBearing(routeInformation.route());
     } else if (routeInformation.routeProgress() != null) {
-      setupLineStringAndBearing(routeInformation.routeProgress().directionsRoute());
+      setupLineStringAndBearing(routeInformation.routeProgress().getDirectionsRoute());
     }
   }
 

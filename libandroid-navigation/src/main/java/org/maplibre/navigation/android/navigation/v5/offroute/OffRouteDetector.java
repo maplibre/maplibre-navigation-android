@@ -71,7 +71,7 @@ public class OffRouteDetector extends OffRoute {
         currentPoint, options);
     }
 
-    LegStep upComingStep = routeProgress.currentLegProgress().upComingStep();
+    LegStep upComingStep = routeProgress.getCurrentLegProgress().getUpComingStep();
     if (closeToUpcomingStep(options, callback, currentPoint, upComingStep)) {
       return false;
     }
@@ -105,7 +105,7 @@ public class OffRouteDetector extends OffRoute {
   }
 
   private boolean checkDistanceRemaining(RouteProgress routeProgress) {
-    return routeProgress.distanceRemaining() == 0;
+    return routeProgress.getDistanceRemaining() == 0;
   }
 
   /**
@@ -134,7 +134,7 @@ public class OffRouteDetector extends OffRoute {
 
   private boolean checkOffRouteRadius(Location location, RouteProgress routeProgress,
                                       MapLibreNavigationOptions options, Point currentPoint) {
-    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
+    LegStep currentStep = routeProgress.getCurrentLegProgress().getCurrentStep();
     double distanceFromCurrentStep = userTrueDistanceFromStep(currentPoint, currentStep);
     double offRouteRadius = createOffRouteRadius(location, routeProgress, options, currentPoint);
     return distanceFromCurrentStep > offRouteRadius;
@@ -152,7 +152,7 @@ public class OffRouteDetector extends OffRoute {
                                            RingBuffer<Integer> distancesAwayFromManeuver,
                                            Point currentPoint,
                                            MapLibreNavigationOptions options) {
-    List<Point> stepPoints = routeProgress.currentStepPoints();
+    List<Point> stepPoints = routeProgress.getCurrentStepPoints();
     if (movingAwayFromManeuver(routeProgress, distancesAwayFromManeuver, stepPoints, currentPoint, options)) {
       updateLastReroutePoint(location);
       return true;
@@ -210,7 +210,7 @@ public class OffRouteDetector extends OffRoute {
                                                 List<Point> stepPoints,
                                                 Point currentPoint,
                                                 MapLibreNavigationOptions options) {
-    boolean invalidUpcomingStep = routeProgress.currentLegProgress().upComingStep() == null;
+    boolean invalidUpcomingStep = routeProgress.getCurrentLegProgress().getUpComingStep() == null;
     boolean invalidStepPointSize = stepPoints.size() < TWO_POINTS;
     if (invalidUpcomingStep || invalidStepPointSize) {
       return false;

@@ -204,9 +204,11 @@ object Trigger {
     private class GreaterThanStatement(private val key: Int, private val value: Any?) :
         Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.greaterThan(
-                statementObjects[key], value as Number?
-            )
+            return false
+            // TODO fabi755
+            // Operation.greaterThan(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 
@@ -219,9 +221,10 @@ object Trigger {
     private class GreaterThanEqualStatement(private val key: Int, private val value: Any?) :
         Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.greaterThanEqual(
-                statementObjects[key], value as Number?
-            )
+            return false
+//            Operation.greaterThanEqual(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 
@@ -232,9 +235,11 @@ object Trigger {
      */
     private class LessThanStatement(private val key: Int, private val value: Any?) : Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.lessThan(
-                statementObjects[key], value as Number?
-            )
+            return false
+            // TODO fabi755
+//            return Operation.lessThan(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 
@@ -247,9 +252,11 @@ object Trigger {
     private class LessThanEqualStatement(private val key: Int, private val value: Any?) :
         Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.lessThanEqual(
-                statementObjects[key], value as Number?
-            )
+            return false
+            // TODO fabi755
+//            return Operation.lessThanEqual(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 
@@ -260,9 +267,11 @@ object Trigger {
      */
     private class NotEqualStatement(private val key: Int, private val value: Any) : Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.notEqual(
-                statementObjects[key], value as Number?
-            )
+            return false
+            // TODO fabi755
+//            return Operation.notEqual(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 
@@ -273,9 +282,11 @@ object Trigger {
      */
     private class EqualStatement(private val key: Int, private val value: Any) : Statement() {
         override fun isOccurring(statementObjects: SparseArray<Array<Number?>?>): Boolean {
-            return Operation.equal(
-                statementObjects[key], value as Number?
-            )
+            return false
+            // TODO fabi755
+//            return Operation.equal(
+//                statementObjects[key], value as Number?
+//            )
         }
     }
 }

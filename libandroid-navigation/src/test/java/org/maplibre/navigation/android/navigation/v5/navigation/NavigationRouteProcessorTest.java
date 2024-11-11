@@ -169,11 +169,11 @@ public class NavigationRouteProcessorTest extends BaseTest {
     RouteProgress progress = routeProcessor.buildNewRouteProgress(navigation, firstOnRoute);
     assertEquals(35.1, progress.currentLegProgress().currentStepProgress().distanceRemaining(), 1);
     // If the step progress is calculated correctly, we must be on the first step of the route (index = 0)
-    assertEquals(0, progress.currentLegProgress().currentLegAnnotation().index());
+    assertEquals(0, progress.currentLegProgress().currentLegAnnotation().getIndex());
 
     Location otherOnRoute = buildDefaultLocationUpdate(-77.033638, 38.900207);
     RouteProgress progress2 = routeProcessor.buildNewRouteProgress(navigation, otherOnRoute);
-    assertEquals(2, progress2.currentLegProgress().currentLegAnnotation().index());
+    assertEquals(2, progress2.currentLegProgress().currentLegAnnotation().getIndex());
 
     // Creating a new route should trigger a new routeProgress to be built. Annotation must be reset to 0 for same location
     DirectionsRoute testRoute2 = buildTestDirectionsRoute("directions_distance_congestion_annotation.json");
@@ -183,7 +183,7 @@ public class NavigationRouteProcessorTest extends BaseTest {
     navigation.startNavigation(testRoute2.toBuilder().geometry(alteredGeometry).build());
 
     RouteProgress progress3 = routeProcessor.buildNewRouteProgress(navigation, firstOnRoute);
-    assertEquals(0, progress3.currentLegProgress().currentLegAnnotation().index());
+    assertEquals(0, progress3.currentLegProgress().currentLegAnnotation().getIndex());
   }
 
   @Test
@@ -198,13 +198,13 @@ public class NavigationRouteProcessorTest extends BaseTest {
     RouteProgress progress = routeProcessor.buildNewRouteProgress(navigation, location1);
     assertEquals(1, progress.currentLegProgress().stepIndex());
     assertEquals(0, progress.legIndex());
-    assertEquals(2, progress.currentLegProgress().currentLegAnnotation().index());
+    assertEquals(2, progress.currentLegProgress().currentLegAnnotation().getIndex());
 
     // Location shortly after the via point, must have a lower annotation index!
     Location location2 = buildDefaultLocationUpdate(-74.219444,40.745065);
     RouteProgress progress2 = routeProcessor.buildNewRouteProgress(navigation, location2);
     assertEquals(1, progress2.legIndex());
-    assertEquals(0, progress2.currentLegProgress().currentLegAnnotation().index());
+    assertEquals(0, progress2.currentLegProgress().currentLegAnnotation().getIndex());
     // This must mean that the annotation was reset correctly in the meantime
   }
 

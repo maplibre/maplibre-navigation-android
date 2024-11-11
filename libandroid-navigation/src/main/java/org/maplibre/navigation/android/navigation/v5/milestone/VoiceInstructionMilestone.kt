@@ -21,7 +21,10 @@ class VoiceInstructionMilestone(
     trigger: Trigger.Statement?
 ) : Milestone(identifier, instruction, trigger) {
 
-    @Deprecated("Use constructor with named arguments.", replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)"))
+    @Deprecated(
+        "Use constructor with named arguments.",
+        replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)")
+    )
     constructor(builder: Builder) : this(
         builder.identifier,
         builder.instruction,
@@ -36,24 +39,30 @@ class VoiceInstructionMilestone(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean {
-        val currentStep = routeProgress.currentLegProgress().currentStep()
-        val stepDistanceRemaining =
-            routeProgress.currentLegProgress().currentStepProgress().distanceRemaining()
-        val instructions =
-            routeUtils.findCurrentVoiceInstructions(currentStep, stepDistanceRemaining)
-        if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
-            return updateInstructions(routeProgress, instructions)
-        }
-        return false
+        return routeProgress.currentLegProgress?.let { legProgress ->
+            legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
+                val instructions = routeUtils.findCurrentVoiceInstructions(
+                    legProgress.currentStep,
+                    stepDistanceRemaining
+                )
+
+                return@currentStepLet if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
+                    updateInstructions(routeProgress, instructions)
+                } else {
+                    false
+                }
+            } ?: false
+        } ?: false
     }
 
     //TODO fabi755, keep this or change param/function name?!
+    //TODO fabi755, null checks!!
     override val instruction: Instruction
         get() = object :
             Instruction() {
             override fun buildInstruction(routeProgress: RouteProgress): String {
                 if (instructions == null) {
-                    return routeProgress.currentLegProgress().currentStep().name()!!
+                    return routeProgress.currentLegProgress!!.currentStep!!.name()!!
                 }
                 return instructions!!.announcement()!!
             }
@@ -101,8 +110,8 @@ class VoiceInstructionMilestone(
      * @return true if new route, false if not
      */
     private fun isNewRoute(routeProgress: RouteProgress): Boolean {
-        val newRoute = currentRoute == null || currentRoute != routeProgress.directionsRoute()
-        currentRoute = routeProgress.directionsRoute()
+        val newRoute = currentRoute == null || currentRoute != routeProgress.directionsRoute
+        currentRoute = routeProgress.directionsRoute
         return newRoute
     }
 
@@ -131,7 +140,10 @@ class VoiceInstructionMilestone(
         return true
     }
 
-    @Deprecated("Use RouteMilestone constructor with named arguments to create instance.", replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)"))
+    @Deprecated(
+        "Use RouteMilestone constructor with named arguments to create instance.",
+        replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)")
+    )
     class Builder : Milestone.Builder() {
 
         @Throws(NavigationException::class)

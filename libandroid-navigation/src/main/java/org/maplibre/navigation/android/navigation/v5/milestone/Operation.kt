@@ -6,7 +6,7 @@ package org.maplibre.navigation.android.navigation.v5.milestone
  * @since 0.4.0
  */
 object Operation {
-    
+
     fun greaterThan(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
             return if (valueTwo == TriggerProperty.TRUE) {
