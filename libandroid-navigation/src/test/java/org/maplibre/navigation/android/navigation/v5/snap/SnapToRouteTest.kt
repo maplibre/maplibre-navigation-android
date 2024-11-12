@@ -13,10 +13,9 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class SnapToRouteTest : BaseTest() {
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_returnsProviderNameCorrectly: Unit
-        get() {
+    
+    @Test
+    fun snappedLocation_returnsProviderNameCorrectly() {
             val routeProgress = buildDefaultTestRouteProgress()
             val snap: Snap = SnapToRoute()
             val location = Location("test")
@@ -27,10 +26,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals("test", snappedLocation.provider)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_locationOnStart: Unit
-        get() {
+    @Test
+    fun snappedLocation_locationOnStart() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -54,10 +51,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(-77.063888, snappedLocation.longitude)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_locationOnStep: Unit
-        get() {
+    @Test
+    fun snappedLocation_locationOnStep() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -81,10 +76,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(-77.06299551713687, snappedLocation.longitude)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_locationOnEnd: Unit
-        get() {
+    @Test
+    fun snappedLocation_locationOnEnd() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -108,10 +101,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(-77.0282631, snappedLocation.longitude)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingStart: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingStart() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -134,10 +125,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(136.2322f, snappedLocation.bearing)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingOnStep: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingOnStep() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -160,10 +149,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(5.0284705f, snappedLocation.bearing)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingBeforeNextLeg: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingBeforeNextLeg() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()
@@ -186,10 +173,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(358.19876f, snappedLocation.bearing)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingWithSingleStepLegBeforeNextLeg: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingWithSingleStepLegBeforeNextLeg() {
             val routeProgress =
                 buildMultipleLegRoute(SINGLE_STEP_LEG)
             val snap: Snap = SnapToRoute()
@@ -227,10 +212,8 @@ class SnapToRouteTest : BaseTest() {
             )
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingNoBearingBeforeWithSingleStepLegBeforeNextLeg: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingNoBearingBeforeWithSingleStepLegBeforeNextLeg() {
             val routeProgress =
                 buildMultipleLegRoute(SINGLE_STEP_LEG)
             val snap: Snap = SnapToRoute()
@@ -254,10 +237,8 @@ class SnapToRouteTest : BaseTest() {
             Assert.assertEquals(location.bearing, snappedLocation.bearing)
         }
 
-    @get:Throws(Exception::class)
-    @get:Test
-    val snappedLocation_bearingEnd: Unit
-        get() {
+    @Test
+    fun snappedLocation_bearingEnd() {
             val routeProgress =
                 buildMultipleLegRoute()
             val snap: Snap = SnapToRoute()

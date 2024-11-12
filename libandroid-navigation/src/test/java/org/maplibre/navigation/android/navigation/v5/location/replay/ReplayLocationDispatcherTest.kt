@@ -9,9 +9,7 @@ import org.mockito.Mockito
 class ReplayLocationDispatcherTest {
     @Test(expected = IllegalArgumentException::class)
     fun checksNonNullLocationListRequired() {
-        val nullLocations: List<Location>? = null
-
-        ReplayLocationDispatcher(nullLocations!!)
+        ReplayLocationDispatcher(emptyList<Location>())
     }
 
     @Test(expected = IllegalArgumentException::class)

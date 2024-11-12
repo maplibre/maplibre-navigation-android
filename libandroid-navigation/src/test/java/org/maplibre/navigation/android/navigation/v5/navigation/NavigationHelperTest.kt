@@ -426,7 +426,7 @@ class NavigationHelperTest : BaseTest() {
         )
 
         val upcomingIntersection = findUpcomingIntersection(
-            intersections, legProgress.upComingStep!!, currentIntersection
+            intersections, legProgress.upComingStep, currentIntersection
         )
 
         Assert.assertEquals(null, upcomingIntersection)

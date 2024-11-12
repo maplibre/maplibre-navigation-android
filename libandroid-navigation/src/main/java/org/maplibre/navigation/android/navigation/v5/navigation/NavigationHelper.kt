@@ -451,19 +451,24 @@ object NavigationHelper {
             return null
         }
 
-        val (annotationIndex, distanceToAnnotation) = findAnnotationIndex(
+        val annotationResult = findAnnotationIndex(
             currentLegAnnotation, leg, legDistanceRemaining, distanceList
         )
         return CurrentLegAnnotation(
-            index = annotationIndex,
-            distance = distanceList[annotationIndex],
-            distanceToAnnotation = distanceToAnnotation,
-            duration = legAnnotation.duration()?.get(annotationIndex),
-            speed = legAnnotation.speed()?.get(annotationIndex),
-            maxSpeed = legAnnotation.maxspeed()?.get(annotationIndex),
-            congestion = legAnnotation.congestion()?.get(annotationIndex),
+            index = annotationResult.index,
+            distance = distanceList[annotationResult.index],
+            distanceToAnnotation = annotationResult.distanceToAnnotation,
+            duration = legAnnotation.duration()?.get(annotationResult.index),
+            speed = legAnnotation.speed()?.get(annotationResult.index),
+            maxSpeed = legAnnotation.maxspeed()?.get(annotationResult.index),
+            congestion = legAnnotation.congestion()?.get(annotationResult.index),
         )
     }
+
+    private data class AnnotationResult(
+        val index: Int,
+        val distanceToAnnotation: Double
+    )
 
     /**
      * This method runs through the list of milestones in [MapLibreNavigation.getMilestones]
@@ -546,7 +551,7 @@ object NavigationHelper {
     private fun findAnnotationIndex(
         currentLegAnnotation: CurrentLegAnnotation?, leg: RouteLeg,
         legDistanceRemaining: Double, distanceAnnotationList: List<Double>
-    ): Pair<Int, Double> {
+    ): AnnotationResult {
         val legDistances: List<Double> = ArrayList(distanceAnnotationList)
         val totalLegDistance = leg.distance()
         val distanceTraveled = totalLegDistance!! - legDistanceRemaining
@@ -563,12 +568,14 @@ object NavigationHelper {
             annotationDistancesTraveled += distance
             if (annotationDistancesTraveled > distanceTraveled || i == legDistances.size - 1) {
                 val distanceToAnnotation = annotationDistancesTraveled - distance
-                return Pair(i, distanceToAnnotation)
+                print("i: $i")
+                print("distanceToAnnotation: $distanceToAnnotation")
+                return AnnotationResult(i, distanceToAnnotation)
             }
         }
 
         //TODO fabi755: is 0 distance right here?
-        return Pair(INDEX_ZERO, 0.0)
+        return AnnotationResult(INDEX_ZERO, 0.0)
     }
 
     private fun getSnappedLocation(

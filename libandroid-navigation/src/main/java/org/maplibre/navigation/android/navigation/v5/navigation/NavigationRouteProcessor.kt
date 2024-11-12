@@ -266,8 +266,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         stepIndex: Int,
         upcomingStepIndex: Int
     ) {
-        currentStepPoints = decodeStepPoints(route, currentStepPoints!!, legIndex, stepIndex)
-        upcomingStepPoints = decodeStepPoints(route, emptyList()!!, legIndex, upcomingStepIndex)
+        currentStepPoints = decodeStepPoints(route, currentStepPoints ?: emptyList(), legIndex, stepIndex)
+        upcomingStepPoints = decodeStepPoints(route, emptyList(), legIndex, upcomingStepIndex)
     }
 
     private fun updateIntersections() {
