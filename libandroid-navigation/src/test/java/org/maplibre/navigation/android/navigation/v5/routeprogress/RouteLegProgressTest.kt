@@ -255,7 +255,7 @@ class RouteLegProgressTest : BaseTest() {
             stepIndex = lastStepIndex
         )
 
-        Assert.assertNull(routeProgress.currentLegProgress!!.followOnStep!!)
+        Assert.assertNull(routeProgress.currentLegProgress!!.followOnStep)
     }
 
     @Throws(Exception::class)
@@ -278,9 +278,9 @@ class RouteLegProgressTest : BaseTest() {
         return buildTestRouteProgress(route, 0.0, 0.0, 0.0, lastStepIndex, 0)
     }
 
-    private fun findUpcomingStep(routeProgress: RouteProgress, firstLeg: RouteLeg): LegStep {
+    private fun findUpcomingStep(routeProgress: RouteProgress, firstLeg: RouteLeg): LegStep? {
         val lastStepIndex = firstLeg.steps()!!.size - 1
         var routeProgress = routeProgress.copy(stepIndex = lastStepIndex)
-        return routeProgress.currentLegProgress!!.upComingStep!!
+        return routeProgress.currentLegProgress!!.upComingStep
     }
 }

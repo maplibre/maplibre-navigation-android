@@ -17,15 +17,14 @@ class StepMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun sanity() {
         val routeProgress = buildStepMilestoneRouteProgress()
-        val milestone = StepMilestone.Builder()
-            .setTrigger(
-                gt(TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 100.0)
-            )
-            .setIdentifier(101)
-            .build()
+        val milestone = StepMilestone(
+            identifier = 1,
+            instruction = null,
+            trigger = gt(TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 100.0),
+        )
 
         Assert.assertNotNull(milestone)
-        Assert.assertTrue(milestone.isOccurring(routeProgress, routeProgress!!))
+        Assert.assertTrue(milestone.isOccurring(routeProgress, routeProgress))
     }
 
     @Test
@@ -39,7 +38,7 @@ class StepMilestoneTest : BaseTest() {
         }
 
     @Throws(Exception::class)
-    private fun buildStepMilestoneRouteProgress(): RouteProgress? {
+    private fun buildStepMilestoneRouteProgress(): RouteProgress {
         val gson = GsonBuilder()
             .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create()
         val body = loadJsonFixture(ROUTE_FIXTURE)

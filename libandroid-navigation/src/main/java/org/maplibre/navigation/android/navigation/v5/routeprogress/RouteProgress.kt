@@ -146,7 +146,23 @@ data class RouteProgress(
                 upcomingIntersection = upcomingIntersection,
                 intersectionDistancesAlongStep = intersectionDistancesAlongStep,
                 currentLegAnnotation = currentLegAnnotation,
-                currentStepProgress = null
             )
         }
+
+//    int lastStepIndex = routeLeg().steps().size() - 1;
+//    boolean isOnLastStep = stepIndex() == lastStepIndex;
+//    int nextStepIndex = stepIndex() + 1;
+//    LegStep nextStep = isOnLastStep ? null : routeLeg().steps().get(nextStepIndex);
+//
+//    LegStep currentStep = routeLeg().steps().get(stepIndex());
+//    RouteStepProgress stepProgress = RouteStepProgress.builder()
+//    .step(currentStep)
+//    .nextStep(nextStep)
+//    .distanceRemaining(stepDistanceRemaining())
+//    .intersections(intersections())
+//    .currentIntersection(currentIntersection())
+//    .upcomingIntersection(upcomingIntersection())
+//    .intersectionDistancesAlongStep(intersectionDistancesAlongStep())
+//    .build();
+//    currentStepProgress(stepProgress);
 }

@@ -37,14 +37,6 @@ data class RouteLegProgress(
     val distanceRemaining: Double,
 
     /**
-     * Gives a [RouteStepProgress] object with information about the particular step the user
-     * is currently on.
-     *
-     * @since 0.1.0
-     */
-    val currentStepProgress: RouteStepProgress?,
-
-    /**
      * Provides a list of points that represent the current step
      * step geometry.
      *
@@ -84,33 +76,6 @@ data class RouteLegProgress(
     val upcomingIntersection: StepIntersection?,
 
     val intersectionDistancesAlongStep: List<Pair<StepIntersection, Double>>?
-
-    // //      int lastStepIndex = routeLeg().steps().size() - 1;
-    ////      boolean isOnLastStep = stepIndex() == lastStepIndex;
-    ////      int nextStepIndex = stepIndex() + 1;
-    ////      LegStep nextStep = isOnLastStep ? null : routeLeg().steps().get(nextStepIndex);
-    ////
-    ////      LegStep currentStep = routeLeg().steps().get(stepIndex());
-
-    //    public RouteLegProgress build() {
-//      int lastStepIndex = routeLeg().steps().size() - 1;
-//      boolean isOnLastStep = stepIndex() == lastStepIndex;
-//      int nextStepIndex = stepIndex() + 1;
-//      LegStep nextStep = isOnLastStep ? null : routeLeg().steps().get(nextStepIndex);
-//
-//      LegStep currentStep = routeLeg().steps().get(stepIndex());
-//      RouteStepProgress stepProgress = RouteStepProgress.builder()
-//        .step(currentStep)
-//        .nextStep(nextStep)
-//        .distanceRemaining(stepDistanceRemaining())
-//        .intersections(intersections())
-//        .currentIntersection(currentIntersection())
-//        .upcomingIntersection(upcomingIntersection())
-//        .intersectionDistancesAlongStep(intersectionDistancesAlongStep())
-//        .build();
-//      currentStepProgress(stepProgress);
-//
-//      return autoBuild();
 ) {
 
     /**
@@ -195,5 +160,24 @@ data class RouteLegProgress(
             routeLeg.steps()?.get(stepIndex + 2)
         } else {
             null
+        }
+
+    /**
+     * Gives a [RouteStepProgress] object with information about the particular step the user
+     * is currently on.
+     *
+     * @since 0.1.0
+     */
+    val currentStepProgress: RouteStepProgress?
+        get() = routeLeg.steps()?.get(stepIndex)?.let { currentStep ->
+            RouteStepProgress(
+                step = currentStep,
+                nextStep = routeLeg.steps()?.getOrNull(stepIndex + 1),
+                distanceRemaining = stepDistanceRemaining,
+                intersections = intersections,
+                currentIntersection = currentIntersection,
+                upcomingIntersection = upcomingIntersection,
+                intersectionDistancesAlongStep = intersectionDistancesAlongStep
+            )
         }
 }

@@ -109,10 +109,11 @@ class TriggerPropertyTest : BaseTest() {
         val stepIndex: Int = routeProgress!!.currentLegProgress!!.stepIndex
 
         for (i in 10 downTo 1) {
-            val milestone = StepMilestone.Builder()
-                .setTrigger(
-                    eq(TriggerProperty.STEP_INDEX, abs((stepIndex - i).toDouble()))
-                ).build()
+            val milestone = StepMilestone(
+                identifier = 1,
+                instruction = null,
+                trigger = eq(TriggerProperty.STEP_INDEX, abs((stepIndex - i)))
+            )
 
             val result = milestone.isOccurring(routeProgress, routeProgress)
             if (abs((stepIndex - i)) == stepIndex) {
@@ -124,7 +125,7 @@ class TriggerPropertyTest : BaseTest() {
     }
 
     @Throws(Exception::class)
-    private fun buildTestRouteProgressForTrigger(): RouteProgress? {
+    private fun buildTestRouteProgressForTrigger(): RouteProgress {
         val gson = GsonBuilder()
             .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create()
         val body = loadJsonFixture(ROUTE_FIXTURE)

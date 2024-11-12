@@ -211,6 +211,7 @@ class RouteStepProgressTest : BaseTest() {
             route, stepDistanceRemaining,
             legDistanceRemaining, distanceRemaining, stepIndex, legIndex
         )
+
         val routeStepProgress: RouteStepProgress =
             routeProgress!!.currentLegProgress!!.currentStepProgress!!
 
@@ -451,11 +452,13 @@ class RouteStepProgressTest : BaseTest() {
         assertEquals(currentStepTotal, routeStepProgress.intersections!!.size)
         assertEquals(
             routeStepProgress.intersections!!.get(0)!!.location().latitude(),
-            lastStepLocation[0].latitude()
+            lastStepLocation[0].latitude(),
+            DELTA
         )
         assertEquals(
             routeStepProgress.intersections!!.get(0)!!.location().longitude(),
-            lastStepLocation[0].longitude()
+            lastStepLocation[0].longitude(),
+            DELTA
         )
     }
 

@@ -207,7 +207,7 @@ class RouteProgressTest : BaseTest() {
                     legDistanceRemaining, distanceRemaining, stepIndex, 0
                 )
                 val fractionRemaining =
-                    (routeProgress!!.distanceTraveled / multiLegRoute.distance()) as Float
+                    (routeProgress!!.distanceTraveled / multiLegRoute.distance()).toFloat()
 
                 fractionsRemaining.add(fractionRemaining)
                 routeProgressFractionsTraveled.add(routeProgress.fractionTraveled)

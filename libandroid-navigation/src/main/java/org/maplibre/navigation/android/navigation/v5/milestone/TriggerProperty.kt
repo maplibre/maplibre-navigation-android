@@ -70,9 +70,9 @@ object TriggerProperty {
     fun getSparseArray(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
-    ): SparseArray<Array<Number?>?> {
+    ): SparseArray<Array<Number>> {
         // Build hashMap matching the trigger properties to their corresponding current values.
-        return SparseArray<Array<Number?>?>(13).apply {
+        return SparseArray<Array<Number>>(13).apply {
             routeProgress.currentLegProgress?.let { currentLegProgress ->
                 currentLegProgress.currentStep?.let { currentStep ->
                     put(
