@@ -13,9 +13,10 @@ org.maplibre.navigation.android.navigation.v5.models.* -->
     - Using Kotlinx serialization instead of GSON for JSON parsing
     - Remove classes MapLibreStreetsV8, DirectionsJsonObject, DirectionsAdapterFactory
 org.maplibre.navigation.android.navigation.v5.utils.abbreviation.* --> Removed. Not used internally. I think it is also not used by developers.
+org.maplibre.navigation.android.navigation.v5.utils.TextUtils --> Removed. Can be replaced by Android's TextUtils or by Kotlin language functions.
 
 ----------------
-Refactore later:
+Refactor later:
 
 org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated
 Instead of parsing models directly, add dtos and mappers that can be replaces by developers to use other API engines

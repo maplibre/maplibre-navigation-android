@@ -214,7 +214,7 @@ class DistanceFormatterTest {
     ) {
         Assert.assertEquals(
             output,
-            DistanceFormatter(context, locale.language, unitType, roundIncrement).formatDistance(
+            DistanceFormatter(context!!, locale.language, unitType, roundIncrement).formatDistance(
                 distance
             ).toString()
         )
