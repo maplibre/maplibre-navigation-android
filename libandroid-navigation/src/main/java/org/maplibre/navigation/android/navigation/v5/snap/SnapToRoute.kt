@@ -1,0 +1,192 @@
+package org.maplibre.navigation.android.navigation.v5.snap
+
+import android.location.Location
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.navigation.android.navigation.v5.utils.MathUtils.wrap
+import org.maplibre.turf.TurfConstants
+import org.maplibre.turf.TurfMeasurement
+import org.maplibre.turf.TurfMisc
+
+/**
+ * This attempts to snap the user to the closest position along the route. Prior to snapping the
+ * user, their location's checked to ensure that the user didn't veer off-route. If your application
+ * uses the MapLibre Map SDK, querying the map and snapping the user to the road grid might be a
+ * better solution.
+ *
+ * @since 0.4.0
+ */
+class SnapToRoute : Snap() {
+    /**
+     * Last calculated snapped bearing. This will be re-used if bearing can not calculated.
+     * Is NULL if no bearing was calculated yet.
+     */
+    private var lastSnappedBearing: Float? = null
+
+    /**
+     * Calculate a snapped location along the route. Latitude, longitude and bearing are provided.
+     *
+     * @param location      Current raw user location
+     * @param routeProgress Current route progress
+     * @return Snapped location along route
+     */
+    override fun getSnappedLocation(location: Location, routeProgress: RouteProgress): Location {
+        return routeProgress.currentStepPoints?.let { currentStepPoints ->
+            snapLocationLatLng(location, currentStepPoints)
+                .apply {
+                    bearing = snapLocationBearing(location, routeProgress)
+                }
+        } ?: location
+    }
+
+    /**
+     * Creates a snapped bearing for the snapped [Location].
+     *
+     *
+     * This is done by measuring 1 meter ahead of the current step distance traveled and
+     * creating a [Point] with this distance using [TurfMeasurement.along].
+     *
+     *
+     * If the step distance remaining is zero, the distance ahead is the first point of upcoming leg.
+     * This way, an accurate bearing is upheld transitioning between legs.
+     *
+     * @param location      Current raw user location
+     * @param routeProgress Current route progress
+     * @return Float bearing snapped to route
+     */
+    private fun snapLocationBearing(location: Location, routeProgress: RouteProgress): Float {
+        val currentPoint = getCurrentPoint(routeProgress)
+        val futurePoint = getFuturePoint(routeProgress)
+        if (currentPoint == null || futurePoint == null) {
+            return lastSnappedBearing ?: location.bearing
+        }
+
+        // Get bearing and convert azimuth to degrees
+        val azimuth = TurfMeasurement.bearing(currentPoint, futurePoint)
+        return wrap(azimuth, 0.0, 360.0)
+            .toFloat()
+            .also { bearing -> lastSnappedBearing = bearing }
+    }
+
+    /**
+     * Snap coordinates of user's location to the closest position along the current step.
+     *
+     * @param location        the raw location
+     * @param stepCoordinates the list of step geometry coordinates
+     * @return the altered user location
+     * @since 0.4.0
+     */
+    private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
+        val snappedLocation = Location(location)
+        val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
+
+        // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
+        // Point on the LineString.
+        if (stepCoordinates.size > 1) {
+            val feature = TurfMisc.nearestPointOnLine(locationToPoint, stepCoordinates)
+            if (feature.geometry() != null) {
+                val point = (feature.geometry() as Point)
+                snappedLocation.longitude = point.longitude()
+                snappedLocation.latitude = point.latitude()
+            }
+        }
+        return snappedLocation
+    }
+
+    /**
+     * Current step point. If no current leg process is available, null is returned.
+     *
+     * @param routeProgress Current route progress
+     * @return Current step point or null if no current leg process is available
+     */
+    private fun getCurrentPoint(routeProgress: RouteProgress): Point? {
+        return routeProgress.currentLegProgress?.let { currentLegProgress ->
+            getCurrentStepPoint(currentLegProgress, 0.0)
+        }
+    }
+
+    /**
+     * Get future point. This might be the upcoming step or the following leg. If none of them are
+     * available, null is returned.
+     *
+     * @param routeProgress Current route progress
+     * @return Future point or null if no following point is available
+     */
+    private fun getFuturePoint(routeProgress: RouteProgress): Point? {
+        return routeProgress.currentLegProgress?.let { currentLegProgress ->
+            if (currentLegProgress.distanceRemaining > 1) {
+                // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
+                getCurrentStepPoint(currentLegProgress, 1.0)
+            } else {
+                // User has reached the end of steps. Use upcoming leg for future point if available.
+                getUpcomingLegPoint(routeProgress)
+            }
+        }
+    }
+
+    /**
+     * Current step point plus additional distance value. If no current leg process is available,
+     * null is returned.
+     *
+     * @param currentLegProgress Current leg process
+     * @param additionalDistance Additional distance to add to current step point
+     * @return Current step point + additional distance or null if no current leg process is available
+     */
+    private fun getCurrentStepPoint(
+        currentLegProgress: RouteLegProgress,
+        additionalDistance: Double
+    ): Point? {
+        val currentStepLineString = currentLegProgress.currentStep
+            ?.geometry
+            ?.let { geometry ->
+                LineString.fromPolyline(geometry, Constants.PRECISION_6)
+            }
+            ?.coordinates()
+            ?.takeIf { coordinates -> coordinates.isNotEmpty() }
+            ?: return null
+
+        return currentLegProgress.distanceTraveled?.let { distanceTraveled ->
+            TurfMeasurement.along(
+                currentStepLineString,
+                distanceTraveled + additionalDistance,
+                TurfConstants.UNIT_METERS
+            )
+        }
+    }
+
+    /**
+     * Get next leg's start point. The second step of next leg is used as start point to avoid
+     * returning the same coordinates as the end point of the leg before. If no next leg is available,
+     * null is returned.
+     *
+     * @param routeProgress Current route progress
+     * @return Next leg's start point or null if no next leg is available
+     */
+    private fun getUpcomingLegPoint(routeProgress: RouteProgress): Point? {
+        if (routeProgress.directionsRoute.legs != null && routeProgress.directionsRoute.legs.size - 1 <= routeProgress.legIndex) {
+            return null
+        }
+
+        val upcomingLeg = routeProgress.directionsRoute.legs?.get(routeProgress.legIndex + 1)
+        if (upcomingLeg?.steps == null || upcomingLeg.steps.size <= 1) {
+            return null
+        }
+
+        // While first step is the same point as the last point of the current step, use the second one.
+        val firstStep = upcomingLeg.steps[1]
+        if (firstStep.geometry == null) {
+            return null
+        }
+
+        val currentStepLineString =
+            LineString.fromPolyline(firstStep.geometry, Constants.PRECISION_6)
+        if (currentStepLineString.coordinates().isEmpty()) {
+            return null
+        }
+
+        return TurfMeasurement.along(currentStepLineString, 1.0, TurfConstants.UNIT_METERS)
+    }
+}
