@@ -14,7 +14,7 @@ class ValidationUtilsTest : BaseTest() {
     fun validDirectionsRoute_isInvalidWithNullRouteOptions() {
         var route = buildTestDirectionsRoute(DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS)
         val invalidRouteOptions: RouteOptions? = null
-        route = route!!.toBuilder().routeOptions(invalidRouteOptions).build()
+        route = route!!.copy(routeOptions = invalidRouteOptions)
 
         ValidationUtils.validDirectionsRoute(route, true)
     }
@@ -47,57 +47,112 @@ class ValidationUtilsTest : BaseTest() {
     private fun buildRouteWithNullInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
-        val routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-            .baseUrl(Constants.BASE_API_URL)
-            .user("user")
-            .profile("profile")
-            .accessToken(BaseTest.Companion.ACCESS_TOKEN)
-            .requestUuid("uuid")
-            .geometries("mocked_geometries")
-            .coordinates(coordinates).build()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = Constants.BASE_API_URL,
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+            bannerInstructions = null,
+            voiceInstructions = null,
+        )
 
-        return route!!.toBuilder()
-            .routeOptions(routeOptionsWithoutVoiceInstructions)
-            .build()
+        return route!!.copy(
+            routeOptions = routeOptionsWithoutVoiceInstructions
+        )
     }
 
     @Throws(IOException::class)
     private fun buildRouteWithFalseVoiceInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
-        val routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-            .baseUrl(Constants.BASE_API_URL)
-            .user("user")
-            .profile("profile")
-            .accessToken(BaseTest.Companion.ACCESS_TOKEN)
-            .requestUuid("uuid")
-            .geometries("mocked_geometries")
-            .voiceInstructions(false)
-            .coordinates(coordinates).build()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = Constants.BASE_API_URL,
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            voiceInstructions = false,
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+            bannerInstructions = null,
+        )
 
-        return route!!.toBuilder()
-            .routeOptions(routeOptionsWithoutVoiceInstructions)
-            .build()
+        return route!!.copy(
+            routeOptions = routeOptionsWithoutVoiceInstructions
+        )
     }
 
     @Throws(IOException::class)
     private fun buildRouteWithFalseBannerInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
-        val routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-            .baseUrl(Constants.BASE_API_URL)
-            .user("user")
-            .profile("profile")
-            .accessToken(BaseTest.Companion.ACCESS_TOKEN)
-            .requestUuid("uuid")
-            .geometries("mocked_geometries")
-            .voiceInstructions(true)
-            .bannerInstructions(false)
-            .coordinates(coordinates).build()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = Constants.BASE_API_URL,
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            voiceInstructions = true,
+            bannerInstructions = false,
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+        )
 
-        return route!!.toBuilder()
-            .routeOptions(routeOptionsWithoutVoiceInstructions)
-            .build()
+        return route!!.copy(routeOptions = routeOptionsWithoutVoiceInstructions)
     }
 
     companion object {

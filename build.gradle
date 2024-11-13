@@ -15,6 +15,7 @@ buildscript {
     classpath pluginDependencies.errorprone
     classpath pluginDependencies.dependencyUpdates
     classpath pluginDependencies.kotlinGradle
+    classpath pluginDependencies.kotlinSerialization
   }
 }
 

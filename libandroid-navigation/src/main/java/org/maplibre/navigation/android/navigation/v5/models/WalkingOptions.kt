@@ -6,11 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Class for specifying options for use with the walking profile.
  * @since 4.8.0
  */
+@Serializable
 data class WalkingOptions(
 
     /**
@@ -19,7 +22,7 @@ data class WalkingOptions(
      *
      * @since 4.8.0
      */
-    @SerializedName("walking_speed")
+    @SerialName("walking_speed")
     val walkingSpeed: Double?,
 
     /**
@@ -30,7 +33,7 @@ data class WalkingOptions(
      *
      * @since 4.8.0
      */
-    @SerializedName("walkway_bias")
+    @SerialName("walkway_bias")
     val walkwayBias: Double?,
 
     /**
@@ -40,6 +43,6 @@ data class WalkingOptions(
      *
      * @since 4.8.0
      */
-    @SerializedName("alley_bias")
+    @SerialName("alley_bias")
     val alleyBias: Double?,
 )

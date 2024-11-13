@@ -67,7 +67,7 @@ class NavigationFasterRouteListenerTest {
                 DirectionsRoute::class.java
             )
         )
-        Mockito.`when`(response.routes()).thenReturn(routes)
+        Mockito.`when`(response.routes).thenReturn(routes)
         return response
     }
 }

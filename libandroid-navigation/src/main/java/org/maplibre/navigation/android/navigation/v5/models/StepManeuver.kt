@@ -1,13 +1,17 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.serializer.PointSerializer
 
 /**
  * Gives maneuver information about one [LegStep].
  *
  * @since 1.0.0
  */
+@Serializable
 data class StepManeuver(
 
     /**
@@ -15,6 +19,7 @@ data class StepManeuver(
      *
      * @since 3.0.0
      */
+    @Serializable(with = PointSerializer::class)
     val location: Point,
 
     /**
@@ -23,7 +28,7 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    @SerializedName("bearing_before")
+    @SerialName("bearing_before")
     val bearingBefore: Double?,
 
     /**
@@ -32,7 +37,7 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    @SerializedName("bearing_after")
+    @SerialName("bearing_after")
     val bearingAfter: Double?,
 
     /**
@@ -78,12 +83,14 @@ data class StepManeuver(
     val exit: Int?,
 ) {
 
+    @Serializable
     enum class Type(val text: String) {
         /**
          * A basic turn in the direction of the modifier.
          *
          * @since 4.1.0
          */
+        @SerialName("turn")
         TURN("turn"),
 
         /**
@@ -91,6 +98,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("new name")
         NEW_NAME("new name"),
 
         /**
@@ -100,6 +108,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("depart")
         DEPART("depart"),
 
         /**
@@ -109,6 +118,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("arrive")
         ARRIVE("arrive"),
 
         /**
@@ -116,12 +126,14 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("merge")
         MERGE("merge"),
 
         /**
          * Take a ramp to enter a highway.
          * @since 4.1.0
          */
+        @SerialName("on ramp")
         ON_RAMP("on ramp"),
 
         /**
@@ -129,6 +141,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("off ramp")
         OFF_RAMP("off ramp"),
 
         /**
@@ -136,6 +149,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("fork")
         FORK("fork"),
 
         /**
@@ -143,6 +157,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("end of road")
         END_OF_ROAD("end of road"),
 
         /**
@@ -150,6 +165,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("continue")
         CONTINUE("continue"),
 
         /**
@@ -159,6 +175,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("roundabout")
         ROUNDABOUT("roundabout"),
 
         /**
@@ -170,6 +187,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("rotary")
         ROTARY("rotary"),
 
         /**
@@ -177,6 +195,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("roundabout turn")
         ROUNDABOUT_TURN("roundabout turn"),
 
         /**
@@ -185,6 +204,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("notification")
         NOTIFICATION("notification"),
 
         /**
@@ -194,6 +214,7 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
+        @SerialName("exit roundabout")
         EXIT_ROUNDABOUT("exit roundabout"),
 
         /**
@@ -203,8 +224,11 @@ data class StepManeuver(
          *
          * @since 4.1.0
          */
-        EXIT_ROTARY("exit rotary")
+        @SerialName("exit rotary")
+        EXIT_ROTARY("exit rotary"),
+
+        @SerialName("use lane")
+        USE_LANE("use lane"),
+        //TODO fabi755, occurs in tests. check if this also occurs in real world data
     }
 }
-
-//TODO fabi755 json parsing (see point deserializer)

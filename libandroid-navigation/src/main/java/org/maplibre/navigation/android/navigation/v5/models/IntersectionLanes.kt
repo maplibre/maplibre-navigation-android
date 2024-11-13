@@ -1,16 +1,14 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Object representing lanes in an intersection.
  *
  * @since 2.0.0
  */
+@Serializable
 data class IntersectionLanes(
     /**
      * Provides a boolean value you can use to determine if the given lane is valid for the user to
@@ -41,7 +39,7 @@ data class IntersectionLanes(
      * When both active and valid are false, this property will not be included in the response.
      * Only available on the mapbox/driving profile.
      */
-    @SerializedName("valid_indication")
+    @SerialName("valid_indication")
     val validIndication: String?,
 
     /**

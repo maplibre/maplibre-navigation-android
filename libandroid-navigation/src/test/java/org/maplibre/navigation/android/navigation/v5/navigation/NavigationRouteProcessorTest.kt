@@ -186,7 +186,7 @@ class NavigationRouteProcessorTest : BaseTest() {
                 Location::class.java
             )
         )
-        val legSize = navigation!!.route.legs()!!.size
+        val legSize = navigation!!.route.legs!!.size
 
         for (i in 0 until legSize) {
             routeProcessor!!.onShouldIncreaseIndex()
@@ -209,7 +209,7 @@ class NavigationRouteProcessorTest : BaseTest() {
                 Location::class.java
             )
         )
-        val stepSize = navigation!!.route.legs()!![0].steps()!!.size
+        val stepSize = navigation!!.route.legs!![0].steps!!.size
 
         for (i in 0 until stepSize) {
             routeProcessor!!.onShouldIncreaseIndex()
@@ -251,11 +251,11 @@ class NavigationRouteProcessorTest : BaseTest() {
         // Creating a new route should trigger a new routeProgress to be built. Annotation must be reset to 0 for same location
         val testRoute2 = buildTestDirectionsRoute("directions_distance_congestion_annotation.json")
         val decoded = PolylineUtils.decode(
-            testRoute2!!.geometry()!!, Constants.PRECISION_6
+            testRoute2!!.geometry!!, Constants.PRECISION_6
         )
         decoded.removeAt(0)
         val alteredGeometry = PolylineUtils.encode(decoded, Constants.PRECISION_6)
-        navigation!!.startNavigation(testRoute2.toBuilder().geometry(alteredGeometry).build())
+        navigation!!.startNavigation(testRoute2.copy(geometry = alteredGeometry))
 
         val progress3 = routeProcessor!!.buildNewRouteProgress(
             navigation!!,

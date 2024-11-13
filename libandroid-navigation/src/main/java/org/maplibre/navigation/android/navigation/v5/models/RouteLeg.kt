@@ -1,12 +1,14 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * A route between only two [DirectionsWaypoint].
  *
  * @since 1.0.0
  */
+@Serializable
 data class RouteLeg(
 
     /**
@@ -34,7 +36,7 @@ data class RouteLeg(
      * @return a double number with unit seconds
      * @since 5.5.0
      */
-    @SerializedName("duration_typical")
+    @SerialName("duration_typical")
     val durationTypical: Double?,
 
     /**

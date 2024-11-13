@@ -1,8 +1,10 @@
 package org.maplibre.navigation.android.navigation.v5
 
 import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.Json
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory
+import org.maplibre.navigation.android.json
+import org.maplibre.navigation.android.navigation.v5.BaseTest.Companion.ACCESS_TOKEN
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
@@ -13,7 +15,7 @@ import java.util.Scanner
 
 internal class TestRouteBuilder {
     @Throws(IOException::class)
-    fun loadJsonFixture(filename: String?): String {
+    fun loadJsonFixture(filename: String): String {
         val classLoader = javaClass.classLoader
         val inputStream = classLoader!!.getResourceAsStream(filename)
         val scanner = Scanner(inputStream, StandardCharsets.UTF_8.name()).useDelimiter("\\A")
@@ -22,44 +24,47 @@ internal class TestRouteBuilder {
 
     @Throws(IOException::class)
     fun buildTestDirectionsRoute(fixtureName: String?): DirectionsRoute {
-        var fixtureName = fixtureName
-        fixtureName = checkNullFixtureName(fixtureName)
-        val gson =
-            GsonBuilder().registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create()
-        val body = loadJsonFixture(fixtureName)
-        val response = gson.fromJson(
-            body,
-            DirectionsResponse::class.java
-        )
-        val route = response.routes()[0]
+        val fixtureJsonString = loadJsonFixture(fixtureName ?: DIRECTIONS_PRECISION_6)
+        val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
+        val route = response.routes[0]
         return buildRouteWithOptions(route)
     }
 
     @Throws(IOException::class)
     private fun buildRouteWithOptions(route: DirectionsRoute): DirectionsRoute {
         val coordinates: List<Point> = ArrayList()
-        val routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-            .baseUrl(Constants.BASE_API_URL)
-            .user("user")
-            .profile("profile")
-            .accessToken(BaseTest.Companion.ACCESS_TOKEN)
-            .requestUuid("uuid")
-            .geometries("mocked_geometries")
-            .voiceInstructions(true)
-            .bannerInstructions(true)
-            .coordinates(coordinates).build()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = Constants.BASE_API_URL,
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            voiceInstructions = true,
+            bannerInstructions = true,
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+        )
 
-        return route.toBuilder()
-            .routeOptions(routeOptionsWithoutVoiceInstructions)
-            .build()
-    }
-
-    private fun checkNullFixtureName(fixtureName: String?): String {
-        var fixtureName = fixtureName
-        if (fixtureName == null) {
-            fixtureName = DIRECTIONS_PRECISION_6
-        }
-        return fixtureName
+        return route.copy(
+            routeOptions = routeOptionsWithoutVoiceInstructions
+        )
     }
 
     companion object {

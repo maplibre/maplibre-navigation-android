@@ -78,7 +78,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_AssertTrueWhenTooFarFromStep() {
             val routeProgress = buildDefaultTestRouteProgress()
             val stepManeuverPoint: Point =
-                routeProgress!!.directionsRoute!!.legs()!!.get(0).steps()!!.get(0).maneuver().location()
+                routeProgress!!.directionsRoute!!.legs!!.get(0).steps!!.get(0).maneuver.location
 
             val firstUpdate =
                 buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -98,7 +98,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_StepPointSize() {
             val routeProgress = buildDefaultTestRouteProgress()
             val stepManeuverPoint: Point =
-                routeProgress!!.directionsRoute.legs()!!.get(0).steps()!!.get(0).maneuver().location()
+                routeProgress!!.directionsRoute.legs!!.get(0).steps!!.get(0).maneuver.location
             removeAllButOneStepPoints(routeProgress)
             val firstUpdate =
                 buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -118,7 +118,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_AssertFalseWhenOnStep() {
             val routeProgress = buildDefaultTestRouteProgress()
             val stepManeuverPoint: Point =
-                routeProgress!!.directionsRoute.legs()!!.get(0).steps()!!.get(0).maneuver().location()
+                routeProgress!!.directionsRoute.legs!!.get(0).steps!!.get(0).maneuver.location
 
             val firstUpdate =
                 buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -138,7 +138,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_AssertFalseWhenWithinRadiusAndStepLocationHasBadAccuracy() {
             val routeProgress = buildDefaultTestRouteProgress()
             val stepManeuverPoint: Point =
-                routeProgress!!.directionsRoute.legs()!!.get(0).steps()!!.get(0).maneuver().location()
+                routeProgress!!.directionsRoute.legs!!.get(0).steps!!.get(0).maneuver.location
 
             val firstUpdate =
                 buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -159,7 +159,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_AssertFalseWhenOffRouteButCloseToUpcomingStep() {
             val routeProgress = buildDefaultTestRouteProgress()
             val upcomingStepManeuverPoint: Point =
-                routeProgress!!.currentLegProgress!!.upComingStep!!.maneuver().location()
+                routeProgress!!.currentLegProgress!!.upComingStep!!.maneuver.location
 
             val firstUpdate =
                 buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -184,7 +184,7 @@ class OffRouteDetectorTest : BaseTest() {
 
             val lineString =
                 LineString.fromPolyline(
-                    currentStep.geometry()!!,
+                    currentStep.geometry!!,
                     Constants.PRECISION_6
                 )
             val coordinates =
@@ -248,7 +248,7 @@ class OffRouteDetectorTest : BaseTest() {
 
             val lineString =
                 LineString.fromPolyline(
-                    currentStep.geometry()!!,
+                    currentStep.geometry!!,
                     Constants.PRECISION_6
                 )
             val coordinates =
@@ -320,7 +320,7 @@ class OffRouteDetectorTest : BaseTest() {
 
             val lineString =
                 LineString.fromPolyline(
-                    currentStep.geometry()!!,
+                    currentStep.geometry!!,
                     Constants.PRECISION_6
                 )
             val coordinates =
@@ -395,7 +395,7 @@ class OffRouteDetectorTest : BaseTest() {
 
             val lineString =
                 LineString.fromPolyline(
-                    currentStep.geometry()!!,
+                    currentStep.geometry!!,
                     Constants.PRECISION_6
                 )
             val coordinates =
@@ -466,7 +466,7 @@ class OffRouteDetectorTest : BaseTest() {
 
             val lineString =
                 LineString.fromPolyline(
-                    currentStep.geometry()!!,
+                    currentStep.geometry!!,
                     Constants.PRECISION_6
                 )
             val coordinates =

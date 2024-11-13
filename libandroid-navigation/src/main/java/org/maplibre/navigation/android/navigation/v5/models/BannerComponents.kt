@@ -1,11 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.StringDef
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 
 /**
  * A part of the [BannerText] which includes a snippet of the full banner text instruction. In
@@ -15,6 +12,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @since 3.0.0
  */
+@Serializable
 data class BannerComponents(
 
     /**
@@ -63,7 +61,7 @@ data class BannerComponents(
      *
      *  @since 3.0.0
      */
-    @SerializedName("abbr")
+    @SerialName("abbr")
     val abbreviation: String?,
 
     /**
@@ -79,7 +77,7 @@ data class BannerComponents(
      *
      * @since 3.0.0
      */
-    @SerializedName("abbr_priority")
+    @SerialName("abbr_priority")
     val abbreviationPriority: Int?,
 
     /**
@@ -89,7 +87,7 @@ data class BannerComponents(
      *
      * @since 3.0.0
      */
-    @SerializedName("imageBaseURL")
+    @SerialName("imageBaseURL")
     val imageBaseUrl: String?,
 
     /**
@@ -99,7 +97,7 @@ data class BannerComponents(
      *
      * @since 5.0.0
      */
-    @SerializedName("imageURL")
+    @SerialName("imageURL")
     val imageUrl: String?,
 
     /**
@@ -128,7 +126,7 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("text")
+        @SerialName("text")
         TEXT("text"),
 
         /**
@@ -136,7 +134,7 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("icon")
+        @SerialName("icon")
         ICON("icon"),
 
         /**
@@ -144,7 +142,7 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("delimiter")
+        @SerialName("delimiter")
         DELIMITER("delimiter"),
 
         /**
@@ -152,7 +150,7 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("exit-number")
+        @SerialName("exit-number")
         EXIT_NUMBER("exit-number"),
 
         /**
@@ -160,7 +158,7 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("exit")
+        @SerialName("exit")
         EXIT("exit"),
 
         /**
@@ -168,27 +166,25 @@ data class BannerComponents(
          *
          * @since 3.0.0
          */
-        @SerializedName("lane")
+        @SerialName("lane")
         LANE("lane"),
 
         /**
          * This view gives guidance through junctions and is used to complete maneuvers.
          */
-        @SerializedName("guidance-view")
+        @SerialName("guidance-view")
         GUIDANCE_VIEW("guidance-view"),
 
         /**
          * This view gives guidance through signboards and is used to complete maneuvers.
          */
-        @SerializedName("signboard")
+        @SerialName("signboard")
         SIGNBOARD("signboard"),
 
         /**
          * This view gives guidance through junctions and is used to complete maneuvers.
          */
-        @SerializedName("jct")
+        @SerialName("jct")
         JCT("jct")
     }
 }
-
-//TODO fabi755 json parsing

@@ -1,14 +1,9 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
-import org.maplibre.geojson.PointAsCoordinatesTypeAdapter
-import org.maplibre.navigation.android.navigation.v5.models.utils.FormatUtils
-import org.maplibre.navigation.android.navigation.v5.models.utils.ParseUtils
+import org.maplibre.navigation.android.navigation.v5.models.serializer.PointSerializer
 
 /**
  * Provides information connected to your request that help when a new directions request is needing
@@ -27,6 +22,7 @@ import org.maplibre.navigation.android.navigation.v5.models.utils.ParseUtils
  *
  * @since 3.0.0
  */
+@Serializable
 data class RouteOptions(
     /**
      * The same base URL which was used during the request that resulted in this root directions
@@ -64,7 +60,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val coordinates: List<Point>,
+    val coordinates: List<@Serializable(with = PointSerializer::class) Point>,
 
     /**
      * Whether to try to return alternative routes (true) or not (false, default). An alternative
@@ -146,7 +142,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("continue_straight")
+    @SerialName("continue_straight")
     val continueStraight: Boolean?,
 
     /**
@@ -158,7 +154,7 @@ data class RouteOptions(
      *
      * @since 3.1.0
      */
-    @SerializedName("roundabout_exits")
+    @SerialName("roundabout_exits")
     val roundaboutExits: Boolean?,
 
     /**
@@ -251,7 +247,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("voice_instructions")
+    @SerialName("voice_instructions")
     val voiceInstructions: Boolean?,
 
     /**
@@ -260,7 +256,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("banner_instructions")
+    @SerialName("banner_instructions")
     val bannerInstructions: Boolean?,
 
     /**
@@ -271,7 +267,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("voice_units")
+    @SerialName("voice_units")
     val voiceUnits: String?,
 
     /**
@@ -279,7 +275,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("access_token")
+    @SerialName("access_token")
     val accessToken: String,
 
     /**
@@ -289,7 +285,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    @SerializedName("uuid")
+    @SerialName("uuid")
     val requestUuid: String,
 
     /**
@@ -335,7 +331,7 @@ data class RouteOptions(
      *
      * @since 4.4.0
      */
-    @SerializedName("waypoints")
+    @SerialName("waypoints")
     val waypointIndices: String?,
 
 ///**
@@ -365,7 +361,7 @@ data class RouteOptions(
      *
      * @since 3.3.0
      */
-    @SerializedName("waypoint_names")
+    @SerialName("waypoint_names")
     val waypointNames: String?,
 
 ///**
@@ -394,7 +390,7 @@ data class RouteOptions(
      *
      * @since 4.3.0
      */
-    @SerializedName("waypoint_targets")
+    @SerialName("waypoint_targets")
     val waypointTargets: String?,
 
 ///**
@@ -429,7 +425,7 @@ data class RouteOptions(
      *
      * @return a String representing a list of booleans
      */
-    @SerializedName("snapping_closures")
+    @SerialName("snapping_closures")
     val snappingClosures: String?,
 
 ///**

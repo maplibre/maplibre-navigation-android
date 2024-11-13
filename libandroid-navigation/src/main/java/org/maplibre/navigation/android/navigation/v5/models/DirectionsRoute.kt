@@ -1,20 +1,22 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Detailed information about an individual route such as the duration, distance and geometry.
  *
  * @since 1.0.0
  */
+@Serializable
 data class DirectionsRoute(
-    /**
-     * The index of this route in the original network response.
-     *
-     * @return string of an int value representing the index
-     * @since 4.4.0
-     */
-    val routeIndex: String?,
+//    /**
+//     * The index of this route in the original network response.
+//     *
+//     * @return string of an int value representing the index
+//     * @since 4.4.0
+//     */
+//    val routeIndex: String?,
 
     /**
      * The distance traveled from origin to destination.
@@ -39,7 +41,7 @@ data class DirectionsRoute(
      *
      * @since 5.5.0
      */
-    @SerializedName("duration_typical")
+    @SerialName("duration_typical")
     val durationTypical: Double?,
 
     /**
@@ -63,7 +65,7 @@ data class DirectionsRoute(
      *
      * @since 2.1.0
      */
-    @SerializedName("weight_name")
+    @SerialName("weight_name")
     val weightName: String?,
 
     /**
@@ -81,7 +83,6 @@ data class DirectionsRoute(
      */
     val routeOptions: RouteOptions?,
 
-
     /**
      * String of the language to be used for voice instructions.  Defaults to en, and
      * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
@@ -89,8 +90,6 @@ data class DirectionsRoute(
      *
      * @since 3.1.0
      */
-    @SerializedName("voiceLocale")
-    val voiceLanguage: String,
+    @SerialName("voiceLocale")
+    val voiceLanguage: String?,
 )
-
-//TODO fabi755 json parsing

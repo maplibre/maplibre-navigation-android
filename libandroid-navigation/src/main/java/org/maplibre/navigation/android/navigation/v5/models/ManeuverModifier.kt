@@ -1,6 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.StringDef
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Constants for the [StepManeuver.modifier].
@@ -9,6 +10,7 @@ import androidx.annotation.StringDef
  */
 object ManeuverModifier {
 
+    @Serializable
     enum class Type(text: String) {
 
         /**
@@ -16,6 +18,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("uturn")
         UTURN("uturn"),
 
         /**
@@ -23,6 +26,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("sharp right")
         SHARP_RIGHT("sharp right"),
 
         /**
@@ -30,6 +34,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("right")
         RIGHT("right"),
 
         /**
@@ -37,6 +42,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("slight right")
         SLIGHT_RIGHT("slight right"),
 
         /**
@@ -44,6 +50,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("straight")
         STRAIGHT("straight"),
 
         /**
@@ -51,6 +58,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("slight left")
         SLIGHT_LEFT("slight left"),
 
         /**
@@ -58,6 +66,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("left")
         LEFT("left"),
 
         /**
@@ -65,6 +74,7 @@ object ManeuverModifier {
          *
          * @since 5.2.0
          */
+        @SerialName("sharp left")
         SHARP_LEFT("sharp left"),
     }
 }

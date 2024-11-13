@@ -1,10 +1,13 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
+import kotlinx.serialization.Serializable
+
 /**
  * Object representing max speeds along a route.
  *
  * @since 3.0.0
  */
+@Serializable
 data class MaxSpeed(
     /**
      * Number indicating the posted speed limit.

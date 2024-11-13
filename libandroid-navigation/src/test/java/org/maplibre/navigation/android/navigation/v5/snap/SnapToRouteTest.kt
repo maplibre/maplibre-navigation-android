@@ -3,10 +3,11 @@ package org.maplibre.navigation.android.navigation.v5.snap
 import android.location.Location
 import com.google.gson.GsonBuilder
 import junit.framework.Assert
+import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.maplibre.navigation.android.json
 import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.robolectric.RobolectricTestRunner
@@ -278,14 +279,9 @@ class SnapToRouteTest : BaseTest() {
 
     @Throws(Exception::class)
     private fun buildMultipleLegRoute(file: String = MULTI_LEG_ROUTE_FIXTURE): DirectionsRoute {
-        val body = loadJsonFixture(file)
-        val gson =
-            GsonBuilder().registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create()
-        val response = gson.fromJson(
-            body,
-            DirectionsResponse::class.java
-        )
-        return response.routes()[0]
+        val fixtureJsonString = loadJsonFixture(file)
+        val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
+        return response.routes[0]
     }
 
     companion object {

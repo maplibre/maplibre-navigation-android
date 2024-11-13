@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
+apply plugin: 'kotlinx-serialization'
 
 java {
     toolchain {
@@ -75,6 +76,8 @@ dependencies {
 
     // Logging
     implementation dependenciesList.timber
+
+    implementation dependenciesList.kotlinxSerializationJson
 
     // AutoValues
     annotationProcessor dependenciesList.autoValue

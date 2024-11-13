@@ -1,10 +1,12 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Reproduces one of road incidents type ([IncidentType]) that might be on the way.
  */
+@Serializable
 data class Incident(
 
     /**
@@ -39,7 +41,7 @@ data class Incident(
     /**
      * Human-readable long description of the incident suitable for displaying to the users.
      */
-    @SerializedName("long_description")
+    @SerialName("long_description")
     val longDescription: String?,
 
     /**
@@ -52,13 +54,13 @@ data class Incident(
     /**
      * Sub-type of the incident.
      */
-    @SerializedName("sub_type")
+    @SerialName("sub_type")
     val subType: String?,
 
     /**
      * Sub-type-specific description.
      */
-    @SerializedName("sub_type_description")
+    @SerialName("sub_type_description")
     val subTypeDescription: String?,
 
     /**
@@ -66,38 +68,38 @@ data class Incident(
      *
      * @see [AlertC](https://www.iso.org/standard/59231.html)
      */
-    @SerializedName("alertc_codes")
+    @SerialName("alertc_codes")
     val alertcCodes: List<Int?>?,
 
     /**
      * Incident's geometry index start point.
      */
-    @SerializedName("geometry_index_start")
+    @SerialName("geometry_index_start")
     val geometryIndexStart: Int?,
 
     /**
      * Incident's geometry index end point.
      */
-    @SerializedName("geometry_index_end")
+    @SerialName("geometry_index_end")
     val geometryIndexEnd: Int?,
 
     /**
      * Time the incident was created/updated in ISO8601 format. Not the same
      * [.startTime]/[.endTime], incident can be created/updated before the incident.
      */
-    @SerializedName("creation_time")
+    @SerialName("creation_time")
     val creationTime: String?,
 
     /**
      * Start time of the incident in ISO8601 format.
      */
-    @SerializedName("start_time")
+    @SerialName("start_time")
     val startTime: String?,
 
     /**
      * End time of the incident in ISO8601 format.
      */
-    @SerializedName("end_time")
+    @SerialName("end_time")
     val endTime: String?,
 ) {
 

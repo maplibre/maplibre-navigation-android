@@ -1,10 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Includes both plain text information that can be visualized inside your navigation application
@@ -14,6 +11,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @since 3.0.0
  */
+@Serializable
 data class BannerText(
 
     /**
@@ -68,8 +66,6 @@ data class BannerText(
      * @return String either `left` or `right`
      * @since 3.0.0
      */
-    @SerializedName("driving_side")
+    @SerialName("driving_side")
     val drivingSide: String?,
 )
-
-//TODO fabi755: json parsing

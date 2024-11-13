@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
+import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.PointAsCoordinatesTypeAdapter
 
@@ -16,6 +17,7 @@ import org.maplibre.geojson.PointAsCoordinatesTypeAdapter
  *
  * @since 1.0.0
  */
+@Serializable
 data class DirectionsResponse(
     /**
      * String indicating the state of the response. This is a separate code than the HTTP status code.

@@ -1,9 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
+import kotlinx.serialization.Serializable
 
 /**
  * An annotations object that contains additional details about each line segment along the route
@@ -12,6 +9,7 @@ import com.google.gson.TypeAdapter
  *
  * @since 2.1.0
  */
+@Serializable
 data class LegAnnotation(
 
     /**

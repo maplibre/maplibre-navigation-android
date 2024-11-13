@@ -14,17 +14,17 @@ open class BaseTest {
     private val locationBuilder = MockLocationBuilder()
 
     @Throws(IOException::class)
-    protected fun loadJsonFixture(filename: String?): String? {
+    protected fun loadJsonFixture(filename: String): String {
         return routeBuilder.loadJsonFixture(filename)
     }
 
     @Throws(IOException::class)
-    protected fun buildTestDirectionsRoute(): DirectionsRoute? {
+    protected fun buildTestDirectionsRoute(): DirectionsRoute {
         return routeBuilder.buildTestDirectionsRoute(null)
     }
 
     @Throws(IOException::class)
-    protected fun buildTestDirectionsRoute(fixtureName: String?): DirectionsRoute? {
+    protected fun buildTestDirectionsRoute(fixtureName: String?): DirectionsRoute {
         return routeBuilder.buildTestDirectionsRoute(fixtureName)
     }
 

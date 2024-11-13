@@ -105,7 +105,9 @@ ext {
 
             // play services
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",
-            errorprone              : "com.google.errorprone:error_prone_core:${version.errorprone}"
+            errorprone              : "com.google.errorprone:error_prone_core:${version.errorprone}",
+
+            kotlinxSerializationJson: "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
     ]
 
     pluginDependencies = [
@@ -117,5 +119,6 @@ ext {
             dependencyGraph     : "com.vanniktech:gradle-dependency-graph-generator-plugin:${pluginVersion.dependencyGraph}",
             dependencyUpdates   : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
             kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
+            kotlinSerialization : "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
     ]
 }

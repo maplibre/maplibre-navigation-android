@@ -1,6 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
 import androidx.annotation.StringDef
+import kotlinx.serialization.Serializable
 
 /**
  * Constants and properties used to customize the directions request.

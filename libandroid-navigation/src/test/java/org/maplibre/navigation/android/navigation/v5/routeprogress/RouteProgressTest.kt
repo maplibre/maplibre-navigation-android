@@ -3,9 +3,10 @@ package org.maplibre.navigation.android.navigation.v5.routeprogress
 import com.google.gson.GsonBuilder
 import junit.framework.Assert
 import junit.framework.TestCase.assertEquals
+import kotlinx.serialization.json.Json
 import org.junit.Test
+import org.maplibre.navigation.android.json
 import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
@@ -37,7 +38,7 @@ class RouteProgressTest : BaseTest() {
         val beginningRouteProgress = buildBeginningOfLegRouteProgress(route!!)
 
         assertEquals(
-            route.distance(),
+            route.distance,
             beginningRouteProgress!!.distanceRemaining,
             LARGE_DELTA
         )
@@ -47,7 +48,7 @@ class RouteProgressTest : BaseTest() {
     @Throws(Exception::class)
     fun distanceRemaining_equalsZeroAtEndOfRoute() {
         val route = buildTestDirectionsRoute()
-        val firstLeg = route!!.legs()!![0]
+        val firstLeg = route!!.legs!![0]
         val lastRouteProgress = buildLastRouteProgress(route, firstLeg)
 
         assertEquals(0.0, lastRouteProgress!!.distanceRemaining, DELTA)
@@ -70,15 +71,15 @@ class RouteProgressTest : BaseTest() {
         val fractionsRemaining: MutableList<Float> = ArrayList()
         val routeProgressFractionsTraveled: MutableList<Float> = ArrayList()
 
-        for (stepIndex in route!!.legs()!![0].steps()!!.indices) {
-            val stepDistanceRemaining = getFirstStep(multiLegRoute).distance()
-            val legDistanceRemaining = multiLegRoute.legs()!![0].distance()!!
-            val distanceRemaining = multiLegRoute.distance()
+        for (stepIndex in route!!.legs!![0].steps!!.indices) {
+            val stepDistanceRemaining = getFirstStep(multiLegRoute).distance
+            val legDistanceRemaining = multiLegRoute.legs!![0].distance!!
+            val distanceRemaining = multiLegRoute.distance
             val routeProgress = buildTestRouteProgress(
                 multiLegRoute, stepDistanceRemaining,
                 legDistanceRemaining, distanceRemaining, stepIndex, 0
             )
-            val fractionRemaining = (routeProgress!!.distanceTraveled / route.distance()).toFloat()
+            val fractionRemaining = (routeProgress!!.distanceTraveled / route.distance).toFloat()
 
             fractionsRemaining.add(fractionRemaining)
             routeProgressFractionsTraveled.add(routeProgress.fractionTraveled)
@@ -91,7 +92,7 @@ class RouteProgressTest : BaseTest() {
     @Throws(Exception::class)
     fun fractionTraveled_equalsOneAtEndOfRoute() {
         val route = buildTestDirectionsRoute()
-        val firstLeg = route!!.legs()!![0]
+        val firstLeg = route!!.legs!![0]
         val lastRouteProgress = buildLastRouteProgress(route, firstLeg)
 
         assertEquals(1.0, lastRouteProgress!!.fractionTraveled.toDouble(), DELTA)
@@ -103,7 +104,7 @@ class RouteProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val beginningRouteProgress = buildBeginningOfLegRouteProgress(route!!)
 
-        val durationRemaining = route.duration()
+        val durationRemaining = route.duration
         val progressDurationRemaining: Double = beginningRouteProgress!!.durationRemaining
 
         Assert.assertEquals(durationRemaining, progressDurationRemaining, DELTA)
@@ -113,7 +114,7 @@ class RouteProgressTest : BaseTest() {
     @Throws(Exception::class)
     fun durationRemaining_equalsZeroAtEndOfRoute() {
         val route = buildTestDirectionsRoute()
-        val firstLeg = route!!.legs()!![0]
+        val firstLeg = route!!.legs!![0]
         val lastRouteProgress = buildLastRouteProgress(route, firstLeg)
 
         assertEquals(0.0, lastRouteProgress!!.durationRemaining, DELTA)
@@ -132,11 +133,11 @@ class RouteProgressTest : BaseTest() {
     @Throws(Exception::class)
     fun distanceTraveled_equalsRouteDistanceAtEndOfRoute() {
         val route = buildTestDirectionsRoute()
-        val firstLeg = route!!.legs()!![0]
+        val firstLeg = route!!.legs!![0]
         val lastRouteProgress = buildLastRouteProgress(route, firstLeg)
 
         assertEquals(
-            route.distance(),
+            route.distance,
             lastRouteProgress!!.distanceTraveled,
             DELTA
         )
@@ -148,7 +149,7 @@ class RouteProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val beginningRouteProgress = buildBeginningOfLegRouteProgress(route!!)
 
-        assertEquals(route.legs()!![0], beginningRouteProgress!!.currentLeg)
+        assertEquals(route.legs!![0], beginningRouteProgress!!.currentLeg)
     }
 
     @Test
@@ -167,7 +168,7 @@ class RouteProgressTest : BaseTest() {
         val routeProgress = buildBeginningOfLegRouteProgress(multiLegRoute)
 
         assertEquals(
-            multiLegRoute.distance(),
+            multiLegRoute.distance,
             routeProgress!!.distanceRemaining,
             LARGE_DELTA
         )
@@ -197,17 +198,17 @@ class RouteProgressTest : BaseTest() {
         val fractionsRemaining: MutableList<Float> = ArrayList()
         val routeProgressFractionsTraveled: MutableList<Float> = ArrayList()
 
-        for (leg in multiLegRoute.legs()!!) {
-            for (stepIndex in leg.steps()!!.indices) {
-                val stepDistanceRemaining = getFirstStep(multiLegRoute).distance()
-                val legDistanceRemaining = multiLegRoute.legs()!![0].distance()!!
-                val distanceRemaining = multiLegRoute.distance()
+        for (leg in multiLegRoute.legs!!) {
+            for (stepIndex in leg.steps!!.indices) {
+                val stepDistanceRemaining = getFirstStep(multiLegRoute).distance
+                val legDistanceRemaining = multiLegRoute.legs!![0].distance!!
+                val distanceRemaining = multiLegRoute.distance
                 val routeProgress = buildTestRouteProgress(
                     multiLegRoute, stepDistanceRemaining,
                     legDistanceRemaining, distanceRemaining, stepIndex, 0
                 )
                 val fractionRemaining =
-                    (routeProgress!!.distanceTraveled / multiLegRoute.distance()).toFloat()
+                    (routeProgress!!.distanceTraveled / multiLegRoute.distance).toFloat()
 
                 fractionsRemaining.add(fractionRemaining)
                 routeProgressFractionsTraveled.add(routeProgress.fractionTraveled)
@@ -258,7 +259,7 @@ class RouteProgressTest : BaseTest() {
         val routeProgress = buildEndOfMultiRouteProgress()
 
         assertEquals(
-            multiLegRoute.distance(),
+            multiLegRoute.distance,
             routeProgress!!.distanceTraveled,
             DELTA
         )
@@ -285,23 +286,18 @@ class RouteProgressTest : BaseTest() {
 
     @Throws(Exception::class)
     private fun buildMultipleLegRoute(): DirectionsRoute {
-        val body = loadJsonFixture(MULTI_LEG_ROUTE_FIXTURE)
-        val gson =
-            GsonBuilder().registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create()
-        val response = gson.fromJson(
-            body,
-            DirectionsResponse::class.java
-        )
-        return response.routes()[0]
+        val fixtureJsonString = loadJsonFixture(MULTI_LEG_ROUTE_FIXTURE)
+        val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
+        return response.routes[0]
     }
 
     @Throws(Exception::class)
     private fun buildLastRouteProgress(route: DirectionsRoute, firstLeg: RouteLeg): RouteProgress? {
-        val stepIndex = firstLeg.steps()!!.size - 1
-        val step = route.legs()!![0].steps()!![stepIndex]
-        val legIndex = route.legs()!!.size - 1
-        val legDistanceRemaining = route.legs()!![0].distance()!!
-        val stepDistanceRemaining = step.distance()
+        val stepIndex = firstLeg.steps!!.size - 1
+        val step = route.legs!![0].steps!![stepIndex]
+        val legIndex = route.legs!!.size - 1
+        val legDistanceRemaining = route.legs!![0].distance!!
+        val stepDistanceRemaining = step.distance
 
         return buildTestRouteProgress(
             route, stepDistanceRemaining,
@@ -310,15 +306,15 @@ class RouteProgressTest : BaseTest() {
     }
 
     private fun getFirstStep(route: DirectionsRoute): LegStep {
-        return route.legs()!![0].steps()!![0]
+        return route.legs!![0].steps!![0]
     }
 
     @Throws(Exception::class)
     private fun buildBeginningOfLegRouteProgress(route: DirectionsRoute): RouteProgress {
         val step = getFirstStep(route)
-        val stepDistanceRemaining = step.distance()
-        val legDistanceRemaining = route.legs()!![0].distance()!!
-        val distanceRemaining = route.distance()
+        val stepDistanceRemaining = step.distance
+        val legDistanceRemaining = route.legs!![0].distance!!
+        val distanceRemaining = route.distance
         return buildTestRouteProgress(
             route, stepDistanceRemaining, legDistanceRemaining,
             distanceRemaining, 0, 0
@@ -329,10 +325,10 @@ class RouteProgressTest : BaseTest() {
     private fun buildEndOfMultiRouteProgress(): RouteProgress? {
         val multiLegRoute = buildMultipleLegRoute()
 
-        val legIndex = multiLegRoute.legs()!!.size - 1
-        val stepIndex = multiLegRoute.legs()!![legIndex].steps()!!.size - 1
-        val stepDistanceRemaining = multiLegRoute.legs()!![0].steps()!![stepIndex].distance()
-        val legDistanceRemaining = multiLegRoute.legs()!![0].distance()!!
+        val legIndex = multiLegRoute.legs!!.size - 1
+        val stepIndex = multiLegRoute.legs!![legIndex].steps!!.size - 1
+        val stepDistanceRemaining = multiLegRoute.legs!![0].steps!![stepIndex].distance
+        val legDistanceRemaining = multiLegRoute.legs!![0].distance!!
         return buildTestRouteProgress(
             multiLegRoute, stepDistanceRemaining,
             legDistanceRemaining, 0.0, stepIndex, legIndex

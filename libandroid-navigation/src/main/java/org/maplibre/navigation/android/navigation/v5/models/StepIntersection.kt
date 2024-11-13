@@ -1,23 +1,25 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.serializer.PointSerializer
 
 /**
  * Object representing an intersection along the step.
  *
  * @since 1.3.0
  */
+@Serializable
 data class StepIntersection(
+
     /**
      * A [Point] representing this intersection location.
      *
      * @since 3.0.0
      */
+    @Serializable(with = PointSerializer::class)
     val location: Point,
 
     /**
@@ -60,7 +62,7 @@ data class StepIntersection(
      *
      * @since 1.3.0
      */
-// in key
+    @SerialName("in")
     val inIndex: Int?,
 
     /**
@@ -70,7 +72,7 @@ data class StepIntersection(
      *
      * @since 1.3.0
      */
-// out key
+    @SerialName("out")
     val outIndex: Int?,
 
     /**
@@ -87,7 +89,7 @@ data class StepIntersection(
      * This value can be used to apply the duration annotation that corresponds with the intersection.
      * Only available on the driving profile.
      */
-    @SerializedName("geometry_index")
+    @SerialName("geometry_index")
     val geometryIndex: Int?,
 
     @get:SerializedName("is_urban")
@@ -100,14 +102,14 @@ data class StepIntersection(
      *
      * @see RouteLeg.admins
      */
-    @SerializedName("admin_index")
+    @SerialName("admin_index")
     val adminIndex: Int?,
 
     /**
      * An object containing information about passing rest stops along the route.
      * Only available on the `driving` profile.
      */
-    @SerializedName("rest_stop")
+    @SerialName("rest_stop")
     val restStop: RestStop?,
 
     /**
@@ -117,14 +119,12 @@ data class StepIntersection(
      * where toll charge is collected.
      * Only available on the [DirectionsCriteria.PROFILE_DRIVING] profile.
      */
-    @SerializedName("toll_collection")
+    @SerialName("toll_collection")
     val tollCollection: TollCollection?,
 
     /**
      * Name of the tunnel. Value may be present if [.classes] contains "tunnel".
      */
-    @SerializedName("tunnel_name")
+    @SerialName("tunnel_name")
     val tunnelName: String?,
 )
-
-// TODO fabi755 json parsing

@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
+import kotlinx.serialization.Serializable
 
 /**
  * This class provides information thats useful for properly making navigation announcements at the
@@ -13,6 +14,7 @@ import com.google.gson.TypeAdapter
  *
  * @since 3.0.0
  */
+@Serializable
 data class VoiceInstructions(
 
     /**

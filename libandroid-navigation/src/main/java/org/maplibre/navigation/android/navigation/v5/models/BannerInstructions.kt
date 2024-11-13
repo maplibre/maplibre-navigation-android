@@ -1,9 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
+import kotlinx.serialization.Serializable
 
 /**
  * Visual instruction information related to a particular [LegStep] useful for making UI
@@ -12,6 +9,7 @@ import com.google.gson.TypeAdapter
  *
  * @since 3.0.0
  */
+@Serializable
 data class BannerInstructions(
 
     /**
@@ -55,5 +53,3 @@ data class BannerInstructions(
      */
     val view: BannerView?,
 )
-
-//TODO fabi755 json parsing

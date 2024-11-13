@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
+import kotlinx.serialization.Serializable
 
 /**
  * Includes both plain text information that can be visualized inside your navigation application
@@ -13,6 +14,7 @@ import com.google.gson.TypeAdapter
  *
  * @since 5.0.0
  */
+@Serializable
 data class BannerView(
     /**
      * Plain text with all the [BannerComponents] text combined.
@@ -46,5 +48,3 @@ data class BannerView(
      */
     val modifier: ManeuverModifier.Type?,
 )
-
-//TODO fabi755: json parsing

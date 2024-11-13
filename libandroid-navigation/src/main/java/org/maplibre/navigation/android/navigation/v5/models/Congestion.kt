@@ -1,8 +1,11 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
+import kotlinx.serialization.Serializable
+
 /**
  * Quantitative descriptor of congestion.
  */
+@Serializable
 data class Congestion(
 
     /**
@@ -10,5 +13,3 @@ data class Congestion(
      */
     val value: Int
 )
-
-//todo fabi755 parsing

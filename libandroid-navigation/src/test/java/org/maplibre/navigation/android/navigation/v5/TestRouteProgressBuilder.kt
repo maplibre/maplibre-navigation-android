@@ -31,7 +31,7 @@ internal class TestRouteProgressBuilder {
         stepIndex: Int,
         legIndex: Int
     ): RouteProgress {
-        val steps = route.legs()!![legIndex].steps()
+        val steps = route.legs!![legIndex].steps
         val currentStep = steps!![stepIndex]
         val currentStepPoints = buildCurrentStepPoints(currentStep)
         val upcomingStepIndex = stepIndex + 1
@@ -39,7 +39,7 @@ internal class TestRouteProgressBuilder {
         var upcomingStep: LegStep? = null
         if (upcomingStepIndex < steps.size) {
             upcomingStep = steps[upcomingStepIndex]
-            val upcomingStepGeometry = upcomingStep.geometry()
+            val upcomingStepGeometry = upcomingStep.geometry
             upcomingStepPoints = buildStepPointsFromGeometry(upcomingStepGeometry!!)
         }
         val intersections: List<StepIntersection> =
@@ -75,7 +75,7 @@ internal class TestRouteProgressBuilder {
     }
 
     private fun buildCurrentStepPoints(currentStep: LegStep): List<Point> {
-        val currentStepGeometry = currentStep.geometry()
+        val currentStepGeometry = currentStep.geometry
         return buildStepPointsFromGeometry(currentStepGeometry!!)
     }
 
@@ -84,7 +84,7 @@ internal class TestRouteProgressBuilder {
         intersections: List<StepIntersection>,
         intersectionDistances: List<Pair<StepIntersection, Double>>
     ): StepIntersection? {
-        val stepDistanceTraveled = currentStep.distance() - stepDistanceRemaining
+        val stepDistanceTraveled = currentStep.distance - stepDistanceRemaining
         return findCurrentIntersection(
             intersections,
             intersectionDistances, stepDistanceTraveled

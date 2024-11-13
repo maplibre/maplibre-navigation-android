@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
+import kotlinx.serialization.Serializable
+
 /**
  * An object containing information about a toll collection point along the route.
  * This is a payment booth or overhead electronic gantry
@@ -7,6 +9,7 @@ package org.maplibre.navigation.android.navigation.v5.models
  * where toll charge is collected.
  * Only available on the [DirectionsCriteria.PROFILE_DRIVING] profile.
  */
+@Serializable
 data class TollCollection(
 
     /**

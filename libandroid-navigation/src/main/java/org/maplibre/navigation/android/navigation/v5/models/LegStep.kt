@@ -1,12 +1,14 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Includes one [StepManeuver] object and travel to the following [LegStep].
  *
  * @since 1.0.0
  */
+@Serializable
 data class LegStep(
     /**
      * The distance traveled from the maneuver to the next [LegStep] in meters.
@@ -31,7 +33,7 @@ data class LegStep(
      *
      * @since 5.5.0
      */
-    @SerializedName("duration_typical")
+    @SerialName("duration_typical")
     val durationTypical: Double?,
 
     /**
@@ -101,7 +103,7 @@ data class LegStep(
      *
      * @since 2.0.0
      */
-    @SerializedName("rotary_name")
+    @SerialName("rotary_name")
     val rotaryName: String?,
 
     /**
@@ -110,7 +112,7 @@ data class LegStep(
      *
      * @since 2.0.0
      */
-    @SerializedName("rotary_pronunciation")
+    @SerialName("rotary_pronunciation")
     val rotaryPronunciation: String?,
 
     /**
@@ -144,7 +146,7 @@ data class LegStep(
      *
      * @since 3.0.0
      */
-    @SerializedName("driving_side")
+    @SerialName("driving_side")
     val drivingSide: String?,
 
     /**

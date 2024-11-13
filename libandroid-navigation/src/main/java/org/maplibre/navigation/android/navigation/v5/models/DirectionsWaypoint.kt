@@ -1,17 +1,15 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.auto.value.AutoValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.serializer.PointSerializer
 
 /**
  * An input coordinate snapped to the roads network.
  *
  * @since 1.0.0
  */
+@Serializable
 data class DirectionsWaypoint(
 
     /**
@@ -26,5 +24,6 @@ data class DirectionsWaypoint(
      *
      * @since 3.0.0
      */
+    @Serializable(with = PointSerializer::class)
     val location: Point?
 )
