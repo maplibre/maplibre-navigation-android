@@ -77,7 +77,7 @@ class BannerInstructionMilestone(
             this.bannerInstructions == null || this.bannerInstructions != instructions
         val isValidNewInstruction = instructions != null && isNewInstruction
         val withinDistanceAlongGeometry = isValidNewInstruction
-                && instructions!!.distanceAlongGeometry() >= stepDistanceRemaining
+                && instructions!!.distanceAlongGeometry >= stepDistanceRemaining
         val isFirstInstruction = this.bannerInstructions == null && instructions != null
         return isFirstInstruction || withinDistanceAlongGeometry
     }

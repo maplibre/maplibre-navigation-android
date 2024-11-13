@@ -74,7 +74,7 @@ data class RouteStepProgress(
      * @since 0.1.0
      */
     val distanceTraveled: Double
-        get() = max(0.0, step.distance() - distanceRemaining)
+        get() = max(0.0, step.distance - distanceRemaining)
 
     /**
      * Get the fraction traveled along the current step, this is a float value between 0 and 1 and
@@ -83,7 +83,7 @@ data class RouteStepProgress(
      * @since 0.1.0
      */
     val fractionTraveled: Float
-        get() = step.distance()
+        get() = step.distance
             .takeIf { distance -> distance > 0 }
             ?.let { stepDistance ->
                 max(0.0, distanceTraveled / stepDistance).toFloat()
@@ -95,5 +95,5 @@ data class RouteStepProgress(
      * @since 0.1.0
      */
     val durationRemaining: Double
-        get() = (1 - fractionTraveled) * step.duration()
+        get() = (1 - fractionTraveled) * step.duration
 }

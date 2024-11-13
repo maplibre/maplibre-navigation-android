@@ -97,7 +97,7 @@ public class SimpleCamera extends Camera {
     if (route == null) {
       return Collections.emptyList();
     }
-    LineString lineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
     return lineString.coordinates();
   }
 }

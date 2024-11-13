@@ -87,7 +87,7 @@ data class RouteProgress(
      * @since 0.1.0
      */
     val currentLeg: RouteLeg?
-        get() = directionsRoute.legs()?.get(legIndex)
+        get() = directionsRoute.legs?.get(legIndex)
 
     /**
      * Total distance traveled in meters along route.
@@ -95,7 +95,7 @@ data class RouteProgress(
      * @since 0.1.0
      */
     val distanceTraveled: Double
-        get() = max(0.0, directionsRoute.distance() - distanceRemaining)
+        get() = max(0.0, directionsRoute.distance - distanceRemaining)
 
     /**
      * Provides the duration remaining in seconds till the user reaches the end of the route.
@@ -103,7 +103,7 @@ data class RouteProgress(
      * @since 0.1.0
      */
     val durationRemaining: Double
-        get() = (1 - fractionTraveled) * directionsRoute.duration()
+        get() = (1 - fractionTraveled) * directionsRoute.duration
 
     /**
      * Get the fraction traveled along the current route, this is a float value between 0 and 1 and
@@ -112,7 +112,7 @@ data class RouteProgress(
      * @since 0.1.0
      */
     val fractionTraveled: Float
-        get() = directionsRoute.distance()
+        get() = directionsRoute.distance
             .takeIf { distance -> distance > 0 }
             ?.let { routeDistance ->
                 max(0.0, distanceTraveled / routeDistance).toFloat()
@@ -124,7 +124,7 @@ data class RouteProgress(
      * @since 0.5.0
      */
     val remainingWaypoints: Int?
-        get() = directionsRoute.legs()?.size?.minus(legIndex)
+        get() = directionsRoute.legs?.size?.minus(legIndex)
 
     /**
      * Gives a [RouteLegProgress] object with information about the particular leg the user is
@@ -133,7 +133,7 @@ data class RouteProgress(
      * @since 0.1.0
      */
     val currentLegProgress: RouteLegProgress?
-        get() = directionsRoute.legs()?.get(legIndex)?.let { currentLeg ->
+        get() = directionsRoute.legs?.get(legIndex)?.let { currentLeg ->
             RouteLegProgress(
                 routeLeg = currentLeg,
                 stepIndex = stepIndex,

@@ -62,9 +62,9 @@ class VoiceInstructionMilestone(
             Instruction() {
             override fun buildInstruction(routeProgress: RouteProgress): String {
                 if (instructions == null) {
-                    return routeProgress.currentLegProgress!!.currentStep!!.name()!!
+                    return routeProgress.currentLegProgress!!.currentStep!!.name!!
                 }
-                return instructions!!.announcement()!!
+                return instructions!!.announcement!!
             }
         }
 
@@ -83,7 +83,7 @@ class VoiceInstructionMilestone(
             if (instructions == null) {
                 return EMPTY_STRING
             }
-            return instructions!!.ssmlAnnouncement()
+            return instructions!!.ssmlAnnouncement
         }
 
     val announcement: String?
@@ -100,7 +100,7 @@ class VoiceInstructionMilestone(
             if (instructions == null) {
                 return EMPTY_STRING
             }
-            return instructions!!.announcement()
+            return instructions!!.announcement
         }
 
     /**
@@ -129,7 +129,7 @@ class VoiceInstructionMilestone(
     ): Boolean {
         val isNewInstruction = this.instructions == null || this.instructions != instructions
         val isValidNewInstruction = instructions != null && isNewInstruction
-        return isValidNewInstruction && instructions!!.distanceAlongGeometry()!! >= stepDistanceRemaining
+        return isValidNewInstruction && instructions!!.distanceAlongGeometry!! >= stepDistanceRemaining
     }
 
     private fun updateInstructions(

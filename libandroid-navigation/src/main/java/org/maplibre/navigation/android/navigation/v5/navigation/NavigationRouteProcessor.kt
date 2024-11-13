@@ -199,7 +199,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         val legIndex = indices.legIndex()
         val stepIndex = indices.stepIndex()
         val upcomingStepIndex = stepIndex + ONE_INDEX
-        if (route.legs()!!.size <= legIndex || route.legs()!![legIndex].steps()!!.size <= stepIndex) {
+        if (route.legs!!.size <= legIndex || route.legs!![legIndex].steps!!.size <= stepIndex) {
             // This catches a potential race condition when the route is changed, before the new index is processed
             createFirstIndices(mapLibreNavigation)
             return
@@ -221,7 +221,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
             currentLegAnnotation,
             currentLeg!!, legDistanceRemaining
         )
-        val stepDistanceTraveled = currentStep!!.distance() - stepDistanceRemaining
+        val stepDistanceTraveled = currentStep!!.distance - stepDistanceRemaining
 
         val currentIntersection = findCurrentIntersection(
             currentIntersections!!, currentIntersectionDistances!!, stepDistanceTraveled
@@ -253,8 +253,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         stepIndex: Int,
         upcomingStepIndex: Int
     ) {
-        currentLeg = route.legs()!![legIndex]
-        val steps = currentLeg?.steps()
+        currentLeg = route.legs!![legIndex]
+        val steps = currentLeg?.steps
         currentStep = steps!![stepIndex]
         upcomingStep =
             if (upcomingStepIndex < steps.size - ONE_INDEX) steps[upcomingStepIndex] else null

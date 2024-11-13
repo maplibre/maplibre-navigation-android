@@ -51,7 +51,7 @@ class ReplayRouteLocationConverter {
     }
 
     boolean isMultiLegRoute() {
-        return route.legs().size() > 1;
+        return route.getLegs().size() > 1;
     }
 
     void initializeTime() {
@@ -123,7 +123,7 @@ class ReplayRouteLocationConverter {
         List<Point> stepPoints = new ArrayList<>();
 
         LineString line = LineString.fromPolyline(
-                route.legs().get(currentLeg).steps().get(currentStep).geometry(), Constants.PRECISION_6);
+                route.getLegs().get(currentLeg).getSteps().get(currentStep).getGeometry(), Constants.PRECISION_6);
         stepPoints.addAll(sliceRoute(line));
         increaseIndex();
 
@@ -131,9 +131,9 @@ class ReplayRouteLocationConverter {
     }
 
     private void increaseIndex() {
-        if (currentStep < route.legs().get(currentLeg).steps().size() - 1) {
+        if (currentStep < route.getLegs().get(currentLeg).getSteps().size() - 1) {
             currentStep++;
-        } else if (currentLeg < route.legs().size() - 1) {
+        } else if (currentLeg < route.getLegs().size() - 1) {
             currentLeg++;
             currentStep = 0;
         }

@@ -30,7 +30,7 @@ public final class ToleranceUtils {
     if(!intersections.isEmpty()){
       List<Point> intersectionsPoints = new ArrayList<>();
       for (StepIntersection intersection : intersections) {
-        intersectionsPoints.add(intersection.location());
+        intersectionsPoints.add(intersection.getLocation());
       }
 
       Point closestIntersection = TurfClassification.nearestPoint(snappedPoint, intersectionsPoints);

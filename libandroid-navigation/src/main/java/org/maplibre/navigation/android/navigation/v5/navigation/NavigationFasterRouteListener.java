@@ -24,7 +24,7 @@ class NavigationFasterRouteListener implements RouteListener {
   @Override
   public void onResponseReceived(DirectionsResponse response, @Nullable RouteProgress routeProgress) {
     if (fasterRouteEngine.isFasterRoute(response, routeProgress)) {
-      eventDispatcher.onFasterRouteEvent(response.routes().get(FIRST_ROUTE));
+      eventDispatcher.onFasterRouteEvent(response.getRoutes().get(FIRST_ROUTE));
     }
   }
 

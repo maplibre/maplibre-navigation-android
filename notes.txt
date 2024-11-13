@@ -7,9 +7,14 @@ org.maplibre.navigation.android.core.crashreporter.CrashReportBuilder --> Remove
 
 org.maplibre.navigation.android.navigation.v5.milestone.Milestone --> Remove Builder, use named arguments in constructor instead.
 org.maplibre.navigation.android.navigation.v5.routeprogress.* --> Convert all @AutoValue classes to Kotlin data classes. (Also Builder pattern is not used here anymore)
+org.maplibre.navigation.android.navigation.v5.models.* -->
+    - Convert all @AutoValue classes to Kotlin data classes. (Also Builder pattern is not used here anymore). Using KotlinX instead of GSON for JSON parsing.
+    - Convert annotation types to enums
+    - Using Kotlinx serialization instead of GSON for JSON parsing
+    - Remove classes MapLibreStreetsV8, DirectionsJsonObject, DirectionsAdapterFactory
 
 ----------------
 Refactore later:
 
 org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated
-
+Instead of parsing models directly, add dtos and mappers that can be replaces by developers to use other API engines

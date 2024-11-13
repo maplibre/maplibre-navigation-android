@@ -14,7 +14,7 @@ public final class ValidationUtils {
   public static void validDirectionsRoute(DirectionsRoute directionsRoute,
                                           boolean defaultMilestonesEnabled) {
     if (defaultMilestonesEnabled) {
-      RouteOptions routeOptions = directionsRoute.routeOptions();
+      RouteOptions routeOptions = directionsRoute.getRouteOptions();
       checkNullRouteOptions(routeOptions);
       checkInvalidVoiceInstructions(routeOptions);
       checkInvalidBannerInstructions(routeOptions);
@@ -29,7 +29,7 @@ public final class ValidationUtils {
   }
 
   private static void checkInvalidVoiceInstructions(RouteOptions routeOptions) {
-    Boolean instructions = routeOptions.voiceInstructions();
+    Boolean instructions = routeOptions.getVoiceInstructions();
     boolean invalidVoiceInstructions = instructions == null
       || !instructions;
     if (invalidVoiceInstructions) {
@@ -39,7 +39,7 @@ public final class ValidationUtils {
   }
 
   private static void checkInvalidBannerInstructions(RouteOptions routeOptions) {
-    Boolean instructions = routeOptions.bannerInstructions();
+    Boolean instructions = routeOptions.getBannerInstructions();
     boolean invalidBannerInstructions = instructions == null || !instructions;
     if (invalidBannerInstructions) {
       throw new MissingFormatArgumentException("Using the default milestones requires the "

@@ -84,7 +84,7 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val distanceTraveled: Double?
-        get() = routeLeg.distance()?.let { distance ->
+        get() = routeLeg.distance?.let { distance ->
             max(0.0, distance - distanceRemaining)
         }
 
@@ -94,7 +94,7 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val durationRemaining: Double?
-        get() = routeLeg.duration()?.let { routeDuration ->
+        get() = routeLeg.duration?.let { routeDuration ->
             fractionTraveled?.let { fractionTraveled ->
                 (1 - fractionTraveled) * routeDuration
             }
@@ -107,7 +107,7 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val fractionTraveled: Float?
-        get() = routeLeg.distance()
+        get() = routeLeg.distance
             ?.takeIf { distance -> distance > 0 }
             ?.let { routeDistance ->
                 distanceTraveled?.let { distanceTraveled ->
@@ -125,7 +125,7 @@ data class RouteLegProgress(
         get() = if (stepIndex == 0) {
             null
         } else {
-            routeLeg.steps()?.get(stepIndex - 1)
+            routeLeg.steps?.get(stepIndex - 1)
         }
 
     /**
@@ -134,7 +134,7 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val currentStep: LegStep?
-        get() = routeLeg.steps()?.get(stepIndex)
+        get() = routeLeg.steps?.get(stepIndex)
 
     /**
      * Get the next/upcoming step immediately after the current step. If the user is on the last step
@@ -143,8 +143,8 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val upComingStep: LegStep?
-        get() = if (((routeLeg.steps()?.size ?: 0) - 1) > stepIndex) {
-            routeLeg.steps()?.get(stepIndex + 1)
+        get() = if (((routeLeg.steps?.size ?: 0) - 1) > stepIndex) {
+            routeLeg.steps?.get(stepIndex + 1)
         } else {
             null
         }
@@ -156,8 +156,8 @@ data class RouteLegProgress(
      * @since 0.5.0
      */
     val followOnStep: LegStep?
-        get() = if (((routeLeg.steps()?.size ?: 0) - 2) > stepIndex) {
-            routeLeg.steps()?.get(stepIndex + 2)
+        get() = if (((routeLeg.steps?.size ?: 0) - 2) > stepIndex) {
+            routeLeg.steps?.get(stepIndex + 2)
         } else {
             null
         }
@@ -169,10 +169,10 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val currentStepProgress: RouteStepProgress?
-        get() = routeLeg.steps()?.get(stepIndex)?.let { currentStep ->
+        get() = routeLeg.steps?.get(stepIndex)?.let { currentStep ->
             RouteStepProgress(
                 step = currentStep,
-                nextStep = routeLeg.steps()?.getOrNull(stepIndex + 1),
+                nextStep = routeLeg.steps?.getOrNull(stepIndex + 1),
                 distanceRemaining = stepDistanceRemaining,
                 intersections = intersections,
                 currentIntersection = currentIntersection,

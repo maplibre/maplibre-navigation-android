@@ -77,12 +77,12 @@ object TriggerProperty {
                 currentLegProgress.currentStep?.let { currentStep ->
                     put(
                         STEP_DISTANCE_TOTAL_METERS,
-                        arrayOf(currentStep.distance())
+                        arrayOf(currentStep.distance)
                     )
 
                     put(
                         STEP_DURATION_TOTAL_SECONDS,
-                        arrayOf(currentStep.duration())
+                        arrayOf(currentStep.duration)
                     )
                 }
 
@@ -118,7 +118,7 @@ object TriggerProperty {
                     )
                 }
 
-                routeProgress.currentLeg?.steps()?.let { steps ->
+                routeProgress.currentLeg?.steps?.let { steps ->
                     put(
                         LAST_STEP,
                         arrayOf(
@@ -133,14 +133,14 @@ object TriggerProperty {
                     arrayOf(currentLegProgress.stepIndex, 0)
                 )
 
-                currentLegProgress.upComingStep?.duration()?.let { upComingStepDuration ->
+                currentLegProgress.upComingStep?.duration?.let { upComingStepDuration ->
                     put(
                         NEXT_STEP_DURATION_SECONDS,
                         arrayOf(upComingStepDuration)
                     )
                 }
 
-                currentLegProgress.upComingStep?.distance()?.let { upComingStepDistance ->
+                currentLegProgress.upComingStep?.distance?.let { upComingStepDistance ->
                     put(
                         NEXT_STEP_DISTANCE_METERS,
                         arrayOf(upComingStepDistance)
@@ -149,7 +149,7 @@ object TriggerProperty {
 
                 put(FIRST_LEG, arrayOf(routeProgress.legIndex, 0))
 
-                routeProgress.directionsRoute.legs()?.let { routeLegs ->
+                routeProgress.directionsRoute.legs?.let { routeLegs ->
                     put(
                         LAST_LEG, arrayOf(
                             routeProgress.legIndex,

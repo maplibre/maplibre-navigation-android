@@ -98,7 +98,7 @@ object NavigationHelper {
 
         val snappedPosition = (feature.geometry() as Point?)
 
-        val steps = directionsRoute.legs()!![legIndex].steps()
+        val steps = directionsRoute.legs!![legIndex].steps
         val nextManeuverPosition = nextManeuverPosition(
             stepIndex,
             steps!!, stepPoints
@@ -132,12 +132,12 @@ object NavigationHelper {
         directionsRoute: DirectionsRoute
     ): Double {
         var stepDistanceRemaining = stepDistanceRemaining
-        val steps = directionsRoute.legs()!![legIndex].steps()
+        val steps = directionsRoute.legs!![legIndex].steps
         if ((steps!!.size < stepIndex + 1)) {
             return stepDistanceRemaining
         }
         for (i in stepIndex + 1 until steps.size) {
-            stepDistanceRemaining += steps[i].distance()
+            stepDistanceRemaining += steps[i].distance
         }
         return stepDistanceRemaining
     }
@@ -154,12 +154,12 @@ object NavigationHelper {
         directionsRoute: DirectionsRoute
     ): Double {
         var legDistanceRemaining = legDistanceRemaining
-        if (directionsRoute.legs()!!.size < 2) {
+        if (directionsRoute.legs!!.size < 2) {
             return legDistanceRemaining
         }
 
-        for (i in legIndex + 1 until directionsRoute.legs()!!.size) {
-            legDistanceRemaining += directionsRoute.legs()!![i].distance()!!
+        for (i in legIndex + 1 until directionsRoute.legs.size) {
+            legDistanceRemaining += directionsRoute.legs[i].distance!!
         }
         return legDistanceRemaining
     }
@@ -190,10 +190,10 @@ object NavigationHelper {
 
         // Bearings need to be normalized so when the bearingAfter is 359 and the user heading is 1, we
         // count this as within the MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION.
-        val maneuver = previousRouteProgress.currentLegProgress!!.upComingStep!!.maneuver()
-        val initialBearing = maneuver.bearingBefore()!!
+        val maneuver = previousRouteProgress.currentLegProgress!!.upComingStep!!.maneuver
+        val initialBearing = maneuver.bearingBefore!!
         val initialBearingNormalized = MathUtils.wrap(initialBearing, 0.0, 360.0)
-        val finalBearing = maneuver.bearingAfter()!!
+        val finalBearing = maneuver.bearingAfter!!
         val finalBearingNormalized = MathUtils.wrap(finalBearing, 0.0, 360.0)
 
         val expectedTurnAngle =
@@ -233,8 +233,8 @@ object NavigationHelper {
         val route = routeProgress.directionsRoute
         val previousStepIndex = previousIndices.stepIndex()
         val previousLegIndex = previousIndices.legIndex()
-        val routeLegSize = route.legs()!!.size
-        val legStepSize = route.legs()!![routeProgress.legIndex].steps()!!.size
+        val routeLegSize = route.legs!!.size
+        val legStepSize = route.legs!![routeProgress.legIndex].steps!!.size
 
         val isOnLastLeg = previousLegIndex == routeLegSize - 1
         val isOnLastStep = previousStepIndex == legStepSize - 1
@@ -270,11 +270,11 @@ object NavigationHelper {
         directionsRoute: DirectionsRoute, currentPoints: List<Point>,
         legIndex: Int, stepIndex: Int
     ): List<Point> {
-        val legs = directionsRoute.legs()
+        val legs = directionsRoute.legs
         if (hasInvalidLegs(legs)) {
             return currentPoints
         }
-        val steps = legs!![legIndex].steps()
+        val steps = legs!![legIndex].steps
         if (hasInvalidSteps(steps)) {
             return currentPoints
         }
@@ -284,7 +284,7 @@ object NavigationHelper {
         }
         val step = steps!![stepIndex]
             ?: return currentPoints
-        val stepGeometry = step.geometry()
+        val stepGeometry = step.geometry
         if (stepGeometry != null) {
             return PolylineUtils.decode(stepGeometry, Constants.PRECISION_6)
         }
@@ -307,9 +307,9 @@ object NavigationHelper {
         upcomingStep: LegStep?
     ): List<StepIntersection> {
         val intersectionsWithNextManeuver: MutableList<StepIntersection> = ArrayList()
-        intersectionsWithNextManeuver.addAll(currentStep.intersections()!!)
-        if (upcomingStep != null && !upcomingStep.intersections()!!.isEmpty()) {
-            intersectionsWithNextManeuver.add(upcomingStep.intersections()!![FIRST_POINT])
+        intersectionsWithNextManeuver.addAll(currentStep.intersections!!)
+        if (upcomingStep != null && !upcomingStep.intersections!!.isEmpty()) {
+            intersectionsWithNextManeuver.add(upcomingStep.intersections!![FIRST_POINT])
         }
         return intersectionsWithNextManeuver
     }
@@ -345,7 +345,7 @@ object NavigationHelper {
         val distancesToIntersections: MutableList<Pair<StepIntersection, Double>> = ArrayList()
 
         for (intersection in intersections) {
-            val intersectionPoint = intersection.location()
+            val intersectionPoint = intersection.location
             if (firstStepPoint == intersectionPoint) {
                 distancesToIntersections.add(Pair(intersection, ZERO_METERS))
             } else {
@@ -423,7 +423,7 @@ object NavigationHelper {
         if (isValidUpcomingIntersection) {
             return intersections[nextIntersectionIndex]
         } else if (upcomingStep != null) {
-            val upcomingIntersections = upcomingStep.intersections()
+            val upcomingIntersections = upcomingStep.intersections
             if (upcomingIntersections != null && !upcomingIntersections.isEmpty()) {
                 return upcomingIntersections[FIRST_INTERSECTION]
             }
@@ -445,8 +445,8 @@ object NavigationHelper {
         currentLegAnnotation: CurrentLegAnnotation?,
         leg: RouteLeg, legDistanceRemaining: Double
     ): CurrentLegAnnotation? {
-        val legAnnotation = leg.annotation() ?: return null
-        val distanceList = legAnnotation.distance()
+        val legAnnotation = leg.annotation ?: return null
+        val distanceList = legAnnotation.distance
         if (distanceList == null || distanceList.isEmpty()) {
             return null
         }
@@ -458,10 +458,10 @@ object NavigationHelper {
             index = annotationResult.index,
             distance = distanceList[annotationResult.index],
             distanceToAnnotation = annotationResult.distanceToAnnotation,
-            duration = legAnnotation.duration()?.get(annotationResult.index),
-            speed = legAnnotation.speed()?.get(annotationResult.index),
-            maxSpeed = legAnnotation.maxspeed()?.get(annotationResult.index),
-            congestion = legAnnotation.congestion()?.get(annotationResult.index),
+            duration = legAnnotation.duration?.get(annotationResult.index),
+            speed = legAnnotation.speed?.get(annotationResult.index),
+            maxSpeed = legAnnotation.maxSpeed?.get(annotationResult.index),
+            congestion = legAnnotation.congestion?.get(annotationResult.index),
         )
     }
 
@@ -543,7 +543,7 @@ object NavigationHelper {
     fun nextManeuverPosition(stepIndex: Int, steps: List<LegStep>, coords: List<Point?>): Point? {
         // If there is an upcoming step, use it's maneuver as the position.
         if (steps.size > (stepIndex + 1)) {
-            return steps[stepIndex + 1].maneuver().location()
+            return steps[stepIndex + 1].maneuver.location
         }
         return if (!coords.isEmpty()) coords[coords.size - 1] else null
     }
@@ -553,7 +553,7 @@ object NavigationHelper {
         legDistanceRemaining: Double, distanceAnnotationList: List<Double>
     ): AnnotationResult {
         val legDistances: List<Double> = ArrayList(distanceAnnotationList)
-        val totalLegDistance = leg.distance()
+        val totalLegDistance = leg.distance
         val distanceTraveled = totalLegDistance!! - legDistanceRemaining
 
         var distanceIndex = 0

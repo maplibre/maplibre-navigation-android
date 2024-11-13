@@ -444,9 +444,9 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      */
     private FeatureCollection waypointFeatureCollection(DirectionsRoute route) {
         final List<Feature> waypointFeatures = new ArrayList<>();
-        for (RouteLeg leg : route.legs()) {
+        for (RouteLeg leg : route.getLegs()) {
             waypointFeatures.add(getPointFromLineString(leg, 0));
-            waypointFeatures.add(getPointFromLineString(leg, leg.steps().size() - 1));
+            waypointFeatures.add(getPointFromLineString(leg, leg.getSteps().size() - 1));
         }
         return FeatureCollection.fromFeatures(waypointFeatures);
     }
@@ -942,8 +942,8 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
 
     private Feature getPointFromLineString(RouteLeg leg, int index) {
         Feature feature = Feature.fromGeometry(Point.fromLngLat(
-                leg.steps().get(index).maneuver().location().longitude(),
-                leg.steps().get(index).maneuver().location().latitude()
+                leg.getSteps().get(index).getManeuver().getLocation().longitude(),
+                leg.getSteps().get(index).getManeuver().getLocation().latitude()
         ));
         feature.addStringProperty(SOURCE_KEY, WAYPOINT_SOURCE_ID);
         feature.addStringProperty("waypoint",
@@ -1103,11 +1103,11 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
      */
     private FeatureCollection addTrafficToSource(DirectionsRoute route, int index) {
         final List<Feature> features = new ArrayList<>();
-        LineString originalGeometry = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+        LineString originalGeometry = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
         buildRouteFeatureFromGeometry(index, features, originalGeometry);
         routeLineStrings.put(originalGeometry, route);
 
-        LineString lineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
         buildTrafficFeaturesFromRoute(route, index, features, lineString);
         return FeatureCollection.fromFeatures(features);
     }
@@ -1121,11 +1121,11 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
 
     private void buildTrafficFeaturesFromRoute(DirectionsRoute route, int index,
                                                List<Feature> features, LineString lineString) {
-        for (RouteLeg leg : route.legs()) {
-            if (leg.annotation() != null && leg.annotation().congestion() != null) {
-                for (int i = 0; i < leg.annotation().congestion().size(); i++) {
+        for (RouteLeg leg : route.getLegs()) {
+            if (leg.getAnnotation() != null && leg.getAnnotation().getCongestion() != null) {
+                for (int i = 0; i < leg.getAnnotation().getCongestion().size(); i++) {
                     // See https://github.com/mapbox/maplibre-navigation-android/issues/353
-                    if (leg.annotation().congestion().size() + 1 <= lineString.coordinates().size()) {
+                    if (leg.getAnnotation().getCongestion().size() + 1 <= lineString.coordinates().size()) {
 
                         List<Point> points = new ArrayList<>();
                         points.add(lineString.coordinates().get(i));
@@ -1133,7 +1133,7 @@ public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListen
 
                         LineString congestionLineString = LineString.fromLngLats(points);
                         Feature feature = Feature.fromGeometry(congestionLineString);
-                        feature.addStringProperty(CONGESTION_KEY, leg.annotation().congestion().get(i));
+                        feature.addStringProperty(CONGESTION_KEY, leg.getAnnotation().getCongestion().get(i));
                         feature.addStringProperty(SOURCE_KEY, String.format(Locale.US, ID_FORMAT,
                                 GENERIC_ROUTE_SOURCE_ID, index));
                         feature.addNumberProperty(INDEX_KEY, index);

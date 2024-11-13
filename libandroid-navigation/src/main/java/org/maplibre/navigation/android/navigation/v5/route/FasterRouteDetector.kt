@@ -45,15 +45,15 @@ class FasterRouteDetector : FasterRoute() {
     ): Boolean {
         if (validRouteResponse(response)) {
             val currentDurationRemaining = routeProgress.durationRemaining
-            val newRoute = response.routes()[0]
+            val newRoute = response.routes[0]
 
             if (hasLegs(newRoute)) {
                 // Extract the first leg
-                val routeLeg = newRoute.legs()!![0]
+                val routeLeg = newRoute.legs!![0]
                 if (hasAtLeastTwoSteps(routeLeg)) {
                     // Extract the first two steps
-                    val firstStep = routeLeg.steps()!![0]
-                    val secondStep = routeLeg.steps()!![1]
+                    val firstStep = routeLeg.steps!![0]
+                    val secondStep = routeLeg.steps[1]
                     // Check for valid first and second steps of the new route
                     if (!validFirstStep(firstStep) || !validSecondStep(secondStep, routeProgress)) {
                         return false
@@ -61,7 +61,7 @@ class FasterRouteDetector : FasterRoute() {
                 }
             }
             // New route must be at least 10% faster
-            if (newRoute.duration() <= (0.9 * currentDurationRemaining)) {
+            if (newRoute.duration <= (0.9 * currentDurationRemaining)) {
                 return true
             }
         }
@@ -69,11 +69,11 @@ class FasterRouteDetector : FasterRoute() {
     }
 
     private fun hasLegs(newRoute: DirectionsRoute): Boolean {
-        return newRoute.legs() != null && !newRoute.legs()!!.isEmpty()
+        return newRoute.legs != null && !newRoute.legs!!.isEmpty()
     }
 
     private fun hasAtLeastTwoSteps(routeLeg: RouteLeg): Boolean {
-        return routeLeg.steps() != null && routeLeg.steps()!!.size > 2
+        return routeLeg.steps != null && routeLeg.steps!!.size > 2
     }
 
     /**
@@ -97,7 +97,7 @@ class FasterRouteDetector : FasterRoute() {
      * @return true if valid, false if not
      */
     private fun validFirstStep(firstStep: LegStep): Boolean {
-        return firstStep.duration() > NavigationConstants.NAVIGATION_MEDIUM_ALERT_DURATION
+        return firstStep.duration > NavigationConstants.NAVIGATION_MEDIUM_ALERT_DURATION
     }
 
     /**
@@ -109,7 +109,7 @@ class FasterRouteDetector : FasterRoute() {
      */
     private fun validRouteResponse(response: DirectionsResponse?): Boolean {
         return response != null
-                && !response.routes().isEmpty()
+                && !response.routes.isEmpty()
     }
 
     private fun validRouteDurationRemaining(routeProgress: RouteProgress): Boolean {

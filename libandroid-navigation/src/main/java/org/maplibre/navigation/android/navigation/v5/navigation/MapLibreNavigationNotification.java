@@ -94,13 +94,13 @@ class MapLibreNavigationNotification implements NavigationNotification {
   }
 
   private void initializeDistanceFormatter(Context context, MapLibreNavigation mapLibreNavigation) {
-    RouteOptions routeOptions = mapLibreNavigation.getRoute().routeOptions();
+    RouteOptions routeOptions = mapLibreNavigation.getRoute().getRouteOptions();
     LocaleUtils localeUtils = new LocaleUtils();
     String language = localeUtils.inferDeviceLanguage(context);
     String unitType = localeUtils.getUnitTypeForDeviceLocale(context);
     if (routeOptions != null) {
-      language = routeOptions.language();
-      unitType = routeOptions.voiceUnits();
+      language = routeOptions.getLanguage();
+      unitType = routeOptions.getVoiceUnits();
     }
     MapLibreNavigationOptions mapLibreNavigationOptions = mapLibreNavigation.options();
     distanceFormatter = new DistanceFormatter(context, language, unitType, mapLibreNavigationOptions.roundingIncrement());
@@ -186,18 +186,18 @@ class MapLibreNavigationNotification implements NavigationNotification {
 
   private void updateInstructionText(LegStep step) {
     if (hasInstructions(step) && (instructionText == null || newInstructionText(step))) {
-      instructionText = step.bannerInstructions().get(0).primary().text();
+      instructionText = step.getBannerInstructions().get(0).getPrimary().getText();
       collapsedNotificationRemoteViews.setTextViewText(R.id.notificationInstructionText, instructionText);
       expandedNotificationRemoteViews.setTextViewText(R.id.notificationInstructionText, instructionText);
     }
   }
 
   private boolean hasInstructions(LegStep step) {
-    return step.bannerInstructions() != null && !step.bannerInstructions().isEmpty();
+    return step.getBannerInstructions() != null && !step.getBannerInstructions().isEmpty();
   }
 
   private boolean newInstructionText(LegStep step) {
-    return !instructionText.equals(step.bannerInstructions().get(0).primary().text());
+    return !instructionText.equals(step.getBannerInstructions().get(0).getPrimary().getText());
   }
 
   private void updateDistanceText(RouteProgress routeProgress) {

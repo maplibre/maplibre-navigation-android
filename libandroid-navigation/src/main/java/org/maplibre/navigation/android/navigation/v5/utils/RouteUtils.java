@@ -69,8 +69,8 @@ public class RouteUtils {
    */
   public boolean isNewRoute(@Nullable RouteProgress previousRouteProgress,
                             @NonNull DirectionsRoute directionsRoute) {
-    return previousRouteProgress == null || !previousRouteProgress.getDirectionsRoute().geometry()
-      .equals(directionsRoute.geometry());
+    return previousRouteProgress == null || !previousRouteProgress.getDirectionsRoute().getGeometry()
+      .equals(directionsRoute.getGeometry());
   }
 
   /**
@@ -91,7 +91,7 @@ public class RouteUtils {
     if (isValidArrivalManeuverType) {
       LegStep currentStep = routeProgress.getCurrentLegProgress().getCurrentStep();
       BannerInstructions currentInstructions = ((BannerInstructionMilestone) milestone).getBannerInstructions();
-      List<BannerInstructions> bannerInstructions = currentStep.bannerInstructions();
+      List<BannerInstructions> bannerInstructions = currentStep.getBannerInstructions();
       if (hasValidInstructions(bannerInstructions, currentInstructions)) {
         int lastInstructionIndex = bannerInstructions.size() - 1;
         BannerInstructions lastInstructions = bannerInstructions.get(lastInstructionIndex);
@@ -110,7 +110,7 @@ public class RouteUtils {
    * @since 0.8.0
    */
   public boolean isLastLeg(RouteProgress routeProgress) {
-    List<RouteLeg> legs = routeProgress.getDirectionsRoute().legs();
+    List<RouteLeg> legs = routeProgress.getDirectionsRoute().getLegs();
     RouteLeg currentLeg = routeProgress.getCurrentLeg();
     return currentLeg.equals(legs.get(legs.size() - 1));
   }
@@ -128,10 +128,10 @@ public class RouteUtils {
    */
   @Nullable
   public List<Point> calculateRemainingWaypoints(RouteProgress routeProgress) {
-    if (routeProgress.getDirectionsRoute().routeOptions() == null) {
+    if (routeProgress.getDirectionsRoute().getRouteOptions() == null) {
       return null;
     }
-    List<Point> coordinates = new ArrayList<>(routeProgress.getDirectionsRoute().routeOptions().coordinates());
+    List<Point> coordinates = new ArrayList<>(routeProgress.getDirectionsRoute().getRouteOptions().getCoordinates());
     int coordinatesSize = coordinates.size();
     int remainingWaypoints = routeProgress.getRemainingWaypoints();
     if (coordinatesSize < remainingWaypoints) {
@@ -153,13 +153,13 @@ public class RouteUtils {
    */
   @Nullable
   public String[] calculateRemainingWaypointNames(RouteProgress routeProgress) {
-    RouteOptions routeOptions = routeProgress.getDirectionsRoute().routeOptions();
-    if (routeOptions == null || TextUtils.isEmpty(routeOptions.waypointNames())) {
+    RouteOptions routeOptions = routeProgress.getDirectionsRoute().getRouteOptions();
+    if (routeOptions == null || TextUtils.isEmpty(routeOptions.getWaypointNames())) {
       return null;
     }
-    String allWaypointNames = routeOptions.waypointNames();
+    String allWaypointNames = routeOptions.getWaypointNames();
     String[] names = allWaypointNames.split(SEMICOLON);
-    int coordinatesSize = routeProgress.getDirectionsRoute().routeOptions().coordinates().size();
+    int coordinatesSize = routeProgress.getDirectionsRoute().getRouteOptions().getCoordinates().size();
     String[] remainingWaypointNames = Arrays.copyOfRange(names,
       coordinatesSize - routeProgress.getRemainingWaypoints(), coordinatesSize);
     String[] waypointNames = new String[remainingWaypointNames.length + ORIGIN_WAYPOINT_NAME_THRESHOLD];
@@ -181,7 +181,7 @@ public class RouteUtils {
    * @since 0.10.0
    */
   public Location createFirstLocationFromRoute(DirectionsRoute route) {
-    List<Point> coordinates = route.routeOptions().coordinates();
+    List<Point> coordinates = route.getRouteOptions().getCoordinates();
     Point origin = coordinates.get(FIRST_COORDINATE);
     Location forcedLocation = new Location(FORCED_LOCATION);
     forcedLocation.setLatitude(origin.latitude());
@@ -213,9 +213,9 @@ public class RouteUtils {
   @Nullable
   public BannerInstructions findCurrentBannerInstructions(LegStep currentStep, double stepDistanceRemaining) {
     if (isValidBannerInstructions(currentStep)) {
-      List<BannerInstructions> instructions = sortBannerInstructions(currentStep.bannerInstructions());
+      List<BannerInstructions> instructions = sortBannerInstructions(currentStep.getBannerInstructions());
       for (BannerInstructions instruction : instructions) {
-        double distanceAlongGeometry = instruction.distanceAlongGeometry();
+        double distanceAlongGeometry = instruction.getDistanceAlongGeometry();
         if (distanceAlongGeometry >= stepDistanceRemaining) {
           return instruction;
         }
@@ -226,7 +226,7 @@ public class RouteUtils {
   }
 
   private boolean isValidBannerInstructions(LegStep currentStep) {
-    return isValidStep(currentStep) && hasInstructions(currentStep.bannerInstructions());
+    return isValidStep(currentStep) && hasInstructions(currentStep.getBannerInstructions());
   }
 
   private List<BannerInstructions> sortBannerInstructions(List<BannerInstructions> instructions) {
@@ -234,7 +234,7 @@ public class RouteUtils {
     Collections.sort(sortedInstructions, new Comparator<BannerInstructions>() {
       @Override
       public int compare(BannerInstructions instructions, BannerInstructions nextInstructions) {
-        return Double.compare(instructions.distanceAlongGeometry(), nextInstructions.distanceAlongGeometry());
+        return Double.compare(instructions.getDistanceAlongGeometry(), nextInstructions.getDistanceAlongGeometry());
       }
     });
     return sortedInstructions;
@@ -274,9 +274,9 @@ public class RouteUtils {
   @Nullable
   public VoiceInstructions findCurrentVoiceInstructions(LegStep currentStep, double stepDistanceRemaining) {
     if (isValidVoiceInstructions(currentStep)) {
-      List<VoiceInstructions> instructions = sortVoiceInstructions(currentStep.voiceInstructions());
+      List<VoiceInstructions> instructions = sortVoiceInstructions(currentStep.getVoiceInstructions());
       for (VoiceInstructions instruction : instructions) {
-        double distanceAlongGeometry = instruction.distanceAlongGeometry();
+        double distanceAlongGeometry = instruction.getDistanceAlongGeometry();
         if (distanceAlongGeometry >= stepDistanceRemaining) {
           return instruction;
         }
@@ -287,7 +287,7 @@ public class RouteUtils {
   }
 
   private boolean isValidVoiceInstructions(LegStep currentStep) {
-    return isValidStep(currentStep) && hasInstructions(currentStep.voiceInstructions());
+    return isValidStep(currentStep) && hasInstructions(currentStep.getVoiceInstructions());
   }
 
   private List<VoiceInstructions> sortVoiceInstructions(List<VoiceInstructions> instructions) {
@@ -295,7 +295,7 @@ public class RouteUtils {
     Collections.sort(sortedInstructions, new Comparator<VoiceInstructions>() {
       @Override
       public int compare(VoiceInstructions instructions, VoiceInstructions nextInstructions) {
-        return Double.compare(instructions.distanceAlongGeometry(), nextInstructions.distanceAlongGeometry());
+        return Double.compare(instructions.getDistanceAlongGeometry(), nextInstructions.getDistanceAlongGeometry());
       }
     });
     return sortedInstructions;
@@ -303,11 +303,11 @@ public class RouteUtils {
 
   private boolean upcomingStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
     return routeProgress.getCurrentLegProgress().getUpComingStep() != null
-      && routeProgress.getCurrentLegProgress().getUpComingStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
+      && routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().getType().getText().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
   }
 
   private boolean currentStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
-    return routeProgress.getCurrentLegProgress().getCurrentStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
+    return routeProgress.getCurrentLegProgress().getCurrentStep().getManeuver().getType().getText().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
   }
 
   private boolean isValidStep(LegStep step) {
@@ -332,6 +332,6 @@ public class RouteUtils {
   }
 
   private BannerText retrievePrimaryOrSecondaryBannerText(boolean findPrimary, BannerInstructions instruction) {
-    return findPrimary ? instruction.primary() : instruction.secondary();
+    return findPrimary ? instruction.getPrimary() : instruction.getSecondary();
   }
 }
