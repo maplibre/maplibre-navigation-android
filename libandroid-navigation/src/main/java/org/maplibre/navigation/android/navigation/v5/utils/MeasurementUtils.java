@@ -9,6 +9,8 @@ import org.maplibre.turf.TurfMisc;
 
 import static org.maplibre.turf.TurfConstants.UNIT_METERS;
 
+import android.text.TextUtils;
+
 public final class MeasurementUtils {
 
     private MeasurementUtils() {

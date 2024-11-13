@@ -1,6 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.utils;
 
 import android.location.Location;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
