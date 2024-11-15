@@ -13,6 +13,7 @@ import org.maplibre.navigation.android.navigation.v5.models.MaxSpeed
  * @since 0.13.0
  */
 data class CurrentLegAnnotation(
+
     /**
      * The index used to retrieve the annotation values from each array in
      * [org.maplibre.navigation.android.navigation.v5.models].

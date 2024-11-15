@@ -32,7 +32,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
-        options = MapLibreNavigationOptions.builder().build()
+        options = MapLibreNavigationOptions()
 
         offRouteDetector = OffRouteDetector()
         offRouteDetector!!.setOffRouteCallback(mockCallback)
@@ -62,8 +62,8 @@ class OffRouteDetectorTest : BaseTest() {
         Mockito.`when`(mockProgress!!.distanceRemaining).thenReturn(1000.0)
         offRouteDetector!!.isUserOffRoute(mockLocation, mockProgress, options)
         val target = buildPointAwayFromLocation(
-            mapboxOffice!!,
-            options!!.minimumDistanceBeforeRerouting() + 1
+            mapboxOffice,
+            options!!.offRouteMinimumDistanceMetersBeforeWrongDirection + 1
         )
         val locationOverMinimumDistance =
             buildDefaultLocationUpdate(target.longitude(), target.latitude())
@@ -385,9 +385,9 @@ class OffRouteDetectorTest : BaseTest() {
 
     @Test
     fun isUserOffRoute_AssertTrueWhenOnRouteMovingAwayWithNotEnoughRightDirectionTraveling() {
-            val options = options!!.toBuilder()
-                .offRouteMinimumDistanceMetersBeforeRightDirection(60.0)
-                .build()
+            val options = options!!.copy(
+                offRouteMinimumDistanceMetersBeforeRightDirection = 60.0
+            )
 
             val routeProgress = buildDefaultTestRouteProgress()
             val currentStep: LegStep =

@@ -61,8 +61,8 @@ class NavigationNotificationProviderTest {
         val options = Mockito.mock(
             MapLibreNavigationOptions::class.java
         )
-        Mockito.`when`(options.navigationNotification()).thenReturn(notification)
-        Mockito.`when`(mapLibreNavigation.options()).thenReturn(options)
+        Mockito.`when`(options.navigationNotification).thenReturn(notification)
+        Mockito.`when`(mapLibreNavigation.options).thenReturn(options)
         return mapLibreNavigation
     }
 }

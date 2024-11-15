@@ -14,8 +14,8 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
  */
 class StepMilestone(
     identifier: Int,
-    instruction: Instruction?,
-    trigger: Trigger.Statement?
+    instruction: Instruction? = null,
+    trigger: Trigger.Statement? = null
 ) : Milestone(identifier, instruction, trigger) {
     private var called = false
 

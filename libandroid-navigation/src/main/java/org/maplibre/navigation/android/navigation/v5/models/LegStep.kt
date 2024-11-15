@@ -10,6 +10,15 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class LegStep(
+
+    /**
+     * Gives the geometry of the leg step as encoded polyline string.
+     *
+     * @since 1.0.0
+     */
+    //TODO fabi755, was optional before, do we can force non-null here?
+    val geometry: String,
+
     /**
      * The distance traveled from the maneuver to the next [LegStep] in meters.
      *
@@ -47,13 +56,6 @@ data class LegStep(
      * @see SpeedLimitSign
      */
     val speedLimitSign: SpeedLimitSign?,
-
-    /**
-     * Gives the geometry of the leg step as encoded polyline string.
-     *
-     * @since 1.0.0
-     */
-    val geometry: String?,
 
     /**
      * String with the name of the way along which the travel proceeds.

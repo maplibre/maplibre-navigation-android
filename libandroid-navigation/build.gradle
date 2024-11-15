@@ -93,6 +93,7 @@ dependencies {
     testImplementation dependenciesList.robolectric
     implementation dependenciesList.androidxCore
     implementation dependenciesList.kotlinstdlib
+    testImplementation "io.mockk:mockk:1.13.13"
 }
 
 apply from: 'javadoc.gradle'

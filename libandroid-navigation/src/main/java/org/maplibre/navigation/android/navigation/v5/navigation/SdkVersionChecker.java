@@ -1,5 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.navigation;
 
+@Deprecated
 public class SdkVersionChecker {
 
   private final int currentSdkVersion;

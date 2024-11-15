@@ -61,7 +61,7 @@ data class RouteStepProgress(
      *
      * @since 0.13.0
      */
-    val intersectionDistancesAlongStep: List<Pair<StepIntersection, Double>>?,
+    val intersectionDistancesAlongStep: Map<StepIntersection, Double>?,
 
     val step: LegStep,
 

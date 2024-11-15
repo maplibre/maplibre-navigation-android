@@ -19,6 +19,22 @@ data class DirectionsRoute(
 //    val routeIndex: String?,
 
     /**
+     * Gives the geometry of the route. Commonly used to draw the route on the map view.
+     *
+     * @since 1.0.0
+     */
+    val geometry: String,
+
+    /**
+     * A Leg is a route between only two waypoints.
+     *
+     * @since 1.0.0
+     */
+    //TODO fabi755, was optional before, do we can force non-null here?
+    val legs: List<RouteLeg>,
+
+
+    /**
      * The distance traveled from origin to destination.
      *
      * @return a double number with unit meters
@@ -45,13 +61,6 @@ data class DirectionsRoute(
     val durationTypical: Double?,
 
     /**
-     * Gives the geometry of the route. Commonly used to draw the route on the map view.
-     *
-     * @since 1.0.0
-     */
-    val geometry: String?,
-
-    /**
      * The calculated weight of the route.
      *
      * @since 2.1.0
@@ -67,14 +76,6 @@ data class DirectionsRoute(
      */
     @SerialName("weight_name")
     val weightName: String?,
-
-    /**
-     * A Leg is a route between only two waypoints.
-     *
-     * @since 1.0.0
-     */
-    val legs: List<RouteLeg>?,
-
     /**
      * Holds onto the parameter information used when making the directions request. Useful for
      * re-requesting a directions route using the same information previously used.

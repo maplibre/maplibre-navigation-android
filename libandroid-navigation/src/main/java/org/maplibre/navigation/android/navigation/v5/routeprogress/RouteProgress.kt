@@ -78,7 +78,7 @@ data class RouteProgress(
 
     val currentLegAnnotation: CurrentLegAnnotation?,
 
-    val intersectionDistancesAlongStep: List<Pair<StepIntersection, Double>>?,
+    val intersectionDistancesAlongStep: Map<StepIntersection, Double>?,
 ) {
 
     /**
@@ -132,22 +132,20 @@ data class RouteProgress(
      *
      * @since 0.1.0
      */
-    val currentLegProgress: RouteLegProgress?
-        get() = directionsRoute.legs?.get(legIndex)?.let { currentLeg ->
-            RouteLegProgress(
-                routeLeg = currentLeg,
-                stepIndex = stepIndex,
-                distanceRemaining = legDistanceRemaining,
-                stepDistanceRemaining = stepDistanceRemaining,
-                currentStepPoints = currentStepPoints,
-                upcomingStepPoints = upcomingStepPoints,
-                intersections = intersections,
-                currentIntersection = currentIntersection,
-                upcomingIntersection = upcomingIntersection,
-                intersectionDistancesAlongStep = intersectionDistancesAlongStep,
-                currentLegAnnotation = currentLegAnnotation,
-            )
-        }
+    val currentLegProgress: RouteLegProgress
+        get() = RouteLegProgress(
+            routeLeg = directionsRoute.legs[legIndex],
+            stepIndex = stepIndex,
+            distanceRemaining = legDistanceRemaining,
+            stepDistanceRemaining = stepDistanceRemaining,
+            currentStepPoints = currentStepPoints,
+            upcomingStepPoints = upcomingStepPoints,
+            intersections = intersections,
+            currentIntersection = currentIntersection,
+            upcomingIntersection = upcomingIntersection,
+            intersectionDistancesAlongStep = intersectionDistancesAlongStep,
+            currentLegAnnotation = currentLegAnnotation,
+        )
 
 //    int lastStepIndex = routeLeg().steps().size() - 1;
 //    boolean isOnLastStep = stepIndex() == lastStepIndex;

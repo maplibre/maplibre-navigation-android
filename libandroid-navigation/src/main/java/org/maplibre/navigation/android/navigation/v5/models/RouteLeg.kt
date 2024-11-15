@@ -17,7 +17,8 @@ data class RouteLeg(
      * @return a double number with unit meters
      * @since 1.0.0
      */
-    val distance: Double?,
+    //TODO fabi755, was optional before, do we can force non-null here?
+    val distance: Double,
 
     /**
      * The estimated travel time from one waypoint to another.
@@ -25,7 +26,17 @@ data class RouteLeg(
      * @return a double number with unit seconds
      * @since 1.0.0
      */
-    val duration: Double?,
+    //TODO fabi755, was optional before, do we can force non-null here?
+    val duration: Double,
+
+    /**
+     * Gives a List including all the steps to get from one waypoint to another.
+     *
+     * @return List of [LegStep]
+     * @since 1.0.0
+     */
+    //TODO fabi755, was optional before, do we can force non-null here?
+    val steps: List<LegStep>,
 
     /**
      * The typical travel time for traversing this RouteLeg. There's a delay along the RouteLeg
@@ -53,14 +64,6 @@ data class RouteLeg(
      * to look up the admin for each intersection in this array.
      */
     val admins: List<Admin>?,
-
-    /**
-     * Gives a List including all the steps to get from one waypoint to another.
-     *
-     * @return List of [LegStep]
-     * @since 1.0.0
-     */
-    val steps: List<LegStep>?,
 
     /**
      * A list of incidents that occur on this leg.

@@ -31,9 +31,9 @@ class NavigationNotificationProvider {
   }
 
   private NavigationNotification buildNotificationFrom(Context context, MapLibreNavigation mapLibreNavigation) {
-    MapLibreNavigationOptions options = mapLibreNavigation.options();
-    if (options.navigationNotification() != null) {
-      return options.navigationNotification();
+    MapLibreNavigationOptions options = mapLibreNavigation.getOptions();
+    if (options.getNavigationNotification() != null) {
+      return options.getNavigationNotification();
     } else {
       return new MapLibreNavigationNotification(context, mapLibreNavigation);
     }

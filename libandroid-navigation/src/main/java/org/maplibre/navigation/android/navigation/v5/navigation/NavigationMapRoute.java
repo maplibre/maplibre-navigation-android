@@ -88,6 +88,7 @@ import java.util.Locale;
  *
  * @since 0.4.0
  */
+@Deprecated
 public class NavigationMapRoute implements MapView.OnDidFinishLoadingStyleListener,
         MapLibreMap.OnMapClickListener, LifecycleObserver {
 

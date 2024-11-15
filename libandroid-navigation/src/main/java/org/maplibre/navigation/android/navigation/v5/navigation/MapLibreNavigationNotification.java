@@ -102,8 +102,8 @@ class MapLibreNavigationNotification implements NavigationNotification {
       language = routeOptions.getLanguage();
       unitType = routeOptions.getVoiceUnits();
     }
-    MapLibreNavigationOptions mapLibreNavigationOptions = mapLibreNavigation.options();
-    distanceFormatter = new DistanceFormatter(context, language, unitType, mapLibreNavigationOptions.roundingIncrement());
+    MapLibreNavigationOptions mapLibreNavigationOptions = mapLibreNavigation.getOptions();
+    distanceFormatter = new DistanceFormatter(context, language, unitType, mapLibreNavigationOptions.getRoundingIncrement());
   }
 
   private void createNotificationChannel(Context context) {
@@ -216,10 +216,10 @@ class MapLibreNavigationNotification implements NavigationNotification {
   }
 
   private void updateArrivalTime(RouteProgress routeProgress) {
-    MapLibreNavigationOptions options = mapLibreNavigation.options();
+    MapLibreNavigationOptions options = mapLibreNavigation.getOptions();
     Calendar time = Calendar.getInstance();
     double durationRemaining = routeProgress.getDurationRemaining();
-    int timeFormatType = options.timeFormatType();
+    int timeFormatType = options.getTimeFormatType().getId();
     String arrivalTime = TimeFormatter.formatTime(time, durationRemaining, timeFormatType, isTwentyFourHourFormat);
     String formattedArrivalTime = String.format(etaFormat, arrivalTime);
     collapsedNotificationRemoteViews.setTextViewText(R.id.notificationArrivalText, formattedArrivalTime);

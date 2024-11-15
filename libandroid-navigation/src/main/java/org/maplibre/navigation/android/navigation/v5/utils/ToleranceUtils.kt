@@ -29,7 +29,7 @@ object ToleranceUtils {
 
             val closestIntersection = TurfClassification.nearestPoint(snappedPoint, intersectionsPoints)
             if (closestIntersection == snappedPoint) {
-                return navigationOptions.minimumDistanceBeforeRerouting()
+                return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection
             }
 
             val distanceToNextIntersection = TurfMeasurement.distance(
@@ -38,11 +38,11 @@ object ToleranceUtils {
                 TurfConstants.UNIT_METERS
             )
 
-            if (distanceToNextIntersection <= navigationOptions.maneuverZoneRadius()) {
-                return navigationOptions.minimumDistanceBeforeRerouting() / 2
+            if (distanceToNextIntersection <= navigationOptions.maneuverZoneRadius) {
+                return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection / 2
             }
         }
 
-        return navigationOptions.minimumDistanceBeforeRerouting()
+        return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection
     }
 }

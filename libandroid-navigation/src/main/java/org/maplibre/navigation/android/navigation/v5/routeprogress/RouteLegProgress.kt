@@ -75,7 +75,7 @@ data class RouteLegProgress(
 
     val upcomingIntersection: StepIntersection?,
 
-    val intersectionDistancesAlongStep: List<Pair<StepIntersection, Double>>?
+    val intersectionDistancesAlongStep: Map<StepIntersection, Double>?
 ) {
 
     /**

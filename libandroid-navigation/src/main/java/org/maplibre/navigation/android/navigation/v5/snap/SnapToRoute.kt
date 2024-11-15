@@ -11,6 +11,7 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
 
+
 /**
  * This attempts to snap the user to the closest position along the route. Prior to snapping the
  * user, their location's checked to ensure that the user didn't veer off-route. If your application
@@ -29,17 +30,14 @@ class SnapToRoute : Snap() {
     /**
      * Calculate a snapped location along the route. Latitude, longitude and bearing are provided.
      *
-     * @param location      Current raw user location
+     * @param location Current raw user location
      * @param routeProgress Current route progress
      * @return Snapped location along route
      */
     override fun getSnappedLocation(location: Location, routeProgress: RouteProgress): Location {
-        return routeProgress.currentStepPoints?.let { currentStepPoints ->
-            snapLocationLatLng(location, currentStepPoints)
-                .apply {
-                    bearing = snapLocationBearing(location, routeProgress)
-                }
-        } ?: location
+        val snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints!!)
+        snappedLocation.bearing = snapLocationBearing(location, routeProgress)
+        return snappedLocation
     }
 
     /**
@@ -53,7 +51,7 @@ class SnapToRoute : Snap() {
      * If the step distance remaining is zero, the distance ahead is the first point of upcoming leg.
      * This way, an accurate bearing is upheld transitioning between legs.
      *
-     * @param location      Current raw user location
+     * @param location Current raw user location
      * @param routeProgress Current route progress
      * @return Float bearing snapped to route
      */
@@ -61,14 +59,17 @@ class SnapToRoute : Snap() {
         val currentPoint = getCurrentPoint(routeProgress)
         val futurePoint = getFuturePoint(routeProgress)
         if (currentPoint == null || futurePoint == null) {
-            return lastSnappedBearing ?: location.bearing
+            return if (lastSnappedBearing != null) {
+                lastSnappedBearing!!
+            } else {
+                location.bearing
+            }
         }
 
         // Get bearing and convert azimuth to degrees
         val azimuth = TurfMeasurement.bearing(currentPoint, futurePoint)
-        return wrap(azimuth, 0.0, 360.0)
-            .toFloat()
-            .also { bearing -> lastSnappedBearing = bearing }
+        lastSnappedBearing = wrap(azimuth, 0.0, 360.0).toFloat()
+        return lastSnappedBearing!!
     }
 
     /**
@@ -103,9 +104,7 @@ class SnapToRoute : Snap() {
      * @return Current step point or null if no current leg process is available
      */
     private fun getCurrentPoint(routeProgress: RouteProgress): Point? {
-        return routeProgress.currentLegProgress?.let { currentLegProgress ->
-            getCurrentStepPoint(currentLegProgress, 0.0)
-        }
+        return getCurrentStepPoint(routeProgress.currentLegProgress, 0.0)
     }
 
     /**
@@ -116,14 +115,12 @@ class SnapToRoute : Snap() {
      * @return Future point or null if no following point is available
      */
     private fun getFuturePoint(routeProgress: RouteProgress): Point? {
-        return routeProgress.currentLegProgress?.let { currentLegProgress ->
-            if (currentLegProgress.distanceRemaining > 1) {
-                // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
-                getCurrentStepPoint(currentLegProgress, 1.0)
-            } else {
-                // User has reached the end of steps. Use upcoming leg for future point if available.
-                getUpcomingLegPoint(routeProgress)
-            }
+        return if (routeProgress.currentLegProgress.distanceRemaining > 1) {
+            // User has not reaching the end of current leg. Use traveled distance + 1 meter for future point
+            getCurrentStepPoint(routeProgress.currentLegProgress, 1.0)
+        } else {
+            // User has reached the end of steps. Use upcoming leg for future point if available.
+            getUpcomingLegPoint(routeProgress)
         }
     }
 
@@ -148,7 +145,7 @@ class SnapToRoute : Snap() {
             ?.takeIf { coordinates -> coordinates.isNotEmpty() }
             ?: return null
 
-        return currentLegProgress.distanceTraveled?.let { distanceTraveled ->
+        return currentLegProgress.currentStepProgress?.distanceTraveled?.let { distanceTraveled ->
             TurfMeasurement.along(
                 currentStepLineString,
                 distanceTraveled + additionalDistance,

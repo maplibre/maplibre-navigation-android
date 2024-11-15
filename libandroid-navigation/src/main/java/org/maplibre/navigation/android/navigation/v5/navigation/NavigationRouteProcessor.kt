@@ -25,34 +25,30 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnn
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
+//TODO fabi755: this logic needs to be cleaned up to have smarter null/kotlin code
 internal class NavigationRouteProcessor : OffRouteCallback {
     @JvmField
     var routeProgress: RouteProgress? = null
     private var currentStepPoints: List<Point>? = null
     private var upcomingStepPoints: List<Point>? = null
     private var currentIntersections: List<StepIntersection>? = null
-    private var currentIntersectionDistances: List<Pair<StepIntersection, Double>>? = null
+    private var currentIntersectionDistances: Map<StepIntersection, Double>? = null
     private var currentLeg: RouteLeg? = null
     private var currentStep: LegStep? = null
     private var upcomingStep: LegStep? = null
     private var currentLegAnnotation: CurrentLegAnnotation? = null
-    private var indices: NavigationIndices
+    private var indices: NavigationIndices = NavigationIndices(legIndex = FIRST_LEG_INDEX, stepIndex = FIRST_STEP_INDEX)
     private var stepDistanceRemaining = 0.0
     private var shouldIncreaseIndex = false
     private var shouldUpdateToIndex: NavigationIndices? = null
-    private val routeUtils: RouteUtils
-
-    init {
-        indices = NavigationIndices.create(FIRST_LEG_INDEX, FIRST_STEP_INDEX)
-        routeUtils = RouteUtils()
-    }
+    private val routeUtils: RouteUtils = RouteUtils()
 
     override fun onShouldIncreaseIndex() {
         shouldIncreaseIndex = true
     }
 
     override fun onShouldUpdateToIndex(legIndex: Int, stepIndex: Int) {
-        shouldUpdateToIndex = NavigationIndices.create(legIndex, stepIndex)
+        shouldUpdateToIndex = NavigationIndices(legIndex = legIndex, stepIndex = stepIndex)
         onShouldIncreaseIndex()
     }
 
@@ -69,11 +65,11 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param location   for step / leg / route distance remaining
      * @return new route progress along the route
      */
-    fun buildNewRouteProgress(navigation: MapLibreNavigation, location: Location): RouteProgress? {
-        val directionsRoute = navigation.route
-        val options = navigation.options()
-        val completionOffset = options.maxTurnCompletionOffset()
-        val maneuverZoneRadius = options.maneuverZoneRadius()
+    fun buildNewRouteProgress(navigation: MapLibreNavigation, location: Location): RouteProgress {
+        val directionsRoute = navigation.route!! //TODO fabi755: how to handle null rout here?
+        val options = navigation.options
+        val completionOffset = options.maxTurnCompletionOffset
+        val maneuverZoneRadius = options.maneuverZoneRadius
         val newRoute = checkNewRoute(navigation)
         stepDistanceRemaining = calculateStepDistanceRemaining(location, directionsRoute)
         if (!newRoute && routeProgress != null) {
@@ -86,7 +82,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
             )
         }
         routeProgress = assembleRouteProgress(directionsRoute)
-        return routeProgress
+        return routeProgress!!
     }
 
     /**
@@ -113,7 +109,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      */
     private fun checkNewRoute(mapLibreNavigation: MapLibreNavigation): Boolean {
         val directionsRoute = mapLibreNavigation.route
-        val newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute)
+        val newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute!!) // TODO fabi755: how to handle null route here?
         if (newRoute) {
             createFirstIndices(mapLibreNavigation)
             currentLegAnnotation = null
@@ -133,7 +129,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         directionsRoute: DirectionsRoute
     ): Double {
         return stepDistanceRemaining(
-            location, indices.legIndex(), indices.stepIndex(), directionsRoute, currentStepPoints!!
+            location, indices.legIndex, indices.stepIndex, directionsRoute, currentStepPoints!!
         )
     }
 
@@ -163,12 +159,9 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param mapLibreNavigation to get the next [LegStep.geometry] and [OffRoute]
      */
     private fun advanceIndices(mapLibreNavigation: MapLibreNavigation) {
-        val newIndices: NavigationIndices = if (shouldUpdateToIndex != null) {
-            shouldUpdateToIndex!!
-        } else {
-            increaseIndex(routeProgress!!, indices)
-        }
-        if (newIndices.legIndex() != indices.legIndex()) {
+        val newIndices: NavigationIndices = shouldUpdateToIndex ?: increaseIndex(routeProgress!!, indices)
+
+        if (newIndices.legIndex != indices.legIndex) {
             currentLegAnnotation = null
         }
         indices = newIndices
@@ -181,7 +174,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param mapLibreNavigation to get the next [LegStep.geometry] and [OffRoute]
      */
     private fun createFirstIndices(mapLibreNavigation: MapLibreNavigation) {
-        indices = NavigationIndices.create(FIRST_LEG_INDEX, FIRST_STEP_INDEX)
+        indices = NavigationIndices(FIRST_LEG_INDEX, FIRST_STEP_INDEX)
         processNewIndex(mapLibreNavigation)
     }
 
@@ -195,11 +188,11 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param mapLibreNavigation for the current route
      */
     private fun processNewIndex(mapLibreNavigation: MapLibreNavigation) {
-        val route = mapLibreNavigation.route
-        val legIndex = indices.legIndex()
-        val stepIndex = indices.stepIndex()
+        val route = mapLibreNavigation.route!! // TODO fabi755: how to handle null route here?
+        val legIndex = indices.legIndex
+        val stepIndex = indices.stepIndex
         val upcomingStepIndex = stepIndex + ONE_INDEX
-        if (route.legs!!.size <= legIndex || route.legs!![legIndex].steps!!.size <= stepIndex) {
+        if (route.legs!!.size <= legIndex || route.legs[legIndex].steps!!.size <= stepIndex) {
             // This catches a potential race condition when the route is changed, before the new index is processed
             createFirstIndices(mapLibreNavigation)
             return
@@ -211,8 +204,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
     }
 
     private fun assembleRouteProgress(route: DirectionsRoute): RouteProgress {
-        val legIndex = indices.legIndex()
-        val stepIndex = indices.stepIndex()
+        val legIndex = indices.legIndex
+        val stepIndex = indices.stepIndex
 
         val legDistanceRemaining =
             legDistanceRemaining(stepDistanceRemaining, legIndex, stepIndex, route)
@@ -227,7 +220,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
             currentIntersections!!, currentIntersectionDistances!!, stepDistanceTraveled
         )
         val upcomingIntersection = findUpcomingIntersection(
-            currentIntersections!!, upcomingStep, currentIntersection
+            currentIntersections!!, upcomingStep, currentIntersection!!
         )
 
         return RouteProgress(
@@ -277,9 +270,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
     }
 
     private fun clearManeuverDistances(offRoute: OffRoute) {
-        if (offRoute is OffRouteDetector) {
-            offRoute.clearDistancesAwayFromManeuver()
-        }
+        (offRoute as? OffRouteDetector)?.clearDistancesAwayFromManeuver()
     }
 
     companion object {

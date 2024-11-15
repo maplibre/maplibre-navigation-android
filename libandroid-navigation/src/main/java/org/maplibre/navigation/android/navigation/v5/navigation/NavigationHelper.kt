@@ -2,8 +2,6 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.location.Location
 import android.util.Pair
-import androidx.core.util.component1
-import androidx.core.util.component2
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
@@ -12,7 +10,6 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
 import org.maplibre.navigation.android.navigation.v5.models.StepIntersection
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRoute
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteCallback
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteDetector
 import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnnotation
@@ -23,17 +20,15 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
 import timber.log.Timber
+import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation
 
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
  * calculations need to be performed on it.
  */
 object NavigationHelper {
-    private const val FIRST_POINT = 0
     private const val FIRST_INTERSECTION = 0
     private const val ONE_INDEX = 1
-    private const val INDEX_ZERO = 0
-    private const val EMPTY_STRING = ""
     private const val ZERO_METERS = 0.0
     private const val TWO_POINTS = 2
 
@@ -43,24 +38,11 @@ object NavigationHelper {
         rawLocation: Location, routeProgress: RouteProgress, userOffRoute: Boolean
     ): Location {
         val location = if (!userOffRoute && snapToRouteEnabled) {
-            getSnappedLocation(mapLibreNavigation, rawLocation, routeProgress)
+            mapLibreNavigation.snapEngine.getSnappedLocation(rawLocation, routeProgress)
         } else {
             rawLocation
         }
         return location
-    }
-
-    /**
-     * When a milestones triggered, it's instruction needs to be built either using the provided
-     * string or an empty string.
-     */
-    @JvmStatic
-    fun buildInstructionString(routeProgress: RouteProgress?, milestone: Milestone): String {
-        if (milestone.instruction != null) {
-            // Create a new custom instruction based on the Instruction packaged with the Milestone
-            return milestone.instruction!!.buildInstruction(routeProgress)
-        }
-        return EMPTY_STRING
     }
 
     /**
@@ -71,8 +53,11 @@ object NavigationHelper {
      */
     @JvmStatic
     fun stepDistanceRemaining(
-        location: Location, legIndex: Int, stepIndex: Int,
-        directionsRoute: DirectionsRoute, stepPoints: List<Point?>
+        location: Location,
+        legIndex: Int,
+        stepIndex: Int,
+        directionsRoute: DirectionsRoute,
+        stepPoints: List<Point?>
     ): Double {
         // If the linestring coordinate size is less than 2,the distance remaining is zero.
         if (stepPoints.size < 2) {
@@ -96,12 +81,13 @@ object NavigationHelper {
             return TurfMeasurement.length(stepPoints, TurfConstants.UNIT_METERS)
         }
 
-        val snappedPosition = (feature.geometry() as Point?)
+        val snappedPosition = (feature.geometry() as Point)
 
-        val steps = directionsRoute.legs!![legIndex].steps
+        val steps = directionsRoute.legs[legIndex].steps
         val nextManeuverPosition = nextManeuverPosition(
             stepIndex,
-            steps!!, stepPoints
+            steps,
+            stepPoints
         )
 
         // When the coordinates are empty, no distance can be calculated
@@ -115,7 +101,7 @@ object NavigationHelper {
         }
 
         val slicedLine = TurfMisc.lineSlice(
-            snappedPosition!!,
+            snappedPosition,
             nextManeuverPosition,
             LineString.fromLngLats(stepPoints)
         )
@@ -128,18 +114,15 @@ object NavigationHelper {
      */
     @JvmStatic
     fun legDistanceRemaining(
-        stepDistanceRemaining: Double, legIndex: Int, stepIndex: Int,
+        stepDistanceRemaining: Double,
+        legIndex: Int,
+        stepIndex: Int,
         directionsRoute: DirectionsRoute
     ): Double {
-        var stepDistanceRemaining = stepDistanceRemaining
-        val steps = directionsRoute.legs!![legIndex].steps
-        if ((steps!!.size < stepIndex + 1)) {
-            return stepDistanceRemaining
-        }
-        for (i in stepIndex + 1 until steps.size) {
-            stepDistanceRemaining += steps[i].distance
-        }
-        return stepDistanceRemaining
+        return stepDistanceRemaining +
+                directionsRoute.legs[legIndex].steps
+                    .drop(stepIndex + 1)
+                    .sumOf(LegStep::distance)
     }
 
     /**
@@ -150,18 +133,18 @@ object NavigationHelper {
      */
     @JvmStatic
     fun routeDistanceRemaining(
-        legDistanceRemaining: Double, legIndex: Int,
+        legDistanceRemaining: Double,
+        legIndex: Int,
         directionsRoute: DirectionsRoute
     ): Double {
-        var legDistanceRemaining = legDistanceRemaining
-        if (directionsRoute.legs!!.size < 2) {
+        if (directionsRoute.legs.size < 2) {
             return legDistanceRemaining
         }
 
-        for (i in legIndex + 1 until directionsRoute.legs.size) {
-            legDistanceRemaining += directionsRoute.legs[i].distance!!
-        }
-        return legDistanceRemaining
+        return legDistanceRemaining +
+                directionsRoute.legs
+                    .drop(legIndex + 1)
+                    .sumOf(RouteLeg::distance)
     }
 
     /**
@@ -181,33 +164,30 @@ object NavigationHelper {
      */
     @JvmStatic
     fun checkBearingForStepCompletion(
-        userLocation: Location, previousRouteProgress: RouteProgress,
-        stepDistanceRemaining: Double, maxTurnCompletionOffset: Double
+        userLocation: Location,
+        previousRouteProgress: RouteProgress,
+        stepDistanceRemaining: Double,
+        maxTurnCompletionOffset: Double
     ): Boolean {
-        if (previousRouteProgress.currentLegProgress?.upComingStep == null) {
-            return false
-        }
+        return previousRouteProgress.currentLegProgress.upComingStep?.maneuver?.let { maneuver ->
+            val initialBearingNormalized = MathUtils.wrap(maneuver.bearingBefore, 0.0, 360.0)
+            val finalBearingNormalized = MathUtils.wrap(maneuver.bearingAfter, 0.0, 360.0)
 
-        // Bearings need to be normalized so when the bearingAfter is 359 and the user heading is 1, we
-        // count this as within the MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION.
-        val maneuver = previousRouteProgress.currentLegProgress!!.upComingStep!!.maneuver
-        val initialBearing = maneuver.bearingBefore!!
-        val initialBearingNormalized = MathUtils.wrap(initialBearing, 0.0, 360.0)
-        val finalBearing = maneuver.bearingAfter!!
-        val finalBearingNormalized = MathUtils.wrap(finalBearing, 0.0, 360.0)
+            // Bearings need to be normalized so when the bearingAfter is 359 and the user heading is 1, we
+            // count this as within the maxTurnCompletionOffset.
+            val expectedTurnAngle =
+                MathUtils.differenceBetweenAngles(initialBearingNormalized, finalBearingNormalized)
 
-        val expectedTurnAngle =
-            MathUtils.differenceBetweenAngles(initialBearingNormalized, finalBearingNormalized)
+            val userBearingNormalized = MathUtils.wrap(userLocation.bearing.toDouble(), 0.0, 360.0)
+            val userAngleFromFinalBearing =
+                MathUtils.differenceBetweenAngles(finalBearingNormalized, userBearingNormalized)
 
-        val userBearingNormalized = MathUtils.wrap(userLocation.bearing.toDouble(), 0.0, 360.0)
-        val userAngleFromFinalBearing =
-            MathUtils.differenceBetweenAngles(finalBearingNormalized, userBearingNormalized)
-
-        return if (expectedTurnAngle <= maxTurnCompletionOffset) {
-            stepDistanceRemaining == 0.0
-        } else {
-            userAngleFromFinalBearing <= maxTurnCompletionOffset
-        }
+            if (expectedTurnAngle <= maxTurnCompletionOffset) {
+                stepDistanceRemaining == 0.0
+            } else {
+                userAngleFromFinalBearing <= maxTurnCompletionOffset
+            }
+        } ?: false
     }
 
     /**
@@ -231,22 +211,23 @@ object NavigationHelper {
         previousIndices: NavigationIndices
     ): NavigationIndices {
         val route = routeProgress.directionsRoute
-        val previousStepIndex = previousIndices.stepIndex()
-        val previousLegIndex = previousIndices.legIndex()
-        val routeLegSize = route.legs!!.size
-        val legStepSize = route.legs!![routeProgress.legIndex].steps!!.size
+        val previousStepIndex = previousIndices.stepIndex
+        val previousLegIndex = previousIndices.legIndex
+        val routeLegSize = route.legs.size
+        val legStepSize = route.legs[routeProgress.legIndex].steps.size
 
         val isOnLastLeg = previousLegIndex == routeLegSize - 1
         val isOnLastStep = previousStepIndex == legStepSize - 1
 
         if (isOnLastStep && !isOnLastLeg) {
-            return NavigationIndices.create((previousLegIndex + 1), 0)
+            return NavigationIndices(previousLegIndex + 1, 0)
         }
 
         if (isOnLastStep) {
             return previousIndices
         }
-        return NavigationIndices.create(previousLegIndex, (previousStepIndex + 1))
+
+        return NavigationIndices(previousLegIndex, previousStepIndex + 1)
     }
 
     /**
@@ -270,25 +251,14 @@ object NavigationHelper {
         directionsRoute: DirectionsRoute, currentPoints: List<Point>,
         legIndex: Int, stepIndex: Int
     ): List<Point> {
-        val legs = directionsRoute.legs
-        if (hasInvalidLegs(legs)) {
-            return currentPoints
-        }
-        val steps = legs!![legIndex].steps
-        if (hasInvalidSteps(steps)) {
-            return currentPoints
-        }
-        val invalidStepIndex = stepIndex < 0 || stepIndex > steps!!.size - 1
-        if (invalidStepIndex) {
-            return currentPoints
-        }
-        val step = steps!![stepIndex]
-            ?: return currentPoints
-        val stepGeometry = step.geometry
-        if (stepGeometry != null) {
-            return PolylineUtils.decode(stepGeometry, Constants.PRECISION_6)
-        }
-        return currentPoints
+        return directionsRoute.legs
+            .getOrNull(legIndex)
+            ?.steps
+            ?.getOrNull(stepIndex)
+            ?.let { step ->
+                PolylineUtils.decode(step.geometry, Constants.PRECISION_6)
+            }
+            ?: currentPoints
     }
 
     /**
@@ -306,12 +276,13 @@ object NavigationHelper {
         currentStep: LegStep,
         upcomingStep: LegStep?
     ): List<StepIntersection> {
-        val intersectionsWithNextManeuver: MutableList<StepIntersection> = ArrayList()
-        intersectionsWithNextManeuver.addAll(currentStep.intersections!!)
-        if (upcomingStep != null && !upcomingStep.intersections!!.isEmpty()) {
-            intersectionsWithNextManeuver.add(upcomingStep.intersections!![FIRST_POINT])
-        }
-        return intersectionsWithNextManeuver
+        return currentStep.intersections
+            ?.plus(
+                listOfNotNull(
+                    upcomingStep?.intersections?.firstOrNull()
+                )
+            )
+            ?: emptyList()
     }
 
     /**
@@ -333,27 +304,24 @@ object NavigationHelper {
     fun createDistancesToIntersections(
         stepPoints: List<Point>,
         intersections: List<StepIntersection>
-    ): List<Pair<StepIntersection, Double>> {
-        val lessThanTwoStepPoints = stepPoints.size < TWO_POINTS
-        val noIntersections = intersections.isEmpty()
-        if (lessThanTwoStepPoints || noIntersections) {
-            return emptyList()
+    ): Map<StepIntersection, Double> {
+        // Require at minimum two points
+        if (stepPoints.size < TWO_POINTS) {
+            return emptyMap()
         }
 
         val stepLineString = LineString.fromLngLats(stepPoints)
-        val firstStepPoint = stepPoints[FIRST_POINT]
-        val distancesToIntersections: MutableList<Pair<StepIntersection, Double>> = ArrayList()
-
+        val distancesToIntersections = mutableMapOf<StepIntersection, Double>()
         for (intersection in intersections) {
             val intersectionPoint = intersection.location
-            if (firstStepPoint == intersectionPoint) {
-                distancesToIntersections.add(Pair(intersection, ZERO_METERS))
+            if (stepPoints.first() == intersectionPoint) {
+                distancesToIntersections[intersection] = ZERO_METERS
             } else {
                 val beginningLineString =
-                    TurfMisc.lineSlice(firstStepPoint, intersectionPoint, stepLineString)
+                    TurfMisc.lineSlice(stepPoints.first(), intersectionPoint, stepLineString)
                 val distanceToIntersectionInMeters =
                     TurfMeasurement.length(beginningLineString, TurfConstants.UNIT_METERS)
-                distancesToIntersections.add(Pair(intersection, distanceToIntersectionInMeters))
+                distancesToIntersections[intersection] = distanceToIntersectionInMeters
             }
         }
         return distancesToIntersections
@@ -372,28 +340,27 @@ object NavigationHelper {
     @JvmStatic
     fun findCurrentIntersection(
         intersections: List<StepIntersection>,
-        measuredIntersections: List<Pair<StepIntersection, Double>>,
+        measuredIntersections: Map<StepIntersection, Double>,
         stepDistanceTraveled: Double
     ): StepIntersection? {
-        for (measuredIntersection in measuredIntersections) {
-            if (measuredIntersection.first == null) return intersections[0]
-            val intersectionDistance = measuredIntersection.second
-            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
-            val nextIntersectionIndex = intersectionIndex + ONE_INDEX
-            val measuredIntersectionSize = measuredIntersections.size
-            val hasValidNextIntersection = nextIntersectionIndex < measuredIntersectionSize
-
-            if (hasValidNextIntersection) {
-                val nextIntersectionDistance = measuredIntersections[nextIntersectionIndex].second
-                if (stepDistanceTraveled > intersectionDistance && stepDistanceTraveled < nextIntersectionDistance) {
-                    return measuredIntersection.first
-                }
-            } else if (stepDistanceTraveled > measuredIntersection.second) {
-                return measuredIntersection.first
-            } else {
-                return measuredIntersections[FIRST_INTERSECTION].first
-            }
-        }
+//        for (measuredIntersection in measuredIntersections) {
+//            val intersectionDistance = measuredIntersection.value
+//            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
+//            val nextIntersectionIndex = intersectionIndex + ONE_INDEX
+//            val measuredIntersectionSize = measuredIntersections.size
+//            val hasValidNextIntersection = nextIntersectionIndex < measuredIntersectionSize
+//
+//            if (hasValidNextIntersection) {
+//                val nextIntersectionDistance = measuredIntersections[nextIntersectionIndex].second
+//                if (stepDistanceTraveled > intersectionDistance && stepDistanceTraveled < nextIntersectionDistance) {
+//                    return measuredIntersection.first
+//                }
+//            } else if (stepDistanceTraveled > measuredIntersection.second) {
+//                return measuredIntersection.first
+//            } else {
+//                return measuredIntersections[FIRST_INTERSECTION].first
+//            }
+//        }
         return intersections[FIRST_INTERSECTION]
     }
 
@@ -412,27 +379,16 @@ object NavigationHelper {
      */
     @JvmStatic
     fun findUpcomingIntersection(
-        intersections: List<StepIntersection?>,
+        intersections: List<StepIntersection>,
         upcomingStep: LegStep?,
-        currentIntersection: StepIntersection?
+        currentIntersection: StepIntersection
     ): StepIntersection? {
-        val intersectionIndex = intersections.indexOf(currentIntersection)
-        val nextIntersectionIndex = intersectionIndex + ONE_INDEX
-        val intersectionSize = intersections.size
-        val isValidUpcomingIntersection = nextIntersectionIndex < intersectionSize
-        if (isValidUpcomingIntersection) {
-            return intersections[nextIntersectionIndex]
-        } else if (upcomingStep != null) {
-            val upcomingIntersections = upcomingStep.intersections
-            if (upcomingIntersections != null && !upcomingIntersections.isEmpty()) {
-                return upcomingIntersections[FIRST_INTERSECTION]
-            }
-        }
-        return null
+        return intersections.getOrNull(intersections.indexOf(currentIntersection) + 1)
+            ?: upcomingStep?.intersections?.firstOrNull()
     }
 
     /**
-     * Given a list of distance annotations, find the current annotation index.  This index retrieves the
+     * Given a list of distance annotations, find the current annotation index. This index retrieves the
      * current annotation from any provided annotation list in [LegAnnotation].
      *
      * @param currentLegAnnotation current annotation being traveled along
@@ -443,35 +399,33 @@ object NavigationHelper {
     @JvmStatic
     fun createCurrentAnnotation(
         currentLegAnnotation: CurrentLegAnnotation?,
-        leg: RouteLeg, legDistanceRemaining: Double
+        leg: RouteLeg,
+        legDistanceRemaining: Double
     ): CurrentLegAnnotation? {
-        val legAnnotation = leg.annotation ?: return null
-        val distanceList = legAnnotation.distance
-        if (distanceList == null || distanceList.isEmpty()) {
-            return null
+        return leg.annotation?.let { legAnnotation ->
+            legAnnotation.distance?.let { distanceList ->
+                findAnnotationIndex(
+                    currentLegAnnotation,
+                    leg,
+                    legDistanceRemaining,
+                    distanceList
+                )?.let { annotationResult ->
+                    CurrentLegAnnotation(
+                        index = annotationResult.index,
+                        distance = distanceList[annotationResult.index],
+                        distanceToAnnotation = annotationResult.distanceToAnnotation,
+                        duration = legAnnotation.duration?.get(annotationResult.index),
+                        speed = legAnnotation.speed?.get(annotationResult.index),
+                        maxSpeed = legAnnotation.maxSpeed?.get(annotationResult.index),
+                        congestion = legAnnotation.congestion?.get(annotationResult.index),
+                    )
+                }
+            }
         }
-
-        val annotationResult = findAnnotationIndex(
-            currentLegAnnotation, leg, legDistanceRemaining, distanceList
-        )
-        return CurrentLegAnnotation(
-            index = annotationResult.index,
-            distance = distanceList[annotationResult.index],
-            distanceToAnnotation = annotationResult.distanceToAnnotation,
-            duration = legAnnotation.duration?.get(annotationResult.index),
-            speed = legAnnotation.speed?.get(annotationResult.index),
-            maxSpeed = legAnnotation.maxSpeed?.get(annotationResult.index),
-            congestion = legAnnotation.congestion?.get(annotationResult.index),
-        )
     }
 
-    private data class AnnotationResult(
-        val index: Int,
-        val distanceToAnnotation: Double
-    )
-
     /**
-     * This method runs through the list of milestones in [MapLibreNavigation.getMilestones]
+     * This method runs through the list of milestones in [MapLibreNavigation.milestones]
      * and returns a list of occurring milestones (if any), based on their individual criteria.
      *
      * @param previousRouteProgress for checking if milestone is occurring
@@ -485,13 +439,8 @@ object NavigationHelper {
         routeProgress: RouteProgress,
         mapLibreNavigation: MapLibreNavigation
     ): List<Milestone> {
-        val milestones: MutableList<Milestone> = ArrayList()
-        for (milestone in mapLibreNavigation.milestones) {
-            if (milestone.isOccurring(previousRouteProgress, routeProgress)) {
-                milestones.add(milestone)
-            }
-        }
-        return milestones
+        return mapLibreNavigation.milestones
+            .filter { m -> m.isOccurring(previousRouteProgress, routeProgress) }
     }
 
     /**
@@ -509,28 +458,34 @@ object NavigationHelper {
      */
     @JvmStatic
     fun isUserOffRoute(
-        navigationLocationUpdate: NavigationLocationUpdate, routeProgress: RouteProgress?,
+        navigationLocationUpdate: NavigationLocationUpdate,
+        routeProgress: RouteProgress,
         callback: OffRouteCallback
     ): Boolean {
-        val options = navigationLocationUpdate.mapLibreNavigation().options()
-        if (!options.enableOffRouteDetection()) {
+        val options = navigationLocationUpdate.mapLibreNavigation.options
+        if (!options.enableOffRouteDetection) {
             return false
         }
-        val offRoute = navigationLocationUpdate.mapLibreNavigation().offRouteEngine
-        setOffRouteDetectorCallback(offRoute, callback)
-        val location = navigationLocationUpdate.location()
-        return offRoute.isUserOffRoute(location, routeProgress, options)
+
+        val offRouteEngine = navigationLocationUpdate.mapLibreNavigation.offRouteEngine
+        (offRouteEngine as? OffRouteDetector)?.setOffRouteCallback(callback)
+
+        return offRouteEngine.isUserOffRoute(
+            navigationLocationUpdate.location,
+            routeProgress,
+            options
+        )
     }
 
+    //TODO fabi755: why this is not used?!?!
     @JvmStatic
     fun shouldCheckFasterRoute(
-        navigationLocationUpdate: NavigationLocationUpdate?,
+        navigationLocationUpdate: NavigationLocationUpdate,
         routeProgress: RouteProgress?
     ): Boolean {
-        if (navigationLocationUpdate == null) return false
-        val fasterRoute = navigationLocationUpdate.mapLibreNavigation().fasterRouteEngine
-        return fasterRoute.shouldCheckFasterRoute(
-            navigationLocationUpdate.location(),
+        val fasterRouteEngine = navigationLocationUpdate.mapLibreNavigation.fasterRouteEngine
+        return fasterRouteEngine.shouldCheckFasterRoute(
+            navigationLocationUpdate.location,
             routeProgress
         )
     }
@@ -545,58 +500,35 @@ object NavigationHelper {
         if (steps.size > (stepIndex + 1)) {
             return steps[stepIndex + 1].maneuver.location
         }
-        return if (!coords.isEmpty()) coords[coords.size - 1] else null
+
+        return coords.lastOrNull()
     }
 
     private fun findAnnotationIndex(
-        currentLegAnnotation: CurrentLegAnnotation?, leg: RouteLeg,
-        legDistanceRemaining: Double, distanceAnnotationList: List<Double>
-    ): AnnotationResult {
+        currentLegAnnotation: CurrentLegAnnotation?,
+        leg: RouteLeg,
+        legDistanceRemaining: Double,
+        distanceAnnotationList: List<Double>
+    ): AnnotationResult? {
         val legDistances: List<Double> = ArrayList(distanceAnnotationList)
-        val totalLegDistance = leg.distance
-        val distanceTraveled = totalLegDistance!! - legDistanceRemaining
+        val distanceTraveled = leg.distance - legDistanceRemaining
+        val distanceIndex = currentLegAnnotation?.index ?: 0
 
-        var distanceIndex = 0
-        var annotationDistancesTraveled = 0.0
-        if (currentLegAnnotation != null) {
-            distanceIndex = currentLegAnnotation.index
-            annotationDistancesTraveled = currentLegAnnotation.distanceToAnnotation
-        }
-
+        var annotationDistancesTraveled = currentLegAnnotation?.distanceToAnnotation ?: 0.0
         for (i in distanceIndex until legDistances.size) {
             val distance = legDistances[i]
             annotationDistancesTraveled += distance
             if (annotationDistancesTraveled > distanceTraveled || i == legDistances.size - 1) {
                 val distanceToAnnotation = annotationDistancesTraveled - distance
-                print("i: $i")
-                print("distanceToAnnotation: $distanceToAnnotation")
                 return AnnotationResult(i, distanceToAnnotation)
             }
         }
 
-        //TODO fabi755: is 0 distance right here?
-        return AnnotationResult(INDEX_ZERO, 0.0)
+        return null
     }
 
-    private fun getSnappedLocation(
-        mapLibreNavigation: MapLibreNavigation, location: Location,
-        routeProgress: RouteProgress
-    ): Location {
-        val snap = mapLibreNavigation.snapEngine
-        return snap.getSnappedLocation(location, routeProgress)
-    }
-
-    private fun setOffRouteDetectorCallback(offRoute: OffRoute, callback: OffRouteCallback) {
-        if (offRoute is OffRouteDetector) {
-            offRoute.setOffRouteCallback(callback)
-        }
-    }
-
-    private fun hasInvalidLegs(legs: List<RouteLeg>?): Boolean {
-        return legs == null || legs.isEmpty()
-    }
-
-    private fun hasInvalidSteps(steps: List<LegStep>?): Boolean {
-        return steps == null || steps.isEmpty()
-    }
+    private data class AnnotationResult(
+        val index: Int,
+        val distanceToAnnotation: Double
+    )
 }

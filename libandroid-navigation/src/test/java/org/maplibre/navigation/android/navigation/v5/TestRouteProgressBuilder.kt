@@ -49,12 +49,15 @@ internal class TestRouteProgressBuilder {
         )
 
         val currentIntersection = createCurrentIntersection(
-            stepDistanceRemaining, currentStep,
-            intersections, intersectionDistances
+            stepDistanceRemaining,
+            currentStep,
+            intersections,
+            intersectionDistances
         )
         val upcomingIntersection = createUpcomingIntersection(
-            upcomingStep, intersections,
-            currentIntersection
+            upcomingStep,
+            intersections,
+            currentIntersection!! //TODO fabi755
         )
 
         return RouteProgress(
@@ -82,7 +85,7 @@ internal class TestRouteProgressBuilder {
     private fun createCurrentIntersection(
         stepDistanceRemaining: Double, currentStep: LegStep,
         intersections: List<StepIntersection>,
-        intersectionDistances: List<Pair<StepIntersection, Double>>
+        intersectionDistances: Map<StepIntersection, Double>
     ): StepIntersection? {
         val stepDistanceTraveled = currentStep.distance - stepDistanceRemaining
         return findCurrentIntersection(
@@ -92,11 +95,14 @@ internal class TestRouteProgressBuilder {
     }
 
     private fun createUpcomingIntersection(
-        upcomingStep: LegStep?, intersections: List<StepIntersection?>,
-        currentIntersection: StepIntersection?
+        upcomingStep: LegStep?,
+        intersections: List<StepIntersection>,
+        currentIntersection: StepIntersection
     ): StepIntersection? {
         return findUpcomingIntersection(
-            intersections, upcomingStep, currentIntersection
+            intersections,
+            upcomingStep,
+            currentIntersection
         )
     }
 

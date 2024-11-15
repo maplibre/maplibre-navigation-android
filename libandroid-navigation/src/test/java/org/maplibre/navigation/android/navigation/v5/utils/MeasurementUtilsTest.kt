@@ -55,8 +55,8 @@ class MeasurementUtilsTest : BaseTest() {
             duration = 0.0,
             maneuver = StepManeuver(
                 location = location,
-                bearingBefore = null,
-                bearingAfter = null,
+                bearingBefore = 0.0,
+                bearingAfter = 0.0,
                 instruction = null,
                 type = null,
                 modifier = null,

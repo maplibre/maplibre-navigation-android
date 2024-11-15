@@ -28,8 +28,9 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
+    //TODO fabi755: removed optional, check if this is right
     @SerialName("bearing_before")
-    val bearingBefore: Double?,
+    val bearingBefore: Double,
 
     /**
      * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
@@ -37,8 +38,9 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
+    //TODO fabi755: removed optional, check if this is right
     @SerialName("bearing_after")
-    val bearingAfter: Double?,
+    val bearingAfter: Double,
 
     /**
      * A human-readable instruction of how to execute the returned maneuver. This String is built

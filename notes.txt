@@ -15,11 +15,21 @@ org.maplibre.navigation.android.navigation.v5.models.* -->
 org.maplibre.navigation.android.navigation.v5.utils.abbreviation.* --> Removed. Not used internally. I think it is also not used by developers.
 org.maplibre.navigation.android.navigation.v5.utils.TextUtils --> Removed. Can be replaced by Android's TextUtils or by Kotlin language functions.
 
+org.maplibre.navigation.android.navigation.v5.navigation.NavigationLifecycleMonitor --> Removed. Not used internal.
+org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute --> Deprecated/Removed. In UI package a newer version is available.
+org.maplibre.navigation.android.navigation.v5.navigation.SdkVersionChecker --> Deprecated/Removed. Make no sense, use plain java/kotlin code.
+
 ----------------
 Refactor later:
 
 org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated
 Instead of parsing models directly, add dtos and mappers that can be replaces by developers to use other API engines
+
+Rename engines to name with ending `engine`. And also choose a standardized naming for implementations.
+    - Camera --> CameraEngine
+    - Snap --> SnapEngine
+    - OffRoute --> OffRouteEngine
+    - FasterRoute --> FasterRouteEngine
 
 ----------------
 Discuss:

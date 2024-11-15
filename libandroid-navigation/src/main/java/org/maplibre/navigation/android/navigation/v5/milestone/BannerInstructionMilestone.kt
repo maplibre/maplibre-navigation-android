@@ -16,8 +16,8 @@ import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
  */
 class BannerInstructionMilestone(
     identifier: Int,
-    instruction: Instruction?,
-    trigger: Trigger.Statement?
+    instruction: Instruction? = null,
+    trigger: Trigger.Statement? = null
 ) : Milestone(identifier, instruction, trigger) {
 
     @Deprecated(

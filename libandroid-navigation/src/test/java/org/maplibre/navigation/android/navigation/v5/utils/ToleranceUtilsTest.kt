@@ -23,7 +23,7 @@ class ToleranceUtilsTest : BaseTest() {
         val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
             midPoint,
             routeProgress,
-            MapLibreNavigationOptions.builder().build()
+            MapLibreNavigationOptions()
         )
 
         Assert.assertEquals(25.0, tolerance, DELTA)
@@ -45,7 +45,7 @@ class ToleranceUtilsTest : BaseTest() {
         val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
             closePoint,
             routeProgress,
-            MapLibreNavigationOptions.builder().build()
+            MapLibreNavigationOptions()
         )
 
         Assert.assertEquals(50.0, tolerance, DELTA)
@@ -66,7 +66,7 @@ class ToleranceUtilsTest : BaseTest() {
         val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
             closePoint,
             routeProgress,
-            MapLibreNavigationOptions.builder().build()
+            MapLibreNavigationOptions()
         )
 
         Assert.assertEquals(50.0, tolerance, DELTA)

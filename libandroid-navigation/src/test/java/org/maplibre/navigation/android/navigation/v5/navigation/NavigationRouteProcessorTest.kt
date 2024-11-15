@@ -22,7 +22,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Throws(Exception::class)
     fun before() {
         routeProcessor = NavigationRouteProcessor()
-        val options = MapLibreNavigationOptions.builder().build()
+        val options = MapLibreNavigationOptions()
         val context = Mockito.mock(Context::class.java)
         Mockito.`when`(context.applicationContext).thenReturn(context)
         navigation = MapLibreNavigation(
@@ -186,7 +186,7 @@ class NavigationRouteProcessorTest : BaseTest() {
                 Location::class.java
             )
         )
-        val legSize = navigation!!.route.legs!!.size
+        val legSize = navigation!!.route!!.legs!!.size
 
         for (i in 0 until legSize) {
             routeProcessor!!.onShouldIncreaseIndex()
@@ -209,7 +209,7 @@ class NavigationRouteProcessorTest : BaseTest() {
                 Location::class.java
             )
         )
-        val stepSize = navigation!!.route.legs!![0].steps!!.size
+        val stepSize = navigation!!.route!!.legs!![0].steps!!.size
 
         for (i in 0 until stepSize) {
             routeProcessor!!.onShouldIncreaseIndex()

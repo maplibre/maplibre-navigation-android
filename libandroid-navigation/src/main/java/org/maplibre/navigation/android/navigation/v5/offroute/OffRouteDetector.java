@@ -129,7 +129,8 @@ public class OffRouteDetector extends OffRoute {
       // If null, this is our first update - set the last reroute point to the given location
       updateLastReroutePoint(location);
     }
-    return distanceFromLastReroute > options.minimumDistanceBeforeRerouting();
+    //TODO fabi755, add options (minimum before reroute) again?!
+    return distanceFromLastReroute > options.getOffRouteMinimumDistanceMetersBeforeWrongDirection();
   }
 
   private boolean checkOffRouteRadius(Location location, RouteProgress routeProgress,
@@ -143,7 +144,7 @@ public class OffRouteDetector extends OffRoute {
   private double createOffRouteRadius(Location location, RouteProgress routeProgress,
                                       MapLibreNavigationOptions options, Point currentPoint) {
     double dynamicTolerance = dynamicRerouteDistanceTolerance(currentPoint, routeProgress, options);
-    double accuracyTolerance = location.getAccuracy() * options.deadReckoningTimeInterval();
+    double accuracyTolerance = location.getAccuracy() * options.getDeadReckoningTimeInterval();
     return Math.max(dynamicTolerance, accuracyTolerance);
   }
 
@@ -182,7 +183,7 @@ public class OffRouteDetector extends OffRoute {
     boolean isCloseToUpcomingStep;
     if (upComingStep != null) {
       double distanceFromUpcomingStep = userTrueDistanceFromStep(currentPoint, upComingStep);
-      double maneuverZoneRadius = options.maneuverZoneRadius();
+      double maneuverZoneRadius = options.getManeuverZoneRadius();
       isCloseToUpcomingStep = distanceFromUpcomingStep < maneuverZoneRadius;
       if (isCloseToUpcomingStep) {
         // Callback to the NavigationEngine to increase the step index
@@ -238,7 +239,7 @@ public class OffRouteDetector extends OffRoute {
         distancesAwayFromManeuver.removeLast();
       }
       distancesAwayFromManeuver.addLast(userDistanceToManeuver);
-    } else if ((distancesAwayFromManeuver.getLast() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection()) {
+    } else if ((distancesAwayFromManeuver.getLast() - userDistanceToManeuver) > options.getOffRouteMinimumDistanceMetersBeforeRightDirection()) {
       // If distance to maneuver decreased (right way) clean history
       distancesAwayFromManeuver.clear();
     }
@@ -246,7 +247,7 @@ public class OffRouteDetector extends OffRoute {
     // Minimum 3 position updates in the wrong way are required before an off-route can occur
     if (distancesAwayFromManeuver.size() >= 3) {
       // Check for minimum distance traveled
-      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection();
+      return (distancesAwayFromManeuver.getLast() - distancesAwayFromManeuver.getFirst()) > options.getOffRouteMinimumDistanceMetersBeforeWrongDirection();
     }
 
     return false;
