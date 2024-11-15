@@ -89,7 +89,7 @@ class RouteProcessorThreadListenerTest {
         listener.onUserOffRoute(mockk<Location>(relaxed = true), false)
 
         verify {
-            dispatcher wasNot(Called)
+            dispatcher.wasNot(Called)
         }
     }
 

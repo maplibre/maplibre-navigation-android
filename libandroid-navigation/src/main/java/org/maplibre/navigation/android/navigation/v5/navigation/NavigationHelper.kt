@@ -479,10 +479,7 @@ object NavigationHelper {
 
     //TODO fabi755: why this is not used?!?!
     @JvmStatic
-    fun shouldCheckFasterRoute(
-        navigationLocationUpdate: NavigationLocationUpdate,
-        routeProgress: RouteProgress?
-    ): Boolean {
+    fun shouldCheckFasterRoute(navigationLocationUpdate: NavigationLocationUpdate, routeProgress: RouteProgress): Boolean {
         val fasterRouteEngine = navigationLocationUpdate.mapLibreNavigation.fasterRouteEngine
         return fasterRouteEngine.shouldCheckFasterRoute(
             navigationLocationUpdate.location,

@@ -19,6 +19,9 @@ org.maplibre.navigation.android.navigation.v5.navigation.NavigationLifecycleMoni
 org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute --> Deprecated/Removed. In UI package a newer version is available.
 org.maplibre.navigation.android.navigation.v5.navigation.SdkVersionChecker --> Deprecated/Removed. Make no sense, use plain java/kotlin code.
 
+org.maplibre.navigation.android.navigation.v5.route.MapRouteProgressChangeListener --> Deprecated/Removed. In UI package a newer version is available.
+org.maplibre.navigation.android.navigation.v5.route.OnRouteSelectionChangeListener --> Deprecated/Removed. In UI package a newer version is available.
+
 ----------------
 Refactor later:
 

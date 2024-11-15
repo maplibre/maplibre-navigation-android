@@ -14,10 +14,7 @@ import java.util.concurrent.TimeUnit
 class FasterRouteDetector : FasterRoute() {
     private var lastCheckedLocation: Location? = null
 
-    override fun shouldCheckFasterRoute(
-        location: Location?,
-        routeProgress: RouteProgress?
-    ): Boolean {
+    override fun shouldCheckFasterRoute(location: Location, routeProgress: RouteProgress): Boolean {
         if (location == null || routeProgress == null) {
             return false
         }
@@ -26,6 +23,7 @@ class FasterRouteDetector : FasterRoute() {
             lastCheckedLocation = location
         }
         // Check if the faster route time interval has been exceeded
+        //todo fabi755 outsource to options
         if (secondsSinceLastCheck(location) >= NavigationConstants.NAVIGATION_CHECK_FASTER_ROUTE_INTERVAL) {
             lastCheckedLocation = location
             // Check for both valid route and step durations remaining
