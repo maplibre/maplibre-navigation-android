@@ -8,13 +8,10 @@ import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener
 import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 
-class NavigationEventDispatcher(
-    private val routeUtils: RouteUtils = RouteUtils()
-) {
+class NavigationEventDispatcher() {
     private val navigationEventListeners = CopyOnWriteArrayList<NavigationEventListener>()
     private val milestoneEventListeners = CopyOnWriteArrayList<MilestoneEventListener>()
     private val progressChangeListeners = CopyOnWriteArrayList<ProgressChangeListener>()
@@ -127,7 +124,7 @@ class NavigationEventDispatcher(
         }
     }
 
-    fun onUserOffRoute(location: Location?) {
+    fun onUserOffRoute(location: Location) {
         for (offRouteListener in offRouteListeners) {
             offRouteListener.userOffRoute(location)
         }

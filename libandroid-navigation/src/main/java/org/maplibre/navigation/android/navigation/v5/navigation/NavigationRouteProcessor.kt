@@ -228,7 +228,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
             legDistanceRemaining = legDistanceRemaining,
             distanceRemaining = routeDistanceRemaining,
             directionsRoute = route,
-            currentStepPoints = currentStepPoints,
+            currentStepPoints = currentStepPoints!!,
             upcomingStepPoints = upcomingStepPoints,
             stepIndex = stepIndex,
             legIndex = legIndex,

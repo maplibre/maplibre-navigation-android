@@ -133,8 +133,8 @@ data class RouteLegProgress(
      *
      * @since 0.1.0
      */
-    val currentStep: LegStep?
-        get() = routeLeg.steps?.get(stepIndex)
+    val currentStep: LegStep
+        get() = routeLeg.steps[stepIndex]
 
     /**
      * Get the next/upcoming step immediately after the current step. If the user is on the last step

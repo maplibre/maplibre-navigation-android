@@ -66,6 +66,12 @@ data class MapLibreNavigationOptions(
     val metersRemainingTillArrival: Double = Defaults.METERS_REMAINING_TILL_ARRIVAL,
 
     /**
+     * Minimum distance in meters that the user must travel after a re-routing was done. in the wrong direction before the
+     * off-route logic recognizes the user is moving away from upcoming maneuver
+     */
+    val offRouteMinimumDistanceMetersAfterReroute: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE,
+
+    /**
      * Minimum distance in meters that the user must travel in the wrong direction before the
      * off-route logic recognizes the user is moving away from upcoming maneuver
      */
@@ -118,6 +124,7 @@ data class MapLibreNavigationOptions(
         const val ENABLE_FASTER_ROUTE_DETECTION = false
         const val MANUALLY_END_NAVIGATION_UPON_COMPLETION = false
         const val METERS_REMAINING_TILL_ARRIVAL = 40.0
+        const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE = 50.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION = 50.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION = 20.0
         const val IS_DEBUG_LOGGING_ENABLED = false

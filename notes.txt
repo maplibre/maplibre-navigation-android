@@ -37,3 +37,5 @@ Rename engines to name with ending `engine`. And also choose a standardized nami
 ----------------
 Discuss:
 
+Can `LegAnnotation` used without distance field? If not, we should thinking about to make the distance list non-null
+

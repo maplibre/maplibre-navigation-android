@@ -54,7 +54,7 @@ data class RouteProgress(
      *
      * @since 0.12.0
      */
-    val currentStepPoints: List<Point>?,
+    val currentStepPoints: List<Point>,
 
     /**
      * Provides a list of points that represent the upcoming step
