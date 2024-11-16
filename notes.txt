@@ -22,11 +22,21 @@ org.maplibre.navigation.android.navigation.v5.navigation.SdkVersionChecker --> D
 org.maplibre.navigation.android.navigation.v5.route.MapRouteProgressChangeListener --> Deprecated/Removed. In UI package a newer version is available.
 org.maplibre.navigation.android.navigation.v5.route.OnRouteSelectionChangeListener --> Deprecated/Removed. In UI package a newer version is available.
 
+org.maplibre.navigation.android.navigation.v5.location.MetricsLocation --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.GpxParser --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.ParseGpxTask --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.ReplayJsonRouteDto --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.ReplayJsonRouteLocationMapper --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.ReplayLocationDto --> Removed. Seems not used.
+org.maplibre.navigation.android.navigation.v5.location.replay.TimestampAdapter --> Removed. Seems not used.
+
 ----------------
 Refactor later:
 
-org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated
-Instead of parsing models directly, add dtos and mappers that can be replaces by developers to use other API engines
+org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated. Create a fresh new re-write.
+org.maplibre.navigation.android.navigation.v5.location.replay.* --> Hard to refactor in clean Kotlin. Also seems too complicated. Create a fresh new re-write.
+Add adapters or use DTOs instead of parsing directly to models that can be replaces by developers to use other API engines
+
 
 Rename engines to name with ending `engine`. And also choose a standardized naming for implementations.
     - Camera --> CameraEngine
