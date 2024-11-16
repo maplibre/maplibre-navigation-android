@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
+import io.mockk.every
+import io.mockk.mockk
 import junit.framework.Assert
 import org.junit.Test
 import org.maplibre.geojson.Point
@@ -10,10 +12,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.mockito.Mockito
 
 class RouteUtilsTest : BaseTest() {
 
@@ -69,12 +68,11 @@ class RouteUtilsTest : BaseTest() {
             first,
             route, currentStep, upcomingStep
         )
-        val bannerInstructionMilestone = Mockito.mock(
-            BannerInstructionMilestone::class.java
-        )
+        val bannerInstructionMilestone = mockk<BannerInstructionMilestone>()
         val currentStepBannerInstructions = currentStep.bannerInstructions
         buildBannerInstruction(
-            lastInstruction, bannerInstructionMilestone,
+            lastInstruction,
+            bannerInstructionMilestone,
             currentStepBannerInstructions!!
         )
 
@@ -100,9 +98,7 @@ class RouteUtilsTest : BaseTest() {
             first,
             route, currentStep, upcomingStep
         )
-        val bannerInstructionMilestone = Mockito.mock(
-            BannerInstructionMilestone::class.java
-        )
+        val bannerInstructionMilestone = mockk<BannerInstructionMilestone>()
         val currentStepBannerInstructions = currentStep.bannerInstructions
         buildBannerInstruction(
             first, bannerInstructionMilestone,
@@ -129,9 +125,7 @@ class RouteUtilsTest : BaseTest() {
             first,
             route, currentStep, upcomingStep
         )
-        val bannerInstructionMilestone = Mockito.mock(
-            BannerInstructionMilestone::class.java
-        )
+        val bannerInstructionMilestone = mockk<BannerInstructionMilestone>()
         val currentStepBannerInstructions = currentStep.bannerInstructions
         buildBannerInstruction(
             first, bannerInstructionMilestone,
@@ -429,9 +423,9 @@ class RouteUtilsTest : BaseTest() {
             stepIndex = 1,
             stepDistanceRemaining = 50.0
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
+            routeProgress.currentLegProgress.currentStepProgress!!.distanceRemaining
         val routeUtils = RouteUtils()
 
         val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
@@ -443,17 +437,17 @@ class RouteUtilsTest : BaseTest() {
 
     @Test
     fun calculateRemainingWaypoints() {
-        val route = Mockito.mock(
-            DirectionsRoute::class.java
-        )
-        val routeOptions = Mockito.mock(
-            RouteOptions::class.java
-        )
-        Mockito.`when`(routeOptions.coordinates).thenReturn(buildCoordinateList())
-        Mockito.`when`(route.routeOptions).thenReturn(routeOptions)
-        val routeProgress = Mockito.mock(RouteProgress::class.java)
-        Mockito.`when`(routeProgress.remainingWaypoints).thenReturn(2)
-        Mockito.`when`(routeProgress.directionsRoute).thenReturn(route)
+        val options = mockk<RouteOptions> {
+            every { coordinates } returns buildCoordinateList()
+        }
+        val route = mockk<DirectionsRoute> {
+            every { routeOptions } returns options
+        }
+
+        val routeProgress = mockk<RouteProgress> {
+            every { remainingWaypoints } returns 2
+            every { directionsRoute } answers { route }
+        }
         val routeUtils = RouteUtils()
 
         val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
@@ -471,13 +465,13 @@ class RouteUtilsTest : BaseTest() {
 
     @Test
     fun calculateRemainingWaypoints_handlesNullOptions() {
-        val route = Mockito.mock(
-            DirectionsRoute::class.java
-        )
-        Mockito.`when`(route.routeOptions).thenReturn(null)
-        val routeProgress = Mockito.mock(RouteProgress::class.java)
-        Mockito.`when`(routeProgress.remainingWaypoints).thenReturn(2)
-        Mockito.`when`(routeProgress.directionsRoute).thenReturn(route)
+        val route = mockk<DirectionsRoute>() {
+            every { routeOptions } returns null
+        }
+        val routeProgress = mockk<RouteProgress> {
+            every { remainingWaypoints } returns 2
+            every { directionsRoute } returns route
+        }
         val routeUtils = RouteUtils()
 
         val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
@@ -487,18 +481,16 @@ class RouteUtilsTest : BaseTest() {
 
     @Test
     fun calculateRemainingWaypointNames() {
-        val route = Mockito.mock(
-            DirectionsRoute::class.java
-        )
-        val routeOptions = Mockito.mock(
-            RouteOptions::class.java
-        )
-        Mockito.`when`(routeOptions.coordinates).thenReturn(buildCoordinateList())
-        Mockito.`when`(routeOptions.waypointNames).thenReturn("first;second;third;fourth")
-        Mockito.`when`(route.routeOptions).thenReturn(routeOptions)
-        val routeProgress = Mockito.mock(RouteProgress::class.java)
-        Mockito.`when`(routeProgress.remainingWaypoints).thenReturn(2)
-        Mockito.`when`(routeProgress.directionsRoute).thenReturn(route)
+        val route = mockk<DirectionsRoute> {
+            every { routeOptions } returns mockk {
+                every { coordinates } returns buildCoordinateList()
+                every { waypointNames } returns "first;second;third;fourth"
+            }
+        }
+        val routeProgress = mockk<RouteProgress> {
+            every { remainingWaypoints } returns 2
+            every { directionsRoute } returns route
+        }
         val routeUtils = RouteUtils()
 
         val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
@@ -511,13 +503,13 @@ class RouteUtilsTest : BaseTest() {
 
     @Test
     fun calculateRemainingWaypointNames_handlesNullOptions() {
-        val route = Mockito.mock(
-            DirectionsRoute::class.java
-        )
-        Mockito.`when`(route.routeOptions).thenReturn(null)
-        val routeProgress = Mockito.mock(RouteProgress::class.java)
-        Mockito.`when`(routeProgress.remainingWaypoints).thenReturn(2)
-        Mockito.`when`(routeProgress.directionsRoute).thenReturn(route)
+        val route = mockk<DirectionsRoute> {
+            every { routeOptions } returns null
+        }
+        val routeProgress = mockk<RouteProgress> {
+            every { remainingWaypoints } returns 2
+            every { directionsRoute } returns route
+        }
         val routeUtils = RouteUtils()
 
         val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
@@ -525,26 +517,29 @@ class RouteUtilsTest : BaseTest() {
         Assert.assertNull(remainingWaypointNames)
     }
 
-    private fun buildRouteProgress(
-        first: Int, route: DirectionsRoute, currentStep: LegStep,
-        upcomingStep: LegStep
+    fun buildRouteProgress(
+        first: Int,
+        routeValue: DirectionsRoute,
+        currentStepValue: LegStep,
+        upcomingStepValue: LegStep
     ): RouteProgress {
-        val routeProgress = Mockito.mock(RouteProgress::class.java)
-        val legProgress = Mockito.mock(RouteLegProgress::class.java)
-        Mockito.`when`(legProgress.currentStep).thenReturn(currentStep)
-        Mockito.`when`(legProgress.upComingStep).thenReturn(upcomingStep)
-        Mockito.`when`(routeProgress.currentLegProgress).thenReturn(legProgress)
-        Mockito.`when`(routeProgress.directionsRoute).thenReturn(route)
-        Mockito.`when`(routeProgress.currentLeg).thenReturn(route.legs!![first])
-        return routeProgress
+        return mockk {
+            every { directionsRoute } returns routeValue
+            every { currentLeg } returns routeValue.legs[first]
+            every { currentLegProgress } returns mockk {
+                every { currentStep } returns currentStepValue
+                every { upComingStep } returns upcomingStepValue
+            }
+        }
     }
 
     private fun buildBannerInstruction(
-        first: Int, bannerInstructionMilestone: BannerInstructionMilestone,
+        first: Int,
+        bannerInstructionMilestone: BannerInstructionMilestone,
         currentStepBannerInstructions: List<BannerInstructions>
     ) {
         val bannerInstructions = currentStepBannerInstructions[first]
-        Mockito.`when`(bannerInstructionMilestone.bannerInstructions).thenReturn(bannerInstructions)
+        every { bannerInstructionMilestone.bannerInstructions } returns bannerInstructions
     }
 
     private fun buildCoordinateList(): List<Point> {

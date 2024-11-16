@@ -12,7 +12,6 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.route.FasterRoute
 import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.mockito.Mockito
 import java.io.IOException
 
 //TODO fabi755, fix tests, after updated JSON parsing

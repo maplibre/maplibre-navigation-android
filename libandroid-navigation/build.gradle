@@ -87,7 +87,6 @@ dependencies {
 
     // Unit testing
     testImplementation dependenciesList.junit
-    testImplementation dependenciesList.mockito
     testImplementation dependenciesList.hamcrest
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric

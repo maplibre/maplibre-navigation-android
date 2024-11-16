@@ -20,9 +20,6 @@ import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 
 // TODO fabi755, fix tests, after updated JSON parsing

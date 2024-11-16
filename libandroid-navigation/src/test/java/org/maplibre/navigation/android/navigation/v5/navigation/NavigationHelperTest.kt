@@ -37,7 +37,6 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgr
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProgress
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
-import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 

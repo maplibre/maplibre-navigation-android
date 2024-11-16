@@ -1,9 +1,10 @@
 package org.maplibre.navigation.android.navigation.v5.location
 
 import android.location.Location
+import io.mockk.every
+import io.mockk.mockk
 import junit.framework.Assert
 import org.junit.Test
-import org.mockito.Mockito
 
 class LocationValidatorTest {
     @Test
@@ -45,9 +46,10 @@ class LocationValidatorTest {
         return validator
     }
 
-    private fun buildLocationWithAccuracy(accuracy: Float): Location {
-        val location = Mockito.mock(Location::class.java)
-        Mockito.`when`(location.accuracy).thenReturn(accuracy)
+    private fun buildLocationWithAccuracy(accuracyValue: Float): Location {
+        val location = mockk<Location> {
+            every { accuracy } returns accuracyValue
+        }
         return location
     }
 }

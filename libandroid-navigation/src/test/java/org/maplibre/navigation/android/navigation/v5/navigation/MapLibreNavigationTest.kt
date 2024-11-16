@@ -1,6 +1,9 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.content.Context
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import junit.framework.Assert
 import org.junit.Test
 import org.maplibre.android.location.engine.LocationEngine
@@ -13,7 +16,6 @@ import org.maplibre.navigation.android.navigation.v5.navigation.camera.SimpleCam
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRoute
 import org.maplibre.navigation.android.navigation.v5.snap.Snap
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
-import org.mockito.Mockito
 
 class MapLibreNavigationTest : BaseTest() {
     @Test
@@ -246,14 +248,14 @@ class MapLibreNavigationTest : BaseTest() {
     @Throws(Exception::class)
     fun startNavigation_doesSendTrueToNavigationEvent() {
         val navigation = buildMapLibreNavigation()
-        val navigationEventListener = Mockito.mock(
-            NavigationEventListener::class.java
-        )
+        val navigationEventListener = mockk<NavigationEventListener>(relaxed = true)
 
         navigation.addNavigationEventListener(navigationEventListener)
         navigation.startNavigation(buildTestDirectionsRoute()!!)
 
-        Mockito.verify(navigationEventListener, Mockito.times(1)).onRunning(true)
+        verify {
+            navigationEventListener.onRunning(true)
+        }
     }
 
     //TODO fabi755
@@ -281,15 +283,17 @@ class MapLibreNavigationTest : BaseTest() {
 //    }
 
     private fun buildMapLibreNavigation(): MapLibreNavigation {
-        val context = Mockito.mock(Context::class.java)
-        Mockito.`when`(context.applicationContext).thenReturn(context)
-        return MapLibreNavigation(context, locationEngine = Mockito.mock(LocationEngine::class.java))
+        val context = mockk<Context>(relaxed = true) {
+            every { applicationContext } returns this
+        }
+        return MapLibreNavigation(context, locationEngine = mockk())
     }
 
     private fun buildMapLibreNavigationWithOptions(options: MapLibreNavigationOptions): MapLibreNavigation {
-        val context = Mockito.mock(Context::class.java)
-        Mockito.`when`(context.applicationContext).thenReturn(context)
-        return MapLibreNavigation(context, options, Mockito.mock(LocationEngine::class.java))
+        val context = mockk<Context> {
+            every { applicationContext } returns this
+        }
+        return MapLibreNavigation(context, options, mockk())
     }
 
     private fun searchForVoiceInstructionMilestone(navigation: MapLibreNavigation): Int {

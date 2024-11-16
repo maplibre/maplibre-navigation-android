@@ -11,8 +11,6 @@ import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.mockito.Mock
-import org.mockito.Mockito
 
 // TODO fabi755, fix tests, after updated JSON parsing
 //class MapLibreNavigationNotificationTest : BaseTest() {

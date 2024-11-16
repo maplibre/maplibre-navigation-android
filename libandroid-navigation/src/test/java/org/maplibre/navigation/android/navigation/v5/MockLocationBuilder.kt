@@ -1,6 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5
 
 import android.location.Location
+import io.mockk.every
+import io.mockk.mockk
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
@@ -8,7 +10,6 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
-import org.mockito.Mockito
 
 internal class MockLocationBuilder {
     fun buildDefaultMockLocationUpdate(lng: Double, lat: Double): Location {
@@ -40,18 +41,18 @@ internal class MockLocationBuilder {
     }
 
     private fun buildMockLocationUpdate(
-        lng: Double,
-        lat: Double,
-        speed: Float,
-        horizontalAccuracy: Float,
-        time: Long
+        lngValue: Double,
+        latValue: Double,
+        speedValue: Float,
+        horizontalAccuracyValue: Float,
+        timeValue: Long
     ): Location {
-        val location = Mockito.mock(Location::class.java)
-        Mockito.`when`(location.longitude).thenReturn(lng)
-        Mockito.`when`(location.latitude).thenReturn(lat)
-        Mockito.`when`(location.speed).thenReturn(speed)
-        Mockito.`when`(location.accuracy).thenReturn(horizontalAccuracy)
-        Mockito.`when`(location.time).thenReturn(time)
-        return location
+        return mockk(relaxed = true) {
+            every { longitude } returns lngValue
+            every { latitude } returns latValue
+            every { speed } returns speedValue
+            every { accuracy } returns horizontalAccuracyValue
+            every { time } returns timeValue
+        }
     }
 }

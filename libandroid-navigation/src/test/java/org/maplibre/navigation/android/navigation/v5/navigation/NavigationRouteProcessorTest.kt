@@ -2,16 +2,16 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.content.Context
 import android.location.Location
+import io.mockk.every
+import io.mockk.mockk
 import junit.framework.Assert
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
-import org.mockito.Mockito
 import java.io.IOException
 
 class NavigationRouteProcessorTest : BaseTest() {
@@ -23,13 +23,10 @@ class NavigationRouteProcessorTest : BaseTest() {
     fun before() {
         routeProcessor = NavigationRouteProcessor()
         val options = MapLibreNavigationOptions()
-        val context = Mockito.mock(Context::class.java)
-        Mockito.`when`(context.applicationContext).thenReturn(context)
-        navigation = MapLibreNavigation(
-            context, options, Mockito.mock(
-                LocationEngine::class.java
-            )
-        )
+        val context = mockk<Context>(relaxed = true) {
+            every { applicationContext } returns this
+        }
+        navigation = MapLibreNavigation(context, options, mockk(relaxed = true))
         navigation!!.startNavigation(buildTestDirectionsRoute()!!)
     }
 
@@ -42,11 +39,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onFirstRouteProgressBuilt_newRouteIsDecoded() {
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress!!.legIndex)
         assertEquals(0, progress!!.currentLegProgress!!.stepIndex)
     }
@@ -54,20 +47,12 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onShouldIncreaseStepIndex_indexIsIncreased() {
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val currentStepIndex: Int = progress!!.currentLegProgress!!.stepIndex
         routeProcessor!!.onShouldIncreaseIndex()
         routeProcessor!!.checkIncreaseIndex(navigation!!)
 
-        val secondProgress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val secondProgress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val secondStepIndex: Int = secondProgress!!.currentLegProgress!!.stepIndex
 
         Assert.assertTrue(currentStepIndex != secondStepIndex)
@@ -76,11 +61,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onSnapToRouteEnabledAndUserOnRoute_snappedLocationReturns() {
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = true
         val userOffRoute = false
         val coordinates = createCoordinatesFromCurrentStep(
@@ -102,11 +83,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onSnapToRouteDisabledAndUserOnRoute_rawLocationReturns() {
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = false
         val userOffRoute = false
         val coordinates = createCoordinatesFromCurrentStep(
@@ -128,11 +105,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onSnapToRouteEnabledAndUserOffRoute_rawLocationReturns() {
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = false
         val userOffRoute = false
         val coordinates = createCoordinatesFromCurrentStep(
@@ -154,11 +127,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onStepDistanceRemainingZeroAndNoBearingMatch_stepIndexForceIncreased() {
-        val firstProgress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val firstProgress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val firstProgressIndex: Int = firstProgress!!.currentLegProgress!!.stepIndex!!
         val coordinates = createCoordinatesFromCurrentStep(
             firstProgress
@@ -181,22 +150,14 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onInvalidNextLeg_indexIsNotIncreased() {
-        routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val legSize = navigation!!.route!!.legs!!.size
 
         for (i in 0 until legSize) {
             routeProcessor!!.onShouldIncreaseIndex()
             routeProcessor!!.checkIncreaseIndex(navigation!!)
         }
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         Assert.assertTrue(progress!!.legIndex === legSize - 1)
     }
@@ -204,22 +165,14 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun onInvalidNextStep_indexIsNotIncreased() {
-        routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val stepSize = navigation!!.route!!.legs!![0].steps!!.size
 
         for (i in 0 until stepSize) {
             routeProcessor!!.onShouldIncreaseIndex()
             routeProcessor!!.checkIncreaseIndex(navigation!!)
         }
-        val progress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         Assert.assertTrue(progress!!.currentLegProgress!!.stepIndex!! === stepSize - 1)
     }
@@ -298,21 +251,17 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun withinManeuverRadiusAndBearingMatches_stepIndexIsIncreased() {
-        val firstProgress = routeProcessor!!.buildNewRouteProgress(
-            navigation!!, Mockito.mock(
-                Location::class.java
-            )
-        )
+        val firstProgress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val firstProgressIndex: Int = firstProgress!!.currentLegProgress!!.stepIndex!!
         val coordinates = createCoordinatesFromCurrentStep(
             firstProgress
         )
-        //TODO fabi755: remote from list will not work
+        //TODO fabi755: remove from list will not work
         val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
         val rawLocation = buildDefaultLocationUpdate(
             lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
         )
-        Mockito.`when`(rawLocation!!.bearing).thenReturn(145f)
+        every { rawLocation.bearing } returns 145f
 
         val secondProgress = routeProcessor!!.buildNewRouteProgress(
             navigation!!,

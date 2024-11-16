@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.LocaleList
+import io.mockk.every
+import io.mockk.mockk
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -11,33 +13,24 @@ import org.junit.runner.RunWith
 import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 class DistanceFormatterTest {
-    @Mock
-    private val context: Context? = null
-
-    @Mock
-    private val resources: Resources? = null
-
-    @Mock
-    private val configuration: Configuration? = null
+     private lateinit var context: Context
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
-        Mockito.`when`(context!!.resources).thenReturn(resources)
-        Mockito.`when`(resources!!.configuration).thenReturn(configuration)
-        Mockito.`when`(configuration!!.locales).thenReturn(LocaleList.getDefault())
-        Mockito.`when`(context.getString(R.string.kilometers)).thenReturn("km")
-        Mockito.`when`(context.getString(R.string.meters)).thenReturn("m")
-        Mockito.`when`(context.getString(R.string.miles)).thenReturn("mi")
-        Mockito.`when`(context.getString(R.string.feet)).thenReturn("ft")
+        context = mockk<Context> {
+            every { resources } returns mockk {
+                every { configuration } returns mockk()
+            }
+            every { getString(R.string.kilometers) } returns "km"
+            every { getString(R.string.meters) } returns "m"
+            every { getString(R.string.miles) } returns "mi"
+            every { getString(R.string.feet) } returns "ft"
+        }
     }
 
     @Test
