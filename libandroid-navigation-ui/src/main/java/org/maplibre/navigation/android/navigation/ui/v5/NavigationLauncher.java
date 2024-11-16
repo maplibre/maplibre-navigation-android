@@ -30,11 +30,11 @@ public class NavigationLauncher {
    * Starts the UI with a {@link DirectionsRoute} already retrieved from
    * {@link NavigationRoute}
    *
-   * @param activity must be launched from another {@link Activity}
+   * @param context to launch the navigation {@link Activity}
    * @param options  with fields to customize the navigation view
    */
-  public static void startNavigation(Activity activity, NavigationLauncherOptions options) {
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+  public static void startNavigation(Context context, NavigationLauncherOptions options) {
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
     SharedPreferences.Editor editor = preferences.edit();
 
     storeDirectionsRouteValue(options, editor);
@@ -44,9 +44,9 @@ public class NavigationLauncher {
 
     editor.apply();
 
-    Intent navigationActivity = new Intent(activity, MapLibreNavigationActivity.class);
+    Intent navigationActivity = new Intent(context, MapLibreNavigationActivity.class);
     storeInitialMapPosition(options, navigationActivity);
-    activity.startActivity(navigationActivity);
+    context.startActivity(navigationActivity);
   }
 
   /**
