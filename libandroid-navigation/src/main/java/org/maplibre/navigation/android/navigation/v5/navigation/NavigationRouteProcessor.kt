@@ -37,11 +37,11 @@ internal class NavigationRouteProcessor : OffRouteCallback {
     private var currentStep: LegStep? = null
     private var upcomingStep: LegStep? = null
     private var currentLegAnnotation: CurrentLegAnnotation? = null
-    private var indices: NavigationIndices = NavigationIndices(legIndex = FIRST_LEG_INDEX, stepIndex = FIRST_STEP_INDEX)
+    private var indices: NavigationIndices =
+        NavigationIndices(legIndex = FIRST_LEG_INDEX, stepIndex = FIRST_STEP_INDEX)
     private var stepDistanceRemaining = 0.0
     private var shouldIncreaseIndex = false
     private var shouldUpdateToIndex: NavigationIndices? = null
-    private val routeUtils: RouteUtils = RouteUtils()
 
     override fun onShouldIncreaseIndex() {
         shouldIncreaseIndex = true
@@ -109,7 +109,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      */
     private fun checkNewRoute(mapLibreNavigation: MapLibreNavigation): Boolean {
         val directionsRoute = mapLibreNavigation.route
-        val newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute!!) // TODO fabi755: how to handle null route here?
+        // TODO fabi755: how to handle null route here?
+        val newRoute = RouteUtils.isNewRoute(routeProgress, directionsRoute!!)
         if (newRoute) {
             createFirstIndices(mapLibreNavigation)
             currentLegAnnotation = null
@@ -159,7 +160,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param mapLibreNavigation to get the next [LegStep.geometry] and [OffRoute]
      */
     private fun advanceIndices(mapLibreNavigation: MapLibreNavigation) {
-        val newIndices: NavigationIndices = shouldUpdateToIndex ?: increaseIndex(routeProgress!!, indices)
+        val newIndices: NavigationIndices =
+            shouldUpdateToIndex ?: increaseIndex(routeProgress!!, indices)
 
         if (newIndices.legIndex != indices.legIndex) {
             currentLegAnnotation = null
@@ -259,7 +261,8 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         stepIndex: Int,
         upcomingStepIndex: Int
     ) {
-        currentStepPoints = decodeStepPoints(route, currentStepPoints ?: emptyList(), legIndex, stepIndex)
+        currentStepPoints =
+            decodeStepPoints(route, currentStepPoints ?: emptyList(), legIndex, stepIndex)
         upcomingStepPoints = decodeStepPoints(route, emptyList(), legIndex, upcomingStepIndex)
     }
 

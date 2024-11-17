@@ -2,13 +2,12 @@ package org.maplibre.navigation.android.navigation.v5.utils
 
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
@@ -19,9 +18,8 @@ class RouteUtilsTest : BaseTest() {
     @Test
     fun isNewRoute_returnsTrueWhenPreviousGeometriesNull() {
         val defaultRouteProgress = buildDefaultTestRouteProgress()
-        val routeUtils = RouteUtils()
 
-        val isNewRoute = routeUtils.isNewRoute(null, defaultRouteProgress!!)
+        val isNewRoute = RouteUtils.isNewRoute(null, defaultRouteProgress)
 
         Assert.assertTrue(isNewRoute)
     }
@@ -29,10 +27,8 @@ class RouteUtilsTest : BaseTest() {
     @Test
     fun isNewRoute_returnsFalseWhenGeometriesEqualEachOther() {
         val previousRouteProgress = buildDefaultTestRouteProgress()
-        val routeUtils = RouteUtils()
 
-        val isNewRoute =
-            routeUtils.isNewRoute(previousRouteProgress, previousRouteProgress!!)
+        val isNewRoute = RouteUtils.isNewRoute(previousRouteProgress, previousRouteProgress)
 
         Assert.assertFalse(isNewRoute)
     }
@@ -43,12 +39,10 @@ class RouteUtilsTest : BaseTest() {
             buildTestDirectionsRoute()
         val defaultRouteProgress = buildDefaultTestRouteProgress()
         val previousRouteProgress: RouteProgress = defaultRouteProgress.copy(
-            directionsRoute = aRoute!!.copy(geometry = "vfejnqiv")
+            directionsRoute = aRoute.copy(geometry = "vfejnqiv")
         )
-        val routeUtils = RouteUtils()
 
-        val isNewRoute =
-            routeUtils.isNewRoute(previousRouteProgress, defaultRouteProgress)
+        val isNewRoute = RouteUtils.isNewRoute(previousRouteProgress, defaultRouteProgress)
 
         Assert.assertTrue(isNewRoute)
     }
@@ -58,9 +52,9 @@ class RouteUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val first = 0
         val lastInstruction = 1
-        val routeLeg = route!!.legs!![first]
+        val routeLeg = route.legs.first()
         val routeSteps = routeLeg.steps
-        val currentStepIndex = routeSteps!!.size - 2
+        val currentStepIndex = routeSteps.size - 2
         val upcomingStepIndex = routeSteps.size - 1
         val currentStep = routeSteps[currentStepIndex]
         val upcomingStep = routeSteps[upcomingStepIndex]
@@ -76,10 +70,8 @@ class RouteUtilsTest : BaseTest() {
             currentStepBannerInstructions!!
         )
 
-        val routeUtils = RouteUtils()
 
-        val isArrivalEvent =
-            routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertTrue(isArrivalEvent)
     }
@@ -88,9 +80,9 @@ class RouteUtilsTest : BaseTest() {
     fun isArrivalEvent_returnsFalseWhenManeuverTypeIsArrival_andIsNotLastInstruction() {
         val route = buildTestDirectionsRoute()
         val first = 0
-        val routeLeg = route!!.legs!![first]
+        val routeLeg = route.legs.first()
         val routeSteps = routeLeg.steps
-        val currentStepIndex = routeSteps!!.size - 2
+        val currentStepIndex = routeSteps.size - 2
         val upcomingStepIndex = routeSteps.size - 1
         val currentStep = routeSteps[currentStepIndex]
         val upcomingStep = routeSteps[upcomingStepIndex]
@@ -105,10 +97,7 @@ class RouteUtilsTest : BaseTest() {
             currentStepBannerInstructions!!
         )
 
-        val routeUtils = RouteUtils()
-
-        val isArrivalEvent =
-            routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertFalse(isArrivalEvent)
     }
@@ -116,142 +105,57 @@ class RouteUtilsTest : BaseTest() {
     @Test
     fun isArrivalEvent_returnsFalseWhenManeuverTypeIsNotArrival() {
         val route = buildTestDirectionsRoute()
-        val first = 0
-        val routeLeg = route!!.legs!![first]
+        val routeLeg = route.legs.first()
         val routeSteps = routeLeg.steps
-        val currentStep = routeSteps!![first]
-        val upcomingStep = routeSteps[first + 1]
+        val currentStep = routeSteps.first()
+        val upcomingStep = routeSteps[1]
         val routeProgress = buildRouteProgress(
-            first,
+            0,
             route, currentStep, upcomingStep
         )
         val bannerInstructionMilestone = mockk<BannerInstructionMilestone>()
         val currentStepBannerInstructions = currentStep.bannerInstructions
         buildBannerInstruction(
-            first, bannerInstructionMilestone,
+            0,
+            bannerInstructionMilestone,
             currentStepBannerInstructions!!
         )
 
-        val routeUtils = RouteUtils()
-
-        val isArrivalEvent =
-            routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertFalse(isArrivalEvent)
     }
 
     @Test
-    fun isValidRouteProfile_returnsTrueWithDrivingTrafficProfile() {
-        val routeProfileDrivingTraffic =
-            DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
-        val routeUtils = RouteUtils()
-
-        val isValidProfile =
-            routeUtils.isValidRouteProfile(routeProfileDrivingTraffic)
-
-        Assert.assertTrue(isValidProfile)
-    }
-
-    @Test
-    fun isValidRouteProfile_returnsTrueWithDrivingProfile() {
-        val routeProfileDriving =
-            DirectionsCriteria.PROFILE_DRIVING
-        val routeUtils = RouteUtils()
-
-        val isValidProfile = routeUtils.isValidRouteProfile(routeProfileDriving)
-
-        Assert.assertTrue(isValidProfile)
-    }
-
-    @Test
-    fun isValidRouteProfile_returnsTrueWithCyclingProfile() {
-        val routeProfileCycling =
-            DirectionsCriteria.PROFILE_CYCLING
-        val routeUtils = RouteUtils()
-
-        val isValidProfile = routeUtils.isValidRouteProfile(routeProfileCycling)
-
-        Assert.assertTrue(isValidProfile)
-    }
-
-    @Test
-    fun isValidRouteProfile_returnsTrueWithWalkingProfile() {
-        val routeProfileWalking =
-            DirectionsCriteria.PROFILE_WALKING
-        val routeUtils = RouteUtils()
-
-        val isValidProfile = routeUtils.isValidRouteProfile(routeProfileWalking)
-
-        Assert.assertTrue(isValidProfile)
-    }
-
-    @Test
-    fun isValidRouteProfile_returnsFalseWithInvalidProfile() {
-        val invalidProfile = "invalid_profile"
-        val routeUtils = RouteUtils()
-
-        val isValidProfile = routeUtils.isValidRouteProfile(invalidProfile)
-
-        Assert.assertFalse(isValidProfile)
-    }
-
-    @Test
-    fun isValidRouteProfile_returnsFalseWithNullProfile() {
-        val nullProfile: String? = null
-        val routeUtils = RouteUtils()
-
-        val isValidProfile = routeUtils.isValidRouteProfile(nullProfile)
-
-        Assert.assertFalse(isValidProfile)
-    }
-
-    @Test
     @Throws(Exception::class)
-    fun findCurrentBannerInstructions_returnsNullWithNullCurrentStep() {
-        val currentStep: LegStep? = null
-        val stepDistanceRemaining = 0.0
-        val routeUtils = RouteUtils()
+    fun findCurrentBannerInstructions_returnsNullWithCurrentStepEmptyInstructions() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val currentStep = routeProgress.currentLegProgress.currentStep.copy(
+            bannerInstructions = emptyList()
+        )
+        val stepDistanceRemaining =
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
         Assert.assertNull(currentBannerInstructions)
     }
 
-    //TODO fabi755 fix this
-//    @Test
-//    @Throws(Exception::class)
-//    fun findCurrentBannerInstructions_returnsNullWithCurrentStepEmptyInstructions() {
-//        val routeProgress = buildDefaultTestRouteProgress()
-//        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
-//        val stepDistanceRemaining: Double =
-//            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-//        val currentInstructions = currentStep.bannerInstructions
-//        currentInstructions!!.clear()
-//        val routeUtils = RouteUtils()
-//
-//        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
-//            currentStep, stepDistanceRemaining
-//        )
-//
-//        Assert.assertNull(currentBannerInstructions)
-//    }
-
     @Test
     @Throws(Exception::class)
     fun findCurrentBannerInstructions_returnsCorrectCurrentInstruction() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
-        Assert.assertEquals(currentStep.bannerInstructions!![0], currentBannerInstructions)
+        Assert.assertEquals(currentStep.bannerInstructions?.first(), currentBannerInstructions)
     }
 
     @Test
@@ -261,12 +165,11 @@ class RouteUtilsTest : BaseTest() {
             stepIndex = 1,
             stepDistanceRemaining = 50.0
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -280,102 +183,34 @@ class RouteUtilsTest : BaseTest() {
             stepIndex = 1,
             stepDistanceRemaining = 500.0
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
-        Assert.assertEquals(currentStep.bannerInstructions!![0], currentBannerInstructions)
+        Assert.assertEquals(currentStep.bannerInstructions?.first(), currentBannerInstructions)
     }
 
     @Test
     @Throws(Exception::class)
-    fun findCurrentBannerText_returnsCorrectPrimaryBannerText() {
-        val routeProgress = buildDefaultTestRouteProgress().copy(
-            stepIndex = 1,
-            stepDistanceRemaining = 50.0
+    fun findCurrentVoiceInstructions_returnsNullWithCurrentStepEmptyInstructions() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep.copy(
+            voiceInstructions = emptyList()
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerText = routeUtils.findCurrentBannerText(
-            currentStep, stepDistanceRemaining, true
+        val voiceInstructions = RouteUtils.findCurrentVoiceInstructions(
+            currentStep,
+            stepDistanceRemaining
         )
 
-        Assert.assertEquals(currentStep.bannerInstructions!![1].primary, currentBannerText)
+        Assert.assertNull(voiceInstructions)
     }
-
-    @Test
-    @Throws(Exception::class)
-    fun findCurrentBannerText_returnsCorrectSecondaryBannerText() {
-        val routeProgress = buildDefaultTestRouteProgress().copy(
-            stepIndex = 1,
-            stepDistanceRemaining = 50.0
-        )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
-        val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
-
-        val currentBannerText = routeUtils.findCurrentBannerText(
-            currentStep, stepDistanceRemaining, false
-        )
-
-        Assert.assertEquals(currentStep.bannerInstructions!![1].secondary, currentBannerText)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun findCurrentBannerText_returnsNullWithNullCurrentStep() {
-        val currentStep: LegStep? = null
-        val stepDistanceRemaining = 0.0
-        val routeUtils = RouteUtils()
-
-        val currentBannerText = routeUtils.findCurrentBannerText(
-            currentStep, stepDistanceRemaining, false
-        )
-
-        Assert.assertNull(currentBannerText)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun findCurrentVoiceInstructions_returnsNullWithNullCurrentStep() {
-        val currentStep: LegStep? = null
-        val stepDistanceRemaining = 0.0
-        val routeUtils = RouteUtils()
-
-        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
-            currentStep, stepDistanceRemaining
-        )
-
-        Assert.assertNull(currentVoiceInstructions)
-    }
-
-    //TODO fabi755
-//    @Test
-//    @Throws(Exception::class)
-//    fun findCurrentVoiceInstructions_returnsNullWithCurrentStepEmptyInstructions() {
-//        val routeProgress = buildDefaultTestRouteProgress()
-//        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
-//        val stepDistanceRemaining: Double =
-//            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-//        val currentInstructions = currentStep.voiceInstructions
-//        currentInstructions!!.clear()
-//        val routeUtils = RouteUtils()
-//
-//        val voiceInstructions = routeUtils.findCurrentVoiceInstructions(
-//            currentStep, stepDistanceRemaining
-//        )
-//
-//        Assert.assertNull(voiceInstructions)
-//    }
 
     @Test
     @Throws(Exception::class)
@@ -384,12 +219,11 @@ class RouteUtilsTest : BaseTest() {
             stepIndex = 1,
             stepDistanceRemaining = 300.0
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -402,14 +236,13 @@ class RouteUtilsTest : BaseTest() {
         var routeProgress = buildDefaultTestRouteProgress()
         routeProgress = routeProgress.copy(
             stepIndex = 0,
-            stepDistanceRemaining = routeProgress.currentLegProgress!!.currentStep!!.distance
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance
         )
-        val currentStep: LegStep = routeProgress.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress!!.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -425,10 +258,9 @@ class RouteUtilsTest : BaseTest() {
         )
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val stepDistanceRemaining: Double =
-            routeProgress.currentLegProgress.currentStepProgress!!.distanceRemaining
-        val routeUtils = RouteUtils()
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -448,33 +280,31 @@ class RouteUtilsTest : BaseTest() {
             every { remainingWaypoints } returns 2
             every { directionsRoute } answers { route }
         }
-        val routeUtils = RouteUtils()
 
-        val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
+        val remainingWaypoints = RouteUtils.calculateRemainingWaypoints(routeProgress)
 
-        Assert.assertEquals(2, remainingWaypoints!!.size)
+        Assert.assertEquals(2, remainingWaypoints?.size)
         Assert.assertEquals(
             Point.fromLngLat(7.890, 1.234),
-            remainingWaypoints[0]
+            remainingWaypoints?.first()
         )
         Assert.assertEquals(
             Point.fromLngLat(5.678, 9.012),
-            remainingWaypoints[1]
+            remainingWaypoints?.get(1)
         )
     }
 
     @Test
     fun calculateRemainingWaypoints_handlesNullOptions() {
-        val route = mockk<DirectionsRoute>() {
+        val route = mockk<DirectionsRoute> {
             every { routeOptions } returns null
         }
         val routeProgress = mockk<RouteProgress> {
             every { remainingWaypoints } returns 2
             every { directionsRoute } returns route
         }
-        val routeUtils = RouteUtils()
 
-        val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
+        val remainingWaypoints = RouteUtils.calculateRemainingWaypoints(routeProgress)
 
         Assert.assertNull(remainingWaypoints)
     }
@@ -491,14 +321,13 @@ class RouteUtilsTest : BaseTest() {
             every { remainingWaypoints } returns 2
             every { directionsRoute } returns route
         }
-        val routeUtils = RouteUtils()
 
-        val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
+        val remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(routeProgress)
 
-        Assert.assertEquals(3, remainingWaypointNames!!.size)
-        Assert.assertEquals("first", remainingWaypointNames[0])
-        Assert.assertEquals("third", remainingWaypointNames[1])
-        Assert.assertEquals("fourth", remainingWaypointNames[2])
+        Assert.assertEquals(3, remainingWaypointNames?.size)
+        Assert.assertEquals("first", remainingWaypointNames?.first())
+        Assert.assertEquals("third", remainingWaypointNames?.get(1))
+        Assert.assertEquals("fourth", remainingWaypointNames?.get(2))
     }
 
     @Test
@@ -510,9 +339,8 @@ class RouteUtilsTest : BaseTest() {
             every { remainingWaypoints } returns 2
             every { directionsRoute } returns route
         }
-        val routeUtils = RouteUtils()
 
-        val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
+        val remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(routeProgress)
 
         Assert.assertNull(remainingWaypointNames)
     }

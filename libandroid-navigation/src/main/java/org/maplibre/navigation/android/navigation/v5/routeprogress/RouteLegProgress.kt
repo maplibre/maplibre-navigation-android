@@ -168,16 +168,15 @@ data class RouteLegProgress(
      *
      * @since 0.1.0
      */
-    val currentStepProgress: RouteStepProgress?
-        get() = routeLeg.steps?.get(stepIndex)?.let { currentStep ->
-            RouteStepProgress(
-                step = currentStep,
-                nextStep = routeLeg.steps?.getOrNull(stepIndex + 1),
-                distanceRemaining = stepDistanceRemaining,
-                intersections = intersections,
-                currentIntersection = currentIntersection,
-                upcomingIntersection = upcomingIntersection,
-                intersectionDistancesAlongStep = intersectionDistancesAlongStep
-            )
-        }
+    val currentStepProgress: RouteStepProgress
+        get() = RouteStepProgress(
+            step = currentStep,
+            nextStep = routeLeg.steps.getOrNull(stepIndex + 1),
+            distanceRemaining = stepDistanceRemaining,
+            intersections = intersections,
+            currentIntersection = currentIntersection,
+            upcomingIntersection = upcomingIntersection,
+            intersectionDistancesAlongStep = intersectionDistancesAlongStep
+        )
+
 }

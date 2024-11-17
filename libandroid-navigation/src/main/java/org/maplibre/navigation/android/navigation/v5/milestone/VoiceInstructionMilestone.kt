@@ -33,7 +33,6 @@ class VoiceInstructionMilestone(
 
     private var instructions: VoiceInstructions? = null
     private var currentRoute: DirectionsRoute? = null
-    private val routeUtils = RouteUtils()
 
     override fun isOccurring(
         previousRouteProgress: RouteProgress?,
@@ -41,7 +40,7 @@ class VoiceInstructionMilestone(
     ): Boolean {
         return routeProgress.currentLegProgress?.let { legProgress ->
             legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
-                val instructions = routeUtils.findCurrentVoiceInstructions(
+                val instructions = RouteUtils.findCurrentVoiceInstructions(
                     legProgress.currentStep,
                     stepDistanceRemaining
                 )

@@ -24,7 +24,7 @@ data class VoiceInstructions(
      *
      * @since 3.0.0
      */
-    val distanceAlongGeometry: Double?,
+    val distanceAlongGeometry: Double,
 
     /**
      * Provides the instruction string which was build on the server-side and can sometimes

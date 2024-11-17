@@ -14,7 +14,6 @@ internal class NavigationLocationEngineUpdater(
     private var locationEngine: LocationEngine,
     private val listener: NavigationLocationEngineListener
 ) {
-    private var routeUtils: RouteUtils = RouteUtils()
 
     init {
         requestLocationUpdates()
@@ -38,7 +37,7 @@ internal class NavigationLocationEngineUpdater(
                 listener.queueLocationUpdate(
                     result.lastLocation
                         ?.takeIf { loc -> listener.isValidLocationUpdate(loc) }
-                        ?: routeUtils.createFirstLocationFromRoute(route)
+                        ?: RouteUtils.createFirstLocationFromRoute(route)
                 )
             }
 

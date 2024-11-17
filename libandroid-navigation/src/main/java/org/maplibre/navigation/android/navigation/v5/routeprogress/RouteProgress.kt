@@ -123,8 +123,8 @@ data class RouteProgress(
      *
      * @since 0.5.0
      */
-    val remainingWaypoints: Int?
-        get() = directionsRoute.legs?.size?.minus(legIndex)
+    val remainingWaypoints: Int
+        get() = directionsRoute.legs.size.minus(legIndex)
 
     /**
      * Gives a [RouteLegProgress] object with information about the particular leg the user is

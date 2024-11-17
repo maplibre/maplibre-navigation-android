@@ -11,6 +11,7 @@ org.maplibre.navigation.android.navigation.v5.models.* -->
     - Remove classes MapLibreStreetsV8, DirectionsJsonObject, DirectionsAdapterFactory
 org.maplibre.navigation.android.navigation.v5.utils.abbreviation.* --> Removed. Not used internally. I think it is also not used by developers.
 org.maplibre.navigation.android.navigation.v5.utils.TextUtils --> Removed. Can be replaced by Android's TextUtils or by Kotlin language functions.
+org.maplibre.navigation.android.navigation.v5.utils.RouteUtils --> Now static (object) class.
 
 org.maplibre.navigation.android.navigation.v5.navigation.NavigationLifecycleMonitor --> Removed. Not used internal.
 org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute --> Deprecated/Removed. In UI package a newer version is available.
@@ -35,7 +36,7 @@ org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seem
 org.maplibre.navigation.android.navigation.v5.location.replay.* --> Hard to refactor in clean Kotlin. Also seems too complicated. Create a fresh new re-write.
 Add adapters or use DTOs instead of parsing directly to models that can be replaces by developers to use other API engines
 org.maplibre.navigation.android.navigation.v5.utils.time.* --> Seems too complicated. Create a simpler version.
-
+org.maplibre.navigation.android.navigation.v5.utils.RouteUtils --> Seems too complicated. Create simpler versions of util functions.
 
 Rename engines to name with ending `engine`. And also choose a standardized naming for implementations.
     - Camera --> CameraEngine

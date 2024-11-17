@@ -94,8 +94,9 @@ class MapLibreNavigation(
     val offRouteEngine: OffRoute = OffRouteDetector(),
     val fasterRouteEngine: FasterRoute = FasterRouteDetector(),
 ) : ServiceConnection {
-    val eventDispatcher: NavigationEventDispatcher = NavigationEventDispatcher()
+
     private var navigationService: NavigationService? = null
+
     private val mutableMilestones: MutableSet<Milestone> = mutableSetOf<Milestone>()
         .apply {
             if (options.defaultMilestonesEnabled) {
@@ -103,8 +104,12 @@ class MapLibreNavigation(
                 add(BannerInstructionMilestone(identifier = BANNER_INSTRUCTION_MILESTONE_ID))
             }
         }
+
+    val eventDispatcher: NavigationEventDispatcher = NavigationEventDispatcher()
+
     val milestones: Set<Milestone>
         get() = mutableMilestones
+
     var route: DirectionsRoute? = null
         private set
 

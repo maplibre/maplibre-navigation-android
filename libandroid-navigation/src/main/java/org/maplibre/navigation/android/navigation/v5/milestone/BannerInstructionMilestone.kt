@@ -39,15 +39,13 @@ class BannerInstructionMilestone(
     var bannerInstructions: BannerInstructions? = null
         private set
 
-    private val routeUtils = RouteUtils()
-
     override fun isOccurring(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean {
         return routeProgress.currentLegProgress?.let { legProgress ->
             legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
-                val instructions = routeUtils.findCurrentBannerInstructions(
+                val instructions = RouteUtils.findCurrentBannerInstructions(
                     legProgress.currentStep,
                     stepDistanceRemaining
                 )

@@ -131,7 +131,7 @@ data class LegStep(
      *
      * @since 3.0.0
      */
-    val voiceInstructions: List<VoiceInstructions?>?,
+    val voiceInstructions: List<VoiceInstructions>?,
 
     /**
      * If in your request you set <tt>MapboxDirections.Builder#bannerInstructions()</tt> to true,

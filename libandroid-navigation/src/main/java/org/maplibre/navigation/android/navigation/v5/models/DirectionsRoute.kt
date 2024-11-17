@@ -76,6 +76,7 @@ data class DirectionsRoute(
      */
     @SerialName("weight_name")
     val weightName: String?,
+
     /**
      * Holds onto the parameter information used when making the directions request. Useful for
      * re-requesting a directions route using the same information previously used.
