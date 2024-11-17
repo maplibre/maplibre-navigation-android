@@ -108,8 +108,8 @@ class NavigationService : Service() {
     }
 
     private fun startForegroundNotification(navigationNotification: NavigationNotification) {
-        val notification = navigationNotification.notification
-        val notificationId = navigationNotification.notificationId
+        val notification = navigationNotification.getNotification()
+        val notificationId = navigationNotification.getNotificationId()
         notification.flags = Notification.FLAG_FOREGROUND_SERVICE
         startForeground(notificationId, notification)
     }

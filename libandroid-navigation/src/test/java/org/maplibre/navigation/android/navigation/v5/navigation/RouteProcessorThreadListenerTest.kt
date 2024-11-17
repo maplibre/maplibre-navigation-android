@@ -104,10 +104,6 @@ class RouteProcessorThreadListenerTest {
     }
 
     private fun buildCustomInstruction(customInstruction: String): Instruction {
-        return object : Instruction() {
-            override fun buildInstruction(routeProgress: RouteProgress): String {
-                return customInstruction
-            }
-        }
+        return Instruction { customInstruction }
     }
 }

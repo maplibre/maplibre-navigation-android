@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.navigation.v5.utils.time
 
 import org.junit.Assert
 import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import java.util.Calendar
 
 class TimeFormatterTest {
@@ -17,7 +18,7 @@ class TimeFormatterTest {
         val zeroSeconds = 0
         time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
         val elevenMinutes = 663.7
-        val twelveHoursTimeFormatType = 0
+        val twelveHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWELVE_HOURS
         val indifferentDeviceTwentyFourHourFormat = true
 
         val formattedTime = TimeFormatter.formatTime(
@@ -40,7 +41,7 @@ class TimeFormatterTest {
         val zeroSeconds = 0
         time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
         val elevenMinutes = 663.7
-        val twentyFourHoursTimeFormatType = 1
+        val twentyFourHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWENTY_FOUR_HOURS
         val indifferentDeviceTwentyFourHourFormat = false
 
         val formattedTime = TimeFormatter.formatTime(
@@ -63,7 +64,7 @@ class TimeFormatterTest {
         val zeroSeconds = 0
         time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
         val elevenMinutes = 663.7
-        val noneSpecifiedTimeFormatType = -1
+        val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
         val deviceTwelveHourFormat = false
 
         val formattedTime = TimeFormatter.formatTime(
@@ -86,7 +87,7 @@ class TimeFormatterTest {
         val zeroSeconds = 0
         time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
         val elevenMinutes = 663.7
-        val noneSpecifiedTimeFormatType = -1
+        val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
         val deviceTwentyFourHourFormat = true
 
         val formattedTime = TimeFormatter.formatTime(

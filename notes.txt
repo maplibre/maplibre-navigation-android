@@ -18,6 +18,7 @@ org.maplibre.navigation.android.navigation.v5.utils.TextUtils --> Removed. Can b
 org.maplibre.navigation.android.navigation.v5.navigation.NavigationLifecycleMonitor --> Removed. Not used internal.
 org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute --> Deprecated/Removed. In UI package a newer version is available.
 org.maplibre.navigation.android.navigation.v5.navigation.SdkVersionChecker --> Deprecated/Removed. Make no sense, use plain java/kotlin code.
+org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat --> Move to MapLibreNavigationOptions and migrate to enum class.
 
 org.maplibre.navigation.android.navigation.v5.route.MapRouteProgressChangeListener --> Deprecated/Removed. In UI package a newer version is available.
 org.maplibre.navigation.android.navigation.v5.route.OnRouteSelectionChangeListener --> Deprecated/Removed. In UI package a newer version is available.
@@ -36,6 +37,7 @@ Refactor later:
 org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty --> Seems too complicated. Create a fresh new re-write.
 org.maplibre.navigation.android.navigation.v5.location.replay.* --> Hard to refactor in clean Kotlin. Also seems too complicated. Create a fresh new re-write.
 Add adapters or use DTOs instead of parsing directly to models that can be replaces by developers to use other API engines
+org.maplibre.navigation.android.navigation.v5.utils.time.* --> Seems too complicated. Create a simpler version.
 
 
 Rename engines to name with ending `engine`. And also choose a standardized naming for implementations.

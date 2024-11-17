@@ -58,8 +58,7 @@ class VoiceInstructionMilestone(
     //TODO fabi755, keep this or change param/function name?!
     //TODO fabi755, null checks!!
     override val instruction: Instruction
-        get() = object :
-            Instruction() {
+        get() = object : Instruction {
             override fun buildInstruction(routeProgress: RouteProgress): String {
                 if (instructions == null) {
                     return routeProgress.currentLegProgress!!.currentStep!!.name!!
