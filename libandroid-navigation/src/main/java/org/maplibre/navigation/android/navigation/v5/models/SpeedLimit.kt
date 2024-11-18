@@ -6,10 +6,11 @@ import kotlinx.serialization.Serializable
 /**
  * The file exposes speed limit annotations.
  */
+@Suppress("unused")
 object SpeedLimit {
 
     @Serializable
-    enum class Unit(text: String) {
+    enum class Unit(val text: String) {
         /**
          * Speed limit unit in km/h.
          */

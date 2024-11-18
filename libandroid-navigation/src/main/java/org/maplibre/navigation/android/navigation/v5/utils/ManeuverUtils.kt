@@ -1,7 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
 import android.text.TextUtils
-import androidx.annotation.DrawableRes
 import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants

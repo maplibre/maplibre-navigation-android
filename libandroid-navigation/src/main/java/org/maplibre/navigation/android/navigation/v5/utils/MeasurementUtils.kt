@@ -22,7 +22,7 @@ object MeasurementUtils {
     @JvmStatic
     fun userTrueDistanceFromStep(usersRawLocation: Point, step: LegStep): Double {
         // Check that the leg step contains geometry.
-        if (step.geometry.isNullOrEmpty()) {
+        if (step.geometry.isEmpty()) {
             return 0.0
         }
 

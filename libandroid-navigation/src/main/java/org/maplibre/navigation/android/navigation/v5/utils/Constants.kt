@@ -20,6 +20,7 @@ object Constants {
      *
      * @since 1.0.0
      */
+    @Suppress("unused")
     @Deprecated("Mapbox specific parameter. Will be removed in future.")
     const val MAPBOX_USER: String = "mapbox"
 
@@ -35,5 +36,6 @@ object Constants {
      *
      * @since 1.0.0
      */
+    @Suppress("unused")
     const val PRECISION_5: Int = 5
 }

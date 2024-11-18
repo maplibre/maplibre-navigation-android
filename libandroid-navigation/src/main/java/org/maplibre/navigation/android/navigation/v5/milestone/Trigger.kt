@@ -8,6 +8,7 @@ import android.util.SparseArray
  * @since 0.4.0
  */
 object Trigger {
+
     /**
      * Groups a collection of statements in an `all` relationship.
      *
@@ -65,6 +66,7 @@ object Trigger {
      * @return the statement
      * @since 0.4.0
      */
+    @Suppress("unused")
     @JvmStatic
     fun neq(key: Int, value: Any): Statement {
         return NotEqualStatement(key, value)
@@ -104,6 +106,7 @@ object Trigger {
      * @return the statement
      * @since 0.4.0
      */
+    @Suppress("unused")
     @JvmStatic
     fun lte(key: Int, value: Any): Statement {
         return LessThanEqualStatement(key, value)

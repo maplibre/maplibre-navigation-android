@@ -34,7 +34,7 @@ class OffRouteDetector : OffRoute {
      * Test #2:
      * Valid or invalid off-route. An off-route check can only continue if the device has received
      * at least 1 location update (for comparison) and the user has traveled passed
-     * the [MapLibreNavigationOptions.minimumDistanceBeforeRerouting] checked against the last re-route location.
+     * the [MapLibreNavigationOptions.offRouteMinimumDistanceMetersAfterReroute] checked against the last re-route location.
      *
      *
      * Test #3:

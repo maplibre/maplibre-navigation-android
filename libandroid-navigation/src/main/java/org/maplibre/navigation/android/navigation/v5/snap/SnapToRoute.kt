@@ -20,6 +20,7 @@ import org.maplibre.turf.TurfMisc
  *
  * @since 0.4.0
  */
+//TODO fabi755
 class SnapToRoute : Snap() {
     /**
      * Last calculated snapped bearing. This will be re-used if bearing can not calculated.
@@ -35,7 +36,7 @@ class SnapToRoute : Snap() {
      * @return Snapped location along route
      */
     override fun getSnappedLocation(location: Location, routeProgress: RouteProgress): Location {
-        val snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints!!)
+        val snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints)
         snappedLocation.bearing = snapLocationBearing(location, routeProgress)
         return snappedLocation
     }
@@ -137,15 +138,15 @@ class SnapToRoute : Snap() {
         additionalDistance: Double
     ): Point? {
         val currentStepLineString = currentLegProgress.currentStep
-            ?.geometry
-            ?.let { geometry ->
+            .geometry
+            .let { geometry ->
                 LineString.fromPolyline(geometry, Constants.PRECISION_6)
             }
-            ?.coordinates()
-            ?.takeIf { coordinates -> coordinates.isNotEmpty() }
+            .coordinates()
+            .takeIf { coordinates -> coordinates.isNotEmpty() }
             ?: return null
 
-        return currentLegProgress.currentStepProgress?.distanceTraveled?.let { distanceTraveled ->
+        return currentLegProgress.currentStepProgress.distanceTraveled.let { distanceTraveled ->
             TurfMeasurement.along(
                 currentStepLineString,
                 distanceTraveled + additionalDistance,
@@ -163,20 +164,17 @@ class SnapToRoute : Snap() {
      * @return Next leg's start point or null if no next leg is available
      */
     private fun getUpcomingLegPoint(routeProgress: RouteProgress): Point? {
-        if (routeProgress.directionsRoute.legs != null && routeProgress.directionsRoute.legs.size - 1 <= routeProgress.legIndex) {
+        if (routeProgress.directionsRoute.legs.size - 1 <= routeProgress.legIndex) {
             return null
         }
 
-        val upcomingLeg = routeProgress.directionsRoute.legs?.get(routeProgress.legIndex + 1)
-        if (upcomingLeg?.steps == null || upcomingLeg.steps.size <= 1) {
+        val upcomingLeg = routeProgress.directionsRoute.legs.get(routeProgress.legIndex + 1)
+        if (upcomingLeg.steps.size <= 1) {
             return null
         }
 
         // While first step is the same point as the last point of the current step, use the second one.
         val firstStep = upcomingLeg.steps[1]
-        if (firstStep.geometry == null) {
-            return null
-        }
 
         val currentStepLineString =
             LineString.fromPolyline(firstStep.geometry, Constants.PRECISION_6)

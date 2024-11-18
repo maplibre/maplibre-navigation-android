@@ -96,6 +96,7 @@ class DistanceFormatter(
      * @param unitType to check against the current formatter unitType
      * @return true if new formatter is needed, false otherwise
      */
+    @Suppress("unused")
     fun shouldUpdate(language: String, unitType: String, roundingIncrement: Int): Boolean {
         return this.language != language || this.unitType != unitType || this.roundingIncrement != roundingIncrement
     }

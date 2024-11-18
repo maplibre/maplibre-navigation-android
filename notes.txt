@@ -9,6 +9,7 @@ org.maplibre.navigation.android.navigation.v5.models.* -->
     - Convert annotation types to enums
     - Using Kotlinx serialization instead of GSON for JSON parsing
     - Remove classes MapLibreStreetsV8, DirectionsJsonObject, DirectionsAdapterFactory
+org.maplibre.navigation.android.navigation.v5.models.utils.* --> Removed. Not used internally.
 org.maplibre.navigation.android.navigation.v5.utils.abbreviation.* --> Removed. Not used internally. I think it is also not used by developers.
 org.maplibre.navigation.android.navigation.v5.utils.TextUtils --> Removed. Can be replaced by Android's TextUtils or by Kotlin language functions.
 org.maplibre.navigation.android.navigation.v5.utils.RouteUtils --> Now static (object) class.

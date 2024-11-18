@@ -20,7 +20,6 @@ internal class ReplayLocationDispatcher : Runnable {
     }
 
     // For testing only
-    @Suppress("unused")
     constructor(locationsToReplay: MutableList<Location>, handler: Handler) {
         checkValidInput(locationsToReplay)
         this.locationsToReplay = locationsToReplay

@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.routeprogress
 
-import android.util.Pair
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
@@ -83,22 +82,16 @@ data class RouteLegProgress(
      *
      * @since 0.1.0
      */
-    val distanceTraveled: Double?
-        get() = routeLeg.distance?.let { distance ->
-            max(0.0, distance - distanceRemaining)
-        }
+    val distanceTraveled: Double
+        get() = max(0.0, routeLeg.distance - distanceRemaining)
 
     /**
      * Provides the duration remaining in seconds till the user reaches the end of the current step.
      *
      * @since 0.1.0
      */
-    val durationRemaining: Double?
-        get() = routeLeg.duration?.let { routeDuration ->
-            fractionTraveled?.let { fractionTraveled ->
-                (1 - fractionTraveled) * routeDuration
-            }
-        }
+    val durationRemaining: Double
+        get() = (1 - fractionTraveled) * routeLeg.duration
 
     /**
      * Get the fraction traveled along the current leg, this is a float value between 0 and 1 and
@@ -106,14 +99,11 @@ data class RouteLegProgress(
      *
      * @since 0.1.0
      */
-    val fractionTraveled: Float?
-        get() = routeLeg.distance
-            ?.takeIf { distance -> distance > 0 }
-            ?.let { routeDistance ->
-                distanceTraveled?.let { distanceTraveled ->
-                    max(0.0, distanceTraveled / routeDistance)
-                }
-            }?.toFloat()
+    val fractionTraveled: Float
+        get() = if (routeLeg.distance > 0)
+                max(0.0, distanceTraveled / routeLeg.distance).toFloat()
+            else
+                0f
 
     /**
      * Get the previous step the user traversed along, if the user is still on the first step, this
@@ -125,7 +115,7 @@ data class RouteLegProgress(
         get() = if (stepIndex == 0) {
             null
         } else {
-            routeLeg.steps?.get(stepIndex - 1)
+            routeLeg.steps[stepIndex - 1]
         }
 
     /**
@@ -143,11 +133,7 @@ data class RouteLegProgress(
      * @since 0.1.0
      */
     val upComingStep: LegStep?
-        get() = if (((routeLeg.steps?.size ?: 0) - 1) > stepIndex) {
-            routeLeg.steps?.get(stepIndex + 1)
-        } else {
-            null
-        }
+        get() = routeLeg.steps.getOrNull(stepIndex + 1)
 
     /**
      * This will return the [LegStep] two steps ahead of the current step the user's on. If the
@@ -156,11 +142,7 @@ data class RouteLegProgress(
      * @since 0.5.0
      */
     val followOnStep: LegStep?
-        get() = if (((routeLeg.steps?.size ?: 0) - 2) > stepIndex) {
-            routeLeg.steps?.get(stepIndex + 2)
-        } else {
-            null
-        }
+        get() = routeLeg.steps.getOrNull(stepIndex + 2)
 
     /**
      * Gives a [RouteStepProgress] object with information about the particular step the user
@@ -178,5 +160,4 @@ data class RouteLegProgress(
             upcomingIntersection = upcomingIntersection,
             intersectionDistancesAlongStep = intersectionDistancesAlongStep
         )
-
 }

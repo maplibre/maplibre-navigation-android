@@ -1,7 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.navigation.camera
 
 import android.location.Location
-import com.google.auto.value.AutoValue
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 

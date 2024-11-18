@@ -58,7 +58,7 @@ open class SimpleCamera : Camera {
         routeInformation.route?.let { route ->
             setupLineStringAndBearing(route)
         } ?: routeInformation.routeProgress?.let { routeProgress ->
-            setupLineStringAndBearing(routeProgress.directionsRoute);
+            setupLineStringAndBearing(routeProgress.directionsRoute)
         }
     }
 

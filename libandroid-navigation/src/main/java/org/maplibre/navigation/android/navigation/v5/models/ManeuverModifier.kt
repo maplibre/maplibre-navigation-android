@@ -8,10 +8,11 @@ import kotlinx.serialization.Serializable
  *
  * @since 5.2.0
  */
+@Suppress("unused")
 object ManeuverModifier {
 
     @Serializable
-    enum class Type(text: String) {
+    enum class Type(val text: String) {
 
         /**
          * Indicates "uturn" maneuver modifier.

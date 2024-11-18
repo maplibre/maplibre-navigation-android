@@ -1,7 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.location.Location
-import android.util.Pair
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
@@ -28,7 +27,6 @@ import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation
  */
 object NavigationHelper {
     private const val FIRST_INTERSECTION = 0
-    private const val ONE_INDEX = 1
     private const val ZERO_METERS = 0.0
     private const val TWO_POINTS = 2
 
@@ -343,6 +341,7 @@ object NavigationHelper {
         measuredIntersections: Map<StepIntersection, Double>,
         stepDistanceTraveled: Double
     ): StepIntersection? {
+        //TODO fabi755
 //        for (measuredIntersection in measuredIntersections) {
 //            val intersectionDistance = measuredIntersection.value
 //            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)

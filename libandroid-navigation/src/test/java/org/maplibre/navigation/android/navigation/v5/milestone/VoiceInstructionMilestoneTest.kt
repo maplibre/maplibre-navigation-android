@@ -143,7 +143,6 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     }
 
     private fun buildVoiceInstructionMilestone(): VoiceInstructionMilestone {
-        return VoiceInstructionMilestone.Builder().setIdentifier(1234)
-            .build() as VoiceInstructionMilestone
+        return VoiceInstructionMilestone(identifier = 1234)
     }
 }

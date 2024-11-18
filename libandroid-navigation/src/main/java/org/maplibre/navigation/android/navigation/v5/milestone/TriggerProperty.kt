@@ -63,101 +63,90 @@ object TriggerProperty {
 
     const val TRUE: Int = 0x00000124
 
-    const val FALSE: Int = 0x00000100
-
-
-    //TODO fabi755: check route progress fields optionals
     fun getSparseArray(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): SparseArray<Array<Number>> {
         // Build hashMap matching the trigger properties to their corresponding current values.
         return SparseArray<Array<Number>>(13).apply {
-            routeProgress.currentLegProgress?.let { currentLegProgress ->
-                currentLegProgress.currentStep?.let { currentStep ->
-                    put(
-                        STEP_DISTANCE_TOTAL_METERS,
-                        arrayOf(currentStep.distance)
-                    )
+            val currentLegProgress = routeProgress.currentLegProgress
+            val currentStep = currentLegProgress.currentStep
 
-                    put(
-                        STEP_DURATION_TOTAL_SECONDS,
-                        arrayOf(currentStep.duration)
-                    )
-                }
+            put(
+                STEP_DISTANCE_TOTAL_METERS,
+                arrayOf(currentStep.distance)
+            )
 
-                currentLegProgress.currentStepProgress?.let { currentStepProgress ->
-                    put(
-                        STEP_DISTANCE_REMAINING_METERS,
-                        arrayOf(currentStepProgress.distanceRemaining)
-                    )
+            put(
+                STEP_DURATION_TOTAL_SECONDS,
+                arrayOf(currentStep.duration)
+            )
 
-                    put(
-                        STEP_DURATION_REMAINING_SECONDS,
-                        arrayOf(currentStepProgress.durationRemaining)
-                    )
+            put(
+                STEP_DISTANCE_REMAINING_METERS,
+                arrayOf(currentLegProgress.currentStepProgress.distanceRemaining)
+            )
 
-                    put(
-                        STEP_DISTANCE_TRAVELED_METERS,
-                        arrayOf(currentStepProgress.distanceTraveled)
-                    )
-                }
+            put(
+                STEP_DURATION_REMAINING_SECONDS,
+                arrayOf(currentLegProgress.currentStepProgress.durationRemaining)
+            )
 
+            put(
+                STEP_DISTANCE_TRAVELED_METERS,
+                arrayOf(currentLegProgress.currentStepProgress.distanceTraveled)
+            )
+
+            put(
+                STEP_INDEX,
+                arrayOf(currentLegProgress.stepIndex)
+            )
+
+            previousRouteProgress?.currentLegProgress?.let { previousLegProgress ->
                 put(
-                    STEP_INDEX,
-                    arrayOf(currentLegProgress.stepIndex)
+                    NEW_STEP,
+                    arrayOf(
+                        previousLegProgress.stepIndex,
+                        currentLegProgress.stepIndex
+                    )
                 )
-
-                previousRouteProgress?.currentLegProgress?.let { previousLegProgress ->
-                    put(
-                        NEW_STEP,
-                        arrayOf(
-                            previousLegProgress.stepIndex,
-                            currentLegProgress.stepIndex
-                        )
-                    )
-                }
-
-                routeProgress.currentLeg?.steps?.let { steps ->
-                    put(
-                        LAST_STEP,
-                        arrayOf(
-                            currentLegProgress.stepIndex,
-                            steps.size - 2
-                        )
-                    )
-                }
-
-                put(
-                    FIRST_STEP,
-                    arrayOf(currentLegProgress.stepIndex, 0)
-                )
-
-                currentLegProgress.upComingStep?.duration?.let { upComingStepDuration ->
-                    put(
-                        NEXT_STEP_DURATION_SECONDS,
-                        arrayOf(upComingStepDuration)
-                    )
-                }
-
-                currentLegProgress.upComingStep?.distance?.let { upComingStepDistance ->
-                    put(
-                        NEXT_STEP_DISTANCE_METERS,
-                        arrayOf(upComingStepDistance)
-                    )
-                }
-
-                put(FIRST_LEG, arrayOf(routeProgress.legIndex, 0))
-
-                routeProgress.directionsRoute.legs?.let { routeLegs ->
-                    put(
-                        LAST_LEG, arrayOf(
-                            routeProgress.legIndex,
-                            routeLegs.size - 1
-                        )
-                    )
-                }
             }
+
+            routeProgress.currentLeg?.steps?.let { steps ->
+                put(
+                    LAST_STEP,
+                    arrayOf(
+                        currentLegProgress.stepIndex,
+                        steps.size - 2
+                    )
+                )
+            }
+
+            put(
+                FIRST_STEP,
+                arrayOf(currentLegProgress.stepIndex, 0)
+            )
+
+            currentLegProgress.upComingStep?.duration?.let { upComingStepDuration ->
+                put(
+                    NEXT_STEP_DURATION_SECONDS,
+                    arrayOf(upComingStepDuration)
+                )
+            }
+
+            currentLegProgress.upComingStep?.distance?.let { upComingStepDistance ->
+                put(
+                    NEXT_STEP_DISTANCE_METERS,
+                    arrayOf(upComingStepDistance)
+                )
+            }
+
+            put(FIRST_LEG, arrayOf(routeProgress.legIndex, 0))
+
+            put(
+                LAST_LEG,
+                arrayOf(routeProgress.legIndex, routeProgress.directionsRoute.legs.size - 1)
+            )
         }
     }
 }

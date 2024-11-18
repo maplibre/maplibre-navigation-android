@@ -1,7 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.location.Location
-import android.util.Pair
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
@@ -194,7 +193,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         val legIndex = indices.legIndex
         val stepIndex = indices.stepIndex
         val upcomingStepIndex = stepIndex + ONE_INDEX
-        if (route.legs!!.size <= legIndex || route.legs[legIndex].steps!!.size <= stepIndex) {
+        if (route.legs.size <= legIndex || route.legs[legIndex].steps.size <= stepIndex) {
             // This catches a potential race condition when the route is changed, before the new index is processed
             createFirstIndices(mapLibreNavigation)
             return
@@ -248,7 +247,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
         stepIndex: Int,
         upcomingStepIndex: Int
     ) {
-        currentLeg = route.legs!![legIndex]
+        currentLeg = route.legs[legIndex]
         val steps = currentLeg?.steps
         currentStep = steps!![stepIndex]
         upcomingStep =

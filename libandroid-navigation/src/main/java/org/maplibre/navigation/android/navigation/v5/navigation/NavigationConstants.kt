@@ -2,12 +2,16 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 
 import androidx.annotation.IntDef
 import androidx.annotation.StringDef
+import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
+import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
+import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
 
 /**
  * Navigation constants
  *
  * @since 0.1.0
  */
+@Suppress("unused")
 object NavigationConstants {
 
     /**

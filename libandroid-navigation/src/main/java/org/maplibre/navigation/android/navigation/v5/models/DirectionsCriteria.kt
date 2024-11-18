@@ -1,13 +1,14 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
 import androidx.annotation.StringDef
-import kotlinx.serialization.Serializable
 
 /**
  * Constants and properties used to customize the directions request.
  *
  * @since 1.0.0
  */
+
+@Suppress("unused")
 object DirectionsCriteria {
     /**
      * Mapbox default username.
@@ -303,7 +304,6 @@ object DirectionsCriteria {
     @Retention(AnnotationRetention.SOURCE)
     @StringDef(DESTINATION_ANY, DESTINATION_LAST)
     annotation class DestinationCriteria
-
 
     /**
      * Retention policy for the approaches parameter in the MapMatching and Directions API.

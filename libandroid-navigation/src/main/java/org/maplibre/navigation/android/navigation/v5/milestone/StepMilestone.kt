@@ -1,8 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone.Builder
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 /**
@@ -19,16 +17,6 @@ class StepMilestone(
 ) : Milestone(identifier, instruction, trigger) {
     private var called = false
 
-    @Deprecated(
-        "Use constructor with named arguments.",
-        replaceWith = ReplaceWith("StepMilestone(identifier, instruction, trigger)")
-    )
-    constructor(builder: Builder) : this(
-        builder.identifier,
-        builder.instruction,
-        builder.trigger
-    )
-
     override fun isOccurring(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
@@ -37,7 +25,7 @@ class StepMilestone(
             if (called) {
                 // Determine if the step index has changed and set called accordingly. This prevents multiple calls to
                 // onMilestoneEvent per Step.
-                if (previousRouteProgress?.currentLegProgress?.stepIndex != routeProgress.currentLegProgress?.stepIndex
+                if (previousRouteProgress?.currentLegProgress?.stepIndex != routeProgress.currentLegProgress.stepIndex
                 ) {
                     called = false
                 } else {
@@ -54,22 +42,5 @@ class StepMilestone(
 
             return@let called
         } ?: false
-    }
-
-    /**
-     * Build a new [StepMilestone]
-     *
-     * @since 0.4.0
-     */
-    @Deprecated(
-        "Use RouteMilestone constructor with named arguments to create instance.",
-        replaceWith = ReplaceWith("StepMilestone(identifier, instruction, trigger)")
-    )
-    class Builder : Milestone.Builder() {
-
-        @Throws(NavigationException::class)
-        override fun build(): StepMilestone {
-            return StepMilestone(this)
-        }
     }
 }

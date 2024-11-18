@@ -8,11 +8,9 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
  * This class handles calculating snapped position along the route. Latitude, longitude and bearing
  * should be provided.
  *
- *
  * The [MapLibreNavigation] uses
- * a [SnapToRoute] by default. If you would
- * like to customize the camera position, create a concrete implementation of this class
- * or subclass [SnapToRoute] and update [MapLibreNavigation.setSnapEngine]}.
+ * a [SnapToRoute] by default. If you would ike to customize the camera position, create a concrete implementation of this class
+ * or subclass [SnapToRoute] and set it on [MapLibreNavigation] constructor}.
  */
 abstract class Snap {
 

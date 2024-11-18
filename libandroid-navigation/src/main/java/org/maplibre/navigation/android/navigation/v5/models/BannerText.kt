@@ -23,7 +23,7 @@ data class BannerText(
     val text: String,
 
     /**
-     * A part or element of the [com.mapbox.api.directions.v5.models.BannerInstructions].
+     * A part or element of the [BannerInstructions].
      *
      * @return a [BannerComponents] specific to a [LegStep]
      * @since 3.0.0
@@ -34,7 +34,7 @@ data class BannerText(
      * This indicates the type of maneuver.
      *
      * @return String with type of maneuver
-     * @see StepManeuver.StepManeuverType
+     * @see StepManeuver.Type
      *
      * @since 3.0.0
      */

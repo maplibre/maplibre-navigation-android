@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.maplibre.geojson.Point
@@ -11,6 +10,7 @@ import org.maplibre.navigation.android.navigation.v5.models.serializer.PointSeri
  *
  * @since 1.0.0
  */
+@Suppress("unused")
 @Serializable
 data class StepManeuver(
 
@@ -183,7 +183,7 @@ data class StepManeuver(
         /**
          * A traffic circle. While very similar to a larger version of a roundabout,
          * it does not necessarily follow roundabout rules for right of way.
-         * It can offer [com.mapbox.api.directions.v5.models.LegStep.rotaryName]  parameters,
+         * It can offer [LegStep.rotaryName]  parameters,
          * [LegStep.rotaryPronunciation] ()}  parameters, or both,
          * in addition to the [.exit] property.
          *

@@ -19,8 +19,7 @@ object ToleranceUtils {
         routeProgress: RouteProgress,
         navigationOptions: MapLibreNavigationOptions
     ): Double {
-        val intersections = routeProgress.currentLegProgress?.currentStepProgress?.intersections
-
+        val intersections = routeProgress.currentLegProgress.currentStepProgress.intersections
         if (!intersections.isNullOrEmpty()) {
             val intersectionsPoints: MutableList<Point> = ArrayList()
             for (intersection in intersections) {

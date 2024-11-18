@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
  *
  * @since 1.0.0
  */
+@Suppress("unused")
 @Serializable
 data class LegStep(
 
@@ -174,7 +175,7 @@ data class LegStep(
     val exits: String?
 ) {
 
-    enum class SpeedLimitSign(text: String) {
+    enum class SpeedLimitSign(val text: String) {
         MUTCD("mutcd"),
         VIENNA("vienna")
     }

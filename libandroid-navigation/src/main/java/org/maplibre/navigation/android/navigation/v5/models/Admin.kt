@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

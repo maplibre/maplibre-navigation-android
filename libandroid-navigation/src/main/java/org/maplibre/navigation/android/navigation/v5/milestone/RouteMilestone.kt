@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
@@ -18,16 +17,6 @@ class RouteMilestone(
 ) : Milestone(identifier, instruction, trigger) {
     private var called = false
 
-    @Deprecated(
-        "Use constructor with named arguments.",
-        replaceWith = ReplaceWith("RouteMilestone(identifier, instruction, trigger)")
-    )
-    constructor(builder: Builder) : this(
-        builder.identifier,
-        builder.instruction,
-        builder.trigger
-    )
-
     override fun isOccurring(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
@@ -42,22 +31,5 @@ class RouteMilestone(
             )
             called
         } ?: false
-    }
-
-    /**
-     * Build a new [RouteMilestone]
-     *
-     * @since 0.4.0
-     */
-    @Deprecated(
-        "Use RouteMilestone constructor with named arguments to create instance.",
-        replaceWith = ReplaceWith("RouteMilestone(identifier, instruction, trigger)")
-    )
-    class Builder : Milestone.Builder() {
-
-        @Throws(NavigationException::class)
-        override fun build(): RouteMilestone {
-            return RouteMilestone(this)
-        }
     }
 }

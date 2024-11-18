@@ -75,7 +75,6 @@ data class RouteOptions(
 
     /**
      * The language of returned turn-by-turn text instructions. The default is en (English).
-     * Must be used in conjunction with [Builder.steps].
      *
      * @since 3.0.0
      */
@@ -182,8 +181,8 @@ data class RouteOptions(
      * If steps is set to true, the following guidance-related parameters will be available:
      * [RouteOptions.bannerInstructions], [RouteOptions.language],
      * [RouteOptions.roundaboutExits], [RouteOptions.voiceInstructions],
-     * [RouteOptions.voiceUnits], [RouteOptions.waypointNamesList],
-     * [RouteOptions.waypointTargetsList], waypoints from [RouteOptions.coordinates]
+     * [RouteOptions.voiceUnits], [RouteOptions.waypointNames],
+     * [RouteOptions.waypointTargets], waypoints from [RouteOptions.coordinates]
      *
      * @since 3.1.0
      */

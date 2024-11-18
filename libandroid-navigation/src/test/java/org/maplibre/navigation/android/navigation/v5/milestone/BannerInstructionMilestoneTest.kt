@@ -113,7 +113,6 @@ class BannerInstructionMilestoneTest : BaseTest() {
     }
 
     private fun buildBannerInstructionMilestone(): BannerInstructionMilestone {
-        return BannerInstructionMilestone.Builder().setIdentifier(1234)
-            .build() as BannerInstructionMilestone
+        return BannerInstructionMilestone(identifier = 1234)
     }
 }

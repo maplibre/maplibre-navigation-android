@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Build
 import android.os.IBinder
 import androidx.core.content.ContextCompat
 import org.maplibre.android.location.engine.LocationEngine
@@ -15,7 +14,6 @@ import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventLis
 import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.BANNER_INSTRUCTION_MILESTONE_ID
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NON_NULL_APPLICATION_CONTEXT_REQUIRED
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationService.LocalBinder
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera
@@ -41,19 +39,19 @@ import timber.log.Timber
  * user experience. Once this class is initialized, the options specified
  * through the options class cannot be modified.
  *
- * @param context        required in order to create and bind the navigation service. An application context is required here.
- * @param options        a custom built `MapLibreNavigationOptions` class
- * @param locationEngine a LocationEngine to provide Location updates
- * @param cameraEngine Navigation uses a camera engine to determine the camera position while routing.
+ * @param applicationContext    required in order to create and bind the navigation service. An application context is required here.
+ * @param options               a custom built `MapLibreNavigationOptions` class
+ * @param locationEngine        a LocationEngine to provide Location updates
+ * @param cameraEngine          Navigation uses a camera engine to determine the camera position while routing.
  *  By default, it uses a [SimpleCamera]. If you would like to customize how the camera is
  *  positioned, create a new [Camera] and set it here.
- * @param snapEngine This parameter is used to pass in a custom implementation of the snapping
+ * @param snapEngine            This parameter is used to pass in a custom implementation of the snapping
  *  logic. A default snap-to-route engine is attached when this class is first initialized;
  *  setting a custom one will replace it with your own implementation.
- * @param offRouteEngine This param is used to pass in a custom implementation of the off-route
+ * @param offRouteEngine        This param is used to pass in a custom implementation of the off-route
  *  logic, A default off-route detection engine is attached when this class is first initialized;
  *  setting a custom one will replace it with your own implementation.
- * @param fasterRouteEngine This API is used to pass in a custom implementation of the faster-route
+ * @param fasterRouteEngine     This API is used to pass in a custom implementation of the faster-route
  *  detection logic, A default faster-route detection engine is attached when this class is first
  *  initialized; setting a custom one will replace it with your own implementation.
  *
@@ -217,12 +215,6 @@ class MapLibreNavigation(
      * On initial start of the navigation session, the navigation services gets created and bound to
      * your activity. Unless disabled, a notification will be displayed to the user and will remain
      * until the service stops running in the background.
-     *
-     *
-     * The directions route should be acquired by building a [NavigationRoute] object and
-     * calling [NavigationRoute.getRoute] on it. Using navigation route request a
-     * route with the required parameters needed while at the same time, allowing for flexibility in
-     * other parts of the request.
      *
      *
      * @param directionsRoute a [DirectionsRoute] that makes up the path your user should
@@ -465,6 +457,7 @@ class MapLibreNavigation(
      *
      * @since 0.9.0
      */
+    @Suppress("unused")
     fun removeFasterRouteListener(fasterRouteListener: FasterRouteListener?) {
         eventDispatcher.removeFasterRouteListener(fasterRouteListener)
     }

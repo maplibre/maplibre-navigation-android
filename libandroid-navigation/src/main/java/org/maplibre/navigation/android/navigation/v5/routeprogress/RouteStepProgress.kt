@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.routeprogress
 
-import android.util.Pair
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.StepIntersection
 import kotlin.math.max

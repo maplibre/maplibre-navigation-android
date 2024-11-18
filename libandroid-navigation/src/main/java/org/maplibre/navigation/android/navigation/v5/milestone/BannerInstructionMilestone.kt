@@ -1,10 +1,10 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 
 /**
  * A default milestone that is added to [MapLibreNavigation]
@@ -20,16 +20,6 @@ class BannerInstructionMilestone(
     trigger: Trigger.Statement? = null
 ) : Milestone(identifier, instruction, trigger) {
 
-    @Deprecated(
-        "Use constructor with named arguments.",
-        replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)")
-    )
-    constructor(builder: Builder) : this(
-        builder.identifier,
-        builder.instruction,
-        builder.trigger
-    )
-
     /**
      * Returns the given [BannerInstructions] for the time that the milestone is triggered.
      *
@@ -43,21 +33,19 @@ class BannerInstructionMilestone(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean {
-        return routeProgress.currentLegProgress?.let { legProgress ->
-            legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
-                val instructions = RouteUtils.findCurrentBannerInstructions(
-                    legProgress.currentStep,
-                    stepDistanceRemaining
-                )
+        val stepDistanceRemaining =
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+        val instructions = RouteUtils.findCurrentBannerInstructions(
+            routeProgress.currentLegProgress.currentStep,
+            stepDistanceRemaining
+        )
 
-                return@currentStepLet if (shouldBeShown(instructions, stepDistanceRemaining)) {
-                    this.bannerInstructions = instructions
-                    true
-                } else {
-                    false
-                }
-            } ?: false
-        } ?: false
+        return if (shouldBeShown(instructions, stepDistanceRemaining)) {
+            this.bannerInstructions = instructions
+            true
+        } else {
+            false
+        }
     }
 
     /**
@@ -78,22 +66,5 @@ class BannerInstructionMilestone(
                 && instructions!!.distanceAlongGeometry >= stepDistanceRemaining
         val isFirstInstruction = this.bannerInstructions == null && instructions != null
         return isFirstInstruction || withinDistanceAlongGeometry
-    }
-
-    /**
-     * Build a new [BannerInstructionMilestone]
-     *
-     * @since 0.4.0
-     */
-    @Deprecated(
-        "Use BannerInstructionMilestone constructor with named arguments to create instance.",
-        replaceWith = ReplaceWith("BannerInstructionMilestone(identifier, instruction, trigger)")
-    )
-    class Builder : Milestone.Builder() {
-
-        @Throws(NavigationException::class)
-        override fun build(): BannerInstructionMilestone {
-            return BannerInstructionMilestone(this)
-        }
     }
 }

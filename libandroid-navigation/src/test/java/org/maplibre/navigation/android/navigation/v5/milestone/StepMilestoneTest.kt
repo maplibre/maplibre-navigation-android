@@ -30,11 +30,7 @@ class StepMilestoneTest : BaseTest() {
 
     @Test
     fun identifier_doesEqualSetValue() {
-            val milestone =
-                StepMilestone.Builder()
-                    .setIdentifier(101)
-                    .build()
-
+            val milestone = StepMilestone(identifier = 101)
             Assert.assertEquals(101, milestone.identifier)
         }
 

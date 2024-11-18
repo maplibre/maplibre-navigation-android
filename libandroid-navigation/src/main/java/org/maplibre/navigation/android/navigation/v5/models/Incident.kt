@@ -4,8 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Reproduces one of road incidents type ([IncidentType]) that might be on the way.
+ * Reproduces one of road incidents type ([Type]) that might be on the way.
  */
+@Suppress("unused")
 @Serializable
 data class Incident(
 

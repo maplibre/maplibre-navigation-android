@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.maplibre.navigation.android.navigation.v5.models
 
 import kotlinx.serialization.SerialName
@@ -44,7 +46,7 @@ data class BannerComponents(
     val type: Type,
 
     /**
-     * String giving you more context about [BannerComponentsType] which
+     * String giving you more context about [Type] which
      * may help in visual markup/display choices.
      *
      * Possible values:

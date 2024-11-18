@@ -1,21 +1,16 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
 import android.location.Location
-import android.text.TextUtils
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
-import org.maplibre.navigation.android.navigation.v5.models.BannerText
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import java.util.Arrays
-import java.util.Collections
 
 object RouteUtils {
 
@@ -228,5 +223,4 @@ object RouteUtils {
     }
 
     private const val FORCED_LOCATION = "Forced Location"
-    private const val ORIGIN_WAYPOINT_NAME_THRESHOLD = 1
 }

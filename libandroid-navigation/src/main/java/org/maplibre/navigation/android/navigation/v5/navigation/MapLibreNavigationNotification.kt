@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.format.DateFormat
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
@@ -152,22 +153,13 @@ internal class MapLibreNavigationNotification(
         return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS)
     }
 
-    private fun registerReceiver(context: Context?) {
-        if (context != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.registerReceiver(
-                    endNavigationBtnReceiver, IntentFilter(
-                        NavigationNotification.END_NAVIGATION_ACTION
-                    ), Context.RECEIVER_NOT_EXPORTED
-                )
-            } else {
-                context.registerReceiver(
-                    endNavigationBtnReceiver, IntentFilter(
-                        NavigationNotification.END_NAVIGATION_ACTION
-                    )
-                )
-            }
-        }
+    private fun registerReceiver(context: Context) {
+        ContextCompat.registerReceiver(
+            context,
+            endNavigationBtnReceiver,
+            IntentFilter(NavigationNotification.END_NAVIGATION_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     /**
@@ -214,7 +206,7 @@ internal class MapLibreNavigationNotification(
     }
 
     private fun hasInstructions(step: LegStep): Boolean {
-        return step.bannerInstructions != null && !step.bannerInstructions.isEmpty()
+        return !step.bannerInstructions.isNullOrEmpty()
     }
 
     private fun newInstructionText(step: LegStep): Boolean {
@@ -224,7 +216,7 @@ internal class MapLibreNavigationNotification(
     private fun updateDistanceText(routeProgress: RouteProgress) {
         if (currentDistanceText == null || newDistanceText(routeProgress)) {
             currentDistanceText = distanceFormatter!!.formatDistance(
-                routeProgress.currentLegProgress.currentStepProgress!!.distanceRemaining
+                routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
             )
             collapsedNotificationRemoteViews!!.setTextViewText(
                 R.id.notificationDistanceText,
@@ -238,9 +230,8 @@ internal class MapLibreNavigationNotification(
     }
 
     private fun newDistanceText(routeProgress: RouteProgress): Boolean {
-        return currentDistanceText != null
-                && currentDistanceText.toString() != distanceFormatter!!.formatDistance(
-            routeProgress.currentLegProgress.currentStepProgress!!.distanceRemaining
+        return currentDistanceText != null && currentDistanceText.toString() != distanceFormatter!!.formatDistance(
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
         ).toString()
     }
 

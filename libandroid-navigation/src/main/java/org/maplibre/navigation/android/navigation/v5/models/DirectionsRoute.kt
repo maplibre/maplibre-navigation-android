@@ -10,13 +10,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class DirectionsRoute(
-//    /**
-//     * The index of this route in the original network response.
-//     *
-//     * @return string of an int value representing the index
-//     * @since 4.4.0
-//     */
-//    val routeIndex: String?,
 
     /**
      * Gives the geometry of the route. Commonly used to draw the route on the map view.

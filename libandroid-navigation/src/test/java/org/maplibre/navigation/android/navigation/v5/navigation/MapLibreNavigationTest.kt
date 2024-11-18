@@ -84,7 +84,7 @@ class MapLibreNavigationTest : BaseTest() {
     @Throws(Exception::class)
     fun addMilestone_milestoneDidGetAdded() {
         val navigation = buildMapLibreNavigation()
-        val milestone: Milestone = StepMilestone.Builder().build()
+        val milestone: Milestone = StepMilestone(identifier = 42)
 
         navigation.addMilestone(milestone)
 
@@ -99,7 +99,7 @@ class MapLibreNavigationTest : BaseTest() {
         )
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
-        val milestone: Milestone = StepMilestone.Builder().build()
+        val milestone: Milestone = StepMilestone(identifier = 42)
         navigationWithOptions.addMilestone(milestone)
         navigationWithOptions.addMilestone(milestone)
 
@@ -114,7 +114,7 @@ class MapLibreNavigationTest : BaseTest() {
         )
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
 
-        val milestone: Milestone = StepMilestone.Builder().build()
+        val milestone: Milestone = StepMilestone(identifier = 1)
         navigationWithOptions.addMilestone(milestone)
         navigationWithOptions.removeMilestone(milestone)
 
@@ -129,8 +129,8 @@ class MapLibreNavigationTest : BaseTest() {
         )
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
-        val milestone: Milestone = StepMilestone.Builder().build()
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
+        val milestone: Milestone = StepMilestone(identifier = 1)
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 2))
         navigationWithOptions.removeMilestone(milestone)
 
         Assert.assertEquals(1, navigationWithOptions.milestones.size)
@@ -144,10 +144,10 @@ class MapLibreNavigationTest : BaseTest() {
         )
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 1))
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 2))
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 3))
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 4))
 
         navigationWithOptions.removeMilestone(null)
 
@@ -163,7 +163,7 @@ class MapLibreNavigationTest : BaseTest() {
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
         val removedMilestoneIdentifier = 5678
-        val milestone = StepMilestone.Builder().setIdentifier(removedMilestoneIdentifier).build()
+        val milestone = StepMilestone(identifier = removedMilestoneIdentifier)
         navigationWithOptions.addMilestone(milestone)
 
         navigationWithOptions.removeMilestone(removedMilestoneIdentifier)
@@ -179,7 +179,7 @@ class MapLibreNavigationTest : BaseTest() {
         )
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
-        navigationWithOptions.addMilestone(StepMilestone.Builder().build())
+        navigationWithOptions.addMilestone(StepMilestone(identifier = 1234))
         val removedMilestoneIdentifier = 5678
 
         navigationWithOptions.removeMilestone(removedMilestoneIdentifier)
@@ -196,9 +196,9 @@ class MapLibreNavigationTest : BaseTest() {
 
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
         val milestoneIdentifier = 5678
-        val milestone = StepMilestone.Builder().setIdentifier(milestoneIdentifier).build()
+        val milestone = StepMilestone(identifier = milestoneIdentifier)
         navigationWithOptions.addMilestone(milestone)
-        val milestones: MutableList<Milestone> = ArrayList()
+        val milestones: MutableList<Milestone> = java.util.ArrayList()
         milestones.add(milestone)
         milestones.add(milestone)
         milestones.add(milestone)
@@ -218,8 +218,8 @@ class MapLibreNavigationTest : BaseTest() {
         val navigationWithOptions = buildMapLibreNavigationWithOptions(options)
         val firstMilestoneId = 5678
         val secondMilestoneId = 5679
-        val firstMilestone = StepMilestone.Builder().setIdentifier(firstMilestoneId).build()
-        val secondMilestone = StepMilestone.Builder().setIdentifier(secondMilestoneId).build()
+        val firstMilestone = StepMilestone(identifier = firstMilestoneId)
+        val secondMilestone = StepMilestone(identifier = secondMilestoneId)
         val milestones: MutableList<Milestone> = ArrayList()
         milestones.add(firstMilestone)
         milestones.add(secondMilestone)

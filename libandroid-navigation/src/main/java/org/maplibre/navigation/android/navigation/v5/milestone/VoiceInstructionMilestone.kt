@@ -1,66 +1,53 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 
 /**
- * A default milestone that is added to [MapLibreNavigation]
- * when default milestones are enabled.
+ * A default milestone that is added to [MapLibreNavigation] when default milestones are enabled.
  *
  *
  * Please note, this milestone has a custom trigger based on location progress along a route.  If you
  * set custom triggers, they will be ignored in favor of this logic.
  */
+//TODO fabi755, null checks!!
 class VoiceInstructionMilestone(
     identifier: Int,
     instruction: Instruction? = null,
     trigger: Trigger.Statement? = null
 ) : Milestone(identifier, instruction, trigger) {
 
-    @Deprecated(
-        "Use constructor with named arguments.",
-        replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)")
-    )
-    constructor(builder: Builder) : this(
-        builder.identifier,
-        builder.instruction,
-        builder.trigger
-    )
-
     private var instructions: VoiceInstructions? = null
-    private var currentRoute: DirectionsRoute? = null
 
     override fun isOccurring(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean {
-        return routeProgress.currentLegProgress?.let { legProgress ->
-            legProgress.currentStepProgress?.distanceRemaining?.let currentStepLet@{ stepDistanceRemaining ->
-                val instructions = RouteUtils.findCurrentVoiceInstructions(
-                    legProgress.currentStep,
-                    stepDistanceRemaining
-                )
+        val stepDistanceRemaining = routeProgress.currentLegProgress
+            .currentStepProgress
+            .distanceRemaining
+        val instructions = RouteUtils.findCurrentVoiceInstructions(
+            routeProgress.currentLegProgress.currentStep,
+            stepDistanceRemaining
+        )
 
-                return@currentStepLet if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
-                    updateInstructions(routeProgress, instructions)
-                } else {
-                    false
-                }
-            } ?: false
-        } ?: false
+        return if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
+            this.instructions = instructions
+            true
+        } else {
+            false
+        }
     }
 
     //TODO fabi755, keep this or change param/function name?!
-    //TODO fabi755, null checks!!
     override val instruction: Instruction
         get() = object : Instruction {
             override fun buildInstruction(routeProgress: RouteProgress): String {
                 if (instructions == null) {
-                    return routeProgress.currentLegProgress!!.currentStep!!.name!!
+                    return routeProgress.currentLegProgress.currentStep.name!!
                 }
                 return instructions!!.announcement!!
             }
@@ -102,18 +89,6 @@ class VoiceInstructionMilestone(
         }
 
     /**
-     * Looks to see if we have a new route.
-     *
-     * @param routeProgress provides updated route information
-     * @return true if new route, false if not
-     */
-    private fun isNewRoute(routeProgress: RouteProgress): Boolean {
-        val newRoute = currentRoute == null || currentRoute != routeProgress.directionsRoute
-        currentRoute = routeProgress.directionsRoute
-        return newRoute
-    }
-
-    /**
      * Checks if the current instructions are different from the instructions
      * determined by the step distance remaining.
      *
@@ -127,27 +102,7 @@ class VoiceInstructionMilestone(
     ): Boolean {
         val isNewInstruction = this.instructions == null || this.instructions != instructions
         val isValidNewInstruction = instructions != null && isNewInstruction
-        return isValidNewInstruction && instructions!!.distanceAlongGeometry!! >= stepDistanceRemaining
-    }
-
-    private fun updateInstructions(
-        routeProgress: RouteProgress,
-        instructions: VoiceInstructions?
-    ): Boolean {
-        this.instructions = instructions
-        return true
-    }
-
-    @Deprecated(
-        "Use RouteMilestone constructor with named arguments to create instance.",
-        replaceWith = ReplaceWith("VoiceInstructionMilestone(identifier, instruction, trigger)")
-    )
-    class Builder : Milestone.Builder() {
-
-        @Throws(NavigationException::class)
-        override fun build(): VoiceInstructionMilestone {
-            return VoiceInstructionMilestone(this)
-        }
+        return isValidNewInstruction && instructions!!.distanceAlongGeometry >= stepDistanceRemaining
     }
 
     companion object {

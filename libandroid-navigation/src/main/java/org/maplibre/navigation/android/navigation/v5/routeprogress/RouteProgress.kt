@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.routeprogress
 
-import android.util.Pair
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
@@ -86,8 +85,8 @@ data class RouteProgress(
      *
      * @since 0.1.0
      */
-    val currentLeg: RouteLeg?
-        get() = directionsRoute.legs?.get(legIndex)
+    val currentLeg: RouteLeg
+        get() = directionsRoute.legs[legIndex]
 
     /**
      * Total distance traveled in meters along route.
