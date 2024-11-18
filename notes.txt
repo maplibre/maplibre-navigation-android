@@ -29,6 +29,8 @@ org.maplibre.navigation.android.navigation.v5.location.replay.ReplayJsonRouteLoc
 org.maplibre.navigation.android.navigation.v5.location.replay.ReplayLocationDto --> Removed. Seems not used.
 org.maplibre.navigation.android.navigation.v5.location.replay.TimestampAdapter --> Removed. Seems not used.
 
+org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation --> Remove Builder, use named arguments in constructor instead.
+
 ----------------
 Refactor later:
 
