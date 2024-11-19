@@ -21,10 +21,10 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,9 +59,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
         navigation = MapLibreNavigation(
             this,
-            MapLibreNavigationOptions.builder()
-                .snapToRoute(true)
-                .build()
+            MapLibreNavigationOptions(snapToRoute = true)
         ).apply {
             snapEngine
             addProgressChangeListener(this@SnapToRouteNavigationActivity)
@@ -149,11 +147,11 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { responseBody ->
-                    if (responseBody.routes().isNotEmpty()) {
+                    if (responseBody.routes.isNotEmpty()) {
                         val maplibreResponse = DirectionsResponse.fromJson(responseBody.toJson());
-                        val directionsRoute = maplibreResponse.routes().first()
+                        val directionsRoute = maplibreResponse.routes.first()
                         this@SnapToRouteNavigationActivity.route = directionsRoute
-                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes)
 
                         startNavigation()
                     }
@@ -170,7 +168,8 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         route?.let { route ->
             locationEngine.also { locationEngine ->
                 locationEngine.assign(route)
-                navigation.locationEngine = locationEngine
+                //TODO fabi755
+//                navigation.locationEngine = locationEngine
                 navigation.startNavigation(route)
             }
         }

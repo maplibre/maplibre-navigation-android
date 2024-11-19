@@ -30,6 +30,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -232,30 +233,28 @@ class ValhallaNavigationActivity :
                         val responseBodyJson = response.body!!.string()
                         Timber.d("calculateRoute ValhallaRouting responseBodyJson: %s", responseBodyJson)
                         val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
-                        this@ValhallaNavigationActivity.route = maplibreResponse.routes()
+                        this@ValhallaNavigationActivity.route = maplibreResponse.routes
                             .first()
-                            .toBuilder()
-                            .routeOptions(
-                                // These dummy route options are not not used to create directions,
-                                // but currently they are necessary to start the navigation
-                                // and to use the voice instructions.
-                                // Again, this isn't ideal, but it is a requirement of the framework.
-                                RouteOptions.builder()
-                                    .baseUrl("https://valhalla.routing")
-                                    .profile("valhalla")
-                                    .user("valhalla")
-                                    .accessToken("valhalla")
-                                    .voiceInstructions(true)
-                                    .bannerInstructions(true)
-                                    .language(language)
-                                    .coordinates(listOf(origin, destination))
-                                    .requestUuid("0000-0000-0000-0000")
-                                    .build()
+                            .copy(
+                                routeOptions = RouteOptions(
+                                    // These dummy route options are not not used to create directions,
+                                    // but currently they are necessary to start the navigation
+                                    // and to use the voice instructions.
+                                    // Again, this isn't ideal, but it is a requirement of the framework.
+                                    baseUrl = "https://valhalla.routing",
+                                    profile = "valhalla",
+                                    user = "valhalla",
+                                    accessToken = "valhalla",
+                                    voiceInstructions = true,
+                                    bannerInstructions = true,
+                                    language = language,
+                                    coordinates = listOf(origin, destination),
+                                    requestUuid = "0000-0000-0000-0000"
+                                )
                             )
-                            .build()
 
                         runOnUiThread {
-                            navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                            navigationMapRoute?.addRoutes(maplibreResponse.routes)
                             binding.startRouteLayout.visibility = View.VISIBLE
                         }
                     } else {

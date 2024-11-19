@@ -71,14 +71,14 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val alternatives: Boolean?,
+    val alternatives: Boolean? = null,
 
     /**
      * The language of returned turn-by-turn text instructions. The default is en (English).
      *
      * @since 3.0.0
      */
-    val language: String?,
+    val language: String? = null,
 
     /**
      * The maximum distance a coordinate can be moved to snap to the road network in meters. There
@@ -87,7 +87,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val radiuses: String?,
+    val radiuses: String? = null,
 
 ///**
 // * The maximum distance a coordinate can be moved to snap to the road network in meters. There
@@ -114,7 +114,7 @@ data class RouteOptions(
      * bearing value are comma-separated.
      * @since 3.0.0
      */
-    val bearings: String?,
+    val bearings: String? = null,
 
 ///**
 // * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -142,7 +142,7 @@ data class RouteOptions(
      * @since 3.0.0
      */
     @SerialName("continue_straight")
-    val continueStraight: Boolean?,
+    val continueStraight: Boolean? = null,
 
     /**
      * Whether to emit instructions at roundabout exits (true) or not (false, default). Without
@@ -154,7 +154,7 @@ data class RouteOptions(
      * @since 3.1.0
      */
     @SerialName("roundabout_exits")
-    val roundaboutExits: Boolean?,
+    val roundaboutExits: Boolean? = null,
 
     /**
      * The format of the returned geometry. Allowed values are:
@@ -164,7 +164,7 @@ data class RouteOptions(
      *
      * @since 3.1.0
      */
-    val geometries: String?,
+    val geometries: String? = null,
 
     /**
      * Displays the requested type of overview geometry. Can be
@@ -174,7 +174,7 @@ data class RouteOptions(
      *
      * @since 3.1.0
      */
-    val overview: String?,
+    val overview: String? = null,
 
     /**
      * Whether to return steps and turn-by-turn instructions (true) or not (false, default).
@@ -186,7 +186,7 @@ data class RouteOptions(
      *
      * @since 3.1.0
      */
-    val steps: Boolean?,
+    val steps: Boolean? = null,
 
     /**
      * A comma-separated list of annotations. Defines whether to return additional metadata along the
@@ -201,7 +201,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val annotations: String?,
+    val annotations: String? = null,
 
 ///**
 // * A list of annotations. Defines whether to return additional metadata along the
@@ -237,7 +237,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val exclude: String?,
+    val exclude: String? = null,
 
     /**
      * Whether to return SSML marked-up text for voice guidance along the route (true) or not
@@ -247,7 +247,7 @@ data class RouteOptions(
      * @since 3.0.0
      */
     @SerialName("voice_instructions")
-    val voiceInstructions: Boolean?,
+    val voiceInstructions: Boolean? = null,
 
     /**
      * Whether to return banner objects associated with the route steps (true) or not
@@ -256,7 +256,7 @@ data class RouteOptions(
      * @since 3.0.0
      */
     @SerialName("banner_instructions")
-    val bannerInstructions: Boolean?,
+    val bannerInstructions: Boolean? = null,
 
     /**
      * A type of units to return in the text for voice instructions.
@@ -267,7 +267,7 @@ data class RouteOptions(
      * @since 3.0.0
      */
     @SerialName("voice_units")
-    val voiceUnits: String?,
+    val voiceUnits: String? = null,
 
     /**
      * A valid Mapbox access token used to making the request.
@@ -300,7 +300,7 @@ data class RouteOptions(
      *
      * @since 3.2.0
      */
-    val approaches: String?,
+    val approaches: String? = null,
 
 ///**
 // * Indicates from which side of the road to approach a waypoint.
@@ -331,7 +331,7 @@ data class RouteOptions(
      * @since 4.4.0
      */
     @SerialName("waypoints")
-    val waypointIndices: String?,
+    val waypointIndices: String? = null,
 
 ///**
 // * Indicates which input coordinates should be treated as waypoints.
@@ -361,7 +361,7 @@ data class RouteOptions(
      * @since 3.3.0
      */
     @SerialName("waypoint_names")
-    val waypointNames: String?,
+    val waypointNames: String? = null,
 
 ///**
 // * A semicolon-separated list of custom names for entries in the list of
@@ -390,7 +390,7 @@ data class RouteOptions(
      * @since 4.3.0
      */
     @SerialName("waypoint_targets")
-    val waypointTargets: String?,
+    val waypointTargets: String? = null,
 
 ///**
 // * A list of points used to specify drop-off
@@ -411,7 +411,7 @@ data class RouteOptions(
      *
      * @since 4.8.0
      */
-    val walkingOptions: WalkingOptions?,
+    val walkingOptions: WalkingOptions? = null,
 
     /**
      * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
@@ -425,7 +425,7 @@ data class RouteOptions(
      * @return a String representing a list of booleans
      */
     @SerialName("snapping_closures")
-    val snappingClosures: String?,
+    val snappingClosures: String? = null,
 
 ///**
 // * A list of booleans affecting snapping of waypoint locations to road segments.

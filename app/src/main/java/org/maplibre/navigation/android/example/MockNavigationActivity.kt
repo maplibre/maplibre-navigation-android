@@ -34,6 +34,8 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityMockNavigationBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.milestone.RouteMilestone
@@ -42,7 +44,6 @@ import org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,9 +91,7 @@ class MockNavigationActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             customNotification.createNotificationChannel(this)
         }
-        val options = MapLibreNavigationOptions.builder()
-            .navigationNotification(customNotification)
-            .build()
+        val options = MapLibreNavigationOptions(navigationNotification = customNotification)
 
         navigation =
             MapLibreNavigation(
@@ -101,19 +100,18 @@ class MockNavigationActivity :
             )
 
         navigation.addMilestone(
-            RouteMilestone.Builder()
-                .setIdentifier(BEGIN_ROUTE_MILESTONE)
-                .setInstruction(BeginRouteInstruction())
-                .setTrigger(
-                    Trigger.all(
-                        Trigger.lt(
-                            TriggerProperty.STEP_INDEX, 3),
-                        Trigger.gt(
-                            TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 200),
-                        Trigger.gte(
-                            TriggerProperty.STEP_DISTANCE_TRAVELED_METERS, 75),
-                    ),
-                ).build(),
+            RouteMilestone(
+                identifier = BEGIN_ROUTE_MILESTONE,
+                instruction = BeginRouteInstruction(),
+                    trigger = Trigger.all(
+                            Trigger.lt(
+                                TriggerProperty.STEP_INDEX, 3),
+                            Trigger.gt(
+                                TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 200),
+                            Trigger.gte(
+                                TriggerProperty.STEP_DISTANCE_TRAVELED_METERS, 75),
+                        ),
+            )
         )
         customNotification.register(MyBroadcastReceiver(navigation), context)
 
@@ -131,7 +129,8 @@ class MockNavigationActivity :
 
                 locationEngine.also {
                     it.assign(route)
-                    navigation.locationEngine = it
+                    //TODO fabi755
+//                    navigation.locationEngine = it
                     navigation.startNavigation(route)
                     if (::mapLibreMap.isInitialized) {
                         mapLibreMap.removeOnMapClickListener(this)
@@ -260,11 +259,11 @@ class MockNavigationActivity :
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
-                    if (response.routes().isNotEmpty()) {
+                    if (response.routes.isNotEmpty()) {
                         val maplibreResponse = DirectionsResponse.fromJson(response.toJson());
-                        val directionsRoute = maplibreResponse.routes().first()
+                        val directionsRoute = maplibreResponse.routes.first()
                         this@MockNavigationActivity.route = directionsRoute
-                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes)
                     }
                 }
             }
@@ -275,23 +274,23 @@ class MockNavigationActivity :
         })
     }
 
-    override fun onProgressChange(location: Location?, routeProgress: RouteProgress?) {
+    override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
     }
 
     override fun onRunning(running: Boolean) {
     }
 
     override fun onMilestoneEvent(
-        routeProgress: RouteProgress?,
+        routeProgress: RouteProgress,
         instruction: String?,
-        milestone: Milestone?,
+        milestone: Milestone,
     ) {
     }
 
-    override fun userOffRoute(location: Location?) {
+    override fun userOffRoute(location: Location) {
     }
 
-    private class BeginRouteInstruction : Instruction() {
+    private class BeginRouteInstruction : Instruction {
 
         override fun buildInstruction(routeProgress: RouteProgress): String {
             return "Have a safe trip!"

@@ -27,7 +27,7 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -199,10 +199,10 @@ class NavigationUIActivity :
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
-                    if (response.routes().isNotEmpty()) {
+                    if (response.routes.isNotEmpty()) {
                         val maplibreResponse = DirectionsResponse.fromJson(response.toJson());
-                        this@NavigationUIActivity.route = maplibreResponse.routes().first()
-                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                        this@NavigationUIActivity.route = maplibreResponse.routes.first()
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes)
                         binding.startRouteLayout.visibility = View.VISIBLE
                     }
                 }
