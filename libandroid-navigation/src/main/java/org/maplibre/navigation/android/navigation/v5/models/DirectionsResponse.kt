@@ -1,6 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import org.maplibre.navigation.android.json
 
 /**
  * This is the root Mapbox Directions API response. Inside this class are several nested classes
@@ -66,6 +68,13 @@ data class DirectionsResponse(
      * @since 3.0.0
      */
     val uuid: String?,
-)
+) {
 
-//TODO fabi755 json parsing
+    fun toJson(): String = json.encodeToString(this)
+
+    companion object {
+
+        @JvmStatic
+        fun fromJson(jsonString: String): DirectionsResponse = json.decodeFromString(jsonString)
+    }
+}

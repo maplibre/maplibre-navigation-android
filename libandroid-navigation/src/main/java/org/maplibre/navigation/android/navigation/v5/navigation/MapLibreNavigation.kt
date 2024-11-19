@@ -57,7 +57,7 @@ import timber.log.Timber
  *
  * @see MapLibreNavigationOptions
  */
-class MapLibreNavigation(
+class MapLibreNavigation @JvmOverloads constructor(
     private val applicationContext: Context,
     val options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
     /**

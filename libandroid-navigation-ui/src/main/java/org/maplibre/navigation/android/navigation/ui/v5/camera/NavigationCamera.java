@@ -304,7 +304,8 @@ public class NavigationCamera implements LifecycleObserver {
    */
   public void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
-    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
+    //TODO fabi755
+//    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     navigation.addProgressChangeListener(progressChangeListener);
   }
 
@@ -387,7 +388,8 @@ public class NavigationCamera implements LifecycleObserver {
   }
 
   private void initializeWith(MapLibreNavigation navigation) {
-    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
+    //TODO fabi755
+//    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     updateCameraTrackingMode(trackingCameraMode);
   }
 
@@ -402,7 +404,7 @@ public class NavigationCamera implements LifecycleObserver {
    */
   @NonNull
   private RouteInformation buildRouteInformationFromRoute(DirectionsRoute route) {
-    return RouteInformation.create(route, null, null);
+    return new RouteInformation(route, null, null);
   }
 
   /**
@@ -416,15 +418,15 @@ public class NavigationCamera implements LifecycleObserver {
    */
   @NonNull
   private RouteInformation buildRouteInformationFromLocation(Location location, RouteProgress routeProgress) {
-    return RouteInformation.create(null, location, routeProgress);
+    return new RouteInformation(null, location, routeProgress);
   }
 
   @NonNull
   private RouteInformation buildRouteInformationFromProgress(RouteProgress routeProgress) {
     if (routeProgress == null) {
-      return RouteInformation.create(null, null, null);
+      return new RouteInformation(null, null, null);
     }
-    return RouteInformation.create(routeProgress.directionsRoute(), null, null);
+    return new RouteInformation(routeProgress.getDirectionsRoute(), null, null);
   }
 
   private void onCameraTransitionFinished() {

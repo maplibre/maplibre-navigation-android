@@ -24,15 +24,15 @@ public class AbbreviationCreatorTest extends BaseTest {
     String abbreviation = "smtxt";
     BannerComponents bannerComponents =
       BannerComponentsFaker.bannerComponentsBuilder()
-        .abbreviation(abbreviation)
-        .abbreviationPriority(0)
+        .withAbbreviation(abbreviation)
+        .withAbbreviationPriority(0)
         .build();
     TextView textView = mock(TextView.class);
     AbbreviationVerifier abbreviationVerifier = mock(AbbreviationVerifier.class);
     when(abbreviationVerifier.isNodeType(bannerComponents)).thenReturn(true);
     TextViewUtils textViewUtils = mock(TextViewUtils.class);
     when(textViewUtils.textFits(textView, abbreviation)).thenReturn(true);
-    when(textViewUtils.textFits(textView, bannerComponents.text())).thenReturn(false);
+    when(textViewUtils.textFits(textView, bannerComponents.getText())).thenReturn(false);
     BannerComponentNode node = mock(AbbreviationCreator.AbbreviationNode.class);
     when(((AbbreviationCreator.AbbreviationNode) node).getAbbreviate()).thenReturn(true);
     when(node.toString()).thenReturn(abbreviation);
@@ -49,8 +49,8 @@ public class AbbreviationCreatorTest extends BaseTest {
     int abbreviationPriority = 0;
     BannerComponents bannerComponents =
       BannerComponentsFaker.bannerComponentsBuilder()
-        .abbreviation(abbreviation)
-        .abbreviationPriority(abbreviationPriority)
+        .withAbbreviation(abbreviation)
+        .withAbbreviationPriority(abbreviationPriority)
         .build();
     AbbreviationVerifier abbreviationVerifier = mock(AbbreviationVerifier.class);
     when(abbreviationVerifier.isNodeType(bannerComponents)).thenReturn(true);

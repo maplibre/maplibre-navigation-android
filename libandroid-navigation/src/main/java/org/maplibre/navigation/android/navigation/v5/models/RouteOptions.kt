@@ -440,7 +440,122 @@ data class RouteOptions(
 //fun snappingClosuresList(): List<Boolean?>? {
 //    return ParseUtils.parseToBooleans(snappingClosures())
 //}
-)
+) {
+
+    fun toBuilder(): Builder {
+        return Builder(
+            baseUrl = baseUrl,
+            user = user,
+            profile = profile,
+            coordinates = coordinates,
+            accessToken = accessToken,
+            requestUuid = requestUuid
+        ).apply {
+            withAlternatives(alternatives)
+            withLanguage(language)
+            withRadiuses(radiuses)
+            withBearings(bearings)
+            withContinueStraight(continueStraight)
+            withRoundaboutExits(roundaboutExits)
+            withGeometries(geometries)
+            withOverview(overview)
+            withSteps(steps)
+            withAnnotations(annotations)
+            withExclude(exclude)
+            withVoiceInstructions(voiceInstructions)
+            withBannerInstructions(bannerInstructions)
+            withVoiceUnits(voiceUnits)
+            withApproaches(approaches)
+            withWaypointIndices(waypointIndices)
+            withWaypointNames(waypointNames)
+            withWaypointTargets(waypointTargets)
+            withWalkingOptions(walkingOptions)
+            withSnappingClosures(snappingClosures)
+        }
+    }
+
+    class Builder(
+        private var baseUrl: String,
+        private var user: String,
+        private var profile: String,
+        private var coordinates: List<@Serializable(with = PointSerializer::class) Point>,
+        private var accessToken: String,
+        private var requestUuid: String
+    ) {
+        private var alternatives: Boolean? = null
+        private var language: String? = null
+        private var radiuses: String? = null
+        private var bearings: String? = null
+        private var continueStraight: Boolean? = null
+        private var roundaboutExits: Boolean? = null
+        private var geometries: String? = null
+        private var overview: String? = null
+        private var steps: Boolean? = null
+        private var annotations: String? = null
+        private var exclude: String? = null
+        private var voiceInstructions: Boolean? = null
+        private var bannerInstructions: Boolean? = null
+        private var voiceUnits: String? = null
+        private var approaches: String? = null
+        private var waypointIndices: String? = null
+        private var waypointNames: String? = null
+        private var waypointTargets: String? = null
+        private var walkingOptions: WalkingOptions? = null
+        private var snappingClosures: String? = null
+
+        fun withAlternatives(alternatives: Boolean?) = apply { this.alternatives = alternatives }
+        fun withLanguage(language: String?) = apply { this.language = language }
+        fun withRadiuses(radiuses: String?) = apply { this.radiuses = radiuses }
+        fun withBearings(bearings: String?) = apply { this.bearings = bearings }
+        fun withContinueStraight(continueStraight: Boolean?) = apply { this.continueStraight = continueStraight }
+        fun withRoundaboutExits(roundaboutExits: Boolean?) = apply { this.roundaboutExits = roundaboutExits }
+        fun withGeometries(geometries: String?) = apply { this.geometries = geometries }
+        fun withOverview(overview: String?) = apply { this.overview = overview }
+        fun withSteps(steps: Boolean?) = apply { this.steps = steps }
+        fun withAnnotations(annotations: String?) = apply { this.annotations = annotations }
+        fun withExclude(exclude: String?) = apply { this.exclude = exclude }
+        fun withVoiceInstructions(voiceInstructions: Boolean?) = apply { this.voiceInstructions = voiceInstructions }
+        fun withBannerInstructions(bannerInstructions: Boolean?) = apply { this.bannerInstructions = bannerInstructions }
+        fun withVoiceUnits(voiceUnits: String?) = apply { this.voiceUnits = voiceUnits }
+        fun withApproaches(approaches: String?) = apply { this.approaches = approaches }
+        fun withWaypointIndices(waypointIndices: String?) = apply { this.waypointIndices = waypointIndices }
+        fun withWaypointNames(waypointNames: String?) = apply { this.waypointNames = waypointNames }
+        fun withWaypointTargets(waypointTargets: String?) = apply { this.waypointTargets = waypointTargets }
+        fun withWalkingOptions(walkingOptions: WalkingOptions?) = apply { this.walkingOptions = walkingOptions }
+        fun withSnappingClosures(snappingClosures: String?) = apply { this.snappingClosures = snappingClosures }
+
+        fun build(): RouteOptions {
+            return RouteOptions(
+                baseUrl = baseUrl,
+                user = user,
+                profile = profile,
+                coordinates = coordinates,
+                accessToken = accessToken,
+                requestUuid = requestUuid,
+                alternatives = alternatives,
+                language = language,
+                radiuses = radiuses,
+                bearings = bearings,
+                continueStraight = continueStraight,
+                roundaboutExits = roundaboutExits,
+                geometries = geometries,
+                overview = overview,
+                steps = steps,
+                annotations = annotations,
+                exclude = exclude,
+                voiceInstructions = voiceInstructions,
+                bannerInstructions = bannerInstructions,
+                voiceUnits = voiceUnits,
+                approaches = approaches,
+                waypointIndices = waypointIndices,
+                waypointNames = waypointNames,
+                waypointTargets = waypointTargets,
+                walkingOptions = walkingOptions,
+                snappingClosures = snappingClosures
+            )
+        }
+    }
+}
 
 //TODO fabi755 check options, which can be removed or be optional?
 //TODO fabi755 json parsing

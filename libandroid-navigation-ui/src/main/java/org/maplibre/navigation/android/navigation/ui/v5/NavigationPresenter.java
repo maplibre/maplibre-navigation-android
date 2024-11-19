@@ -1,11 +1,12 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import android.location.Location;
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 import org.maplibre.geojson.Point;
 
 class NavigationPresenter {

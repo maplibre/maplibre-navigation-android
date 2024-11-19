@@ -5,6 +5,6 @@ import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
 class TextVerifier implements NodeVerifier {
   @Override
   public boolean isNodeType(BannerComponents bannerComponents) {
-    return bannerComponents.text() != null && !bannerComponents.text().isEmpty();
+    return bannerComponents.getText() != null && !bannerComponents.getText().isEmpty();
   }
 }

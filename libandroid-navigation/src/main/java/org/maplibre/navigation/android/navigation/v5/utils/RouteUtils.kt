@@ -89,6 +89,7 @@ object RouteUtils {
      * @return list of remaining waypoints as [Point]s
      * @since 0.10.0
      */
+    @JvmStatic
     fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Point>? {
         return routeProgress.directionsRoute.routeOptions?.let { options ->
             val coordinatesSize = options.coordinates.size
@@ -113,6 +114,7 @@ object RouteUtils {
      * @return String array including the origin waypoint name and the remaining ones
      * @since 0.19.0
      */
+    @JvmStatic
     fun calculateRemainingWaypointNames(routeProgress: RouteProgress): List<String>? {
         return routeProgress.directionsRoute.routeOptions?.let { routeOptions ->
             routeOptions.waypointNames
@@ -163,6 +165,7 @@ object RouteUtils {
      * @return the current banner instructions based on the current distance along the step
      * @since 0.13.0
      */
+    @JvmStatic
     fun findCurrentBannerInstructions(
         currentStep: LegStep,
         stepDistanceRemaining: Double

@@ -248,15 +248,15 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
   public void updateBannerInstructionsWith(Milestone milestone) {
     if (milestone instanceof BannerInstructionMilestone) {
       BannerInstructions instructions = ((BannerInstructionMilestone) milestone).getBannerInstructions();
-      if (instructions == null || instructions.primary() == null) {
+      if (instructions == null || instructions.getPrimary() == null) {
         return;
       }
-      BannerText primary = instructions.primary();
-      String primaryManeuverModifier = primary.modifier();
-      String drivingSide = currentStep.drivingSide();
-      updateManeuverView(primary.type(), primaryManeuverModifier, primary.degrees(), drivingSide);
-      updateDataFromBannerText(primary, instructions.secondary());
-      updateSubStep(instructions.sub(), primaryManeuverModifier);
+      BannerText primary = instructions.getPrimary();
+      String primaryManeuverModifier = primary.getModifier().getText();
+      String drivingSide = currentStep.getDrivingSide();
+      updateManeuverView(primary.getType().getText(), primaryManeuverModifier, primary.getDegrees(), drivingSide);
+      updateDataFromBannerText(primary, instructions.getSecondary());
+      updateSubStep(instructions.getSub(), primaryManeuverModifier);
     }
   }
 
@@ -448,8 +448,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
    * Sets up the {@link RecyclerView} that is used to display the list of instructions.
    */
   private void initializeInstructionListRecyclerView() {
-    RouteUtils routeUtils = new RouteUtils();
-    instructionListAdapter = new InstructionListAdapter(routeUtils, distanceFormatter);
+    instructionListAdapter = new InstructionListAdapter(distanceFormatter);
     rvInstructions.setAdapter(instructionListAdapter);
     rvInstructions.setHasFixedSize(true);
     rvInstructions.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -566,7 +565,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
   }
 
   private boolean hasComponents(BannerText bannerText) {
-    return bannerText != null && bannerText.components() != null && !bannerText.components().isEmpty();
+    return bannerText != null && bannerText.getComponents() != null && !bannerText.getComponents().isEmpty();
   }
 
   /**
@@ -576,21 +575,21 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
    * @return true if new step, false if not
    */
   private boolean newStep(RouteProgress routeProgress) {
-    boolean newStep = currentStep == null || !currentStep.equals(routeProgress.currentLegProgress().currentStep());
-    currentStep = routeProgress.currentLegProgress().currentStep();
+    boolean newStep = currentStep == null || !currentStep.equals(routeProgress.getCurrentLegProgress().getCurrentStep());
+    currentStep = routeProgress.getCurrentLegProgress().getCurrentStep();
     return newStep;
   }
 
   private void updateSubStep(BannerText subText, String primaryManeuverModifier) {
     if (shouldShowSubStep(subText)) {
-      String maneuverType = subText.type();
-      String maneuverModifier = subText.modifier();
+      String maneuverType = subText.getType().getText();
+      String maneuverModifier = subText.getModifier().getText();
       subManeuverView.setManeuverTypeAndModifier(maneuverType, maneuverModifier);
-      Double roundaboutAngle = subText.degrees();
+      Double roundaboutAngle = subText.getDegrees();
       if (roundaboutAngle != null) {
         subManeuverView.setRoundaboutAngle(roundaboutAngle.floatValue());
       }
-      String drivingSide = currentStep.drivingSide();
+      String drivingSide = currentStep.getDrivingSide();
       subManeuverView.setDrivingSide(drivingSide);
       InstructionLoader instructionLoader = createInstructionLoader(subStepText, subText);
       if (instructionLoader != null) {
@@ -603,7 +602,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
     }
 
     if (shouldShowTurnLanes(subText, primaryManeuverModifier)) {
-      turnLaneAdapter.addTurnLanes(subText.components(), primaryManeuverModifier);
+      turnLaneAdapter.addTurnLanes(subText.getComponents(), primaryManeuverModifier);
       showTurnLanes();
     } else {
       hideTurnLanes();
@@ -612,8 +611,8 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
 
   private boolean shouldShowSubStep(@Nullable BannerText subText) {
     return subText != null
-      && subText.type() != null
-      && !subText.type().contains(COMPONENT_TYPE_LANE);
+      && subText.getType() != null
+      && !subText.getType().getText().contains(COMPONENT_TYPE_LANE);
   }
 
   private void showSubLayout() {
@@ -634,8 +633,8 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
     if (!hasComponents(subText) || TextUtils.isEmpty(maneuverModifier)) {
       return false;
     }
-    for (BannerComponents components : subText.components()) {
-      if (components.type().equals(COMPONENT_TYPE_LANE)) {
+    for (BannerComponents components : subText.getComponents()) {
+      if (components.getType().equals(COMPONENT_TYPE_LANE)) {
         return true;
       }
     }
@@ -699,7 +698,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
     updateDistanceText(model);
     updateInstructionList(model);
     if (newStep(model.retrieveProgress())) {
-      LegStep upComingStep = model.retrieveProgress().currentLegProgress().upComingStep();
+      LegStep upComingStep = model.retrieveProgress().getCurrentLegProgress().getUpComingStep();
       ImageCreator.getInstance().prefetchImageCache(upComingStep);
     }
   }

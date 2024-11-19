@@ -122,7 +122,22 @@ data class BannerComponents(
     val active: Boolean?,
 ) {
 
-    enum class Type(val s: String) {
+    fun toBuilder(): Builder {
+        return Builder(
+            text = text,
+            type = type
+        ).apply {
+            withSubType(subType)
+            withAbbreviation(abbreviation)
+            withAbbreviationPriority(abbreviationPriority)
+            withImageBaseUrl(imageBaseUrl)
+            withImageUrl(imageUrl)
+            withDirections(directions)
+            withActive(active)
+        }
+    }
+
+    enum class Type(val text: String) {
         /**
          * Default. Indicates the text is part of the instructions and no other type.
          *
@@ -188,5 +203,40 @@ data class BannerComponents(
          */
         @SerialName("jct")
         JCT("jct")
+    }
+
+    class Builder(
+        private var text: String,
+        private var type: Type
+    ) {
+        private var subType: Type? = null
+        private var abbreviation: String? = null
+        private var abbreviationPriority: Int? = null
+        private var imageBaseUrl: String? = null
+        private var imageUrl: String? = null
+        private var directions: List<String>? = null
+        private var active: Boolean? = null
+
+        fun withSubType(subType: Type?) = apply { this.subType = subType }
+        fun withAbbreviation(abbreviation: String?) = apply { this.abbreviation = abbreviation }
+        fun withAbbreviationPriority(abbreviationPriority: Int?) = apply { this.abbreviationPriority = abbreviationPriority }
+        fun withImageBaseUrl(imageBaseUrl: String?) = apply { this.imageBaseUrl = imageBaseUrl }
+        fun withImageUrl(imageUrl: String?) = apply { this.imageUrl = imageUrl }
+        fun withDirections(directions: List<String>?) = apply { this.directions = directions }
+        fun withActive(active: Boolean?) = apply { this.active = active }
+
+        fun build(): BannerComponents {
+            return BannerComponents(
+                text = text,
+                type = type,
+                subType = subType,
+                abbreviation = abbreviation,
+                abbreviationPriority = abbreviationPriority,
+                imageBaseUrl = imageBaseUrl,
+                imageUrl = imageUrl,
+                directions = directions,
+                active = active
+            )
+        }
     }
 }

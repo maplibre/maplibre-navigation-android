@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import android.content.Context;
 import android.location.Location;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,6 @@ import org.maplibre.navigation.android.navigation.v5.route.RouteFetcher;
 import org.maplibre.navigation.android.navigation.v5.route.RouteListener;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -41,13 +41,11 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     private final WeakReference<Context> contextWeakReference;
 
     private RouteProgress routeProgress;
-    private RouteUtils routeUtils;
 
     private NavigationRoute navigationRoute;
 
     public MapLibreRouteFetcher(Context context) {
         contextWeakReference = new WeakReference<>(context);
-        routeUtils = new RouteUtils();
     }
 
     /**
@@ -76,12 +74,12 @@ public class MapLibreRouteFetcher extends RouteFetcher {
         }
         Point origin = Point.fromLngLat(location.getLongitude(), location.getLatitude());
         Double bearing = location.hasBearing() ? Float.valueOf(location.getBearing()).doubleValue() : null;
-        RouteOptions options = progress.directionsRoute().routeOptions();
+        RouteOptions options = progress.getDirectionsRoute().getRouteOptions();
         NavigationRoute.Builder builder = NavigationRoute.builder(context)
                 .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<Point> remainingWaypoints = toMapboxPointList(routeUtils.calculateRemainingWaypoints(progress));
+        List<Point> remainingWaypoints = toMapboxPointList(RouteUtils.calculateRemainingWaypoints(progress));
         if (remainingWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;
@@ -113,7 +111,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     }
 
     private void addWaypointNames(RouteProgress progress, NavigationRoute.Builder builder) {
-        String[] remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(progress);
+        String[] remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(progress).toArray(new String[0]);
         if (remainingWaypointNames != null) {
             builder.addWaypointNames(remainingWaypointNames);
         }
@@ -127,15 +125,15 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     }
 
     private String[] calculateRemainingApproaches(RouteProgress routeProgress) {
-        RouteOptions routeOptions = routeProgress.directionsRoute().routeOptions();
-        if (routeOptions == null || TextUtils.isEmpty(routeOptions.approaches())) {
+        RouteOptions routeOptions = routeProgress.getDirectionsRoute().getRouteOptions();
+        if (routeOptions == null || TextUtils.isEmpty(routeOptions.getApproaches())) {
             return null;
         }
-        String allApproaches = routeOptions.approaches();
+        String allApproaches = routeOptions.getApproaches();
         String[] splitApproaches = allApproaches.split(SEMICOLON);
-        int coordinatesSize = routeProgress.directionsRoute().routeOptions().coordinates().size();
+        int coordinatesSize = routeProgress.getDirectionsRoute().getRouteOptions().getCoordinates().size();
         String[] remainingApproaches = Arrays.copyOfRange(splitApproaches,
-                coordinatesSize - routeProgress.remainingWaypoints(), coordinatesSize);
+                coordinatesSize - routeProgress.getRemainingWaypoints(), coordinatesSize);
         String[] approaches = new String[remainingApproaches.length + ORIGIN_APPROACH_THRESHOLD];
         approaches[ORIGIN_APPROACH] = splitApproaches[ORIGIN_APPROACH];
         System.arraycopy(remainingApproaches, FIRST_POSITION, approaches, SECOND_POSITION, remainingApproaches.length);

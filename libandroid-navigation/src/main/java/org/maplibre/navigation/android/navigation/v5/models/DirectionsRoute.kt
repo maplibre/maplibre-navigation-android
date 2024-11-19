@@ -2,6 +2,8 @@ package org.maplibre.navigation.android.navigation.v5.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import org.maplibre.navigation.android.json
 
 /**
  * Detailed information about an individual route such as the duration, distance and geometry.
@@ -87,4 +89,67 @@ data class DirectionsRoute(
      */
     @SerialName("voiceLocale")
     val voiceLanguage: String?,
-)
+) {
+
+    fun toJson(): String = json.encodeToString(this)
+
+    fun toBuilder(): Builder {
+        return Builder(
+            geometry = geometry,
+            legs = legs,
+            distance = distance,
+            duration = duration
+        ).apply {
+            durationTypical(durationTypical)
+            withWeight(weight)
+            withWeightName(weightName)
+            withRouteOptions(routeOptions)
+            withVoiceLanguage(voiceLanguage)
+        }
+    }
+
+    class Builder(
+        private var geometry: String,
+        private var legs: List<RouteLeg>,
+        private var distance: Double,
+        private var duration: Double
+    ) {
+        private var durationTypical: Double? = null
+        private var weight: Double? = null
+        private var weightName: String? = null
+        private var routeOptions: RouteOptions? = null
+        private var voiceLanguage: String? = null
+
+        fun durationTypical(durationTypical: Double?) =
+            apply { this.durationTypical = durationTypical }
+
+        fun withWeight(weight: Double?) = apply { this.weight = weight }
+
+        fun withWeightName(weightName: String?) = apply { this.weightName = weightName }
+
+        fun withRouteOptions(routeOptions: RouteOptions?) =
+            apply { this.routeOptions = routeOptions }
+
+        fun withVoiceLanguage(voiceLanguage: String?) = apply { this.voiceLanguage = voiceLanguage }
+
+        fun build(): DirectionsRoute {
+            return DirectionsRoute(
+                geometry = geometry,
+                legs = legs,
+                distance = distance,
+                duration = duration,
+                durationTypical = durationTypical,
+                weight = weight,
+                weightName = weightName,
+                routeOptions = routeOptions,
+                voiceLanguage = voiceLanguage
+            )
+        }
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun fromJson(jsonString: String): DirectionsRoute = json.decodeFromString(jsonString)
+    }
+}

@@ -107,10 +107,10 @@ public class MapFpsDelegateTest {
     RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);
     LegStep currentStep = mock(LegStep.class);
     StepManeuver currentManeuver = mock(StepManeuver.class);
-    when(currentManeuver.modifier()).thenReturn(maneuverModifier);
-    when(currentStep.maneuver()).thenReturn(currentManeuver);
-    when(routeLegProgress.currentStep()).thenReturn(currentStep);
-    when(routeProgress.currentLegProgress()).thenReturn(routeLegProgress);
+    when(currentManeuver.getModifier()).thenReturn(maneuverModifier);
+    when(currentStep.getManeuver()).thenReturn(currentManeuver);
+    when(routeLegProgress.getCurrentStep()).thenReturn(currentStep);
+    when(routeProgress.getCurrentLegProgress()).thenReturn(routeLegProgress);
     return routeProgress;
   }
 
@@ -119,14 +119,14 @@ public class MapFpsDelegateTest {
     RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);
     RouteStepProgress routeStepProgress = mock(RouteStepProgress.class);
     StepManeuver currentManeuver = mock(StepManeuver.class);
-    when(currentManeuver.modifier()).thenReturn("left");
+    when(currentManeuver.getModifier()).thenReturn("left");
     LegStep currentStep = mock(LegStep.class);
-    when(currentStep.duration()).thenReturn(totalDuration);
-    when(routeStepProgress.durationRemaining()).thenReturn(durationRemaining);
-    when(routeLegProgress.currentStepProgress()).thenReturn(routeStepProgress);
-    when(routeProgress.currentLegProgress()).thenReturn(routeLegProgress);
-    when(currentStep.maneuver()).thenReturn(currentManeuver);
-    when(routeLegProgress.currentStep()).thenReturn(currentStep);
+    when(currentStep.getDuration()).thenReturn(totalDuration);
+    when(routeStepProgress.getDurationRemaining()).thenReturn(durationRemaining);
+    when(routeLegProgress.getCurrentStepProgress()).thenReturn(routeStepProgress);
+    when(routeProgress.getCurrentLegProgress()).thenReturn(routeLegProgress);
+    when(currentStep.getManeuver()).thenReturn(currentManeuver);
+    when(routeLegProgress.getCurrentStep()).thenReturn(currentStep);
     return routeProgress;
   }
 }

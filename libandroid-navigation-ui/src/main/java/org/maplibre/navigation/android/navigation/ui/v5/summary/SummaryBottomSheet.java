@@ -20,7 +20,6 @@ import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
@@ -45,7 +44,6 @@ public class SummaryBottomSheet extends FrameLayout implements LifecycleObserver
   private TextView arrivalTimeText;
   private ProgressBar rerouteProgressBar;
   private boolean isRerouting;
-  @NavigationTimeFormat.Type
   private int timeFormatType;
   private DistanceFormatter distanceFormatter;
   private NavigationViewModel navigationViewModel;
@@ -171,7 +169,7 @@ public class SummaryBottomSheet extends FrameLayout implements LifecycleObserver
    *
    * @param type to use
    */
-  public void setTimeFormat(@NavigationTimeFormat.Type int type) {
+  public void setTimeFormat(int type) {
     this.timeFormatType = type;
   }
 

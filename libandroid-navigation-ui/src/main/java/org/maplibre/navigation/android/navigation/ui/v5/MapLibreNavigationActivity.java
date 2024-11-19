@@ -18,8 +18,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConsta
  * <p>
  * Demonstrates the proper setup and usage of the view, including all lifecycle methods.
  */
-public class MapLibreNavigationActivity extends AppCompatActivity implements OnNavigationReadyCallback,
-    NavigationListener {
+public class MapLibreNavigationActivity extends AppCompatActivity implements OnNavigationReadyCallback, NavigationListener {
 
   private NavigationView navigationView;
 
@@ -95,7 +94,7 @@ public class MapLibreNavigationActivity extends AppCompatActivity implements OnN
     options.navigationListener(this);
     extractRoute(options);
     extractConfiguration(options);
-    options.navigationOptions(MapLibreNavigationOptions.builder().build());
+    options.navigationOptions(new MapLibreNavigationOptions());
     navigationView.startNavigation(options.build());
   }
 

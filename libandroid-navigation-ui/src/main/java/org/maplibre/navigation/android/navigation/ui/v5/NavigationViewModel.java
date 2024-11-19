@@ -30,7 +30,6 @@ import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera;
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
 import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener;
@@ -71,7 +70,6 @@ public class NavigationViewModel extends AndroidViewModel {
     private RouteUtils routeUtils;
     private LocaleUtils localeUtils;
     private DistanceFormatter distanceFormatter;
-    @NavigationTimeFormat.Type
     private int timeFormatType;
     private boolean isRunning;
     private boolean isChangingConfigurations;
@@ -80,7 +78,6 @@ public class NavigationViewModel extends AndroidViewModel {
         super(application);
         initializeLocationEngine();
         initializeRouter();
-        this.routeUtils = new RouteUtils();
         this.localeUtils = new LocaleUtils();
     }
 
@@ -148,7 +145,8 @@ public class NavigationViewModel extends AndroidViewModel {
      */
     void initialize(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
-        navigationOptions = navigationOptions.toBuilder().isFromNavigationUi(true).build();
+        //TODO fabi755
+//        navigationOptions = navigationOptions.toBuilder().isFromNavigationUi(true).build();
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
@@ -243,29 +241,29 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeLanguage(NavigationUiOptions options) {
-        RouteOptions routeOptions = options.directionsRoute().routeOptions();
+        RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
         language = localeUtils.inferDeviceLanguage(getApplication());
         if (routeOptions != null) {
-            language = routeOptions.language();
+            language = routeOptions.getLanguage();
         }
     }
 
     private String initializeUnitType(NavigationUiOptions options) {
-        RouteOptions routeOptions = options.directionsRoute().routeOptions();
+        RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
         String unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
         if (routeOptions != null) {
-            unitType = routeOptions.voiceUnits();
+            unitType = routeOptions.getVoiceUnits();
         }
         return unitType;
     }
 
     private void initializeTimeFormat(MapLibreNavigationOptions options) {
-        timeFormatType = options.timeFormatType();
+        timeFormatType = options.getTimeFormatType().getId();
     }
 
     private int initializeRoundingIncrement(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
-        return navigationOptions.roundingIncrement();
+        return navigationOptions.getRoundingIncrement();
     }
 
     private void initializeDistanceFormatter(NavigationViewOptions options) {
@@ -280,7 +278,7 @@ public class NavigationViewModel extends AndroidViewModel {
             this.speechPlayer = speechPlayer;
             return;
         }
-        boolean isVoiceLanguageSupported = options.directionsRoute().voiceLanguage() != null;
+        boolean isVoiceLanguageSupported = options.directionsRoute().getVoiceLanguage() != null;
         SpeechPlayerProvider speechPlayerProvider = initializeSpeechPlayerProvider(isVoiceLanguageSupported);
         this.speechPlayer = new NavigationSpeechPlayer(speechPlayerProvider);
     }
@@ -352,7 +350,8 @@ public class NavigationViewModel extends AndroidViewModel {
     private void updateReplayEngine(DirectionsRoute route) {
         if (locationEngineConductor.updateSimulatedRoute(route)) {
             LocationEngine replayEngine = locationEngineConductor.obtainLocationEngine();
-            navigation.setLocationEngine(replayEngine);
+            //TODO fabi755
+//            navigation.setLocationEngine(replayEngine);
         }
     }
 

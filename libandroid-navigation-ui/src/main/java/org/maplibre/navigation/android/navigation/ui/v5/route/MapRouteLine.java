@@ -347,17 +347,17 @@ class MapRouteLine {
 
   private FeatureCollection buildWayPointFeatureCollectionFrom(DirectionsRoute route) {
     final List<Feature> wayPointFeatures = new ArrayList<>();
-    for (RouteLeg leg : route.legs()) {
+    for (RouteLeg leg : route.getLegs()) {
       wayPointFeatures.add(buildWayPointFeatureFromLeg(leg, 0));
-      wayPointFeatures.add(buildWayPointFeatureFromLeg(leg, leg.steps().size() - 1));
+      wayPointFeatures.add(buildWayPointFeatureFromLeg(leg, leg.getSteps().size() - 1));
     }
     return FeatureCollection.fromFeatures(wayPointFeatures);
   }
 
   private Feature buildWayPointFeatureFromLeg(RouteLeg leg, int index) {
     Feature feature = Feature.fromGeometry(Point.fromLngLat(
-      leg.steps().get(index).maneuver().location().longitude(),
-      leg.steps().get(index).maneuver().location().latitude()
+      leg.getSteps().get(index).getManeuver().getLocation().longitude(),
+      leg.getSteps().get(index).getManeuver().getLocation().latitude()
     ));
     feature.addStringProperty(WAYPOINT_PROPERTY_KEY, index == 0 ? WAYPOINT_ORIGIN_VALUE : WAYPOINT_DESTINATION_VALUE);
     return feature;

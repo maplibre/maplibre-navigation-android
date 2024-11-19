@@ -146,20 +146,66 @@ data class RouteProgress(
             currentLegAnnotation = currentLegAnnotation,
         )
 
-//    int lastStepIndex = routeLeg().steps().size() - 1;
-//    boolean isOnLastStep = stepIndex() == lastStepIndex;
-//    int nextStepIndex = stepIndex() + 1;
-//    LegStep nextStep = isOnLastStep ? null : routeLeg().steps().get(nextStepIndex);
-//
-//    LegStep currentStep = routeLeg().steps().get(stepIndex());
-//    RouteStepProgress stepProgress = RouteStepProgress.builder()
-//    .step(currentStep)
-//    .nextStep(nextStep)
-//    .distanceRemaining(stepDistanceRemaining())
-//    .intersections(intersections())
-//    .currentIntersection(currentIntersection())
-//    .upcomingIntersection(upcomingIntersection())
-//    .intersectionDistancesAlongStep(intersectionDistancesAlongStep())
-//    .build();
-//    currentStepProgress(stepProgress);
+
+
+    fun toBuilder(): Builder {
+        return Builder(
+            directionsRoute = directionsRoute,
+            legIndex = legIndex,
+            distanceRemaining = distanceRemaining,
+            currentStepPoints = currentStepPoints,
+            stepIndex = stepIndex,
+            legDistanceRemaining = legDistanceRemaining,
+            stepDistanceRemaining = stepDistanceRemaining
+        ).apply {
+            withUpcomingStepPoints(upcomingStepPoints)
+            withIntersections(intersections)
+            withCurrentIntersection(currentIntersection)
+            withUpcomingIntersection(upcomingIntersection)
+            withCurrentLegAnnotation(currentLegAnnotation)
+            withIntersectionDistancesAlongStep(intersectionDistancesAlongStep)
+        }
+    }
+
+    class Builder(
+        private var directionsRoute: DirectionsRoute,
+        private var legIndex: Int,
+        private var distanceRemaining: Double,
+        private var currentStepPoints: List<Point>,
+        private var stepIndex: Int,
+        private var legDistanceRemaining: Double,
+        private var stepDistanceRemaining: Double
+    ) {
+        private var upcomingStepPoints: List<Point>? = null
+        private var intersections: List<StepIntersection>? = null
+        private var currentIntersection: StepIntersection? = null
+        private var upcomingIntersection: StepIntersection? = null
+        private var currentLegAnnotation: CurrentLegAnnotation? = null
+        private var intersectionDistancesAlongStep: Map<StepIntersection, Double>? = null
+
+        fun withUpcomingStepPoints(upcomingStepPoints: List<Point>?) = apply { this.upcomingStepPoints = upcomingStepPoints }
+        fun withIntersections(intersections: List<StepIntersection>?) = apply { this.intersections = intersections }
+        fun withCurrentIntersection(currentIntersection: StepIntersection?) = apply { this.currentIntersection = currentIntersection }
+        fun withUpcomingIntersection(upcomingIntersection: StepIntersection?) = apply { this.upcomingIntersection = upcomingIntersection }
+        fun withCurrentLegAnnotation(currentLegAnnotation: CurrentLegAnnotation?) = apply { this.currentLegAnnotation = currentLegAnnotation }
+        fun withIntersectionDistancesAlongStep(intersectionDistancesAlongStep: Map<StepIntersection, Double>?) = apply { this.intersectionDistancesAlongStep = intersectionDistancesAlongStep }
+
+        fun build(): RouteProgress {
+            return RouteProgress(
+                directionsRoute = directionsRoute,
+                legIndex = legIndex,
+                distanceRemaining = distanceRemaining,
+                currentStepPoints = currentStepPoints,
+                upcomingStepPoints = upcomingStepPoints,
+                stepIndex = stepIndex,
+                legDistanceRemaining = legDistanceRemaining,
+                stepDistanceRemaining = stepDistanceRemaining,
+                intersections = intersections,
+                currentIntersection = currentIntersection,
+                upcomingIntersection = upcomingIntersection,
+                currentLegAnnotation = currentLegAnnotation,
+                intersectionDistancesAlongStep = intersectionDistancesAlongStep
+            )
+        }
+    }
 }

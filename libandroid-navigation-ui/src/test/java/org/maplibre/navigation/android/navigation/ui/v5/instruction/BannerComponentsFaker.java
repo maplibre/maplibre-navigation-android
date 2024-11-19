@@ -8,15 +8,16 @@ class BannerComponentsFaker {
   }
 
   static BannerComponents.Builder bannerComponentsBuilder() {
-    return BannerComponents.builder()
-      .type("some type")
-      .text("some text");
+    return new BannerComponents.Builder(
+        "some text",
+        BannerComponents.Type.EXIT
+    );
   }
 
   static BannerComponents bannerComponentsWithAbbreviation() {
     return bannerComponentsBuilder()
-      .abbreviationPriority(1)
-      .abbreviation("abbreviation text")
+      .withAbbreviationPriority(1)
+      .withAbbreviation("abbreviation text")
       .build();
   }
 }
