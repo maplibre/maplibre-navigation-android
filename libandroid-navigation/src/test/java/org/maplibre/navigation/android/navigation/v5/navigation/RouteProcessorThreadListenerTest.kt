@@ -76,7 +76,7 @@ class RouteProcessorThreadListenerTest {
 
         listener.onUserOffRoute(location, true)
 
-        verify() {
+        verify {
             dispatcher.onUserOffRoute(location)
         }
     }

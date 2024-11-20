@@ -1,11 +1,10 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 class VoiceInstructionMilestoneTest : BaseTest() {
@@ -20,7 +19,7 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onBeginningOfStep_voiceInstructionsShouldTrigger() {
         var routeProgress = buildDefaultTestRouteProgress()
-        routeProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val milestone = buildVoiceInstructionMilestone()
 
         val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
@@ -32,9 +31,9 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onSameInstructionOccurring_milestoneDoesNotTriggerTwice() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val firstProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        val firstProgress = createBeginningOfStepRouteProgress(routeProgress)
         val secondProgress: RouteProgress = routeProgress.copy(
-            stepDistanceRemaining = routeProgress.currentLegProgress!!.currentStep!!.distance - 40,
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance - 40,
             stepIndex = 0
         )
         val milestone = buildVoiceInstructionMilestone()
@@ -65,9 +64,9 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onOccurringMilestone_voiceSsmlInstructionsAreReturned() {
         var routeProgress = buildDefaultTestRouteProgress()
-        routeProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val instructions: VoiceInstructions =
-            routeProgress.currentLegProgress!!.currentStep!!.voiceInstructions!!.get(0)!!
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
         val milestone = buildVoiceInstructionMilestone()
 
         milestone.isOccurring(routeProgress, routeProgress)
@@ -79,9 +78,9 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onOccurringMilestone_voiceInstructionsAreReturned() {
         var routeProgress = buildDefaultTestRouteProgress()
-        routeProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val instructions: VoiceInstructions =
-            routeProgress.currentLegProgress!!.currentStep!!.voiceInstructions!!.get(0)!!
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
         val milestone = buildVoiceInstructionMilestone()
 
         milestone.isOccurring(routeProgress, routeProgress)
@@ -95,7 +94,7 @@ class VoiceInstructionMilestoneTest : BaseTest() {
         var routeProgress = buildDefaultTestRouteProgress()
         routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val instructions: VoiceInstructions =
-            routeProgress.currentLegProgress.currentStep.voiceInstructions!!.get(0)
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
         val milestone = buildVoiceInstructionMilestone()
 
         milestone.isOccurring(routeProgress, routeProgress)
@@ -126,7 +125,7 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onNullMilestoneInstructions_stepNameIsReturnedForInstruction() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val milestone = buildVoiceInstructionMilestone()
 
         Assert.assertEquals(
@@ -137,7 +136,7 @@ class VoiceInstructionMilestoneTest : BaseTest() {
 
     private fun createBeginningOfStepRouteProgress(routeProgress: RouteProgress): RouteProgress {
         return routeProgress.copy(
-            stepDistanceRemaining = routeProgress.currentLegProgress!!.currentStep!!.distance,
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
             stepIndex = 0
         )
     }

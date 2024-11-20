@@ -1,9 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.snap
 
 import android.location.Location
-import com.google.gson.GsonBuilder
-import junit.framework.Assert
-import kotlinx.serialization.json.Json
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.maplibre.navigation.android.json

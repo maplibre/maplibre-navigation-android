@@ -1,8 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import com.google.gson.GsonBuilder
-import junit.framework.Assert
-import kotlinx.serialization.json.Json
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.maplibre.navigation.android.json
@@ -40,8 +38,8 @@ class StepMilestoneTest : BaseTest() {
         val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
         val route = response.routes[0]
         val distanceRemaining = route.distance
-        val legDistanceRemaining = route.legs!![0].distance!!
-        val stepDistanceRemaining = route.legs!![0].steps!![0].distance
+        val legDistanceRemaining = route.legs[0].distance
+        val stepDistanceRemaining = route.legs[0].steps[0].distance
         return buildTestRouteProgress(
             route, stepDistanceRemaining,
             legDistanceRemaining, distanceRemaining, 1, 0

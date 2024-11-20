@@ -1,14 +1,11 @@
 package org.maplibre.navigation.android.navigation.v5
 
-import com.google.gson.GsonBuilder
-import kotlinx.serialization.json.Json
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.json
 import org.maplibre.navigation.android.navigation.v5.BaseTest.Companion.ACCESS_TOKEN
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.Scanner
@@ -34,7 +31,7 @@ internal class TestRouteBuilder {
     private fun buildRouteWithOptions(route: DirectionsRoute): DirectionsRoute {
         val coordinates: List<Point> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
-            baseUrl = Constants.BASE_API_URL,
+            baseUrl = "api://",
             user = "user",
             profile = "profile",
             accessToken = ACCESS_TOKEN,

@@ -11,7 +11,7 @@ class ReplayLocationDispatcherTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun checksNonNullLocationListRequired() {
-        ReplayLocationDispatcher(emptyList<Location>())
+        ReplayLocationDispatcher(emptyList())
     }
 
     @Test(expected = IllegalArgumentException::class)

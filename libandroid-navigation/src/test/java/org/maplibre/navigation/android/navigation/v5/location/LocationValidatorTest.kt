@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.v5.location
 import android.location.Location
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 
 class LocationValidatorTest {

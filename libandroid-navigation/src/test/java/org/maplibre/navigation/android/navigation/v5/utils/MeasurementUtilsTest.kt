@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
@@ -15,7 +15,6 @@ class MeasurementUtilsTest : BaseTest() {
 
         val geometryPoints: MutableList<Point> = ArrayList()
         geometryPoints.add(futurePoint)
-        val rawLocation = doubleArrayOf(0.0, 0.0)
         val step = getLegStep(Point.fromLngLat(0.0, 0.0), geometryPoints)
 
         val distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step)

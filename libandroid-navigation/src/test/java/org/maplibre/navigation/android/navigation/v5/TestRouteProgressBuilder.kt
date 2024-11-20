@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5
 
-import android.util.Pair
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
@@ -31,8 +30,8 @@ internal class TestRouteProgressBuilder {
         stepIndex: Int,
         legIndex: Int
     ): RouteProgress {
-        val steps = route.legs!![legIndex].steps
-        val currentStep = steps!![stepIndex]
+        val steps = route.legs[legIndex].steps
+        val currentStep = steps[stepIndex]
         val currentStepPoints = buildCurrentStepPoints(currentStep)
         val upcomingStepIndex = stepIndex + 1
         var upcomingStepPoints: List<Point>? = null
@@ -40,7 +39,7 @@ internal class TestRouteProgressBuilder {
         if (upcomingStepIndex < steps.size) {
             upcomingStep = steps[upcomingStepIndex]
             val upcomingStepGeometry = upcomingStep.geometry
-            upcomingStepPoints = buildStepPointsFromGeometry(upcomingStepGeometry!!)
+            upcomingStepPoints = buildStepPointsFromGeometry(upcomingStepGeometry)
         }
         val intersections: List<StepIntersection> =
             createIntersectionsList(currentStep, upcomingStep)
@@ -79,7 +78,7 @@ internal class TestRouteProgressBuilder {
 
     private fun buildCurrentStepPoints(currentStep: LegStep): List<Point> {
         val currentStepGeometry = currentStep.geometry
-        return buildStepPointsFromGeometry(currentStepGeometry!!)
+        return buildStepPointsFromGeometry(currentStepGeometry)
     }
 
     private fun createCurrentIntersection(

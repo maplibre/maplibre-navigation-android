@@ -5,7 +5,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants

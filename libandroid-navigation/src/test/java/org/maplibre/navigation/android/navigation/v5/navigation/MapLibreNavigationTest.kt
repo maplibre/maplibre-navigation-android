@@ -4,7 +4,7 @@ import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.BaseTest
@@ -12,7 +12,6 @@ import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstruction
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.SimpleCamera
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRoute
 import org.maplibre.navigation.android.navigation.v5.snap.Snap
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
@@ -248,7 +247,7 @@ class MapLibreNavigationTest : BaseTest() {
         val navigationEventListener = mockk<NavigationEventListener>(relaxed = true)
 
         navigation.addNavigationEventListener(navigationEventListener)
-        navigation.startNavigation(buildTestDirectionsRoute()!!)
+        navigation.startNavigation(buildTestDirectionsRoute())
 
         verify {
             navigationEventListener.onRunning(true)

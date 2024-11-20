@@ -1,12 +1,9 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Resources
-import android.os.LocaleList
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -207,7 +204,7 @@ class DistanceFormatterTest {
     ) {
         Assert.assertEquals(
             output,
-            DistanceFormatter(context!!, locale.language, unitType, roundIncrement).formatDistance(
+            DistanceFormatter(context, locale.language, unitType, roundIncrement).formatDistance(
                 distance
             ).toString()
         )

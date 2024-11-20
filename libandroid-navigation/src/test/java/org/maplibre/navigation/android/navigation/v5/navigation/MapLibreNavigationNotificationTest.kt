@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 import android.app.NotificationManager
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

@@ -120,7 +120,7 @@ class OffRouteDetectorTest : BaseTest() {
     fun isUserOffRoute_AssertFalseWhenOnStep() {
         val routeProgress = buildDefaultTestRouteProgress()
         val stepManeuverPoint: Point =
-            routeProgress.directionsRoute.legs.get(0).steps.get(0).maneuver.location
+            routeProgress.directionsRoute.legs[0].steps[0].maneuver.location
         val offRouteDetector = OffRouteDetector()
         val firstUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)

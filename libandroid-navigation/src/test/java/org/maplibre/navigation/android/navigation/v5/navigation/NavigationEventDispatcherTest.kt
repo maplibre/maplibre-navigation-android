@@ -1,21 +1,14 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.content.Context
 import android.location.Location
 import androidx.test.core.app.ApplicationProvider
-import com.google.gson.GsonBuilder
-import io.mockk.every
-import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
@@ -24,7 +17,6 @@ import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener
 import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -73,7 +65,7 @@ class NavigationEventDispatcherTest : BaseTest() {
             milestoneEventListener.onMilestoneEvent(routeProgress!!, "", milestone!!)
         }
 
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
         navigationEventDispatcher!!.onMilestoneEvent(routeProgress!!, "", milestone!!)
 
         verify {
@@ -90,9 +82,9 @@ class NavigationEventDispatcherTest : BaseTest() {
             milestoneEventListener.onMilestoneEvent(routeProgress!!, "", milestone!!)
         }
 
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
         navigationEventDispatcher!!.onMilestoneEvent(routeProgress!!, "", milestone!!)
 
         verify {
@@ -103,7 +95,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeMilestoneEventListener_didRemoveListener() {
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
         navigation!!.removeMilestoneEventListener(milestoneEventListener)
         navigationEventDispatcher!!.onMilestoneEvent(routeProgress!!, "", milestone!!)
 
@@ -115,7 +107,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeMilestoneEventListener_nullRemovesAllListeners() {
-        navigation!!.addMilestoneEventListener(milestoneEventListener!!)
+        navigation!!.addMilestoneEventListener(milestoneEventListener)
         navigation!!.addMilestoneEventListener(mockk(relaxed = true))
         navigation!!.addMilestoneEventListener(mockk(relaxed = true))
         navigation!!.addMilestoneEventListener(mockk(relaxed = true))
@@ -137,7 +129,7 @@ class NavigationEventDispatcherTest : BaseTest() {
             progressChangeListener.onProgressChange(location!!, routeProgress!!)
         }
 
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
+        navigation!!.addProgressChangeListener(progressChangeListener)
         navigationEventDispatcher!!.onProgressChange(location!!, routeProgress!!)
 
         verify {
@@ -155,9 +147,9 @@ class NavigationEventDispatcherTest : BaseTest() {
         }
 
 
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
+        navigation!!.addProgressChangeListener(progressChangeListener)
+        navigation!!.addProgressChangeListener(progressChangeListener)
+        navigation!!.addProgressChangeListener(progressChangeListener)
         navigationEventDispatcher!!.onProgressChange(location!!, routeProgress!!)
 
         verify {
@@ -168,7 +160,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeProgressChangeListener_didRemoveListener() {
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
+        navigation!!.addProgressChangeListener(progressChangeListener)
         navigation!!.removeProgressChangeListener(progressChangeListener)
         navigationEventDispatcher!!.onProgressChange(location!!, routeProgress!!)
 
@@ -180,7 +172,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeProgressChangeListener_nullRemovesAllListeners() {
-        navigation!!.addProgressChangeListener(progressChangeListener!!)
+        navigation!!.addProgressChangeListener(progressChangeListener)
         navigation!!.addProgressChangeListener(mockk(relaxed = true))
         navigation!!.addProgressChangeListener(mockk(relaxed = true))
         navigation!!.addProgressChangeListener(mockk(relaxed = true))
@@ -203,7 +195,7 @@ class NavigationEventDispatcherTest : BaseTest() {
             offRouteListener.userOffRoute(location!!)
         }
 
-        navigation!!.addOffRouteListener(offRouteListener!!)
+        navigation!!.addOffRouteListener(offRouteListener)
         navigationEventDispatcher!!.onUserOffRoute(location!!)
 
         verify {
@@ -220,9 +212,9 @@ class NavigationEventDispatcherTest : BaseTest() {
             offRouteListener.userOffRoute(location!!)
         }
 
-        navigation!!.addOffRouteListener(offRouteListener!!)
-        navigation!!.addOffRouteListener(offRouteListener!!)
-        navigation!!.addOffRouteListener(offRouteListener!!)
+        navigation!!.addOffRouteListener(offRouteListener)
+        navigation!!.addOffRouteListener(offRouteListener)
+        navigation!!.addOffRouteListener(offRouteListener)
         navigationEventDispatcher!!.onUserOffRoute(location!!)
 
         verify {
@@ -233,7 +225,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeOffRouteListener_didRemoveListener() {
-        navigation!!.addOffRouteListener(offRouteListener!!)
+        navigation!!.addOffRouteListener(offRouteListener)
         navigation!!.removeOffRouteListener(offRouteListener)
         navigationEventDispatcher!!.onUserOffRoute(location!!)
 
@@ -245,7 +237,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeOffRouteListener_nullRemovesAllListeners() {
-        navigation!!.addOffRouteListener(offRouteListener!!)
+        navigation!!.addOffRouteListener(offRouteListener)
         navigation!!.addOffRouteListener(mockk(relaxed = true))
         navigation!!.addOffRouteListener(mockk(relaxed = true))
         navigation!!.addOffRouteListener(mockk(relaxed = true))
@@ -268,7 +260,7 @@ class NavigationEventDispatcherTest : BaseTest() {
             navigationEventListener.onRunning(true)
         }
 
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
+        navigation!!.addNavigationEventListener(navigationEventListener)
         navigationEventDispatcher!!.onNavigationEvent(true)
 
         verify {
@@ -285,9 +277,9 @@ class NavigationEventDispatcherTest : BaseTest() {
             navigationEventListener.onRunning(true)
         }
 
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
+        navigation!!.addNavigationEventListener(navigationEventListener)
+        navigation!!.addNavigationEventListener(navigationEventListener)
+        navigation!!.addNavigationEventListener(navigationEventListener)
         navigationEventDispatcher!!.onNavigationEvent(true)
 
         verify {
@@ -298,7 +290,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeNavigationEventListener_didRemoveListener() {
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
+        navigation!!.addNavigationEventListener(navigationEventListener)
         navigation!!.removeNavigationEventListener(navigationEventListener)
         navigationEventDispatcher!!.onNavigationEvent(true)
 
@@ -310,7 +302,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeNavigationEventListener_nullRemovesAllListeners() {
-        navigation!!.addNavigationEventListener(navigationEventListener!!)
+        navigation!!.addNavigationEventListener(navigationEventListener)
         navigation!!.addNavigationEventListener(mockk(relaxed = true))
         navigation!!.addNavigationEventListener(mockk(relaxed = true))
         navigation!!.addNavigationEventListener(mockk(relaxed = true))
@@ -333,7 +325,7 @@ class NavigationEventDispatcherTest : BaseTest() {
             fasterRouteListener.fasterRouteFound(route)
         }
 
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
         navigationEventDispatcher!!.onFasterRouteEvent(route)
 
         verify {
@@ -350,9 +342,9 @@ class NavigationEventDispatcherTest : BaseTest() {
             fasterRouteListener.fasterRouteFound(route)
         }
 
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
         navigationEventDispatcher!!.onFasterRouteEvent(route)
 
         verify {
@@ -363,7 +355,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeFasterRouteListener_didRemoveListener() {
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
         navigation!!.removeFasterRouteListener(fasterRouteListener)
         navigationEventDispatcher!!.onFasterRouteEvent(route)
 
@@ -375,7 +367,7 @@ class NavigationEventDispatcherTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun removeFasterRouteListener_nullRemovesAllListeners() {
-        navigation!!.addFasterRouteListener(fasterRouteListener!!)
+        navigation!!.addFasterRouteListener(fasterRouteListener)
         navigation!!.addFasterRouteListener(mockk(relaxed = true))
         navigation!!.addFasterRouteListener(mockk(relaxed = true))
         navigation!!.addFasterRouteListener(mockk(relaxed = true))
@@ -410,7 +402,7 @@ class NavigationEventDispatcherTest : BaseTest() {
         milestone: Milestone
     ): NavigationEventDispatcher {
         val navigationEventDispatcher = NavigationEventDispatcher()
-        navigationEventDispatcher.addOffRouteListener(offRouteListener!!)
+        navigationEventDispatcher.addOffRouteListener(offRouteListener)
         navigationEventDispatcher.onMilestoneEvent(routeProgress!!, instruction, milestone)
         return navigationEventDispatcher
     }

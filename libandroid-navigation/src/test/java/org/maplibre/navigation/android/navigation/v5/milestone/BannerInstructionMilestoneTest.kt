@@ -1,11 +1,9 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 class BannerInstructionMilestoneTest : BaseTest() {
@@ -20,7 +18,7 @@ class BannerInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onBeginningOfStep_bannerInstructionsShouldTrigger() {
         var routeProgress = buildDefaultTestRouteProgress()
-        routeProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val milestone = buildBannerInstructionMilestone()
 
         val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
@@ -32,9 +30,9 @@ class BannerInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onSameInstructionOccurring_milestoneDoesNotTriggerTwice() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val firstProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        val firstProgress = createBeginningOfStepRouteProgress(routeProgress)
         val fortyMetersIntoStep: Double =
-            routeProgress.currentLegProgress!!.currentStep!!.distance - 40
+            routeProgress.currentLegProgress.currentStep.distance - 40
         val secondProgress: RouteProgress = routeProgress.copy(
             stepDistanceRemaining = fortyMetersIntoStep,
             stepIndex = 0
@@ -73,11 +71,11 @@ class BannerInstructionMilestoneTest : BaseTest() {
     fun onOccurringMilestone_beginningOfStep_bannerInstructionsAreReturned() {
         var routeProgress = buildDefaultTestRouteProgress()
         routeProgress = routeProgress.copy(
-            stepDistanceRemaining = routeProgress!!.currentLegProgress!!.currentStep!!.distance,
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
             stepIndex = 1
         )
         val instructions: BannerInstructions =
-            routeProgress.currentLegProgress!!.currentStep!!.bannerInstructions!!.get(0)!!
+            routeProgress.currentLegProgress.currentStep.bannerInstructions!![0]
         val milestone = buildBannerInstructionMilestone()
 
         milestone.isOccurring(routeProgress, routeProgress)
@@ -96,7 +94,7 @@ class BannerInstructionMilestoneTest : BaseTest() {
         )
 
         val bannerInstructions: List<BannerInstructions> =
-            routeProgress.currentLegProgress!!.currentStep!!.bannerInstructions!!.toList()
+            routeProgress.currentLegProgress.currentStep.bannerInstructions!!.toList()
         val instructions = bannerInstructions[bannerInstructions.size - 1]
         val milestone = buildBannerInstructionMilestone()
 
@@ -107,7 +105,7 @@ class BannerInstructionMilestoneTest : BaseTest() {
 
     private fun createBeginningOfStepRouteProgress(routeProgress: RouteProgress): RouteProgress {
         return routeProgress.copy(
-            stepDistanceRemaining = routeProgress.currentLegProgress!!.currentStep!!.distance,
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
             stepIndex = 0
         )
     }

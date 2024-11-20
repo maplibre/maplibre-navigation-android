@@ -1,16 +1,12 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.content.Context
-import android.location.Location
-import android.util.Pair
-import com.google.gson.GsonBuilder
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert
+import org.junit.Assert
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.android.navigation.v5.BaseTest
@@ -33,7 +29,6 @@ import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.isUserOffRoute
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.nextManeuverPosition
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteCallback
 import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
@@ -133,10 +128,10 @@ class NavigationHelperTest : BaseTest() {
         val route = buildMultiLegRoute()
         val location = buildDefaultLocationUpdate(-77.062996, 38.798405)
         val coordinates = PolylineUtils.decode(
-            route.legs!![0].steps!![1].geometry!!, Constants.PRECISION_6
+            route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
-        val distance = stepDistanceRemaining(location!!, 0, 1, route, coordinates)
+        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates)
 
         Assert.assertEquals(0.0, distance)
     }
@@ -147,10 +142,10 @@ class NavigationHelperTest : BaseTest() {
         val route = buildMultiLegRoute()
         val location = buildDefaultLocationUpdate(0.0, 0.0)
         val coordinates = PolylineUtils.decode(
-            route.legs!![0].steps!![1].geometry!!, Constants.PRECISION_6
+            route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
-        val distance = stepDistanceRemaining(location!!, 0, 1, route, coordinates)
+        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates)
 
         Assert.assertEquals(25.0, distance, 1.0)
     }
@@ -160,40 +155,40 @@ class NavigationHelperTest : BaseTest() {
     fun nextManeuverPosition_correctlyReturnsNextManeuverPosition() {
         val route = buildMultiLegRoute()
         val coordinates = PolylineUtils.decode(
-            route.legs!![0].steps!![0].geometry!!, Constants.PRECISION_6
+            route.legs[0].steps[0].geometry, Constants.PRECISION_6
         )
 
         val nextManeuver = nextManeuverPosition(
             0,
-            route.legs!![0].steps!!, coordinates
+            route.legs[0].steps, coordinates
         )
 
-        Assert.assertTrue(nextManeuver == route.legs!![0].steps!![1].maneuver.location)
+        Assert.assertTrue(nextManeuver == route.legs[0].steps[1].maneuver.location)
     }
 
     @Test
     @Throws(Exception::class)
     fun nextManeuverPosition_correctlyReturnsNextManeuverPositionInNextLeg() {
         val route = buildMultiLegRoute()
-        val stepIndex = route.legs!![0].steps!!.size - 1
+        val stepIndex = route.legs[0].steps.size - 1
         val coordinates = PolylineUtils.decode(
-            route.legs!![0].steps!![stepIndex].geometry!!, Constants.PRECISION_6
+            route.legs[0].steps[stepIndex].geometry, Constants.PRECISION_6
         )
 
         val nextManeuver = nextManeuverPosition(
             stepIndex,
-            route.legs!![0].steps!!, coordinates
+            route.legs[0].steps, coordinates
         )
 
-        Assert.assertTrue(nextManeuver == route.legs!![1].steps!![0].maneuver.location)
+        Assert.assertTrue(nextManeuver == route.legs[1].steps[0].maneuver.location)
     }
 
     @Test
     @Throws(Exception::class)
     fun createIntersectionList_returnsCompleteIntersectionList() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
-        val upcomingStep: LegStep = routeProgress.currentLegProgress!!.upComingStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
+        val upcomingStep: LegStep = routeProgress.currentLegProgress.upComingStep!!
 
         val intersections = createIntersectionsList(currentStep, upcomingStep)
         val correctListSize = currentStep.intersections!!.size + 1
@@ -205,7 +200,7 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionList_upcomingStepNull_returnsCurrentStepIntersectionList() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val upcomingStep: LegStep? = null
 
         val intersections = createIntersectionsList(currentStep, upcomingStep)
@@ -218,9 +213,9 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionDistanceList_samePointsForDistanceCalculationsEqualZero() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints = PolylineUtils.decode(
-            currentStep.geometry!!, Constants.PRECISION_6
+            currentStep.geometry, Constants.PRECISION_6
         )
         val currentStepIntersections = currentStep.intersections
 
@@ -235,9 +230,9 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionDistanceList_intersectionListSizeEqualsDistanceListSize() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints = PolylineUtils.decode(
-            currentStep.geometry!!, Constants.PRECISION_6
+            currentStep.geometry, Constants.PRECISION_6
         )
         val currentStepIntersections = currentStep.intersections
 
@@ -252,7 +247,7 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionDistanceList_emptyStepPointsReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints: List<Point> = ArrayList()
         val currentStepIntersections = currentStep.intersections
 
@@ -267,7 +262,7 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionDistanceList_oneStepPointReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints: MutableList<Point> = ArrayList()
         currentStepPoints.add(Point.fromLngLat(1.0, 1.0))
         val currentStepIntersections = currentStep.intersections
@@ -283,7 +278,7 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createIntersectionDistanceList_emptyStepIntersectionsReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
-        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints = PolylineUtils.decode(
             currentStep.geometry, Constants.PRECISION_6
         )
@@ -300,8 +295,8 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun findCurrentIntersection_beginningOfStepReturnsFirstIntersection() {
         val routeProgress = buildMultiLegRouteProgress()
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections: List<StepIntersection> = stepProgress.intersections!!
         val intersectionDistances = stepProgress.intersectionDistancesAlongStep!!
 
@@ -316,13 +311,13 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun findCurrentIntersection_endOfStepReturnsLastIntersection() {
         val routeProgress = buildMultiLegRouteProgress()
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections: List<StepIntersection> = stepProgress.intersections!!
         val intersectionDistances = stepProgress.intersectionDistancesAlongStep!!
 
         val currentIntersection = findCurrentIntersection(
-            intersections, intersectionDistances, legProgress.currentStep!!.distance
+            intersections, intersectionDistances, legProgress.currentStep.distance
         )
 
         Assert.assertTrue(currentIntersection == intersections[intersections.size - 1])
@@ -332,8 +327,8 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun findCurrentIntersection_middleOfStepReturnsCorrectIntersection() {
         val routeProgress = buildMultiLegRouteProgress(100.0, 0.0, 0.0, 2, 0)
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections: List<StepIntersection> = stepProgress.intersections!!
         val intersectionDistances = stepProgress.intersectionDistancesAlongStep!!
 
@@ -348,8 +343,8 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun findUpcomingIntersection_beginningOfStepReturnsSecondIntersection() {
         val routeProgress = buildMultiLegRouteProgress()
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections = stepProgress.intersections!!
 
         val upcomingIntersection = findUpcomingIntersection(
@@ -363,33 +358,33 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun findUpcomingIntersection_endOfStepReturnsUpcomingStepFirstIntersection() {
         val routeProgress = buildMultiLegRouteProgress()
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections: List<StepIntersection> = stepProgress.intersections!!
         val intersectionDistances = stepProgress.intersectionDistancesAlongStep!!
         val currentIntersection = findCurrentIntersection(
-            intersections, intersectionDistances, legProgress.currentStep!!.distance
+            intersections, intersectionDistances, legProgress.currentStep.distance
         )!!
 
         val upcomingIntersection = findUpcomingIntersection(
             intersections, legProgress.upComingStep!!, currentIntersection
         )
 
-        assertEquals(legProgress.upComingStep!!.intersections!!.get(0), upcomingIntersection)
+        assertEquals(legProgress.upComingStep!!.intersections!![0], upcomingIntersection)
     }
 
     @Test
     @Throws(Exception::class)
     fun findUpcomingIntersection_endOfLegReturnsNullIntersection() {
-        val stepIndex = buildMultiLegRoute().legs!![1].steps!!.size - 1
+        val stepIndex = buildMultiLegRoute().legs[1].steps.size - 1
         val routeProgress = buildMultiLegRouteProgress(0.0, 0.0, 0.0, stepIndex, 1)
-        val legProgress: RouteLegProgress = routeProgress!!.currentLegProgress!!
-        val stepProgress: RouteStepProgress = legProgress.currentStepProgress!!
+        val legProgress: RouteLegProgress = routeProgress.currentLegProgress
+        val stepProgress: RouteStepProgress = legProgress.currentStepProgress
         val intersections: List<StepIntersection> = stepProgress.intersections!!
         val intersectionDistances =
             stepProgress.intersectionDistancesAlongStep!!
         val currentIntersection = findCurrentIntersection(
-            intersections, intersectionDistances, legProgress.currentStep!!.distance
+            intersections, intersectionDistances, legProgress.currentStep.distance
         )!!
 
         val upcomingIntersection = findUpcomingIntersection(
@@ -426,10 +421,10 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createCurrentAnnotation_beginningOfStep_correctAnnotationIsReturned() {
         val routeProgress = buildDistanceCongestionAnnotationRouteProgress(0.0, 0.0, 0.0, 0, 0)
-        val legDistanceRemaining: Double = routeProgress!!.currentLeg!!.distance!!
+        val legDistanceRemaining: Double = routeProgress.currentLeg.distance
 
         val newLegAnnotation = createCurrentAnnotation(
-            null, routeProgress.currentLeg!!, legDistanceRemaining
+            null, routeProgress.currentLeg, legDistanceRemaining
         )
 
         Assert.assertEquals("moderate", newLegAnnotation!!.congestion)
@@ -439,10 +434,10 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createCurrentAnnotation_midStep_correctAnnotationIsReturned() {
         val routeProgress = buildDistanceCongestionAnnotationRouteProgress(0.0, 0.0, 0.0, 0, 0)
-        val legDistanceRemaining: Double = routeProgress!!.currentLeg!!.distance!! / 2
+        val legDistanceRemaining: Double = routeProgress.currentLeg.distance / 2
 
         val newLegAnnotation = createCurrentAnnotation(
-            null, routeProgress.currentLeg!!, legDistanceRemaining
+            null, routeProgress.currentLeg, legDistanceRemaining
         )
 
         Assert.assertTrue(newLegAnnotation!!.distanceToAnnotation < legDistanceRemaining)
@@ -453,8 +448,8 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun createCurrentAnnotation_usesCurrentLegAnnotationForPriorDistanceTraveled() {
         val routeProgress = buildDistanceCongestionAnnotationRouteProgress(0.0, 0.0, 0.0, 0, 0)
-        val legDistanceRemaining: Double = routeProgress!!.currentLeg!!.distance!! / 2
-        val previousAnnotationDistance: Double = routeProgress.currentLeg!!.distance!! / 3
+        val legDistanceRemaining: Double = routeProgress.currentLeg.distance / 2
+        val previousAnnotationDistance: Double = routeProgress.currentLeg.distance / 3
         val currentLegAnnotation = CurrentLegAnnotation(
             distance = 100.0,
             distanceToAnnotation = previousAnnotationDistance,
@@ -466,7 +461,7 @@ class NavigationHelperTest : BaseTest() {
         )
 
         val newLegAnnotation = createCurrentAnnotation(
-            currentLegAnnotation, routeProgress.currentLeg!!, legDistanceRemaining
+            currentLegAnnotation, routeProgress.currentLeg, legDistanceRemaining
         )
 
         assertEquals(11, newLegAnnotation!!.index)
@@ -476,7 +471,7 @@ class NavigationHelperTest : BaseTest() {
     private fun buildMultiLegRouteProgress(
         stepDistanceRemaining: Double, legDistanceRemaining: Double,
         distanceRemaining: Double, stepIndex: Int, legIndex: Int
-    ): RouteProgress? {
+    ): RouteProgress {
         val multiLegRoute = buildMultiLegRoute()
         return buildTestRouteProgress(
             multiLegRoute, stepDistanceRemaining,
@@ -491,7 +486,7 @@ class NavigationHelperTest : BaseTest() {
         distanceRemaining: Double,
         stepIndex: Int,
         legIndex: Int
-    ): RouteProgress? {
+    ): RouteProgress {
         val annotatedRoute = buildDistanceCongestionAnnotationRoute()
         return buildTestRouteProgress(
             annotatedRoute, stepDistanceRemaining,

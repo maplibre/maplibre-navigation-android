@@ -14,7 +14,7 @@ class ValidationUtilsTest : BaseTest() {
     fun validDirectionsRoute_isInvalidWithNullRouteOptions() {
         var route = buildTestDirectionsRoute(DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS)
         val invalidRouteOptions: RouteOptions? = null
-        route = route!!.copy(routeOptions = invalidRouteOptions)
+        route = route.copy(routeOptions = invalidRouteOptions)
 
         ValidationUtils.validDirectionsRoute(route, true)
     }
@@ -48,7 +48,7 @@ class ValidationUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
-            baseUrl = Constants.BASE_API_URL,
+            baseUrl = "api://",
             user = "user",
             profile = "profile",
             accessToken = ACCESS_TOKEN,
@@ -76,7 +76,7 @@ class ValidationUtilsTest : BaseTest() {
             voiceInstructions = null,
         )
 
-        return route!!.copy(
+        return route.copy(
             routeOptions = routeOptionsWithoutVoiceInstructions
         )
     }
@@ -86,7 +86,7 @@ class ValidationUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
-            baseUrl = Constants.BASE_API_URL,
+            baseUrl = "api://",
             user = "user",
             profile = "profile",
             accessToken = ACCESS_TOKEN,
@@ -114,7 +114,7 @@ class ValidationUtilsTest : BaseTest() {
             bannerInstructions = null,
         )
 
-        return route!!.copy(
+        return route.copy(
             routeOptions = routeOptionsWithoutVoiceInstructions
         )
     }
@@ -124,7 +124,7 @@ class ValidationUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val coordinates: List<Point> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
-            baseUrl = Constants.BASE_API_URL,
+            baseUrl = "api://",
             user = "user",
             profile = "profile",
             accessToken = ACCESS_TOKEN,
@@ -152,7 +152,7 @@ class ValidationUtilsTest : BaseTest() {
             snappingClosures = null,
         )
 
-        return route!!.copy(routeOptions = routeOptionsWithoutVoiceInstructions)
+        return route.copy(routeOptions = routeOptionsWithoutVoiceInstructions)
     }
 
     companion object {

@@ -35,7 +35,7 @@ open class BaseTest {
     }
 
     @Throws(Exception::class)
-    protected fun buildDefaultTestRouteProgress(testRoute: DirectionsRoute): RouteProgress? {
+    protected fun buildDefaultTestRouteProgress(testRoute: DirectionsRoute): RouteProgress {
         return routeProgressBuilder.buildDefaultTestRouteProgress(testRoute)
     }
 

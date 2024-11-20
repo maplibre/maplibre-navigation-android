@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
 import com.google.common.collect.Lists
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 
@@ -26,7 +26,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
 
         Assert.assertEquals(1, buffer.size)
-        Assert.assertEquals(2.0, buffer.pop().toDouble(), BaseTest.Companion.DELTA)
+        Assert.assertEquals(2.0, buffer.pop().toDouble(), DELTA)
     }
 
     @Test
@@ -37,7 +37,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
 
         Assert.assertEquals(2, buffer.size)
-        Assert.assertEquals(1.0, buffer.pop().toDouble(), BaseTest.Companion.DELTA)
+        Assert.assertEquals(1.0, buffer.pop().toDouble(), DELTA)
     }
 
     @Test
@@ -47,7 +47,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
         buffer.add(3)
         Assert.assertEquals(2, buffer.size)
-        Assert.assertEquals(2.0, buffer.peekFirst().toDouble(), BaseTest.Companion.DELTA)
-        Assert.assertEquals(3.0, buffer.peekLast().toDouble(), BaseTest.Companion.DELTA)
+        Assert.assertEquals(2.0, buffer.peekFirst()!!.toDouble(), DELTA)
+        Assert.assertEquals(3.0, buffer.peekLast()!!.toDouble(), DELTA)
     }
 }

@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
@@ -47,7 +47,7 @@ class FasterRouteDetectorTest : BaseTest() {
         val navigation = buildNavigationWithFasterRouteEnabled()
         val fasterRouteEngine = navigation.fasterRouteEngine
         var currentProgress = obtainDefaultRouteProgress()
-        val longerRoute: DirectionsRoute = currentProgress!!.directionsRoute!!.copy(
+        val longerRoute: DirectionsRoute = currentProgress.directionsRoute.copy(
             duration = 10000000.0
         )
         currentProgress = currentProgress.copy(
@@ -66,7 +66,7 @@ class FasterRouteDetectorTest : BaseTest() {
         val navigation = buildNavigationWithFasterRouteEnabled()
         val fasterRouteEngine = navigation.fasterRouteEngine
         var currentProgress = obtainDefaultRouteProgress()
-        val longerRoute: DirectionsRoute = currentProgress!!.directionsRoute!!.copy(
+        val longerRoute: DirectionsRoute = currentProgress.directionsRoute.copy(
             duration = 1000.0
         )
         currentProgress = currentProgress.copy(
