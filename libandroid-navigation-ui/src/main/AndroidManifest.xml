@@ -1,9 +1,9 @@
 <manifest
-    package="com.mapbox.services.android.navigation.ui.v5"
+    package="org.maplibre.navigation.android.navigation.ui.v5"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application>
-    <activity android:name=".MapboxNavigationActivity"/>
+    <activity android:name="org.maplibre.navigation.android.navigation.ui.v5.MapLibreNavigationActivity"/>
   </application>
 
 </manifest>

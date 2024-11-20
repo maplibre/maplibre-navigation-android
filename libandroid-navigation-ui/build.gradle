@@ -10,10 +10,10 @@ java {
 }
 
 android {
+    namespace 'org.maplibre.navigation.android.navigation.ui.v5'
+
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
-
-    namespace 'com.mapbox.services.android.navigation.ui.v5'
 
     defaultConfig {
         minSdkVersion androidVersions.minSdkVersion
@@ -22,10 +22,10 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         buildConfigField('String',
-                "MAPBOX_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "mapbox-navigation-ui-android")
+                "MAPLIBRE_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "maplibre-navigation-ui-android")
         )
         buildConfigField 'String',
-                "MAPBOX_NAVIGATION_EVENTS_USER_AGENT", String.format("\"mapbox-navigation-ui-android/%s\"",
+                "MAPLIBRE_NAVIGATION_EVENTS_USER_AGENT", String.format("\"maplibre-navigation-ui-android/%s\"",
                 project.VERSION_NAME
         )
         consumerProguardFiles 'proguard-consumer.pro'
@@ -35,10 +35,6 @@ android {
         javadocDeps
     }
 
-    buildFeatures {
-        buildConfig true
-    }
-
     buildTypes {
         debug {
             testCoverageEnabled = true
@@ -46,15 +42,18 @@ android {
     }
 
     buildFeatures {
-        buildConfig = true
+        buildConfig true
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+                excludes = ['jdk.internal.*']
+            }
+        }
     }
 
     publishing {
@@ -63,6 +62,9 @@ android {
             withJavadocJar()
         }
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
@@ -70,20 +72,19 @@ dependencies {
     api project(':libandroid-navigation')
 
     // Maplibre Maps SDK
-    api dependenciesList.mapLibreServices
     api dependenciesList.mapLibreTurf
     api dependenciesList.mapLibreAnnotations
-    implementation(dependenciesList.mapLibre) {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
-    }
+    implementation dependenciesList.mapLibre
+
+    // Mapbox SDKs (needed for requests)
+    api dependenciesList.mapboxGeoJson
 
     // Support libraries
     implementation dependenciesList.materialDesign
     implementation dependenciesList.androidxRecyclerView
     implementation dependenciesList.androidxConstraintLayout
     implementation dependenciesList.androidxCardView
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation dependenciesList.androidxCore
 
     // AutoValues
     annotationProcessor dependenciesList.autoValue
@@ -107,7 +108,7 @@ dependencies {
 }
 
 apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/mvn-push-android.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"

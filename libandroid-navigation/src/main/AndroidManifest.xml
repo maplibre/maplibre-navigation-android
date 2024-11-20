@@ -7,7 +7,7 @@
 
     <application>
         <service
-            android:name="com.mapbox.services.android.navigation.v5.navigation.NavigationService"
+            android:name="org.maplibre.navigation.android.navigation.v5.navigation.NavigationService"
             android:foregroundServiceType="location" />
     </application>
 

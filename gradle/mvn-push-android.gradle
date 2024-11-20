@@ -50,7 +50,7 @@ publishing {
                     developer {
                         id = project.ext.navigationDeveloperId
                         name = project.ext.navigationDeveloperName
-                        email = project.ext.mavogatopmDeveloperMail
+                        email = project.ext.navigationDeveloperMail
                     }
                 }
                 scm {
