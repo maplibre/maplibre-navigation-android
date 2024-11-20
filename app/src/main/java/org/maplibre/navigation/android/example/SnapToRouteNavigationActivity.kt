@@ -168,8 +168,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         route?.let { route ->
             locationEngine.also { locationEngine ->
                 locationEngine.assign(route)
-                //TODO fabi755
-//                navigation.locationEngine = locationEngine
+                navigation.locationEngine = locationEngine
                 navigation.startNavigation(route)
             }
         }

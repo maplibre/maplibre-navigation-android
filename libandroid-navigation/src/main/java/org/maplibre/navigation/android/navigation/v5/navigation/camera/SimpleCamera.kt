@@ -27,17 +27,6 @@ open class SimpleCamera : Camera {
             ?: 0.0
     }
 
-    override fun target(routeInformation: RouteInformation): Point {
-        return routeInformation.route?.let { route ->
-            setupLineStringAndBearing(route)
-            val firstPoint = routeCoordinates.first()
-            Point.fromLngLat(firstPoint.longitude(), firstPoint.latitude())
-        } ?: routeInformation.location?.let { location ->
-            Point.fromLngLat(location.longitude, location.latitude)
-        // TODO fabi755: throw or return null?
-        } ?: throw IllegalArgumentException("RouteInformation must have a route or location.")
-    }
-
     override fun tilt(routeInformation: RouteInformation): Double {
         return DEFAULT_TILT.toDouble()
     }

@@ -17,7 +17,6 @@ data class RouteLeg(
      * @return a double number with unit meters
      * @since 1.0.0
      */
-    //TODO fabi755, was optional before, do we can force non-null here?
     val distance: Double,
 
     /**
@@ -26,7 +25,6 @@ data class RouteLeg(
      * @return a double number with unit seconds
      * @since 1.0.0
      */
-    //TODO fabi755, was optional before, do we can force non-null here?
     val duration: Double,
 
     /**
@@ -35,7 +33,6 @@ data class RouteLeg(
      * @return List of [LegStep]
      * @since 1.0.0
      */
-    //TODO fabi755, was optional before, do we can force non-null here?
     val steps: List<LegStep>,
 
     /**

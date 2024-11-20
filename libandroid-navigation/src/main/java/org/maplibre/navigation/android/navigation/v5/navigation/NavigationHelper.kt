@@ -341,7 +341,6 @@ object NavigationHelper {
         measuredIntersections: Map<StepIntersection, Double>,
         stepDistanceTraveled: Double
     ): StepIntersection? {
-        //TODO fabi755
 //        for (measuredIntersection in measuredIntersections) {
 //            val intersectionDistance = measuredIntersection.value
 //            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
@@ -476,7 +475,6 @@ object NavigationHelper {
         )
     }
 
-    //TODO fabi755: why this is not used?!?!
     @JvmStatic
     fun shouldCheckFasterRoute(navigationLocationUpdate: NavigationLocationUpdate, routeProgress: RouteProgress): Boolean {
         val fasterRouteEngine = navigationLocationUpdate.mapLibreNavigation.fasterRouteEngine

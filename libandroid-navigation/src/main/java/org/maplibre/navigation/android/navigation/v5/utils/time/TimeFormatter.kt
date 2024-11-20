@@ -19,7 +19,8 @@ object TimeFormatter {
 
     @JvmStatic
     fun formatTime(
-        time: Calendar, routeDuration: Double, type: MapLibreNavigationOptions.TimeFormat,
+        time: Calendar, routeDuration: Double,
+        type: MapLibreNavigationOptions.TimeFormat,
         isDeviceTwentyFourHourFormat: Boolean
     ): String? {
         time.add(Calendar.SECOND, routeDuration.toInt())

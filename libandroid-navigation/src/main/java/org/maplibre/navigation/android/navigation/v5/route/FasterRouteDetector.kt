@@ -5,14 +5,15 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProgress
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-//TODO fabi755
-class FasterRouteDetector : FasterRoute() {
+class FasterRouteDetector(private val navigationOptions: MapLibreNavigationOptions) :
+    FasterRoute() {
     private var lastCheckedLocation: Location? = null
 
     override fun shouldCheckFasterRoute(location: Location, routeProgress: RouteProgress): Boolean {
@@ -20,9 +21,9 @@ class FasterRouteDetector : FasterRoute() {
         if (lastCheckedLocation == null) {
             lastCheckedLocation = location
         }
+
         // Check if the faster route time interval has been exceeded
-        //todo fabi755 outsource to options
-        if (secondsSinceLastCheck(location) >= NavigationConstants.NAVIGATION_CHECK_FASTER_ROUTE_INTERVAL) {
+        if (secondsSinceLastCheck(location) >= navigationOptions.fasterRouteCheckIntervalSeconds) {
             lastCheckedLocation = location
             // Check for both valid route and step durations remaining
             if (validRouteDurationRemaining(routeProgress) && validStepDurationRemaining(
@@ -82,7 +83,7 @@ class FasterRouteDetector : FasterRoute() {
      */
     private fun validSecondStep(secondStep: LegStep, routeProgress: RouteProgress): Boolean {
         return routeProgress.currentLegProgress.upComingStep != null
-                && routeProgress.currentLegProgress.upComingStep!! == secondStep
+                && routeProgress.currentLegProgress.upComingStep == secondStep
     }
 
     /**
@@ -103,9 +104,8 @@ class FasterRouteDetector : FasterRoute() {
      * @param response to be checked
      * @return true if valid, false if not
      */
-    private fun validRouteResponse(response: DirectionsResponse?): Boolean {
-        return response != null
-                && response.routes.isNotEmpty()
+    private fun validRouteResponse(response: DirectionsResponse): Boolean {
+        return response.routes.isNotEmpty()
     }
 
     private fun validRouteDurationRemaining(routeProgress: RouteProgress): Boolean {
@@ -123,7 +123,9 @@ class FasterRouteDetector : FasterRoute() {
     }
 
     private fun secondsSinceLastCheck(location: Location): Long {
-        return dateDiff(Date(lastCheckedLocation!!.time), Date(location.time), TimeUnit.SECONDS)
+        return lastCheckedLocation?.let { lastCheckedLocation ->
+            dateDiff(Date(lastCheckedLocation.time), Date(location.time), TimeUnit.SECONDS)
+        } ?: -1
     }
 
     @Suppress("SameParameterValue")

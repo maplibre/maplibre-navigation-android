@@ -4,6 +4,7 @@ import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstruction
 import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.RoundingIncrement
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
 
 
 /**
@@ -104,7 +105,39 @@ data class MapLibreNavigationOptions(
      * is not considered.
      */
     val locationAcceptableAccuracyInMetersThreshold: Int = Defaults.LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD,
+
+    /**
+     * In seconds, how quickly [FasterRouteDetector]
+     * will tell [RouteProcessorBackgroundThread] to check
+     * for a faster [org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute].
+     */
+    val fasterRouteCheckIntervalSeconds: Int = Defaults.FASTER_ROUTE_CHECK_INTERVAL_SECONDS
 ) {
+    fun toBuilder(): Builder {
+        return Builder()
+            .withMaxTurnCompletionOffset(maxTurnCompletionOffset)
+            .withManeuverZoneRadius(maneuverZoneRadius)
+            .withDeadReckoningTimeInterval(deadReckoningTimeInterval)
+            .withMaxManipulatedCourseAngle(maxManipulatedCourseAngle)
+            .withUserLocationSnapDistance(userLocationSnapDistance)
+            .withSecondsBeforeReroute(secondsBeforeReroute)
+            .withDefaultMilestonesEnabled(defaultMilestonesEnabled)
+            .withSnapToRoute(snapToRoute)
+            .withEnableOffRouteDetection(enableOffRouteDetection)
+            .withEnableFasterRouteDetection(enableFasterRouteDetection)
+            .withManuallyEndNavigationUponCompletion(manuallyEndNavigationUponCompletion)
+            .withMetersRemainingTillArrival(metersRemainingTillArrival)
+            .withOffRouteMinimumDistanceMetersAfterReroute(offRouteMinimumDistanceMetersAfterReroute)
+            .withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection)
+            .withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection)
+            .withIsDebugLoggingEnabled(isDebugLoggingEnabled)
+            .withNavigationNotification(navigationNotification)
+            .withRoundingIncrement(roundingIncrement)
+            .withTimeFormatType(timeFormatType)
+            .withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold)
+            .withFasterRouteCheckIntervalSeconds(fasterRouteCheckIntervalSeconds)
+    }
+
     enum class TimeFormat(val id: Int) {
         NONE_SPECIFIED(-1),
         TWELVE_HOURS(0),
@@ -130,5 +163,78 @@ data class MapLibreNavigationOptions(
         const val IS_DEBUG_LOGGING_ENABLED = false
         const val ROUNDING_INCREMENT = NavigationConstants.ROUNDING_INCREMENT_FIFTY
         const val LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD = 100
+        const val FASTER_ROUTE_CHECK_INTERVAL_SECONDS = 120
+    }
+
+    class Builder {
+        private var maxTurnCompletionOffset: Double = Defaults.MAX_TURN_COMPLETION_OFFSET
+        private var maneuverZoneRadius: Double = Defaults.MANEUVER_ZONE_RADIUS
+        private var deadReckoningTimeInterval: Double = Defaults.DEAD_RECKONING_TIME_INTERVAL
+        private var maxManipulatedCourseAngle: Double = Defaults.MAX_MANIPULATED_COURSE_ANGLE
+        private var userLocationSnapDistance: Double = Defaults.USER_LOCATION_SNAPPING_DISTANCE
+        private var secondsBeforeReroute: Int = Defaults.SECONDS_BEFORE_REROUTE
+        private var defaultMilestonesEnabled: Boolean = Defaults.DEFAULT_MILESTONES_ENABLED
+        private var snapToRoute: Boolean = Defaults.SNAP_TO_ROUTE
+        private var enableOffRouteDetection: Boolean = Defaults.ENABLE_OFF_ROUTE_DETECTION
+        private var enableFasterRouteDetection: Boolean = Defaults.ENABLE_FASTER_ROUTE_DETECTION
+        private var manuallyEndNavigationUponCompletion: Boolean = Defaults.MANUALLY_END_NAVIGATION_UPON_COMPLETION
+        private var metersRemainingTillArrival: Double = Defaults.METERS_REMAINING_TILL_ARRIVAL
+        private var offRouteMinimumDistanceMetersAfterReroute: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE
+        private var offRouteMinimumDistanceMetersBeforeWrongDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION
+        private var offRouteMinimumDistanceMetersBeforeRightDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION
+        private var isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED
+        private var navigationNotification: NavigationNotification? = null
+        @RoundingIncrement private var roundingIncrement: Int = Defaults.ROUNDING_INCREMENT
+        private var timeFormatType: TimeFormat = TimeFormat.NONE_SPECIFIED
+        private var locationAcceptableAccuracyInMetersThreshold: Int = Defaults.LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD
+        private var fasterRouteCheckIntervalSeconds: Int = Defaults.FASTER_ROUTE_CHECK_INTERVAL_SECONDS
+
+        fun withMaxTurnCompletionOffset(maxTurnCompletionOffset: Double) = apply { this.maxTurnCompletionOffset = maxTurnCompletionOffset }
+        fun withManeuverZoneRadius(maneuverZoneRadius: Double) = apply { this.maneuverZoneRadius = maneuverZoneRadius }
+        fun withDeadReckoningTimeInterval(deadReckoningTimeInterval: Double) = apply { this.deadReckoningTimeInterval = deadReckoningTimeInterval }
+        fun withMaxManipulatedCourseAngle(maxManipulatedCourseAngle: Double) = apply { this.maxManipulatedCourseAngle = maxManipulatedCourseAngle }
+        fun withUserLocationSnapDistance(userLocationSnapDistance: Double) = apply { this.userLocationSnapDistance = userLocationSnapDistance }
+        fun withSecondsBeforeReroute(secondsBeforeReroute: Int) = apply { this.secondsBeforeReroute = secondsBeforeReroute }
+        fun withDefaultMilestonesEnabled(defaultMilestonesEnabled: Boolean) = apply { this.defaultMilestonesEnabled = defaultMilestonesEnabled }
+        fun withSnapToRoute(snapToRoute: Boolean) = apply { this.snapToRoute = snapToRoute }
+        fun withEnableOffRouteDetection(enableOffRouteDetection: Boolean) = apply { this.enableOffRouteDetection = enableOffRouteDetection }
+        fun withEnableFasterRouteDetection(enableFasterRouteDetection: Boolean) = apply { this.enableFasterRouteDetection = enableFasterRouteDetection }
+        fun withManuallyEndNavigationUponCompletion(manuallyEndNavigationUponCompletion: Boolean) = apply { this.manuallyEndNavigationUponCompletion = manuallyEndNavigationUponCompletion }
+        fun withMetersRemainingTillArrival(metersRemainingTillArrival: Double) = apply { this.metersRemainingTillArrival = metersRemainingTillArrival }
+        fun withOffRouteMinimumDistanceMetersAfterReroute(offRouteMinimumDistanceMetersAfterReroute: Double) = apply { this.offRouteMinimumDistanceMetersAfterReroute = offRouteMinimumDistanceMetersAfterReroute }
+        fun withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeWrongDirection = offRouteMinimumDistanceMetersBeforeWrongDirection }
+        fun withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeRightDirection = offRouteMinimumDistanceMetersBeforeRightDirection }
+        fun withIsDebugLoggingEnabled(isDebugLoggingEnabled: Boolean) = apply { this.isDebugLoggingEnabled = isDebugLoggingEnabled }
+        fun withNavigationNotification(navigationNotification: NavigationNotification?) = apply { this.navigationNotification = navigationNotification }
+        fun withRoundingIncrement(roundingIncrement: Int) = apply { this.roundingIncrement = roundingIncrement }
+        fun withTimeFormatType(timeFormatType: TimeFormat) = apply { this.timeFormatType = timeFormatType }
+        fun withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold: Int) = apply { this.locationAcceptableAccuracyInMetersThreshold = locationAcceptableAccuracyInMetersThreshold }
+        fun withFasterRouteCheckIntervalSeconds(fasterRouteCheckIntervalSeconds: Int) = apply { this.fasterRouteCheckIntervalSeconds = fasterRouteCheckIntervalSeconds }
+
+        fun build(): MapLibreNavigationOptions {
+            return MapLibreNavigationOptions(
+                maxTurnCompletionOffset,
+                maneuverZoneRadius,
+                deadReckoningTimeInterval,
+                maxManipulatedCourseAngle,
+                userLocationSnapDistance,
+                secondsBeforeReroute,
+                defaultMilestonesEnabled,
+                snapToRoute,
+                enableOffRouteDetection,
+                enableFasterRouteDetection,
+                manuallyEndNavigationUponCompletion,
+                metersRemainingTillArrival,
+                offRouteMinimumDistanceMetersAfterReroute,
+                offRouteMinimumDistanceMetersBeforeWrongDirection,
+                offRouteMinimumDistanceMetersBeforeRightDirection,
+                isDebugLoggingEnabled,
+                navigationNotification,
+                roundingIncrement,
+                timeFormatType,
+                locationAcceptableAccuracyInMetersThreshold,
+                fasterRouteCheckIntervalSeconds
+            )
+        }
     }
 }

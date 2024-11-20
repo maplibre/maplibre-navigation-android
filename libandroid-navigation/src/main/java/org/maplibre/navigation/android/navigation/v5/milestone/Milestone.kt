@@ -12,9 +12,11 @@ import org.maplibre.navigation.android.navigation.v5.exception.NavigationExcepti
  */
 abstract class Milestone(
     val identifier: Int,
-    open val instruction: Instruction? = null,
+    instruction: Instruction? = null,
     val trigger: Trigger.Statement? = null
 ) {
+
+    private val internalInstruction = instruction
 
     /**
      * A milestone can either be passed in to the
@@ -31,4 +33,8 @@ abstract class Milestone(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
     ): Boolean
+
+    open fun getInstruction(): Instruction? {
+        return internalInstruction
+    }
 }

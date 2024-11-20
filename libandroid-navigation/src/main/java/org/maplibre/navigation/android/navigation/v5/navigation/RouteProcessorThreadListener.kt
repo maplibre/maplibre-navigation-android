@@ -28,7 +28,7 @@ internal class RouteProcessorThreadListener(
         routeProgress: RouteProgress
     ) {
         for (milestone in triggeredMilestones) {
-            val instruction = milestone.instruction?.buildInstruction(routeProgress)
+            val instruction = milestone.getInstruction()?.buildInstruction(routeProgress)
             eventDispatcher.onMilestoneEvent(routeProgress, instruction, milestone)
         }
     }

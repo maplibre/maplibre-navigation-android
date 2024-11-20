@@ -229,20 +229,17 @@ class MapLibreNavigationTest : BaseTest() {
         Assert.assertEquals(2, navigationWithOptions.milestones.size)
     }
 
-    //TODO fabi755
-//    @Test
-//    fun locationEngine_returnsCorrectLocationEngine() {
-//        val navigation = buildMapLibreNavigation()
-//        val locationEngine = Mockito.mock(LocationEngine::class.java)
-//        val locationEngineInstanceNotUsed = Mockito.mock(
-//            LocationEngine::class.java
-//        )
-//
-//        navigation.locationEngine = locationEngine
-//
-//        Assert.assertNotSame(locationEngineInstanceNotUsed, navigation.locationEngine)
-//        Assert.assertEquals(locationEngine, navigation.locationEngine)
-//    }
+    @Test
+    fun locationEngine_returnsCorrectLocationEngine() {
+        val navigation = buildMapLibreNavigation()
+        val locationEngine = mockk<LocationEngine>()
+        val locationEngineInstanceNotUsed = mockk<LocationEngine>()
+
+        navigation.locationEngine = locationEngine
+
+        Assert.assertNotSame(locationEngineInstanceNotUsed, navigation.locationEngine)
+        Assert.assertEquals(locationEngine, navigation.locationEngine)
+    }
 
     @Test
     @Throws(Exception::class)
@@ -258,29 +255,27 @@ class MapLibreNavigationTest : BaseTest() {
         }
     }
 
-    //TODO fabi755
-//    @Test
-//    @Throws(Exception::class)
-//    fun setSnapEngine_doesReplaceDefaultEngine() {
-//        val navigation = buildMapLibreNavigation()
-//
-//        val snap = Mockito.mock(Snap::class.java)
-//        navigation.snapEngine = snap
-//
-//        Assert.assertTrue(navigation.snapEngine !is SnapToRoute)
-//    }
+    @Test
+    @Throws(Exception::class)
+    fun setSnapEngine_doesReplaceDefaultEngine() {
+        val navigation = buildMapLibreNavigation()
 
-    //TODO fabi755
-//    @Test
-//    @Throws(Exception::class)
-//    fun setOffRouteEngine_doesReplaceDefaultEngine() {
-//        val navigation = buildMapLibreNavigation()
-//
-//        val offRoute = Mockito.mock(OffRoute::class.java)
-//        navigation.offRouteEngine = offRoute
-//
-//        Assert.assertEquals(offRoute, navigation.offRouteEngine)
-//    }
+        val snap = mockk<Snap>()
+        navigation.snapEngine = snap
+
+        Assert.assertTrue(navigation.snapEngine !is SnapToRoute)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setOffRouteEngine_doesReplaceDefaultEngine() {
+        val navigation = buildMapLibreNavigation()
+
+        val offRoute = mockk<OffRoute>()
+        navigation.offRouteEngine = offRoute
+
+        Assert.assertEquals(offRoute, navigation.offRouteEngine)
+    }
 
     private fun buildMapLibreNavigation(): MapLibreNavigation {
         val context = mockk<Context>(relaxed = true) {

@@ -84,16 +84,46 @@ class MapLibreNavigation @JvmOverloads constructor(
      * - Setting the location engine interval to 0 will result in location updates occurring as
      *   quickly as possible within the fastest interval limit placed on it.
      */
-    private val locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(
+    locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(
         applicationContext
     ),
-    val cameraEngine: Camera = SimpleCamera(),
-    val snapEngine: Snap = SnapToRoute(),
-    val offRouteEngine: OffRoute = OffRouteDetector(),
-    val fasterRouteEngine: FasterRoute = FasterRouteDetector(),
+    var cameraEngine: Camera = SimpleCamera(),
+    var snapEngine: Snap = SnapToRoute(),
+    var offRouteEngine: OffRoute = OffRouteDetector(),
+    var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
 ) : ServiceConnection {
 
     private var navigationService: NavigationService? = null
+
+    /**
+     * Navigation needs an instance of location engine in order to acquire user location information
+     * and handle events based off of the current information. By default, a LOST location engine is
+     * created with the optimal navigation settings.
+     *
+     * Although it is not required to set your location engine to these parameters, these values are
+     * what we found works best. Note that this also depends on which underlying location service you
+     * are using. Reference the corresponding location service documentation for more information and
+     * way's you could improve the performance.
+     *
+     * An ideal conditions, the Navigation SDK will receive location updates once every second with
+     * mild to high horizontal accuracy. The location update must also contain all information an
+     * Android location object would expect including bearing, speed, timestamp, and
+     * latitude/longitude.
+     *
+     * Listed below are the ideal conditions for both a LOST location engine and a Google Play
+     * Services Location engine.
+     *
+     * - Set the location priority to `HIGH_ACCURACY`.
+     * - The fastest interval should be set around 1 second (1000ms). Note that the interval isn't
+     *   a guaranteed to match this value exactly and is only an estimate.
+     * - Setting the location engine interval to 0 will result in location updates occurring as
+     *   quickly as possible within the fastest interval limit placed on it.
+     */
+    var locationEngine: LocationEngine = locationEngine
+        set(value) {
+            field = value
+            navigationService?.updateLocationEngine(locationEngine)
+        }
 
     private val mutableMilestones: MutableSet<Milestone> = mutableSetOf<Milestone>()
         .apply {
@@ -192,19 +222,6 @@ class MapLibreNavigation @JvmOverloads constructor(
         milestones.firstOrNull { m -> m.identifier == milestoneIdentifier }
             ?.let { removeMilestone(it) }
             ?: run { Timber.w("No milestone found with the specified identifier.") }
-    }
-
-    /**
-     * Will return the currently set location engine. By default, the LOST location engine that's
-     * created on initialization of this class. If a custom location engine is preferred to be used,
-     * [.setLocationEngine] is offered which will replace the default.
-     *
-     * @return the location engine which is will or currently is being used during the navigation
-     * session
-     * @since 0.5.0
-     */
-    fun getLocationEngine(): LocationEngine {
-        return locationEngine
     }
 
     /**

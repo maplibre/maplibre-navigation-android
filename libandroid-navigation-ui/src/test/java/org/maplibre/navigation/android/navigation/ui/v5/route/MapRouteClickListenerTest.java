@@ -58,8 +58,6 @@ public class MapRouteClickListenerTest {
     DirectionsRoute anyRoute = mock(DirectionsRoute.class);
     when(anyRoute.getGeometry()).thenReturn("awbagAzavnhFp`@~fGr~Ya|BhcBwcYbr\\u{C`tZ~{H~vrBsge@bdo@`kc@dqpAckUbmn" +
       "@sphAjnDovu@zviDgasDpa^ixsBbmy@{ubBvou@ajy@|}\\y~q@dycAcotGj{v@cdr@lyUwpC");
-    //TODO fabi755
-//    when(anyRoute.getRouteIndex()).thenReturn("1");
     return anyRoute;
   }
 

@@ -19,6 +19,12 @@ internal class NavigationLocationEngineUpdater(
         requestLocationUpdates()
     }
 
+    fun updateLocationEngine(locationEngine: LocationEngine) {
+        removeLocationEngineListener()
+        this.locationEngine = locationEngine
+        requestLocationUpdates()
+    }
+
     @SuppressLint("MissingPermission")
     private fun requestLocationUpdates() {
         locationEngine.requestLocationUpdates(

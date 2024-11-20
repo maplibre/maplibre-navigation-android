@@ -33,10 +33,8 @@ internal class MockLocationBuilder {
     }
 
     fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
-        val currentStep: LegStep = progress.currentLegProgress!!.currentStep!! //TODO fabi755
-        val lineString = LineString.fromPolyline(
-            currentStep.geometry!!, Constants.PRECISION_6
-        )
+        val currentStep = progress.currentLegProgress.currentStep
+        val lineString = LineString.fromPolyline(currentStep.geometry, Constants.PRECISION_6)
         return lineString.coordinates()
     }
 

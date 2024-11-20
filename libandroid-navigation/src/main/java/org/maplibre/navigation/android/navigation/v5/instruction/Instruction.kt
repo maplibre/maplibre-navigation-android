@@ -15,5 +15,5 @@ fun interface Instruction {
      * @return [String] instruction that will be showed or voiced on the client
      * @since 0.4.0
      */
-    fun buildInstruction(routeProgress: RouteProgress): String
+    fun buildInstruction(routeProgress: RouteProgress): String?
 }

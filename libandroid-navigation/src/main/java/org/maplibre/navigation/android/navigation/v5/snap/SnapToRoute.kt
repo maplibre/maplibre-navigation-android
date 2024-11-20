@@ -20,7 +20,6 @@ import org.maplibre.turf.TurfMisc
  *
  * @since 0.4.0
  */
-//TODO fabi755
 class SnapToRoute : Snap() {
     /**
      * Last calculated snapped bearing. This will be re-used if bearing can not calculated.
@@ -57,20 +56,16 @@ class SnapToRoute : Snap() {
      * @return Float bearing snapped to route
      */
     private fun snapLocationBearing(location: Location, routeProgress: RouteProgress): Float {
-        val currentPoint = getCurrentPoint(routeProgress)
-        val futurePoint = getFuturePoint(routeProgress)
-        if (currentPoint == null || futurePoint == null) {
-            return if (lastSnappedBearing != null) {
-                lastSnappedBearing!!
-            } else {
-                location.bearing
+        return getCurrentPoint(routeProgress)?.let { currentPoint ->
+            getFuturePoint(routeProgress)?.let { futurePoint ->
+                // Get bearing and convert azimuth to degrees
+                val azimuth = TurfMeasurement.bearing(currentPoint, futurePoint)
+                wrap(azimuth, 0.0, 360.0).toFloat()
+                    .also { bearing -> lastSnappedBearing = bearing }
             }
         }
-
-        // Get bearing and convert azimuth to degrees
-        val azimuth = TurfMeasurement.bearing(currentPoint, futurePoint)
-        lastSnappedBearing = wrap(azimuth, 0.0, 360.0).toFloat()
-        return lastSnappedBearing!!
+            ?: lastSnappedBearing
+            ?: location.bearing
     }
 
     /**
@@ -82,20 +77,21 @@ class SnapToRoute : Snap() {
      * @since 0.4.0
      */
     private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
-        val snappedLocation = Location(location)
         val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        if (stepCoordinates.size > 1) {
+        return if (stepCoordinates.size > 1) {
             val feature = TurfMisc.nearestPointOnLine(locationToPoint, stepCoordinates)
-            if (feature.geometry() != null) {
-                val point = (feature.geometry() as Point)
-                snappedLocation.longitude = point.longitude()
-                snappedLocation.latitude = point.latitude()
-            }
+            (feature.geometry() as? Point)?.let { point ->
+                location.apply {
+                    longitude = point.longitude()
+                    latitude = point.latitude()
+                }
+            } ?: location
+        } else {
+            location
         }
-        return snappedLocation
     }
 
     /**
@@ -164,24 +160,20 @@ class SnapToRoute : Snap() {
      * @return Next leg's start point or null if no next leg is available
      */
     private fun getUpcomingLegPoint(routeProgress: RouteProgress): Point? {
-        if (routeProgress.directionsRoute.legs.size - 1 <= routeProgress.legIndex) {
-            return null
-        }
+        return routeProgress.directionsRoute
+            .legs
+            .getOrNull(routeProgress.legIndex + 1)
+            ?.steps
+            // While first step is the same point as the last point of the current step, use the second one.
+            ?.getOrNull(1)
+            ?.let { firstStep ->
+                val currentStepLineString =
+                    LineString.fromPolyline(firstStep.geometry, Constants.PRECISION_6)
+                if (currentStepLineString.coordinates().isEmpty()) {
+                    return@let null
+                }
 
-        val upcomingLeg = routeProgress.directionsRoute.legs.get(routeProgress.legIndex + 1)
-        if (upcomingLeg.steps.size <= 1) {
-            return null
-        }
-
-        // While first step is the same point as the last point of the current step, use the second one.
-        val firstStep = upcomingLeg.steps[1]
-
-        val currentStepLineString =
-            LineString.fromPolyline(firstStep.geometry, Constants.PRECISION_6)
-        if (currentStepLineString.coordinates().isEmpty()) {
-            return null
-        }
-
-        return TurfMeasurement.along(currentStepLineString, 1.0, TurfConstants.UNIT_METERS)
+                TurfMeasurement.along(currentStepLineString, 1.0, TurfConstants.UNIT_METERS)
+            }
     }
 }

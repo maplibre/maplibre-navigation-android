@@ -56,10 +56,6 @@ data class DirectionsResponse(
      * @since 1.0.0
      */
     val routes: List<DirectionsRoute>,
-    //TODO fabi755: we need to set indexes?
-    //  for (i in routes().indices) {
-//    routes()[i] = routes()[i]!!.toBuilder().routeIndex(i.toString()).build()
-//  }
 
     /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route

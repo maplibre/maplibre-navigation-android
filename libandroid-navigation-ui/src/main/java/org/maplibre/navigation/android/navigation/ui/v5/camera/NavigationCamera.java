@@ -304,8 +304,7 @@ public class NavigationCamera implements LifecycleObserver {
    */
   public void addProgressChangeListener(MapLibreNavigation navigation) {
     this.navigation = navigation;
-    //TODO fabi755
-//    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
+    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     navigation.addProgressChangeListener(progressChangeListener);
   }
 
@@ -388,8 +387,7 @@ public class NavigationCamera implements LifecycleObserver {
   }
 
   private void initializeWith(MapLibreNavigation navigation) {
-    //TODO fabi755
-//    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
+    navigation.setCameraEngine(new DynamicCamera(mapLibreMap));
     updateCameraTrackingMode(trackingCameraMode);
   }
 

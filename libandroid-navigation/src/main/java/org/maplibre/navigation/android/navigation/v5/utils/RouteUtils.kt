@@ -123,7 +123,6 @@ object RouteUtils {
                     val wayPointNames = allWaypointNames.split(";")
 
                     val coordinatesSize = routeOptions.coordinates.size
-                    //TODO fabi755: WTF. Why using coordinates for remaining waypoint names?!?!
                     listOf(wayPointNames.first()) +
                             wayPointNames.subList(
                                 coordinatesSize - routeProgress.remainingWaypoints,

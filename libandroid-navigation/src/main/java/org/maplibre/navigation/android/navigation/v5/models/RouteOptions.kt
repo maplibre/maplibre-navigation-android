@@ -89,17 +89,6 @@ data class RouteOptions(
      */
     val radiuses: String? = null,
 
-///**
-// * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-// * must be as many radiuses as there are coordinates in the request.
-// * Values can be any number greater than 0, the string unlimited, or null.
-// *
-// * @return a list of radiuses
-// */
-//fun radiusesList(): List<Double?>? {
-//    return ParseUtils.parseToDoubles(radiuses())
-//}
-
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
      * segment the waypoint will be placed on by direction. This is useful for making sure the new
@@ -115,23 +104,6 @@ data class RouteOptions(
      * @since 3.0.0
      */
     val bearings: String? = null,
-
-///**
-// * Influences the direction in which a route starts from a waypoint. Used to filter the road
-// * segment the waypoint will be placed on by direction. This is useful for making sure the new
-// * routes of rerouted vehicles continue traveling in their current direction. A request that does
-// * this would provide bearing and radius values for the first waypoint and leave the remaining
-// * values empty. Returns a list of values, each value is a list of an angle clockwise from true
-// * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
-// * value is 45° or 90°).
-// * If provided, the list of bearings must be the same length as the list of coordinates.
-// *
-// * @return a List of list of doubles representing the bearings used in the original request.
-// * The first value in the list is the angle, the second one is the degrees.
-// */
-//fun bearingsList(): List<List<Double?>?>? {
-//    return ParseUtils.parseToListOfListOfDoubles(bearings())
-//}
 
     /**
      * The allowed direction of travel when departing intermediate waypoints. If true, the route
@@ -202,23 +174,6 @@ data class RouteOptions(
      * @since 3.0.0
      */
     val annotations: String? = null,
-
-///**
-// * A list of annotations. Defines whether to return additional metadata along the
-// * route. Possible values are:
-// * [DirectionsCriteria.ANNOTATION_DURATION]
-// * [DirectionsCriteria.ANNOTATION_DISTANCE]
-// * [DirectionsCriteria.ANNOTATION_SPEED]
-// * [DirectionsCriteria.ANNOTATION_CONGESTION]
-// * [DirectionsCriteria.ANNOTATION_MAXSPEED]
-// * See the [RouteLeg] object for more details on what is included with annotations.
-// * Must be used in conjunction with overview=full.
-// *
-// * @return a list of annotations that were used during the request
-// */
-//fun annotationsList(): List<String?>? {
-//    return ParseUtils.parseToStrings(annotations(), ",")
-//}
 
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the
@@ -302,23 +257,6 @@ data class RouteOptions(
      */
     val approaches: String? = null,
 
-///**
-// * Indicates from which side of the road to approach a waypoint.
-// * Accepts  [DirectionsCriteria.APPROACH_UNRESTRICTED] (default) or
-// * [DirectionsCriteria.APPROACH_CURB] .
-// * If set to [DirectionsCriteria.APPROACH_UNRESTRICTED], the route can approach waypoints
-// * from either side of the road.
-// * If set to [DirectionsCriteria.APPROACH_CURB], the route will be returned so that on
-// * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
-// * region in which the returned route is located.
-// * If provided, the list of approaches must be the same length as the list of waypoints.
-// *
-// * @return a list of strings representing approaches for each waypoint
-// */
-//fun approachesList(): List<String>? {
-//    return parseToStrings(approaches())
-//}
-
     /**
      * Indicates which input coordinates should be treated as waypoints.
      *
@@ -332,22 +270,6 @@ data class RouteOptions(
      */
     @SerialName("waypoints")
     val waypointIndices: String? = null,
-
-///**
-// * Indicates which input coordinates should be treated as waypoints.
-// *
-// *
-// * Most useful in combination with  steps=true and requests based on traces
-// * with high sample rates. Can be an index corresponding to any of the input coordinates,
-// * but must contain the first ( 0 ) and last coordinates' index.
-// * [.steps]
-// *
-// *
-// * @return a List of Integers representing indices to be used as waypoints
-// */
-//fun waypointIndicesList(): List<Int?>? {
-//    return ParseUtils.parseToIntegers(waypointIndices())
-//}
 
     /**
      * A semicolon-separated list of custom names for entries in the list of
@@ -363,21 +285,6 @@ data class RouteOptions(
     @SerialName("waypoint_names")
     val waypointNames: String? = null,
 
-///**
-// * A semicolon-separated list of custom names for entries in the list of
-// * [RouteOptions.coordinates], used for the arrival instruction in banners and voice
-// * instructions. Values can be any string, and the total number of all characters cannot exceed
-// * 500. If provided, the list of waypoint_names must be the same length as the list of
-// * coordinates. The first value in the list corresponds to the route origin, not the first
-// * destination.
-// * Must be used in conjunction with [RouteOptions.steps] = true.
-// *
-// * @return  a list of strings representing names for each waypoint
-// */
-//fun waypointNamesList(): List<String>? {
-//    return parseToStrings(waypointNames())
-//}
-
     /**
      * A semicolon-separated list of coordinate pairs used to specify drop-off
      * locations that are distinct from the locations specified in coordinates.
@@ -391,20 +298,6 @@ data class RouteOptions(
      */
     @SerialName("waypoint_targets")
     val waypointTargets: String? = null,
-
-///**
-// * A list of points used to specify drop-off
-// * locations that are distinct from the locations specified in coordinates.
-// * If this parameter is provided, the Directions API will compute the side of the street,
-// * left or right, for each target based on the waypoint_targets and the driving direction.
-// * The maneuver.modifier, banner and voice instructions will be updated with the computed
-// * side of street. The number of waypoint targets must be the same as the number of coordinates.
-// * Must be used with [RouteOptions.steps] = true.
-// * @return  a list of Points representing coordinate pairs for drop-off locations
-// */
-//fun waypointTargetsList(): List<Point?>? {
-//    return ParseUtils.parseToPoints(waypointTargets())
-//}
 
     /**
      * To be used to specify settings for use with the walking profile.
@@ -426,20 +319,6 @@ data class RouteOptions(
      */
     @SerialName("snapping_closures")
     val snappingClosures: String? = null,
-
-///**
-// * A list of booleans affecting snapping of waypoint locations to road segments.
-// * If true, road segments closed due to live-traffic closures will be considered for snapping.
-// * If false, they will not be considered for snapping.
-// * If provided, the number of snappingClosures must be the same as the number of
-// * coordinates.
-// * Must be used with [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC]
-// *
-// * @return a list of booleans
-// */
-//fun snappingClosuresList(): List<Boolean?>? {
-//    return ParseUtils.parseToBooleans(snappingClosures())
-//}
 ) {
 
     fun toBuilder(): Builder {
@@ -556,6 +435,3 @@ data class RouteOptions(
         }
     }
 }
-
-//TODO fabi755 check options, which can be removed or be optional?
-//TODO fabi755 json parsing

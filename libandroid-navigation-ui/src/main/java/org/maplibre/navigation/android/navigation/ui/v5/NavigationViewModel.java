@@ -70,7 +70,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private RouteUtils routeUtils;
     private LocaleUtils localeUtils;
     private DistanceFormatter distanceFormatter;
-    private int timeFormatType;
+    private MapLibreNavigationOptions.TimeFormat timeFormatType;
     private boolean isRunning;
     private boolean isChangingConfigurations;
 
@@ -145,8 +145,6 @@ public class NavigationViewModel extends AndroidViewModel {
      */
     void initialize(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
-        //TODO fabi755
-//        navigationOptions = navigationOptions.toBuilder().isFromNavigationUi(true).build();
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
@@ -258,7 +256,7 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeTimeFormat(MapLibreNavigationOptions options) {
-        timeFormatType = options.getTimeFormatType().getId();
+        timeFormatType = options.getTimeFormatType();
     }
 
     private int initializeRoundingIncrement(NavigationViewOptions options) {
@@ -350,8 +348,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private void updateReplayEngine(DirectionsRoute route) {
         if (locationEngineConductor.updateSimulatedRoute(route)) {
             LocationEngine replayEngine = locationEngineConductor.obtainLocationEngine();
-            //TODO fabi755
-//            navigation.setLocationEngine(replayEngine);
+            navigation.setLocationEngine(replayEngine);
         }
     }
 

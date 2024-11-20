@@ -74,7 +74,7 @@ open class BaseTest {
         return locationBuilder.buildPointAwayFromPoint(point, distanceAway, bearing)
     }
 
-    protected fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point?> {
+    protected fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
         return locationBuilder.createCoordinatesFromCurrentStep(progress)
     }
 

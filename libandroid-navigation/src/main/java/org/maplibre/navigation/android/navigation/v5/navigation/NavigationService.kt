@@ -7,11 +7,12 @@ import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
+import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.location.LocationValidator
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
 import timber.log.Timber
-import java.lang.IllegalStateException
 import java.lang.ref.WeakReference
+
 
 /**
  * Internal usage only, use navigation by initializing a new instance of [MapLibreNavigation]
@@ -76,6 +77,16 @@ class NavigationService : Service() {
         thread?.quit()
     }
 
+    /**
+     * Called with [MapLibreNavigation.setLocationEngine].
+     * Updates this service with the new [LocationEngine].
+     *
+     * @param locationEngine to update the provider
+     */
+    fun updateLocationEngine(locationEngine: LocationEngine) {
+        locationEngineUpdater?.updateLocationEngine(locationEngine)
+    }
+
     private fun initialize(mapLibreNavigation: MapLibreNavigation) {
         val notificationProvider = NavigationNotificationProvider(application, mapLibreNavigation)
         this.notificationProvider = notificationProvider
@@ -98,7 +109,7 @@ class NavigationService : Service() {
         mapLibreNavigation: MapLibreNavigation,
         thread: RouteProcessorBackgroundThread
     ) {
-        val locationEngine = mapLibreNavigation.getLocationEngine()
+        val locationEngine = mapLibreNavigation.locationEngine
         val listener = NavigationLocationEngineListener(
             mapLibreNavigation = mapLibreNavigation,
             validator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),

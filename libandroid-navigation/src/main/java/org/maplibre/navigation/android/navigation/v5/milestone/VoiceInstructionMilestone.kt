@@ -9,11 +9,9 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 /**
  * A default milestone that is added to [MapLibreNavigation] when default milestones are enabled.
  *
- *
  * Please note, this milestone has a custom trigger based on location progress along a route.  If you
  * set custom triggers, they will be ignored in favor of this logic.
  */
-//TODO fabi755, null checks!!
 class VoiceInstructionMilestone(
     identifier: Int,
     instruction: Instruction? = null,
@@ -42,16 +40,12 @@ class VoiceInstructionMilestone(
         }
     }
 
-    //TODO fabi755, keep this or change param/function name?!
-    override val instruction: Instruction
-        get() = object : Instruction {
-            override fun buildInstruction(routeProgress: RouteProgress): String {
-                if (instructions == null) {
-                    return routeProgress.currentLegProgress.currentStep.name!!
-                }
-                return instructions!!.announcement!!
-            }
+    override fun getInstruction(): Instruction {
+        return Instruction { routeProgress ->
+            instructions?.announcement
+                ?: routeProgress.currentLegProgress.currentStep.name
         }
+    }
 
     val ssmlAnnouncement: String?
         /**

@@ -17,7 +17,6 @@ data class LegStep(
      *
      * @since 1.0.0
      */
-    //TODO fabi755, was optional before, do we can force non-null here?
     val geometry: String,
 
     /**

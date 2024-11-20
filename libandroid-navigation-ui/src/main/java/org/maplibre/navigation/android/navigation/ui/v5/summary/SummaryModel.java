@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
 
@@ -18,16 +19,13 @@ public class SummaryModel {
   private final SpannableStringBuilder timeRemaining;
   private final String arrivalTime;
 
-  public SummaryModel(Context context, DistanceFormatter distanceFormatter, RouteProgress progress,
-                      int timeFormatType) {
+  public SummaryModel(Context context, DistanceFormatter distanceFormatter, RouteProgress progress, MapLibreNavigationOptions.TimeFormat timeFormatType) {
     distanceRemaining = distanceFormatter.formatDistance(progress.getDistanceRemaining()).toString();
     double legDurationRemaining = progress.getCurrentLegProgress().getDurationRemaining();
     timeRemaining = formatTimeRemaining(context, legDurationRemaining);
     Calendar time = Calendar.getInstance();
     boolean isTwentyFourHourFormat = DateFormat.is24HourFormat(context);
-    //TODO fabi755
-    arrivalTime = "";
-//    arrivalTime = formatTime(time, legDurationRemaining, timeFormatType, isTwentyFourHourFormat);
+    arrivalTime = formatTime(time, legDurationRemaining, timeFormatType, isTwentyFourHourFormat);
   }
 
   String getDistanceRemaining() {

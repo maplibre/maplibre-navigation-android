@@ -676,8 +676,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   }
 
   private void establishTimeFormat(NavigationViewOptions options) {
-    int timeFormatType = options.navigationOptions().getTimeFormatType().getId();
-    summaryBottomSheet.setTimeFormat(timeFormatType);
+    summaryBottomSheet.setTimeFormat(options.navigationOptions().getTimeFormatType());
   }
 
   private void initializeNavigationListeners(NavigationViewOptions options, NavigationViewModel navigationViewModel) {

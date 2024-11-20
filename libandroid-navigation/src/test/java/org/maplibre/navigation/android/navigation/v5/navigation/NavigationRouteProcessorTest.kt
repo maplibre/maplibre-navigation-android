@@ -64,17 +64,14 @@ class NavigationRouteProcessorTest : BaseTest() {
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = true
         val userOffRoute = false
-        val coordinates = createCoordinatesFromCurrentStep(
-            progress!!
-        )
-        //TODO fabi755: remote from list will not work
-        val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
+        val coordinates = createCoordinatesFromCurrentStep(progress)
+        val lastPointInCurrentStep = coordinates[coordinates.size - 1]
         val rawLocation = buildDefaultLocationUpdate(
-            lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
+            lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep.latitude()
         )
 
         val snappedLocation = buildSnappedLocation(
-            navigation!!, snapEnabled, rawLocation!!, progress, userOffRoute
+            navigation!!, snapEnabled, rawLocation, progress, userOffRoute
         )
 
         Assert.assertTrue(rawLocation != snappedLocation)
@@ -86,11 +83,8 @@ class NavigationRouteProcessorTest : BaseTest() {
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = false
         val userOffRoute = false
-        val coordinates = createCoordinatesFromCurrentStep(
-            progress!!
-        )
-        //TODO fabi755: remote from list will not work
-        val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
+        val coordinates = createCoordinatesFromCurrentStep(progress)
+        val lastPointInCurrentStep = coordinates[coordinates.size - 1]
         val rawLocation = buildDefaultLocationUpdate(
             lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
         )
@@ -108,11 +102,8 @@ class NavigationRouteProcessorTest : BaseTest() {
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val snapEnabled = false
         val userOffRoute = false
-        val coordinates = createCoordinatesFromCurrentStep(
-            progress!!
-        )
-        //TODO fabi755: remote from list will not work
-        val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
+        val coordinates = createCoordinatesFromCurrentStep(progress)
+        val lastPointInCurrentStep = coordinates[coordinates.size - 1]
         val rawLocation = buildDefaultLocationUpdate(
             lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
         )
@@ -132,8 +123,7 @@ class NavigationRouteProcessorTest : BaseTest() {
         val coordinates = createCoordinatesFromCurrentStep(
             firstProgress
         )
-        //TODO fabi755: remote from list will not work
-        val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
+        val lastPointInCurrentStep = coordinates[coordinates.size - 1]
         val rawLocation = buildDefaultLocationUpdate(
             lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
         )
@@ -253,13 +243,10 @@ class NavigationRouteProcessorTest : BaseTest() {
     fun withinManeuverRadiusAndBearingMatches_stepIndexIsIncreased() {
         val firstProgress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         val firstProgressIndex: Int = firstProgress!!.currentLegProgress!!.stepIndex!!
-        val coordinates = createCoordinatesFromCurrentStep(
-            firstProgress
-        )
-        //TODO fabi755: remove from list will not work
-        val lastPointInCurrentStep = coordinates.toMutableList().removeAt(coordinates.size - 1)
+        val coordinates = createCoordinatesFromCurrentStep(firstProgress)
+        val lastPointInCurrentStep = coordinates[coordinates.size - 1]
         val rawLocation = buildDefaultLocationUpdate(
-            lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep!!.latitude()
+            lastPointInCurrentStep!!.longitude(), lastPointInCurrentStep.latitude()
         )
         every { rawLocation.bearing } returns 145f
 

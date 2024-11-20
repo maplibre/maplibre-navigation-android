@@ -195,5 +195,3 @@ data class Incident(
         LOW("low"),
     }
 }
-
-//TODO fabi755 json

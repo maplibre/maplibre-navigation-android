@@ -28,7 +28,6 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    //TODO fabi755: removed optional, check if this is right
     @SerialName("bearing_before")
     val bearingBefore: Double,
 
@@ -38,7 +37,6 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    //TODO fabi755: removed optional, check if this is right
     @SerialName("bearing_after")
     val bearingAfter: Double,
 
@@ -231,6 +229,5 @@ data class StepManeuver(
 
         @SerialName("use lane")
         USE_LANE("use lane"),
-        //TODO fabi755, occurs in tests. check if this also occurs in real world data
     }
 }

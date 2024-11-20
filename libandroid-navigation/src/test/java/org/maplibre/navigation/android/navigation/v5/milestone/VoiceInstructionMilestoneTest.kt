@@ -93,16 +93,16 @@ class VoiceInstructionMilestoneTest : BaseTest() {
     @Throws(Exception::class)
     fun onOccurringMilestone_instructionsAreReturned() {
         var routeProgress = buildDefaultTestRouteProgress()
-        routeProgress = createBeginningOfStepRouteProgress(routeProgress!!)
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
         val instructions: VoiceInstructions =
-            routeProgress.currentLegProgress!!.currentStep!!.voiceInstructions!!.get(0)!!
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!!.get(0)
         val milestone = buildVoiceInstructionMilestone()
 
         milestone.isOccurring(routeProgress, routeProgress)
 
         Assert.assertEquals(
             instructions.announcement,
-            milestone.instruction.buildInstruction(routeProgress)
+            milestone.getInstruction().buildInstruction(routeProgress)
         )
     }
 
@@ -131,7 +131,7 @@ class VoiceInstructionMilestoneTest : BaseTest() {
 
         Assert.assertEquals(
             currentStep.name,
-            milestone.instruction.buildInstruction(routeProgress)
+            milestone.getInstruction().buildInstruction(routeProgress)
         )
     }
 

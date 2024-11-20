@@ -24,7 +24,6 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnn
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
-//TODO fabi755: this logic needs to be cleaned up to have smarter null/kotlin code
 internal class NavigationRouteProcessor : OffRouteCallback {
     @JvmField
     var routeProgress: RouteProgress? = null
@@ -65,7 +64,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @return new route progress along the route
      */
     fun buildNewRouteProgress(navigation: MapLibreNavigation, location: Location): RouteProgress {
-        val directionsRoute = navigation.route!! //TODO fabi755: how to handle null rout here?
+        val directionsRoute = navigation.route!!
         val options = navigation.options
         val completionOffset = options.maxTurnCompletionOffset
         val maneuverZoneRadius = options.maneuverZoneRadius
@@ -100,21 +99,21 @@ internal class NavigationRouteProcessor : OffRouteCallback {
     }
 
     /**
-     * Checks if the route provided is a new route.  If it is, all [RouteProgress]
+     * Checks if the route provided is a new route. If it is, all [RouteProgress]
      * data and [NavigationIndices] needs to be reset.
      *
      * @param mapLibreNavigation to get the current route and off-route engine
      * @return Whether or not a route progress is already set and [RouteUtils] determines this is a new route
      */
     private fun checkNewRoute(mapLibreNavigation: MapLibreNavigation): Boolean {
-        val directionsRoute = mapLibreNavigation.route
-        // TODO fabi755: how to handle null route here?
-        val newRoute = RouteUtils.isNewRoute(routeProgress, directionsRoute!!)
-        if (newRoute) {
-            createFirstIndices(mapLibreNavigation)
-            currentLegAnnotation = null
-        }
-        return newRoute
+        return mapLibreNavigation.route?.let { directionsRoute ->
+            val newRoute = RouteUtils.isNewRoute(routeProgress, directionsRoute)
+            if (newRoute) {
+                createFirstIndices(mapLibreNavigation)
+                currentLegAnnotation = null
+            }
+            newRoute
+        } ?: false
     }
 
     /**
@@ -189,7 +188,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      * @param mapLibreNavigation for the current route
      */
     private fun processNewIndex(mapLibreNavigation: MapLibreNavigation) {
-        val route = mapLibreNavigation.route!! // TODO fabi755: how to handle null route here?
+        val route = mapLibreNavigation.route!!
         val legIndex = indices.legIndex
         val stepIndex = indices.stepIndex
         val upcomingStepIndex = stepIndex + ONE_INDEX

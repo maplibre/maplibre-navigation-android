@@ -100,15 +100,6 @@ object NavigationConstants {
     const val NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION: Long = 750L
 
     /**
-     * In seconds, how quickly [FasterRouteDetector]
-     * will tell [RouteProcessorBackgroundThread] to check
-     * for a faster [org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute].
-     *
-     * @since 0.9.0
-     */
-    const val NAVIGATION_CHECK_FASTER_ROUTE_INTERVAL: Int = 120
-
-    /**
      * 125 seconds remaining is considered a low alert level when
      * navigating along a [org.maplibre.navigation.android.navigation.v5.models.LegStep].
      *

@@ -31,6 +31,11 @@ org.maplibre.navigation.android.navigation.v5.location.replay.ReplayLocationDto 
 org.maplibre.navigation.android.navigation.v5.location.replay.TimestampAdapter --> Removed. Seems not used.
 
 org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation --> Remove Builder, use named arguments in constructor instead.
+org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera --> Remove function `target`, because it's not used anywhere.
+
+org.maplibre.navigation.android.navigation.v5.models.RouteOptions --> Remove `*list` functions. Seems not used anywhere.
+
+org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions --> Remove `isFromNavigationUi`, because seems not used anywhere.
 
 ----------------
 Refactor later:

@@ -129,8 +129,7 @@ class MockNavigationActivity :
 
                 locationEngine.also {
                     it.assign(route)
-                    //TODO fabi755
-//                    navigation.locationEngine = it
+                    navigation.locationEngine = it
                     navigation.startNavigation(route)
                     if (::mapLibreMap.isInitialized) {
                         mapLibreMap.removeOnMapClickListener(this)
