@@ -8,6 +8,7 @@ import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 
+//TODO fabi755
 internal class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
     private var speed: Int,
@@ -116,14 +117,13 @@ internal class ReplayRouteLocationConverter(
     }
 
     private fun createMockLocationFrom(point: Point): Location {
-        return Location(REPLAY_ROUTE).apply {
-            latitude = point.latitude()
-            longitude = point.longitude()
-            val speedInMetersPerSec = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat()
-            speed = speedInMetersPerSec
-            accuracy = 3f
-            time = time
-        }
+        val location = Location(REPLAY_ROUTE)
+        location.latitude = point.latitude()
+        location.longitude = point.longitude()
+        location.speed = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat()
+        location.accuracy = 3f
+        location.time = time
+        return location
     }
 
     companion object {

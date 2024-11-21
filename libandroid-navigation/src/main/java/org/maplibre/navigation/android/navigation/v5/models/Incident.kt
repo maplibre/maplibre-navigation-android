@@ -109,61 +109,73 @@ data class Incident(
         /**
          * [Type] accident.
          */
+        @SerialName("accident")
         ACCIDENT("accident"),
 
         /**
          * [Type] congestion.
          */
+        @SerialName("congestion")
         CONGESTION("congestion"),
 
         /**
          * [Type] construction.
          */
+        @SerialName("construction")
         CONSTRUCTION("construction"),
 
         /**
          * [Type] disabled vehicle.
          */
+        @SerialName("disabled_vehicle")
         DISABLED_VEHICLE("disabled_vehicle"),
 
         /**
          * [Type] lane restriction.
          */
+        @SerialName("lane_restriction")
         LANE_RESTRICTION("lane_restriction"),
 
         /**
          * [Type] mass transit.
          */
+        @SerialName("mass_transit")
         INCIDENT_MASS_TRANSIT("mass_transit"),
 
         /**
          * [Type] miscellaneous.
          */
+        @SerialName("miscellaneous")
         MISCELLANEOUS("miscellaneous"),
 
         /**
          * [Type] other news.
          */
+        @SerialName("other_news")
         OTHER_NEWS("other_news"),
 
         /**
          * [Type] planned event.
          */
+        @SerialName("planned_event")
         PLANNED_EVENT("planned_event"),
 
         /**
          * [Type] road closure.
          */
+        @SerialName("road_closure")
         ROAD_CLOSURE("road_closure"),
 
         /**
          * [Type] road hazard.
          */
+        @SerialName("road_hazard")
         ROAD_HAZARD("road_hazard"),
 
         /**
          * [Type] weather.
          */
+        @SerialName("weather")
         WEATHER("weather"),
     }
 
@@ -172,26 +184,31 @@ data class Incident(
         /**
          * [Impact] unknown.
          */
+        @SerialName("unknown")
         UNKNOWN("unknown"),
 
         /**
          * [Impact] critical.
          */
+        @SerialName("critical")
         CRITICAL("critical"),
 
         /**
          * [Impact] major.
          */
+        @SerialName("major")
         MAJOR("major"),
 
         /**
          * [Impact] minor.
          */
+        @SerialName("minor")
         MINOR("minor"),
 
         /**
          * [Impact] low.
          */
+        @SerialName("low")
         LOW("low"),
     }
 }

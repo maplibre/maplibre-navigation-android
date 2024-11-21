@@ -14,6 +14,7 @@ import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import java.util.concurrent.CopyOnWriteArrayList
 
+//TODO fabi755
 class ReplayRouteLocationEngine : LocationEngine, Runnable {
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED
@@ -25,9 +26,8 @@ class ReplayRouteLocationEngine : LocationEngine, Runnable {
     @get:SuppressLint("MissingPermission")
     var lastLocation: Location? = null
         private set
-    private val callbackList = CopyOnWriteArrayList<LocationEngineCallback<LocationEngineResult>>()
-    private val replayLocationListener =
-        ReplayLocationListener { location ->
+    private val callbackList = mutableListOf<LocationEngineCallback<LocationEngineResult>>()
+    private val replayLocationListener = ReplayLocationListener { location ->
             lastLocation = location
             val result = LocationEngineResult.create(location)
             for (callback in callbackList) {

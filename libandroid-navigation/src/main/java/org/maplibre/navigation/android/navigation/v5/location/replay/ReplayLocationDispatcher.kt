@@ -3,19 +3,18 @@ package org.maplibre.navigation.android.navigation.v5.location.replay
 import android.location.Location
 import android.os.Handler
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.CopyOnWriteArraySet
 
+//TODO fabi755
 internal class ReplayLocationDispatcher : Runnable {
-    private var locationsToReplay: MutableList<Location>
+    private var locationsToReplay = mutableListOf<Location>()
     private var current: Location? = null
     private var handler: Handler
-    private var replayLocationListeners: CopyOnWriteArraySet<ReplayLocationListener>
+    private val replayLocationListeners = mutableListOf<ReplayLocationListener>()
 
     constructor(locationsToReplay: List<Location>) {
         checkValidInput(locationsToReplay)
-        this.locationsToReplay = CopyOnWriteArrayList(locationsToReplay)
+        this.locationsToReplay.addAll(locationsToReplay)
         initialize()
-        this.replayLocationListeners = CopyOnWriteArraySet()
         this.handler = Handler()
     }
 
@@ -24,7 +23,6 @@ internal class ReplayLocationDispatcher : Runnable {
         checkValidInput(locationsToReplay)
         this.locationsToReplay = locationsToReplay
         initialize()
-        this.replayLocationListeners = CopyOnWriteArraySet()
         this.handler = handler
     }
 
@@ -68,12 +66,12 @@ internal class ReplayLocationDispatcher : Runnable {
     }
 
     private fun checkValidInput(locations: List<Location>?) {
-        val isValidInput = locations == null || locations.isEmpty()
+        val isValidInput = locations.isNullOrEmpty()
         require(!isValidInput) { NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED }
     }
 
     private fun initialize() {
-        current = locationsToReplay.removeAt(HEAD)
+        current = locationsToReplay.removeFirstOrNull()
     }
 
     private fun addLocations(toReplay: List<Location>) {
@@ -92,7 +90,7 @@ internal class ReplayLocationDispatcher : Runnable {
             return
         }
         val currentTime = current!!.time
-        current = locationsToReplay.removeAt(HEAD)
+        current = locationsToReplay.removeFirstOrNull()
         val nextTime = current!!.time
         val diff = nextTime - currentTime
         handler.postDelayed(this, diff)
@@ -109,6 +107,5 @@ internal class ReplayLocationDispatcher : Runnable {
     companion object {
         private const val NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED =
             "Non-null and non-empty location list required."
-        private const val HEAD = 0
     }
 }

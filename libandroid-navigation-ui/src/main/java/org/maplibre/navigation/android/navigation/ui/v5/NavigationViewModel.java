@@ -67,7 +67,6 @@ public class NavigationViewModel extends AndroidViewModel {
 
     Milestone milestone;
     private String language;
-    private RouteUtils routeUtils;
     private LocaleUtils localeUtils;
     private DistanceFormatter distanceFormatter;
     private MapLibreNavigationOptions.TimeFormat timeFormatType;
@@ -249,7 +248,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private String initializeUnitType(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
         String unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
-        if (routeOptions != null) {
+        if (routeOptions != null && routeOptions.getVoiceUnits() != null) {
             unitType = routeOptions.getVoiceUnits();
         }
         return unitType;
@@ -405,7 +404,8 @@ public class NavigationViewModel extends AndroidViewModel {
         if (milestone == null || routeProgress == null) {
             return;
         }
-        if (navigationViewEventDispatcher != null && routeUtils.isArrivalEvent(routeProgress, milestone)) {
+
+        if (navigationViewEventDispatcher != null && RouteUtils.isArrivalEvent(routeProgress, milestone)) {
             navigationViewEventDispatcher.onArrival();
         }
     }

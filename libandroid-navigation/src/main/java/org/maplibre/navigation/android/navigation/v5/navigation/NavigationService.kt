@@ -47,6 +47,7 @@ class NavigationService : Service() {
     override fun onDestroy() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         locationEngineUpdater?.removeLocationEngineListener()
+        locationEngineUpdater = null
         super.onDestroy()
     }
 
@@ -73,6 +74,8 @@ class NavigationService : Service() {
      */
     fun endNavigation() {
         locationEngineUpdater?.removeLocationEngineListener()
+        locationEngineUpdater = null
+
         notificationProvider?.shutdown(application)
         thread?.quit()
     }
