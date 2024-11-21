@@ -14,10 +14,20 @@ import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
 import kotlin.math.max
 
-class OffRouteDetector : OffRoute {
+/**
+ * @param callback a callback that is fired for different off-route scenarios.
+ */
+class OffRouteDetector(
+    /**
+     * A callback that is fired for different off-route scenarios.
+     *
+     * Right now, the only scenario is when the step index should be increased with
+     * [OffRouteCallback.onShouldIncreaseIndex].
+     */
+    var callback: OffRouteCallback? = null
+) : OffRoute {
 
     private var lastReroutePoint: Point? = null
-    private var callback: OffRouteCallback? = null
     private val distancesAwayFromManeuver = RingBuffer<Int>(3)
 
     /**
@@ -89,20 +99,6 @@ class OffRouteDetector : OffRoute {
         // All checks have run, return true
         updateLastReroutePoint(location)
         return true
-    }
-
-    /**
-     * Sets a callback that is fired for different off-route scenarios.
-     *
-     *
-     * Right now, the only scenario is when the step index should be increased with
-     * [OffRouteCallback.onShouldIncreaseIndex].
-     *
-     * @param callback to be fired
-     * @since 0.11.0
-     */
-    fun setOffRouteCallback(callback: OffRouteCallback?) {
-        this.callback = callback
     }
 
     /**

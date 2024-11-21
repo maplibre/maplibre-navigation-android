@@ -133,7 +133,7 @@ class NavigationHelperTest : BaseTest() {
 
         val distance = stepDistanceRemaining(location, 0, 1, route, coordinates)
 
-        Assert.assertEquals(0.0, distance)
+        Assert.assertEquals(0.0, distance, DELTA)
     }
 
     @Test
@@ -320,7 +320,7 @@ class NavigationHelperTest : BaseTest() {
             intersections, intersectionDistances, legProgress.currentStep.distance
         )
 
-        Assert.assertTrue(currentIntersection == intersections[intersections.size - 1])
+        Assert.assertEquals(currentIntersection, intersections[intersections.size - 1])
     }
 
     @Test
@@ -336,7 +336,7 @@ class NavigationHelperTest : BaseTest() {
             intersections, intersectionDistances, 130.0
         )
 
-        Assert.assertTrue(currentIntersection == intersections[1])
+        Assert.assertEquals(currentIntersection, intersections[1])
     }
 
     @Test

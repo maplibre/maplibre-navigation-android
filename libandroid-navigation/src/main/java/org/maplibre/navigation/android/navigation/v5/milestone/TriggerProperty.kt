@@ -63,6 +63,8 @@ object TriggerProperty {
 
     const val TRUE: Int = 0x00000124
 
+    const val FALSE: Int = 0x00000100
+
     fun getSparseArray(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress

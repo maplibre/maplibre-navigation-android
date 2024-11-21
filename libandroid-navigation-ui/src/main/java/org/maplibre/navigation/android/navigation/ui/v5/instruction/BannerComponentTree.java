@@ -38,8 +38,12 @@ class BannerComponentTree {
       BannerComponentNode node = null;
       for (NodeCreator nodeCreator : nodeCreators) {
         if (nodeCreator.isNodeType(components)) {
-          node = nodeCreator.setupNode(components, bannerComponentNodes.size(), length,
-            bannerText.getModifier().getText());
+          String modifier = null;
+          if (bannerText.getModifier() != null) {
+            modifier = bannerText.getModifier().getText();
+          }
+
+          node = nodeCreator.setupNode(components, bannerComponentNodes.size(), length, modifier);
           break;
         }
       }

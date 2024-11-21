@@ -65,15 +65,13 @@ class NavigationRouteProcessorTest : BaseTest() {
         val userOffRoute = false
         val coordinates = createCoordinatesFromCurrentStep(progress)
         val lastPointInCurrentStep = coordinates[coordinates.size - 1]
-        val rawLocation = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
-        )
+        val rawLocation = buildDefaultLocationUpdate(lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude())
 
         val snappedLocation = buildSnappedLocation(
             navigation!!, snapEnabled, rawLocation, progress, userOffRoute
         )
 
-        Assert.assertTrue(rawLocation != snappedLocation)
+        Assert.assertNotEquals(rawLocation, snappedLocation)
     }
 
     @Test

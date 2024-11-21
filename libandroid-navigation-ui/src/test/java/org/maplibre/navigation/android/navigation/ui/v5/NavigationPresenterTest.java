@@ -1,14 +1,18 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationContract;
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationPresenter;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 
 import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import android.text.TextUtils;
 
 public class NavigationPresenterTest {
 
@@ -95,12 +99,17 @@ public class NavigationPresenterTest {
 
   @Test
   public void onWayNameChanged_mapWayNameIsHidden() {
+    MockedStatic<TextUtils> staticMock = mockStatic(TextUtils.class);
+    Mockito.when(TextUtils.isEmpty(eq(""))).thenReturn(true);
+
     NavigationContract.View view = mock(NavigationContract.View.class);
     NavigationPresenter presenter = new NavigationPresenter(view);
 
     presenter.onWayNameChanged("");
 
     verify(view).updateWayNameVisibility(false);
+
+    staticMock.close();
   }
 
   @Test

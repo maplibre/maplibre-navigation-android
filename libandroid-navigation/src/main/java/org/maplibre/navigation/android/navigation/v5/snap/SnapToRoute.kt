@@ -78,19 +78,20 @@ class SnapToRoute : Snap() {
      */
     private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
         val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
+        val snappedLocation = Location(location)
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         return if (stepCoordinates.size > 1) {
             val feature = TurfMisc.nearestPointOnLine(locationToPoint, stepCoordinates)
             (feature.geometry() as? Point)?.let { point ->
-                location.apply {
+                snappedLocation.apply {
                     longitude = point.longitude()
                     latitude = point.latitude()
                 }
-            } ?: location
+            } ?: snappedLocation
         } else {
-            location
+            snappedLocation
         }
     }
 

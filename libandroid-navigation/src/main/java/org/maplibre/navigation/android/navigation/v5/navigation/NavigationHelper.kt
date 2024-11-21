@@ -6,6 +6,7 @@ import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
 import org.maplibre.navigation.android.navigation.v5.models.StepIntersection
@@ -19,7 +20,7 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
 import timber.log.Timber
-import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation
+
 
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
@@ -32,8 +33,11 @@ object NavigationHelper {
 
     @JvmStatic
     fun buildSnappedLocation(
-        mapLibreNavigation: MapLibreNavigation, snapToRouteEnabled: Boolean,
-        rawLocation: Location, routeProgress: RouteProgress, userOffRoute: Boolean
+        mapLibreNavigation: MapLibreNavigation,
+        snapToRouteEnabled: Boolean,
+        rawLocation: Location,
+        routeProgress: RouteProgress,
+        userOffRoute: Boolean
     ): Location {
         val location = if (!userOffRoute && snapToRouteEnabled) {
             mapLibreNavigation.snapEngine.getSnappedLocation(rawLocation, routeProgress)
@@ -340,25 +344,37 @@ object NavigationHelper {
         intersections: List<StepIntersection>,
         measuredIntersections: Map<StepIntersection, Double>,
         stepDistanceTraveled: Double
+    ): StepIntersection? = findCurrentIntersection(
+        intersections,
+        measuredIntersections.toList(),
+        stepDistanceTraveled
+    )
+
+    @JvmStatic
+    fun findCurrentIntersection(
+        intersections: List<StepIntersection>,
+        measuredIntersections: List<Pair<StepIntersection?, Double>>,
+        stepDistanceTraveled: Double
     ): StepIntersection? {
-//        for (measuredIntersection in measuredIntersections) {
-//            val intersectionDistance = measuredIntersection.value
-//            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
-//            val nextIntersectionIndex = intersectionIndex + ONE_INDEX
-//            val measuredIntersectionSize = measuredIntersections.size
-//            val hasValidNextIntersection = nextIntersectionIndex < measuredIntersectionSize
-//
-//            if (hasValidNextIntersection) {
-//                val nextIntersectionDistance = measuredIntersections[nextIntersectionIndex].second
-//                if (stepDistanceTraveled > intersectionDistance && stepDistanceTraveled < nextIntersectionDistance) {
-//                    return measuredIntersection.first
-//                }
-//            } else if (stepDistanceTraveled > measuredIntersection.second) {
-//                return measuredIntersection.first
-//            } else {
-//                return measuredIntersections[FIRST_INTERSECTION].first
-//            }
-//        }
+        for (measuredIntersection in measuredIntersections) {
+            if (measuredIntersection.first == null) return intersections[0]
+            val intersectionDistance = measuredIntersection.second
+            val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
+            val nextIntersectionIndex: Int = intersectionIndex + 1
+            val measuredIntersectionSize = measuredIntersections.size
+            val hasValidNextIntersection = nextIntersectionIndex < measuredIntersectionSize
+
+            if (hasValidNextIntersection) {
+                val nextIntersectionDistance = measuredIntersections[nextIntersectionIndex].second
+                if (stepDistanceTraveled > intersectionDistance && stepDistanceTraveled < nextIntersectionDistance) {
+                    return measuredIntersection.first
+                }
+            } else if (stepDistanceTraveled > measuredIntersection.second) {
+                return measuredIntersection.first
+            } else {
+                return measuredIntersections[FIRST_INTERSECTION].first
+            }
+        }
         return intersections[FIRST_INTERSECTION]
     }
 
@@ -466,7 +482,7 @@ object NavigationHelper {
         }
 
         val offRouteEngine = navigationLocationUpdate.mapLibreNavigation.offRouteEngine
-        (offRouteEngine as? OffRouteDetector)?.setOffRouteCallback(callback)
+        (offRouteEngine as? OffRouteDetector)?.callback = callback
 
         return offRouteEngine.isUserOffRoute(
             navigationLocationUpdate.location,
@@ -475,6 +491,7 @@ object NavigationHelper {
         )
     }
 
+    @Suppress("unused")
     @JvmStatic
     fun shouldCheckFasterRoute(navigationLocationUpdate: NavigationLocationUpdate, routeProgress: RouteProgress): Boolean {
         val fasterRouteEngine = navigationLocationUpdate.mapLibreNavigation.fasterRouteEngine
