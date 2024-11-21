@@ -4,7 +4,9 @@ import org.junit.Assert
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+
 
 class BannerInstructionMilestoneTest : BaseTest() {
     @Test
@@ -46,25 +48,37 @@ class BannerInstructionMilestoneTest : BaseTest() {
         Assert.assertFalse(shouldNotBeOccurring)
     }
 
-    //TODO fabi755 adjust test to get work again
-//    @Test
-//    @Throws(Exception::class)
-//    fun nullInstructions_MilestoneDoesNotGetTriggered() {
-//        var routeProgress = buildDefaultTestRouteProgress().copy(
-//            currentLegProgress = routePr
-//        )
-//        val currentStep: LegStep = routeProgress!!.currentLegProgress!!.currentStep!!.copy(
-//            bannerInstructions = emptyList()
-//        )
-//        val instructions = currentStep.bannerInstructions
-//        instructions!!.clear()
-//        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
-//        val milestone = buildBannerInstructionMilestone()
-//
-//        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
-//
-//        Assert.assertFalse(isOccurring)
-//    }
+    @Test
+    @Throws(Exception::class)
+    fun nullInstructions_MilestoneDoesNotGetTriggered() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = with(createBeginningOfStepRouteProgress(routeProgress)) {
+            copy(
+                directionsRoute = directionsRoute.copy(
+                    legs = directionsRoute.legs.mapIndexed { lIndex, leg ->
+                        if (lIndex == legIndex) {
+                            leg.copy(steps = leg.steps.mapIndexed { sIndex, step ->
+                                if (sIndex == stepIndex) {
+                                    step.copy(
+                                        bannerInstructions = null
+                                    )
+                                } else {
+                                    step
+                                }
+                            })
+                        } else {
+                            leg
+                        }
+                    }
+                )
+            )
+        }
+        val milestone = buildBannerInstructionMilestone()
+
+        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
+
+        Assert.assertFalse(isOccurring)
+    }
 
     @Test
     @Throws(Exception::class)
