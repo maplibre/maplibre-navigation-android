@@ -27,6 +27,7 @@ import java.util.Calendar
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
+//TODO: fabi755
 internal class MapLibreNavigationNotification(
     context: Context,
     mapLibreNavigation: MapLibreNavigation
@@ -89,16 +90,14 @@ internal class MapLibreNavigationNotification(
     ) {
         val routeOptions = mapLibreNavigation.route!!.routeOptions
         val localeUtils = LocaleUtils()
-        var language: String? = localeUtils.inferDeviceLanguage(context)
-        var unitType: String? = localeUtils.getUnitTypeForDeviceLocale(context)
-        if (routeOptions != null) {
-            language = routeOptions.language
-            unitType = routeOptions.voiceUnits
-        }
-        val mapLibreNavigationOptions = mapLibreNavigation.options
+        val language: String = routeOptions?.language ?: localeUtils.inferDeviceLanguage(context)
+        val unitType: String = routeOptions?.voiceUnits ?: localeUtils.getUnitTypeForDeviceLocale(context)
+
         distanceFormatter = DistanceFormatter(
-            context, language,
-            unitType!!, mapLibreNavigationOptions.roundingIncrement
+            context,
+            language,
+            unitType,
+            mapLibreNavigation.options.roundingIncrement
         )
     }
 

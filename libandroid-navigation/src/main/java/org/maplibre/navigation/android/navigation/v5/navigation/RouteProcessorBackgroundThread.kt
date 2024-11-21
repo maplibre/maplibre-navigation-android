@@ -12,21 +12,28 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
  * background thread.
  */
 internal class RouteProcessorBackgroundThread(
-    responseHandler: Handler,
-    listener: Listener
+    val responseHandler: Handler,
+    val listener: Listener
 ) : HandlerThread(MAPLIBRE_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND) {
-    private val workerHandler: Handler = Handler(
-        looper, RouteProcessorHandlerCallback(
-            NavigationRouteProcessor(), responseHandler, listener
-        )
-    )
+    private var workerHandler: Handler? = null
 
     init {
         start()
     }
 
+    override fun onLooperPrepared() {
+        super.onLooperPrepared()
+
+        workerHandler = Handler(
+            looper, RouteProcessorHandlerCallback(
+                NavigationRouteProcessor(), responseHandler, listener
+            )
+        )
+    }
+
     fun queueUpdate(navigationLocationUpdate: NavigationLocationUpdate?) {
-        workerHandler.obtainMessage(MSG_LOCATION_UPDATED, navigationLocationUpdate).sendToTarget()
+        workerHandler?.obtainMessage(MSG_LOCATION_UPDATED, navigationLocationUpdate)
+            ?.sendToTarget()
     }
 
     /**

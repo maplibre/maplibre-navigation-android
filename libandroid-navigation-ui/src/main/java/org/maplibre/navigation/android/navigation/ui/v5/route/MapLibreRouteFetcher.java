@@ -111,9 +111,9 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     }
 
     private void addWaypointNames(RouteProgress progress, NavigationRoute.Builder builder) {
-        String[] remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(progress).toArray(new String[0]);
+        List<String> remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(progress);
         if (remainingWaypointNames != null) {
-            builder.addWaypointNames(remainingWaypointNames);
+            builder.addWaypointNames(remainingWaypointNames.toArray(new String[0]));
         }
     }
 

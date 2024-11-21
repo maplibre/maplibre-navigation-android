@@ -26,7 +26,7 @@ import java.util.Locale
 class DistanceFormatter(
     context: Context,
     language: String?,
-    @DirectionsCriteria.VoiceUnitCriteria unitType: String,
+    @DirectionsCriteria.VoiceUnitCriteria unitType: String?,
     @property:RoundingIncrement @RoundingIncrement private val roundingIncrement: Int
 ) {
     private val unitStrings: Map<String, String> = mapOf(

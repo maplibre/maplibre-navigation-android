@@ -175,7 +175,10 @@ data class LegStep(
 ) {
 
     enum class SpeedLimitSign(val text: String) {
+        @SerialName("mutcd")
         MUTCD("mutcd"),
+
+        @SerialName("vienna")
         VIENNA("vienna")
     }
 }

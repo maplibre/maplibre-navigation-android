@@ -56,6 +56,7 @@ object RouteUtils {
      * @return true if in arrival state, false if not
      * @since 0.8.0
      */
+    @JvmStatic
     fun isArrivalEvent(routeProgress: RouteProgress, milestone: Milestone): Boolean {
         return (milestone as? BannerInstructionMilestone)?.let { bannerMilestone ->
             val isValidArrivalManeuverType =
