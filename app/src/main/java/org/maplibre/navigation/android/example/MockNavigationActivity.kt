@@ -103,14 +103,17 @@ class MockNavigationActivity :
             RouteMilestone(
                 identifier = BEGIN_ROUTE_MILESTONE,
                 instruction = BeginRouteInstruction(),
-                    trigger = Trigger.all(
-                            Trigger.lt(
-                                TriggerProperty.STEP_INDEX, 3),
-                            Trigger.gt(
-                                TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 200),
-                            Trigger.gte(
-                                TriggerProperty.STEP_DISTANCE_TRAVELED_METERS, 75),
-                        ),
+                trigger = Trigger.all(
+                    Trigger.lt(
+                        TriggerProperty.STEP_INDEX, 3
+                    ),
+                    Trigger.gt(
+                        TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 200
+                    ),
+                    Trigger.gte(
+                        TriggerProperty.STEP_DISTANCE_TRAVELED_METERS, 75
+                    ),
+                ),
             )
         )
         customNotification.register(MyBroadcastReceiver(navigation), context)
@@ -158,25 +161,21 @@ class MockNavigationActivity :
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         this.mapLibreMap = mapLibreMap
-        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+        mapLibreMap.setStyle(
+            Style.Builder().fromUri(getString(R.string.map_style_light))
+        ) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapLibreMap)
+
+            mapLibreMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
+
+            newOrigin()
         }
-
-        navigationMapRoute =
-            NavigationMapRoute(
-                navigation,
-                binding.mapView,
-                mapLibreMap
-            )
-
-        mapLibreMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
-
-        newOrigin()
     }
 
     @SuppressWarnings("MissingPermission")

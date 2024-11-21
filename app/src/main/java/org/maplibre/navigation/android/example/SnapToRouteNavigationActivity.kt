@@ -81,15 +81,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         this.mapLibreMap = mapLibreMap
         mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapLibreMap)
+            calculateRouteAndStartNavigation()
         }
-
-        navigationMapRoute =
-            NavigationMapRoute(
-                navigation,
-                binding.mapView,
-                mapLibreMap
-            )
-        calculateRouteAndStartNavigation()
     }
 
     @SuppressWarnings("MissingPermission")

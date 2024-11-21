@@ -73,7 +73,10 @@ class ValhallaNavigationActivity :
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
                     .shouldSimulateRoute(simulateRoute)
-                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
+                    .initialMapCameraPosition(
+                        CameraPosition.Builder()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                    )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
@@ -101,21 +104,19 @@ class ValhallaNavigationActivity :
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         this.mapLibreMap = mapLibreMap
-        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+        mapLibreMap.setStyle(
+            Style.Builder().fromUri(getString(R.string.map_style_light))
+        ) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(binding.mapView, mapLibreMap)
+            mapLibreMap.addOnMapClickListener(this)
+
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place destination",
+                Snackbar.LENGTH_LONG,
+            ).show()
         }
-
-        navigationMapRoute = NavigationMapRoute(
-            binding.mapView,
-            mapLibreMap
-        )
-
-        mapLibreMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place destination",
-            Snackbar.LENGTH_LONG,
-        ).show()
     }
 
     @SuppressWarnings("MissingPermission")
@@ -229,9 +230,15 @@ class ValhallaNavigationActivity :
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 response.use {
                     if (response.isSuccessful) {
-                        Timber.e("calculateRoute to ValhallaRouting successful with status code: %s", response.code)
+                        Timber.e(
+                            "calculateRoute to ValhallaRouting successful with status code: %s",
+                            response.code
+                        )
                         val responseBodyJson = response.body!!.string()
-                        Timber.d("calculateRoute ValhallaRouting responseBodyJson: %s", responseBodyJson)
+                        Timber.d(
+                            "calculateRoute ValhallaRouting responseBodyJson: %s",
+                            responseBodyJson
+                        )
                         val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
                         this@ValhallaNavigationActivity.route = maplibreResponse.routes
                             .first()
@@ -258,7 +265,11 @@ class ValhallaNavigationActivity :
                             binding.startRouteLayout.visibility = View.VISIBLE
                         }
                     } else {
-                        Timber.e("calculateRoute Request to Valhalla failed with status code: %s: %s", response.code, response.body)
+                        Timber.e(
+                            "calculateRoute Request to Valhalla failed with status code: %s: %s",
+                            response.code,
+                            response.body
+                        )
                     }
                 }
             }
