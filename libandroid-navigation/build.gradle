@@ -90,6 +90,7 @@ dependencies {
     testImplementation dependenciesList.robolectric
     implementation dependenciesList.androidxCore
     implementation dependenciesList.kotlinstdlib
+    implementation dependenciesList.materialDesign
 }
 
 apply from: 'javadoc.gradle'

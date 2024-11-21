@@ -49,6 +49,10 @@ import static org.maplibre.android.style.layers.Property.VISIBLE;
 import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap;
 import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_CUSTOM_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_CUSTOM_ID;
+
+import timber.log.Timber;
 
 class MapRouteArrow {
 
@@ -163,20 +167,28 @@ class MapRouteArrow {
 
   private void initializeArrowShaft() {
     arrowShaftGeoJsonSource = new GeoJsonSource(
-      RouteConstants.ARROW_SHAFT_SOURCE_ID,
-      FeatureCollection.fromFeatures(new Feature[]{}),
-      new GeoJsonOptions().withMaxZoom(16)
+            ARROW_SHAFT_CUSTOM_ID,
+            FeatureCollection.fromFeatures(new Feature[]{}),
+            new GeoJsonOptions().withMaxZoom(16)
     );
-    mapLibreMap.getStyle().addSource(arrowShaftGeoJsonSource);
+    try {
+      mapLibreMap.getStyle().addSource(arrowShaftGeoJsonSource);
+    } catch (Exception e) {
+      Timber.d("Style already exists");
+    }
   }
 
   private void initializeArrowHead() {
     arrowHeadGeoJsonSource = new GeoJsonSource(
-      RouteConstants.ARROW_HEAD_SOURCE_ID,
-      FeatureCollection.fromFeatures(new Feature[]{}),
-      new GeoJsonOptions().withMaxZoom(16)
+            ARROW_HEAD_CUSTOM_ID,
+            FeatureCollection.fromFeatures(new Feature[]{}),
+            new GeoJsonOptions().withMaxZoom(16)
     );
-    mapLibreMap.getStyle().addSource(arrowHeadGeoJsonSource);
+    try {
+      mapLibreMap.getStyle().addSource(arrowHeadGeoJsonSource);
+    } catch (Exception e) {
+      Timber.d("Style already exists");
+    }
   }
 
   private void addArrowHeadIcon() {

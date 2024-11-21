@@ -5,5 +5,5 @@
     <!-- The "day" style used for navigation, here mapilion is used but you can use maptiler too -->
     <string name="map_style_light" translatable="false">m</string>
     <!-- The "night" style used for navigation -->
-    <string name="map_style_dark" translatable="false">https://api.maptiler.com/maps/streets-v2/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ</string>
+    <string name="map_style_dark" translatable="false">https://api.maptiler.com/maps/streets-v2-dark/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ</string>
 </resources>

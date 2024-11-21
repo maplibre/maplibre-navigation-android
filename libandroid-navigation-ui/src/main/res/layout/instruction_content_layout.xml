@@ -8,7 +8,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    tools:background="?navigationViewBannerBackground">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/maneuver_layout"
@@ -80,7 +80,6 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:lineSpacingMultiplier="0.8"
-            android:textColor="?attr/navigationViewBannerSecondaryText"
             android:textSize="14sp"
             android:visibility="gone"
             android:textStyle="bold"

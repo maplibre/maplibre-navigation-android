@@ -8,6 +8,7 @@ import android.os.Handler;
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
+import org.maplibre.navigation.android.navigation.ui.v5.BuildConfig;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
@@ -41,6 +42,8 @@ import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConsta
 import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_ORIGIN_VALUE;
 import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
 import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
+
+import timber.log.Timber;
 
 class MapRouteLine {
 
@@ -161,12 +164,19 @@ class MapRouteLine {
     GeoJsonOptions wayPointGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
     drawnWaypointsFeatureCollection = waypointsFeatureCollection;
     wayPointSource = sourceProvider.build(WAYPOINT_SOURCE_ID, drawnWaypointsFeatureCollection, wayPointGeoJsonOptions);
-    style.addSource(wayPointSource);
 
     GeoJsonOptions routeLineGeoJsonOptions = new GeoJsonOptions().withMaxZoom(16);
     drawnRouteFeatureCollection = routesFeatureCollection;
     routeLineSource = sourceProvider.build(ROUTE_SOURCE_ID, drawnRouteFeatureCollection, routeLineGeoJsonOptions);
-    style.addSource(routeLineSource);
+
+    try {
+      style.addSource(wayPointSource);
+      style.addSource(routeLineSource);
+    } catch(Exception e) {
+      if (BuildConfig.DEBUG) {
+        Timber.d("Style Already exists");
+      }
+    }
 
     // Waypoint attributes
     int originWaypointIcon = typedArray.getResourceId(

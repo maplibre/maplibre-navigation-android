@@ -90,12 +90,9 @@ class NavigationRouteView @JvmOverloads constructor(
     NavigationContract.View {
     private var mapView: MapView? = null
     private var instructionView: InstructionView? = null
-    private var summaryBottomSheet: SummaryBottomSheet? = null
     private var summaryBehavior: BottomSheetBehavior<*>? = null
-    private var cancelBtn: ImageButton? = null
     private var recenterBtn: RecenterButton? = null
     private var wayNameView: WayNameView? = null
-    private var routeOverviewBtn: ImageButton? = null
 
     private var navigationPresenter: NavigationPresenter? = null
     private var navigationViewEventDispatcher: NavigationViewEventDispatcher? = null
@@ -127,9 +124,10 @@ class NavigationRouteView @JvmOverloads constructor(
      * @param savedInstanceState to restore state if not null
      */
     fun onCreate(navigationCallback: OnNavigationReadyCallback, savedInstanceState: Bundle?, context: ComponentActivity, style: String) {
+        ThemeSwitcher.setTheme(context, attrs, style)
         initializeNavigationViewModel(context)
         initializeView()
-        ThemeSwitcher.setTheme(context, attrs, style)
+        mapStyle = if (style == MapRouteData.LIGHT_THEME) context.getString(R.string.map_style_light) else context.getString(R.string.map_style_dark)
         mapView?.let {
             it.apply {
                 if (!isMapInitialized) {
@@ -322,7 +320,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     fun calculateRoute(mapRouteData: MapRouteData) {
-            mapStyle = mapRouteData.mapStyle
 //        startRouteButton.setOnClickListener {
             val destination = Point.fromLngLat(76.930137, 43.230361)
             val origin = Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second)
@@ -667,7 +664,6 @@ class NavigationRouteView @JvmOverloads constructor(
         initializeNavigationEventDispatcher()
         initializeNavigationPresenter()
         initializeInstructionListListener()
-        initializeSummaryBottomSheet()
         initializeClickListeners()
     }
 
@@ -677,11 +673,8 @@ class NavigationRouteView @JvmOverloads constructor(
         instructionView?.let {
             ViewCompat.setElevation(it, 10f)
         }
-        summaryBottomSheet = findViewById(R.id.summaryBottomSheet)
-        cancelBtn = findViewById(R.id.cancelBtn)
         recenterBtn = findViewById(R.id.recenterBtn)
         wayNameView = findViewById(R.id.wayNameView)
-        routeOverviewBtn = findViewById(R.id.routeOverviewBtn)
     }
 
     fun initializeNavigationViewModel(context: ComponentActivity) {
@@ -689,19 +682,6 @@ class NavigationRouteView @JvmOverloads constructor(
             navigationViewModel = NavigationViewModel(context)
         } catch (exception: ClassCastException) {
             throw ClassCastException("Please ensure that the provided Context is a valid FragmentActivity")
-        }
-    }
-
-    private fun initializeSummaryBottomSheet() {
-        summaryBehavior = BottomSheetBehavior.from(summaryBottomSheet!!)
-        summaryBehavior?.let {
-            it.isHideable = false
-            it.addBottomSheetCallback(
-                SummaryBottomSheetCallback(
-                    navigationPresenter,
-                    navigationViewEventDispatcher
-                )
-            )
         }
     }
 
@@ -811,9 +791,7 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     private fun initializeClickListeners() {
-        cancelBtn!!.setOnClickListener(CancelBtnClickListener(navigationViewEventDispatcher))
         recenterBtn!!.addOnClickListener(RecenterBtnClickListener(navigationPresenter))
-        routeOverviewBtn!!.setOnClickListener(RouteOverviewBtnClickListener(navigationPresenter))
     }
 
     private fun initializeOnCameraTrackingChangedListener() {
@@ -838,7 +816,6 @@ class NavigationRouteView @JvmOverloads constructor(
         val distanceFormatter = DistanceFormatter(context, language, unitType, roundingIncrement)
 
         instructionView!!.setDistanceFormatter(distanceFormatter)
-        summaryBottomSheet!!.setDistanceFormatter(distanceFormatter)
     }
 
     private fun establishRoundingIncrement(navigationViewOptions: NavigationViewOptions): Int {
@@ -864,7 +841,6 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private fun establishTimeFormat(options: NavigationViewOptions) {
         @NavigationTimeFormat.Type val timeFormatType = options.navigationOptions().timeFormatType()
-        summaryBottomSheet!!.setTimeFormat(timeFormatType)
     }
 
     private fun initializeNavigationListeners(
@@ -891,7 +867,6 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     private fun subscribeViewModels() {
         instructionView!!.subscribe(this, navigationViewModel)
-        summaryBottomSheet!!.subscribe(this, navigationViewModel)
 
         NavigationViewSubscriber(this, navigationViewModel, navigationPresenter).subscribe()
         isSubscribed = true

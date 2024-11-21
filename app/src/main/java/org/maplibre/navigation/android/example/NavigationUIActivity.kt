@@ -57,7 +57,7 @@ class NavigationUIActivity :
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.navigationView.onCreate(this, savedInstanceState, this, MapRouteData.LIGHT_THEME)
+        binding.navigationView.onCreate(this, savedInstanceState, this, MapRouteData.DARK_THEME)
 
 //        binding.mapView.apply {
 //            onCreate(savedInstanceState)
