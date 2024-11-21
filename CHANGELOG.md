@@ -4,6 +4,8 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+- Updated startNavigation() in NavigationLauncher to just use a context instead of an activity [#126](https://github.com/maplibre/maplibre-navigation-android/pull/126)
+
 ### v4.0.0 - November 9, 2024
 
 **BREAKING CHANGES:**
