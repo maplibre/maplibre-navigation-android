@@ -67,7 +67,9 @@ android {
 dependencies {
     api dependenciesList.mapLibreTurf
     implementation dependenciesList.mapLibre
-    implementation 'androidx.test:core-ktx:1.6.1'
+
+    implementation dependenciesList.androidxCore
+    implementation dependenciesList.kotlinstdlib
 
     compileOnly dependenciesList.gmsLocation
 
@@ -79,21 +81,14 @@ dependencies {
     implementation dependenciesList.timber
 
     implementation dependenciesList.kotlinxSerializationJson
-
-    // AutoValues
-    annotationProcessor dependenciesList.autoValue
-    compileOnly dependenciesList.autoValueAnnotations
-    compileOnly dependenciesList.autoValueGson
-    annotationProcessor(dependenciesList.autoValueGson)
-
+    
     // Unit testing
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.hamcrest
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric
-    implementation dependenciesList.androidxCore
-    implementation dependenciesList.kotlinstdlib
-    testImplementation "io.mockk:mockk:1.13.13"
+    testImplementation dependenciesList.androidxTestKtx
+    testImplementation dependenciesList.mockk
 }
 
 apply from: 'javadoc.gradle'
