@@ -6,7 +6,9 @@ import android.view.View;
 
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.models.ManeuverModifier;
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
@@ -97,9 +99,13 @@ class InstructionListPresenter {
   }
 
   private void updateManeuverView(@NonNull InstructionListView listView, BannerInstructions bannerInstructions) {
-    String maneuverType = bannerInstructions.getPrimary().getType().getText();
-    String maneuverModifier = bannerInstructions.getPrimary().getModifier().getText();
-    listView.updateManeuverViewTypeAndModifier(maneuverType, maneuverModifier);
+    StepManeuver.Type maneuverType = bannerInstructions.getPrimary().getType();
+    if (maneuverType == null) {
+      return;
+    }
+
+    ManeuverModifier.Type maneuverModifier = bannerInstructions.getPrimary().getModifier();
+    listView.updateManeuverViewTypeAndModifier(maneuverType.getText(), maneuverModifier != null ? maneuverModifier.getText() : null);
 
     Double roundaboutDegrees = bannerInstructions.getPrimary().getDegrees();
     if (roundaboutDegrees != null) {
