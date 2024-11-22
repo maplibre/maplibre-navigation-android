@@ -12,9 +12,7 @@ import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import java.util.concurrent.CopyOnWriteArrayList
 
-//TODO fabi755
 class ReplayRouteLocationEngine : LocationEngine, Runnable {
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED

@@ -8,7 +8,6 @@ import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 
-//TODO fabi755
 internal class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
     private var speed: Int,

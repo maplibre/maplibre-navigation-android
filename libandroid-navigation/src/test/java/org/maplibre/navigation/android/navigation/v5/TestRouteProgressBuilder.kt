@@ -56,7 +56,7 @@ internal class TestRouteProgressBuilder {
         val upcomingIntersection = createUpcomingIntersection(
             upcomingStep,
             intersections,
-            currentIntersection!! //TODO fabi755
+            currentIntersection!!
         )
 
         return RouteProgress(

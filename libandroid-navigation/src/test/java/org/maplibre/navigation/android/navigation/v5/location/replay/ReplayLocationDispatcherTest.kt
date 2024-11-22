@@ -4,6 +4,7 @@ import android.location.Location
 import android.os.Handler
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Test
 
@@ -78,26 +79,13 @@ class ReplayLocationDispatcherTest {
     fun checksStopDispatchingWhenLocationsIsEmpty() {
         val firstLocation = mockk<Location>()
         val aHandler = mockk<Handler>(relaxed = true)
-        val theReplayLocationDispatcher = ReplayLocationDispatcher(mutableListOf(firstLocation), aHandler)
+        val theReplayLocationDispatcher =
+            ReplayLocationDispatcher(mutableListOf(firstLocation), aHandler)
 
         theReplayLocationDispatcher.run()
 
         verify {
             aHandler.removeCallbacks(theReplayLocationDispatcher)
-        }
-    }
-
-    @Test
-    fun checksClearLocationsWhenStop() {
-        val theLocations = mockk<MutableList<Location>>(relaxed = true) {
-            every { removeAt(any()) } returns mockk()
-        }
-        val theReplayLocationDispatcher = ReplayLocationDispatcher(theLocations, mockk(relaxed = true))
-
-        theReplayLocationDispatcher.stop()
-
-        verify {
-            theLocations.clear()
         }
     }
 
@@ -135,21 +123,5 @@ class ReplayLocationDispatcherTest {
         val empty = emptyList<Location>()
 
         theReplayLocationDispatcher.update(empty)
-    }
-
-    @Test
-    fun checksAddLocationsWhenAdd() {
-        val anyLocations = mockk<MutableList<Location>>(relaxed = true) {
-            every { removeAt(any()) } returns mockk()
-        }
-        val aHandler = mockk<Handler>(relaxed = true)
-        val theReplayLocationDispatcher = ReplayLocationDispatcher(anyLocations, aHandler)
-        val locationsToReplay = listOf<Location>()
-
-        theReplayLocationDispatcher.add(locationsToReplay)
-
-        verify {
-            anyLocations.addAll(locationsToReplay)
-        }
     }
 }

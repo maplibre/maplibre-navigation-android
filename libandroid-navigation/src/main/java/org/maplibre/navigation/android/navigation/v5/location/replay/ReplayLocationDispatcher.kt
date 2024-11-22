@@ -4,26 +4,17 @@ import android.location.Location
 import android.os.Handler
 import java.util.concurrent.CopyOnWriteArrayList
 
-//TODO fabi755
-internal class ReplayLocationDispatcher : Runnable {
-    private var locationsToReplay = mutableListOf<Location>()
+internal class ReplayLocationDispatcher(
+    locationsToReplay: List<Location>,
+    private var handler: Handler = Handler()
+) : Runnable {
+    private var locationsToReplay = locationsToReplay.toMutableList()
     private var current: Location? = null
-    private var handler: Handler
     private val replayLocationListeners = mutableListOf<ReplayLocationListener>()
 
-    constructor(locationsToReplay: List<Location>) {
+    init {
         checkValidInput(locationsToReplay)
-        this.locationsToReplay.addAll(locationsToReplay)
         initialize()
-        this.handler = Handler()
-    }
-
-    // For testing only
-    constructor(locationsToReplay: MutableList<Location>, handler: Handler) {
-        checkValidInput(locationsToReplay)
-        this.locationsToReplay = locationsToReplay
-        initialize()
-        this.handler = handler
     }
 
     override fun run() {
@@ -89,6 +80,7 @@ internal class ReplayLocationDispatcher : Runnable {
             stopDispatching()
             return
         }
+
         val currentTime = current!!.time
         current = locationsToReplay.removeFirstOrNull()
         val nextTime = current!!.time

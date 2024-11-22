@@ -27,24 +27,27 @@ import java.util.Calendar
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
-//TODO: fabi755
 internal class MapLibreNavigationNotification(
     context: Context,
-    mapLibreNavigation: MapLibreNavigation
-) :
-    NavigationNotification {
-    private var notificationBuilder: NotificationCompat.Builder? = null
-    private var notificationManager: NotificationManager? = null
+    private val mapLibreNavigation: MapLibreNavigation
+) : NavigationNotification {
+    private val etaFormat = context.getString(R.string.eta_format)
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val isTwentyFourHourFormat = DateFormat.is24HourFormat(context)
+    private val collapsedNotificationRemoteViews: RemoteViews = RemoteViews(
+        context.packageName,
+        R.layout.collapsed_navigation_notification_layout
+    )
+    private val expandedNotificationRemoteViews: RemoteViews = RemoteViews(
+        context.packageName,
+        R.layout.expanded_navigation_notification_layout
+    )
+    private val distanceFormatter: DistanceFormatter = initializeDistanceFormatter(context, mapLibreNavigation)
     private var notification: Notification? = null
-    private var collapsedNotificationRemoteViews: RemoteViews? = null
-    private var expandedNotificationRemoteViews: RemoteViews? = null
-    private var mapLibreNavigation: MapLibreNavigation? = null
     private var currentDistanceText: SpannableString? = null
-    private var distanceFormatter: DistanceFormatter? = null
     private var instructionText: String? = null
     private var currentManeuverId = 0
-    private var isTwentyFourHourFormat = false
-    private var etaFormat: String? = null
 
     private val endNavigationBtnReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -53,7 +56,9 @@ internal class MapLibreNavigationNotification(
     }
 
     init {
-        initialize(context, mapLibreNavigation)
+        createNotificationChannel(context)
+        buildNotification(context)
+        registerReceiver(context)
     }
 
     override fun getNotification(): Notification {
@@ -72,28 +77,17 @@ internal class MapLibreNavigationNotification(
         unregisterReceiver(context)
     }
 
-    private fun initialize(context: Context, mapLibreNavigation: MapLibreNavigation) {
-        this.mapLibreNavigation = mapLibreNavigation
-        etaFormat = context.getString(R.string.eta_format)
-        initializeDistanceFormatter(context, mapLibreNavigation)
-        notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        isTwentyFourHourFormat = DateFormat.is24HourFormat(context)
-        createNotificationChannel(context)
-        buildNotification(context)
-        registerReceiver(context)
-    }
-
     private fun initializeDistanceFormatter(
         context: Context,
         mapLibreNavigation: MapLibreNavigation
-    ) {
-        val routeOptions = mapLibreNavigation.route!!.routeOptions
+    ): DistanceFormatter {
+        val routeOptions = mapLibreNavigation.route?.routeOptions
         val localeUtils = LocaleUtils()
         val language: String = routeOptions?.language ?: localeUtils.inferDeviceLanguage(context)
-        val unitType: String = routeOptions?.voiceUnits ?: localeUtils.getUnitTypeForDeviceLocale(context)
+        val unitType: String =
+            routeOptions?.voiceUnits ?: localeUtils.getUnitTypeForDeviceLocale(context)
 
-        distanceFormatter = DistanceFormatter(
+        return DistanceFormatter(
             context,
             language,
             unitType,
@@ -108,30 +102,22 @@ internal class MapLibreNavigationNotification(
                 context.getString(R.string.channel_name),
                 NotificationManager.IMPORTANCE_LOW
             )
-            notificationManager!!.createNotificationChannel(notificationChannel)
+
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
     private fun buildNotification(context: Context) {
-        collapsedNotificationRemoteViews = RemoteViews(
-            context.packageName,
-            R.layout.collapsed_navigation_notification_layout
-        )
-        expandedNotificationRemoteViews = RemoteViews(
-            context.packageName,
-            R.layout.expanded_navigation_notification_layout
-        )
-
         val pendingOpenIntent = createPendingOpenIntent(context)
         // Will trigger endNavigationBtnReceiver when clicked
         val pendingCloseIntent = createPendingCloseIntent(context)
-        expandedNotificationRemoteViews!!.setOnClickPendingIntent(
+        expandedNotificationRemoteViews.setOnClickPendingIntent(
             R.id.endNavigationBtn,
             pendingCloseIntent
         )
 
         // Sets up the top bar notification
-        notificationBuilder =
+        val notificationBuilder =
             NotificationCompat.Builder(context, NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL)
                 .setContentIntent(pendingOpenIntent)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
@@ -141,7 +127,7 @@ internal class MapLibreNavigationNotification(
                 .setCustomBigContentView(expandedNotificationRemoteViews)
                 .setOngoing(true)
 
-        notification = notificationBuilder!!.build()
+        notification = notificationBuilder.build()
     }
 
     private fun createPendingOpenIntent(context: Context): PendingIntent {
@@ -177,27 +163,25 @@ internal class MapLibreNavigationNotification(
             routeProgress.currentLegProgress.currentStep
         updateManeuverImage(step!!)
 
-        notificationManager!!.notify(
+        notificationManager.notify(
             NavigationConstants.NAVIGATION_NOTIFICATION_ID,
-            notificationBuilder!!.build()
+            notification
         )
     }
 
-    private fun unregisterReceiver(context: Context?) {
-        context?.unregisterReceiver(endNavigationBtnReceiver)
-        if (notificationManager != null) {
-            notificationManager!!.cancel(NavigationConstants.NAVIGATION_NOTIFICATION_ID)
-        }
+    private fun unregisterReceiver(context: Context) {
+        context.unregisterReceiver(endNavigationBtnReceiver)
+        notificationManager.cancel(NavigationConstants.NAVIGATION_NOTIFICATION_ID)
     }
 
     private fun updateInstructionText(step: LegStep) {
         if (hasInstructions(step) && (instructionText == null || newInstructionText(step))) {
             instructionText = step.bannerInstructions!![0].primary.text
-            collapsedNotificationRemoteViews!!.setTextViewText(
+            collapsedNotificationRemoteViews.setTextViewText(
                 R.id.notificationInstructionText,
                 instructionText
             )
-            expandedNotificationRemoteViews!!.setTextViewText(
+            expandedNotificationRemoteViews.setTextViewText(
                 R.id.notificationInstructionText,
                 instructionText
             )
@@ -214,14 +198,14 @@ internal class MapLibreNavigationNotification(
 
     private fun updateDistanceText(routeProgress: RouteProgress) {
         if (currentDistanceText == null || newDistanceText(routeProgress)) {
-            currentDistanceText = distanceFormatter!!.formatDistance(
+            currentDistanceText = distanceFormatter.formatDistance(
                 routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
             )
-            collapsedNotificationRemoteViews!!.setTextViewText(
+            collapsedNotificationRemoteViews.setTextViewText(
                 R.id.notificationDistanceText,
                 currentDistanceText
             )
-            expandedNotificationRemoteViews!!.setTextViewText(
+            expandedNotificationRemoteViews.setTextViewText(
                 R.id.notificationDistanceText,
                 currentDistanceText
             )
@@ -229,13 +213,13 @@ internal class MapLibreNavigationNotification(
     }
 
     private fun newDistanceText(routeProgress: RouteProgress): Boolean {
-        return currentDistanceText != null && currentDistanceText.toString() != distanceFormatter!!.formatDistance(
+        return currentDistanceText != null && currentDistanceText.toString() != distanceFormatter.formatDistance(
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
         ).toString()
     }
 
     private fun updateArrivalTime(routeProgress: RouteProgress) {
-        val options = mapLibreNavigation!!.options
+        val options = mapLibreNavigation.options
         val time = Calendar.getInstance()
         val durationRemaining = routeProgress.durationRemaining
         val timeFormatType = options.timeFormatType
@@ -245,12 +229,12 @@ internal class MapLibreNavigationNotification(
             timeFormatType,
             isTwentyFourHourFormat
         )
-        val formattedArrivalTime = String.format(etaFormat!!, arrivalTime)
-        collapsedNotificationRemoteViews!!.setTextViewText(
+        val formattedArrivalTime = String.format(etaFormat, arrivalTime)
+        collapsedNotificationRemoteViews.setTextViewText(
             R.id.notificationArrivalText,
             formattedArrivalTime
         )
-        expandedNotificationRemoteViews!!.setTextViewText(
+        expandedNotificationRemoteViews.setTextViewText(
             R.id.notificationArrivalText,
             formattedArrivalTime
         )
@@ -260,11 +244,11 @@ internal class MapLibreNavigationNotification(
         if (newManeuverId(step)) {
             val maneuverResource = getManeuverResource(step)
             currentManeuverId = maneuverResource
-            collapsedNotificationRemoteViews!!.setImageViewResource(
+            collapsedNotificationRemoteViews.setImageViewResource(
                 R.id.maneuverImage,
                 maneuverResource
             )
-            expandedNotificationRemoteViews!!.setImageViewResource(
+            expandedNotificationRemoteViews.setImageViewResource(
                 R.id.maneuverImage,
                 maneuverResource
             )
@@ -281,9 +265,7 @@ internal class MapLibreNavigationNotification(
     }
 
     private fun onEndNavigationBtnClick() {
-        if (mapLibreNavigation != null) {
-            mapLibreNavigation!!.stopNavigation()
-        }
+        mapLibreNavigation.stopNavigation()
     }
 
     companion object {
