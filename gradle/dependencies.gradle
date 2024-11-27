@@ -41,6 +41,7 @@ ext {
             jsonVersion              : '20240303',
             androidxTestKtx          : '1.6.1',
             mockk                    : '1.13.13',
+            kotlinxSerializationJson : '1.7.3'
     ]
 
     pluginVersion = [
@@ -111,18 +112,18 @@ ext {
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",
             errorprone              : "com.google.errorprone:error_prone_core:${version.errorprone}",
 
-            kotlinxSerializationJson: "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+            kotlinxSerializationJson: "org.jetbrains.kotlinx:kotlinx-serialization-json:${version.kotlinxSerializationJson}"
     ]
 
     pluginDependencies = [
-            gradle             : "com.android.tools.build:gradle:${pluginVersion.gradle}",
-            checkstyle         : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
-            spotbugs           : "gradle.plugin.com.github.spotbugs:gradlePlugin:${pluginVersion.spotbugs}",
-            coveralls          : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${pluginVersion.coveralls}",
-            errorprone         : "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}",
-            dependencyGraph    : "com.vanniktech:gradle-dependency-graph-generator-plugin:${pluginVersion.dependencyGraph}",
-            dependencyUpdates  : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
-            kotlinGradle       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
-            kotlinSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
+            gradle              : "com.android.tools.build:gradle:${pluginVersion.gradle}",
+            checkstyle          : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
+            spotbugs            : "gradle.plugin.com.github.spotbugs:gradlePlugin:${pluginVersion.spotbugs}",
+            coveralls           : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${pluginVersion.coveralls}",
+            errorprone          : "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}",
+            dependencyGraph     : "com.vanniktech:gradle-dependency-graph-generator-plugin:${pluginVersion.dependencyGraph}",
+            dependencyUpdates   : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
+            kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
+            kotlinxSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
     ]
 }
