@@ -70,7 +70,7 @@ data class Incident(
      * @see [AlertC](https://www.iso.org/standard/59231.html)
      */
     @SerialName("alertc_codes")
-    val alertcCodes: List<Int?>?,
+    val alertcCodes: List<Int>?,
 
     /**
      * Incident's geometry index start point.

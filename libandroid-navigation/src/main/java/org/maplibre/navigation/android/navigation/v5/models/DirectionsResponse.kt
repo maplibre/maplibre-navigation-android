@@ -45,7 +45,7 @@ data class DirectionsResponse(
      *
      * @since 1.0.0
      */
-    val waypoints: List<DirectionsWaypoint?>?,
+    val waypoints: List<DirectionsWaypoint>?,
 
     /**
      * List containing all the different route options. It's ordered by descending recommendation

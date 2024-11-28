@@ -82,7 +82,7 @@ data class StepIntersection(
      *
      * @since 2.0.0
      */
-    val lanes: List<IntersectionLanes?>?,
+    val lanes: List<IntersectionLanes>?,
 
     /**
      * The zero-based index for the intersection.
