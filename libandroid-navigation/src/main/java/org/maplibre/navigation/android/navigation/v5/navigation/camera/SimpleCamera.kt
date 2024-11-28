@@ -74,8 +74,8 @@ open class SimpleCamera : Camera {
         } ?: emptyList()
     }
 
-    companion object {
-        protected const val DEFAULT_TILT: Int = 50
-        protected const val DEFAULT_ZOOM: Double = 15.0
+    protected companion object {
+        const val DEFAULT_TILT: Int = 50
+        const val DEFAULT_ZOOM: Double = 15.0
     }
 }
