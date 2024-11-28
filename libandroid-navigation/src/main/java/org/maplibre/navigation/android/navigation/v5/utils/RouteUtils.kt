@@ -12,7 +12,7 @@ import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-object RouteUtils {
+open class RouteUtils {
 
     /**
      * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
@@ -56,7 +56,6 @@ object RouteUtils {
      * @return true if in arrival state, false if not
      * @since 0.8.0
      */
-    @JvmStatic
     fun isArrivalEvent(routeProgress: RouteProgress, milestone: Milestone): Boolean {
         return (milestone as? BannerInstructionMilestone)?.let { bannerMilestone ->
             val isValidArrivalManeuverType =
@@ -90,7 +89,6 @@ object RouteUtils {
      * @return list of remaining waypoints as [Point]s
      * @since 0.10.0
      */
-    @JvmStatic
     fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Point>? {
         return routeProgress.directionsRoute.routeOptions?.let { options ->
             val coordinatesSize = options.coordinates.size
@@ -115,7 +113,6 @@ object RouteUtils {
      * @return String array including the origin waypoint name and the remaining ones
      * @since 0.19.0
      */
-    @JvmStatic
     fun calculateRemainingWaypointNames(routeProgress: RouteProgress): List<String>? {
         return routeProgress.directionsRoute.routeOptions?.let { routeOptions ->
             routeOptions.waypointNames
@@ -165,7 +162,6 @@ object RouteUtils {
      * @return the current banner instructions based on the current distance along the step
      * @since 0.13.0
      */
-    @JvmStatic
     fun findCurrentBannerInstructions(
         currentStep: LegStep,
         stepDistanceRemaining: Double
@@ -225,5 +221,7 @@ object RouteUtils {
         ) ?: false
     }
 
-    private const val FORCED_LOCATION = "Forced Location"
+    companion object {
+        const val FORCED_LOCATION = "Forced Location"
+    }
 }

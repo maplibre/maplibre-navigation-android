@@ -17,7 +17,8 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 open class BannerInstructionMilestone(
     identifier: Int,
     instruction: Instruction? = null,
-    trigger: Trigger.Statement? = null
+    trigger: Trigger.Statement? = null,
+    private val routeUtils: RouteUtils = RouteUtils()
 ) : Milestone(identifier, instruction, trigger) {
 
     /**
@@ -35,7 +36,7 @@ open class BannerInstructionMilestone(
     ): Boolean {
         val stepDistanceRemaining =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
-        val instructions = RouteUtils.findCurrentBannerInstructions(
+        val instructions = routeUtils.findCurrentBannerInstructions(
             routeProgress.currentLegProgress.currentStep,
             stepDistanceRemaining
         )

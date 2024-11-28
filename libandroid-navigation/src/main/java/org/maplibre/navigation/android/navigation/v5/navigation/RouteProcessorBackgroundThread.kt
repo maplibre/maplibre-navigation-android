@@ -6,6 +6,7 @@ import android.os.HandlerThread
 import android.os.Process
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * This class extends handler thread to run most of the navigation calculations on a separate
@@ -13,7 +14,8 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
  */
 internal class RouteProcessorBackgroundThread(
     val responseHandler: Handler,
-    val listener: Listener
+    val listener: Listener,
+    private val routeUtils: RouteUtils
 ) : HandlerThread(MAPLIBRE_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND) {
     private var workerHandler: Handler? = null
 
@@ -26,7 +28,7 @@ internal class RouteProcessorBackgroundThread(
 
         workerHandler = Handler(
             looper, RouteProcessorHandlerCallback(
-                NavigationRouteProcessor(), responseHandler, listener
+                NavigationRouteProcessor(routeUtils), responseHandler, listener
             )
         )
     }

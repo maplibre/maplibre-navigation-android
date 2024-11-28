@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.navigation.v5.milestone
 
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * Using a Step Milestone will result in
@@ -13,7 +14,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 open class StepMilestone(
     identifier: Int,
     instruction: Instruction? = null,
-    trigger: Trigger.Statement? = null
+    trigger: Trigger.Statement? = null,
 ) : Milestone(identifier, instruction, trigger) {
     private var called = false
 

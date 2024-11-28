@@ -15,7 +15,8 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 open class VoiceInstructionMilestone(
     identifier: Int,
     instruction: Instruction? = null,
-    trigger: Trigger.Statement? = null
+    trigger: Trigger.Statement? = null,
+    private val routeUtils: RouteUtils = RouteUtils()
 ) : Milestone(identifier, instruction, trigger) {
 
     private var instructions: VoiceInstructions? = null
@@ -27,7 +28,7 @@ open class VoiceInstructionMilestone(
         val stepDistanceRemaining = routeProgress.currentLegProgress
             .currentStepProgress
             .distanceRemaining
-        val instructions = RouteUtils.findCurrentVoiceInstructions(
+        val instructions = routeUtils.findCurrentVoiceInstructions(
             routeProgress.currentLegProgress.currentStep,
             stepDistanceRemaining
         )

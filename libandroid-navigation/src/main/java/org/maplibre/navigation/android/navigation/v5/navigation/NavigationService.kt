@@ -10,6 +10,7 @@ import androidx.core.app.ServiceCompat
 import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.location.LocationValidator
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
@@ -55,8 +56,8 @@ open class NavigationService : Service() {
      * This gets called when [MapLibreNavigation.startNavigation] is called and
      * setups variables among other things on the Navigation Service side.
      */
-    fun startNavigation(mapLibreNavigation: MapLibreNavigation) {
-        initialize(mapLibreNavigation)
+    fun startNavigation(mapLibreNavigation: MapLibreNavigation, routeUtils: RouteUtils) {
+        initialize(mapLibreNavigation, routeUtils)
 
         mapLibreNavigation.route
             ?.let { route ->
@@ -81,7 +82,7 @@ open class NavigationService : Service() {
     }
 
     /**
-     * Called with [MapLibreNavigation.setLocationEngine].
+     * Called with [MapLibreNavigation.locationEngine].
      * Updates this service with the new [LocationEngine].
      *
      * @param locationEngine to update the provider
@@ -90,27 +91,29 @@ open class NavigationService : Service() {
         locationEngineUpdater?.updateLocationEngine(locationEngine)
     }
 
-    private fun initialize(mapLibreNavigation: MapLibreNavigation) {
+    private fun initialize(mapLibreNavigation: MapLibreNavigation, routeUtils: RouteUtils) {
         val notificationProvider = NavigationNotificationProvider(application, mapLibreNavigation)
         this.notificationProvider = notificationProvider
 
         val thread =
-            initializeRouteProcessorThread(mapLibreNavigation.eventDispatcher, notificationProvider)
-        initializeLocationProvider(mapLibreNavigation, thread)
+            initializeRouteProcessorThread(mapLibreNavigation.eventDispatcher, notificationProvider, routeUtils)
+        initializeLocationProvider(mapLibreNavigation, thread, routeUtils)
     }
 
     private fun initializeRouteProcessorThread(
         dispatcher: NavigationEventDispatcher,
-        notificationProvider: NavigationNotificationProvider
+        notificationProvider: NavigationNotificationProvider,
+        routeUtils: RouteUtils
     ): RouteProcessorBackgroundThread {
         val listener = RouteProcessorThreadListener(dispatcher, notificationProvider)
-        return RouteProcessorBackgroundThread(Handler(), listener)
+        return RouteProcessorBackgroundThread(Handler(), listener, routeUtils)
             .also { t -> this.thread = t }
     }
 
     private fun initializeLocationProvider(
         mapLibreNavigation: MapLibreNavigation,
-        thread: RouteProcessorBackgroundThread
+        thread: RouteProcessorBackgroundThread,
+        routeUtils: RouteUtils
     ) {
         val locationEngine = mapLibreNavigation.locationEngine
         val listener = NavigationLocationEngineListener(
@@ -118,7 +121,7 @@ open class NavigationService : Service() {
             validator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
             thread = thread,
         )
-        locationEngineUpdater = NavigationLocationEngineUpdater(locationEngine, listener)
+        locationEngineUpdater = NavigationLocationEngineUpdater(locationEngine, listener, routeUtils)
     }
 
     private fun startForegroundNotification(navigationNotification: NavigationNotification) {

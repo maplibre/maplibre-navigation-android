@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.navigation.v5.milestone
 
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * Using a Route Milestone will result in
@@ -13,7 +14,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 open class RouteMilestone(
     identifier: Int,
     instruction: Instruction?,
-    trigger: Trigger.Statement?
+    trigger: Trigger.Statement?,
 ) : Milestone(identifier, instruction, trigger) {
     private var called = false
 

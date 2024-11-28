@@ -27,6 +27,7 @@ import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.android.navigation.v5.snap.Snap
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import org.maplibre.navigation.android.navigation.v5.utils.ValidationUtils.validDirectionsRoute
 import timber.log.Timber
 
@@ -54,6 +55,7 @@ import timber.log.Timber
  * @param fasterRouteEngine     This API is used to pass in a custom implementation of the faster-route
  *  detection logic, A default faster-route detection engine is attached when this class is first
  *  initialized; setting a custom one will replace it with your own implementation.
+ * @param routeUtils            core utility class for route related calculations
  *
  * @see MapLibreNavigationOptions
  */
@@ -91,6 +93,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var snapEngine: Snap = SnapToRoute(),
     var offRouteEngine: OffRoute = OffRouteDetector(),
     var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
+    val routeUtils: RouteUtils = RouteUtils()
 ) : ServiceConnection {
 
     private var navigationService: NavigationService? = null
@@ -483,7 +486,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
         Timber.d("Connected to service.")
 
         (service as LocalBinder).service?.let { navigationService ->
-            navigationService.startNavigation(this)
+            navigationService.startNavigation(this, routeUtils)
             this@MapLibreNavigation.navigationService = navigationService
         } ?: throw IllegalStateException("NavigationService must not be null")
     }

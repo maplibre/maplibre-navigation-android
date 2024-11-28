@@ -3,6 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.map;
 import android.content.Context;
 
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.models.ManeuverModifier;
 import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
 import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
@@ -78,7 +79,7 @@ public class MapFpsDelegateTest {
     MapBatteryMonitor batteryMonitor = mock(MapBatteryMonitor.class);
     when(batteryMonitor.isPluggedIn(any(Context.class))).thenReturn(false);
     MapFpsDelegate delegate = new MapFpsDelegate(mapView, batteryMonitor);
-    RouteProgress routeProgress = buildRouteProgressWith("straight");
+    RouteProgress routeProgress = buildRouteProgressWith(ManeuverModifier.Type.STRAIGHT);
     int maxFps = 5;
     delegate.updateMaxFpsThreshold(maxFps);
 
@@ -102,7 +103,7 @@ public class MapFpsDelegateTest {
     verify(mapView).setMaximumFps(eq(maxFps));
   }
 
-  private RouteProgress buildRouteProgressWith(String maneuverModifier) {
+  private RouteProgress buildRouteProgressWith(ManeuverModifier.Type maneuverModifier) {
     RouteProgress routeProgress = mock(RouteProgress.class);
     RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);
     LegStep currentStep = mock(LegStep.class);
@@ -119,7 +120,7 @@ public class MapFpsDelegateTest {
     RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);
     RouteStepProgress routeStepProgress = mock(RouteStepProgress.class);
     StepManeuver currentManeuver = mock(StepManeuver.class);
-    when(currentManeuver.getModifier()).thenReturn("left");
+    when(currentManeuver.getModifier()).thenReturn(ManeuverModifier.Type.LEFT);
     LegStep currentStep = mock(LegStep.class);
     when(currentStep.getDuration()).thenReturn(totalDuration);
     when(routeStepProgress.getDurationRemaining()).thenReturn(durationRemaining);

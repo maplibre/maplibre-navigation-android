@@ -12,7 +12,8 @@ import timber.log.Timber
 
 internal class NavigationLocationEngineUpdater(
     private var locationEngine: LocationEngine,
-    private val listener: NavigationLocationEngineListener
+    private val listener: NavigationLocationEngineListener,
+    private val routeUtils: RouteUtils
 ) {
 
     init {
@@ -43,7 +44,7 @@ internal class NavigationLocationEngineUpdater(
                 listener.queueLocationUpdate(
                     result.lastLocation
                         ?.takeIf { loc -> listener.isValidLocationUpdate(loc) }
-                        ?: RouteUtils.createFirstLocationFromRoute(route)
+                        ?: routeUtils.createFirstLocationFromRoute(route)
                 )
             }
 

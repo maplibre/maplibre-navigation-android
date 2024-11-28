@@ -24,7 +24,10 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnn
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
-internal class NavigationRouteProcessor : OffRouteCallback {
+internal class NavigationRouteProcessor(
+    private val routeUtils: RouteUtils
+) : OffRouteCallback {
+
     @JvmField
     var routeProgress: RouteProgress? = null
     private var currentStepPoints: List<Point>? = null
@@ -107,7 +110,7 @@ internal class NavigationRouteProcessor : OffRouteCallback {
      */
     private fun checkNewRoute(mapLibreNavigation: MapLibreNavigation): Boolean {
         return mapLibreNavigation.route?.let { directionsRoute ->
-            val newRoute = RouteUtils.isNewRoute(routeProgress, directionsRoute)
+            val newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute)
             if (newRoute) {
                 createFirstIndices(mapLibreNavigation)
                 currentLegAnnotation = null

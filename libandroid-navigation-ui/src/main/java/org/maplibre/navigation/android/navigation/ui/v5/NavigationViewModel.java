@@ -72,6 +72,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private MapLibreNavigationOptions.TimeFormat timeFormatType;
     private boolean isRunning;
     private boolean isChangingConfigurations;
+    private RouteUtils routeUtils = new RouteUtils();
 
     public NavigationViewModel(Application application) {
         super(application);
@@ -405,7 +406,7 @@ public class NavigationViewModel extends AndroidViewModel {
             return;
         }
 
-        if (navigationViewEventDispatcher != null && RouteUtils.isArrivalEvent(routeProgress, milestone)) {
+        if (navigationViewEventDispatcher != null && routeUtils.isArrivalEvent(routeProgress, milestone)) {
             navigationViewEventDispatcher.onArrival();
         }
     }

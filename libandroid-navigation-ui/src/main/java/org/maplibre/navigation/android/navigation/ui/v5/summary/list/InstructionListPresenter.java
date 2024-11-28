@@ -28,6 +28,7 @@ class InstructionListPresenter {
   private List<BannerInstructions> instructions;
   private RouteLeg currentLeg;
   private String drivingSide;
+  private final RouteUtils routeUtils = new RouteUtils();
 
   InstructionListPresenter(DistanceFormatter distanceFormatter) {
     this.distanceFormatter = distanceFormatter;
@@ -140,7 +141,7 @@ class InstructionListPresenter {
     RouteLegProgress legProgress = routeProgress.getCurrentLegProgress();
     LegStep currentStep = legProgress.getCurrentStep();
     double stepDistanceRemaining = legProgress.getCurrentStepProgress().getDistanceRemaining();
-    BannerInstructions currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
+    BannerInstructions currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
       currentStep, stepDistanceRemaining
     );
     if (!instructions.contains(currentBannerInstructions)) {

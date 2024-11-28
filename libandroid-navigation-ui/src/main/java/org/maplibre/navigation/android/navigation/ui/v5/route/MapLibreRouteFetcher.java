@@ -43,6 +43,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     private RouteProgress routeProgress;
 
     private NavigationRoute navigationRoute;
+    private final RouteUtils routeUtils = new RouteUtils();
 
     public MapLibreRouteFetcher(Context context) {
         contextWeakReference = new WeakReference<>(context);
@@ -79,7 +80,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
                 .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<Point> remainingWaypoints = toMapboxPointList(RouteUtils.calculateRemainingWaypoints(progress));
+        List<Point> remainingWaypoints = toMapboxPointList(routeUtils.calculateRemainingWaypoints(progress));
         if (remainingWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;
@@ -111,7 +112,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     }
 
     private void addWaypointNames(RouteProgress progress, NavigationRoute.Builder builder) {
-        List<String> remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(progress);
+        List<String> remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(progress);
         if (remainingWaypointNames != null) {
             builder.addWaypointNames(remainingWaypointNames.toArray(new String[0]));
         }

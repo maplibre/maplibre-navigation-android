@@ -15,11 +15,13 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 class RouteUtilsTest : BaseTest() {
 
+    private val routeUtils = RouteUtils()
+
     @Test
     fun isNewRoute_returnsTrueWhenPreviousGeometriesNull() {
         val defaultRouteProgress = buildDefaultTestRouteProgress()
 
-        val isNewRoute = RouteUtils.isNewRoute(null, defaultRouteProgress)
+        val isNewRoute = routeUtils.isNewRoute(null, defaultRouteProgress)
 
         Assert.assertTrue(isNewRoute)
     }
@@ -28,7 +30,7 @@ class RouteUtilsTest : BaseTest() {
     fun isNewRoute_returnsFalseWhenGeometriesEqualEachOther() {
         val previousRouteProgress = buildDefaultTestRouteProgress()
 
-        val isNewRoute = RouteUtils.isNewRoute(previousRouteProgress, previousRouteProgress)
+        val isNewRoute = routeUtils.isNewRoute(previousRouteProgress, previousRouteProgress)
 
         Assert.assertFalse(isNewRoute)
     }
@@ -42,7 +44,7 @@ class RouteUtilsTest : BaseTest() {
             directionsRoute = aRoute.copy(geometry = "vfejnqiv")
         )
 
-        val isNewRoute = RouteUtils.isNewRoute(previousRouteProgress, defaultRouteProgress)
+        val isNewRoute = routeUtils.isNewRoute(previousRouteProgress, defaultRouteProgress)
 
         Assert.assertTrue(isNewRoute)
     }
@@ -71,7 +73,7 @@ class RouteUtilsTest : BaseTest() {
         )
 
 
-        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertTrue(isArrivalEvent)
     }
@@ -97,7 +99,7 @@ class RouteUtilsTest : BaseTest() {
             currentStepBannerInstructions!!
         )
 
-        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertFalse(isArrivalEvent)
     }
@@ -121,7 +123,7 @@ class RouteUtilsTest : BaseTest() {
             currentStepBannerInstructions!!
         )
 
-        val isArrivalEvent = RouteUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
+        val isArrivalEvent = routeUtils.isArrivalEvent(routeProgress, bannerInstructionMilestone)
 
         Assert.assertFalse(isArrivalEvent)
     }
@@ -136,7 +138,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -151,7 +153,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -169,7 +171,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -187,7 +189,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentBannerInstructions = RouteUtils.findCurrentBannerInstructions(
+        val currentBannerInstructions = routeUtils.findCurrentBannerInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -204,7 +206,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val voiceInstructions = RouteUtils.findCurrentVoiceInstructions(
+        val voiceInstructions = routeUtils.findCurrentVoiceInstructions(
             currentStep,
             stepDistanceRemaining
         )
@@ -223,7 +225,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -242,7 +244,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -260,7 +262,7 @@ class RouteUtilsTest : BaseTest() {
         val stepDistanceRemaining: Double =
             routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
 
-        val currentVoiceInstructions = RouteUtils.findCurrentVoiceInstructions(
+        val currentVoiceInstructions = routeUtils.findCurrentVoiceInstructions(
             currentStep, stepDistanceRemaining
         )
 
@@ -281,7 +283,7 @@ class RouteUtilsTest : BaseTest() {
             every { directionsRoute } answers { route }
         }
 
-        val remainingWaypoints = RouteUtils.calculateRemainingWaypoints(routeProgress)
+        val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
 
         Assert.assertEquals(2, remainingWaypoints?.size)
         Assert.assertEquals(
@@ -304,7 +306,7 @@ class RouteUtilsTest : BaseTest() {
             every { directionsRoute } returns route
         }
 
-        val remainingWaypoints = RouteUtils.calculateRemainingWaypoints(routeProgress)
+        val remainingWaypoints = routeUtils.calculateRemainingWaypoints(routeProgress)
 
         Assert.assertNull(remainingWaypoints)
     }
@@ -322,7 +324,7 @@ class RouteUtilsTest : BaseTest() {
             every { directionsRoute } returns route
         }
 
-        val remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(routeProgress)
+        val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
 
         Assert.assertEquals(3, remainingWaypointNames?.size)
         Assert.assertEquals("first", remainingWaypointNames?.first())
@@ -340,7 +342,7 @@ class RouteUtilsTest : BaseTest() {
             every { directionsRoute } returns route
         }
 
-        val remainingWaypointNames = RouteUtils.calculateRemainingWaypointNames(routeProgress)
+        val remainingWaypointNames = routeUtils.calculateRemainingWaypointNames(routeProgress)
 
         Assert.assertNull(remainingWaypointNames)
     }

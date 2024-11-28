@@ -11,6 +11,7 @@ import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.android.navigation.v5.BaseTest
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import java.io.IOException
 
 class NavigationRouteProcessorTest : BaseTest() {
@@ -20,7 +21,7 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Before
     @Throws(Exception::class)
     fun before() {
-        routeProcessor = NavigationRouteProcessor()
+        routeProcessor = NavigationRouteProcessor(RouteUtils())
         val options = MapLibreNavigationOptions()
         val context = mockk<Context>(relaxed = true) {
             every { applicationContext } returns this
@@ -146,7 +147,7 @@ class NavigationRouteProcessorTest : BaseTest() {
         }
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
-        Assert.assertTrue(progress.legIndex === legSize - 1)
+        Assert.assertTrue(progress.legIndex == legSize - 1)
     }
 
     @Test

@@ -101,7 +101,7 @@ public class InstructionListPresenterTest extends BaseTest {
   @Test
   public void retrieveBannerInstructionListSize_returnsCorrectListSize() throws Exception {
     RouteProgress routeProgress = buildRouteProgress();
-    MockedStatic<RouteUtils> routeUtilsMock = mockRouteUtils(routeProgress);
+    RouteUtils routeUtilsMock = mockRouteUtils(routeProgress);
     DistanceFormatter distanceFormatter = mock(DistanceFormatter.class);
     InstructionListPresenter presenter = new InstructionListPresenter(distanceFormatter);
 
@@ -109,27 +109,24 @@ public class InstructionListPresenterTest extends BaseTest {
 
     int expectedInstructionSize = retrieveInstructionSizeFrom(routeProgress.getCurrentLeg());
     assertEquals(expectedInstructionSize, presenter.retrieveBannerInstructionListSize());
-
-    routeUtilsMock.close();
   }
 
   @Test
   public void updateBannerListWith_instructionListIsPopulated() throws Exception {
     RouteProgress routeProgress = buildRouteProgress();
-    MockedStatic<RouteUtils> routeUtilsMock = mockRouteUtils(routeProgress);
+    RouteUtils routeUtilsMock = mockRouteUtils(routeProgress);
     DistanceFormatter distanceFormatter = mock(DistanceFormatter.class);
     InstructionListPresenter presenter = new InstructionListPresenter(distanceFormatter);
 
     boolean didUpdate = presenter.updateBannerListWith(routeProgress);
 
     assertTrue(didUpdate);
-    routeUtilsMock.close();
   }
 
   @Test
   public void updateBannerListWith_emptyInstructionsReturnFalse() throws Exception {
     RouteProgress routeProgress = buildRouteProgress();
-    MockedStatic<RouteUtils> routeUtilsMock = mockRouteUtils(routeProgress);
+    RouteUtils routeUtilsMock = mockRouteUtils(routeProgress);
     clearInstructions(routeProgress);
     DistanceFormatter distanceFormatter = mock(DistanceFormatter.class);
     InstructionListPresenter presenter = new InstructionListPresenter(distanceFormatter);
@@ -137,14 +134,13 @@ public class InstructionListPresenterTest extends BaseTest {
     boolean didUpdate = presenter.updateBannerListWith(routeProgress);
 
     assertFalse(didUpdate);
-    routeUtilsMock.close();
   }
 
   @Test
   public void updateDistanceFormatter_newFormatterIsUsed() throws Exception {
     RouteProgress routeProgress = buildRouteProgress();
     DistanceFormatter firstDistanceFormatter = buildDistanceFormatter();
-    MockedStatic<RouteUtils> routeUtilsMock = mockRouteUtils(routeProgress);
+    RouteUtils routeUtilsMock = mockRouteUtils(routeProgress);
     InstructionListPresenter presenter = buildPresenter(firstDistanceFormatter);
     presenter.updateBannerListWith(routeProgress);
     InstructionListView listView = mock(InstructionListView.class);
@@ -154,7 +150,6 @@ public class InstructionListPresenterTest extends BaseTest {
     presenter.onBindInstructionListViewAtPosition(0, listView);
 
     verify(secondDistanceFormatter).formatDistance(anyDouble());
-    routeUtilsMock.close();
   }
 
   @Test
@@ -191,11 +186,11 @@ public class InstructionListPresenterTest extends BaseTest {
   }
 
   @NonNull
-  private MockedStatic<RouteUtils> mockRouteUtils(RouteProgress routeProgress) {
-    MockedStatic<RouteUtils> staticMock = mockStatic(RouteUtils.class);
+  private RouteUtils mockRouteUtils(RouteProgress routeProgress) {
     BannerInstructions instructions = routeProgress.getCurrentLegProgress().getCurrentStep().getBannerInstructions().get(FIRST);
-    when(RouteUtils.findCurrentBannerInstructions(any(LegStep.class), anyDouble())).thenReturn(instructions);
-    return staticMock;
+    RouteUtils routeUtils = mock(RouteUtils.class);
+    when(routeUtils.findCurrentBannerInstructions(any(LegStep.class), anyDouble())).thenReturn(instructions);
+    return routeUtils;
   }
 
   @NonNull
