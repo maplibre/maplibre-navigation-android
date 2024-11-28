@@ -4,7 +4,7 @@ import android.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-internal class RouteProcessorThreadListener(
+open class RouteProcessorThreadListener(
     private val eventDispatcher: NavigationEventDispatcher,
     private val notificationProvider: NavigationNotificationProvider
 ) : RouteProcessorBackgroundThread.Listener {

@@ -28,7 +28,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChang
 import org.maplibre.navigation.android.navigation.v5.snap.Snap
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
-import org.maplibre.navigation.android.navigation.v5.utils.ValidationUtils.validDirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.utils.ValidationUtils
 import timber.log.Timber
 
 /**
@@ -93,7 +93,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var snapEngine: Snap = SnapToRoute(),
     var offRouteEngine: OffRoute = OffRouteDetector(),
     var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
-    val routeUtils: RouteUtils = RouteUtils()
+    val routeUtils: RouteUtils = RouteUtils(),
 ) : ServiceConnection {
 
     private var navigationService: NavigationService? = null
@@ -242,7 +242,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * @since 0.1.0
      */
     fun startNavigation(directionsRoute: DirectionsRoute) {
-        validDirectionsRoute(directionsRoute, options.defaultMilestonesEnabled)
+        ValidationUtils.validDirectionsRoute(directionsRoute, options.defaultMilestonesEnabled)
         this.route = directionsRoute
         Timber.d("MapLibreNavigation startNavigation called.")
 

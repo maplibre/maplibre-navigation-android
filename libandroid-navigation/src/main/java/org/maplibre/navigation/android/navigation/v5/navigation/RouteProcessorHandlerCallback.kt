@@ -9,7 +9,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.isUserOffRoute
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-internal class RouteProcessorHandlerCallback(
+open class RouteProcessorHandlerCallback(
     private val routeProcessor: NavigationRouteProcessor,
     private val responseHandler: Handler,
     private val listener: RouteProcessorBackgroundThread.Listener

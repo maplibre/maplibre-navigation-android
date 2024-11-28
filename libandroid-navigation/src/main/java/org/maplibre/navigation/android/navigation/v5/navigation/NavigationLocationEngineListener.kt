@@ -5,7 +5,7 @@ import org.maplibre.android.location.engine.LocationEngineCallback
 import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.navigation.android.navigation.v5.location.LocationValidator
 
-internal class NavigationLocationEngineListener(
+open class NavigationLocationEngineListener(
     private val thread: RouteProcessorBackgroundThread,
     private val mapLibreNavigation: MapLibreNavigation,
     private val validator: LocationValidator

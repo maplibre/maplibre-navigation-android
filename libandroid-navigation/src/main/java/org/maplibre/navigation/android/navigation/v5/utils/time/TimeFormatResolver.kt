@@ -4,7 +4,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 import java.util.Calendar
 
 
-internal interface TimeFormatResolver {
+interface TimeFormatResolver {
     fun nextChain(chain: TimeFormatResolver?)
 
     fun obtainTimeFormatted(type: MapLibreNavigationOptions.TimeFormat, time: Calendar): String?

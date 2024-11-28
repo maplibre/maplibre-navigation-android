@@ -5,7 +5,7 @@ import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
 
-object ManeuverUtils {
+open class ManeuverUtils {
 
     private val maneuverResources = mutableMapOf(
         NavigationConstants.STEP_MANEUVER_TYPE_TURN + NavigationConstants.STEP_MANEUVER_MODIFIER_UTURN to R.drawable.ic_maneuver_turn_180,
@@ -151,7 +151,6 @@ object ManeuverUtils {
                 R.drawable.ic_maneuver_turn_0,
     )
 
-    @JvmStatic
     fun getManeuverResource(step: LegStep): Int {
         val maneuver = step.maneuver
 

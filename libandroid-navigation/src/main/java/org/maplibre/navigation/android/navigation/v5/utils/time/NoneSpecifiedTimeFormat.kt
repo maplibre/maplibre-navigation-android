@@ -5,7 +5,7 @@ import java.util.Calendar
 import java.util.Locale
 
 
-internal class NoneSpecifiedTimeFormat(
+open class NoneSpecifiedTimeFormat(
     private val isDeviceTwentyFourHourFormat: Boolean
 ) : TimeFormatResolver {
 

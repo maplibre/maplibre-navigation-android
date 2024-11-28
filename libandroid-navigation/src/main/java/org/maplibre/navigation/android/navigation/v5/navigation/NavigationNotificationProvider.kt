@@ -4,7 +4,7 @@ import android.content.Context
 import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-internal class NavigationNotificationProvider(
+open class NavigationNotificationProvider(
     context: Context,
     mapLibreNavigation: MapLibreNavigation
 ) {

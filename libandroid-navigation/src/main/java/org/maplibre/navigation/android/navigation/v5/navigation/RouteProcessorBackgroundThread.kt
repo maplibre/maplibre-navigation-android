@@ -12,7 +12,7 @@ import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
  * This class extends handler thread to run most of the navigation calculations on a separate
  * background thread.
  */
-internal class RouteProcessorBackgroundThread(
+open class RouteProcessorBackgroundThread(
     val responseHandler: Handler,
     val listener: Listener,
     private val routeUtils: RouteUtils
@@ -46,7 +46,7 @@ internal class RouteProcessorBackgroundThread(
      * finished and within Navigation Service it is determined if the public corresponding listeners
      * need invoking or not; the Navigation event dispatcher class handles those callbacks.
      */
-    internal interface Listener {
+    interface Listener {
         fun onNewRouteProgress(location: Location, routeProgress: RouteProgress)
 
         fun onMilestoneTrigger(triggeredMilestones: List<Milestone>, routeProgress: RouteProgress)

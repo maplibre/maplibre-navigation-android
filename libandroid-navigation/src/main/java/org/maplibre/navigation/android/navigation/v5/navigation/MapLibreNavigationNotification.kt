@@ -20,16 +20,17 @@ import org.maplibre.navigation.android.navigation.v5.navigation.notification.Nav
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
-import org.maplibre.navigation.android.navigation.v5.utils.ManeuverUtils.getManeuverResource
+import org.maplibre.navigation.android.navigation.v5.utils.ManeuverUtils
 import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter
 import java.util.Calendar
 
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
-internal class MapLibreNavigationNotification(
+open class MapLibreNavigationNotification(
     context: Context,
-    private val mapLibreNavigation: MapLibreNavigation
+    private val mapLibreNavigation: MapLibreNavigation,
+    private val maneuverUtils: ManeuverUtils = ManeuverUtils()
 ) : NavigationNotification {
     private val etaFormat = context.getString(R.string.eta_format)
     private val notificationManager =
@@ -242,7 +243,7 @@ internal class MapLibreNavigationNotification(
 
     private fun updateManeuverImage(step: LegStep) {
         if (newManeuverId(step)) {
-            val maneuverResource = getManeuverResource(step)
+            val maneuverResource = maneuverUtils.getManeuverResource(step)
             currentManeuverId = maneuverResource
             collapsedNotificationRemoteViews.setImageViewResource(
                 R.id.maneuverImage,
@@ -256,7 +257,7 @@ internal class MapLibreNavigationNotification(
     }
 
     private fun newManeuverId(step: LegStep): Boolean {
-        return currentManeuverId != getManeuverResource(step)
+        return currentManeuverId != maneuverUtils.getManeuverResource(step)
     }
 
     private fun createPendingCloseIntent(context: Context): PendingIntent {

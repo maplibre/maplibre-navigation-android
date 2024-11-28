@@ -10,7 +10,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import timber.log.Timber
 
-internal class NavigationLocationEngineUpdater(
+open class NavigationLocationEngineUpdater(
     private var locationEngine: LocationEngine,
     private val listener: NavigationLocationEngineListener,
     private val routeUtils: RouteUtils

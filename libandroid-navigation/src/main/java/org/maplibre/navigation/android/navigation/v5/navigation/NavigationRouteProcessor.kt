@@ -24,7 +24,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.CurrentLegAnn
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
-internal class NavigationRouteProcessor(
+open class NavigationRouteProcessor(
     private val routeUtils: RouteUtils
 ) : OffRouteCallback {
 

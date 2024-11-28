@@ -8,7 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.maplibre.geojson.Point
 
-internal class PointSerializer : KSerializer<Point> {
+class PointSerializer : KSerializer<Point> {
     private val delegateSerializer = DoubleArraySerializer()
 
     @OptIn(ExperimentalSerializationApi::class)

@@ -5,7 +5,7 @@ import java.util.Calendar
 import java.util.Locale
 
 
-internal class TwentyFourHoursTimeFormat : TimeFormatResolver {
+open class TwentyFourHoursTimeFormat : TimeFormatResolver {
     private var chain: TimeFormatResolver? = null
 
     override fun nextChain(chain: TimeFormatResolver?) {

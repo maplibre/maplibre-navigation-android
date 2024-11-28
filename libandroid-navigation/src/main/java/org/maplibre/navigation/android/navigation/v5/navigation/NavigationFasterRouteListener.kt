@@ -6,7 +6,7 @@ import org.maplibre.navigation.android.navigation.v5.route.RouteListener
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import timber.log.Timber
 
-internal class NavigationFasterRouteListener(
+open class NavigationFasterRouteListener(
     private val eventDispatcher: NavigationEventDispatcher,
     private val fasterRouteEngine: FasterRoute
 ) : RouteListener {

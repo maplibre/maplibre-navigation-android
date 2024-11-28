@@ -4,7 +4,7 @@ import android.location.Location
 import android.os.Handler
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class ReplayLocationDispatcher(
+open class ReplayLocationDispatcher(
     locationsToReplay: List<Location>,
     private var handler: Handler = Handler()
 ) : Runnable {
