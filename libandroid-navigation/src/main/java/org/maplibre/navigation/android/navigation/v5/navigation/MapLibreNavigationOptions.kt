@@ -67,10 +67,15 @@ data class MapLibreNavigationOptions(
     val metersRemainingTillArrival: Double = Defaults.METERS_REMAINING_TILL_ARRIVAL,
 
     /**
-     * Minimum distance in meters that the user must travel after a re-routing was done. in the wrong direction before the
-     * off-route logic recognizes the user is moving away from upcoming maneuver
+     * Minimum distance in meters that the user must travel after a re-routing was done.
      */
     val offRouteMinimumDistanceMetersAfterReroute: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE,
+
+    /**
+     * Threshold for off-route detection. If the user is outside of this defined radius,
+     * the user always is off route. Radius defined in meters.
+     */
+    val offRouteThresholdRadiusMeters: Double = Defaults.OFF_ROUTE_THRESHOLD_RADIUS_METERS,
 
     /**
      * Minimum distance in meters that the user must travel in the wrong direction before the
@@ -128,6 +133,7 @@ data class MapLibreNavigationOptions(
             .withManuallyEndNavigationUponCompletion(manuallyEndNavigationUponCompletion)
             .withMetersRemainingTillArrival(metersRemainingTillArrival)
             .withOffRouteMinimumDistanceMetersAfterReroute(offRouteMinimumDistanceMetersAfterReroute)
+            .withOffRouteThresholdRadiusMeters(offRouteThresholdRadiusMeters)
             .withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection)
             .withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection)
             .withIsDebugLoggingEnabled(isDebugLoggingEnabled)
@@ -158,6 +164,7 @@ data class MapLibreNavigationOptions(
         const val MANUALLY_END_NAVIGATION_UPON_COMPLETION = false
         const val METERS_REMAINING_TILL_ARRIVAL = 40.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE = 50.0
+        const val OFF_ROUTE_THRESHOLD_RADIUS_METERS = 50.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION = 50.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION = 20.0
         const val IS_DEBUG_LOGGING_ENABLED = false
@@ -180,6 +187,7 @@ data class MapLibreNavigationOptions(
         private var manuallyEndNavigationUponCompletion: Boolean = Defaults.MANUALLY_END_NAVIGATION_UPON_COMPLETION
         private var metersRemainingTillArrival: Double = Defaults.METERS_REMAINING_TILL_ARRIVAL
         private var offRouteMinimumDistanceMetersAfterReroute: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_AFTER_REROUTE
+        private var offRouteThresholdRadiusMeters: Double = Defaults.OFF_ROUTE_THRESHOLD_RADIUS_METERS
         private var offRouteMinimumDistanceMetersBeforeWrongDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION
         private var offRouteMinimumDistanceMetersBeforeRightDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION
         private var isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED
@@ -202,6 +210,7 @@ data class MapLibreNavigationOptions(
         fun withManuallyEndNavigationUponCompletion(manuallyEndNavigationUponCompletion: Boolean) = apply { this.manuallyEndNavigationUponCompletion = manuallyEndNavigationUponCompletion }
         fun withMetersRemainingTillArrival(metersRemainingTillArrival: Double) = apply { this.metersRemainingTillArrival = metersRemainingTillArrival }
         fun withOffRouteMinimumDistanceMetersAfterReroute(offRouteMinimumDistanceMetersAfterReroute: Double) = apply { this.offRouteMinimumDistanceMetersAfterReroute = offRouteMinimumDistanceMetersAfterReroute }
+        fun withOffRouteThresholdRadiusMeters(offRouteThresholdRadiusMeters: Double) = apply { this.offRouteThresholdRadiusMeters = offRouteThresholdRadiusMeters }
         fun withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeWrongDirection = offRouteMinimumDistanceMetersBeforeWrongDirection }
         fun withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeRightDirection = offRouteMinimumDistanceMetersBeforeRightDirection }
         fun withIsDebugLoggingEnabled(isDebugLoggingEnabled: Boolean) = apply { this.isDebugLoggingEnabled = isDebugLoggingEnabled }
@@ -226,6 +235,7 @@ data class MapLibreNavigationOptions(
                 manuallyEndNavigationUponCompletion,
                 metersRemainingTillArrival,
                 offRouteMinimumDistanceMetersAfterReroute,
+                offRouteThresholdRadiusMeters,
                 offRouteMinimumDistanceMetersBeforeWrongDirection,
                 offRouteMinimumDistanceMetersBeforeRightDirection,
                 isDebugLoggingEnabled,

@@ -20,7 +20,7 @@ class ToleranceUtilsTest : BaseTest() {
         )
         val midPoint = TurfMeasurement.midpoint(stepPoints[0], stepPoints[1])
 
-        val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             midPoint,
             routeProgress,
             MapLibreNavigationOptions()
@@ -42,7 +42,7 @@ class ToleranceUtilsTest : BaseTest() {
         val closePoint =
             TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS)
 
-        val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,
             routeProgress,
             MapLibreNavigationOptions()
@@ -63,7 +63,7 @@ class ToleranceUtilsTest : BaseTest() {
         val closePoint =
             TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS)
 
-        val tolerance = ToleranceUtils.dynamicRerouteDistanceTolerance(
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,
             routeProgress,
             MapLibreNavigationOptions()

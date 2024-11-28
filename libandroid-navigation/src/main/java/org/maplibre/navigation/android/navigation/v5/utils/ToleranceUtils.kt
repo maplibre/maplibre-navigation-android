@@ -10,11 +10,11 @@ import org.maplibre.turf.TurfMeasurement
 object ToleranceUtils {
 
     /**
-     * Reduce the minimumDistanceBeforeRerouting if we are close to an intersection.
+     * Reduce the offRouteMinimumDistanceMetersBeforeWrongDirection if we are close to an intersection.
      * You can define these values in the navigationOptions
      */
     @JvmStatic
-    fun dynamicRerouteDistanceTolerance(
+    fun dynamicOffRouteRadiusTolerance(
         snappedPoint: Point,
         routeProgress: RouteProgress,
         navigationOptions: MapLibreNavigationOptions
@@ -28,7 +28,7 @@ object ToleranceUtils {
 
             val closestIntersection = TurfClassification.nearestPoint(snappedPoint, intersectionsPoints)
             if (closestIntersection == snappedPoint) {
-                return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection
+                return navigationOptions.offRouteThresholdRadiusMeters
             }
 
             val distanceToNextIntersection = TurfMeasurement.distance(
@@ -38,10 +38,10 @@ object ToleranceUtils {
             )
 
             if (distanceToNextIntersection <= navigationOptions.maneuverZoneRadius) {
-                return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection / 2
+                return navigationOptions.offRouteThresholdRadiusMeters / 2
             }
         }
 
-        return navigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection
+        return navigationOptions.offRouteThresholdRadiusMeters
     }
 }

@@ -8,7 +8,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.MeasurementUtils.userTrueDistanceFromStep
 import org.maplibre.navigation.android.navigation.v5.utils.RingBuffer
-import org.maplibre.navigation.android.navigation.v5.utils.ToleranceUtils.dynamicRerouteDistanceTolerance
+import org.maplibre.navigation.android.navigation.v5.utils.ToleranceUtils.dynamicOffRouteRadiusTolerance
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
@@ -162,7 +162,7 @@ open class OffRouteDetector(
         options: MapLibreNavigationOptions,
         currentPoint: Point
     ): Double {
-        val dynamicTolerance = dynamicRerouteDistanceTolerance(currentPoint, routeProgress, options)
+        val dynamicTolerance = dynamicOffRouteRadiusTolerance(currentPoint, routeProgress, options)
         val accuracyTolerance = location.accuracy * options.deadReckoningTimeInterval
         return max(dynamicTolerance, accuracyTolerance)
     }
@@ -291,6 +291,7 @@ open class OffRouteDetector(
     }
 
     companion object {
-        private const val TWO_POINTS = 2
+        @JvmStatic
+        protected val TWO_POINTS = 2
     }
 }
