@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.v5.location
 
 import android.location.Location
 
-class LocationValidator(private val accuracyThreshold: Int) {
+open class LocationValidator(private val accuracyThreshold: Int) {
     private var lastValidLocation: Location? = null
 
     fun isValidUpdate(location: Location): Boolean {

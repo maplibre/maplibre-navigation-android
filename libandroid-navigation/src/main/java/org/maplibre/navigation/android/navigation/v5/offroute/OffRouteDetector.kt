@@ -17,7 +17,7 @@ import kotlin.math.max
 /**
  * @param callback a callback that is fired for different off-route scenarios.
  */
-class OffRouteDetector(
+open class OffRouteDetector(
     /**
      * A callback that is fired for different off-route scenarios.
      *

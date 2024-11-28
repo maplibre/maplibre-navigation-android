@@ -13,7 +13,7 @@ import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 
-class ReplayRouteLocationEngine : LocationEngine, Runnable {
+open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED
     private var delay = DEFAULT_DELAY

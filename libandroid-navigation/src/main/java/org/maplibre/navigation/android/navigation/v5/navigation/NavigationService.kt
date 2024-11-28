@@ -26,7 +26,7 @@ import java.lang.ref.WeakReference
  * gets destroyed.
  *
  */
-class NavigationService : Service() {
+open class NavigationService : Service() {
     private val localBinder: IBinder = LocalBinder(this)
     private var thread: RouteProcessorBackgroundThread? = null
     private var locationEngineUpdater: NavigationLocationEngineUpdater? = null

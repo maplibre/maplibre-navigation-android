@@ -22,7 +22,7 @@ import org.maplibre.android.location.engine.LocationEngineResult
 /**
  * Wraps implementation of Fused Location Provider
  */
-class GoogleLocationEngineImpl(
+open class GoogleLocationEngineImpl(
     private val context: Context,
     private val fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
         context

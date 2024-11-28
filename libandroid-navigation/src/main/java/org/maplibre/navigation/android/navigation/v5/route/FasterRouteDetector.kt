@@ -12,7 +12,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProg
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-class FasterRouteDetector(private val navigationOptions: MapLibreNavigationOptions) :
+open class FasterRouteDetector(private val navigationOptions: MapLibreNavigationOptions) :
     FasterRoute() {
     private var lastCheckedLocation: Location? = null
 

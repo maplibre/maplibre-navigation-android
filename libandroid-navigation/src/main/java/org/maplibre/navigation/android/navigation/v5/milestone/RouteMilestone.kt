@@ -10,7 +10,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
  *
  * @since 0.4.0
  */
-class RouteMilestone(
+open class RouteMilestone(
     identifier: Int,
     instruction: Instruction?,
     trigger: Trigger.Statement?

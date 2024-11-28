@@ -20,7 +20,7 @@ import org.maplibre.turf.TurfMisc
  *
  * @since 0.4.0
  */
-class SnapToRoute : Snap() {
+open class SnapToRoute : Snap() {
     /**
      * Last calculated snapped bearing. This will be re-used if bearing can not calculated.
      * Is NULL if no bearing was calculated yet.

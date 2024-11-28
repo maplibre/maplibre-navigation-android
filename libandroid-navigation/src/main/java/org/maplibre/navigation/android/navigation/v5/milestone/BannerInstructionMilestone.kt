@@ -14,7 +14,7 @@ import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigati
  * Please note, this milestone has a custom trigger based on location progress along a route.  If you
  * set custom triggers, they will be ignored in favor of this logic.
  */
-class BannerInstructionMilestone(
+open class BannerInstructionMilestone(
     identifier: Int,
     instruction: Instruction? = null,
     trigger: Trigger.Statement? = null

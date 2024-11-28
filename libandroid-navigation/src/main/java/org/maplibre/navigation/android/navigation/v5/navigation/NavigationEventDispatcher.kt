@@ -11,7 +11,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 
-class NavigationEventDispatcher {
+open class NavigationEventDispatcher {
     private val navigationEventListeners = CopyOnWriteArrayList<NavigationEventListener>()
     private val milestoneEventListeners = CopyOnWriteArrayList<MilestoneEventListener>()
     private val progressChangeListeners = CopyOnWriteArrayList<ProgressChangeListener>()

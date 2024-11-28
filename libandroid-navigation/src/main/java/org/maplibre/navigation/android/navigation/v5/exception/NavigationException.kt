@@ -8,4 +8,4 @@ package org.maplibre.navigation.android.navigation.v5.exception
  *  [.getMessage] method).
  * @since 0.2.0
  */
-class NavigationException(message: String) : RuntimeException(message)
+open class NavigationException(message: String) : RuntimeException(message)
