@@ -26,6 +26,12 @@ interface Camera {
     fun tilt(routeInformation: RouteInformation): Double
 
     /**
+     * The location that the camera is pointing at.
+     */
+    fun target(routeInformation: RouteInformation): Point?
+
+
+    /**
      * Zoom level near the center of the screen. See zoom(float) for the definition of the camera's
      * zoom level.
      */
