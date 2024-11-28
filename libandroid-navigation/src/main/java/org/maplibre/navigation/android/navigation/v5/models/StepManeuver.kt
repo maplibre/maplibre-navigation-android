@@ -66,7 +66,7 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    val modifier: String?,
+    val modifier: ManeuverModifier.Type?,
 
     /**
      * An optional integer indicating number of the exit to take. If exit is undefined the destination

@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
  *
  * @since 5.2.0
  */
-@Suppress("unused")
 object ManeuverModifier {
 
     @Serializable
