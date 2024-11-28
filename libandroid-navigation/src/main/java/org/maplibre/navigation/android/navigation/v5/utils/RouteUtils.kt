@@ -6,11 +6,13 @@ import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
+import org.maplibre.navigation.android.navigation.v5.models.BannerText
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+
 
 open class RouteUtils {
 
@@ -179,6 +181,37 @@ open class RouteUtils {
                 }
                 instructions.firstOrNull()
             }
+    }
+
+    /**
+     * This method returns the current [BannerText] based on the currentStep distance
+     * remaining.
+     *
+     *
+     * When called, this is the banner text that should be shown at the given point along the route.
+     *
+     * @param currentStep           holding the current banner instructions
+     * @param stepDistanceRemaining to determine progress along the currentStep
+     * @param findPrimary           if the primary or secondary BannerText should be retrieved
+     * @return current BannerText based on currentStep distance remaining
+     * @since 0.13.0
+     */
+    fun findCurrentBannerText(
+        currentStep: LegStep,
+        stepDistanceRemaining: Double,
+        findPrimary: Boolean
+    ): BannerText? {
+        return findCurrentBannerInstructions(currentStep, stepDistanceRemaining)
+            ?.let { instructions ->
+            retrievePrimaryOrSecondaryBannerText(findPrimary, instructions)
+        }
+    }
+
+    private fun retrievePrimaryOrSecondaryBannerText(
+        findPrimary: Boolean,
+        instruction: BannerInstructions
+    ): BannerText? {
+        return if (findPrimary) instruction.primary else instruction.secondary
     }
 
     /**

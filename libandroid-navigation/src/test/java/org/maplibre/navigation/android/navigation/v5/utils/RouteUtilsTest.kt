@@ -13,6 +13,7 @@ import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
+
 class RouteUtilsTest : BaseTest() {
 
     private val routeUtils = RouteUtils()
@@ -194,6 +195,44 @@ class RouteUtilsTest : BaseTest() {
         )
 
         Assert.assertEquals(currentStep.bannerInstructions?.first(), currentBannerInstructions)
+    }
+
+
+    @Test
+    @Throws(java.lang.Exception::class)
+    fun findCurrentBannerText_returnsCorrectPrimaryBannerText() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = 1,
+            stepDistanceRemaining = 50.0
+        )
+        val currentStep = routeProgress.currentLegProgress.currentStep
+        val stepDistanceRemaining = routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+        val routeUtils = RouteUtils()
+
+        val currentBannerText = routeUtils.findCurrentBannerText(
+            currentStep, stepDistanceRemaining, true
+        )
+
+        Assert.assertEquals(currentStep.bannerInstructions!![1].primary, currentBannerText)
+    }
+
+    @Test
+    @Throws(java.lang.Exception::class)
+    fun findCurrentBannerText_returnsCorrectSecondaryBannerText() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = 1,
+            stepDistanceRemaining = 50.0
+        )
+        val currentStep = routeProgress.currentLegProgress.currentStep
+        val stepDistanceRemaining =
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+        val routeUtils = RouteUtils()
+
+        val currentBannerText = routeUtils.findCurrentBannerText(
+            currentStep, stepDistanceRemaining, false
+        )
+
+        Assert.assertEquals(currentStep.bannerInstructions!!.get(1).secondary, currentBannerText)
     }
 
     @Test
