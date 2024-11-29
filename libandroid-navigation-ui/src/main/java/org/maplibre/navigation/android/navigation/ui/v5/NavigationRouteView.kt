@@ -127,7 +127,7 @@ class NavigationRouteView @JvmOverloads constructor(
         ThemeSwitcher.setTheme(context, attrs, style)
         initializeNavigationViewModel(context)
         initializeView()
-        mapStyle = if (style == MapRouteData.LIGHT_THEME) context.getString(R.string.map_style_light) else context.getString(R.string.map_style_dark)
+        mapStyle = style
         mapView?.let {
             it.apply {
                 if (!isMapInitialized) {
