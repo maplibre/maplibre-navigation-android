@@ -58,7 +58,12 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
 
     fun updateDelay(customDelayInSeconds: Int) {
         require(customDelayInSeconds > 0) { DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS }
-        this.delay = customDelayInSeconds
+        this.delay = customDelayInSeconds * ONE_SECOND_IN_MILLISECONDS
+    }
+
+    fun updateDelayMs(customDelayInMilliseconds: Long) {
+        require(customDelayInMilliseconds > 0) { DELAY_MUST_BE_GREATER_THAN_ZERO_MILLISECONDS }
+        this.delay = customDelayInMilliseconds
     }
 
     override fun run() {
@@ -106,7 +111,7 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         converter?.let { converter ->
             handler.removeCallbacks(this)
             converter.updateSpeed(speed)
-            converter.updateDelay(delay)
+            converter.updateDelayMs(delay)
             converter.initializeTime()
 
             val route = obtainRoute(point, lastLocation)
@@ -128,11 +133,11 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         if (currentMockedPoints == ZERO) {
             handler.postDelayed(this, DO_NOT_DELAY.toLong())
         } else if (currentMockedPoints <= MOCKED_POINTS_LEFT_THRESHOLD) {
-            handler.postDelayed(this, ONE_SECOND_IN_MILLISECONDS.toLong())
+            handler.postDelayed(this, delay)
         } else {
             handler.postDelayed(
                 this,
-                ((currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * ONE_SECOND_IN_MILLISECONDS).toLong()
+                ((currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * delay)
             )
         }
     }
@@ -182,17 +187,18 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
 
     companion object {
         private const val MOCKED_POINTS_LEFT_THRESHOLD = 5
-        private const val ONE_SECOND_IN_MILLISECONDS = 1000
+        private const val ONE_SECOND_IN_MILLISECONDS = 1000L
         private const val FORTY_FIVE_KM_PER_HOUR = 45
         private const val DEFAULT_SPEED = FORTY_FIVE_KM_PER_HOUR
-        private const val ONE_SECOND = 1
-        private const val DEFAULT_DELAY = ONE_SECOND
+        private const val DEFAULT_DELAY = ONE_SECOND_IN_MILLISECONDS
         private const val DO_NOT_DELAY = 0
         private const val ZERO = 0
         private const val SPEED_MUST_BE_GREATER_THAN_ZERO_KM_H =
             "Speed must be greater than 0 km/h."
         private const val DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS =
             "Delay must be greater than 0 seconds."
+        private const val DELAY_MUST_BE_GREATER_THAN_ZERO_MILLISECONDS =
+            "Delay must be greater than 0 milliseconds."
         private const val REPLAY_ROUTE = "ReplayRouteLocation"
     }
 }

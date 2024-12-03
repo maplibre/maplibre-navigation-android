@@ -11,7 +11,7 @@ import org.maplibre.turf.TurfMeasurement
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
     private var speed: Int,
-    private var delay: Int
+    private var delay: Long
 ) {
     private var distance = calculateDistancePerSec()
     private var currentLeg = 0
@@ -27,7 +27,11 @@ open class ReplayRouteLocationConverter(
     }
 
     fun updateDelay(customDelayInSeconds: Int) {
-        this.delay = customDelayInSeconds
+        this.delay = customDelayInSeconds * ONE_SECOND_IN_MILLISECONDS
+    }
+
+    fun updateDelayMs(customDelayInMilliseconds: Long) {
+        this.delay = customDelayInMilliseconds
     }
 
     fun toLocations(): MutableList<Location> {
@@ -78,7 +82,7 @@ open class ReplayRouteLocationConverter(
             } else {
                 mockedLocation.bearing = 0f
             }
-            time += (delay * ONE_SECOND_IN_MILLISECONDS).toLong()
+            time += delay
             mockedLocations.add(mockedLocation)
         }
 
@@ -91,7 +95,7 @@ open class ReplayRouteLocationConverter(
      * @return a double value representing the distance given a speed and time.
      */
     private fun calculateDistancePerSec(): Double {
-        val distance = (speed * ONE_KM_IN_METERS * delay) / ONE_HOUR_IN_SECONDS
+        val distance = (speed * ONE_KM_IN_METERS * delay) / (ONE_HOUR_IN_SECONDS * ONE_SECOND_IN_MILLISECONDS)
         return distance
     }
 
@@ -126,7 +130,7 @@ open class ReplayRouteLocationConverter(
     }
 
     companion object {
-        private const val ONE_SECOND_IN_MILLISECONDS = 1000
+        private const val ONE_SECOND_IN_MILLISECONDS = 1000L
         private const val ONE_KM_IN_METERS = 1000.0
         private const val ONE_HOUR_IN_SECONDS = 3600
         private const val REPLAY_ROUTE = "ReplayRouteLocation"
