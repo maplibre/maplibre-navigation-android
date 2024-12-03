@@ -21,7 +21,7 @@ class RouteComparator {
 
   void compare(@NonNull DirectionsResponse response, @Nullable DirectionsRoute chosenRoute) {
     if (isValidRoute(response)) {
-      List<DirectionsRoute> routes = response.routes();
+      List<DirectionsRoute> routes = response.getRoutes();
       DirectionsRoute bestRoute = routes.get(FIRST_ROUTE);
       if (isNavigationRunning(chosenRoute)) {
         bestRoute = findMostSimilarRoute(routes, bestRoute, chosenRoute);
@@ -55,16 +55,16 @@ class RouteComparator {
   }
 
   private String obtainRouteLegDescriptionFrom(DirectionsRoute route) {
-    List<RouteLeg> routeLegs = route.legs();
+    List<RouteLeg> routeLegs = route.getLegs();
     StringBuilder routeLegDescription = new StringBuilder();
     for (RouteLeg leg : routeLegs) {
-      routeLegDescription.append(leg.summary());
+      routeLegDescription.append(leg.getSummary());
     }
     return routeLegDescription.toString();
   }
 
   private boolean isValidRoute(DirectionsResponse response) {
-    return response != null && !response.routes().isEmpty();
+    return response != null && !response.getRoutes().isEmpty();
   }
 
   private boolean isNavigationRunning(DirectionsRoute chosenRoute) {

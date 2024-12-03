@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
+apply plugin: 'kotlinx-serialization'
 
 java {
     toolchain {
@@ -67,6 +68,9 @@ dependencies {
     api dependenciesList.mapLibreTurf
     implementation dependenciesList.mapLibre
 
+    implementation dependenciesList.androidxCore
+    implementation dependenciesList.kotlinstdlib
+
     compileOnly dependenciesList.gmsLocation
 
     // Support
@@ -76,20 +80,15 @@ dependencies {
     // Logging
     implementation dependenciesList.timber
 
-    // AutoValues
-    annotationProcessor dependenciesList.autoValue
-    compileOnly dependenciesList.autoValueAnnotations
-    compileOnly dependenciesList.autoValueGson
-    annotationProcessor(dependenciesList.autoValueGson)
-
+    implementation dependenciesList.kotlinxSerializationJson
+    
     // Unit testing
     testImplementation dependenciesList.junit
-    testImplementation dependenciesList.mockito
     testImplementation dependenciesList.hamcrest
     testImplementation dependenciesList.commonsIO
     testImplementation dependenciesList.robolectric
-    implementation dependenciesList.androidxCore
-    implementation dependenciesList.kotlinstdlib
+    testImplementation dependenciesList.androidxTestKtx
+    testImplementation dependenciesList.mockk
 }
 
 apply from: 'javadoc.gradle'

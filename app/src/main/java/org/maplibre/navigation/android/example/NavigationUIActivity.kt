@@ -27,7 +27,7 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -72,7 +72,10 @@ class NavigationUIActivity :
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
                     .shouldSimulateRoute(simulateRoute)
-                    .initialMapCameraPosition(CameraPosition.Builder().target(LatLng(userLocation.latitude, userLocation.longitude)).build())
+                    .initialMapCameraPosition(
+                        CameraPosition.Builder()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                    )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
                     .build()
@@ -102,22 +105,20 @@ class NavigationUIActivity :
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         this.mapLibreMap = mapLibreMap
-        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+        mapLibreMap.setStyle(
+            Style.Builder().fromUri(getString(R.string.map_style_light))
+        ) { style ->
             enableLocationComponent(style)
+            navigationMapRoute = NavigationMapRoute(binding.mapView, mapLibreMap)
+
+            mapLibreMap.addOnMapClickListener(this)
+
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
         }
-
-        navigationMapRoute =
-            NavigationMapRoute(
-                binding.mapView,
-                mapLibreMap
-            )
-
-        mapLibreMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
     }
 
     @SuppressWarnings("MissingPermission")
@@ -199,10 +200,10 @@ class NavigationUIActivity :
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
-                    if (response.routes().isNotEmpty()) {
+                    if (response.routes.isNotEmpty()) {
                         val maplibreResponse = DirectionsResponse.fromJson(response.toJson());
-                        this@NavigationUIActivity.route = maplibreResponse.routes().first()
-                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                        this@NavigationUIActivity.route = maplibreResponse.routes.first()
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes)
                         binding.startRouteLayout.visibility = View.VISIBLE
                     }
                 }

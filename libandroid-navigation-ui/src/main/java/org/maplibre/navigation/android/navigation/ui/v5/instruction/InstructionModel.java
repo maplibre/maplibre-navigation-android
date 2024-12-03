@@ -13,9 +13,9 @@ public class InstructionModel {
 
   public InstructionModel(DistanceFormatter distanceFormatter, RouteProgress progress) {
     this.progress = progress;
-    double distanceRemaining = progress.currentLegProgress().currentStepProgress().distanceRemaining();
+    double distanceRemaining = progress.getCurrentLegProgress().getCurrentStepProgress().getDistanceRemaining();
     stepDistanceRemaining = distanceFormatter.formatDistance(distanceRemaining);
-    this.drivingSide = progress.currentLegProgress().currentStep().drivingSide();
+    this.drivingSide = progress.getCurrentLegProgress().getCurrentStep().getDrivingSide();
   }
 
   RouteProgress retrieveProgress() {

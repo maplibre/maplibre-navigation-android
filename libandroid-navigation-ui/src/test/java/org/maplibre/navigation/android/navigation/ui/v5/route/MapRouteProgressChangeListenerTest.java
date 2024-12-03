@@ -29,7 +29,7 @@ public class MapRouteProgressChangeListenerTest {
     MapRouteProgressChangeListener progressChangeListener = new MapRouteProgressChangeListener(routeLine, routeArrow);
     RouteProgress routeProgress = mock(RouteProgress.class);
     DirectionsRoute newRoute = mock(DirectionsRoute.class);
-    when(routeProgress.directionsRoute()).thenReturn(newRoute);
+    when(routeProgress.getDirectionsRoute()).thenReturn(newRoute);
 
     progressChangeListener.onProgressChange(mock(Location.class), routeProgress);
 

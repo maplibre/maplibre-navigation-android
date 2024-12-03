@@ -27,10 +27,10 @@ class ExitSignCreator extends NodeCreator<BannerComponentNode, ExitSignVerifier>
   @Override
   BannerComponentNode setupNode(BannerComponents components, int index, int startIndex,
                                 String modifier) {
-    if (components.type().equals(EXIT)) {
+    if (components.getType().equals(EXIT)) {
       return null;
-    } else if (components.type().equals(EXIT_NUMBER)) {
-      exitNumber = components.text();
+    } else if (components.getType().equals(EXIT_NUMBER)) {
+      exitNumber = components.getText();
       this.startIndex = startIndex;
       this.modifier = modifier;
     }

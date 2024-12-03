@@ -34,19 +34,23 @@ class BannerComponentTree {
     int length = 0;
     List<BannerComponentNode> bannerComponentNodes = new ArrayList<>();
 
-    for (BannerComponents components : bannerText.components()) {
+    for (BannerComponents components : bannerText.getComponents()) {
       BannerComponentNode node = null;
       for (NodeCreator nodeCreator : nodeCreators) {
         if (nodeCreator.isNodeType(components)) {
-          node = nodeCreator.setupNode(components, bannerComponentNodes.size(), length,
-            bannerText.modifier());
+          String modifier = null;
+          if (bannerText.getModifier() != null) {
+            modifier = bannerText.getModifier().getText();
+          }
+
+          node = nodeCreator.setupNode(components, bannerComponentNodes.size(), length, modifier);
           break;
         }
       }
 
       if (node != null) {
         bannerComponentNodes.add(node);
-        length += components.text().length();
+        length += components.getText().length();
       }
     }
 

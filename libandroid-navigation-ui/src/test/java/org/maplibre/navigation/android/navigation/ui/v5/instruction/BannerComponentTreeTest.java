@@ -6,6 +6,7 @@ import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
 import org.maplibre.navigation.android.navigation.v5.models.BannerText;
 
 import org.junit.Test;
+import org.maplibre.navigation.android.navigation.v5.models.ManeuverModifier;
 import org.mockito.InOrder;
 
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class BannerComponentTreeTest {
     TestCreator testCreator = mock(TestCreator.class);
     when(testCreator.isNodeType(bannerComponents)).thenReturn(true);
     BannerText bannerText = mock(BannerText.class);
-    when(bannerText.components()).thenReturn(bannerComponentsList);
+    when(bannerText.getComponents()).thenReturn(bannerComponentsList);
 
     new BannerComponentTree(bannerText, testCreator);
 
@@ -44,7 +45,7 @@ public class BannerComponentTreeTest {
     when(testCreator.setupNode(bannerComponents, 0, 0, null)).thenReturn(testNode);
     TextView textView = mock(TextView.class);
     BannerText bannerText = mock(BannerText.class);
-    when(bannerText.components()).thenReturn(bannerComponentsList);
+    when(bannerText.getComponents()).thenReturn(bannerComponentsList);
     BannerComponentTree bannerComponentTree = new BannerComponentTree(bannerText, testCreator);
 
     bannerComponentTree.loadInstruction(textView);

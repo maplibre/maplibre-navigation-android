@@ -1,7 +1,8 @@
 package org.maplibre.navigation.android.navigation.ui.v5.instruction;
 
+import android.text.TextUtils;
+
 import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
-import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 class AbbreviationVerifier implements NodeVerifier {
   @Override
@@ -10,6 +11,6 @@ class AbbreviationVerifier implements NodeVerifier {
   }
 
   private boolean hasAbbreviation(BannerComponents components) {
-    return !TextUtils.isEmpty(components.abbreviation());
+    return !TextUtils.isEmpty(components.getAbbreviation());
   }
 }

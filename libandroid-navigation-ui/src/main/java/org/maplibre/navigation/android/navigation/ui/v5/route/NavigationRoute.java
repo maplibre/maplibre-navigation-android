@@ -1,19 +1,20 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
+
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,10 +65,10 @@ public final class NavigationRoute {
 
     static Builder builder(Context context, LocaleUtils localeUtils) {
         return new Builder()
-                .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
-                .language(context, localeUtils)
-                .voiceUnits(context, localeUtils)
-                .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
+            .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
+            .language(context, localeUtils)
+            .voiceUnits(context, localeUtils)
+            .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
     }
 
     /**
@@ -97,7 +98,7 @@ public final class NavigationRoute {
 
     private Response<DirectionsResponse> toMapLibreResponse(Response<com.mapbox.api.directions.v5.models.DirectionsResponse> response) {
         if (response.isSuccessful()) {
-           return Response.success(response.code(), toMapLibreDirectionsResponse(response.body()));
+            return Response.success(response.code(), toMapLibreDirectionsResponse(response.body()));
         } else {
             return Response.error(response.errorBody(), response.raw());
         }
@@ -579,49 +580,49 @@ public final class NavigationRoute {
          */
         public Builder routeOptions(RouteOptions options) {
 
-            if (!TextUtils.isEmpty(options.baseUrl())) {
-                directionsBuilder.baseUrl(options.baseUrl());
+            if (!TextUtils.isEmpty(options.getBaseUrl())) {
+                directionsBuilder.baseUrl(options.getBaseUrl());
             }
 
-            if (!TextUtils.isEmpty(options.language())) {
-                directionsBuilder.language(new Locale(options.language()));
+            if (!TextUtils.isEmpty(options.getLanguage())) {
+                directionsBuilder.language(new Locale(options.getLanguage()));
             }
 
-            if (options.alternatives() != null) {
-                directionsBuilder.alternatives(options.alternatives());
+            if (options.getAlternatives() != null) {
+                directionsBuilder.alternatives(options.getAlternatives());
             }
 
-            if (!TextUtils.isEmpty(options.profile())) {
-                directionsBuilder.profile(options.profile());
+            if (!TextUtils.isEmpty(options.getProfile())) {
+                directionsBuilder.profile(options.getProfile());
             }
 
-            if (options.alternatives() != null) {
-                directionsBuilder.alternatives(options.alternatives());
+            if (options.getAlternatives() != null) {
+                directionsBuilder.alternatives(options.getAlternatives());
             }
 
-            if (!TextUtils.isEmpty(options.voiceUnits())) {
-                directionsBuilder.voiceUnits(options.voiceUnits());
+            if (!TextUtils.isEmpty(options.getVoiceUnits())) {
+                directionsBuilder.voiceUnits(options.getVoiceUnits());
             }
 
-            if (!TextUtils.isEmpty(options.user())) {
-                directionsBuilder.user(options.user());
+            if (!TextUtils.isEmpty(options.getUser())) {
+                directionsBuilder.user(options.getUser());
             }
 
-            if (!TextUtils.isEmpty(options.accessToken())) {
-                directionsBuilder.accessToken(options.accessToken());
+            if (!TextUtils.isEmpty(options.getAccessToken())) {
+                directionsBuilder.accessToken(options.getAccessToken());
             }
 
-            if (!TextUtils.isEmpty(options.annotations())) {
-                directionsBuilder.annotations(options.annotations());
+            if (!TextUtils.isEmpty(options.getAnnotations())) {
+                directionsBuilder.annotations(options.getAnnotations());
             }
 
-            if (!TextUtils.isEmpty(options.approaches())) {
-                String[] approaches = options.approaches().split(";");
+            if (!TextUtils.isEmpty(options.getApproaches())) {
+                String[] approaches = options.getApproaches().split(";");
                 directionsBuilder.addApproaches(approaches);
             }
 
-            if (!TextUtils.isEmpty(options.waypointNames())) {
-                String[] waypointNames = options.waypointNames().split(";");
+            if (!TextUtils.isEmpty(options.getWaypointNames())) {
+                String[] waypointNames = options.getWaypointNames().split(";");
                 directionsBuilder.addWaypointNames(waypointNames);
             }
 
@@ -638,13 +639,13 @@ public final class NavigationRoute {
         public NavigationRoute build() {
             // Set the default values which the user cannot alter.
             directionsBuilder
-                    .steps(true)
-                    .continueStraight(true)
-                    .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-                    .overview(DirectionsCriteria.OVERVIEW_FULL)
-                    .voiceInstructions(true)
-                    .bannerInstructions(true)
-                    .roundaboutExits(true);
+                .steps(true)
+                .continueStraight(true)
+                .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                .voiceInstructions(true)
+                .bannerInstructions(true)
+                .roundaboutExits(true);
             return new NavigationRoute(directionsBuilder.build());
         }
     }

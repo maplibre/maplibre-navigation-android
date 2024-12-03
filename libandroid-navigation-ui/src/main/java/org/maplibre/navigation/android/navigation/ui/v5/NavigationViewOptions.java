@@ -100,7 +100,7 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
 
   public static Builder builder() {
     return new AutoValue_NavigationViewOptions.Builder()
-      .navigationOptions(MapLibreNavigationOptions.builder().build())
+      .navigationOptions(new MapLibreNavigationOptions())
       .shouldSimulateRoute(false)
       .waynameChipEnabled(true);
   }
