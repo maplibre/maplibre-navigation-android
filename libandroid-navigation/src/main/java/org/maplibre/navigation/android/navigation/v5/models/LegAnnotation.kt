@@ -1,5 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -40,6 +41,7 @@ data class LegAnnotation(
      *
      * @since 3.0.0
      */
+    @SerialName("maxspeed")
     val maxSpeed: List<MaxSpeed>?,
 
     /**
