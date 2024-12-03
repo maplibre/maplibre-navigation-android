@@ -126,6 +126,7 @@ object NavigationConstants {
     const val NON_NULL_APPLICATION_CONTEXT_REQUIRED: String =
         "Non-null application context required."
 
+    @JvmField
     val WAYNAME_OFFSET: Array<Float> = arrayOf(0.0f, 40.0f)
     const val MAPLIBRE_LOCATION_SOURCE: String = "maplibre-location-source"
     const val MAPLIBRE_WAYNAME_LAYER: String = "maplibre-wayname-layer"
