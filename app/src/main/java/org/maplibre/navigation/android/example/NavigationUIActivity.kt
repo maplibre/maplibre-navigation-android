@@ -57,7 +57,7 @@ class NavigationUIActivity :
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.navigationView.onCreate(this, savedInstanceState, this, MapRouteData.DARK_THEME)
+        binding.navigationView.onCreate(this, savedInstanceState, this, "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ")
 
 //        binding.mapView.apply {
 //            onCreate(savedInstanceState)
