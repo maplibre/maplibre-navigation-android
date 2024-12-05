@@ -3,7 +3,6 @@ package org.maplibre.navigation.android.navigation.v5.milestone
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException
 
 /**
  * Base Milestone statement. Subclassed to provide concrete statements.

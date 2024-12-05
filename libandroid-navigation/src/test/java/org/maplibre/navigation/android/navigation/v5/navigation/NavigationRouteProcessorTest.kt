@@ -243,10 +243,9 @@ class NavigationRouteProcessorTest : BaseTest() {
         val firstProgressIndex: Int = firstProgress.currentLegProgress.stepIndex
         val coordinates = createCoordinatesFromCurrentStep(firstProgress)
         val lastPointInCurrentStep = coordinates[coordinates.size - 1]
-        val rawLocation = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+        val rawLocation = buildDefaultLocationUpdate(lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()).copy(
+            bearing = 145f
         )
-        every { rawLocation.bearing } returns 145f
 
         val secondProgress = routeProcessor!!.buildNewRouteProgress(
             navigation!!,

@@ -1,8 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.location.Location
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants
@@ -72,14 +72,16 @@ open class ReplayRouteLocationConverter(
         for (i in points.indices) {
             val mockedLocation = createMockLocationFrom(points[i])
 
-            if (i - 1 >= 0) {
-                val bearing = TurfMeasurement.bearing(points[i - 1], points[i])
-                mockedLocation.bearing = bearing.toFloat()
-            } else {
-                mockedLocation.bearing = 0f
-            }
+            mockedLocations.add(
+                if (i - 1 >= 0) {
+                    val bearing = TurfMeasurement.bearing(points[i - 1], points[i])
+                    mockedLocation.copy(bearing = bearing.toFloat())
+                } else {
+                    mockedLocation.copy(bearing = 0f)
+                }
+            )
+
             time += (delay * ONE_SECOND_IN_MILLISECONDS).toLong()
-            mockedLocations.add(mockedLocation)
         }
 
         return mockedLocations
@@ -116,13 +118,15 @@ open class ReplayRouteLocationConverter(
     }
 
     private fun createMockLocationFrom(point: Point): Location {
-        val location = Location(REPLAY_ROUTE)
-        location.latitude = point.latitude()
-        location.longitude = point.longitude()
-        location.speed = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat()
-        location.accuracy = 3f
-        location.time = time
-        return location
+        return Location(
+            //TODO fabi755
+//            provider = REPLAY_ROUTE,
+            latitude = point.latitude(),
+            longitude = point.longitude(),
+            speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
+            accuracyMeters = 3f,
+            elapsedRealtimeMilliseconds = time
+        )
     }
 
     companion object {

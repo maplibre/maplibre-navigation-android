@@ -1,9 +1,9 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.location.Location
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation
@@ -20,7 +20,6 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
 import timber.log.Timber
-
 
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
@@ -180,7 +179,7 @@ object NavigationHelper {
             val expectedTurnAngle =
                 MathUtils.differenceBetweenAngles(initialBearingNormalized, finalBearingNormalized)
 
-            val userBearingNormalized = MathUtils.wrap(userLocation.bearing.toDouble(), 0.0, 360.0)
+            val userBearingNormalized = MathUtils.wrap(userLocation.bearing?.toDouble() ?: 0.0, 0.0, 360.0)
             val userAngleFromFinalBearing =
                 MathUtils.differenceBetweenAngles(finalBearingNormalized, userBearingNormalized)
 

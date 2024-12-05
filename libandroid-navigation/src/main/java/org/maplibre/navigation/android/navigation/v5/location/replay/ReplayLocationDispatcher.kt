@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.location.Location
 import android.os.Handler
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class ReplayLocationDispatcher(
@@ -81,9 +81,9 @@ open class ReplayLocationDispatcher(
             return
         }
 
-        val currentTime = current!!.time
+        val currentTime = current!!.elapsedRealtimeMilliseconds
         current = locationsToReplay.removeFirstOrNull()
-        val nextTime = current!!.time
+        val nextTime = current!!.elapsedRealtimeMilliseconds
         val diff = nextTime - currentTime
         handler.postDelayed(this, diff)
     }

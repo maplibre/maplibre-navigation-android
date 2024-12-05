@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.offroute
 
-import android.location.Location
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -9,6 +8,7 @@ import org.junit.Test
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
@@ -148,9 +148,9 @@ class OffRouteDetectorTest : BaseTest() {
 
         val offRoutePoint =
             buildPointAwayFromPoint(stepManeuverPoint, 250.0, 90.0)
-        val secondUpdate =
-            buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude())
-        every { secondUpdate.accuracy } returns 300f
+        val secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude()).copy(
+            accuracyMeters = 300f
+        )
 
         val isUserOffRoute =
             offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, defaultOptions)
@@ -520,7 +520,7 @@ class OffRouteDetectorTest : BaseTest() {
 
     @Test
     fun isUserOffRoute_assertTrueWhenRouteDistanceRemainingIsZero() {
-        val location = mockk<Location>()
+        val location = Location(0.0, 0.0)
         val routeProgress = mockk<RouteProgress>()
         every { routeProgress.distanceRemaining } returns 0.0
 

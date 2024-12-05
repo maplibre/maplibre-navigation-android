@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.v5
 
-import android.location.Location
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import java.io.IOException

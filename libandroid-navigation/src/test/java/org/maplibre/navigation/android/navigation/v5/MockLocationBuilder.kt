@@ -1,10 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5
 
-import android.location.Location
-import io.mockk.every
-import io.mockk.mockk
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
 import org.maplibre.turf.TurfConstants
@@ -44,12 +42,12 @@ internal class MockLocationBuilder {
         horizontalAccuracyValue: Float,
         timeValue: Long
     ): Location {
-        return mockk(relaxed = true) {
-            every { longitude } returns lngValue
-            every { latitude } returns latValue
-            every { speed } returns speedValue
-            every { accuracy } returns horizontalAccuracyValue
-            every { time } returns timeValue
-        }
+        return Location(
+            latitude = latValue,
+            longitude = lngValue,
+            speedMetersPerSeconds = speedValue,
+            accuracyMeters = horizontalAccuracyValue,
+            elapsedRealtimeMilliseconds = timeValue
+        )
     }
 }

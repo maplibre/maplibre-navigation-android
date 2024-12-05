@@ -1,11 +1,13 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
 import android.annotation.SuppressLint
+import android.location.Location as AndroidLocation
 import android.os.Looper
 import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.android.location.engine.LocationEngineCallback
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.android.location.engine.LocationEngineResult
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 import timber.log.Timber
@@ -43,6 +45,7 @@ open class NavigationLocationEngineUpdater(
             override fun onSuccess(result: LocationEngineResult) {
                 listener.queueLocationUpdate(
                     result.lastLocation
+                        ?.toLocation()
                         ?.takeIf { loc -> listener.isValidLocationUpdate(loc) }
                         ?: routeUtils.createFirstLocationFromRoute(route)
                 )
@@ -57,6 +60,14 @@ open class NavigationLocationEngineUpdater(
     fun removeLocationEngineListener() {
         locationEngine.removeLocationUpdates(listener)
     }
+
+    fun AndroidLocation.toLocation() = Location(
+        latitude = latitude,
+        longitude = longitude,
+        bearing = bearing.takeIf { hasBearing() },
+        speedMetersPerSeconds = speed.takeIf { hasSpeed() },
+        accuracyMeters = accuracy.takeIf { hasAccuracy() }
+    )
 
     companion object {
         private const val LOCATION_ENGINE_INTERVAL = 1000L

@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.route
 
-import android.location.Location
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
@@ -12,8 +12,9 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProg
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-open class FasterRouteDetector(private val navigationOptions: MapLibreNavigationOptions) :
-    FasterRoute() {
+open class FasterRouteDetector(
+    private val navigationOptions: MapLibreNavigationOptions
+) : FasterRoute() {
     private var lastCheckedLocation: Location? = null
 
     override fun shouldCheckFasterRoute(location: Location, routeProgress: RouteProgress): Boolean {
@@ -124,7 +125,8 @@ open class FasterRouteDetector(private val navigationOptions: MapLibreNavigation
 
     private fun secondsSinceLastCheck(location: Location): Long {
         return lastCheckedLocation?.let { lastCheckedLocation ->
-            dateDiff(Date(lastCheckedLocation.time), Date(location.time), TimeUnit.SECONDS)
+            // TODO: fabi755 millis are not date since 1900
+            dateDiff(Date(lastCheckedLocation.elapsedRealtimeMilliseconds), Date(location.elapsedRealtimeMilliseconds), TimeUnit.SECONDS)
         } ?: -1
     }
 

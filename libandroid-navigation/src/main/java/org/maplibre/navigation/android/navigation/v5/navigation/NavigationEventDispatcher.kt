@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.location.Location
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute

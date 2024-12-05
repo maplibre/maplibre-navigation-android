@@ -1,8 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.snap
 
-import android.location.Location
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.utils.Constants
@@ -36,8 +36,7 @@ open class SnapToRoute : Snap() {
      */
     override fun getSnappedLocation(location: Location, routeProgress: RouteProgress): Location {
         val snappedLocation = snapLocationLatLng(location, routeProgress.currentStepPoints)
-        snappedLocation.bearing = snapLocationBearing(location, routeProgress)
-        return snappedLocation
+        return snappedLocation.copy(bearing = snapLocationBearing(location, routeProgress))
     }
 
     /**
@@ -55,7 +54,7 @@ open class SnapToRoute : Snap() {
      * @param routeProgress Current route progress
      * @return Float bearing snapped to route
      */
-    private fun snapLocationBearing(location: Location, routeProgress: RouteProgress): Float {
+    private fun snapLocationBearing(location: Location, routeProgress: RouteProgress): Float? {
         return getCurrentPoint(routeProgress)?.let { currentPoint ->
             getFuturePoint(routeProgress)?.let { futurePoint ->
                 // Get bearing and convert azimuth to degrees
@@ -78,20 +77,19 @@ open class SnapToRoute : Snap() {
      */
     private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
         val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
-        val snappedLocation = Location(location)
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         return if (stepCoordinates.size > 1) {
-            val feature = TurfMisc.nearestPointOnLine(locationToPoint, stepCoordinates)
+            val feature = TurfMisc.nearestPointOnLine(location.point, stepCoordinates)
             (feature.geometry() as? Point)?.let { point ->
-                snappedLocation.apply {
+                location.copy(
+                    latitude = point.latitude(),
                     longitude = point.longitude()
-                    latitude = point.latitude()
-                }
-            } ?: snappedLocation
+                )
+            } ?: location.copy()
         } else {
-            snappedLocation
+            location.copy()
         }
     }
 

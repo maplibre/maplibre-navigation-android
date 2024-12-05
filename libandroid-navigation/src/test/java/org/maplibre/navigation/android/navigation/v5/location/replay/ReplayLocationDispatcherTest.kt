@@ -1,12 +1,11 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.location.Location
 import android.os.Handler
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.location.Location
 
 class ReplayLocationDispatcherTest {
 
@@ -40,10 +39,10 @@ class ReplayLocationDispatcherTest {
     fun checksNextDispatchScheduledWhenLocationsIsNotEmpty() {
         val anyLocations: MutableList<Location> = ArrayList(2)
         val firstLocation = mockk<Location>(relaxed = true) {
-            every { time } returns 1000L
+            every { elapsedRealtimeMilliseconds } returns 1000L
         }
         val secondLocation = mockk<Location>(relaxed = true) {
-            every { time } returns 2000L
+            every { elapsedRealtimeMilliseconds } returns 2000L
         }
         anyLocations.add(firstLocation)
         anyLocations.add(secondLocation)

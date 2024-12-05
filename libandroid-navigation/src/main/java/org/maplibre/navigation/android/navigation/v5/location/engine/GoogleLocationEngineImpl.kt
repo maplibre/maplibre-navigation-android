@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.v5.location.engine
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
-import android.location.Location
+import android.location.Location as AndroidLocation
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -99,9 +99,9 @@ open class GoogleLocationEngineImpl(
     @VisibleForTesting
     internal class GoogleLastLocationEngineCallbackTransport(
         private val callback: LocationEngineCallback<LocationEngineResult>
-    ) : OnSuccessListener<Location>, OnFailureListener {
+    ) : OnSuccessListener<AndroidLocation>, OnFailureListener {
 
-        override fun onSuccess(location: Location?) {
+        override fun onSuccess(location: AndroidLocation?) {
             callback.onSuccess(
                 if (location != null)
                     LocationEngineResult.create(location)

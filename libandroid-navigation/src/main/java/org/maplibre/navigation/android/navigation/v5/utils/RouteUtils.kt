@@ -1,8 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
-import android.location.Location
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
@@ -149,10 +149,12 @@ open class RouteUtils {
             Constants.PRECISION_6
         )
         val firstRoutePoint = lineString.coordinates().first()
-        return Location(FORCED_LOCATION).apply {
-            latitude = firstRoutePoint.latitude()
+        return Location(
+            //TODO fabi755: provider?
+//            provider = FORCED_LOCATION,
+            latitude = firstRoutePoint.latitude(),
             longitude = firstRoutePoint.longitude()
-        }
+        )
     }
 
     /**

@@ -2,15 +2,16 @@ package org.maplibre.navigation.android.navigation.v5.location.replay
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.location.Location
 import android.os.Handler
 import android.os.Looper
+import android.location.Location as AndroidLocation
 import org.maplibre.android.location.engine.LocationEngine
 import org.maplibre.android.location.engine.LocationEngineCallback
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 
 open class ReplayRouteLocationEngine : LocationEngine, Runnable {
@@ -24,15 +25,18 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     @get:SuppressLint("MissingPermission")
     var lastLocation: Location? = null
         private set
+
     private val callbackList = mutableListOf<LocationEngineCallback<LocationEngineResult>>()
     private val replayLocationListener = ReplayLocationListener { location ->
-            lastLocation = location
-            val result = LocationEngineResult.create(location)
-            for (callback in callbackList) {
-                callback.onSuccess(result)
-            }
-            mockedLocations.removeFirstOrNull()
+        lastLocation = location
+        //TODO: this needs converted to platform specific LocationEngineResult
+//            val result = LocationEngineResult.create(location)
+        val result = LocationEngineResult.create(location.toAndroidLocation())
+        for (callback in callbackList) {
+            callback.onSuccess(result)
         }
+        mockedLocations.removeFirstOrNull()
+    }
 
     @SuppressLint("MissingPermission")
     fun assign(route: DirectionsRoute) {
@@ -46,9 +50,10 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     }
 
     fun assignLastLocation(currentPosition: Point) {
-        initializeLastLocation()
-        lastLocation?.longitude = currentPosition.longitude()
-        lastLocation?.latitude = currentPosition.latitude()
+        lastLocation = Location(
+            latitude = currentPosition.latitude(),
+            longitude = currentPosition.longitude()
+        )
     }
 
     fun updateSpeed(customSpeedInKmPerHour: Int) {
@@ -137,12 +142,6 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         }
     }
 
-    private fun initializeLastLocation() {
-        if (lastLocation == null) {
-            lastLocation = Location(REPLAY_ROUTE)
-        }
-    }
-
     fun onStop() {
         dispatcher?.stop()
         handler.removeCallbacks(this)
@@ -153,7 +152,7 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     @Throws(SecurityException::class)
     override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
         lastLocation?.let { lastLocation ->
-            callback.onSuccess(LocationEngineResult.create(lastLocation))
+            callback.onSuccess(LocationEngineResult.create(lastLocation.toAndroidLocation()))
         } ?: callback.onFailure(Exception("No last location"))
     }
 
@@ -194,5 +193,14 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         private const val DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS =
             "Delay must be greater than 0 seconds."
         private const val REPLAY_ROUTE = "ReplayRouteLocation"
+    }
+
+    fun Location.toAndroidLocation() = AndroidLocation(REPLAY_ROUTE).also { androidLoc ->
+        androidLoc.latitude = this.latitude
+        androidLoc.longitude = this.longitude
+        androidLoc.bearing = this.bearing ?: 0f
+        androidLoc.speed = this.speedMetersPerSeconds ?: 0f
+        androidLoc.accuracy = this.accuracyMeters ?: 0f
+        androidLoc.elapsedRealtimeNanos = this.elapsedRealtimeMilliseconds * 1_000_000
     }
 }

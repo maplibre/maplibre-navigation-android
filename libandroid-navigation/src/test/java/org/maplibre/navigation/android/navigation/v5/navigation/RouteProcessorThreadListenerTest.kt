@@ -1,11 +1,11 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.location.Location
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 

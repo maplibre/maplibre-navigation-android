@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.location
 
-import android.location.Location
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
@@ -48,7 +47,7 @@ class LocationValidatorTest {
 
     private fun buildLocationWithAccuracy(accuracyValue: Float): Location {
         val location = mockk<Location> {
-            every { accuracy } returns accuracyValue
+            every { accuracyMeters } returns accuracyValue
         }
         return location
     }

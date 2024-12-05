@@ -1,8 +1,8 @@
 package org.maplibre.navigation.android.navigation.v5.offroute
 
-import android.location.Location
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
@@ -163,7 +163,7 @@ open class OffRouteDetector(
         currentPoint: Point
     ): Double {
         val dynamicTolerance = dynamicOffRouteRadiusTolerance(currentPoint, routeProgress, options)
-        val accuracyTolerance = location.accuracy * options.deadReckoningTimeInterval
+        val accuracyTolerance = (location.accuracyMeters ?: 0f) * options.deadReckoningTimeInterval
         return max(dynamicTolerance, accuracyTolerance)
     }
 
