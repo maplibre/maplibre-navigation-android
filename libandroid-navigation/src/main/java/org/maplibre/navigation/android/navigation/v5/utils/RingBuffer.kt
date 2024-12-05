@@ -1,9 +1,12 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
-import androidx.annotation.IntRange
 import java.util.ArrayDeque
 
-class RingBuffer<T>(@param:IntRange(from = 0) private val maxSize: Int) : ArrayDeque<T>() {
+class RingBuffer<T>(private val maxSize: Int) : ArrayDeque<T>() {
+
+    init {
+        require(maxSize > 0) { "Max size must be greater than 0." }
+    }
 
     override fun add(element: T): Boolean {
         val result = super.add(element)

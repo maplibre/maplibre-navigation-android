@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.utils
 
-import android.text.TextUtils
 import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.LegStep
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
@@ -155,6 +154,6 @@ open class ManeuverUtils {
         val maneuver = step.maneuver
 
         val maneuverKey = listOfNotNull(maneuver.type?.text, maneuver.modifier)
-        return maneuverResources[TextUtils.join("", maneuverKey)] ?: R.drawable.ic_maneuver_turn_0
+        return maneuverResources[maneuverKey.joinToString("")] ?: R.drawable.ic_maneuver_turn_0
     }
 }
