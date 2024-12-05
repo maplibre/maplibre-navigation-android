@@ -5,8 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="56dp"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardBackgroundColor="?attr/navigationViewBannerBackground"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
@@ -16,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="?attr/navigationViewBannerPrimaryText"
         android:textStyle="bold"
         android:textSize="18sp"
         android:maxLines="1"

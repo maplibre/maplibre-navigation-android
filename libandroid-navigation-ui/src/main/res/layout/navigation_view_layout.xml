@@ -39,12 +39,6 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <com.mapbox.services.android.navigation.ui.v5.summary.SummaryBottomSheet
-            android:id="@+id/summaryBottomSheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
-
         <com.mapbox.services.android.navigation.ui.v5.RecenterButton
             android:id="@+id/recenterBtn"
             android:layout_width="wrap_content"
@@ -52,7 +46,6 @@
             android:layout_gravity="top"
             android:layout_margin="16dp"
             android:visibility="invisible"
-            app:layout_anchor="@id/summaryBottomSheet"
             app:layout_anchorGravity="top|left" />
 
         <com.mapbox.services.android.navigation.ui.v5.map.WayNameView
@@ -61,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:visibility="invisible"
-            app:layout_anchor="@id/summaryBottomSheet"
             app:layout_anchorGravity="center|top" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
