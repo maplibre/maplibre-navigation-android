@@ -1,80 +1,86 @@
-package org.maplibre.navigation.android.navigation.v5;
+package org.maplibre.navigation.android.navigation.v5
 
-import android.location.Location;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.location.Location
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import java.io.IOException
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+open class BaseTest {
+    private val routeBuilder =
+        TestRouteBuilder()
+    private val routeProgressBuilder =
+        TestRouteProgressBuilder()
+    private val locationBuilder = MockLocationBuilder()
 
-import java.io.IOException;
-import java.util.List;
+    @Throws(IOException::class)
+    protected fun loadJsonFixture(filename: String): String {
+        return routeBuilder.loadJsonFixture(filename)
+    }
 
-public class BaseTest {
+    @Throws(IOException::class)
+    protected fun buildTestDirectionsRoute(): DirectionsRoute {
+        return routeBuilder.buildTestDirectionsRoute(null)
+    }
 
-  protected static final double DELTA = 1E-10;
-  protected static final double LARGE_DELTA = 0.1;
-  protected static final String ACCESS_TOKEN = "pk.XXX";
+    @Throws(IOException::class)
+    protected fun buildTestDirectionsRoute(fixtureName: String?): DirectionsRoute {
+        return routeBuilder.buildTestDirectionsRoute(fixtureName)
+    }
 
-  private TestRouteBuilder routeBuilder;
-  private TestRouteProgressBuilder routeProgressBuilder;
-  private MockLocationBuilder locationBuilder;
+    @Throws(Exception::class)
+    protected fun buildDefaultTestRouteProgress(): RouteProgress {
+        val testRoute = routeBuilder.buildTestDirectionsRoute(null)
+        return routeProgressBuilder.buildDefaultTestRouteProgress(testRoute)
+    }
 
-  public BaseTest() {
-    routeBuilder = new TestRouteBuilder();
-    routeProgressBuilder = new TestRouteProgressBuilder();
-    locationBuilder = new MockLocationBuilder();
-  }
+    @Throws(Exception::class)
+    protected fun buildDefaultTestRouteProgress(testRoute: DirectionsRoute): RouteProgress {
+        return routeProgressBuilder.buildDefaultTestRouteProgress(testRoute)
+    }
 
-  protected String loadJsonFixture(String filename) throws IOException {
-    return routeBuilder.loadJsonFixture(filename);
-  }
+    @Throws(Exception::class)
+    protected fun buildTestRouteProgress(
+        route: DirectionsRoute,
+        stepDistanceRemaining: Double,
+        legDistanceRemaining: Double,
+        distanceRemaining: Double,
+        stepIndex: Int,
+        legIndex: Int
+    ): RouteProgress {
+        return routeProgressBuilder.buildTestRouteProgress(
+            route,
+            stepDistanceRemaining,
+            legDistanceRemaining,
+            distanceRemaining,
+            stepIndex,
+            legIndex
+        )
+    }
 
-  protected DirectionsRoute buildTestDirectionsRoute() throws IOException {
-    return routeBuilder.buildTestDirectionsRoute(null);
-  }
+    protected fun buildDefaultLocationUpdate(lng: Double, lat: Double): Location {
+        return locationBuilder.buildDefaultMockLocationUpdate(lng, lat)
+    }
 
-  protected DirectionsRoute buildTestDirectionsRoute(@Nullable String fixtureName) throws IOException {
-    return routeBuilder.buildTestDirectionsRoute(fixtureName);
-  }
+    protected fun buildPointAwayFromLocation(location: Location, distanceAway: Double): Point {
+        return locationBuilder.buildPointAwayFromLocation(location, distanceAway)
+    }
 
-  protected RouteProgress buildDefaultTestRouteProgress() throws Exception {
-    DirectionsRoute testRoute = routeBuilder.buildTestDirectionsRoute(null);
-    return routeProgressBuilder.buildDefaultTestRouteProgress(testRoute);
-  }
+    protected fun buildPointAwayFromPoint(
+        point: Point,
+        distanceAway: Double,
+        bearing: Double
+    ): Point {
+        return locationBuilder.buildPointAwayFromPoint(point, distanceAway, bearing)
+    }
 
-  protected RouteProgress buildDefaultTestRouteProgress(DirectionsRoute testRoute) throws Exception {
-    return routeProgressBuilder.buildDefaultTestRouteProgress(testRoute);
-  }
+    protected fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
+        return locationBuilder.createCoordinatesFromCurrentStep(progress)
+    }
 
-  protected RouteProgress buildTestRouteProgress(DirectionsRoute route,
-                                                 double stepDistanceRemaining,
-                                                 double legDistanceRemaining,
-                                                 double distanceRemaining,
-                                                 int stepIndex,
-                                                 int legIndex) throws Exception {
-    return routeProgressBuilder.buildTestRouteProgress(
-      route, stepDistanceRemaining, legDistanceRemaining, distanceRemaining, stepIndex, legIndex
-    );
-  }
-
-  protected Location buildDefaultLocationUpdate(double lng, double lat) {
-    return locationBuilder.buildDefaultMockLocationUpdate(lng, lat);
-  }
-
-  @NonNull
-  protected Point buildPointAwayFromLocation(Location location, double distanceAway) {
-    return locationBuilder.buildPointAwayFromLocation(location, distanceAway);
-  }
-
-  @NonNull
-  protected Point buildPointAwayFromPoint(Point point, double distanceAway, double bearing) {
-    return locationBuilder.buildPointAwayFromPoint(point, distanceAway, bearing);
-  }
-
-  @NonNull
-  protected List<Point> createCoordinatesFromCurrentStep(RouteProgress progress) {
-    return locationBuilder.createCoordinatesFromCurrentStep(progress);
-  }
+    companion object {
+        const val DELTA: Double = 1E-10
+        const val LARGE_DELTA: Double = 0.1
+        const val ACCESS_TOKEN: String = "pk.XXX"
+    }
 }

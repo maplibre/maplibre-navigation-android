@@ -1,55 +1,53 @@
-package org.maplibre.navigation.android.navigation.v5.utils;
+package org.maplibre.navigation.android.navigation.v5.utils
 
-import static junit.framework.Assert.assertEquals;
+import com.google.common.collect.Lists
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
 
-import com.google.common.collect.Lists;
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
+class RingBufferTest : BaseTest() {
+    @Test
+    fun testBounds() {
+        val buffer = RingBuffer<Int>(1)
+        buffer.add(1)
+        buffer.addFirst(2)
+        buffer.addLast(3)
+        buffer.addAll(Lists.newArrayList(4))
+        buffer.push(5)
+        buffer.add(6)
 
-import org.junit.Test;
+        Assert.assertEquals(1, buffer.size)
+    }
 
-public class RingBufferTest extends BaseTest {
+    @Test
+    fun testLifoOrder() {
+        val buffer = RingBuffer<Int>(1)
+        buffer.add(1)
+        buffer.add(2)
 
-  @Test
-  public void testBounds() {
-    RingBuffer<Integer> buffer = new RingBuffer<>(1);
-    buffer.add(1);
-    buffer.addFirst(2);
-    buffer.addLast(3);
-    buffer.addAll(Lists.newArrayList(4));
-    buffer.push(5);
-    buffer.add(6);
+        Assert.assertEquals(1, buffer.size)
+        Assert.assertEquals(2.0, buffer.pop().toDouble(), DELTA)
+    }
 
-    assertEquals(1, buffer.size());
-  }
+    @Test
+    @Throws(Exception::class)
+    fun testFifo() {
+        val buffer = RingBuffer<Int>(2)
+        buffer.add(1)
+        buffer.add(2)
 
-  @Test
-  public void testLifoOrder() {
-    RingBuffer<Integer> buffer = new RingBuffer<>(1);
-    buffer.add(1);
-    buffer.add(2);
+        Assert.assertEquals(2, buffer.size)
+        Assert.assertEquals(1.0, buffer.pop().toDouble(), DELTA)
+    }
 
-    assertEquals(1, buffer.size());
-    assertEquals(2, buffer.pop(), DELTA);
-  }
-
-  @Test
-  public void testFifo() throws Exception {
-    RingBuffer<Integer> buffer = new RingBuffer<>(2);
-    buffer.add(1);
-    buffer.add(2);
-
-    assertEquals(2, buffer.size());
-    assertEquals(1, buffer.pop(), DELTA);
-  }
-
-  @Test
-  public void testPeek() {
-    RingBuffer<Integer> buffer = new RingBuffer<>(2);
-    buffer.add(1);
-    buffer.add(2);
-    buffer.add(3);
-    assertEquals(2, buffer.size());
-    assertEquals(2, buffer.peekFirst(), DELTA);
-    assertEquals(3, buffer.peekLast(), DELTA);
-  }
+    @Test
+    fun testPeek() {
+        val buffer = RingBuffer<Int>(2)
+        buffer.add(1)
+        buffer.add(2)
+        buffer.add(3)
+        Assert.assertEquals(2, buffer.size)
+        Assert.assertEquals(2.0, buffer.peekFirst()!!.toDouble(), DELTA)
+        Assert.assertEquals(3.0, buffer.peekLast()!!.toDouble(), DELTA)
+    }
 }

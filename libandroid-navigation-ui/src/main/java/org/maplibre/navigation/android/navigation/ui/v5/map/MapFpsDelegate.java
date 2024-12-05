@@ -99,7 +99,7 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
 
   private int determineMaxFpsFrom(RouteProgress routeProgress, Context context) {
     final boolean isPluggedIn = batteryMonitor.isPluggedIn(context);
-    RouteLegProgress routeLegProgress = routeProgress.currentLegProgress();
+    RouteLegProgress routeLegProgress = routeProgress.getCurrentLegProgress();
 
     if (isPluggedIn) {
       return LOW_POWER_MAX_FPS;
@@ -111,7 +111,7 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
   }
 
   private boolean validLowFpsManeuver(RouteLegProgress routeLegProgress) {
-    final String maneuverModifier = routeLegProgress.currentStep().maneuver().modifier();
+    final String maneuverModifier = routeLegProgress.getCurrentStep().getManeuver().getModifier().getText();
     return maneuverModifier != null
       && (maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_STRAIGHT)
       || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT)
@@ -119,8 +119,8 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
   }
 
   private boolean validLowFpsDuration(RouteLegProgress routeLegProgress) {
-    final double expectedStepDuration = routeLegProgress.currentStep().duration();
-    final double durationUntilNextManeuver = routeLegProgress.currentStepProgress().durationRemaining();
+    final double expectedStepDuration = routeLegProgress.getCurrentStep().getDuration();
+    final double durationUntilNextManeuver = routeLegProgress.getCurrentStepProgress().getDurationRemaining();
     final double durationSincePreviousManeuver = expectedStepDuration - durationUntilNextManeuver;
     return durationUntilNextManeuver > VALID_DURATION_IN_SECONDS_UNTIL_NEXT_MANEUVER
       && durationSincePreviousManeuver > VALID_DURATION_IN_SECONDS_SINCE_PREVIOUS_MANEUVER;

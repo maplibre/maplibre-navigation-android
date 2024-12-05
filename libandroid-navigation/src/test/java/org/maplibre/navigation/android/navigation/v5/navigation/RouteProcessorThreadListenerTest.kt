@@ -1,120 +1,109 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.location.Location;
-import androidx.annotation.NonNull;
+import android.location.Location
+import io.mockk.Called
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.maplibre.navigation.android.navigation.v5.instruction.Instruction;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventDispatcher;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationNotificationProvider;
-import org.maplibre.navigation.android.navigation.v5.navigation.RouteProcessorThreadListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+class RouteProcessorThreadListenerTest {
 
-import org.junit.Test;
+    @Test
+    fun onNewRouteProgress_notificationProviderIsUpdated() {
+        val provider = mockk<NavigationNotificationProvider>(relaxed = true)
+        val listener = buildListener(provider)
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-import java.util.ArrayList;
-import java.util.List;
+        listener.onNewRouteProgress(mockk(relaxed = true), routeProgress)
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+        verify { provider.updateNavigationNotification(routeProgress) }
+    }
 
-public class RouteProcessorThreadListenerTest {
+    @Test
+    fun onNewRouteProgress_eventDispatcherProgressIsUpdated() {
+        val dispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val listener = buildListener(dispatcher)
+        val location = mockk<Location>(relaxed = true)
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-  @Test
-  public void onNewRouteProgress_notificationProviderIsUpdated() {
-    NavigationNotificationProvider provider = mock(NavigationNotificationProvider.class);
-    RouteProcessorThreadListener listener = buildListener(provider);
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        listener.onNewRouteProgress(location, routeProgress)
 
-    listener.onNewRouteProgress(mock(Location.class), routeProgress);
+        verify { dispatcher.onProgressChange(location, routeProgress) }
+    }
 
-    verify(provider).updateNavigationNotification(eq(routeProgress));
-  }
+    @Test
+    fun onMilestoneTrigger_eventDispatcherSendsMilestone() {
+        val stepMilestone = StepMilestone(identifier = 1)
+        val eventDispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val listener = buildListener(eventDispatcher)
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-  @Test
-  public void onNewRouteProgress_eventDispatcherProgressIsUpdated() {
-    NavigationEventDispatcher dispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(dispatcher);
-    Location location = mock(Location.class);
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        listener.onMilestoneTrigger(listOf(stepMilestone), routeProgress)
 
-    listener.onNewRouteProgress(location, routeProgress);
+        verify {
+            eventDispatcher.onMilestoneEvent(routeProgress, any(), stepMilestone)
+        }
+    }
 
-    verify(dispatcher).onProgressChange(eq(location), eq(routeProgress));
-  }
+    @Test
+    fun onMilestoneTrigger_correctInstructionIsBuilt() {
+        val customInstruction = "Custom instruction!"
+        val instruction = buildCustomInstruction(customInstruction)
+        val stepMilestone = StepMilestone(identifier = 1, instruction = instruction)
+        val eventDispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val listener = buildListener(eventDispatcher)
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-  @Test
-  public void onMilestoneTrigger_eventDispatcherSendsMilestone() {
-    List<Milestone> milestones = new ArrayList<>();
-    StepMilestone stepMilestone = new StepMilestone.Builder().build();
-    milestones.add(stepMilestone);
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(eventDispatcher);
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        listener.onMilestoneTrigger(listOf(stepMilestone), routeProgress)
 
-    listener.onMilestoneTrigger(milestones, routeProgress);
+        verify {
+            eventDispatcher.onMilestoneEvent(
+                routeProgress,
+                customInstruction,
+                stepMilestone
+            )
+        }
+    }
 
-    verify(eventDispatcher).onMilestoneEvent(eq(routeProgress), anyString(), eq(stepMilestone));
-  }
+    @Test
+    fun onUserOffRouteTrue_eventDispatcherSendsEvent() {
+        val dispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val listener = buildListener(dispatcher)
+        val location = mockk<Location>(relaxed = true)
 
-  @Test
-  public void onMilestoneTrigger_correctInstructionIsBuilt() {
-    String customInstruction = "Custom instruction!";
-    Instruction instruction = buildCustomInstruction(customInstruction);
-    List<Milestone> milestones = new ArrayList<>();
-    Milestone stepMilestone = new StepMilestone.Builder().setInstruction(instruction).build();
-    milestones.add(stepMilestone);
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(eventDispatcher);
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        listener.onUserOffRoute(location, true)
 
-    listener.onMilestoneTrigger(milestones, routeProgress);
+        verify {
+            dispatcher.onUserOffRoute(location)
+        }
+    }
 
-    verify(eventDispatcher).onMilestoneEvent(eq(routeProgress), eq(customInstruction), eq(stepMilestone));
-  }
+    @Test
+    fun onUserOffRouteFalse_eventDispatcherDoesNotSendEvent() {
+        val dispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val listener = buildListener(dispatcher)
 
-  @Test
-  public void onUserOffRouteTrue_eventDispatcherSendsEvent() {
-    NavigationEventDispatcher dispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(dispatcher);
-    Location location = mock(Location.class);
+        listener.onUserOffRoute(mockk<Location>(relaxed = true), false)
 
-    listener.onUserOffRoute(location, true);
+        verify {
+            dispatcher.wasNot(Called)
+        }
+    }
 
-    verify(dispatcher).onUserOffRoute(eq(location));
-  }
+    private fun buildListener(provider: NavigationNotificationProvider): RouteProcessorThreadListener {
+        val eventDispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        return RouteProcessorThreadListener(eventDispatcher, provider)
+    }
 
-  @Test
-  public void onUserOffRouteFalse_eventDispatcherDoesNotSendEvent() {
-    NavigationEventDispatcher dispatcher = mock(NavigationEventDispatcher.class);
-    RouteProcessorThreadListener listener = buildListener(dispatcher);
+    private fun buildListener(eventDispatcher: NavigationEventDispatcher): RouteProcessorThreadListener {
+        val provider = mockk<NavigationNotificationProvider>(relaxed = true)
+        return RouteProcessorThreadListener(eventDispatcher, provider)
+    }
 
-    listener.onUserOffRoute(mock(Location.class), false);
-
-    verifyNoInteractions (dispatcher);
-  }
-
-  private RouteProcessorThreadListener buildListener(NavigationNotificationProvider provider) {
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    return new RouteProcessorThreadListener(eventDispatcher, provider);
-  }
-
-  private RouteProcessorThreadListener buildListener(NavigationEventDispatcher eventDispatcher) {
-    NavigationNotificationProvider provider = mock(NavigationNotificationProvider.class);
-    return new RouteProcessorThreadListener(eventDispatcher, provider);
-  }
-
-  @NonNull
-  private Instruction buildCustomInstruction(final String customInstruction) {
-    return new Instruction() {
-      @Override
-      public String buildInstruction(RouteProgress routeProgress) {
-        return customInstruction;
-      }
-    };
-  }
+    private fun buildCustomInstruction(customInstruction: String): Instruction {
+        return Instruction { customInstruction }
+    }
 }

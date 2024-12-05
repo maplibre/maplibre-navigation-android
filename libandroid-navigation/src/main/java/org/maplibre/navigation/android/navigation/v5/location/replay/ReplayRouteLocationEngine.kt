@@ -1,217 +1,198 @@
-package org.maplibre.navigation.android.navigation.v5.location.replay;
+package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.location.Location;
-import android.os.Handler;
-import android.os.Looper;
+import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.location.Location
+import android.os.Handler
+import android.os.Looper
+import org.maplibre.android.location.engine.LocationEngine
+import org.maplibre.android.location.engine.LocationEngineCallback
+import org.maplibre.android.location.engine.LocationEngineRequest
+import org.maplibre.android.location.engine.LocationEngineResult
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+open class ReplayRouteLocationEngine : LocationEngine, Runnable {
+    private var converter: ReplayRouteLocationConverter? = null
+    private var speed = DEFAULT_SPEED
+    private var delay = DEFAULT_DELAY
+    private val handler = Handler()
+    private var mockedLocations: MutableList<Location> = mutableListOf()
+    private var dispatcher: ReplayLocationDispatcher? = null
 
-import org.maplibre.geojson.LineString;
-import org.maplibre.geojson.Point;
-import org.maplibre.android.location.engine.LocationEngine;
-import org.maplibre.android.location.engine.LocationEngineCallback;
-import org.maplibre.android.location.engine.LocationEngineRequest;
-import org.maplibre.android.location.engine.LocationEngineResult;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-
-public class ReplayRouteLocationEngine implements LocationEngine, Runnable {
-    private static final int HEAD = 0;
-    private static final int MOCKED_POINTS_LEFT_THRESHOLD = 5;
-    private static final int ONE_SECOND_IN_MILLISECONDS = 1000;
-    private static final int FORTY_FIVE_KM_PER_HOUR = 45;
-    private static final int DEFAULT_SPEED = FORTY_FIVE_KM_PER_HOUR;
-    private static final int ONE_SECOND = 1;
-    private static final int DEFAULT_DELAY = ONE_SECOND;
-    private static final int DO_NOT_DELAY = 0;
-    private static final int ZERO = 0;
-    private static final String SPEED_MUST_BE_GREATER_THAN_ZERO_KM_H = "Speed must be greater than 0 km/h.";
-    private static final String DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS = "Delay must be greater than 0 seconds.";
-    private static final String REPLAY_ROUTE = "ReplayRouteLocation";
-    private ReplayRouteLocationConverter converter;
-    private int speed = DEFAULT_SPEED;
-    private int delay = DEFAULT_DELAY;
-    private Handler handler;
-    private List<Location> mockedLocations;
-    private ReplayLocationDispatcher dispatcher;
-    private Location lastLocation = null;
-    private CopyOnWriteArrayList<LocationEngineCallback<LocationEngineResult>> callbackList = new CopyOnWriteArrayList<>();
-    private final ReplayLocationListener replayLocationListener = new ReplayLocationListener() {
-        @Override
-        public void onLocationReplay(Location location) {
-            lastLocation = location;
-            for (LocationEngineCallback<LocationEngineResult> result : callbackList) {
-                result.onSuccess(LocationEngineResult.create(location));
+    @get:SuppressLint("MissingPermission")
+    var lastLocation: Location? = null
+        private set
+    private val callbackList = mutableListOf<LocationEngineCallback<LocationEngineResult>>()
+    private val replayLocationListener = ReplayLocationListener { location ->
+            lastLocation = location
+            val result = LocationEngineResult.create(location)
+            for (callback in callbackList) {
+                callback.onSuccess(result)
             }
-            lastLocation = location;
-            if (!mockedLocations.isEmpty()) {
-                mockedLocations.remove(HEAD);
-            }
+            mockedLocations.removeFirstOrNull()
         }
-    };
 
-    public ReplayRouteLocationEngine() {
-        this.handler = new Handler();
+    @SuppressLint("MissingPermission")
+    fun assign(route: DirectionsRoute) {
+        start(route)
     }
 
     @SuppressLint("MissingPermission")
-    public void assign(DirectionsRoute route) {
-        start(route);
+    fun moveTo(point: Point) {
+        val lastLocation = lastLocation ?: return
+        startRoute(point, lastLocation)
     }
 
-    @SuppressLint("MissingPermission")
-    public void moveTo(Point point) {
-        Location lastLocation = getLastLocation();
-        if (lastLocation == null) {
-            return;
-        }
-
-        startRoute(point, lastLocation);
+    fun assignLastLocation(currentPosition: Point) {
+        initializeLastLocation()
+        lastLocation?.longitude = currentPosition.longitude()
+        lastLocation?.latitude = currentPosition.latitude()
     }
 
-    public void assignLastLocation(Point currentPosition) {
-        initializeLastLocation();
-        lastLocation.setLongitude(currentPosition.longitude());
-        lastLocation.setLatitude(currentPosition.latitude());
+    fun updateSpeed(customSpeedInKmPerHour: Int) {
+        require(customSpeedInKmPerHour > 0) { SPEED_MUST_BE_GREATER_THAN_ZERO_KM_H }
+        this.speed = customSpeedInKmPerHour
     }
 
-    public void updateSpeed(int customSpeedInKmPerHour) {
-        if (customSpeedInKmPerHour <= 0) {
-            throw new IllegalArgumentException(SPEED_MUST_BE_GREATER_THAN_ZERO_KM_H);
-        }
-        this.speed = customSpeedInKmPerHour;
+    fun updateDelay(customDelayInSeconds: Int) {
+        require(customDelayInSeconds > 0) { DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS }
+        this.delay = customDelayInSeconds
     }
 
-    public void updateDelay(int customDelayInSeconds) {
-        if (customDelayInSeconds <= 0) {
-            throw new IllegalArgumentException(DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS);
-        }
-        this.delay = customDelayInSeconds;
-    }
-
-    @Override
-    public void run() {
-        List<Location> nextMockedLocations = converter.toLocations();
-        if (nextMockedLocations.isEmpty()) {
-            if (converter.isMultiLegRoute()) {
-                nextMockedLocations = converter.toLocations();
-            } else {
-                handler.removeCallbacks(this);
-                return;
+    override fun run() {
+        converter?.let { converter ->
+            var nextMockedLocations = converter.toLocations()
+            if (nextMockedLocations.isEmpty()) {
+                if (converter.isMultiLegRoute) {
+                    nextMockedLocations = converter.toLocations()
+                } else {
+                    handler.removeCallbacks(this)
+                    return
+                }
             }
+            dispatcher?.add(nextMockedLocations)
+            mockedLocations.addAll(nextMockedLocations)
+            scheduleNextDispatch()
         }
-        dispatcher.add(nextMockedLocations);
-        mockedLocations.addAll(nextMockedLocations);
-        scheduleNextDispatch();
     }
 
-    private void start(DirectionsRoute route) {
-        handler.removeCallbacks(this);
-        converter = new ReplayRouteLocationConverter(route, speed, delay);
-        converter.initializeTime();
-        mockedLocations = converter.toLocations();
-        dispatcher = obtainDispatcher();
-        dispatcher.run();
-        scheduleNextDispatch();
-    }
-
-    private ReplayLocationDispatcher obtainDispatcher() {
-        if (dispatcher != null) {
-            dispatcher.stop();
-            dispatcher.removeReplayLocationListener(replayLocationListener);
+    private fun start(route: DirectionsRoute) {
+        handler.removeCallbacks(this)
+        converter = ReplayRouteLocationConverter(route, speed, delay).apply {
+            initializeTime()
+            mockedLocations = toLocations()
         }
-        dispatcher = new ReplayLocationDispatcher(mockedLocations);
-        dispatcher.addReplayLocationListener(replayLocationListener);
 
-        return dispatcher;
+        dispatcher = obtainDispatcher().apply {
+            run()
+        }
+
+        scheduleNextDispatch()
     }
 
-    private void startRoute(Point point, Location lastLocation) {
-        handler.removeCallbacks(this);
-        converter.updateSpeed(speed);
-        converter.updateDelay(delay);
-        converter.initializeTime();
-        LineString route = obtainRoute(point, lastLocation);
-        mockedLocations = converter.calculateMockLocations(converter.sliceRoute(route));
-        dispatcher = obtainDispatcher();
-        dispatcher.run();
+    private fun obtainDispatcher(): ReplayLocationDispatcher {
+        dispatcher?.stop()
+        dispatcher?.removeReplayLocationListener(replayLocationListener)
+
+        return ReplayLocationDispatcher(mockedLocations).also { dispatch ->
+            dispatch.addReplayLocationListener(replayLocationListener)
+            dispatcher = dispatch
+        }
     }
 
-    @NonNull
-    private LineString obtainRoute(Point point, Location lastLocation) {
-        List<Point> pointList = new ArrayList<>();
-        pointList.add(Point.fromLngLat(lastLocation.getLongitude(), lastLocation.getLatitude()));
-        pointList.add(point);
-        return LineString.fromLngLats(pointList);
+    private fun startRoute(point: Point, lastLocation: Location) {
+        converter?.let { converter ->
+            handler.removeCallbacks(this)
+            converter.updateSpeed(speed)
+            converter.updateDelay(delay)
+            converter.initializeTime()
+
+            val route = obtainRoute(point, lastLocation)
+            mockedLocations = converter.calculateMockLocations(converter.sliceRoute(route))
+            dispatcher = obtainDispatcher()
+            dispatcher?.run()
+        }
     }
 
-    private void scheduleNextDispatch() {
-        int currentMockedPoints = mockedLocations.size();
+    private fun obtainRoute(point: Point, lastLocation: Location): LineString {
+        val pointList: MutableList<Point> = ArrayList()
+        pointList.add(Point.fromLngLat(lastLocation.longitude, lastLocation.latitude))
+        pointList.add(point)
+        return LineString.fromLngLats(pointList)
+    }
+
+    private fun scheduleNextDispatch() {
+        val currentMockedPoints = mockedLocations.size
         if (currentMockedPoints == ZERO) {
-            handler.postDelayed(this, DO_NOT_DELAY);
+            handler.postDelayed(this, DO_NOT_DELAY.toLong())
         } else if (currentMockedPoints <= MOCKED_POINTS_LEFT_THRESHOLD) {
-            handler.postDelayed(this, ONE_SECOND_IN_MILLISECONDS);
+            handler.postDelayed(this, ONE_SECOND_IN_MILLISECONDS.toLong())
         } else {
-            handler.postDelayed(this, (currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * ONE_SECOND_IN_MILLISECONDS);
+            handler.postDelayed(
+                this,
+                ((currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * ONE_SECOND_IN_MILLISECONDS).toLong()
+            )
         }
     }
 
-    private void initializeLastLocation() {
+    private fun initializeLastLocation() {
         if (lastLocation == null) {
-            lastLocation = new Location(REPLAY_ROUTE);
+            lastLocation = Location(REPLAY_ROUTE)
         }
     }
 
-    @SuppressLint("MissingPermission")
-    @Nullable
-    public Location getLastLocation() {
-        return lastLocation;
+    fun onStop() {
+        dispatcher?.stop()
+        handler.removeCallbacks(this)
+        callbackList.removeAll(callbackList)
+        dispatcher?.removeReplayLocationListener(replayLocationListener)
     }
 
-    public void onStop() {
-        if (dispatcher != null) {
-            dispatcher.stop();
-        }
-        handler.removeCallbacks(this);
-        for (LocationEngineCallback<LocationEngineResult> callback : callbackList) {
-            callbackList.remove(callback);
-        }
-        if (dispatcher != null) {
-            dispatcher.removeReplayLocationListener(replayLocationListener);
-        }
+    @Throws(SecurityException::class)
+    override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
+        lastLocation?.let { lastLocation ->
+            callback.onSuccess(LocationEngineResult.create(lastLocation))
+        } ?: callback.onFailure(Exception("No last location"))
     }
 
-    @Override
-    public void getLastLocation(@NonNull LocationEngineCallback<LocationEngineResult> callback) throws SecurityException {
-        if (lastLocation != null) {
-            callback.onSuccess(LocationEngineResult.create(lastLocation));
-        } else {
-            callback.onFailure(new Exception("No last location"));
-        }
+    @Throws(SecurityException::class)
+    override fun requestLocationUpdates(
+        request: LocationEngineRequest,
+        callback: LocationEngineCallback<LocationEngineResult>,
+        looper: Looper?
+    ) {
+        callbackList.add(callback)
     }
 
-    @Override
-    public void requestLocationUpdates(@NonNull LocationEngineRequest request, @NonNull LocationEngineCallback<LocationEngineResult> callback, @Nullable Looper looper) throws SecurityException {
-        callbackList.add(callback);
+    @Throws(SecurityException::class)
+    override fun requestLocationUpdates(
+        request: LocationEngineRequest,
+        pendingIntent: PendingIntent
+    ) {
     }
 
-    @Override
-    public void requestLocationUpdates(@NonNull LocationEngineRequest request, PendingIntent pendingIntent) throws SecurityException {
+    override fun removeLocationUpdates(callback: LocationEngineCallback<LocationEngineResult>) {
+        callbackList.remove(callback)
     }
 
-    @Override
-    public void removeLocationUpdates(@NonNull LocationEngineCallback<LocationEngineResult> callback) {
-        callbackList.remove(callback);
+    override fun removeLocationUpdates(pendingIntent: PendingIntent) {
     }
 
-    @Override
-    public void removeLocationUpdates(PendingIntent pendingIntent) {
+    companion object {
+        private const val MOCKED_POINTS_LEFT_THRESHOLD = 5
+        private const val ONE_SECOND_IN_MILLISECONDS = 1000
+        private const val FORTY_FIVE_KM_PER_HOUR = 45
+        private const val DEFAULT_SPEED = FORTY_FIVE_KM_PER_HOUR
+        private const val ONE_SECOND = 1
+        private const val DEFAULT_DELAY = ONE_SECOND
+        private const val DO_NOT_DELAY = 0
+        private const val ZERO = 0
+        private const val SPEED_MUST_BE_GREATER_THAN_ZERO_KM_H =
+            "Speed must be greater than 0 km/h."
+        private const val DELAY_MUST_BE_GREATER_THAN_ZERO_SECONDS =
+            "Delay must be greater than 0 seconds."
+        private const val REPLAY_ROUTE = "ReplayRouteLocation"
     }
 }

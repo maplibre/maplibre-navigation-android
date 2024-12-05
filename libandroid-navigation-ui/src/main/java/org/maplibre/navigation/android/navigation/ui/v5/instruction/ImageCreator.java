@@ -11,7 +11,6 @@ import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.BannerText;
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.navigation.SdkVersionChecker;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -128,26 +127,25 @@ public class ImageCreator extends NodeCreator<BannerComponentNode, ImageVerifier
   }
 
   private void initializeData(Context context) {
-    SdkVersionChecker currentVersionChecker = new SdkVersionChecker(Build.VERSION.SDK_INT);
     int displayDensity = context.getResources().getDisplayMetrics().densityDpi;
-    urlDensityMap = new UrlDensityMap(displayDensity, currentVersionChecker);
+    urlDensityMap = new UrlDensityMap(displayDensity, Build.VERSION.SDK_INT);
     targets = new ArrayList<>();
     bannerShieldList = new ArrayList<>();
   }
 
   private void fetchInstructions(LegStep legStep) {
-    if (legStep == null || legStep.bannerInstructions() == null
-      || legStep.bannerInstructions().isEmpty()) {
+    if (legStep == null || legStep.getBannerInstructions() == null
+      || legStep.getBannerInstructions().isEmpty()) {
       return;
     }
 
-    List<BannerInstructions> bannerInstructionList = new ArrayList<>(legStep.bannerInstructions());
+    List<BannerInstructions> bannerInstructionList = new ArrayList<>(legStep.getBannerInstructions());
     for (BannerInstructions instructions : bannerInstructionList) {
-      if (hasComponents(instructions.primary())) {
-        fetchImageBaseUrls(instructions.primary());
+      if (hasComponents(instructions.getPrimary())) {
+        fetchImageBaseUrls(instructions.getPrimary());
       }
-      if (hasComponents(instructions.secondary())) {
-        fetchImageBaseUrls(instructions.secondary());
+      if (hasComponents(instructions.getSecondary())) {
+        fetchImageBaseUrls(instructions.getSecondary());
       }
     }
   }
@@ -159,7 +157,7 @@ public class ImageCreator extends NodeCreator<BannerComponentNode, ImageVerifier
   }
 
   private boolean hasComponents(BannerText bannerText) {
-    return bannerText != null && bannerText.components() != null && !bannerText.components().isEmpty();
+    return bannerText != null && bannerText.getComponents() != null && !bannerText.getComponents().isEmpty();
   }
 
   private boolean hasImages() {
@@ -173,9 +171,9 @@ public class ImageCreator extends NodeCreator<BannerComponentNode, ImageVerifier
    * @param bannerText to provide the base URL
    */
   private void fetchImageBaseUrls(BannerText bannerText) {
-    for (BannerComponents components : bannerText.components()) {
+    for (BannerComponents components : bannerText.getComponents()) {
       if (nodeVerifier.hasImageUrl(components)) {
-        picassoImageLoader.load(urlDensityMap.get(components.imageBaseUrl())).fetch();
+        picassoImageLoader.load(urlDensityMap.get(components.getImageBaseUrl())).fetch();
       }
     }
   }

@@ -101,12 +101,12 @@ public class NavigationViewRouter implements RouteListener {
   }
 
   private boolean validRouteResponse(DirectionsResponse response) {
-    return response != null && !response.routes().isEmpty();
+    return response != null && !response.getRoutes().isEmpty();
   }
 
   private void extractRouteFrom(NavigationViewOptions options) {
     DirectionsRoute route = options.directionsRoute();
-    cacheRouteOptions(route.routeOptions());
+    cacheRouteOptions(route.getRouteOptions());
     updateCurrentRoute(route);
   }
 
@@ -116,9 +116,9 @@ public class NavigationViewRouter implements RouteListener {
   }
 
   private void cacheRouteDestination() {
-    boolean hasValidCoordinates = routeOptions != null && !routeOptions.coordinates().isEmpty();
+    boolean hasValidCoordinates = routeOptions != null && !routeOptions.getCoordinates().isEmpty();
     if (hasValidCoordinates) {
-      List<Point> coordinates = routeOptions.coordinates();
+      List<Point> coordinates = routeOptions.getCoordinates();
       int destinationCoordinate = coordinates.size() - 1;
       Point destinationPoint = coordinates.get(destinationCoordinate);
       listener.onDestinationSet(destinationPoint);

@@ -1,28 +1,26 @@
-package org.maplibre.navigation.android.navigation.v5.snap;
+package org.maplibre.navigation.android.navigation.v5.snap
 
-import android.location.Location;
-
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import android.location.Location
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 
 /**
  * This class handles calculating snapped position along the route. Latitude, longitude and bearing
  * should be provided.
- * <p>
- * The {@link MapLibreNavigation} uses
- * a {@link SnapToRoute} by default. If you would
- * like to customize the camera position, create a concrete implementation of this class
- * or subclass {@link SnapToRoute} and update {@link MapLibreNavigation#setSnapEngine(Snap)}}.
+ *
+ * The [MapLibreNavigation] uses
+ * a [SnapToRoute] by default. If you would ike to customize the camera position, create a concrete implementation of this class
+ * or subclass [SnapToRoute] and set it on [MapLibreNavigation] constructor}.
  */
-public abstract class Snap {
+abstract class Snap {
 
-  /**
-   * Calculate a snapped location along the route. Latitude, longitude and bearing should be
-   * provided.
-   *
-   * @param location Current raw user location
-   * @param routeProgress Current route progress
-   * @return Snapped location along route
-   */
-  public abstract Location getSnappedLocation(Location location, RouteProgress routeProgress);
+    /**
+     * Calculate a snapped location along the route. Latitude, longitude and bearing should be
+     * provided.
+     *
+     * @param location Current raw user location
+     * @param routeProgress Current route progress
+     * @return Snapped location along route
+     */
+    abstract fun getSnappedLocation(location: Location, routeProgress: RouteProgress): Location
 }

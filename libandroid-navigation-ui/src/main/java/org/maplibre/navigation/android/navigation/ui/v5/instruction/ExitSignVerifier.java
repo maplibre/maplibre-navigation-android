@@ -6,6 +6,6 @@ class ExitSignVerifier implements NodeVerifier {
 
   @Override
   public boolean isNodeType(BannerComponents bannerComponents) {
-    return bannerComponents.type().equals("exit") || bannerComponents.type().equals("exit-number");
+    return bannerComponents.getType().equals("exit") || bannerComponents.getType().getText().equals("exit-number");
   }
 }

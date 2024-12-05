@@ -1,59 +1,55 @@
-package org.maplibre.navigation.android.navigation.v5.location;
+package org.maplibre.navigation.android.navigation.v5.location
 
-import android.location.Location;
+import android.location.Location
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.Assert
+import org.junit.Test
 
-import org.junit.Test;
-import org.maplibre.navigation.android.navigation.v5.location.LocationValidator;
+class LocationValidatorTest {
+    @Test
+    fun isValidUpdate_trueOnFirstUpdate() {
+        val location = buildLocationWithAccuracy(10f)
+        val accuracyThreshold = 100
+        val validator = LocationValidator(accuracyThreshold)
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+        val isValid = validator.isValidUpdate(location)
 
-public class LocationValidatorTest {
+        Assert.assertTrue(isValid)
+    }
 
-  @Test
-  public void isValidUpdate_trueOnFirstUpdate() {
-    Location location = buildLocationWithAccuracy(10);
-    int accuracyThreshold = 100;
-    LocationValidator validator = new LocationValidator(accuracyThreshold);
+    @Test
+    fun isValidUpdate_trueWhenUnder100MeterAccuracyThreshold() {
+        val location = buildLocationWithAccuracy(90f)
+        val validator = buildValidatorWithUpdate()
 
-    boolean isValid = validator.isValidUpdate(location);
+        val isValid = validator.isValidUpdate(location)
 
-    assertTrue(isValid);
-  }
+        Assert.assertTrue(isValid)
+    }
 
-  @Test
-  public void isValidUpdate_trueWhenUnder100MeterAccuracyThreshold() {
-    Location location = buildLocationWithAccuracy(90);
-    LocationValidator validator = buildValidatorWithUpdate();
+    @Test
+    fun isValidUpdate_falseWhenOver100MeterAccuracyThreshold() {
+        val location = buildLocationWithAccuracy(110f)
+        val validator = buildValidatorWithUpdate()
 
-    boolean isValid = validator.isValidUpdate(location);
+        val isValid = validator.isValidUpdate(location)
 
-    assertTrue(isValid);
-  }
+        Assert.assertFalse(isValid)
+    }
 
-  @Test
-  public void isValidUpdate_falseWhenOver100MeterAccuracyThreshold() {
-    Location location = buildLocationWithAccuracy(110);
-    LocationValidator validator = buildValidatorWithUpdate();
+    private fun buildValidatorWithUpdate(): LocationValidator {
+        val location = buildLocationWithAccuracy(10f)
+        val accuracyThreshold = 100
+        val validator = LocationValidator(accuracyThreshold)
+        validator.isValidUpdate(location)
+        return validator
+    }
 
-    boolean isValid = validator.isValidUpdate(location);
-
-    assertFalse(isValid);
-  }
-
-  private LocationValidator buildValidatorWithUpdate() {
-    Location location = buildLocationWithAccuracy(10);
-    int accuracyThreshold = 100;
-    LocationValidator validator = new LocationValidator(accuracyThreshold);
-    validator.isValidUpdate(location);
-    return validator;
-  }
-
-  private Location buildLocationWithAccuracy(float accuracy) {
-    Location location = mock(Location.class);
-    when(location.getAccuracy()).thenReturn(accuracy);
-    return location;
-  }
+    private fun buildLocationWithAccuracy(accuracyValue: Float): Location {
+        val location = mockk<Location> {
+            every { accuracy } returns accuracyValue
+        }
+        return location
+    }
 }

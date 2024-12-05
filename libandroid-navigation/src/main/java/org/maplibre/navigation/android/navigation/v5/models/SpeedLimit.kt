@@ -1,32 +1,26 @@
-package org.maplibre.navigation.android.navigation.v5.models;
+package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.StringDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * The file exposes speed limit annotations.
  */
-public class SpeedLimit {
-  /**
-   * Speed limit unit in km/h.
-   */
-  public static final String KMPH = "km/h";
+@Suppress("unused")
+object SpeedLimit {
 
-  /**
-   * Speed limit unit in mph.
-   */
-  public static final String MPH = "mph";
+    @Serializable
+    enum class Unit(val text: String) {
+        /**
+         * Speed limit unit in km/h.
+         */
+        @SerialName("km/h")
+        KMPH("km/h"),
 
-  /**
-   * Speed limit unit.
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef({
-      MPH,
-      KMPH
-  })
-  public @interface Unit {
-  }
+        /**
+         * Speed limit unit in mph.
+         */
+        @SerialName("mph")
+        MPH("mph"),
+    }
 }

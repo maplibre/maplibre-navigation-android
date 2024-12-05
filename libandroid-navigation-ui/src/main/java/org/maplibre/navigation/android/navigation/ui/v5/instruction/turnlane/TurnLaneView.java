@@ -57,13 +57,13 @@ public class TurnLaneView extends AppCompatImageView {
   }
 
   private boolean hasInvalidData(@NonNull BannerComponents lane) {
-    return lane.directions() == null || lane.active() == null;
+    return lane.getDirections() == null || lane.getActive() == null;
   }
 
   @NonNull
   private TurnLaneViewData buildTurnLaneViewData(@NonNull BannerComponents lane, @NonNull String maneuverModifier) {
     StringBuilder builder = new StringBuilder();
-    for (String indication : lane.directions()) {
+    for (String indication : lane.getDirections()) {
       builder.append(indication);
     }
     String laneIndications = builder.toString();
@@ -85,7 +85,7 @@ public class TurnLaneView extends AppCompatImageView {
       getResources(), resId, getContext().getTheme()
     );
     setImageDrawable(turnLaneDrawable);
-    setAlpha(!lane.active() ? HALF_OPACITY : FULL_OPACITY);
+    setAlpha(!lane.getActive() ? HALF_OPACITY : FULL_OPACITY);
     setScaleX(drawData.shouldBeFlipped() ? SCALE_FLIPPED : SCALE_NORMAL);
   }
 }

@@ -24,7 +24,7 @@ public class MapRouteClickListenerTest {
   public void checksOnRouteSelectionChangeListenerIsCalledWhenClickedRouteIsFound() {
     DirectionsRoute anyRoute = buildMockDirectionsRoute();
     List<DirectionsRoute> anyDirectionsRoutes = buildDirectionsRoutes(anyRoute);
-    LineString anyRouteGeometry = LineString.fromPolyline(anyRoute.geometry(), Constants.PRECISION_6);
+    LineString anyRouteGeometry = LineString.fromPolyline(anyRoute.getGeometry(), Constants.PRECISION_6);
     HashMap<LineString, DirectionsRoute> anyLineStringDirectionsRouteMap =
       buildLineStringDirectionsRouteHashMap(anyRoute, anyRouteGeometry);
     MapRouteLine mockedMapRouteLine = buildMockMapRouteLine(true, anyLineStringDirectionsRouteMap);
@@ -56,9 +56,8 @@ public class MapRouteClickListenerTest {
 
   private DirectionsRoute buildMockDirectionsRoute() {
     DirectionsRoute anyRoute = mock(DirectionsRoute.class);
-    when(anyRoute.geometry()).thenReturn("awbagAzavnhFp`@~fGr~Ya|BhcBwcYbr\\u{C`tZ~{H~vrBsge@bdo@`kc@dqpAckUbmn" +
+    when(anyRoute.getGeometry()).thenReturn("awbagAzavnhFp`@~fGr~Ya|BhcBwcYbr\\u{C`tZ~{H~vrBsge@bdo@`kc@dqpAckUbmn" +
       "@sphAjnDovu@zviDgasDpa^ixsBbmy@{ubBvou@ajy@|}\\y~q@dycAcotGj{v@cdr@lyUwpC");
-    when(anyRoute.routeIndex()).thenReturn("1");
     return anyRoute;
   }
 

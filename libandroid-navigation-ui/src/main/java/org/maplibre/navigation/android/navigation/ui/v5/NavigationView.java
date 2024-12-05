@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -45,10 +46,8 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat;
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.TextUtils;
 
 /**
  * View that creates the drop-in UI.
@@ -671,23 +670,21 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
 
   private int establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
     MapLibreNavigationOptions mapLibreNavigationOptions = navigationViewOptions.navigationOptions();
-    return mapLibreNavigationOptions.roundingIncrement();
+    return mapLibreNavigationOptions.getRoundingIncrement();
   }
 
   private String establishLanguage(LocaleUtils localeUtils, NavigationViewOptions options) {
-    return localeUtils.getNonEmptyLanguage(getContext(), options.directionsRoute().voiceLanguage());
+    return localeUtils.getNonEmptyLanguage(getContext(), options.directionsRoute().getVoiceLanguage());
   }
 
   private String establishUnitType(LocaleUtils localeUtils, NavigationViewOptions options) {
-    RouteOptions routeOptions = options.directionsRoute().routeOptions();
-    String voiceUnits = routeOptions == null ? null : routeOptions.voiceUnits();
+    RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
+    String voiceUnits = routeOptions == null ? null : routeOptions.getVoiceUnits();
     return localeUtils.retrieveNonNullUnitType(getContext(), voiceUnits);
   }
 
   private void establishTimeFormat(NavigationViewOptions options) {
-    @NavigationTimeFormat.Type
-    int timeFormatType = options.navigationOptions().timeFormatType();
-    summaryBottomSheet.setTimeFormat(timeFormatType);
+    summaryBottomSheet.setTimeFormat(options.navigationOptions().getTimeFormatType());
   }
 
   private void initializeNavigationListeners(NavigationViewOptions options, NavigationViewModel navigationViewModel) {

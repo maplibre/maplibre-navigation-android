@@ -1,332 +1,193 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import androidx.annotation.IntDef;
-import androidx.annotation.StringDef;
-
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
-import org.maplibre.navigation.android.navigation.v5.location.LocationValidator;
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector;
+import androidx.annotation.IntDef
+import androidx.annotation.StringDef
+import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
+import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
+import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
 
 /**
  * Navigation constants
  *
  * @since 0.1.0
  */
-public final class NavigationConstants {
-
-    private NavigationConstants() {
-        // Empty private constructor to prevent users creating an instance of this class.
-    }
+@Suppress("unused")
+object NavigationConstants {
 
     /**
      * If default voice instructions are enabled, this identifier will be used to differentiate them
      * from custom milestones in the
-     * {@link MilestoneEventListener}.
+     * [MilestoneEventListener].
      *
      * @since 0.7.0
      */
-    public static final int VOICE_INSTRUCTION_MILESTONE_ID = 1;
-
+    const val VOICE_INSTRUCTION_MILESTONE_ID: Int = 1
 
     /**
      * String channel used to post the navigation notification (custom or default).
-     * <p>
+     *
+     *
      * If &gt; Android O, a notification channel needs to be created to properly post the notification.
      *
      * @since 0.8.0
      */
-    public static final String NAVIGATION_NOTIFICATION_CHANNEL = "NAVIGATION_NOTIFICATION_CHANNEL";
+    const val NAVIGATION_NOTIFICATION_CHANNEL: String = "NAVIGATION_NOTIFICATION_CHANNEL"
 
     /**
      * This identifier will be used to
-     * differentiate the {@link BannerInstructionMilestone}
-     * from custom milestones in the {@link MilestoneEventListener}.
+     * differentiate the [BannerInstructionMilestone]
+     * from custom milestones in the [MilestoneEventListener].
      *
      * @since 0.8.0
      */
-    public static final int BANNER_INSTRUCTION_MILESTONE_ID = 2;
+    const val BANNER_INSTRUCTION_MILESTONE_ID: Int = 2
 
     /**
      * Random integer value used for identifying the navigation notification.
      *
      * @since 0.5.0
      */
-    public static final int NAVIGATION_NOTIFICATION_ID = 5678;
-
+    const val NAVIGATION_NOTIFICATION_ID: Int = 5678
 
     /**
      * NavigationLauncher key for storing initial map position in Intent
      */
-    public static final String NAVIGATION_VIEW_INITIAL_MAP_POSITION = "navigation_view_initial_map_position";
-
-    /**
-     * Threshold user must be within to count as completing a step. One of two heuristics used to know
-     * when a user completes a step, see {@link #MANEUVER_ZONE_RADIUS}. The users heading and the
-     * finalHeading are compared. If this number is within this defined constant, the user has
-     * completed the step.
-     *
-     * @since 0.1.0
-     */
-    static final int MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION = 30;
-
-    /**
-     * Radius in meters the user must enter to count as completing a step. One of two heuristics used
-     * to know when a user completes a step, see
-     * {@link #MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION}.
-     *
-     * @since 0.1.0
-     */
-    public static final int MANEUVER_ZONE_RADIUS = 40;
-
-    /**
-     * Maximum number of meters the user can travel away from step before the
-     * {@link OffRouteListener}'s called.
-     *
-     * @deprecated has no effect and will be removed in a future release.
-     * @since 0.2.0
-     */
-    @Deprecated
-    static final double MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE = 20;
-
-    /**
-     * Seconds used before a reroute occurs.
-     *
-     * @since 0.2.0
-     */
-    static final int SECONDS_BEFORE_REROUTE = 3;
-
-    /**
-     * Accepted deviation excluding horizontal accuracy before the user is considered to be off route.
-     *
-     * @since 0.1.0
-     */
-    static final double USER_LOCATION_SNAPPING_DISTANCE = 10;
-
-    /**
-     * When calculating whether or not the user is on the route, we look where the user will be given
-     * their speed and this variable.
-     *
-     * @since 0.2.0
-     */
-    static final double DEAD_RECKONING_TIME_INTERVAL = 1.0;
-
-    /**
-     * Maximum angle the user puck will be rotated when snapping the user's course to the route line.
-     *
-     * @since 0.3.0
-     */
-    static final int MAX_MANIPULATED_COURSE_ANGLE = 25;
-
-    /**
-     * Meter radius which the user must be inside for an arrival milestone to be triggered and
-     * navigation to end.
-     */
-    public static final double METERS_REMAINING_TILL_ARRIVAL = 40;
-
-    /**
-     * Minimum distance in meters that the user must travel in the wrong direction before the
-     * off-route logic recognizes the user is moving away from upcoming maneuver
-     */
-    public static final double OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION = 50;
-
-    /**
-     * Minimum distance in meters that the user must travel in the correct direction before the
-     * off-route logic recognizes the user is back on the right direction
-     */
-    public static final double OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION = 20;
-
-    public static final double MINIMUM_DISTANCE_BEFORE_REROUTING = 50;
+    const val NAVIGATION_VIEW_INITIAL_MAP_POSITION: String = "navigation_view_initial_map_position"
 
     /**
      * Text to be shown in AlertView during off-route scenario.
      */
-    public static final String REPORT_PROBLEM = "Report Problem";
+    const val REPORT_PROBLEM: String = "Report Problem"
 
     /**
      * Duration in which the AlertView is shown with the "Report Problem" text.
      */
-    public static final long ALERT_VIEW_PROBLEM_DURATION = 10000;
+    const val ALERT_VIEW_PROBLEM_DURATION: Long = 10000
 
     /**
-     * If a set of light / dark themes been set in {@link android.content.SharedPreferences}
+     * If a set of light / dark themes been set in [android.content.SharedPreferences]
      */
-    public static final String NAVIGATION_VIEW_PREFERENCE_SET_THEME = "navigation_view_theme_preference";
+    const val NAVIGATION_VIEW_PREFERENCE_SET_THEME: String = "navigation_view_theme_preference"
 
     /**
      * Key for the set light theme in preferences
      */
-    public static final String NAVIGATION_VIEW_LIGHT_THEME = "navigation_view_light_theme";
+    const val NAVIGATION_VIEW_LIGHT_THEME: String = "navigation_view_light_theme"
 
     /**
      * Key for the set dark theme in preferences
      */
-    public static final String NAVIGATION_VIEW_DARK_THEME = "navigation_view_dark_theme";
-
+    const val NAVIGATION_VIEW_DARK_THEME: String = "navigation_view_dark_theme"
 
     /**
      * Defines the minimum zoom level of the displayed map.
      */
-    public static final double NAVIGATION_MINIMUM_MAP_ZOOM = 7d;
+    const val NAVIGATION_MINIMUM_MAP_ZOOM: Double = 7.0
 
     /**
      * Maximum duration of the zoom/tilt adjustment animation while tracking.
      */
-    public static final long NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION = 1500L;
+    const val NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION: Long = 1500L
 
     /**
      * Minimum duration of the zoom adjustment animation while tracking.
      */
-    public static final long NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION = 300L;
+    const val NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION: Long = 300L
 
     /**
      * Minimum duration of the tilt adjustment animation while tracking.
      */
-    public static final long NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION = 750L;
-
-    /**
-     * In seconds, how quickly {@link FasterRouteDetector}
-     * will tell {@link RouteProcessorBackgroundThread} to check
-     * for a faster {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute}.
-     *
-     * @since 0.9.0
-     */
-    public static final int NAVIGATION_CHECK_FASTER_ROUTE_INTERVAL = 120;
+    const val NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION: Long = 750L
 
     /**
      * 125 seconds remaining is considered a low alert level when
-     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
+     * navigating along a [org.maplibre.navigation.android.navigation.v5.models.LegStep].
      *
      * @since 0.9.0
      */
-    public static final int NAVIGATION_LOW_ALERT_DURATION = 125;
+    const val NAVIGATION_LOW_ALERT_DURATION: Int = 125
 
     /**
      * 70 seconds remaining is considered a medium alert level when
-     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
+     * navigating along a [org.maplibre.navigation.android.navigation.v5.models.LegStep].
      *
      * @since 0.9.0
      */
-    public static final int NAVIGATION_MEDIUM_ALERT_DURATION = 70;
+    const val NAVIGATION_MEDIUM_ALERT_DURATION: Int = 70
 
     /**
      * 15 seconds remaining is considered a high alert level when
-     * navigating along a {@link org.maplibre.navigation.android.navigation.v5.models.LegStep}.
+     * navigating along a [org.maplibre.navigation.android.navigation.v5.models.LegStep].
      *
      * @since 0.10.1
      */
-    public static final int NAVIGATION_HIGH_ALERT_DURATION = 15;
+    const val NAVIGATION_HIGH_ALERT_DURATION: Int = 15
 
-    /**
-     * Default location acceptable accuracy threshold
-     * used in {@link LocationValidator}.
-     * <p>
-     * If a new {@link android.location.Location} update is received from the LocationEngine that has
-     * an accuracy less than this threshold, the update will be considered valid and all other validation
-     * is not considered.
-     *
-     * @since 0.17.0
-     */
-    static final int ONE_HUNDRED_METER_ACCEPTABLE_ACCURACY_THRESHOLD = 100;
+    const val NON_NULL_APPLICATION_CONTEXT_REQUIRED: String =
+        "Non-null application context required."
 
-    static final String NON_NULL_APPLICATION_CONTEXT_REQUIRED = "Non-null application context required.";
-
-    public static final Float[] WAYNAME_OFFSET = {0.0f, 40.0f};
-    public static final String MAPLIBRE_LOCATION_SOURCE = "maplibre-location-source";
-    public static final String MAPLIBRE_WAYNAME_LAYER = "maplibre-wayname-layer";
-    public static final String MAPLIBRE_WAYNAME_ICON = "maplibre-wayname-icon";
+    @JvmField
+    val WAYNAME_OFFSET: Array<Float> = arrayOf(0.0f, 40.0f)
+    const val MAPLIBRE_LOCATION_SOURCE: String = "maplibre-location-source"
+    const val MAPLIBRE_WAYNAME_LAYER: String = "maplibre-wayname-layer"
+    const val MAPLIBRE_WAYNAME_ICON: String = "maplibre-wayname-icon"
 
     // Bundle variable keys
-    public static final String NAVIGATION_VIEW_ROUTE_KEY = "route_json";
-    public static final String NAVIGATION_VIEW_SIMULATE_ROUTE = "navigation_view_simulate_route";
-    public static final String NAVIGATION_VIEW_ROUTE_PROFILE_KEY = "navigation_view_route_profile";
-    public static final String NAVIGATION_VIEW_OFF_ROUTE_ENABLED_KEY = "navigation_view_off_route_enabled";
-    public static final String NAVIGATION_VIEW_SNAP_ENABLED_KEY = "navigation_view_snap_enabled";
+    const val NAVIGATION_VIEW_ROUTE_KEY: String = "route_json"
+    const val NAVIGATION_VIEW_SIMULATE_ROUTE: String = "navigation_view_simulate_route"
+    const val NAVIGATION_VIEW_ROUTE_PROFILE_KEY: String = "navigation_view_route_profile"
+    const val NAVIGATION_VIEW_OFF_ROUTE_ENABLED_KEY: String = "navigation_view_off_route_enabled"
+    const val NAVIGATION_VIEW_SNAP_ENABLED_KEY: String = "navigation_view_snap_enabled"
 
     // Step Maneuver Types
-    public static final String STEP_MANEUVER_TYPE_TURN = "turn";
-    public static final String STEP_MANEUVER_TYPE_NEW_NAME = "new name";
-    public static final String STEP_MANEUVER_TYPE_DEPART = "depart";
-    public static final String STEP_MANEUVER_TYPE_ARRIVE = "arrive";
-    public static final String STEP_MANEUVER_TYPE_MERGE = "merge";
-    public static final String STEP_MANEUVER_TYPE_ON_RAMP = "on ramp";
-    public static final String STEP_MANEUVER_TYPE_OFF_RAMP = "off ramp";
-    public static final String STEP_MANEUVER_TYPE_FORK = "fork";
-    public static final String STEP_MANEUVER_TYPE_END_OF_ROAD = "end of road";
-    public static final String STEP_MANEUVER_TYPE_CONTINUE = "continue";
-    public static final String STEP_MANEUVER_TYPE_ROUNDABOUT = "roundabout";
-    public static final String STEP_MANEUVER_TYPE_ROTARY = "rotary";
-    public static final String STEP_MANEUVER_TYPE_EXIT_ROTARY = "exit rotary";
-    public static final String STEP_MANEUVER_TYPE_ROUNDABOUT_TURN = "roundabout turn";
-    public static final String STEP_MANEUVER_TYPE_NOTIFICATION = "notification";
-    public static final String STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT = "exit roundabout";
-
-    @StringDef({
-        STEP_MANEUVER_TYPE_TURN,
-        STEP_MANEUVER_TYPE_NEW_NAME,
-        STEP_MANEUVER_TYPE_DEPART,
-        STEP_MANEUVER_TYPE_ARRIVE,
-        STEP_MANEUVER_TYPE_MERGE,
-        STEP_MANEUVER_TYPE_ON_RAMP,
-        STEP_MANEUVER_TYPE_OFF_RAMP,
-        STEP_MANEUVER_TYPE_FORK,
-        STEP_MANEUVER_TYPE_END_OF_ROAD,
-        STEP_MANEUVER_TYPE_CONTINUE,
-        STEP_MANEUVER_TYPE_ROUNDABOUT,
-        STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT,
-        STEP_MANEUVER_TYPE_ROTARY,
-        STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,
-        STEP_MANEUVER_TYPE_NOTIFICATION
-    })
-    public @interface ManeuverType {
-    }
+    const val STEP_MANEUVER_TYPE_TURN: String = "turn"
+    const val STEP_MANEUVER_TYPE_NEW_NAME: String = "new name"
+    const val STEP_MANEUVER_TYPE_DEPART: String = "depart"
+    const val STEP_MANEUVER_TYPE_ARRIVE: String = "arrive"
+    const val STEP_MANEUVER_TYPE_MERGE: String = "merge"
+    const val STEP_MANEUVER_TYPE_ON_RAMP: String = "on ramp"
+    const val STEP_MANEUVER_TYPE_OFF_RAMP: String = "off ramp"
+    const val STEP_MANEUVER_TYPE_FORK: String = "fork"
+    const val STEP_MANEUVER_TYPE_END_OF_ROAD: String = "end of road"
+    const val STEP_MANEUVER_TYPE_CONTINUE: String = "continue"
+    const val STEP_MANEUVER_TYPE_ROUNDABOUT: String = "roundabout"
+    const val STEP_MANEUVER_TYPE_ROTARY: String = "rotary"
+    const val STEP_MANEUVER_TYPE_EXIT_ROTARY: String = "exit rotary"
+    const val STEP_MANEUVER_TYPE_ROUNDABOUT_TURN: String = "roundabout turn"
+    const val STEP_MANEUVER_TYPE_NOTIFICATION: String = "notification"
+    const val STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT: String = "exit roundabout"
 
     // Step Maneuver Modifiers
-    public static final String STEP_MANEUVER_MODIFIER_UTURN = "uturn";
-    public static final String STEP_MANEUVER_MODIFIER_SHARP_RIGHT = "sharp right";
-    public static final String STEP_MANEUVER_MODIFIER_RIGHT = "right";
-    public static final String STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT = "slight right";
-    public static final String STEP_MANEUVER_MODIFIER_STRAIGHT = "straight";
-    public static final String STEP_MANEUVER_MODIFIER_SLIGHT_LEFT = "slight left";
-    public static final String STEP_MANEUVER_MODIFIER_LEFT = "left";
-    public static final String STEP_MANEUVER_MODIFIER_SHARP_LEFT = "sharp left";
-
-    @StringDef({
-        STEP_MANEUVER_MODIFIER_UTURN,
-        STEP_MANEUVER_MODIFIER_SHARP_RIGHT,
-        STEP_MANEUVER_MODIFIER_RIGHT,
-        STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT,
-        STEP_MANEUVER_MODIFIER_STRAIGHT,
-        STEP_MANEUVER_MODIFIER_SLIGHT_LEFT,
-        STEP_MANEUVER_MODIFIER_LEFT,
-        STEP_MANEUVER_MODIFIER_SHARP_LEFT
-    })
-    public @interface ManeuverModifier {
-    }
+    const val STEP_MANEUVER_MODIFIER_UTURN: String = "uturn"
+    const val STEP_MANEUVER_MODIFIER_SHARP_RIGHT: String = "sharp right"
+    const val STEP_MANEUVER_MODIFIER_RIGHT: String = "right"
+    const val STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT: String = "slight right"
+    const val STEP_MANEUVER_MODIFIER_STRAIGHT: String = "straight"
+    const val STEP_MANEUVER_MODIFIER_SLIGHT_LEFT: String = "slight left"
+    const val STEP_MANEUVER_MODIFIER_LEFT: String = "left"
+    const val STEP_MANEUVER_MODIFIER_SHARP_LEFT: String = "sharp left"
 
     // Turn Lane Indication
-    public static final String TURN_LANE_INDICATION_LEFT = "left";
-    public static final String TURN_LANE_INDICATION_SLIGHT_LEFT = "slight left";
-    public static final String TURN_LANE_INDICATION_STRAIGHT = "straight";
-    public static final String TURN_LANE_INDICATION_RIGHT = "right";
-    public static final String TURN_LANE_INDICATION_SLIGHT_RIGHT = "slight right";
-    public static final String TURN_LANE_INDICATION_UTURN = "uturn";
+    const val TURN_LANE_INDICATION_LEFT: String = "left"
+    const val TURN_LANE_INDICATION_SLIGHT_LEFT: String = "slight left"
+    const val TURN_LANE_INDICATION_STRAIGHT: String = "straight"
+    const val TURN_LANE_INDICATION_RIGHT: String = "right"
+    const val TURN_LANE_INDICATION_SLIGHT_RIGHT: String = "slight right"
+    const val TURN_LANE_INDICATION_UTURN: String = "uturn"
 
     // Distance Rounding Increments
-    public static final int ROUNDING_INCREMENT_FIVE = 5;
-    public static final int ROUNDING_INCREMENT_TEN = 10;
-    public static final int ROUNDING_INCREMENT_TWENTY_FIVE = 25;
-    public static final int ROUNDING_INCREMENT_FIFTY = 50;
-    public static final int ROUNDING_INCREMENT_ONE_HUNDRED = 100;
+    const val ROUNDING_INCREMENT_FIVE: Int = 5
+    const val ROUNDING_INCREMENT_TEN: Int = 10
+    const val ROUNDING_INCREMENT_TWENTY_FIVE: Int = 25
+    const val ROUNDING_INCREMENT_FIFTY: Int = 50
+    const val ROUNDING_INCREMENT_ONE_HUNDRED: Int = 100
 
-    @IntDef({
-        ROUNDING_INCREMENT_FIVE,
-        ROUNDING_INCREMENT_TEN,
-        ROUNDING_INCREMENT_TWENTY_FIVE,
-        ROUNDING_INCREMENT_FIFTY,
-        ROUNDING_INCREMENT_ONE_HUNDRED
-    })
-    public @interface RoundingIncrement {
-    }
+    @StringDef(STEP_MANEUVER_TYPE_TURN, STEP_MANEUVER_TYPE_NEW_NAME, STEP_MANEUVER_TYPE_DEPART, STEP_MANEUVER_TYPE_ARRIVE, STEP_MANEUVER_TYPE_MERGE, STEP_MANEUVER_TYPE_ON_RAMP, STEP_MANEUVER_TYPE_OFF_RAMP, STEP_MANEUVER_TYPE_FORK, STEP_MANEUVER_TYPE_END_OF_ROAD, STEP_MANEUVER_TYPE_CONTINUE, STEP_MANEUVER_TYPE_ROUNDABOUT, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT, STEP_MANEUVER_TYPE_ROTARY, STEP_MANEUVER_TYPE_ROUNDABOUT_TURN, STEP_MANEUVER_TYPE_NOTIFICATION)
+    annotation class ManeuverType
+
+    @StringDef(STEP_MANEUVER_MODIFIER_UTURN, STEP_MANEUVER_MODIFIER_SHARP_RIGHT, STEP_MANEUVER_MODIFIER_RIGHT, STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT, STEP_MANEUVER_MODIFIER_STRAIGHT, STEP_MANEUVER_MODIFIER_SLIGHT_LEFT, STEP_MANEUVER_MODIFIER_LEFT, STEP_MANEUVER_MODIFIER_SHARP_LEFT)
+    annotation class ManeuverModifier
+
+    @IntDef(ROUNDING_INCREMENT_FIVE, ROUNDING_INCREMENT_TEN, ROUNDING_INCREMENT_TWENTY_FIVE, ROUNDING_INCREMENT_FIFTY, ROUNDING_INCREMENT_ONE_HUNDRED)
+    annotation class RoundingIncrement
 }

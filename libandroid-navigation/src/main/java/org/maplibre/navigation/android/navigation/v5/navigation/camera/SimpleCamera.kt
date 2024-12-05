@@ -1,103 +1,91 @@
-package org.maplibre.navigation.android.navigation.v5.navigation.camera;
+package org.maplibre.navigation.android.navigation.v5.navigation.camera
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.geojson.LineString;
-import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
-import org.maplibre.turf.TurfMeasurement;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.turf.TurfMeasurement
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 
 /**
- * The default camera used by {@link MapLibreNavigation}.
+ * The default camera used by [MapLibreNavigation].
  *
  * @since 0.10.0
  */
-public class SimpleCamera extends Camera {
+open class SimpleCamera : Camera {
 
-  protected static final int DEFAULT_TILT = 50;
-  protected static final double DEFAULT_ZOOM = 15d;
+    private var routeCoordinates: List<Point> = ArrayList()
+    private var initialBearing = 0.0
+    private var initialRoute: DirectionsRoute? = null
 
-  private List<Point> routeCoordinates = new ArrayList<>();
-  private double initialBearing;
-  private DirectionsRoute initialRoute;
-
-  @Override
-  public double bearing(RouteInformation routeInformation) {
-    if (routeInformation.route() != null) {
-      setupLineStringAndBearing(routeInformation.route());
-      return initialBearing;
-    } else if (routeInformation.location() != null) {
-      return routeInformation.location().getBearing();
+    override fun bearing(routeInformation: RouteInformation): Double {
+        return routeInformation.route?.let { route ->
+            setupLineStringAndBearing(route)
+            initialBearing
+        }
+            ?: routeInformation.location?.bearing?.toDouble()
+            ?: 0.0
     }
-    return 0;
-  }
 
-  @Override
-  public Point target(RouteInformation routeInformation) {
-    double lng;
-    double lat;
-    Point targetPoint = null;
-    if (routeInformation.route() != null) {
-      setupLineStringAndBearing(routeInformation.route());
-      lng = routeCoordinates.get(0).longitude();
-      lat = routeCoordinates.get(0).latitude();
-      return Point.fromLngLat(lng, lat);
-    } else if (routeInformation.location() != null) {
-      lng = routeInformation.location().getLongitude();
-      lat = routeInformation.location().getLatitude();
-      targetPoint = Point.fromLngLat(lng, lat);
+    override fun target(routeInformation: RouteInformation): Point? {
+        return routeInformation.route?.let { route ->
+            setupLineStringAndBearing(route)
+            val firstPoint = routeCoordinates.first()
+            Point.fromLngLat(firstPoint.longitude(), firstPoint.latitude())
+        } ?: routeInformation.location?.let { location ->
+            Point.fromLngLat(location.longitude, location.latitude)
+        }
     }
-    return targetPoint;
-  }
 
-  @Override
-  public double tilt(RouteInformation routeInformation) {
-    return DEFAULT_TILT;
-  }
-
-  @Override
-  public double zoom(RouteInformation routeInformation) {
-    return DEFAULT_ZOOM;
-  }
-
-  @Override
-  public List<Point> overview(RouteInformation routeInformation) {
-    boolean invalidCoordinates = routeCoordinates == null || routeCoordinates.isEmpty();
-    if (invalidCoordinates) {
-      buildRouteCoordinatesFromRouteData(routeInformation);
+    override fun tilt(routeInformation: RouteInformation): Double {
+        return DEFAULT_TILT.toDouble()
     }
-    return routeCoordinates;
-  }
 
-  private void buildRouteCoordinatesFromRouteData(RouteInformation routeInformation) {
-    if (routeInformation.route() != null) {
-      setupLineStringAndBearing(routeInformation.route());
-    } else if (routeInformation.routeProgress() != null) {
-      setupLineStringAndBearing(routeInformation.routeProgress().directionsRoute());
+    override fun zoom(routeInformation: RouteInformation): Double {
+        return DEFAULT_ZOOM
     }
-  }
 
-  private void setupLineStringAndBearing(DirectionsRoute route) {
-    if (initialRoute != null && route.equals(initialRoute)) {
-      return; //no need to recalculate these values
-    }
-    initialRoute = route;
-    routeCoordinates = generateRouteCoordinates(route);
-    initialBearing = TurfMeasurement.bearing(
-      Point.fromLngLat(routeCoordinates.get(0).longitude(), routeCoordinates.get(0).latitude()),
-      Point.fromLngLat(routeCoordinates.get(1).longitude(), routeCoordinates.get(1).latitude())
-    );
-  }
+    override fun overview(routeInformation: RouteInformation): List<Point> {
+        if (routeCoordinates.isEmpty()) {
+            buildRouteCoordinatesFromRouteData(routeInformation)
+        }
 
-  private List<Point> generateRouteCoordinates(DirectionsRoute route) {
-    if (route == null) {
-      return Collections.emptyList();
+        return routeCoordinates
     }
-    LineString lineString = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
-    return lineString.coordinates();
-  }
+
+    private fun buildRouteCoordinatesFromRouteData(routeInformation: RouteInformation) {
+        routeInformation.route?.let { route ->
+            setupLineStringAndBearing(route)
+        } ?: routeInformation.routeProgress?.let { routeProgress ->
+            setupLineStringAndBearing(routeProgress.directionsRoute)
+        }
+    }
+
+    private fun setupLineStringAndBearing(route: DirectionsRoute) {
+        if (initialRoute != null && route == initialRoute) {
+            return // no need to recalculate these values
+        }
+
+        initialRoute = route
+        routeCoordinates = generateRouteCoordinates(route)
+        initialBearing = TurfMeasurement.bearing(
+            Point.fromLngLat(
+                routeCoordinates.first().longitude(),
+                routeCoordinates.first().latitude()
+            ),
+            Point.fromLngLat(routeCoordinates[1].longitude(), routeCoordinates[1].latitude())
+        )
+    }
+
+    private fun generateRouteCoordinates(route: DirectionsRoute?): List<Point> {
+        return route?.let { rte ->
+            val lineString = LineString.fromPolyline(rte.geometry, Constants.PRECISION_6)
+            lineString.coordinates()
+        } ?: emptyList()
+    }
+
+    protected companion object {
+        const val DEFAULT_TILT: Int = 50
+        const val DEFAULT_ZOOM: Double = 15.0
+    }
 }

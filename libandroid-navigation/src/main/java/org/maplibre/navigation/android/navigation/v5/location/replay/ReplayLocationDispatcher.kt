@@ -1,117 +1,103 @@
-package org.maplibre.navigation.android.navigation.v5.location.replay;
+package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.location.Location;
-import android.os.Handler;
+import android.location.Location
+import android.os.Handler
+import java.util.concurrent.CopyOnWriteArrayList
 
-import androidx.annotation.NonNull;
+open class ReplayLocationDispatcher(
+    locationsToReplay: List<Location>,
+    private var handler: Handler = Handler()
+) : Runnable {
+    private var locationsToReplay = locationsToReplay.toMutableList()
+    private var current: Location? = null
+    private val replayLocationListeners = mutableListOf<ReplayLocationListener>()
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-class ReplayLocationDispatcher implements Runnable {
-
-  private static final String NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED = "Non-null and non-empty location list "
-    + "required.";
-  private static final int HEAD = 0;
-  private List<Location> locationsToReplay;
-  private Location current;
-  private Handler handler;
-  private CopyOnWriteArraySet<ReplayLocationListener> replayLocationListeners;
-
-  ReplayLocationDispatcher(@NonNull List<Location> locationsToReplay) {
-    checkValidInput(locationsToReplay);
-    this.locationsToReplay = new CopyOnWriteArrayList<>(locationsToReplay);
-    initialize();
-    this.replayLocationListeners = new CopyOnWriteArraySet<>();
-    this.handler = new Handler();
-  }
-
-  // For testing only
-  ReplayLocationDispatcher(List<Location> locationsToReplay, Handler handler) {
-    checkValidInput(locationsToReplay);
-    this.locationsToReplay = locationsToReplay;
-    initialize();
-    this.replayLocationListeners = new CopyOnWriteArraySet<>();
-    this.handler = handler;
-  }
-
-  @Override
-  public void run() {
-    dispatchLocation(current);
-    scheduleNextDispatch();
-  }
-
-  void stop() {
-    clearLocations();
-    stopDispatching();
-  }
-
-  void pause() {
-    stopDispatching();
-  }
-
-  void update(@NonNull List<Location> locationsToReplay) {
-    checkValidInput(locationsToReplay);
-    this.locationsToReplay = new CopyOnWriteArrayList<>(locationsToReplay);
-    initialize();
-  }
-
-  void add(@NonNull List<Location> toReplay) {
-    boolean shouldRedispatch = locationsToReplay.isEmpty();
-    addLocations(toReplay);
-    if (shouldRedispatch) {
-      stopDispatching();
-      scheduleNextDispatch();
+    init {
+        checkValidInput(locationsToReplay)
+        initialize()
     }
-  }
 
-  void addReplayLocationListener(ReplayLocationListener listener) {
-    replayLocationListeners.add(listener);
-  }
-
-  void removeReplayLocationListener(ReplayLocationListener listener) {
-    replayLocationListeners.remove(listener);
-  }
-
-  private void checkValidInput(List<Location> locations) {
-    boolean isValidInput = locations == null || locations.isEmpty();
-    if (isValidInput) {
-      throw new IllegalArgumentException(NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED);
+    override fun run() {
+        current?.let { current ->
+            dispatchLocation(current)
+            scheduleNextDispatch()
+        }
     }
-  }
 
-  private void initialize() {
-    current = locationsToReplay.remove(HEAD);
-  }
-
-  private void addLocations(List<Location> toReplay) {
-    locationsToReplay.addAll(toReplay);
-  }
-
-  private void dispatchLocation(Location location) {
-    for (ReplayLocationListener listener : replayLocationListeners) {
-      listener.onLocationReplay(location);
+    fun stop() {
+        clearLocations()
+        stopDispatching()
     }
-  }
 
-  private void scheduleNextDispatch() {
-    if (locationsToReplay.isEmpty()) {
-      stopDispatching();
-      return;
+    fun pause() {
+        stopDispatching()
     }
-    long currentTime = current.getTime();
-    current = locationsToReplay.remove(HEAD);
-    long nextTime = current.getTime();
-    long diff = nextTime - currentTime;
-    handler.postDelayed(this, diff);
-  }
 
-  private void clearLocations() {
-    locationsToReplay.clear();
-  }
+    fun update(locationsToReplay: List<Location>) {
+        checkValidInput(locationsToReplay)
+        this.locationsToReplay = CopyOnWriteArrayList(locationsToReplay)
+        initialize()
+    }
 
-  private void stopDispatching() {
-    handler.removeCallbacks(this);
-  }
+    fun add(toReplay: List<Location>) {
+        val shouldRedispatch = locationsToReplay.isEmpty()
+        addLocations(toReplay)
+        if (shouldRedispatch) {
+            stopDispatching()
+            scheduleNextDispatch()
+        }
+    }
+
+    fun addReplayLocationListener(listener: ReplayLocationListener) {
+        replayLocationListeners.add(listener)
+    }
+
+    fun removeReplayLocationListener(listener: ReplayLocationListener) {
+        replayLocationListeners.remove(listener)
+    }
+
+    private fun checkValidInput(locations: List<Location>?) {
+        val isValidInput = locations.isNullOrEmpty()
+        require(!isValidInput) { NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED }
+    }
+
+    private fun initialize() {
+        current = locationsToReplay.removeFirstOrNull()
+    }
+
+    private fun addLocations(toReplay: List<Location>) {
+        locationsToReplay.addAll(toReplay)
+    }
+
+    private fun dispatchLocation(location: Location) {
+        for (listener in replayLocationListeners) {
+            listener.onLocationReplay(location)
+        }
+    }
+
+    private fun scheduleNextDispatch() {
+        if (locationsToReplay.isEmpty()) {
+            stopDispatching()
+            return
+        }
+
+        val currentTime = current!!.time
+        current = locationsToReplay.removeFirstOrNull()
+        val nextTime = current!!.time
+        val diff = nextTime - currentTime
+        handler.postDelayed(this, diff)
+    }
+
+    private fun clearLocations() {
+        locationsToReplay.clear()
+    }
+
+    private fun stopDispatching() {
+        handler.removeCallbacks(this)
+    }
+
+    companion object {
+        private const val NON_NULL_AND_NON_EMPTY_LOCATION_LIST_REQUIRED =
+            "Non-null and non-empty location list required."
+    }
 }

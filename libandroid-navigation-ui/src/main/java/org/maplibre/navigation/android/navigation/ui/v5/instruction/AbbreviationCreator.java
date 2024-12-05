@@ -45,7 +45,7 @@ class AbbreviationCreator extends NodeCreator<AbbreviationCreator.AbbreviationNo
    * @param index in the list of BannerComponentNodes
    */
   private void addPriorityInfo(BannerComponents bannerComponents, int index) {
-    Integer abbreviationPriority = bannerComponents.abbreviationPriority();
+    Integer abbreviationPriority = bannerComponents.getAbbreviationPriority();
     if (abbreviations.get(abbreviationPriority) == null) {
       abbreviations.put(abbreviationPriority, new ArrayList<Integer>());
     }
@@ -164,7 +164,7 @@ class AbbreviationCreator extends NodeCreator<AbbreviationCreator.AbbreviationNo
 
     @Override
     public String toString() {
-      return abbreviate ? bannerComponents.abbreviation() : bannerComponents.text();
+      return abbreviate ? bannerComponents.getAbbreviation() : bannerComponents.getText();
     }
 
     void setAbbreviate(boolean abbreviate) {

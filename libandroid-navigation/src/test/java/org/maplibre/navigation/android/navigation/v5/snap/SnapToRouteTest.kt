@@ -1,260 +1,289 @@
-package org.maplibre.navigation.android.navigation.v5.snap;
+package org.maplibre.navigation.android.navigation.v5.snap
 
-import android.location.Location;
+import android.location.Location
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.maplibre.navigation.android.json
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.robolectric.RobolectricTestRunner
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-
-import static junit.framework.Assert.assertEquals;
-
-@RunWith(RobolectricTestRunner.class)
-public class SnapToRouteTest extends BaseTest {
-
-  private static final String MULTI_LEG_ROUTE_FIXTURE = "directions_two_leg_route.json";
-  private static final String SINGLE_STEP_LEG = "directions_three_leg_single_step_route.json";
+@RunWith(RobolectricTestRunner::class)
+class SnapToRouteTest : BaseTest() {
 
     @Test
-    public void getSnappedLocation_returnsProviderNameCorrectly() throws Exception {
-        RouteProgress routeProgress = buildDefaultTestRouteProgress();
-        Snap snap = new SnapToRoute();
-        Location location = new Location("test");
+    fun snappedLocation_returnsProviderNameCorrectly() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
 
-        Location snappedLocation = snap.getSnappedLocation(location, routeProgress);
+        val snappedLocation =
+            snap.getSnappedLocation(location, routeProgress)
 
-      assertEquals("test", snappedLocation.getProvider());
+        Assert.assertEquals("test", snappedLocation.provider)
     }
 
-  @Test
-  public void getSnappedLocation_locationOnStart() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.7989792);
-    location.setLongitude(-77.0638882);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_locationOnStart() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.7989792
+        location.longitude = -77.0638882
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        100,
-        100,
-        200,
-        0,
-        0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                100.0,
+                100.0,
+                200.0,
+                0,
+                0
+            )
+        )
 
-    assertEquals(38.798979, snappedLocation.getLatitude());
-    assertEquals(-77.063888, snappedLocation.getLongitude());
-  }
+        Assert.assertEquals(38.798979, snappedLocation.latitude, DELTA)
+        Assert.assertEquals(-77.063888, snappedLocation.longitude, DELTA)
+    }
 
-  @Test
-  public void getSnappedLocation_locationOnStep() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.7984052);
-    location.setLongitude(-77.0629411);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_locationOnStep() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.7984052
+        location.longitude = -77.0629411
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        50,
-        50,
-        150,
-        2,
-        0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                50.0,
+                50.0,
+                150.0,
+                2,
+                0
+            )
+        )
 
-    assertEquals(38.79840909601134, snappedLocation.getLatitude());
-    assertEquals(-77.06299551713687, snappedLocation.getLongitude());
-  }
+        Assert.assertEquals(38.79840909601134, snappedLocation.latitude, DELTA)
+        Assert.assertEquals(-77.06299551713687, snappedLocation.longitude, DELTA)
+    }
 
-  @Test
-  public void getSnappedLocation_locationOnEnd() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.9623092);
-    location.setLongitude(-77.0282631);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_locationOnEnd() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.9623092
+        location.longitude = -77.0282631
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        0.8,
-        0.8,
-        0.8,
-        15,
-        1
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                0.8,
+                15,
+                1
+            )
+        )
 
-    assertEquals(38.9623092, snappedLocation.getLatitude());
-    assertEquals(-77.0282631, snappedLocation.getLongitude());
-  }
+        Assert.assertEquals(38.9623092, snappedLocation.latitude, DELTA)
+        Assert.assertEquals(-77.0282631, snappedLocation.longitude, DELTA)
+    }
 
-  @Test
-  public void getSnappedLocation_bearingStart() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.7989792);
-    location.setLongitude(-77.0638882);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingStart() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.7989792
+        location.longitude = -77.0638882
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        100,
-        100,
-        200,
-        0,
-        0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                100.0,
+                100.0,
+                200.0,
+                0,
+                0
+            )
+        )
 
-    assertEquals(136.2322f, snappedLocation.getBearing());
-  }
+        Assert.assertEquals(136.2322f, snappedLocation.bearing)
+    }
 
-  @Test
-  public void getSnappedLocation_bearingOnStep() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.79881);
-    location.setLongitude(-77.0629411);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingOnStep() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.79881
+        location.longitude = -77.0629411
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        50,
-        50,
-        150,
-        2,
-        0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                50.0,
+                50.0,
+                150.0,
+                2,
+                0
+            )
+        )
 
-    assertEquals(5.0284705f, snappedLocation.getBearing());
-  }
+        Assert.assertEquals(5.0284705f, snappedLocation.bearing)
+    }
 
-  @Test
-  public void getSnappedLocation_bearingBeforeNextLeg() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.8943771);
-    location.setLongitude(-77.0782341);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingBeforeNextLeg() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.8943771
+        location.longitude = -77.0782341
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        0.8,
-        0.8,
-        200,
-        21,
-        0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                200.0,
+                21,
+                0
+            )
+        )
 
-    assertEquals(358.19876f, snappedLocation.getBearing());
-  }
+        Assert.assertEquals(358.19876f, snappedLocation.bearing)
+    }
 
-  @Test
-  public void getSnappedLocation_bearingWithSingleStepLegBeforeNextLeg() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute(SINGLE_STEP_LEG);
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.8943771);
-    location.setLongitude(-77.0782341);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingWithSingleStepLegBeforeNextLeg() {
+        val routeProgress =
+            buildMultipleLegRoute(SINGLE_STEP_LEG)
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.8943771
+        location.longitude = -77.0782341
+        location.bearing = 20f
 
-    Location previousSnappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-            routeProgress,
-            0.8,
-            0.8,
-            200,
-            20,
-            0
-    ));
+        val previousSnappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                200.0,
+                20,
+                0
+            )
+        )
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-            routeProgress,
-            0.8,
-            0.8,
-            200,
-            21,
-            0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                200.0,
+                21,
+                0
+            )
+        )
 
-    // Latest snapped bearing should be used, because next lef is not containing enough steps
-    assertEquals(previousSnappedLocation.getBearing(), snappedLocation.getBearing());
-  }
+        // Latest snapped bearing should be used, because next lef is not containing enough steps
+        Assert.assertEquals(
+            previousSnappedLocation.bearing,
+            snappedLocation.bearing
+        )
+    }
 
-  @Test
-  public void getSnappedLocation_bearingNoBearingBeforeWithSingleStepLegBeforeNextLeg() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute(SINGLE_STEP_LEG);
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.8943771);
-    location.setLongitude(-77.0782341);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingNoBearingBeforeWithSingleStepLegBeforeNextLeg() {
+        val routeProgress =
+            buildMultipleLegRoute(SINGLE_STEP_LEG)
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.8943771
+        location.longitude = -77.0782341
+        location.bearing = 20f
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-            routeProgress,
-            0.8,
-            0.8,
-            200,
-            21,
-            0
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                200.0,
+                21,
+                0
+            )
+        )
 
-    // Fallback to location bearing if no previous bearing was calculated.
-    assertEquals(location.getBearing(), snappedLocation.getBearing());
-  }
+        // Fallback to location bearing if no previous bearing was calculated.
+        Assert.assertEquals(location.bearing, snappedLocation.bearing)
+    }
 
-  @Test
-  public void getSnappedLocation_bearingEnd() throws Exception {
-    DirectionsRoute routeProgress = buildMultipleLegRoute();
-    Snap snap = new SnapToRoute();
-    Location location = new Location("test");
-    location.setLatitude(38.9623091);
-    location.setLongitude(-77.0282631);
-    location.setBearing(20);
+    @Test
+    fun snappedLocation_bearingEnd() {
+        val routeProgress =
+            buildMultipleLegRoute()
+        val snap: Snap = SnapToRoute()
+        val location = Location("test")
+        location.latitude = 38.9623091
+        location.longitude = -77.0282631
+        location.bearing = 20f
 
-    Location lastSnappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        0.6,
-        0.6,
-        0.6,
-        14,
-        1
-    ));
+        val lastSnappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.6,
+                0.6,
+                0.6,
+                14,
+                1
+            )
+        )
 
-    Location snappedLocation = snap.getSnappedLocation(location, buildTestRouteProgress(
-        routeProgress,
-        0.8,
-        0.8,
-        0.8,
-        15,
-        1
-    ));
+        val snappedLocation = snap.getSnappedLocation(
+            location, buildTestRouteProgress(
+                routeProgress,
+                0.8,
+                0.8,
+                0.8,
+                15,
+                1
+            )
+        )
 
-    // Latest snapped bearing should be used, because no future steps are available
-    assertEquals(lastSnappedLocation.getBearing(), snappedLocation.getBearing());
-  }
+        // Latest snapped bearing should be used, because no future steps are available
+        Assert.assertEquals(
+            lastSnappedLocation.bearing,
+            snappedLocation.bearing
+        )
+    }
 
-  private DirectionsRoute buildMultipleLegRoute() throws Exception {
-    return buildMultipleLegRoute(MULTI_LEG_ROUTE_FIXTURE);
-  }
+    @Throws(Exception::class)
+    private fun buildMultipleLegRoute(file: String = MULTI_LEG_ROUTE_FIXTURE): DirectionsRoute {
+        val fixtureJsonString = loadJsonFixture(file)
+        val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
+        return response.routes[0]
+    }
 
-  private DirectionsRoute buildMultipleLegRoute(String file) throws Exception {
-    String body = loadJsonFixture(file);
-    Gson gson = new GsonBuilder().registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
-    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
-    return response.routes().get(0);
-  }
+    companion object {
+        private const val MULTI_LEG_ROUTE_FIXTURE = "directions_two_leg_route.json"
+        private const val SINGLE_STEP_LEG = "directions_three_leg_single_step_route.json"
+    }
 }

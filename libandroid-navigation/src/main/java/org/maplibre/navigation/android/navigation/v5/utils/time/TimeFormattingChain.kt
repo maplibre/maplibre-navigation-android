@@ -1,15 +1,14 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time;
+package org.maplibre.navigation.android.navigation.v5.utils.time
 
 
-class TimeFormattingChain {
+open class TimeFormattingChain {
 
-  TimeFormatResolver setup(boolean isDeviceTwentyFourHourFormat) {
-    TimeFormatResolver noneSpecified = new NoneSpecifiedTimeFormat(isDeviceTwentyFourHourFormat);
-    TimeFormatResolver twentyFourHours = new TwentyFourHoursTimeFormat();
-    twentyFourHours.nextChain(noneSpecified);
-    TimeFormatResolver rootOfTheChain = new TwelveHoursTimeFormat();
-    rootOfTheChain.nextChain(twentyFourHours);
-
-    return rootOfTheChain;
-  }
+    fun setup(isDeviceTwentyFourHourFormat: Boolean): TimeFormatResolver {
+        val noneSpecified = NoneSpecifiedTimeFormat(isDeviceTwentyFourHourFormat)
+        val twentyFourHours = TwentyFourHoursTimeFormat()
+        twentyFourHours.nextChain(noneSpecified)
+        val rootOfTheChain = TwelveHoursTimeFormat()
+        rootOfTheChain.nextChain(twentyFourHours)
+        return rootOfTheChain
+    }
 }

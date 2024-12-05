@@ -1,66 +1,57 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import androidx.annotation.NonNull;
+import io.mockk.Called
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.route.FasterRoute
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventDispatcher;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationFasterRouteListener;
-import org.maplibre.navigation.android.navigation.v5.route.FasterRoute;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+class NavigationFasterRouteListenerTest {
 
-import org.junit.Test;
+    @Test
+    fun onResponseReceived_fasterRouteIsSentToDispatcher() {
+        val eventDispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val fasterRoute = buildFasterRouteThatReturns(true)
+        val listener = NavigationFasterRouteListener(eventDispatcher, fasterRoute)
+        val response = buildDirectionsResponse()
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-import java.util.ArrayList;
-import java.util.List;
+        listener.onResponseReceived(response, routeProgress)
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+        verify { eventDispatcher.onFasterRouteEvent(any()) }
+    }
 
-public class NavigationFasterRouteListenerTest {
+    @Test
+    fun onResponseReceived_slowerRouteIsNotSentToDispatcher() {
+        val eventDispatcher = mockk<NavigationEventDispatcher>(relaxed = true)
+        val fasterRoute = buildFasterRouteThatReturns(false)
+        val listener = NavigationFasterRouteListener(eventDispatcher, fasterRoute)
+        val response = buildDirectionsResponse()
+        val routeProgress = mockk<RouteProgress>(relaxed = true)
 
-  @Test
-  public void onResponseReceived_fasterRouteIsSentToDispatcher() {
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    FasterRoute fasterRoute = buildFasterRouteThatReturns(true);
-    NavigationFasterRouteListener listener = new NavigationFasterRouteListener(eventDispatcher, fasterRoute);
-    DirectionsResponse response = buildDirectionsResponse();
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        listener.onResponseReceived(response, routeProgress)
 
-    listener.onResponseReceived(response, routeProgress);
+        verify {
+            eventDispatcher.wasNot(Called)
+        }
+    }
 
-    verify(eventDispatcher).onFasterRouteEvent(any(DirectionsRoute.class));
-  }
+    private fun buildFasterRouteThatReturns(isFaster: Boolean): FasterRoute {
+        val fasterRoute = mockk<FasterRoute> {
+            every { isFasterRoute(any(), any()) } returns isFaster
+        }
 
-  @Test
-  public void onResponseReceived_slowerRouteIsNotSentToDispatcher() {
-    NavigationEventDispatcher eventDispatcher = mock(NavigationEventDispatcher.class);
-    FasterRoute fasterRoute = buildFasterRouteThatReturns(false);
-    NavigationFasterRouteListener listener = new NavigationFasterRouteListener(eventDispatcher, fasterRoute);
-    DirectionsResponse response = buildDirectionsResponse();
-    RouteProgress routeProgress = mock(RouteProgress.class);
+        return fasterRoute
+    }
 
-    listener.onResponseReceived(response, routeProgress);
-
-    verifyNoInteractions (eventDispatcher);
-  }
-
-  @NonNull
-  private FasterRoute buildFasterRouteThatReturns(boolean isFaster) {
-    FasterRoute fasterRoute = mock(FasterRoute.class);
-    when(fasterRoute.isFasterRoute(any(DirectionsResponse.class), any(RouteProgress.class))).thenReturn(isFaster);
-    return fasterRoute;
-  }
-
-  @NonNull
-  private DirectionsResponse buildDirectionsResponse() {
-    DirectionsResponse response = mock(DirectionsResponse.class);
-    List<DirectionsRoute> routes = new ArrayList<>();
-    routes.add(mock(DirectionsRoute.class));
-    when(response.routes()).thenReturn(routes);
-    return response;
-  }
+    private fun buildDirectionsResponse(): DirectionsResponse {
+        val response = mockk<DirectionsResponse> {
+            every { routes } returns listOf(mockk<DirectionsRoute>())
+        }
+        return response
+    }
 }

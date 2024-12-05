@@ -1,337 +1,260 @@
-package org.maplibre.navigation.android.navigation.v5.utils;
+package org.maplibre.navigation.android.navigation.v5.utils
 
-import android.location.Location;
+import android.location.Location
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
+import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
+import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
+import org.maplibre.navigation.android.navigation.v5.models.BannerText
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
+import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.BannerText;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions;
-import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+open class RouteUtils {
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-public class RouteUtils {
-
-  private static final String FORCED_LOCATION = "Forced Location";
-  private static final int FIRST_COORDINATE = 0;
-  private static final int FIRST_INSTRUCTION = 0;
-  private static final int ORIGIN_WAYPOINT_NAME_THRESHOLD = 1;
-  private static final int ORIGIN_WAYPOINT_NAME = 0;
-  private static final int FIRST_POSITION = 0;
-  private static final int SECOND_POSITION = 1;
-  private static final String SEMICOLON = ";";
-  private static final Set<String> VALID_PROFILES = new HashSet<String>(Arrays.asList(
-          DirectionsCriteria.PROFILE_DRIVING_TRAFFIC,
-          DirectionsCriteria.PROFILE_DRIVING,
-          DirectionsCriteria.PROFILE_CYCLING,
-          DirectionsCriteria.PROFILE_WALKING
-  ));
-
-  /**
-   * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
-   * user is traversing along a new route. If the route geometries do not match, this returns true.
-   *
-   * @param previousRouteProgress the past route progress with the directions route included
-   * @param routeProgress         the route progress with the directions route included
-   * @return true if the direction route geometries do not match up, otherwise, false
-   * @since 0.7.0
-   */
-  public boolean isNewRoute(@Nullable RouteProgress previousRouteProgress,
-                            @NonNull RouteProgress routeProgress) {
-    return isNewRoute(previousRouteProgress, routeProgress.directionsRoute());
-  }
-
-  /**
-   * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
-   * user is traversing along a new route. If the route geometries do not match, this returns true.
-   *
-   * @param previousRouteProgress the past route progress with the directions route included
-   * @param directionsRoute       the current directions route
-   * @return true if the direction route geometries do not match up, otherwise, false
-   * @since 0.7.0
-   */
-  public boolean isNewRoute(@Nullable RouteProgress previousRouteProgress,
-                            @NonNull DirectionsRoute directionsRoute) {
-    return previousRouteProgress == null || !previousRouteProgress.directionsRoute().geometry()
-      .equals(directionsRoute.geometry());
-  }
-
-  /**
-   * Looks at the current {@link RouteProgress} maneuverType for type "arrival", then
-   * checks if the arrival meter threshold has been hit.
-   *
-   * @param routeProgress the current route progress
-   * @param milestone     the current milestone from the MilestoneEventListener
-   * @return true if in arrival state, false if not
-   * @since 0.8.0
-   */
-  public boolean isArrivalEvent(@NonNull RouteProgress routeProgress, @NonNull Milestone milestone) {
-    if (!(milestone instanceof BannerInstructionMilestone)) {
-      return false;
+    /**
+     * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
+     * user is traversing along a new route. If the route geometries do not match, this returns true.
+     *
+     * @param previousRouteProgress the past route progress with the directions route included
+     * @param routeProgress         the route progress with the directions route included
+     * @return true if the direction route geometries do not match up, otherwise, false
+     * @since 0.7.0
+     */
+    fun isNewRoute(
+        previousRouteProgress: RouteProgress?,
+        routeProgress: RouteProgress
+    ): Boolean {
+        return isNewRoute(previousRouteProgress, routeProgress.directionsRoute)
     }
-    boolean isValidArrivalManeuverType = upcomingStepIsArrivalManeuverType(routeProgress)
-      || currentStepIsArrivalManeuverType(routeProgress);
-    if (isValidArrivalManeuverType) {
-      LegStep currentStep = routeProgress.currentLegProgress().currentStep();
-      BannerInstructions currentInstructions = ((BannerInstructionMilestone) milestone).getBannerInstructions();
-      List<BannerInstructions> bannerInstructions = currentStep.bannerInstructions();
-      if (hasValidInstructions(bannerInstructions, currentInstructions)) {
-        int lastInstructionIndex = bannerInstructions.size() - 1;
-        BannerInstructions lastInstructions = bannerInstructions.get(lastInstructionIndex);
-        return currentInstructions.equals(lastInstructions);
-      }
+
+    /**
+     * Compares a new routeProgress geometry to a previousRouteProgress geometry to determine if the
+     * user is traversing along a new route. If the route geometries do not match, this returns true.
+     *
+     * @param previousRouteProgress the past route progress with the directions route included
+     * @param directionsRoute       the current directions route
+     * @return true if the direction route geometries do not match up, otherwise, false
+     * @since 0.7.0
+     */
+    fun isNewRoute(
+        previousRouteProgress: RouteProgress?,
+        directionsRoute: DirectionsRoute
+    ): Boolean {
+        return previousRouteProgress == null || (previousRouteProgress.directionsRoute.geometry
+                != directionsRoute.geometry)
     }
-    return false;
-  }
 
-  /**
-   * Looks at the current {@link RouteProgress} list of legs and
-   * checks if the current leg is the last leg.
-   *
-   * @param routeProgress the current route progress
-   * @return true if last leg, false if not
-   * @since 0.8.0
-   */
-  public boolean isLastLeg(RouteProgress routeProgress) {
-    List<RouteLeg> legs = routeProgress.directionsRoute().legs();
-    RouteLeg currentLeg = routeProgress.currentLeg();
-    return currentLeg.equals(legs.get(legs.size() - 1));
-  }
+    /**
+     * Looks at the current [RouteProgress] maneuverType for type "arrival", then
+     * checks if the arrival meter threshold has been hit.
+     *
+     * @param routeProgress the current route progress
+     * @param milestone     the current milestone from the MilestoneEventListener
+     * @return true if in arrival state, false if not
+     * @since 0.8.0
+     */
+    fun isArrivalEvent(routeProgress: RouteProgress, milestone: Milestone): Boolean {
+        return (milestone as? BannerInstructionMilestone)?.let { bannerMilestone ->
+            val isValidArrivalManeuverType =
+                upcomingStepIsArrivalManeuverType(routeProgress) || currentStepIsArrivalManeuverType(
+                    routeProgress
+                )
+            if (isValidArrivalManeuverType) {
+                val currentStep = routeProgress.currentLegProgress.currentStep
+                val currentInstructions = bannerMilestone.bannerInstructions
+                val bannerInstructions = currentStep.bannerInstructions ?: emptyList()
+                if (bannerInstructions.isNotEmpty() && currentInstructions != null) {
+                    val lastInstructionIndex = bannerInstructions.size - 1
+                    val lastInstructions = bannerInstructions[lastInstructionIndex]
+                    return@let currentInstructions == lastInstructions
+                }
+            }
 
-  /**
-   * Given a {@link RouteProgress}, this method will calculate the remaining coordinates
-   * along the given route based on total route coordinates and the progress remaining waypoints.
-   * <p>
-   * If the coordinate size is less than the remaining waypoints, this method
-   * will return null.
-   *
-   * @param routeProgress for route coordinates and remaining waypoints
-   * @return list of remaining waypoints as {@link Point}s
-   * @since 0.10.0
-   */
-  @Nullable
-  public List<Point> calculateRemainingWaypoints(RouteProgress routeProgress) {
-    if (routeProgress.directionsRoute().routeOptions() == null) {
-      return null;
+            return@let false
+        } ?: false
     }
-    List<Point> coordinates = new ArrayList<>(routeProgress.directionsRoute().routeOptions().coordinates());
-    int coordinatesSize = coordinates.size();
-    int remainingWaypoints = routeProgress.remainingWaypoints();
-    if (coordinatesSize < remainingWaypoints) {
-      return null;
-    }
-    List<Point> remainingCoordinates = coordinates.subList(coordinatesSize - remainingWaypoints, coordinatesSize);
-    return remainingCoordinates;
-  }
 
-  /**
-   * Given a {@link RouteProgress}, this method will calculate the remaining waypoint names
-   * along the given route based on route option waypoint names and the progress remaining coordinates.
-   * <p>
-   * If the waypoint names are empty, this method will return null.
-   *
-   * @param routeProgress for route waypoint names and remaining coordinates
-   * @return String array including the origin waypoint name and the remaining ones
-   * @since 0.19.0
-   */
-  @Nullable
-  public String[] calculateRemainingWaypointNames(RouteProgress routeProgress) {
-    RouteOptions routeOptions = routeProgress.directionsRoute().routeOptions();
-    if (routeOptions == null || TextUtils.isEmpty(routeOptions.waypointNames())) {
-      return null;
-    }
-    String allWaypointNames = routeOptions.waypointNames();
-    String[] names = allWaypointNames.split(SEMICOLON);
-    int coordinatesSize = routeProgress.directionsRoute().routeOptions().coordinates().size();
-    String[] remainingWaypointNames = Arrays.copyOfRange(names,
-      coordinatesSize - routeProgress.remainingWaypoints(), coordinatesSize);
-    String[] waypointNames = new String[remainingWaypointNames.length + ORIGIN_WAYPOINT_NAME_THRESHOLD];
-    waypointNames[ORIGIN_WAYPOINT_NAME] = names[ORIGIN_WAYPOINT_NAME];
-    System.arraycopy(remainingWaypointNames, FIRST_POSITION, waypointNames, SECOND_POSITION,
-      remainingWaypointNames.length);
-    return waypointNames;
-  }
+    /**
+     * Given a [RouteProgress], this method will calculate the remaining coordinates
+     * along the given route based on total route coordinates and the progress remaining waypoints.
+     *
+     *
+     * If the coordinate size is less than the remaining waypoints, this method
+     * will return null.
+     *
+     * @param routeProgress for route coordinates and remaining waypoints
+     * @return list of remaining waypoints as [Point]s
+     * @since 0.10.0
+     */
+    fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Point>? {
+        return routeProgress.directionsRoute.routeOptions?.let { options ->
+            val coordinatesSize = options.coordinates.size
+            if (coordinatesSize < routeProgress.remainingWaypoints) {
+                return null
+            }
 
-  /**
-   * If navigation begins, a location update is sometimes needed to force a
-   * progress change update as soon as navigation is started.
-   * <p>
-   * This method creates a location update from the first coordinate (origin) that created
-   * the route.
-   *
-   * @param route with list of coordinates
-   * @return {@link Location} from first coordinate
-   * @since 0.10.0
-   */
-  public Location createFirstLocationFromRoute(DirectionsRoute route) {
-    List<Point> coordinates = route.routeOptions().coordinates();
-    Point origin = coordinates.get(FIRST_COORDINATE);
-    Location forcedLocation = new Location(FORCED_LOCATION);
-    forcedLocation.setLatitude(origin.latitude());
-    forcedLocation.setLongitude(origin.longitude());
-    return forcedLocation;
-  }
-
-  /**
-   * Checks if the {@link String} route profile provided is a valid profile
-   * that can be used with the directions API.
-   *
-   * @param routeProfile being validated
-   * @return true if valid, false if not
-   * @since 0.13.0
-   */
-  public boolean isValidRouteProfile(String routeProfile) {
-    return !TextUtils.isEmpty(routeProfile) && VALID_PROFILES.contains(routeProfile);
-  }
-
-  /**
-   * Given the current step / current step distance remaining, this function will
-   * find the current instructions to be shown.
-   *
-   * @param currentStep           holding the current banner instructions
-   * @param stepDistanceRemaining to determine progress along the currentStep
-   * @return the current banner instructions based on the current distance along the step
-   * @since 0.13.0
-   */
-  @Nullable
-  public BannerInstructions findCurrentBannerInstructions(LegStep currentStep, double stepDistanceRemaining) {
-    if (isValidBannerInstructions(currentStep)) {
-      List<BannerInstructions> instructions = sortBannerInstructions(currentStep.bannerInstructions());
-      for (BannerInstructions instruction : instructions) {
-        double distanceAlongGeometry = instruction.distanceAlongGeometry();
-        if (distanceAlongGeometry >= stepDistanceRemaining) {
-          return instruction;
+            options.coordinates.subList(
+                coordinatesSize - routeProgress.remainingWaypoints,
+                coordinatesSize
+            )
         }
-      }
-      return instructions.get(FIRST_INSTRUCTION);
     }
-    return null;
-  }
 
-  private boolean isValidBannerInstructions(LegStep currentStep) {
-    return isValidStep(currentStep) && hasInstructions(currentStep.bannerInstructions());
-  }
+    /**
+     * Given a [RouteProgress], this method will calculate the remaining waypoint names
+     * along the given route based on route option waypoint names and the progress remaining coordinates.
+     *
+     * If the waypoint names are empty, this method will return null.
+     *
+     * @param routeProgress for route waypoint names and remaining coordinates
+     * @return String array including the origin waypoint name and the remaining ones
+     * @since 0.19.0
+     */
+    fun calculateRemainingWaypointNames(routeProgress: RouteProgress): List<String>? {
+        return routeProgress.directionsRoute.routeOptions?.let { routeOptions ->
+            routeOptions.waypointNames
+                ?.takeIf { allWaypointNames -> allWaypointNames.isNotEmpty() }
+                ?.let { allWaypointNames ->
+                    val wayPointNames = allWaypointNames.split(";")
 
-  private List<BannerInstructions> sortBannerInstructions(List<BannerInstructions> instructions) {
-    List<BannerInstructions> sortedInstructions = new ArrayList<>(instructions);
-    Collections.sort(sortedInstructions, new Comparator<BannerInstructions>() {
-      @Override
-      public int compare(BannerInstructions instructions, BannerInstructions nextInstructions) {
-        return Double.compare(instructions.distanceAlongGeometry(), nextInstructions.distanceAlongGeometry());
-      }
-    });
-    return sortedInstructions;
-  }
-
-  /**
-   * This method returns the current {@link BannerText} based on the currentStep distance
-   * remaining.
-   * <p>
-   * When called, this is the banner text that should be shown at the given point along the route.
-   *
-   * @param currentStep           holding the current banner instructions
-   * @param stepDistanceRemaining to determine progress along the currentStep
-   * @param findPrimary           if the primary or secondary BannerText should be retrieved
-   * @return current BannerText based on currentStep distance remaining
-   * @since 0.13.0
-   */
-  @Nullable
-  public BannerText findCurrentBannerText(LegStep currentStep, double stepDistanceRemaining,
-                                          boolean findPrimary) {
-    BannerInstructions instructions = findCurrentBannerInstructions(currentStep, stepDistanceRemaining);
-    if (instructions != null) {
-      return retrievePrimaryOrSecondaryBannerText(findPrimary, instructions);
-    }
-    return null;
-  }
-
-  /**
-   * This method returns the current {@link VoiceInstructions} based on the step distance
-   * remaining.
-   *
-   * @param currentStep           holding the current banner instructions
-   * @param stepDistanceRemaining to determine progress along the step
-   * @return current voice instructions based on step distance remaining
-   * @since 0.13.0
-   */
-  @Nullable
-  public VoiceInstructions findCurrentVoiceInstructions(LegStep currentStep, double stepDistanceRemaining) {
-    if (isValidVoiceInstructions(currentStep)) {
-      List<VoiceInstructions> instructions = sortVoiceInstructions(currentStep.voiceInstructions());
-      for (VoiceInstructions instruction : instructions) {
-        double distanceAlongGeometry = instruction.distanceAlongGeometry();
-        if (distanceAlongGeometry >= stepDistanceRemaining) {
-          return instruction;
+                    val coordinatesSize = routeOptions.coordinates.size
+                    listOf(wayPointNames.first()) +
+                            wayPointNames.subList(
+                                coordinatesSize - routeProgress.remainingWaypoints,
+                                coordinatesSize
+                            )
+                }
         }
-      }
-      return instructions.get(FIRST_INSTRUCTION);
     }
-    return null;
-  }
 
-  private boolean isValidVoiceInstructions(LegStep currentStep) {
-    return isValidStep(currentStep) && hasInstructions(currentStep.voiceInstructions());
-  }
-
-  private List<VoiceInstructions> sortVoiceInstructions(List<VoiceInstructions> instructions) {
-    List<VoiceInstructions> sortedInstructions = new ArrayList<>(instructions);
-    Collections.sort(sortedInstructions, new Comparator<VoiceInstructions>() {
-      @Override
-      public int compare(VoiceInstructions instructions, VoiceInstructions nextInstructions) {
-        return Double.compare(instructions.distanceAlongGeometry(), nextInstructions.distanceAlongGeometry());
-      }
-    });
-    return sortedInstructions;
-  }
-
-  private boolean upcomingStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
-    return routeProgress.currentLegProgress().upComingStep() != null
-      && routeProgress.currentLegProgress().upComingStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
-  }
-
-  private boolean currentStepIsArrivalManeuverType(@NonNull RouteProgress routeProgress) {
-    return routeProgress.currentLegProgress().currentStep().maneuver().type().contains(NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE);
-  }
-
-  private boolean isValidStep(LegStep step) {
-    return step != null;
-  }
-
-  private <T> boolean hasInstructions(List<T> instructions) {
-    return instructions != null && !instructions.isEmpty();
-  }
-
-  private <T> int checkValidIndex(List<T> instructions) {
-    int instructionIndex = instructions.size() - 1;
-    if (instructionIndex < 0) {
-      instructionIndex = 0;
+    /**
+     * If navigation begins, a location update is sometimes needed to force a
+     * progress change update as soon as navigation is started.
+     *
+     * This method creates a location update from the first coordinate (origin) that created
+     * the route.
+     *
+     * @param route with list of coordinates
+     * @return [Location] from first coordinate
+     * @since 0.10.0
+     */
+    fun createFirstLocationFromRoute(route: DirectionsRoute): Location {
+        val lineString = LineString.fromPolyline(
+            route.legs.firstOrNull()?.steps?.firstOrNull()?.geometry ?: route.geometry,
+            Constants.PRECISION_6
+        )
+        val firstRoutePoint = lineString.coordinates().first()
+        return Location(FORCED_LOCATION).apply {
+            latitude = firstRoutePoint.latitude()
+            longitude = firstRoutePoint.longitude()
+        }
     }
-    return instructionIndex;
-  }
 
-  private boolean hasValidInstructions(List<BannerInstructions> bannerInstructions,
-                                       BannerInstructions currentInstructions) {
-    return bannerInstructions != null && !bannerInstructions.isEmpty() && currentInstructions != null;
-  }
+    /**
+     * Given the current step / current step distance remaining, this function will
+     * find the current instructions to be shown.
+     *
+     * @param currentStep           holding the current banner instructions
+     * @param stepDistanceRemaining to determine progress along the currentStep
+     * @return the current banner instructions based on the current distance along the step
+     * @since 0.13.0
+     */
+    fun findCurrentBannerInstructions(
+        currentStep: LegStep,
+        stepDistanceRemaining: Double
+    ): BannerInstructions? {
+        return currentStep.bannerInstructions
+            ?.takeIf { instructions -> instructions.isNotEmpty() }
+            ?.let { bannerInstructions ->
+                val instructions =
+                    bannerInstructions.sortedBy(BannerInstructions::distanceAlongGeometry)
+                for (instruction in instructions) {
+                    val distanceAlongGeometry = instruction.distanceAlongGeometry
+                    if (distanceAlongGeometry >= stepDistanceRemaining) {
+                        return@let instruction
+                    }
+                }
+                instructions.firstOrNull()
+            }
+    }
 
-  private BannerText retrievePrimaryOrSecondaryBannerText(boolean findPrimary, BannerInstructions instruction) {
-    return findPrimary ? instruction.primary() : instruction.secondary();
-  }
+    /**
+     * This method returns the current [BannerText] based on the currentStep distance
+     * remaining.
+     *
+     *
+     * When called, this is the banner text that should be shown at the given point along the route.
+     *
+     * @param currentStep           holding the current banner instructions
+     * @param stepDistanceRemaining to determine progress along the currentStep
+     * @param findPrimary           if the primary or secondary BannerText should be retrieved
+     * @return current BannerText based on currentStep distance remaining
+     * @since 0.13.0
+     */
+    fun findCurrentBannerText(
+        currentStep: LegStep,
+        stepDistanceRemaining: Double,
+        findPrimary: Boolean
+    ): BannerText? {
+        return findCurrentBannerInstructions(currentStep, stepDistanceRemaining)
+            ?.let { instructions ->
+            retrievePrimaryOrSecondaryBannerText(findPrimary, instructions)
+        }
+    }
+
+    private fun retrievePrimaryOrSecondaryBannerText(
+        findPrimary: Boolean,
+        instruction: BannerInstructions
+    ): BannerText? {
+        return if (findPrimary) instruction.primary else instruction.secondary
+    }
+
+    /**
+     * This method returns the current [VoiceInstructions] based on the step distance
+     * remaining.
+     *
+     * @param currentStep           holding the current banner instructions
+     * @param stepDistanceRemaining to determine progress along the step
+     * @return current voice instructions based on step distance remaining
+     * @since 0.13.0
+     */
+    fun findCurrentVoiceInstructions(
+        currentStep: LegStep,
+        stepDistanceRemaining: Double
+    ): VoiceInstructions? {
+        return currentStep.voiceInstructions
+            ?.takeIf { instructions -> instructions.isNotEmpty() }
+            ?.let { voiceInstructions ->
+                val instructions =
+                    voiceInstructions.sortedBy(VoiceInstructions::distanceAlongGeometry)
+                for (instruction in instructions) {
+                    val distanceAlongGeometry = instruction.distanceAlongGeometry
+                    if (distanceAlongGeometry >= stepDistanceRemaining) {
+                        return@let instruction
+                    }
+                }
+                instructions.firstOrNull()
+            }
+    }
+
+    private fun upcomingStepIsArrivalManeuverType(routeProgress: RouteProgress): Boolean {
+        return routeProgress.currentLegProgress.upComingStep?.maneuver?.type?.text?.contains(
+            NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE
+        ) ?: false
+    }
+
+    private fun currentStepIsArrivalManeuverType(routeProgress: RouteProgress): Boolean {
+        return routeProgress.currentLegProgress.currentStep.maneuver.type?.text?.contains(
+            NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE
+        ) ?: false
+    }
+
+    companion object {
+        const val FORCED_LOCATION = "Forced Location"
+    }
 }

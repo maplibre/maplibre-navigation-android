@@ -1,41 +1,40 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.content.Context;
+import android.content.Context
+import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+open class NavigationNotificationProvider(
+    context: Context,
+    mapLibreNavigation: MapLibreNavigation
+) {
+    private val navigationNotification: NavigationNotification =
+        buildNotificationFrom(context, mapLibreNavigation)
+    private var shouldUpdate = true
 
-class NavigationNotificationProvider {
-
-  private NavigationNotification navigationNotification;
-  private boolean shouldUpdate = true;
-
-  NavigationNotificationProvider(Context context, MapLibreNavigation mapLibreNavigation) {
-    navigationNotification = buildNotificationFrom(context, mapLibreNavigation);
-  }
-
-  NavigationNotification retrieveNotification() {
-    return navigationNotification;
-  }
-
-  void updateNavigationNotification(RouteProgress routeProgress) {
-    if (shouldUpdate) {
-      navigationNotification.updateNotification(routeProgress);
+    fun retrieveNotification(): NavigationNotification {
+        return navigationNotification
     }
-  }
 
-  void shutdown(Context context) {
-    navigationNotification.onNavigationStopped(context);
-    navigationNotification = null;
-    shouldUpdate = false;
-  }
-
-  private NavigationNotification buildNotificationFrom(Context context, MapLibreNavigation mapLibreNavigation) {
-    MapLibreNavigationOptions options = mapLibreNavigation.options();
-    if (options.navigationNotification() != null) {
-      return options.navigationNotification();
-    } else {
-      return new MapLibreNavigationNotification(context, mapLibreNavigation);
+    fun updateNavigationNotification(routeProgress: RouteProgress) {
+        if (shouldUpdate) {
+            navigationNotification.updateNotification(routeProgress)
+        }
     }
-  }
+
+    fun shutdown(context: Context) {
+        navigationNotification.onNavigationStopped(context)
+        shouldUpdate = false
+    }
+
+    private fun buildNotificationFrom(
+        context: Context,
+        mapLibreNavigation: MapLibreNavigation
+    ): NavigationNotification {
+        return mapLibreNavigation.options.navigationNotification
+            ?: MapLibreNavigationNotification(
+                context,
+                mapLibreNavigation
+            )
+    }
 }

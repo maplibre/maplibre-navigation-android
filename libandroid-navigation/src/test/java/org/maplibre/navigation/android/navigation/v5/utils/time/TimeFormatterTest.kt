@@ -1,91 +1,100 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time;
+package org.maplibre.navigation.android.navigation.v5.utils.time
 
-import org.junit.Test;
-import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter;
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import java.util.Calendar
 
-import java.util.Calendar;
+class TimeFormatterTest {
+    @Test
+    @Throws(Exception::class)
+    fun checksTwelveHoursTimeFormat() {
+        val time = Calendar.getInstance()
+        val anyYear = 2018
+        val anyMonth = 3
+        val anyDay = 26
+        val sixPm = 18
+        val eighteenMinutes = 18
+        val zeroSeconds = 0
+        time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
+        val elevenMinutes = 663.7
+        val twelveHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWELVE_HOURS
+        val indifferentDeviceTwentyFourHourFormat = true
 
-import static org.junit.Assert.assertEquals;
+        val formattedTime = TimeFormatter.formatTime(
+            time, elevenMinutes, twelveHoursTimeFormatType,
+            indifferentDeviceTwentyFourHourFormat
+        )
 
-public class TimeFormatterTest {
+        Assert.assertEquals("6:29 pm", formattedTime)
+    }
 
-  @Test
-  public void checksTwelveHoursTimeFormat() throws Exception {
-    Calendar time = Calendar.getInstance();
-    int anyYear = 2018;
-    int anyMonth = 3;
-    int anyDay = 26;
-    int sixPm = 18;
-    int eighteenMinutes = 18;
-    int zeroSeconds = 0;
-    time.set(anyYear, anyMonth, anyDay, sixPm, eighteenMinutes, zeroSeconds);
-    double elevenMinutes = 663.7;
-    int twelveHoursTimeFormatType = 0;
-    boolean indifferentDeviceTwentyFourHourFormat = true;
+    @Test
+    @Throws(Exception::class)
+    fun checksTwentyFourHoursTimeFormat() {
+        val time = Calendar.getInstance()
+        val anyYear = 2018
+        val anyMonth = 3
+        val anyDay = 26
+        val sixPm = 18
+        val eighteenMinutes = 18
+        val zeroSeconds = 0
+        time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
+        val elevenMinutes = 663.7
+        val twentyFourHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWENTY_FOUR_HOURS
+        val indifferentDeviceTwentyFourHourFormat = false
 
-    String formattedTime = TimeFormatter.formatTime(time, elevenMinutes, twelveHoursTimeFormatType,
-      indifferentDeviceTwentyFourHourFormat);
+        val formattedTime = TimeFormatter.formatTime(
+            time, elevenMinutes, twentyFourHoursTimeFormatType,
+            indifferentDeviceTwentyFourHourFormat
+        )
 
-    assertEquals("6:29 pm", formattedTime);
-  }
+        Assert.assertEquals("18:29", formattedTime)
+    }
 
-  @Test
-  public void checksTwentyFourHoursTimeFormat() throws Exception {
-    Calendar time = Calendar.getInstance();
-    int anyYear = 2018;
-    int anyMonth = 3;
-    int anyDay = 26;
-    int sixPm = 18;
-    int eighteenMinutes = 18;
-    int zeroSeconds = 0;
-    time.set(anyYear, anyMonth, anyDay, sixPm, eighteenMinutes, zeroSeconds);
-    double elevenMinutes = 663.7;
-    int twentyFourHoursTimeFormatType = 1;
-    boolean indifferentDeviceTwentyFourHourFormat = false;
+    @Test
+    @Throws(Exception::class)
+    fun checksDefaultTwelveHoursTimeFormat() {
+        val time = Calendar.getInstance()
+        val anyYear = 2018
+        val anyMonth = 3
+        val anyDay = 26
+        val sixPm = 18
+        val eighteenMinutes = 18
+        val zeroSeconds = 0
+        time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
+        val elevenMinutes = 663.7
+        val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
+        val deviceTwelveHourFormat = false
 
-    String formattedTime = TimeFormatter.formatTime(time, elevenMinutes, twentyFourHoursTimeFormatType,
-      indifferentDeviceTwentyFourHourFormat);
+        val formattedTime = TimeFormatter.formatTime(
+            time, elevenMinutes, noneSpecifiedTimeFormatType,
+            deviceTwelveHourFormat
+        )
 
-    assertEquals("18:29", formattedTime);
-  }
+        Assert.assertEquals("6:29 pm", formattedTime)
+    }
 
-  @Test
-  public void checksDefaultTwelveHoursTimeFormat() throws Exception {
-    Calendar time = Calendar.getInstance();
-    int anyYear = 2018;
-    int anyMonth = 3;
-    int anyDay = 26;
-    int sixPm = 18;
-    int eighteenMinutes = 18;
-    int zeroSeconds = 0;
-    time.set(anyYear, anyMonth, anyDay, sixPm, eighteenMinutes, zeroSeconds);
-    double elevenMinutes = 663.7;
-    int noneSpecifiedTimeFormatType = -1;
-    boolean deviceTwelveHourFormat = false;
+    @Test
+    @Throws(Exception::class)
+    fun checksDefaultTwentyFourHoursTimeFormat() {
+        val time = Calendar.getInstance()
+        val anyYear = 2018
+        val anyMonth = 3
+        val anyDay = 26
+        val sixPm = 18
+        val eighteenMinutes = 18
+        val zeroSeconds = 0
+        time[anyYear, anyMonth, anyDay, sixPm, eighteenMinutes] = zeroSeconds
+        val elevenMinutes = 663.7
+        val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
+        val deviceTwentyFourHourFormat = true
 
-    String formattedTime = TimeFormatter.formatTime(time, elevenMinutes, noneSpecifiedTimeFormatType,
-      deviceTwelveHourFormat);
+        val formattedTime = TimeFormatter.formatTime(
+            time, elevenMinutes, noneSpecifiedTimeFormatType,
+            deviceTwentyFourHourFormat
+        )
 
-    assertEquals("6:29 pm", formattedTime);
-  }
-
-  @Test
-  public void checksDefaultTwentyFourHoursTimeFormat() throws Exception {
-    Calendar time = Calendar.getInstance();
-    int anyYear = 2018;
-    int anyMonth = 3;
-    int anyDay = 26;
-    int sixPm = 18;
-    int eighteenMinutes = 18;
-    int zeroSeconds = 0;
-    time.set(anyYear, anyMonth, anyDay, sixPm, eighteenMinutes, zeroSeconds);
-    double elevenMinutes = 663.7;
-    int noneSpecifiedTimeFormatType = -1;
-    boolean deviceTwentyFourHourFormat = true;
-
-    String formattedTime = TimeFormatter.formatTime(time, elevenMinutes, noneSpecifiedTimeFormatType,
-      deviceTwentyFourHourFormat);
-
-    assertEquals("18:29", formattedTime);
-  }
+        Assert.assertEquals("18:29", formattedTime)
+    }
 }

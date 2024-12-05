@@ -1,201 +1,47 @@
-package org.maplibre.navigation.android.navigation.v5.models;
+package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.auto.value.AutoValue;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.SerializedName;
-import org.maplibre.geojson.Point;
-import org.maplibre.geojson.PointAsCoordinatesTypeAdapter;
-
-import java.util.List;
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import org.maplibre.navigation.android.json
 
 /**
  * Detailed information about an individual route such as the duration, distance and geometry.
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class DirectionsRoute extends DirectionsJsonObject {
+@Serializable
+data class DirectionsRoute(
 
-  /**
-   * Create a new instance of this class by using the {@link Builder} class.
-   *
-   * @return this classes {@link Builder} for creating a new instance
-   * @since 3.0.0
-   */
-  public static Builder builder() {
-    return new AutoValue_DirectionsRoute.Builder();
-  }
+    /**
+     * Gives the geometry of the route. Commonly used to draw the route on the map view.
+     *
+     * @since 1.0.0
+     */
+    val geometry: String,
 
-  /**
-   * The index of this route in the original network response.
-   *
-   * @return string of an int value representing the index
-   * @since 4.4.0
-   */
-  @Nullable
-  public abstract String routeIndex();
+    /**
+     * A Leg is a route between only two waypoints.
+     *
+     * @since 1.0.0
+     */
+    val legs: List<RouteLeg>,
 
-  /**
-   * The distance traveled from origin to destination.
-   *
-   * @return a double number with unit meters
-   * @since 1.0.0
-   */
-  @NonNull
-  public abstract Double distance();
-
-  /**
-   * The estimated travel time from origin to destination.
-   *
-   * @return a double number with unit seconds
-   * @since 1.0.0
-   */
-  @NonNull
-  public abstract Double duration();
-
-  /**
-   * The typical travel time from this route's origin to destination. There's a delay along
-   * this route if you subtract this durationTypical() value from the route's duration()
-   * value and the resulting difference is greater than 0. The delay is because of any
-   * number of real-world situations (road repair, traffic jam, etc).
-   *
-   * @return a double number with unit seconds
-   * @since 5.5.0
-   */
-  @Nullable
-  @SerializedName("duration_typical")
-  public abstract Double durationTypical();
-
-  /**
-   * Gives the geometry of the route. Commonly used to draw the route on the map view.
-   *
-   * @return an encoded polyline string
-   * @since 1.0.0
-   */
-  @Nullable
-  public abstract String geometry();
-
-  /**
-   * The calculated weight of the route.
-   *
-   * @return the weight value provided from the API as a {@code double} value
-   * @since 2.1.0
-   */
-  @Nullable
-  public abstract Double weight();
-
-  /**
-   * The name of the weight profile used while calculating during extraction phase. The default is
-   * {@code routability} which is duration based, with additional penalties for less desirable
-   * maneuvers.
-   *
-   * @return a String representing the weight profile used while calculating the route
-   * @since 2.1.0
-   */
-  @Nullable
-  @SerializedName("weight_name")
-  public abstract String weightName();
-
-  /**
-   * A Leg is a route between only two waypoints.
-   *
-   * @return list of {@link RouteLeg} objects
-   * @since 1.0.0
-   */
-  @Nullable
-  public abstract List<RouteLeg> legs();
-
-  /**
-   * Holds onto the parameter information used when making the directions request. Useful for
-   * re-requesting a directions route using the same information previously used.
-   *
-   * @return a {@link RouteOptions}s object which holds onto critical information from the request
-   *   that cannot be derived directly from the directions route
-   * @since 3.0.0
-   */
-  @Nullable
-  public abstract RouteOptions routeOptions();
-
-
-  /**
-   * String of the language to be used for voice instructions.  Defaults to en, and
-   * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
-   * <tt>MapboxDirections.Builder#language()</tt> via is not compatible with API Voice.
-   *
-   * @return String compatible with voice instructions, null otherwise
-   * @since 3.1.0
-   */
-  @Nullable
-  @SerializedName("voiceLocale")
-  public abstract String voiceLanguage();
-
-  /**
-   * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
-   * values. This allows you to modify a single property and then rebuild the object resulting in
-   * an updated and modified {@link DirectionsRoute}.
-   *
-   * @return a {@link Builder} with the same values set to match the ones defined
-   *   in this {@link DirectionsRoute}
-   * @since 3.0.0
-   */
-  public abstract Builder toBuilder();
-
-  /**
-   * Gson type adapter for parsing Gson to this class.
-   *
-   * @param gson the built {@link Gson} object
-   * @return the type adapter for this class
-   * @since 3.0.0
-   */
-  public static TypeAdapter<DirectionsRoute> typeAdapter(Gson gson) {
-    return new AutoValue_DirectionsRoute.GsonTypeAdapter(gson);
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   *
-   * @param json a formatted valid JSON string defining a GeoJson Directions Route
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static DirectionsRoute fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    return gson.create().fromJson(json, DirectionsRoute.class);
-  }
-
-  /**
-   * This builder can be used to set the values describing the {@link DirectionsRoute}.
-   *
-   * @since 3.0.0
-   */
-  @AutoValue.Builder
-  public abstract static class Builder {
 
     /**
      * The distance traveled from origin to destination.
      *
-     * @param distance a double number with unit meters
-     * @return this builder for chaining options together
-     * @since 3.0.0
+     * @return a double number with unit meters
+     * @since 1.0.0
      */
-    public abstract Builder distance(@NonNull Double distance);
+    val distance: Double,
 
     /**
      * The estimated travel time from origin to destination.
      *
-     * @param duration a double number with unit seconds
-     * @return this builder for chaining options together
-     * @since 3.0.0
+     * @since 1.0.0
      */
-    public abstract Builder duration(@NonNull Double duration);
+    val duration: Double,
 
     /**
      * The typical travel time from this route's origin to destination. There's a delay along
@@ -203,78 +49,106 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * value and the resulting difference is greater than 0. The delay is because of any
      * number of real-world situations (road repair, traffic jam, etc).
      *
-     * @param durationTypical a double number with unit seconds
-     * @return this builder for chaining options together
      * @since 5.5.0
      */
-    public abstract Builder durationTypical(@Nullable Double durationTypical);
-
-    /**
-     * Gives the geometry of the route. Commonly used to draw the route on the map view.
-     *
-     * @param geometry an encoded polyline string
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    public abstract Builder geometry(@Nullable String geometry);
+    @SerialName("duration_typical")
+    val durationTypical: Double?,
 
     /**
      * The calculated weight of the route.
      *
-     * @param weight the weight value provided from the API as a {@code double} value
-     * @return this builder for chaining options together
-     * @since 3.0.0
+     * @since 2.1.0
      */
-    public abstract Builder weight(@Nullable Double weight);
+    val weight: Double?,
 
     /**
      * The name of the weight profile used while calculating during extraction phase. The default is
-     * {@code routability} which is duration based, with additional penalties for less desirable
+     * `routability` which is duration based, with additional penalties for less desirable
      * maneuvers.
      *
-     * @param weightName a String representing the weight profile used while calculating the route
-     * @return this builder for chaining options together
-     * @since 3.0.0
+     * @since 2.1.0
      */
-    public abstract Builder weightName(@Nullable String weightName);
+    @SerialName("weight_name")
+    val weightName: String?,
 
     /**
-     * A Leg is a route between only two waypoints.
+     * Holds onto the parameter information used when making the directions request. Useful for
+     * re-requesting a directions route using the same information previously used.
      *
-     * @param legs list of {@link RouteLeg} objects
-     * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder legs(@Nullable List<RouteLeg> legs);
-
-    /**
-     * Holds onto the parameter information used when making the directions request.
-     *
-     * @param routeOptions a {@link RouteOptions}s object which holds onto critical information from
-     *                     the request that cannot be derived directly from the directions route
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
+    val routeOptions: RouteOptions?,
 
     /**
      * String of the language to be used for voice instructions.  Defaults to en, and
-     * can be any accepted instruction language.
+     * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
+     * <tt>MapboxDirections.Builder#language()</tt> via is not compatible with API Voice.
      *
-     * @param voiceLanguage String compatible with voice instructions, null otherwise
-     * @return this builder for chaining options together
      * @since 3.1.0
      */
-    public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
+    @SerialName("voiceLocale")
+    val voiceLanguage: String?,
+) {
 
-    abstract Builder routeIndex(String routeIndex);
+    fun toJson(): String = json.encodeToString(this)
 
-    /**
-     * Build a new {@link DirectionsRoute} object.
-     *
-     * @return a new {@link DirectionsRoute} using the provided values in this builder
-     * @since 3.0.0
-     */
-    public abstract DirectionsRoute build();
-  }
+    fun toBuilder(): Builder {
+        return Builder(
+            geometry = geometry,
+            legs = legs,
+            distance = distance,
+            duration = duration
+        ).apply {
+            durationTypical(durationTypical)
+            withWeight(weight)
+            withWeightName(weightName)
+            withRouteOptions(routeOptions)
+            withVoiceLanguage(voiceLanguage)
+        }
+    }
+
+    class Builder(
+        private var geometry: String,
+        private var legs: List<RouteLeg>,
+        private var distance: Double,
+        private var duration: Double
+    ) {
+        private var durationTypical: Double? = null
+        private var weight: Double? = null
+        private var weightName: String? = null
+        private var routeOptions: RouteOptions? = null
+        private var voiceLanguage: String? = null
+
+        fun durationTypical(durationTypical: Double?) =
+            apply { this.durationTypical = durationTypical }
+
+        fun withWeight(weight: Double?) = apply { this.weight = weight }
+
+        fun withWeightName(weightName: String?) = apply { this.weightName = weightName }
+
+        fun withRouteOptions(routeOptions: RouteOptions?) =
+            apply { this.routeOptions = routeOptions }
+
+        fun withVoiceLanguage(voiceLanguage: String?) = apply { this.voiceLanguage = voiceLanguage }
+
+        fun build(): DirectionsRoute {
+            return DirectionsRoute(
+                geometry = geometry,
+                legs = legs,
+                distance = distance,
+                duration = duration,
+                durationTypical = durationTypical,
+                weight = weight,
+                weightName = weightName,
+                routeOptions = routeOptions,
+                voiceLanguage = voiceLanguage
+            )
+        }
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun fromJson(jsonString: String): DirectionsRoute = json.decodeFromString(jsonString)
+    }
 }

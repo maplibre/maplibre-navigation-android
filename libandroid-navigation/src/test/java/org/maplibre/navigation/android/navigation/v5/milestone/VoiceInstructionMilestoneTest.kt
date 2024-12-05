@@ -1,136 +1,163 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.junit.Test;
+class VoiceInstructionMilestoneTest : BaseTest() {
+    @Test
+    fun sanity() {
+        val milestone = buildVoiceInstructionMilestone()
 
-import java.util.List;
+        Assert.assertNotNull(milestone)
+    }
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+    @Test
+    @Throws(Exception::class)
+    fun onBeginningOfStep_voiceInstructionsShouldTrigger() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val milestone = buildVoiceInstructionMilestone()
 
-public class VoiceInstructionMilestoneTest extends BaseTest {
+        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
 
-  @Test
-  public void sanity() {
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        Assert.assertTrue(isOccurring)
+    }
 
-    assertNotNull(milestone);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun onSameInstructionOccurring_milestoneDoesNotTriggerTwice() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val firstProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val secondProgress: RouteProgress = routeProgress.copy(
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance - 40,
+            stepIndex = 0
+        )
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void onBeginningOfStep_voiceInstructionsShouldTrigger() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        milestone.isOccurring(firstProgress, firstProgress)
+        val shouldNotBeOccurring = milestone.isOccurring(firstProgress, secondProgress)
 
-    boolean isOccurring = milestone.isOccurring(routeProgress, routeProgress);
+        Assert.assertFalse(shouldNotBeOccurring)
+    }
 
-    assertTrue(isOccurring);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun nullInstructions_doNotGetTriggered() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = with(createBeginningOfStepRouteProgress(routeProgress)) {
+            copy(
+                directionsRoute = directionsRoute.copy(
+                    legs = directionsRoute.legs.mapIndexed { lIndex, leg ->
+                        if (lIndex == legIndex) {
+                            leg.copy(steps = leg.steps.mapIndexed { sIndex, step ->
+                                if (sIndex == stepIndex) {
+                                    step.copy(
+                                        voiceInstructions = null
+                                    )
+                                } else {
+                                    step
+                                }
+                            })
+                        } else {
+                            leg
+                        }
+                    }
+                )
+            )
+        }
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void onSameInstructionOccurring_milestoneDoesNotTriggerTwice() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    RouteProgress firstProgress = createBeginningOfStepRouteProgress(routeProgress);
-    RouteProgress secondProgress = routeProgress.toBuilder()
-      .stepDistanceRemaining(routeProgress.currentLegProgress().currentStep().distance() - 40)
-      .stepIndex(0)
-      .build();
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
 
-    milestone.isOccurring(firstProgress, firstProgress);
-    boolean shouldNotBeOccurring = milestone.isOccurring(firstProgress, secondProgress);
+        Assert.assertFalse(isOccurring)
+    }
 
-    assertFalse(shouldNotBeOccurring);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun onOccurringMilestone_voiceSsmlInstructionsAreReturned() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val instructions: VoiceInstructions =
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void nullInstructions_doNotGetTriggered() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
-    List<VoiceInstructions> instructions = currentStep.voiceInstructions();
-    instructions.clear();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        milestone.isOccurring(routeProgress, routeProgress)
 
-    boolean isOccurring = milestone.isOccurring(routeProgress, routeProgress);
+        Assert.assertEquals(instructions.ssmlAnnouncement, milestone.ssmlAnnouncement)
+    }
 
-    assertFalse(isOccurring);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun onOccurringMilestone_voiceInstructionsAreReturned() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val instructions: VoiceInstructions =
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void onOccurringMilestone_voiceSsmlInstructionsAreReturned() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    VoiceInstructions instructions = routeProgress.currentLegProgress().currentStep().voiceInstructions().get(0);
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        milestone.isOccurring(routeProgress, routeProgress)
 
-    milestone.isOccurring(routeProgress, routeProgress);
+        Assert.assertEquals(instructions.announcement, milestone.announcement)
+    }
 
-    assertEquals(instructions.ssmlAnnouncement(), milestone.getSsmlAnnouncement());
-  }
+    @Test
+    @Throws(Exception::class)
+    fun onOccurringMilestone_instructionsAreReturned() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val instructions: VoiceInstructions =
+            routeProgress.currentLegProgress.currentStep.voiceInstructions!![0]
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void onOccurringMilestone_voiceInstructionsAreReturned() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    VoiceInstructions instructions = routeProgress.currentLegProgress().currentStep().voiceInstructions().get(0);
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        milestone.isOccurring(routeProgress, routeProgress)
 
-    milestone.isOccurring(routeProgress, routeProgress);
+        Assert.assertEquals(
+            instructions.announcement,
+            milestone.getInstruction().buildInstruction(routeProgress)
+        )
+    }
 
-    assertEquals(instructions.announcement(), milestone.getAnnouncement());
-  }
+    @Test
+    @Throws(Exception::class)
+    fun onNullMilestoneInstructions_emptyInstructionsAreReturned() {
+        val milestone = buildVoiceInstructionMilestone()
 
-  @Test
-  public void onOccurringMilestone_instructionsAreReturned() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    VoiceInstructions instructions = routeProgress.currentLegProgress().currentStep().voiceInstructions().get(0);
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+        Assert.assertEquals("", milestone.announcement)
+    }
 
-    milestone.isOccurring(routeProgress, routeProgress);
+    @Test
+    @Throws(Exception::class)
+    fun onNullMilestoneInstructions_emptySsmlInstructionsAreReturned() {
+        val milestone = buildVoiceInstructionMilestone()
 
-    assertEquals(instructions.announcement(), milestone.getInstruction().buildInstruction(routeProgress));
-  }
+        Assert.assertEquals("", milestone.ssmlAnnouncement)
+    }
 
-  @Test
-  public void onNullMilestoneInstructions_emptyInstructionsAreReturned() throws Exception {
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+    @Test
+    @Throws(Exception::class)
+    fun onNullMilestoneInstructions_stepNameIsReturnedForInstruction() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
+        val milestone = buildVoiceInstructionMilestone()
 
-    assertEquals("", milestone.getAnnouncement());
-  }
+        Assert.assertEquals(
+            currentStep.name,
+            milestone.getInstruction().buildInstruction(routeProgress)
+        )
+    }
 
-  @Test
-  public void onNullMilestoneInstructions_emptySsmlInstructionsAreReturned() throws Exception {
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
+    private fun createBeginningOfStepRouteProgress(routeProgress: RouteProgress): RouteProgress {
+        return routeProgress.copy(
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
+            stepIndex = 0
+        )
+    }
 
-    assertEquals("", milestone.getSsmlAnnouncement());
-  }
-
-  @Test
-  public void onNullMilestoneInstructions_stepNameIsReturnedForInstruction() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
-    VoiceInstructionMilestone milestone = buildVoiceInstructionMilestone();
-
-    assertEquals(currentStep.name(), milestone.getInstruction().buildInstruction(routeProgress));
-  }
-
-  private RouteProgress createBeginningOfStepRouteProgress(RouteProgress routeProgress) {
-    return routeProgress.toBuilder()
-      .stepDistanceRemaining(routeProgress.currentLegProgress().currentStep().distance())
-      .stepIndex(0)
-      .build();
-  }
-
-  private VoiceInstructionMilestone buildVoiceInstructionMilestone() {
-    return (VoiceInstructionMilestone) new VoiceInstructionMilestone.Builder().setIdentifier(1234).build();
-  }
+    private fun buildVoiceInstructionMilestone(): VoiceInstructionMilestone {
+        return VoiceInstructionMilestone(identifier = 1234)
+    }
 }

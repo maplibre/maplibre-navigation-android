@@ -1,36 +1,29 @@
-package org.maplibre.navigation.android.navigation.v5.location;
+package org.maplibre.navigation.android.navigation.v5.location
 
-import android.location.Location;
+import android.location.Location
 
-import androidx.annotation.NonNull;
+open class LocationValidator(private val accuracyThreshold: Int) {
+    private var lastValidLocation: Location? = null
 
-public class LocationValidator {
-
-  private Location lastValidLocation;
-  private final int accuracyThreshold;
-
-  public LocationValidator(int accuracyThreshold) {
-    this.accuracyThreshold = accuracyThreshold;
-  }
-
-  public boolean isValidUpdate(@NonNull Location location) {
-    return checkLastValidLocation(location) || location.getAccuracy() < accuracyThreshold;
-  }
-
-  /**
-   * On the first location update, the last valid location will be null.
-   * <p>
-   * So set the last valid location and return true.  On the next update, there
-   * will be a last update to compare against.
-   *
-   * @param location new location update
-   * @return true if last valid location null, false otherwise
-   */
-  private boolean checkLastValidLocation(@NonNull Location location) {
-    if (lastValidLocation == null) {
-      lastValidLocation = location;
-      return true;
+    fun isValidUpdate(location: Location): Boolean {
+        return checkLastValidLocation(location) || location.accuracy < accuracyThreshold
     }
-    return false;
-  }
+
+    /**
+     * On the first location update, the last valid location will be null.
+     *
+     *
+     * So set the last valid location and return true.  On the next update, there
+     * will be a last update to compare against.
+     *
+     * @param location new location update
+     * @return true if last valid location null, false otherwise
+     */
+    private fun checkLastValidLocation(location: Location): Boolean {
+        if (lastValidLocation == null) {
+            lastValidLocation = location
+            return true
+        }
+        return false
+    }
 }

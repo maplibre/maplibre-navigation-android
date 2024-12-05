@@ -22,10 +22,10 @@ import org.maplibre.android.maps.Style
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.example.R
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import timber.log.Timber
@@ -98,7 +98,9 @@ class ValhallaNavigationActivity :
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         this.mapLibreMap = mapLibreMap
-        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+        mapLibreMap.setStyle(
+            Style.Builder().fromUri(getString(R.string.map_style_light))
+        ) { style ->
             enableLocationComponent(style)
         }
 //
@@ -226,38 +228,46 @@ class ValhallaNavigationActivity :
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 response.use {
                     if (response.isSuccessful) {
-                        Timber.e("calculateRoute to ValhallaRouting successful with status code: %s", response.code)
+                        Timber.e(
+                            "calculateRoute to ValhallaRouting successful with status code: %s",
+                            response.code
+                        )
                         val responseBodyJson = response.body!!.string()
-                        Timber.d("calculateRoute ValhallaRouting responseBodyJson: %s", responseBodyJson)
+                        Timber.d(
+                            "calculateRoute ValhallaRouting responseBodyJson: %s",
+                            responseBodyJson
+                        )
                         val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
-                        this@ValhallaNavigationActivity.route = maplibreResponse.routes()
+                        this@ValhallaNavigationActivity.route = maplibreResponse.routes
                             .first()
-                            .toBuilder()
-                            .routeOptions(
-                                // These dummy route options are not not used to create directions,
-                                // but currently they are necessary to start the navigation
-                                // and to use the voice instructions.
-                                // Again, this isn't ideal, but it is a requirement of the framework.
-                                RouteOptions.builder()
-                                    .baseUrl("https://valhalla.routing")
-                                    .profile("valhalla")
-                                    .user("valhalla")
-                                    .accessToken("valhalla")
-                                    .voiceInstructions(true)
-                                    .bannerInstructions(true)
-                                    .language(language)
-                                    .coordinates(listOf(origin, destination))
-                                    .requestUuid("0000-0000-0000-0000")
-                                    .build()
+                            .copy(
+                                routeOptions = RouteOptions(
+                                    // These dummy route options are not not used to create directions,
+                                    // but currently they are necessary to start the navigation
+                                    // and to use the voice instructions.
+                                    // Again, this isn't ideal, but it is a requirement of the framework.
+                                    baseUrl = "https://valhalla.routing",
+                                    profile = "valhalla",
+                                    user = "valhalla",
+                                    accessToken = "valhalla",
+                                    voiceInstructions = true,
+                                    bannerInstructions = true,
+                                    language = language,
+                                    coordinates = listOf(origin, destination),
+                                    requestUuid = "0000-0000-0000-0000"
+                                )
                             )
-                            .build()
 
                         runOnUiThread {
-                            navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                            navigationMapRoute?.addRoutes(maplibreResponse.routes)
                             binding.startRouteLayout.visibility = View.VISIBLE
                         }
                     } else {
-                        Timber.e("calculateRoute Request to Valhalla failed with status code: %s: %s", response.code, response.body)
+                        Timber.e(
+                            "calculateRoute Request to Valhalla failed with status code: %s: %s",
+                            response.code,
+                            response.body
+                        )
                     }
                 }
             }

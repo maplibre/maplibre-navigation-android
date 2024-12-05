@@ -1,54 +1,55 @@
-package org.maplibre.navigation.android.navigation.v5;
+package org.maplibre.navigation.android.navigation.v5
 
-import static org.maplibre.navigation.android.navigation.v5.utils.Constants.PRECISION_6;
+import android.location.Location
+import io.mockk.every
+import io.mockk.mockk
+import org.maplibre.geojson.LineString
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.turf.TurfConstants
+import org.maplibre.turf.TurfMeasurement
 
-import android.location.Location;
-import androidx.annotation.NonNull;
+internal class MockLocationBuilder {
+    fun buildDefaultMockLocationUpdate(lng: Double, lat: Double): Location {
+        return buildMockLocationUpdate(lng, lat, 30f, 10f, System.currentTimeMillis())
+    }
 
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.geojson.LineString;
-import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.turf.TurfConstants;
-import org.maplibre.turf.TurfMeasurement;
+    fun buildPointAwayFromLocation(location: Location, distanceAway: Double): Point {
+        val fromLocation = Point.fromLngLat(
+            location.longitude, location.latitude
+        )
+        return TurfMeasurement.destination(
+            fromLocation,
+            distanceAway,
+            90.0,
+            TurfConstants.UNIT_METERS
+        )
+    }
 
-import java.util.List;
+    fun buildPointAwayFromPoint(point: Point, distanceAway: Double, bearing: Double): Point {
+        return TurfMeasurement.destination(point, distanceAway, bearing, TurfConstants.UNIT_METERS)
+    }
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+    fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
+        val currentStep = progress.currentLegProgress.currentStep
+        val lineString = LineString.fromPolyline(currentStep.geometry, Constants.PRECISION_6)
+        return lineString.coordinates()
+    }
 
-class MockLocationBuilder {
-
-  Location buildDefaultMockLocationUpdate(double lng, double lat) {
-    return buildMockLocationUpdate(lng, lat, 30f, 10f, System.currentTimeMillis());
-  }
-
-  @NonNull
-  Point buildPointAwayFromLocation(Location location, double distanceAway) {
-    Point fromLocation = Point.fromLngLat(
-      location.getLongitude(), location.getLatitude());
-    return TurfMeasurement.destination(fromLocation, distanceAway, 90, TurfConstants.UNIT_METERS);
-  }
-
-  @NonNull
-  Point buildPointAwayFromPoint(Point point, double distanceAway, double bearing) {
-    return TurfMeasurement.destination(point, distanceAway, bearing, TurfConstants.UNIT_METERS);
-  }
-
-  @NonNull
-  List<Point> createCoordinatesFromCurrentStep(RouteProgress progress) {
-    LegStep currentStep = progress.currentLegProgress().currentStep();
-    LineString lineString = LineString.fromPolyline(currentStep.geometry(), PRECISION_6);
-    return lineString.coordinates();
-  }
-
-  private Location buildMockLocationUpdate(double lng, double lat, float speed, float horizontalAccuracy, long time) {
-    Location location = mock(Location.class);
-    when(location.getLongitude()).thenReturn(lng);
-    when(location.getLatitude()).thenReturn(lat);
-    when(location.getSpeed()).thenReturn(speed);
-    when(location.getAccuracy()).thenReturn(horizontalAccuracy);
-    when(location.getTime()).thenReturn(time);
-    return location;
-  }
+    private fun buildMockLocationUpdate(
+        lngValue: Double,
+        latValue: Double,
+        speedValue: Float,
+        horizontalAccuracyValue: Float,
+        timeValue: Long
+    ): Location {
+        return mockk(relaxed = true) {
+            every { longitude } returns lngValue
+            every { latitude } returns latValue
+            every { speed } returns speedValue
+            every { accuracy } returns horizontalAccuracyValue
+            every { time } returns timeValue
+        }
+    }
 }

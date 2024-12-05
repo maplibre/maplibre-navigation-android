@@ -84,9 +84,9 @@ class MapRouteArrow {
   }
 
   void addUpcomingManeuverArrow(RouteProgress routeProgress) {
-    boolean invalidUpcomingStepPoints = routeProgress.upcomingStepPoints() == null
-      || routeProgress.upcomingStepPoints().size() < RouteConstants.TWO_POINTS;
-    boolean invalidCurrentStepPoints = routeProgress.currentStepPoints().size() < RouteConstants.TWO_POINTS;
+    boolean invalidUpcomingStepPoints = routeProgress.getUpcomingStepPoints() == null
+      || routeProgress.getUpcomingStepPoints().size() < RouteConstants.TWO_POINTS;
+    boolean invalidCurrentStepPoints = routeProgress.getCurrentStepPoints().size() < RouteConstants.TWO_POINTS;
     if (invalidUpcomingStepPoints || invalidCurrentStepPoints) {
       updateVisibilityTo(false);
       return;
@@ -114,11 +114,11 @@ class MapRouteArrow {
   }
 
   private List<Point> obtainArrowPointsFrom(RouteProgress routeProgress) {
-    List<Point> reversedCurrent = new ArrayList<>(routeProgress.currentStepPoints());
+    List<Point> reversedCurrent = new ArrayList<>(routeProgress.getCurrentStepPoints());
     Collections.reverse(reversedCurrent);
 
     LineString arrowLineCurrent = LineString.fromLngLats(reversedCurrent);
-    LineString arrowLineUpcoming = LineString.fromLngLats(routeProgress.upcomingStepPoints());
+    LineString arrowLineUpcoming = LineString.fromLngLats(routeProgress.getUpcomingStepPoints());
 
     LineString arrowCurrentSliced = TurfMisc.lineSliceAlong(arrowLineCurrent, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
     LineString arrowUpcomingSliced = TurfMisc.lineSliceAlong(arrowLineUpcoming, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);

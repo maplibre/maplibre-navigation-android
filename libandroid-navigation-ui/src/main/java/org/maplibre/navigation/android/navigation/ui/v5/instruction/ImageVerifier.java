@@ -12,6 +12,6 @@ class ImageVerifier implements NodeVerifier {
   }
 
   boolean hasImageUrl(BannerComponents components) {
-    return !TextUtils.isEmpty(components.imageBaseUrl());
+    return !TextUtils.isEmpty(components.getImageBaseUrl());
   }
 }

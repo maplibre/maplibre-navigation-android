@@ -1,145 +1,115 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.content.Context;
-import android.location.Location;
+import android.content.Context
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.route.FasterRoute
+import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import java.io.IOException
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+class FasterRouteDetectorTest : BaseTest() {
+    @Test
+    @Throws(Exception::class)
+    fun sanity() {
+        val fasterRouteDetector = FasterRouteDetector(MapLibreNavigationOptions())
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.android.location.engine.LocationEngine;
+        Assert.assertNotNull(fasterRouteDetector)
+    }
 
-import org.maplibre.navigation.android.navigation.v5.route.FasterRoute;
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+    @Test
+    @Throws(Exception::class)
+    fun defaultFasterRouteEngine_didGetAddedOnInitialization() {
+        val navigation = buildNavigationWithFasterRouteEnabled()
 
-import org.junit.Test;
+        Assert.assertNotNull(navigation.fasterRouteEngine)
+    }
 
-import java.io.IOException;
+    @Test
+    @Throws(Exception::class)
+    fun addFasterRouteEngine_didGetAdded() {
+        val navigation = buildNavigationWithFasterRouteEnabled()
+        val fasterRouteEngine = mockk<FasterRoute>()
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+        navigation.fasterRouteEngine = fasterRouteEngine
 
-public class FasterRouteDetectorTest extends BaseTest {
+        Assert.assertEquals(navigation.fasterRouteEngine, fasterRouteEngine)
+    }
 
-  private static final String PRECISION_6 = "directions_v5_precision_6.json";
+    @Test
+    @Throws(Exception::class)
+    fun onFasterRouteResponse_isFasterRouteIsTrue() {
+        val navigation = buildNavigationWithFasterRouteEnabled()
+        val fasterRouteEngine = navigation.fasterRouteEngine
+        var currentProgress = obtainDefaultRouteProgress()
+        val longerRoute: DirectionsRoute = currentProgress.directionsRoute.copy(
+            duration = 10000000.0
+        )
+        currentProgress = currentProgress.copy(
+            directionsRoute = longerRoute
+        )
+        val response = obtainADirectionsResponse()
 
-  @Test
-  public void sanity() throws Exception {
-    FasterRouteDetector fasterRouteDetector = new FasterRouteDetector();
+        val isFasterRoute = fasterRouteEngine.isFasterRoute(response, currentProgress)
 
-    assertNotNull(fasterRouteDetector);
-  }
+        Assert.assertTrue(isFasterRoute)
+    }
 
-  @Test
-  public void defaultFasterRouteEngine_didGetAddedOnInitialization() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
+    @Test
+    @Throws(Exception::class)
+    fun onSlowerRouteResponse_isFasterRouteIsFalse() {
+        val navigation = buildNavigationWithFasterRouteEnabled()
+        val fasterRouteEngine = navigation.fasterRouteEngine
+        var currentProgress = obtainDefaultRouteProgress()
+        val longerRoute: DirectionsRoute = currentProgress.directionsRoute.copy(
+            duration = 1000.0
+        )
+        currentProgress = currentProgress.copy(
+            directionsRoute = longerRoute
+        )
+        val response = obtainADirectionsResponse()
 
-    assertNotNull(navigation.getFasterRouteEngine());
-  }
+        val isFasterRoute = fasterRouteEngine.isFasterRoute(response, currentProgress)
 
-  @Test
-  public void addFasterRouteEngine_didGetAdded() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
-    FasterRoute fasterRouteEngine = mock(FasterRoute.class);
+        Assert.assertFalse(isFasterRoute)
+    }
 
-    navigation.setFasterRouteEngine(fasterRouteEngine);
+    private fun buildNavigationWithFasterRouteEnabled(): MapLibreNavigation {
+        val options = MapLibreNavigationOptions(enableFasterRouteDetection = true)
+        val context = mockk<Context> {
+            every { applicationContext } returns this
+        }
+        return MapLibreNavigation(context, options, mockk())
+    }
 
-    assertEquals(navigation.getFasterRouteEngine(), fasterRouteEngine);
-  }
+    @Throws(Exception::class)
+    private fun obtainDefaultRouteProgress(): RouteProgress {
+        val aRoute = obtainADirectionsRoute()
+        return buildTestRouteProgress(aRoute, 100.0, 700.0, 1000.0, 0, 0)
+    }
 
-  @Test
-  public void onFasterRouteResponse_isFasterRouteIsTrue() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
-    FasterRoute fasterRouteEngine = navigation.getFasterRouteEngine();
-    RouteProgress currentProgress = obtainDefaultRouteProgress();
-    DirectionsRoute longerRoute = currentProgress.directionsRoute().toBuilder()
-      .duration(10000000d)
-      .build();
-    currentProgress = currentProgress.toBuilder()
-      .directionsRoute(longerRoute)
-      .build();
-    DirectionsResponse response = obtainADirectionsResponse();
+    @Throws(IOException::class)
+    private fun obtainADirectionsRoute(): DirectionsRoute {
+        val body = loadJsonFixture(PRECISION_6)
+        val response = DirectionsResponse.fromJson(body)
+        val aRoute = response.routes[0]
 
-    boolean isFasterRoute = fasterRouteEngine.isFasterRoute(response, currentProgress);
+        return aRoute
+    }
 
-    assertTrue(isFasterRoute);
-  }
+    @Throws(IOException::class)
+    private fun obtainADirectionsResponse(): DirectionsResponse {
+        val body = loadJsonFixture(PRECISION_6)
+        val response = DirectionsResponse.fromJson(body)
+        return response
+    }
 
-  @Test
-  public void onSlowerRouteResponse_isFasterRouteIsFalse() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
-    FasterRoute fasterRouteEngine = navigation.getFasterRouteEngine();
-    RouteProgress currentProgress = obtainDefaultRouteProgress();
-    DirectionsRoute longerRoute = currentProgress.directionsRoute().toBuilder()
-      .duration(1000d)
-      .build();
-    currentProgress = currentProgress.toBuilder()
-      .directionsRoute(longerRoute)
-      .build();
-    DirectionsResponse response = obtainADirectionsResponse();
-
-    boolean isFasterRoute = fasterRouteEngine.isFasterRoute(response, currentProgress);
-
-    assertFalse(isFasterRoute);
-  }
-
-  @Test
-  public void onNullLocationPassed_shouldCheckFasterRouteIsFalse() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
-    FasterRoute fasterRouteEngine = navigation.getFasterRouteEngine();
-
-    boolean checkFasterRoute = fasterRouteEngine.shouldCheckFasterRoute(null, obtainDefaultRouteProgress());
-
-    assertFalse(checkFasterRoute);
-  }
-
-  @Test
-  public void onNullRouteProgressPassed_shouldCheckFasterRouteIsFalse() throws Exception {
-    MapLibreNavigation navigation = buildNavigationWithFasterRouteEnabled();
-    FasterRoute fasterRouteEngine = navigation.getFasterRouteEngine();
-
-    boolean checkFasterRoute = fasterRouteEngine.shouldCheckFasterRoute(mock(Location.class), null);
-
-    assertFalse(checkFasterRoute);
-  }
-
-  private MapLibreNavigation buildNavigationWithFasterRouteEnabled() {
-    MapLibreNavigationOptions options = MapLibreNavigationOptions.builder()
-      .enableFasterRouteDetection(true)
-      .build();
-    Context context = mock(Context.class);
-    when(context.getApplicationContext()).thenReturn(mock(Context.class));
-    return new MapLibreNavigation(context, options, mock(LocationEngine.class));
-  }
-
-  private RouteProgress obtainDefaultRouteProgress() throws Exception {
-    DirectionsRoute aRoute = obtainADirectionsRoute();
-    return buildTestRouteProgress(aRoute, 100, 700, 1000, 0, 0);
-  }
-
-  private DirectionsRoute obtainADirectionsRoute() throws IOException {
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
-    String body = loadJsonFixture(PRECISION_6);
-    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
-    DirectionsRoute aRoute = response.routes().get(0);
-
-    return aRoute;
-  }
-
-  private DirectionsResponse obtainADirectionsResponse() throws IOException {
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
-    String body = loadJsonFixture(PRECISION_6);
-    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
-    return response;
-  }
+    companion object {
+        private const val PRECISION_6 = "directions_v5_precision_6.json"
+    }
 }

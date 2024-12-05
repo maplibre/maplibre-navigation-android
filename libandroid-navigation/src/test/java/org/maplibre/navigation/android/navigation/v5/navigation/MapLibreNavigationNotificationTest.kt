@@ -1,66 +1,71 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.app.NotificationManager;
-import android.content.Context;
+import android.app.NotificationManager
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.R
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+class MapLibreNavigationNotificationTest : BaseTest() {
+    private var notificationManager: NotificationManager? = mockk()
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+    private var route: DirectionsRoute? = null
 
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+    @Before
+    @Throws(Exception::class)
+    fun setUp() {
+        val json = loadJsonFixture(DIRECTIONS_ROUTE_FIXTURE)
+        val response = DirectionsResponse.fromJson(json)
+        route = response.routes[0]
+    }
 
-import junit.framework.Assert;
+    @Ignore
+    @Test
+    @Throws(Exception::class)
+    fun sanity() {
+        val mapLibreNavigationNotification = MapLibreNavigationNotification(mockk(), mockk())
+        Assert.assertNotNull(mapLibreNavigationNotification)
+    }
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+    @Ignore
+    @Test
+    @Throws(Exception::class)
+    fun updateDefaultNotification_onlyUpdatesNameWhenNew() {
+        val routeProgress = RouteProgress(
+            directionsRoute = route!!,
+            legIndex = 0,
+            distanceRemaining = route!!.distance,
+            currentStepPoints = listOf(),
+            upcomingStepPoints = null,
+            stepIndex = 0,
+            legDistanceRemaining = route!!.distance,
+            stepDistanceRemaining = route!!.distance,
+            intersections = null,
+            currentIntersection = null,
+            upcomingIntersection = null,
+            currentLegAnnotation = null,
+            intersectionDistancesAlongStep = null
+        )
 
-public class MapLibreNavigationNotificationTest extends BaseTest {
+        val mapLibreNavigationNotification = MapLibreNavigationNotification(mockk(), mockk())
 
-  private static final String DIRECTIONS_ROUTE_FIXTURE = "directions_v5_precision_6.json";
+        mapLibreNavigationNotification.updateNotification(routeProgress)
 
-  @Mock
-  NotificationManager notificationManager;
+        verify {
+            notificationManager!!.getActiveNotifications()[0].notification.contentView.setTextViewText(
+                R.id.notificationDistanceText, "0.0 mi"
+            )
+        }
+    }
 
-  private DirectionsRoute route;
-
-  @Before
-  public void setUp() throws Exception {
-    final String json = loadJsonFixture(DIRECTIONS_ROUTE_FIXTURE);
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
-    DirectionsResponse response = gson.fromJson(json, DirectionsResponse.class);
-    route = response.routes().get(0);
-  }
-
-  @Ignore
-  @Test
-  public void sanity() throws Exception {
-    MapLibreNavigationNotification mapLibreNavigationNotification = new MapLibreNavigationNotification(
-      Mockito.mock(Context.class), Mockito.mock(MapLibreNavigation.class));
-    Assert.assertNotNull(mapLibreNavigationNotification);
-  }
-
-  @Ignore
-  @Test
-  public void updateDefaultNotification_onlyUpdatesNameWhenNew() throws Exception {
-    RouteProgress routeProgress = RouteProgress.builder()
-      .directionsRoute(route)
-      .stepIndex(0)
-      .legIndex(0)
-      .build();
-
-    MapLibreNavigationNotification mapLibreNavigationNotification = new MapLibreNavigationNotification(
-      Mockito.mock(Context.class), Mockito.mock(MapLibreNavigation.class));
-
-    mapLibreNavigationNotification.updateNotification(routeProgress);
-    //    notificationManager.getActiveNotifications()[0].getNotification().contentView;
-    //    verify(notificationManager, times(1)).getActiveNotifications()[0];
-  }
+    companion object {
+        private const val DIRECTIONS_ROUTE_FIXTURE = "directions_v5_precision_6.json"
+    }
 }

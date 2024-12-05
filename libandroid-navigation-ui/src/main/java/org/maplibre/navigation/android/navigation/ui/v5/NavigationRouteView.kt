@@ -38,14 +38,13 @@ import org.maplibre.navigation.android.navigation.ui.v5.instruction.NavigationAl
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMapInstanceState
 import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationTimeFormat
 import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
 import retrofit2.Call
@@ -346,13 +345,13 @@ class NavigationRouteView @JvmOverloads constructor(
                 ) {
                     Timber.d("Url: %s", (call.request() as Request).url.toString())
                     response.body()?.let { response ->
-                        if (response.routes().isNotEmpty()) {
+                        if (response.routes.isNotEmpty()) {
                             val maplibreResponse =
                                 DirectionsResponse.fromJson(
                                     response.toJson()
                                 );
-                            this@NavigationRouteView.route = maplibreResponse.routes().first()
-                            navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                            this@NavigationRouteView.route = maplibreResponse.routes.first()
+                            navigationMapRoute?.addRoutes(maplibreResponse.routes)
 
                             val options = NavigationLauncherOptions.builder()
                                 .directionsRoute(route)
@@ -820,27 +819,26 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private fun establishRoundingIncrement(navigationViewOptions: NavigationViewOptions): Int {
         val mapboxNavigationOptions = navigationViewOptions.navigationOptions()
-        return mapboxNavigationOptions.roundingIncrement()
+        return mapboxNavigationOptions.roundingIncrement
     }
 
     private fun establishLanguage(
         localeUtils: LocaleUtils,
         options: NavigationViewOptions
     ): String {
-        return localeUtils.getNonEmptyLanguage(context, options.directionsRoute().voiceLanguage())
+        return localeUtils.getNonEmptyLanguage(context, options.directionsRoute().voiceLanguage)
     }
 
     private fun establishUnitType(
         localeUtils: LocaleUtils,
         options: NavigationViewOptions
     ): String {
-        val routeOptions = options.directionsRoute().routeOptions()
-        val voiceUnits = routeOptions?.voiceUnits()
+        val routeOptions = options.directionsRoute().routeOptions
+        val voiceUnits = routeOptions?.voiceUnits
         return localeUtils.retrieveNonNullUnitType(context, voiceUnits)
     }
 
     private fun establishTimeFormat(options: NavigationViewOptions) {
-        @NavigationTimeFormat.Type val timeFormatType = options.navigationOptions().timeFormatType()
     }
 
     private fun initializeNavigationListeners(

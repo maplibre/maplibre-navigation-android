@@ -1,226 +1,286 @@
-package org.maplibre.navigation.android.navigation.v5.routeprogress;
+package org.maplibre.navigation.android.navigation.v5.routeprogress
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.junit.Assert
+import junit.framework.TestCase.assertEquals
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
 
-import org.junit.Test;
+class RouteLegProgressTest : BaseTest() {
+    @Test
+    @Throws(Exception::class)
+    fun sanityTest() {
+        val routeProgress = buildDefaultTestRouteProgress()
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-
-public class RouteLegProgressTest extends BaseTest {
-
-  @Test
-  public void sanityTest() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-
-    assertNotNull(routeProgress.currentLegProgress());
-  }
-
-  @Test
-  public void upComingStep_returnsNextStepInLeg() throws Exception {
-    int stepIndex = 5;
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = routeProgress.toBuilder().stepIndex(5).build();
-    List<LegStep> steps = routeProgress.currentLeg().steps();
-
-    LegStep upComingStep = routeProgress.currentLegProgress().upComingStep();
-    int upComingStepIndex = steps.indexOf(upComingStep);
-
-    assertEquals(stepIndex + 1, upComingStepIndex);
-  }
-
-  @Test
-  public void upComingStep_returnsNull() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-
-    LegStep upComingStep = findUpcomingStep(routeProgress, firstLeg);
-
-    assertNull(upComingStep);
-  }
-
-  @Test
-  public void currentStep_returnsCurrentStep() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-
-    routeProgress = routeProgress.toBuilder().stepIndex(5).build();
-
-    assertEquals(
-      firstLeg.steps().get(5).geometry(), routeProgress.currentLegProgress().currentStep().geometry()
-    );
-    assertNotSame(
-      firstLeg.steps().get(6).geometry(), routeProgress.currentLegProgress().currentStep().geometry()
-    );
-  }
-
-  @Test
-  public void previousStep_returnsPreviousStep() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-
-    routeProgress = routeProgress.toBuilder().stepIndex(5).build();
-
-    assertEquals(
-      firstLeg.steps().get(4).geometry(), routeProgress.currentLegProgress().previousStep().geometry()
-    );
-    assertNotSame(
-      firstLeg.steps().get(5).geometry(), routeProgress.currentLegProgress().previousStep().geometry()
-    );
-  }
-
-  @Test
-  public void stepIndex_returnsCurrentStepIndex() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-
-    routeProgress = routeProgress.toBuilder().stepIndex(3).build();
-
-    assertEquals(3, routeProgress.currentLegProgress().stepIndex(), BaseTest.DELTA);
-  }
-
-  @Test
-  public void fractionTraveled_equalsZeroAtBeginning() throws Exception {
-    RouteProgress routeProgress = buildBeginningOfLegRouteProgress();
-
-    assertEquals(0.0, routeProgress.currentLegProgress().fractionTraveled(), BaseTest.DELTA);
-  }
-
-  @Test
-  public void fractionTraveled_equalsCorrectValueAtIntervals() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-    double stepSegmentsInMeters = 5000;
-    List<Float> fractionsRemaining = new ArrayList<>();
-    List<Float> routeProgressFractionsTraveled = new ArrayList<>();
-
-    for (double i = 0; i < firstLeg.distance(); i += stepSegmentsInMeters) {
-      float fractionRemaining = (float) (routeProgress.currentLegProgress().distanceTraveled() / firstLeg.distance());
-      fractionsRemaining.add(fractionRemaining);
-      routeProgressFractionsTraveled.add(routeProgress.currentLegProgress().fractionTraveled());
+        Assert.assertNotNull(routeProgress.currentLegProgress)
     }
 
-    assertTrue(fractionsRemaining.equals(routeProgressFractionsTraveled));
-  }
+    @Test
+    @Throws(Exception::class)
+    fun upComingStep_returnsNextStepInLeg() {
+        val stepIndex = 5
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = stepIndex
+        )
+        val steps: List<LegStep> = routeProgress.currentLeg.steps
 
-  @Test
-  public void fractionTraveled_equalsOneAtEndOfLeg() throws Exception {
-    RouteProgress routeProgress = buildEndOfLegRouteProgress();
+        val upComingStep: LegStep = routeProgress.currentLegProgress.upComingStep!!
+        val upComingStepIndex = steps.indexOf(upComingStep)
 
-    assertEquals(1.0, routeProgress.currentLegProgress().fractionTraveled(), BaseTest.DELTA);
-  }
+        Assert.assertEquals(stepIndex + 1, upComingStepIndex)
+    }
 
-  @Test
-  public void distanceRemaining_equalsLegDistanceAtBeginning() throws Exception {
-    RouteProgress routeProgress = buildBeginningOfLegRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
+    @Test
+    @Throws(Exception::class)
+    fun upComingStep_returnsNull() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
 
-    assertEquals(firstLeg.distance(), routeProgress.currentLegProgress().distanceRemaining(),
-      BaseTest.LARGE_DELTA);
-  }
+        val upComingStep = findUpcomingStep(
+            routeProgress, firstLeg
+        )
 
-  @Test
-  public void distanceRemaining_equalsZeroAtEndOfLeg() throws Exception {
-    RouteProgress routeProgress = buildEndOfLegRouteProgress();
+        Assert.assertNull(upComingStep)
+    }
 
-    assertEquals(0, routeProgress.currentLegProgress().distanceRemaining(), BaseTest.DELTA);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun currentStep_returnsCurrentStep() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = 5
+        )
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
 
-  @Test
-  public void distanceTraveled_equalsZeroAtBeginning() throws Exception {
-    RouteProgress routeProgress = buildBeginningOfLegRouteProgress();
 
-    assertEquals(0, routeProgress.currentLegProgress().distanceTraveled(), BaseTest.DELTA);
-  }
+        assertEquals(
+            firstLeg.steps[5].geometry,
+            routeProgress.currentLegProgress.currentStep.geometry
+        )
+        Assert.assertNotSame(
+            firstLeg.steps[6].geometry,
+            routeProgress.currentLegProgress.currentStep.geometry
+        )
+    }
 
-  @Test
-  public void getDistanceTraveled_equalsLegDistanceAtEndOfLeg() throws Exception {
-    RouteProgress routeProgress = buildEndOfLegRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
+    @Test
+    @Throws(Exception::class)
+    fun previousStep_returnsPreviousStep() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = 5
+        )
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
 
-    Double firstLegDistance = firstLeg.distance();
-    double distanceTraveled = routeProgress.currentLegProgress().distanceTraveled();
 
-    assertEquals(firstLegDistance, distanceTraveled, BaseTest.DELTA);
-  }
+        assertEquals(
+            firstLeg.steps[4].geometry,
+            routeProgress.currentLegProgress.previousStep!!.geometry
+        )
+        Assert.assertNotSame(
+            firstLeg.steps[5].geometry,
+            routeProgress.currentLegProgress.previousStep!!.geometry
+        )
+    }
 
-  @Test
-  public void getDurationRemaining_equalsLegDurationAtBeginning() throws Exception {
-    RouteProgress routeProgress = buildBeginningOfLegRouteProgress();
-    DirectionsRoute route = routeProgress.directionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
+    @Test
+    @Throws(Exception::class)
+    fun stepIndex_returnsCurrentStepIndex() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = 3
+        )
 
-    Double firstLegDuration = firstLeg.duration();
-    double currentLegDurationRemaining = routeProgress.currentLegProgress().durationRemaining();
+        assertEquals(3.0, routeProgress.currentLegProgress.stepIndex.toDouble(), DELTA)
+    }
 
-    assertEquals(firstLegDuration, currentLegDurationRemaining, BaseTest.DELTA);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun fractionTraveled_equalsZeroAtBeginning() {
+        val routeProgress = buildBeginningOfLegRouteProgress()
 
-  @Test
-  public void getDurationRemaining_equalsZeroAtEndOfLeg() throws Exception {
-    RouteProgress routeProgress = buildEndOfLegRouteProgress();
+        assertEquals(
+            0.0,
+            routeProgress.currentLegProgress.fractionTraveled.toDouble(),
+            DELTA
+        )
+    }
 
-    assertEquals(0, routeProgress.currentLegProgress().durationRemaining(), BaseTest.DELTA);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun fractionTraveled_equalsCorrectValueAtIntervals() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
+        val stepSegmentsInMeters = 5000.0
+        val fractionsRemaining: MutableList<Float> = ArrayList()
+        val routeProgressFractionsTraveled: MutableList<Float> = ArrayList()
 
-  @Test
-  public void followOnStep_doesReturnTwoStepsAheadOfCurrent() throws Exception {
-    int stepIndex = 5;
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = routeProgress.toBuilder().stepIndex(stepIndex).build();
-    List<LegStep> steps = routeProgress.directionsRoute().legs().get(0).steps();
+        var i = 0.0
+        while (i < firstLeg.distance) {
+            val fractionRemaining = (routeProgress.currentLegProgress
+                .distanceTraveled / firstLeg.distance).toFloat()
+            fractionsRemaining.add(fractionRemaining)
+            routeProgressFractionsTraveled.add(
+                routeProgress.currentLegProgress.fractionTraveled
+            )
+            i += stepSegmentsInMeters
+        }
 
-    LegStep followOnStep = routeProgress.currentLegProgress().followOnStep();
-    int followOnIndex = steps.indexOf(followOnStep);
+        Assert.assertTrue(fractionsRemaining == routeProgressFractionsTraveled)
+    }
 
-    assertEquals(stepIndex + 2, followOnIndex);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun fractionTraveled_equalsOneAtEndOfLeg() {
+        val routeProgress = buildEndOfLegRouteProgress()
 
-  @Test
-  public void followOnStep_returnsNull() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-    int lastStepIndex = firstLeg.steps().size() - 1;
+        assertEquals(
+            1.0,
+            routeProgress.currentLegProgress.fractionTraveled.toDouble(),
+            DELTA
+        )
+    }
 
-    routeProgress = routeProgress.toBuilder().stepIndex(lastStepIndex).build();
+    @Test
+    @Throws(Exception::class)
+    fun distanceRemaining_equalsLegDistanceAtBeginning() {
+        val routeProgress = buildBeginningOfLegRouteProgress()
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
 
-    assertNull(routeProgress.currentLegProgress().followOnStep());
-  }
+        assertEquals(
+            firstLeg.distance, routeProgress.currentLegProgress.distanceRemaining,
+            LARGE_DELTA
+        )
+    }
 
-  private RouteProgress buildBeginningOfLegRouteProgress() throws Exception {
-    DirectionsRoute route = buildTestDirectionsRoute();
-    double stepDistanceRemaining = route.legs().get(0).steps().get(0).distance();
-    double legDistanceRemaining = route.legs().get(0).distance();
-    double routeDistance = route.distance();
-    return buildTestRouteProgress(route, stepDistanceRemaining, legDistanceRemaining,
-      routeDistance, 0, 0);
-  }
+    @Test
+    @Throws(Exception::class)
+    fun distanceRemaining_equalsZeroAtEndOfLeg() {
+        val routeProgress = buildEndOfLegRouteProgress()
 
-  private RouteProgress buildEndOfLegRouteProgress() throws Exception {
-    DirectionsRoute route = buildTestDirectionsRoute();
-    RouteLeg firstLeg = route.legs().get(0);
-    int lastStepIndex = firstLeg.steps().size() - 1;
-    return buildTestRouteProgress(route, 0, 0, 0, lastStepIndex, 0);
-  }
+        assertEquals(
+            0.0,
+            routeProgress.currentLegProgress.distanceRemaining,
+            DELTA
+        )
+    }
 
-  private LegStep findUpcomingStep(RouteProgress routeProgress, RouteLeg firstLeg) {
-    int lastStepIndex = firstLeg.steps().size() - 1;
-    routeProgress = routeProgress.toBuilder().stepIndex(lastStepIndex).build();
-    return routeProgress.currentLegProgress().upComingStep();
-  }
+    @Test
+    @Throws(Exception::class)
+    fun distanceTraveled_equalsZeroAtBeginning() {
+        val routeProgress = buildBeginningOfLegRouteProgress()
+
+        assertEquals(
+            0.0,
+            routeProgress.currentLegProgress.distanceTraveled,
+            DELTA
+        )
+    }
+
+    @Test
+    fun distanceTraveled_equalsLegDistanceAtEndOfLeg() {
+            val routeProgress = buildEndOfLegRouteProgress()
+            val route =
+                buildTestDirectionsRoute()
+            val firstLeg =
+                route.legs[0]
+
+            val firstLegDistance = firstLeg.distance
+            val distanceTraveled: Double =
+                routeProgress.currentLegProgress.distanceTraveled
+
+            Assert.assertEquals(
+                firstLegDistance,
+                distanceTraveled,
+                DELTA
+            )
+        }
+
+    @Test
+    fun durationRemaining_equalsLegDurationAtBeginning() {
+            val routeProgress = buildBeginningOfLegRouteProgress()
+            val route: DirectionsRoute =
+                routeProgress.directionsRoute
+            val firstLeg =
+                route.legs[0]
+
+            val firstLegDuration = firstLeg.duration
+            val currentLegDurationRemaining: Double =
+                routeProgress.currentLegProgress.durationRemaining
+
+            Assert.assertEquals(
+                firstLegDuration,
+                currentLegDurationRemaining,
+                DELTA
+            )
+        }
+
+    @Test
+    fun durationRemaining_equalsZeroAtEndOfLeg() {
+            val routeProgress = buildEndOfLegRouteProgress()
+
+            assertEquals(
+                0.0,
+                routeProgress.currentLegProgress.durationRemaining,
+                DELTA
+            )
+        }
+
+    @Test
+    @Throws(Exception::class)
+    fun followOnStep_doesReturnTwoStepsAheadOfCurrent() {
+        val stepIndex = 5
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = stepIndex
+        )
+        val steps: List<LegStep> = routeProgress.directionsRoute.legs[0].steps
+
+        val followOnStep: LegStep = routeProgress.currentLegProgress.followOnStep!!
+        val followOnIndex = steps.indexOf(followOnStep)
+
+        Assert.assertEquals(stepIndex + 2, followOnIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun followOnStep_returnsNull() {
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
+        val lastStepIndex = firstLeg.steps.size - 1
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            stepIndex = lastStepIndex
+        )
+
+        Assert.assertNull(routeProgress.currentLegProgress.followOnStep)
+    }
+
+    @Throws(Exception::class)
+    private fun buildBeginningOfLegRouteProgress(): RouteProgress {
+        val route = buildTestDirectionsRoute()
+        val stepDistanceRemaining = route.legs[0].steps[0].distance
+        val legDistanceRemaining = route.legs[0].distance
+        val routeDistance = route.distance
+        return buildTestRouteProgress(
+            route, stepDistanceRemaining, legDistanceRemaining,
+            routeDistance, 0, 0
+        )
+    }
+
+    @Throws(Exception::class)
+    private fun buildEndOfLegRouteProgress(): RouteProgress {
+        val route = buildTestDirectionsRoute()
+        val firstLeg = route.legs[0]
+        val lastStepIndex = firstLeg.steps.size - 1
+        return buildTestRouteProgress(route, 0.0, 0.0, 0.0, lastStepIndex, 0)
+    }
+
+    private fun findUpcomingStep(routeProgress: RouteProgress, firstLeg: RouteLeg): LegStep? {
+        val lastStepIndex = firstLeg.steps.size - 1
+        return routeProgress.copy(stepIndex = lastStepIndex)
+            .currentLegProgress.upComingStep
+    }
 }

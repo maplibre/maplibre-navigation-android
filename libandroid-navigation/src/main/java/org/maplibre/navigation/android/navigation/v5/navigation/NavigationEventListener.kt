@@ -1,5 +1,5 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-public interface NavigationEventListener {
-  void onRunning(boolean running);
+fun interface NavigationEventListener {
+    fun onRunning(running: Boolean)
 }

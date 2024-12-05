@@ -1,62 +1,36 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * Using a Route Milestone will result in
- * {@link MilestoneEventListener#onMilestoneEvent(RouteProgress, String, Milestone)} being invoked only
+ * [MilestoneEventListener.onMilestoneEvent] being invoked only
  * once during a navigation session.
  *
  * @since 0.4.0
  */
-public class RouteMilestone extends Milestone {
+open class RouteMilestone(
+    identifier: Int,
+    instruction: Instruction?,
+    trigger: Trigger.Statement?,
+) : Milestone(identifier, instruction, trigger) {
+    private var called = false
 
-  private Builder builder;
-  private boolean called;
+    override fun isOccurring(
+        previousRouteProgress: RouteProgress?,
+        routeProgress: RouteProgress
+    ): Boolean {
+        if (called) {
+            return false
+        }
 
-  private RouteMilestone(Builder builder) {
-    super(builder);
-    this.builder = builder;
-  }
-
-  @Override
-  public boolean isOccurring(RouteProgress previousRouteProgress, RouteProgress routeProgress) {
-
-    if (builder.getTrigger().isOccurring(
-      TriggerProperty.getSparseArray(previousRouteProgress, routeProgress)) && !called) {
-      called = true;
-      return true;
+        return trigger?.let { trigger ->
+            this@RouteMilestone.called = trigger.isOccurring(
+                TriggerProperty.getSparseArray(previousRouteProgress, routeProgress)
+            )
+            called
+        } ?: false
     }
-    return false;
-  }
-
-  /**
-   * Build a new {@link RouteMilestone}
-   *
-   * @since 0.4.0
-   */
-  public static final class Builder extends Milestone.Builder {
-
-    private Trigger.Statement trigger;
-
-    public Builder() {
-      super();
-    }
-
-    @Override
-    public Builder setTrigger(Trigger.Statement trigger) {
-      this.trigger = trigger;
-      return this;
-    }
-
-    @Override
-    Trigger.Statement getTrigger() {
-      return trigger;
-    }
-
-    @Override
-    public RouteMilestone build() {
-      return new RouteMilestone(this);
-    }
-  }
 }

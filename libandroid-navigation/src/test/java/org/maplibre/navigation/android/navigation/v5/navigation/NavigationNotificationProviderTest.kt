@@ -1,66 +1,65 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.content.Context;
-import androidx.annotation.NonNull;
+import android.content.Context
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+class NavigationNotificationProviderTest {
 
-import org.junit.Test;
+    @Test
+    fun updateNavigationNotification() {
+        val notification = mockk<NavigationNotification>(relaxed = true)
+        val mapLibreNavigation = buildNavigationWithNotificationOptions(notification)
+        val context = mockk<Context>()
+        val provider = NavigationNotificationProvider(context, mapLibreNavigation)
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+        val routeProgress = mockk<RouteProgress>()
+        provider.updateNavigationNotification(routeProgress)
 
-public class NavigationNotificationProviderTest {
+        verify {
+            notification.updateNotification(routeProgress)
+        }
+    }
 
-  @Test
-  public void updateNavigationNotification() {
-    NavigationNotification notification = mock(NavigationNotification.class);
-    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
-    Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
+    @Test
+    fun updateNavigationNotification_doesNotUpdateAfterShutdown() {
+        val notification = mockk<NavigationNotification>(relaxed = true)
+        val mapLibreNavigation = buildNavigationWithNotificationOptions(notification)
+        val context = mockk<Context>()
+        val provider = NavigationNotificationProvider(context, mapLibreNavigation)
+        val routeProgress = mockk<RouteProgress>()
 
-    RouteProgress routeProgress = mock(RouteProgress.class);
-    provider.updateNavigationNotification(routeProgress);
+        provider.shutdown(context)
+        provider.updateNavigationNotification(routeProgress)
 
-    verify(notification).updateNotification(eq(routeProgress));
-  }
+        verify(exactly = 0) {
+            notification.updateNotification(routeProgress)
+        }
+    }
 
-  @Test
-  public void updateNavigationNotification_doesNotUpdateAfterShutdown() {
-    NavigationNotification notification = mock(NavigationNotification.class);
-    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
-    Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
-    RouteProgress routeProgress = mock(RouteProgress.class);
+    @Test
+    fun onShutdown_onNavigationStoppedIsCalled() {
+        val notification = mockk<NavigationNotification>(relaxed = true)
+        val mapLibreNavigation = buildNavigationWithNotificationOptions(notification)
+        val context = mockk<Context>()
+        val provider = NavigationNotificationProvider(context, mapLibreNavigation)
 
-    provider.shutdown(context);
-    provider.updateNavigationNotification(routeProgress);
+        provider.shutdown(context)
 
-    verify(notification, times(0)).updateNotification(routeProgress);
-  }
+        verify {
+            notification.onNavigationStopped(context)
+        }
+    }
 
-  @Test
-  public void onShutdown_onNavigationStoppedIsCalled() {
-    NavigationNotification notification = mock(NavigationNotification.class);
-    MapLibreNavigation mapLibreNavigation = buildNavigationWithNotificationOptions(notification);
-    Context context = mock(Context.class);
-    NavigationNotificationProvider provider = new NavigationNotificationProvider(context, mapLibreNavigation);
-
-    provider.shutdown(context);
-
-    verify(notification).onNavigationStopped(context);
-  }
-
-  @NonNull
-  private MapLibreNavigation buildNavigationWithNotificationOptions(NavigationNotification notification) {
-    MapLibreNavigation mapLibreNavigation = mock(MapLibreNavigation.class);
-    MapLibreNavigationOptions options = mock(MapLibreNavigationOptions.class);
-    when(options.navigationNotification()).thenReturn(notification);
-    when(mapLibreNavigation.options()).thenReturn(options);
-    return mapLibreNavigation;
-  }
+    private fun buildNavigationWithNotificationOptions(notification: NavigationNotification): MapLibreNavigation {
+        return mockk<MapLibreNavigation> {
+            every { options } returns mockk<MapLibreNavigationOptions> {
+                every { navigationNotification } returns notification
+            }
+        }
+    }
 }

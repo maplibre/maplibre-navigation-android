@@ -1,102 +1,161 @@
-package org.maplibre.navigation.android.navigation.v5.utils;
+package org.maplibre.navigation.android.navigation.v5.utils
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.geojson.Point;
+import org.junit.Test
+import org.maplibre.geojson.Point
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
+import java.io.IOException
+import java.util.MissingFormatArgumentException
 
-import org.junit.Test;
+class ValidationUtilsTest : BaseTest() {
+    @Test(expected = MissingFormatArgumentException::class)
+    @Throws(Exception::class)
+    fun validDirectionsRoute_isInvalidWithNullRouteOptions() {
+        var route = buildTestDirectionsRoute(DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS)
+        val invalidRouteOptions: RouteOptions? = null
+        route = route.copy(routeOptions = invalidRouteOptions)
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingFormatArgumentException;
+        ValidationUtils.validDirectionsRoute(route, true)
+    }
 
-public class ValidationUtilsTest extends BaseTest {
+    @Test(expected = MissingFormatArgumentException::class)
+    @Throws(Exception::class)
+    fun validDirectionsRoute_isInvalidWithNullInstructions() {
+        val routeWithNullInstructions = buildRouteWithNullInstructions()
 
-  private static final String DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS = "directions_v5_no_voice.json";
+        ValidationUtils.validDirectionsRoute(routeWithNullInstructions, true)
+    }
 
-  @Test(expected = MissingFormatArgumentException.class)
-  public void validDirectionsRoute_isInvalidWithNullRouteOptions() throws Exception {
-    DirectionsRoute route = buildTestDirectionsRoute(DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS);
-    RouteOptions invalidRouteOptions = null;
-    route = route.toBuilder().routeOptions(invalidRouteOptions).build();
+    @Test(expected = MissingFormatArgumentException::class)
+    @Throws(Exception::class)
+    fun validDirectionsRoute_isInvalidWithFalseVoiceInstructions() {
+        val routeWithFalseVoiceInstructions = buildRouteWithFalseVoiceInstructions()
 
-    ValidationUtils.validDirectionsRoute(route, true);
-  }
+        ValidationUtils.validDirectionsRoute(routeWithFalseVoiceInstructions, true)
+    }
 
-  @Test(expected = MissingFormatArgumentException.class)
-  public void validDirectionsRoute_isInvalidWithNullInstructions() throws Exception {
-    DirectionsRoute routeWithNullInstructions = buildRouteWithNullInstructions();
+    @Test(expected = MissingFormatArgumentException::class)
+    @Throws(Exception::class)
+    fun validDirectionsRoute_isInvalidWithFalseBannerInstructions() {
+        val routeWithFalseBannerInstructions = buildRouteWithFalseBannerInstructions()
 
-    ValidationUtils.validDirectionsRoute(routeWithNullInstructions, true);
-  }
+        ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true)
+    }
 
-  @Test(expected = MissingFormatArgumentException.class)
-  public void validDirectionsRoute_isInvalidWithFalseVoiceInstructions() throws Exception {
-    DirectionsRoute routeWithFalseVoiceInstructions = buildRouteWithFalseVoiceInstructions();
+    @Throws(IOException::class)
+    private fun buildRouteWithNullInstructions(): DirectionsRoute {
+        val route = buildTestDirectionsRoute()
+        val coordinates: List<Point> = ArrayList()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = "api://",
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+            bannerInstructions = null,
+            voiceInstructions = null,
+        )
 
-    ValidationUtils.validDirectionsRoute(routeWithFalseVoiceInstructions, true);
-  }
+        return route.copy(
+            routeOptions = routeOptionsWithoutVoiceInstructions
+        )
+    }
 
-  @Test(expected = MissingFormatArgumentException.class)
-  public void validDirectionsRoute_isInvalidWithFalseBannerInstructions() throws Exception {
-    DirectionsRoute routeWithFalseBannerInstructions = buildRouteWithFalseBannerInstructions();
+    @Throws(IOException::class)
+    private fun buildRouteWithFalseVoiceInstructions(): DirectionsRoute {
+        val route = buildTestDirectionsRoute()
+        val coordinates: List<Point> = ArrayList()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = "api://",
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            voiceInstructions = false,
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+            bannerInstructions = null,
+        )
 
-    ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true);
-  }
+        return route.copy(
+            routeOptions = routeOptionsWithoutVoiceInstructions
+        )
+    }
 
-  private DirectionsRoute buildRouteWithNullInstructions() throws IOException {
-    DirectionsRoute route = buildTestDirectionsRoute();
-    List<Point> coordinates = new ArrayList<>();
-    RouteOptions routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-      .baseUrl(Constants.BASE_API_URL)
-      .user("user")
-      .profile("profile")
-      .accessToken(ACCESS_TOKEN)
-      .requestUuid("uuid")
-      .geometries("mocked_geometries")
-      .coordinates(coordinates).build();
+    @Throws(IOException::class)
+    private fun buildRouteWithFalseBannerInstructions(): DirectionsRoute {
+        val route = buildTestDirectionsRoute()
+        val coordinates: List<Point> = ArrayList()
+        val routeOptionsWithoutVoiceInstructions = RouteOptions(
+            baseUrl = "api://",
+            user = "user",
+            profile = "profile",
+            accessToken = ACCESS_TOKEN,
+            requestUuid = "uuid",
+            geometries = "mocked_geometries",
+            voiceInstructions = true,
+            bannerInstructions = false,
+            coordinates = coordinates,
+            alternatives = null,
+            language = null,
+            radiuses = null,
+            bearings = null,
+            continueStraight = null,
+            roundaboutExits = null,
+            overview = null,
+            steps = null,
+            annotations = null,
+            exclude = null,
+            voiceUnits = null,
+            approaches = null,
+            waypointIndices = null,
+            waypointNames = null,
+            waypointTargets = null,
+            walkingOptions = null,
+            snappingClosures = null,
+        )
 
-    return route.toBuilder()
-      .routeOptions(routeOptionsWithoutVoiceInstructions)
-      .build();
-  }
+        return route.copy(routeOptions = routeOptionsWithoutVoiceInstructions)
+    }
 
-  private DirectionsRoute buildRouteWithFalseVoiceInstructions() throws IOException {
-    DirectionsRoute route = buildTestDirectionsRoute();
-    List<Point> coordinates = new ArrayList<>();
-    RouteOptions routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-      .baseUrl(Constants.BASE_API_URL)
-      .user("user")
-      .profile("profile")
-      .accessToken(ACCESS_TOKEN)
-      .requestUuid("uuid")
-      .geometries("mocked_geometries")
-      .voiceInstructions(false)
-      .coordinates(coordinates).build();
-
-    return route.toBuilder()
-      .routeOptions(routeOptionsWithoutVoiceInstructions)
-      .build();
-  }
-
-  private DirectionsRoute buildRouteWithFalseBannerInstructions() throws IOException {
-    DirectionsRoute route = buildTestDirectionsRoute();
-    List<Point> coordinates = new ArrayList<>();
-    RouteOptions routeOptionsWithoutVoiceInstructions = RouteOptions.builder()
-      .baseUrl(Constants.BASE_API_URL)
-      .user("user")
-      .profile("profile")
-      .accessToken(ACCESS_TOKEN)
-      .requestUuid("uuid")
-      .geometries("mocked_geometries")
-      .voiceInstructions(true)
-      .bannerInstructions(false)
-      .coordinates(coordinates).build();
-
-    return route.toBuilder()
-      .routeOptions(routeOptionsWithoutVoiceInstructions)
-      .build();
-  }
+    companion object {
+        private const val DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS = "directions_v5_no_voice.json"
+    }
 }

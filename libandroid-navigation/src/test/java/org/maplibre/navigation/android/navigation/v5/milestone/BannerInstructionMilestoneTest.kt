@@ -1,110 +1,130 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.junit.Test;
 
-import java.util.List;
+class BannerInstructionMilestoneTest : BaseTest() {
+    @Test
+    fun sanity() {
+        val milestone = buildBannerInstructionMilestone()
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+        Assert.assertNotNull(milestone)
+    }
 
-public class BannerInstructionMilestoneTest extends BaseTest {
+    @Test
+    @Throws(Exception::class)
+    fun onBeginningOfStep_bannerInstructionsShouldTrigger() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val milestone = buildBannerInstructionMilestone()
 
-  @Test
-  public void sanity() {
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
 
-    assertNotNull(milestone);
-  }
+        Assert.assertTrue(isOccurring)
+    }
 
-  @Test
-  public void onBeginningOfStep_bannerInstructionsShouldTrigger() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+    @Test
+    @Throws(Exception::class)
+    fun onSameInstructionOccurring_milestoneDoesNotTriggerTwice() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val firstProgress = createBeginningOfStepRouteProgress(routeProgress)
+        val fortyMetersIntoStep: Double =
+            routeProgress.currentLegProgress.currentStep.distance - 40
+        val secondProgress: RouteProgress = routeProgress.copy(
+            stepDistanceRemaining = fortyMetersIntoStep,
+            stepIndex = 0
+        )
 
-    boolean isOccurring = milestone.isOccurring(routeProgress, routeProgress);
+        val milestone = buildBannerInstructionMilestone()
 
-    assertTrue(isOccurring);
-  }
+        milestone.isOccurring(firstProgress, firstProgress)
+        val shouldNotBeOccurring = milestone.isOccurring(firstProgress, secondProgress)
 
-  @Test
-  public void onSameInstructionOccurring_milestoneDoesNotTriggerTwice() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    RouteProgress firstProgress = createBeginningOfStepRouteProgress(routeProgress);
-    double fortyMetersIntoStep = routeProgress.currentLegProgress().currentStep().distance() - 40;
-    RouteProgress secondProgress = routeProgress.toBuilder()
-      .stepDistanceRemaining(fortyMetersIntoStep)
-      .stepIndex(0)
-      .build();
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+        Assert.assertFalse(shouldNotBeOccurring)
+    }
 
-    milestone.isOccurring(firstProgress, firstProgress);
-    boolean shouldNotBeOccurring = milestone.isOccurring(firstProgress, secondProgress);
+    @Test
+    @Throws(Exception::class)
+    fun nullInstructions_MilestoneDoesNotGetTriggered() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = with(createBeginningOfStepRouteProgress(routeProgress)) {
+            copy(
+                directionsRoute = directionsRoute.copy(
+                    legs = directionsRoute.legs.mapIndexed { lIndex, leg ->
+                        if (lIndex == legIndex) {
+                            leg.copy(steps = leg.steps.mapIndexed { sIndex, step ->
+                                if (sIndex == stepIndex) {
+                                    step.copy(
+                                        bannerInstructions = null
+                                    )
+                                } else {
+                                    step
+                                }
+                            })
+                        } else {
+                            leg
+                        }
+                    }
+                )
+            )
+        }
+        val milestone = buildBannerInstructionMilestone()
 
-    assertFalse(shouldNotBeOccurring);
-  }
+        val isOccurring = milestone.isOccurring(routeProgress, routeProgress)
 
-  @Test
-  public void nullInstructions_MilestoneDoesNotGetTriggered() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
-    List<BannerInstructions> instructions = currentStep.bannerInstructions();
-    instructions.clear();
-    routeProgress = createBeginningOfStepRouteProgress(routeProgress);
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+        Assert.assertFalse(isOccurring)
+    }
 
-    boolean isOccurring = milestone.isOccurring(routeProgress, routeProgress);
+    @Test
+    @Throws(Exception::class)
+    fun onOccurringMilestone_beginningOfStep_bannerInstructionsAreReturned() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        routeProgress = routeProgress.copy(
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
+            stepIndex = 1
+        )
+        val instructions: BannerInstructions =
+            routeProgress.currentLegProgress.currentStep.bannerInstructions!![0]
+        val milestone = buildBannerInstructionMilestone()
 
-    assertFalse(isOccurring);
-  }
+        milestone.isOccurring(routeProgress, routeProgress)
 
-  @Test
-  public void onOccurringMilestone_beginningOfStep_bannerInstructionsAreReturned() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    routeProgress = routeProgress.toBuilder()
-      .stepDistanceRemaining(routeProgress.currentLegProgress().currentStep().distance())
-      .stepIndex(1)
-      .build();
-    BannerInstructions instructions = routeProgress.currentLegProgress().currentStep().bannerInstructions().get(0);
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+        Assert.assertEquals(instructions, milestone.bannerInstructions)
+    }
 
-    milestone.isOccurring(routeProgress, routeProgress);
+    @Test
+    @Throws(Exception::class)
+    fun onOccurringMilestone_endOfStep_bannerInstructionsAreReturned() {
+        var routeProgress = buildDefaultTestRouteProgress()
+        val tenMetersRemainingInStep = 10.0
+        routeProgress = routeProgress.copy(
+            stepDistanceRemaining = tenMetersRemainingInStep,
+            stepIndex = 1
+        )
 
-    assertEquals(instructions, milestone.getBannerInstructions());
-  }
+        val bannerInstructions: List<BannerInstructions> =
+            routeProgress.currentLegProgress.currentStep.bannerInstructions!!.toList()
+        val instructions = bannerInstructions[bannerInstructions.size - 1]
+        val milestone = buildBannerInstructionMilestone()
 
-  @Test
-  public void onOccurringMilestone_endOfStep_bannerInstructionsAreReturned() throws Exception {
-    RouteProgress routeProgress = buildDefaultTestRouteProgress();
-    int tenMetersRemainingInStep = 10;
-    routeProgress = routeProgress.toBuilder()
-      .stepDistanceRemaining(tenMetersRemainingInStep)
-      .stepIndex(1)
-      .build();
-    List<BannerInstructions> bannerInstructions = routeProgress.currentLegProgress().currentStep().bannerInstructions();
-    BannerInstructions instructions = bannerInstructions.get(bannerInstructions.size() - 1);
-    BannerInstructionMilestone milestone = buildBannerInstructionMilestone();
+        milestone.isOccurring(routeProgress, routeProgress)
 
-    milestone.isOccurring(routeProgress, routeProgress);
+        Assert.assertEquals(instructions, milestone.bannerInstructions)
+    }
 
-    assertEquals(instructions, milestone.getBannerInstructions());
-  }
+    private fun createBeginningOfStepRouteProgress(routeProgress: RouteProgress): RouteProgress {
+        return routeProgress.copy(
+            stepDistanceRemaining = routeProgress.currentLegProgress.currentStep.distance,
+            stepIndex = 0
+        )
+    }
 
-  private RouteProgress createBeginningOfStepRouteProgress(RouteProgress routeProgress) {
-    return routeProgress.toBuilder()
-      .stepDistanceRemaining(routeProgress.currentLegProgress().currentStep().distance())
-      .stepIndex(0)
-      .build();
-  }
-
-  private BannerInstructionMilestone buildBannerInstructionMilestone() {
-    return (BannerInstructionMilestone) new BannerInstructionMilestone.Builder().setIdentifier(1234).build();
-  }
+    private fun buildBannerInstructionMilestone(): BannerInstructionMilestone {
+        return BannerInstructionMilestone(identifier = 1234)
+    }
 }

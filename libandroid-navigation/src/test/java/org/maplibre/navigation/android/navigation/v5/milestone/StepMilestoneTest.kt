@@ -1,60 +1,52 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.maplibre.navigation.android.json
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.gt
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.robolectric.RobolectricTestRunner
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsAdapterFactory;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+@RunWith(RobolectricTestRunner::class)
+class StepMilestoneTest : BaseTest() {
+    @Test
+    @Throws(Exception::class)
+    fun sanity() {
+        val routeProgress = buildStepMilestoneRouteProgress()
+        val milestone = StepMilestone(
+            identifier = 1,
+            instruction = null,
+            trigger = gt(TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 100.0),
+        )
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+        Assert.assertNotNull(milestone)
+        Assert.assertTrue(milestone.isOccurring(routeProgress, routeProgress))
+    }
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+    @Test
+    fun identifier_doesEqualSetValue() {
+            val milestone = StepMilestone(identifier = 101)
+            Assert.assertEquals(101, milestone.identifier)
+        }
 
-@RunWith(RobolectricTestRunner.class)
-public class StepMilestoneTest extends BaseTest {
+    @Throws(Exception::class)
+    private fun buildStepMilestoneRouteProgress(): RouteProgress {
+        val fixtureJsonString = loadJsonFixture(ROUTE_FIXTURE)
+        val response = json.decodeFromString<DirectionsResponse>(fixtureJsonString)
+        val route = response.routes[0]
+        val distanceRemaining = route.distance
+        val legDistanceRemaining = route.legs[0].distance
+        val stepDistanceRemaining = route.legs[0].steps[0].distance
+        return buildTestRouteProgress(
+            route, stepDistanceRemaining,
+            legDistanceRemaining, distanceRemaining, 1, 0
+        )
+    }
 
-  private static final String ROUTE_FIXTURE = "directions_v5_precision_6.json";
-
-  @Test
-  public void sanity() throws Exception {
-    RouteProgress routeProgress = buildStepMilestoneRouteProgress();
-    Milestone milestone = new StepMilestone.Builder()
-      .setTrigger(
-        Trigger.gt(TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 100d)
-      )
-      .setIdentifier(101)
-      .build();
-
-    assertNotNull(milestone);
-    assertTrue(milestone.isOccurring(routeProgress, routeProgress));
-  }
-
-  @Test
-  public void getIdentifier_doesEqualSetValue() {
-    Milestone milestone = new StepMilestone.Builder()
-      .setIdentifier(101)
-      .build();
-
-    assertEquals(101, milestone.getIdentifier());
-  }
-
-  private RouteProgress buildStepMilestoneRouteProgress() throws Exception {
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
-    String body = loadJsonFixture(ROUTE_FIXTURE);
-    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
-    DirectionsRoute route = response.routes().get(0);
-    double distanceRemaining = route.distance();
-    double legDistanceRemaining = route.legs().get(0).distance();
-    double stepDistanceRemaining = route.legs().get(0).steps().get(0).distance();
-    return buildTestRouteProgress(route, stepDistanceRemaining,
-      legDistanceRemaining, distanceRemaining, 1, 0);
-  }
+    companion object {
+        private const val ROUTE_FIXTURE = "directions_v5_precision_6.json"
+    }
 }

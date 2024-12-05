@@ -18,6 +18,7 @@ buildscript {
         classpath pluginDependencies.errorprone
         classpath pluginDependencies.dependencyUpdates
         classpath pluginDependencies.kotlinGradle
+        classpath pluginDependencies.kotlinxSerialization
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

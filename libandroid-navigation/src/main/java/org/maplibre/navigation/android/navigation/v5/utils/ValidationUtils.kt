@@ -1,49 +1,41 @@
-package org.maplibre.navigation.android.navigation.v5.utils;
+package org.maplibre.navigation.android.navigation.v5.utils
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
+import java.util.MissingFormatArgumentException
 
-import java.util.MissingFormatArgumentException;
+object ValidationUtils {
 
-public final class ValidationUtils {
-
-  private ValidationUtils() {
-    // Class should not be initialized.
-  }
-
-  public static void validDirectionsRoute(DirectionsRoute directionsRoute,
-                                          boolean defaultMilestonesEnabled) {
-    if (defaultMilestonesEnabled) {
-      RouteOptions routeOptions = directionsRoute.routeOptions();
-      checkNullRouteOptions(routeOptions);
-      checkInvalidVoiceInstructions(routeOptions);
-      checkInvalidBannerInstructions(routeOptions);
+    @JvmStatic
+    fun validDirectionsRoute(
+        directionsRoute: DirectionsRoute,
+        defaultMilestonesEnabled: Boolean
+    ) {
+        if (defaultMilestonesEnabled) {
+            val routeOptions = directionsRoute.routeOptions ?: throw MissingFormatArgumentException(
+                "Using the default milestones requires the "
+                        + "directions route to include the route options object."
+            )
+            checkInvalidVoiceInstructions(routeOptions)
+            checkInvalidBannerInstructions(routeOptions)
+        }
     }
-  }
 
-  private static void checkNullRouteOptions(RouteOptions routeOptions) {
-    if (routeOptions == null) {
-      throw new MissingFormatArgumentException("Using the default milestones requires the "
-        + "directions route to include the route options object.");
+    private fun checkInvalidVoiceInstructions(routeOptions: RouteOptions) {
+        if (routeOptions.voiceInstructions != true) {
+            throw MissingFormatArgumentException(
+                "Using the default milestones requires the "
+                        + "directions route to be requested with voice instructions enabled."
+            )
+        }
     }
-  }
 
-  private static void checkInvalidVoiceInstructions(RouteOptions routeOptions) {
-    Boolean instructions = routeOptions.voiceInstructions();
-    boolean invalidVoiceInstructions = instructions == null
-      || !instructions;
-    if (invalidVoiceInstructions) {
-      throw new MissingFormatArgumentException("Using the default milestones requires the "
-        + "directions route to be requested with voice instructions enabled.");
+    private fun checkInvalidBannerInstructions(routeOptions: RouteOptions) {
+        if (routeOptions.bannerInstructions != true) {
+            throw MissingFormatArgumentException(
+                "Using the default milestones requires the "
+                        + "directions route to be requested with banner instructions enabled."
+            )
+        }
     }
-  }
-
-  private static void checkInvalidBannerInstructions(RouteOptions routeOptions) {
-    Boolean instructions = routeOptions.bannerInstructions();
-    boolean invalidBannerInstructions = instructions == null || !instructions;
-    if (invalidBannerInstructions) {
-      throw new MissingFormatArgumentException("Using the default milestones requires the "
-        + "directions route to be requested with banner instructions enabled.");
-    }
-  }
 }

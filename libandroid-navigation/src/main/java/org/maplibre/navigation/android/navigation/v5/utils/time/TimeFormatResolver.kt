@@ -1,10 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time;
+package org.maplibre.navigation.android.navigation.v5.utils.time
 
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import java.util.Calendar
 
-import java.util.Calendar;
 
 interface TimeFormatResolver {
-  void nextChain(TimeFormatResolver chain);
+    fun nextChain(chain: TimeFormatResolver?)
 
-  String obtainTimeFormatted(int type, Calendar time);
+    fun obtainTimeFormatted(type: MapLibreNavigationOptions.TimeFormat, time: Calendar): String?
 }

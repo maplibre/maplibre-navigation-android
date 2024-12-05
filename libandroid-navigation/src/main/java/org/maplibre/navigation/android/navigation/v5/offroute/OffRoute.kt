@@ -1,12 +1,10 @@
-package org.maplibre.navigation.android.navigation.v5.offroute;
+package org.maplibre.navigation.android.navigation.v5.offroute
 
-import android.location.Location;
+import android.location.Location
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+fun interface OffRoute {
 
-public abstract class OffRoute {
-
-  public abstract boolean isUserOffRoute(Location location, RouteProgress routeProgress,
-                                         MapLibreNavigationOptions options);
+    fun isUserOffRoute(location: Location, routeProgress: RouteProgress, options: MapLibreNavigationOptions): Boolean
 }

@@ -1,28 +1,20 @@
-package org.maplibre.navigation.android.navigation.v5.utils.span;
+package org.maplibre.navigation.android.navigation.v5.utils.span
 
-import android.os.Build;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 
-import java.util.List;
-
-public class SpanUtils {
-
-  public static SpannableStringBuilder combineSpans(List<SpanItem> spanItems) {
-    SpannableStringBuilder builder = new SpannableStringBuilder();
-    for (SpanItem item : spanItems) {
-      if (item instanceof TextSpanItem) {
-        appendTextSpan(builder, item.getSpan(), ((TextSpanItem) item).getSpanText());
-      }
+object SpanUtils {
+    fun combineSpans(spanItems: List<SpanItem>): SpannableStringBuilder {
+        val builder = SpannableStringBuilder()
+        for (item in spanItems) {
+            if (item is TextSpanItem) {
+                appendTextSpan(builder, item.getSpan(), item.spanText)
+            }
+        }
+        return builder
     }
-    return builder;
-  }
 
-  private static void appendTextSpan(SpannableStringBuilder builder, Object span, String spanText) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      builder.append(spanText, span, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    } else {
-      builder.append(spanText);
+    private fun appendTextSpan(builder: SpannableStringBuilder, span: Any?, spanText: String?) {
+        builder.append(spanText, span, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-  }
 }

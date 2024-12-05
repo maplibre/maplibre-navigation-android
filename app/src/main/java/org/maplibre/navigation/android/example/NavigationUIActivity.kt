@@ -25,7 +25,7 @@ import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -185,13 +185,13 @@ class NavigationUIActivity :
             ) {
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { response ->
-                    if (response.routes().isNotEmpty()) {
+                    if (response.routes.isNotEmpty()) {
                         val maplibreResponse =
                             DirectionsResponse.fromJson(
                                 response.toJson()
                             );
-                        this@NavigationUIActivity.route = maplibreResponse.routes().first()
-                        navigationMapRoute?.addRoutes(maplibreResponse.routes())
+                        this@NavigationUIActivity.route = maplibreResponse.routes.first()
+                        navigationMapRoute?.addRoutes(maplibreResponse.routes)
 //                        binding.startRouteLayout.visibility = View.VISIBLE
                     }
                 }
@@ -247,7 +247,7 @@ class NavigationUIActivity :
         options.navigationListener(this)
         extractRoute(options)
         extractConfiguration(options)
-        options.navigationOptions(MapLibreNavigationOptions.builder().build())
+        options.navigationOptions(MapLibreNavigationOptions())
         binding.navigationView.startNavigation(options.build())
     }
 

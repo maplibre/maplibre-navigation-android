@@ -1,142 +1,106 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.instruction.Instruction;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 
 /**
- * A default milestone that is added to {@link MapLibreNavigation}
- * when default milestones are enabled.
- * <p>
+ * A default milestone that is added to [MapLibreNavigation] when default milestones are enabled.
+ *
  * Please note, this milestone has a custom trigger based on location progress along a route.  If you
  * set custom triggers, they will be ignored in favor of this logic.
  */
-public class VoiceInstructionMilestone extends Milestone {
+open class VoiceInstructionMilestone(
+    identifier: Int,
+    instruction: Instruction? = null,
+    trigger: Trigger.Statement? = null,
+    private val routeUtils: RouteUtils = RouteUtils()
+) : Milestone(identifier, instruction, trigger) {
 
-  private static final String EMPTY_STRING = "";
+    private var instructions: VoiceInstructions? = null
 
-  private VoiceInstructions instructions;
-  private DirectionsRoute currentRoute;
-  private RouteUtils routeUtils;
+    override fun isOccurring(
+        previousRouteProgress: RouteProgress?,
+        routeProgress: RouteProgress
+    ): Boolean {
+        val stepDistanceRemaining = routeProgress.currentLegProgress
+            .currentStepProgress
+            .distanceRemaining
+        val instructions = routeUtils.findCurrentVoiceInstructions(
+            routeProgress.currentLegProgress.currentStep,
+            stepDistanceRemaining
+        )
 
-  VoiceInstructionMilestone(Builder builder) {
-    super(builder);
-    routeUtils = new RouteUtils();
-  }
-
-  @Override
-  public boolean isOccurring(RouteProgress previousRouteProgress, RouteProgress routeProgress) {
-    LegStep currentStep = routeProgress.currentLegProgress().currentStep();
-    double stepDistanceRemaining = routeProgress.currentLegProgress().currentStepProgress().distanceRemaining();
-    VoiceInstructions instructions = routeUtils.findCurrentVoiceInstructions(currentStep, stepDistanceRemaining);
-    if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
-      return updateInstructions(routeProgress, instructions);
-    }
-    return false;
-  }
-
-  @Override
-  public Instruction getInstruction() {
-    return new Instruction() {
-      @Override
-      public String buildInstruction(RouteProgress routeProgress) {
-        if (instructions == null) {
-          return routeProgress.currentLegProgress().currentStep().name();
+        return if (shouldBeVoiced(instructions, stepDistanceRemaining)) {
+            this.instructions = instructions
+            true
+        } else {
+            false
         }
-        return instructions.announcement();
-      }
-    };
-  }
-
-  /**
-   * Provide the SSML instruction that can be used with Mapbox's API Voice.
-   * <p>
-   * This String will provide special markup denoting how certain portions of the announcement
-   * should be pronounced.
-   *
-   * @return announcement with SSML markup
-   * @since 0.8.0
-   */
-  public String getSsmlAnnouncement() {
-    if (instructions == null) {
-      return EMPTY_STRING;
-    }
-    return instructions.ssmlAnnouncement();
-  }
-
-  /**
-   * Provide the instruction that can be used with Android's TextToSpeech.
-   * <p>
-   * This string will be in plain text.
-   *
-   * @return announcement in plain text
-   * @since 0.12.0
-   */
-  public String getAnnouncement() {
-    if (instructions == null) {
-      return EMPTY_STRING;
-    }
-    return instructions.announcement();
-  }
-
-  /**
-   * Looks to see if we have a new route.
-   *
-   * @param routeProgress provides updated route information
-   * @return true if new route, false if not
-   */
-  private boolean isNewRoute(RouteProgress routeProgress) {
-    boolean newRoute = currentRoute == null || !currentRoute.equals(routeProgress.directionsRoute());
-    currentRoute = routeProgress.directionsRoute();
-    return newRoute;
-  }
-
-  /**
-   * Checks if the current instructions are different from the instructions
-   * determined by the step distance remaining.
-   *
-   * @param instructions          the current voice instructions from the list of step instructions
-   * @param stepDistanceRemaining the current step distance remaining
-   * @return true if time to voice the announcement, false if not
-   */
-  private boolean shouldBeVoiced(VoiceInstructions instructions, double stepDistanceRemaining) {
-    boolean isNewInstruction = this.instructions == null || !this.instructions.equals(instructions);
-    boolean isValidNewInstruction = instructions != null && isNewInstruction;
-    return isValidNewInstruction && instructions.distanceAlongGeometry() >= stepDistanceRemaining;
-  }
-
-  private boolean updateInstructions(RouteProgress routeProgress, VoiceInstructions instructions) {
-    this.instructions = instructions;
-    return true;
-  }
-
-
-  public static final class Builder extends Milestone.Builder {
-
-    private Trigger.Statement trigger;
-
-    public Builder() {
-      super();
     }
 
-    @Override
-    Trigger.Statement getTrigger() {
-      return trigger;
+    override fun getInstruction(): Instruction {
+        return Instruction { routeProgress ->
+            instructions?.announcement
+                ?: routeProgress.currentLegProgress.currentStep.name
+        }
     }
 
-    @Override
-    public Builder setTrigger(Trigger.Statement trigger) {
-      this.trigger = trigger;
-      return this;
+    val ssmlAnnouncement: String?
+        /**
+         * Provide the SSML instruction that can be used with Mapbox's API Voice.
+         *
+         *
+         * This String will provide special markup denoting how certain portions of the announcement
+         * should be pronounced.
+         *
+         * @return announcement with SSML markup
+         * @since 0.8.0
+         */
+        get() {
+            if (instructions == null) {
+                return EMPTY_STRING
+            }
+            return instructions!!.ssmlAnnouncement
+        }
+
+    val announcement: String?
+        /**
+         * Provide the instruction that can be used with Android's TextToSpeech.
+         *
+         *
+         * This string will be in plain text.
+         *
+         * @return announcement in plain text
+         * @since 0.12.0
+         */
+        get() {
+            if (instructions == null) {
+                return EMPTY_STRING
+            }
+            return instructions!!.announcement
+        }
+
+    /**
+     * Checks if the current instructions are different from the instructions
+     * determined by the step distance remaining.
+     *
+     * @param instructions          the current voice instructions from the list of step instructions
+     * @param stepDistanceRemaining the current step distance remaining
+     * @return true if time to voice the announcement, false if not
+     */
+    private fun shouldBeVoiced(
+        instructions: VoiceInstructions?,
+        stepDistanceRemaining: Double
+    ): Boolean {
+        val isNewInstruction = this.instructions == null || this.instructions != instructions
+        val isValidNewInstruction = instructions != null && isNewInstruction
+        return isValidNewInstruction && instructions!!.distanceAlongGeometry >= stepDistanceRemaining
     }
 
-    @Override
-    public VoiceInstructionMilestone build() {
-      return new VoiceInstructionMilestone(this);
+    companion object {
+        private const val EMPTY_STRING = ""
     }
-  }
 }

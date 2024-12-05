@@ -16,9 +16,9 @@ public class BannerInstructionModel extends InstructionModel {
   public BannerInstructionModel(DistanceFormatter distanceFormatter, RouteProgress progress,
                                 BannerInstructions instructions) {
     super(distanceFormatter, progress);
-    primaryBannerText = instructions.primary();
-    secondaryBannerText = instructions.secondary();
-    subBannerText = instructions.sub();
+    primaryBannerText = instructions.getPrimary();
+    secondaryBannerText = instructions.getSecondary();
+    subBannerText = instructions.getSub();
   }
 
   BannerText retrievePrimaryBannerText() {
@@ -34,15 +34,15 @@ public class BannerInstructionModel extends InstructionModel {
   }
 
   String retrievePrimaryManeuverType() {
-    return primaryBannerText.type();
+    return primaryBannerText.getType().getText();
   }
 
   String retrievePrimaryManeuverModifier() {
-    return primaryBannerText.modifier();
+    return primaryBannerText.getModifier().getText();
   }
 
   @Nullable
   Double retrievePrimaryRoundaboutAngle() {
-    return primaryBannerText.degrees();
+    return primaryBannerText.getDegrees();
   }
 }

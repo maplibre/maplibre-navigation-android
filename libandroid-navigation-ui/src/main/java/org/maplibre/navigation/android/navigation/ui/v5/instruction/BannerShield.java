@@ -9,9 +9,9 @@ class BannerShield {
   private int startIndex = -1;
 
   BannerShield(BannerComponents bannerComponents, int nodeIndex) {
-    this.url = bannerComponents.imageBaseUrl();
+    this.url = bannerComponents.getImageBaseUrl();
     this.nodeIndex = nodeIndex;
-    this.text = bannerComponents.text();
+    this.text = bannerComponents.getText();
   }
 
   String getUrl() {

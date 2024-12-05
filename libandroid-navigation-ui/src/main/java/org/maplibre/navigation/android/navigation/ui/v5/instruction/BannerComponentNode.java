@@ -16,7 +16,7 @@ class BannerComponentNode {
 
   @Override
   public String toString() {
-    return bannerComponents.text();
+    return bannerComponents.getText();
   }
 
   void setStartIndex(int startIndex) {

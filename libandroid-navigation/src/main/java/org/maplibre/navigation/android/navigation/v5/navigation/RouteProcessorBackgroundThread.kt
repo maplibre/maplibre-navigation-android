@@ -1,55 +1,61 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.location.Location;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Process;
-
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-
-import java.util.List;
+import android.location.Location
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Process
+import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * This class extends handler thread to run most of the navigation calculations on a separate
  * background thread.
  */
-class RouteProcessorBackgroundThread extends HandlerThread {
+open class RouteProcessorBackgroundThread(
+    val responseHandler: Handler,
+    val listener: Listener,
+    private val routeUtils: RouteUtils
+) : HandlerThread(MAPLIBRE_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND) {
+    private var workerHandler: Handler? = null
 
-  private static final String MAPLIBRE_NAVIGATION_THREAD_NAME = "maplibre_navigation_thread";
-  private static final int MSG_LOCATION_UPDATED = 1001;
-  private Handler workerHandler;
+    init {
+        start()
+    }
 
-  RouteProcessorBackgroundThread(Handler responseHandler, Listener listener) {
-    super(MAPLIBRE_NAVIGATION_THREAD_NAME, Process.THREAD_PRIORITY_BACKGROUND);
-    start();
-    initialize(responseHandler, listener);
-  }
+    override fun onLooperPrepared() {
+        super.onLooperPrepared()
 
-  void queueUpdate(NavigationLocationUpdate navigationLocationUpdate) {
-    workerHandler.obtainMessage(MSG_LOCATION_UPDATED, navigationLocationUpdate).sendToTarget();
-  }
+        workerHandler = Handler(
+            looper, RouteProcessorHandlerCallback(
+                NavigationRouteProcessor(routeUtils), responseHandler, listener
+            )
+        )
+    }
 
-  private void initialize(Handler responseHandler, Listener listener) {
-    NavigationRouteProcessor routeProcessor = new NavigationRouteProcessor();
-    workerHandler = new Handler(getLooper(), new RouteProcessorHandlerCallback(
-      routeProcessor, responseHandler, listener)
-    );
-  }
+    fun queueUpdate(navigationLocationUpdate: NavigationLocationUpdate?) {
+        workerHandler?.obtainMessage(MSG_LOCATION_UPDATED, navigationLocationUpdate)
+            ?.sendToTarget()
+    }
 
-  /**
-   * Listener for posting back to the Navigation Service once the thread finishes calculations.
-   * <p>
-   * No matter what, with each new message added to the queue, these callbacks get invoked once
-   * finished and within Navigation Service it is determined if the public corresponding listeners
-   * need invoking or not; the Navigation event dispatcher class handles those callbacks.
-   */
-  interface Listener {
+    /**
+     * Listener for posting back to the Navigation Service once the thread finishes calculations.
+     *
+     *
+     * No matter what, with each new message added to the queue, these callbacks get invoked once
+     * finished and within Navigation Service it is determined if the public corresponding listeners
+     * need invoking or not; the Navigation event dispatcher class handles those callbacks.
+     */
+    interface Listener {
+        fun onNewRouteProgress(location: Location, routeProgress: RouteProgress)
 
-    void onNewRouteProgress(Location location, RouteProgress routeProgress);
+        fun onMilestoneTrigger(triggeredMilestones: List<Milestone>, routeProgress: RouteProgress)
 
-    void onMilestoneTrigger(List<Milestone> triggeredMilestones, RouteProgress routeProgress);
+        fun onUserOffRoute(location: Location, userOffRoute: Boolean)
+    }
 
-    void onUserOffRoute(Location location, boolean userOffRoute);
-  }
+    companion object {
+        private const val MAPLIBRE_NAVIGATION_THREAD_NAME = "maplibre_navigation_thread"
+        private const val MSG_LOCATION_UPDATED = 1001
+    }
 }

@@ -1,25 +1,34 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time;
+package org.maplibre.navigation.android.navigation.v5.utils.time
+
+import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import java.util.Calendar
+import java.util.Locale
 
 
-import java.util.Calendar;
-import java.util.Locale;
+open class TwentyFourHoursTimeFormat : TimeFormatResolver {
+    private var chain: TimeFormatResolver? = null
 
-class TwentyFourHoursTimeFormat implements TimeFormatResolver {
-  static final String TWENTY_FOUR_HOURS_FORMAT = "%tk:%tM";
-  private static final int TWENTY_FOUR_HOURS_TYPE = 1;
-  private TimeFormatResolver chain;
-
-  @Override
-  public void nextChain(TimeFormatResolver chain) {
-    this.chain = chain;
-  }
-
-  @Override
-  public String obtainTimeFormatted(int type, Calendar time) {
-    if (type == TWENTY_FOUR_HOURS_TYPE) {
-      return String.format(Locale.getDefault(), TWENTY_FOUR_HOURS_FORMAT, time, time);
-    } else {
-      return chain.obtainTimeFormatted(type, time);
+    override fun nextChain(chain: TimeFormatResolver?) {
+        this.chain = chain
     }
-  }
+
+    override fun obtainTimeFormatted(
+        type: MapLibreNavigationOptions.TimeFormat,
+        time: Calendar
+    ): String? {
+        return if (type == MapLibreNavigationOptions.TimeFormat.TWENTY_FOUR_HOURS) {
+            String.format(
+                Locale.getDefault(),
+                TWENTY_FOUR_HOURS_FORMAT,
+                time,
+                time
+            )
+        } else {
+            chain?.obtainTimeFormatted(type, time)
+        }
+    }
+
+    companion object {
+        const val TWENTY_FOUR_HOURS_FORMAT: String = "%tk:%tM"
+    }
 }

@@ -1,70 +1,81 @@
-package org.maplibre.navigation.android.navigation.v5.utils;
+package org.maplibre.navigation.android.navigation.v5.utils
 
-import static org.maplibre.navigation.android.navigation.v5.utils.Constants.PRECISION_6;
+import org.junit.Assert
+import org.junit.Test
+import org.maplibre.geojson.Point
+import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.models.StepManeuver
 
-import org.maplibre.navigation.android.navigation.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
-import org.maplibre.geojson.Point;
-import org.maplibre.geojson.utils.PolylineUtils;
+class MeasurementUtilsTest : BaseTest() {
+    @Test
+    fun userTrueDistanceFromStep_returnsZeroWhenCurrentStepAndPointEqualSame() {
+        val futurePoint = Point.fromLngLat(-95.367697, 29.758938)
 
-import org.junit.Test;
+        val geometryPoints: MutableList<Point> = ArrayList()
+        geometryPoints.add(futurePoint)
+        val step = getLegStep(Point.fromLngLat(0.0, 0.0), geometryPoints)
 
-import java.util.ArrayList;
-import java.util.List;
+        val distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step)
+        Assert.assertEquals(0.0, distance, DELTA)
+    }
 
-import static junit.framework.Assert.assertEquals;
+    @Test
+    fun userTrueDistanceFromStep_onlyOnePointInLineStringStillMeasuresDistanceCorrectly() {
+        val futurePoint = Point.fromLngLat(-95.3676974, 29.7589382)
 
-public class MeasurementUtilsTest extends BaseTest {
+        val geometryPoints: MutableList<Point> = ArrayList()
+        geometryPoints.add(Point.fromLngLat(-95.8427, 29.7757))
+        val step = getLegStep(Point.fromLngLat(0.0, 0.0), geometryPoints)
 
-  @Test
-  public void userTrueDistanceFromStep_returnsZeroWhenCurrentStepAndPointEqualSame() {
-    Point futurePoint = Point.fromLngLat(-95.367697, 29.758938);
+        val distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step)
+        Assert.assertEquals(45900.73617999494, distance, DELTA)
+    }
 
-    List<Point> geometryPoints = new ArrayList<>();
-    geometryPoints.add(futurePoint);
-    double[] rawLocation = {0, 0};
-    LegStep step = getLegStep(rawLocation, geometryPoints);
+    @Test
+    fun userTrueDistanceFromStep_onePointStepGeometryWithDifferentRawPoint() {
+        val futurePoint = Point.fromLngLat(-95.3676974, 29.7589382)
 
-    double distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step);
-    assertEquals(0d, distance, DELTA);
-  }
+        val geometryPoints: MutableList<Point> = ArrayList()
+        geometryPoints.add(Point.fromLngLat(-95.8427, 29.7757))
+        geometryPoints.add(futurePoint)
+        val step = getLegStep(Point.fromLngLat(0.0, 0.0), geometryPoints)
 
-  @Test
-  public void userTrueDistanceFromStep_onlyOnePointInLineStringStillMeasuresDistanceCorrectly() {
-    Point futurePoint = Point.fromLngLat(-95.3676974, 29.7589382);
+        val distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step)
+        Assert.assertEquals(0.04457271773629306, distance, DELTA)
+    }
 
-    List<Point> geometryPoints = new ArrayList<>();
-    geometryPoints.add(Point.fromLngLat(-95.8427, 29.7757));
-    double[] rawLocation = {0, 0};
-    LegStep step = getLegStep(rawLocation, geometryPoints);
-
-    double distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step);
-    assertEquals(45900.73617999494, distance, DELTA);
-  }
-
-  @Test
-  public void userTrueDistanceFromStep_onePointStepGeometryWithDifferentRawPoint() {
-    Point futurePoint = Point.fromLngLat(-95.3676974, 29.7589382);
-
-    List<Point> geometryPoints = new ArrayList<>();
-    geometryPoints.add(Point.fromLngLat(-95.8427, 29.7757));
-    geometryPoints.add(futurePoint);
-    double[] rawLocation = {0, 0};
-    LegStep step = getLegStep(rawLocation, geometryPoints);
-
-    double distance = MeasurementUtils.userTrueDistanceFromStep(futurePoint, step);
-    assertEquals(0.04457271773629306d, distance, DELTA);
-  }
-
-  private LegStep getLegStep(double[] rawLocation, List<Point> geometryPoints) {
-    return LegStep.builder()
-      .geometry(PolylineUtils.encode(geometryPoints, PRECISION_6))
-      .mode("driving")
-      .distance(0)
-      .duration(0)
-      .maneuver(StepManeuver.builder().rawLocation(rawLocation).build())
-      .weight(0)
-      .build();
-  }
+    private fun getLegStep(location: Point, geometryPoints: List<Point>): LegStep {
+        return LegStep(
+            geometry = PolylineUtils.encode(geometryPoints, Constants.PRECISION_6),
+            mode = "driving",
+            distance = 0.0,
+            duration = 0.0,
+            maneuver = StepManeuver(
+                location = location,
+                bearingBefore = 0.0,
+                bearingAfter = 0.0,
+                instruction = null,
+                type = null,
+                modifier = null,
+                exit = null
+            ),
+            weight = 0.0,
+            durationTypical = null,
+            speedLimitUnit = null,
+            speedLimitSign = null,
+            name = null,
+            ref = null,
+            destinations = null,
+            pronunciation = null,
+            rotaryName = null,
+            rotaryPronunciation = null,
+            voiceInstructions = null,
+            bannerInstructions = null,
+            drivingSide = null,
+            intersections = null,
+            exits = null,
+        )
+    }
 }

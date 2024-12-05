@@ -1,97 +1,111 @@
-package org.maplibre.navigation.android.navigation.v5;
+package org.maplibre.navigation.android.navigation.v5
 
-import android.util.Pair;
+import org.maplibre.geojson.Point
+import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.models.StepIntersection
+import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createDistancesToIntersections
+import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createIntersectionsList
+import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findCurrentIntersection
+import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findUpcomingIntersection
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.Constants
 
-import androidx.annotation.NonNull;
-
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.StepIntersection;
-import org.maplibre.geojson.Point;
-import org.maplibre.geojson.utils.PolylineUtils;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-
-import java.util.List;
-
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createDistancesToIntersections;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createIntersectionsList;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findCurrentIntersection;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findUpcomingIntersection;
-import static org.maplibre.navigation.android.navigation.v5.utils.Constants.PRECISION_6;
-
-class TestRouteProgressBuilder {
-
-  RouteProgress buildDefaultTestRouteProgress(DirectionsRoute testRoute) throws Exception {
-    return buildTestRouteProgress(testRoute, 100, 100,
-      100, 0, 0);
-  }
-
-  RouteProgress buildTestRouteProgress(DirectionsRoute route,
-                                       double stepDistanceRemaining,
-                                       double legDistanceRemaining,
-                                       double distanceRemaining,
-                                       int stepIndex,
-                                       int legIndex) throws Exception {
-    List<LegStep> steps = route.legs().get(legIndex).steps();
-    LegStep currentStep = steps.get(stepIndex);
-    List<Point> currentStepPoints = buildCurrentStepPoints(currentStep);
-    int upcomingStepIndex = stepIndex + 1;
-    List<Point> upcomingStepPoints = null;
-    LegStep upcomingStep = null;
-    if (upcomingStepIndex < steps.size()) {
-      upcomingStep = steps.get(upcomingStepIndex);
-      String upcomingStepGeometry = upcomingStep.geometry();
-      upcomingStepPoints = buildStepPointsFromGeometry(upcomingStepGeometry);
+internal class TestRouteProgressBuilder {
+    @Throws(Exception::class)
+    fun buildDefaultTestRouteProgress(testRoute: DirectionsRoute): RouteProgress {
+        return buildTestRouteProgress(
+            testRoute, 100.0, 100.0,
+            100.0, 0, 0
+        )
     }
-    List<StepIntersection> intersections = createIntersectionsList(currentStep, upcomingStep);
-    List<Pair<StepIntersection, Double>> intersectionDistances = createDistancesToIntersections(
-      currentStepPoints, intersections
-    );
 
-    StepIntersection currentIntersection = createCurrentIntersection(stepDistanceRemaining, currentStep,
-      intersections, intersectionDistances);
-    StepIntersection upcomingIntersection = createUpcomingIntersection(upcomingStep, intersections,
-      currentIntersection);
+    @Throws(Exception::class)
+    fun buildTestRouteProgress(
+        route: DirectionsRoute,
+        stepDistanceRemaining: Double,
+        legDistanceRemaining: Double,
+        distanceRemaining: Double,
+        stepIndex: Int,
+        legIndex: Int
+    ): RouteProgress {
+        val steps = route.legs[legIndex].steps
+        val currentStep = steps[stepIndex]
+        val currentStepPoints = buildCurrentStepPoints(currentStep)
+        val upcomingStepIndex = stepIndex + 1
+        var upcomingStepPoints: List<Point>? = null
+        var upcomingStep: LegStep? = null
+        if (upcomingStepIndex < steps.size) {
+            upcomingStep = steps[upcomingStepIndex]
+            val upcomingStepGeometry = upcomingStep.geometry
+            upcomingStepPoints = buildStepPointsFromGeometry(upcomingStepGeometry)
+        }
+        val intersections: List<StepIntersection> =
+            createIntersectionsList(currentStep, upcomingStep)
+        val intersectionDistances = createDistancesToIntersections(
+            currentStepPoints, intersections
+        )
 
-    return RouteProgress.builder()
-      .stepDistanceRemaining(stepDistanceRemaining)
-      .legDistanceRemaining(legDistanceRemaining)
-      .distanceRemaining(distanceRemaining)
-      .directionsRoute(route)
-      .currentStepPoints(currentStepPoints)
-      .upcomingStepPoints(upcomingStepPoints)
-      .intersections(intersections)
-      .currentIntersection(currentIntersection)
-      .upcomingIntersection(upcomingIntersection)
-      .intersectionDistancesAlongStep(intersectionDistances)
-      .stepIndex(stepIndex)
-      .legIndex(legIndex)
-      .build();
-  }
+        val currentIntersection = createCurrentIntersection(
+            stepDistanceRemaining,
+            currentStep,
+            intersections,
+            intersectionDistances
+        )
+        val upcomingIntersection = createUpcomingIntersection(
+            upcomingStep,
+            intersections,
+            currentIntersection!!
+        )
 
-  @NonNull
-  private List<Point> buildCurrentStepPoints(LegStep currentStep) {
-    String currentStepGeometry = currentStep.geometry();
-    return buildStepPointsFromGeometry(currentStepGeometry);
-  }
+        return RouteProgress(
+            stepDistanceRemaining = stepDistanceRemaining,
+            legDistanceRemaining = legDistanceRemaining,
+            distanceRemaining = distanceRemaining,
+            directionsRoute = route,
+            currentStepPoints = currentStepPoints,
+            upcomingStepPoints = upcomingStepPoints,
+            intersections = intersections,
+            currentIntersection = currentIntersection,
+            upcomingIntersection = upcomingIntersection,
+            intersectionDistancesAlongStep = intersectionDistances,
+            stepIndex = stepIndex,
+            legIndex = legIndex,
+            currentLegAnnotation = null
+        )
+    }
 
-  private StepIntersection createCurrentIntersection(double stepDistanceRemaining, LegStep currentStep,
-                                                     List<StepIntersection> intersections,
-                                                     List<Pair<StepIntersection, Double>> intersectionDistances) {
-    double stepDistanceTraveled = currentStep.distance() - stepDistanceRemaining;
-    return findCurrentIntersection(intersections,
-      intersectionDistances, stepDistanceTraveled
-    );
-  }
+    private fun buildCurrentStepPoints(currentStep: LegStep): List<Point> {
+        val currentStepGeometry = currentStep.geometry
+        return buildStepPointsFromGeometry(currentStepGeometry)
+    }
 
-  private StepIntersection createUpcomingIntersection(LegStep upcomingStep, List<StepIntersection> intersections,
-                                                      StepIntersection currentIntersection) {
-    return findUpcomingIntersection(
-        intersections, upcomingStep, currentIntersection
-      );
-  }
+    private fun createCurrentIntersection(
+        stepDistanceRemaining: Double, currentStep: LegStep,
+        intersections: List<StepIntersection>,
+        intersectionDistances: Map<StepIntersection, Double>
+    ): StepIntersection? {
+        val stepDistanceTraveled = currentStep.distance - stepDistanceRemaining
+        return findCurrentIntersection(
+            intersections,
+            intersectionDistances, stepDistanceTraveled
+        )
+    }
 
-  private List<Point> buildStepPointsFromGeometry(String stepGeometry) {
-    return PolylineUtils.decode(stepGeometry, PRECISION_6);
-  }
+    private fun createUpcomingIntersection(
+        upcomingStep: LegStep?,
+        intersections: List<StepIntersection>,
+        currentIntersection: StepIntersection
+    ): StepIntersection? {
+        return findUpcomingIntersection(
+            intersections,
+            upcomingStep,
+            currentIntersection
+        )
+    }
+
+    private fun buildStepPointsFromGeometry(stepGeometry: String): List<Point> {
+        return PolylineUtils.decode(stepGeometry, Constants.PRECISION_6)
+    }
 }

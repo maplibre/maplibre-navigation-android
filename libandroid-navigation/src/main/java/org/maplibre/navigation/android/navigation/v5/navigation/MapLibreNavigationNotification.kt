@@ -1,253 +1,276 @@
-package org.maplibre.navigation.android.navigation.v5.navigation;
+package org.maplibre.navigation.android.navigation.v5.navigation
 
-import org.maplibre.navigation.android.navigation.R;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.ManeuverUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.text.SpannableString;
-import android.text.format.DateFormat;
-import android.widget.RemoteViews;
-
-import androidx.core.app.NotificationCompat;
-
-
-
-import java.util.Calendar;
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
+import android.text.SpannableString
+import android.text.format.DateFormat
+import android.widget.RemoteViews
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import org.maplibre.navigation.android.navigation.R
+import org.maplibre.navigation.android.navigation.v5.models.LegStep
+import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter
+import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
+import org.maplibre.navigation.android.navigation.v5.utils.ManeuverUtils
+import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter
+import java.util.Calendar
 
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
-class MapLibreNavigationNotification implements NavigationNotification {
+open class MapLibreNavigationNotification(
+    context: Context,
+    private val mapLibreNavigation: MapLibreNavigation,
+    private val maneuverUtils: ManeuverUtils = ManeuverUtils()
+) : NavigationNotification {
+    private val etaFormat = context.getString(R.string.eta_format)
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val isTwentyFourHourFormat = DateFormat.is24HourFormat(context)
+    private val collapsedNotificationRemoteViews: RemoteViews = RemoteViews(
+        context.packageName,
+        R.layout.collapsed_navigation_notification_layout
+    )
+    private val expandedNotificationRemoteViews: RemoteViews = RemoteViews(
+        context.packageName,
+        R.layout.expanded_navigation_notification_layout
+    )
+    private val distanceFormatter: DistanceFormatter = initializeDistanceFormatter(context, mapLibreNavigation)
+    private var notification: Notification? = null
+    private var currentDistanceText: SpannableString? = null
+    private var instructionText: String? = null
+    private var currentManeuverId = 0
 
-  private static final int INTENT_FLAGS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
-          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE :
-          PendingIntent.FLAG_UPDATE_CURRENT;
-
-  private NotificationCompat.Builder notificationBuilder;
-  private NotificationManager notificationManager;
-  private Notification notification;
-  private RemoteViews collapsedNotificationRemoteViews;
-  private RemoteViews expandedNotificationRemoteViews;
-  private MapLibreNavigation mapLibreNavigation;
-  private SpannableString currentDistanceText;
-  private DistanceFormatter distanceFormatter;
-  private String instructionText;
-  private int currentManeuverId;
-  private boolean isTwentyFourHourFormat;
-  private String etaFormat;
-
-  private BroadcastReceiver endNavigationBtnReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(final Context context, final Intent intent) {
-      MapLibreNavigationNotification.this.onEndNavigationBtnClick();
+    private val endNavigationBtnReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            this@MapLibreNavigationNotification.onEndNavigationBtnClick()
+        }
     }
-  };
 
-  MapLibreNavigationNotification(Context context, MapLibreNavigation mapLibreNavigation) {
-    initialize(context, mapLibreNavigation);
-  }
-
-  @Override
-  public Notification getNotification() {
-    return notification;
-  }
-
-  @Override
-  public int getNotificationId() {
-    return NavigationConstants.NAVIGATION_NOTIFICATION_ID;
-  }
-
-  @Override
-  public void updateNotification(RouteProgress routeProgress) {
-    updateNotificationViews(routeProgress);
-  }
-
-  @Override
-  public void onNavigationStopped(Context context) {
-    unregisterReceiver(context);
-  }
-
-  private void initialize(Context context, MapLibreNavigation mapLibreNavigation) {
-    this.mapLibreNavigation = mapLibreNavigation;
-    etaFormat = context.getString(R.string.eta_format);
-    initializeDistanceFormatter(context, mapLibreNavigation);
-    notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-    isTwentyFourHourFormat = DateFormat.is24HourFormat(context);
-    createNotificationChannel(context);
-    buildNotification(context);
-    registerReceiver(context);
-  }
-
-  private void initializeDistanceFormatter(Context context, MapLibreNavigation mapLibreNavigation) {
-    RouteOptions routeOptions = mapLibreNavigation.getRoute().routeOptions();
-    LocaleUtils localeUtils = new LocaleUtils();
-    String language = localeUtils.inferDeviceLanguage(context);
-    String unitType = localeUtils.getUnitTypeForDeviceLocale(context);
-    if (routeOptions != null) {
-      language = routeOptions.language();
-      unitType = routeOptions.voiceUnits();
+    init {
+        createNotificationChannel(context)
+        buildNotification(context)
+        registerReceiver(context)
     }
-    MapLibreNavigationOptions mapLibreNavigationOptions = mapLibreNavigation.options();
-    distanceFormatter = new DistanceFormatter(context, language, unitType, mapLibreNavigationOptions.roundingIncrement());
-  }
 
-  private void createNotificationChannel(Context context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationChannel notificationChannel = new NotificationChannel(
-        NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL, context.getString(R.string.channel_name),
-        NotificationManager.IMPORTANCE_LOW);
-      notificationManager.createNotificationChannel(notificationChannel);
+    override fun getNotification(): Notification {
+        return notification!!
     }
-  }
 
-  private void buildNotification(Context context) {
-    collapsedNotificationRemoteViews = new RemoteViews(context.getPackageName(),
-      R.layout.collapsed_navigation_notification_layout);
-    expandedNotificationRemoteViews = new RemoteViews(context.getPackageName(),
-      R.layout.expanded_navigation_notification_layout);
-
-    PendingIntent pendingOpenIntent = createPendingOpenIntent(context);
-    // Will trigger endNavigationBtnReceiver when clicked
-    PendingIntent pendingCloseIntent = createPendingCloseIntent(context);
-    expandedNotificationRemoteViews.setOnClickPendingIntent(R.id.endNavigationBtn, pendingCloseIntent);
-
-    // Sets up the top bar notification
-    notificationBuilder = new NotificationCompat.Builder(context, NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL)
-      .setContentIntent(pendingOpenIntent)
-      .setCategory(NotificationCompat.CATEGORY_SERVICE)
-      .setPriority(NotificationCompat.PRIORITY_MAX)
-      .setSmallIcon(R.drawable.ic_navigation)
-      .setCustomContentView(collapsedNotificationRemoteViews)
-      .setCustomBigContentView(expandedNotificationRemoteViews)
-      .setOngoing(true);
-
-    notification = notificationBuilder.build();
-  }
-
-  private PendingIntent createPendingOpenIntent(Context context) {
-    PackageManager pm = context.getPackageManager();
-    Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
-    intent.setPackage(null);
-    intent.setAction(OPEN_NAVIGATION_ACTION);
-    return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS);
-  }
-
-  private void registerReceiver(Context context) {
-    if (context != null) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION), Context.RECEIVER_NOT_EXPORTED);
-      } else {
-        context.registerReceiver(endNavigationBtnReceiver, new IntentFilter(END_NAVIGATION_ACTION));
-      }
+    override fun getNotificationId(): Int {
+        return NavigationConstants.NAVIGATION_NOTIFICATION_ID
     }
-  }
 
-  /**
-   * With each location update and new routeProgress, the notification is checked and updated if any
-   * information has changed.
-   *
-   * @param routeProgress the latest RouteProgress object
-   */
-  private void updateNotificationViews(RouteProgress routeProgress) {
-    updateInstructionText(routeProgress.currentLegProgress().currentStep());
-    updateDistanceText(routeProgress);
-    updateArrivalTime(routeProgress);
-    LegStep step = routeProgress.currentLegProgress().upComingStep() != null
-      ? routeProgress.currentLegProgress().upComingStep()
-      : routeProgress.currentLegProgress().currentStep();
-    updateManeuverImage(step);
-
-    notificationManager.notify(NavigationConstants.NAVIGATION_NOTIFICATION_ID, notificationBuilder.build());
-  }
-
-  private void unregisterReceiver(Context context) {
-    if (context != null) {
-      context.unregisterReceiver(endNavigationBtnReceiver);
+    override fun updateNotification(routeProgress: RouteProgress) {
+        updateNotificationViews(routeProgress)
     }
-    if (notificationManager != null) {
-      notificationManager.cancel(NavigationConstants.NAVIGATION_NOTIFICATION_ID);
+
+    override fun onNavigationStopped(context: Context) {
+        unregisterReceiver(context)
     }
-  }
 
-  private void updateInstructionText(LegStep step) {
-    if (hasInstructions(step) && (instructionText == null || newInstructionText(step))) {
-      instructionText = step.bannerInstructions().get(0).primary().text();
-      collapsedNotificationRemoteViews.setTextViewText(R.id.notificationInstructionText, instructionText);
-      expandedNotificationRemoteViews.setTextViewText(R.id.notificationInstructionText, instructionText);
+    private fun initializeDistanceFormatter(
+        context: Context,
+        mapLibreNavigation: MapLibreNavigation
+    ): DistanceFormatter {
+        val routeOptions = mapLibreNavigation.route?.routeOptions
+        val localeUtils = LocaleUtils()
+        val language: String = routeOptions?.language ?: localeUtils.inferDeviceLanguage(context)
+        val unitType: String =
+            routeOptions?.voiceUnits ?: localeUtils.getUnitTypeForDeviceLocale(context)
+
+        return DistanceFormatter(
+            context,
+            language,
+            unitType,
+            mapLibreNavigation.options.roundingIncrement
+        )
     }
-  }
 
-  private boolean hasInstructions(LegStep step) {
-    return step.bannerInstructions() != null && !step.bannerInstructions().isEmpty();
-  }
+    private fun createNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL,
+                context.getString(R.string.channel_name),
+                NotificationManager.IMPORTANCE_LOW
+            )
 
-  private boolean newInstructionText(LegStep step) {
-    return !instructionText.equals(step.bannerInstructions().get(0).primary().text());
-  }
-
-  private void updateDistanceText(RouteProgress routeProgress) {
-    if (currentDistanceText == null || newDistanceText(routeProgress)) {
-      currentDistanceText = distanceFormatter.formatDistance(
-        routeProgress.currentLegProgress().currentStepProgress().distanceRemaining());
-      collapsedNotificationRemoteViews.setTextViewText(R.id.notificationDistanceText, currentDistanceText);
-      expandedNotificationRemoteViews.setTextViewText(R.id.notificationDistanceText, currentDistanceText);
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
-  }
 
-  private boolean newDistanceText(RouteProgress routeProgress) {
-    return currentDistanceText != null
-      && !currentDistanceText.toString().equals(distanceFormatter.formatDistance(
-      routeProgress.currentLegProgress().currentStepProgress().distanceRemaining()).toString());
-  }
+    private fun buildNotification(context: Context) {
+        val pendingOpenIntent = createPendingOpenIntent(context)
+        // Will trigger endNavigationBtnReceiver when clicked
+        val pendingCloseIntent = createPendingCloseIntent(context)
+        expandedNotificationRemoteViews.setOnClickPendingIntent(
+            R.id.endNavigationBtn,
+            pendingCloseIntent
+        )
 
-  private void updateArrivalTime(RouteProgress routeProgress) {
-    MapLibreNavigationOptions options = mapLibreNavigation.options();
-    Calendar time = Calendar.getInstance();
-    double durationRemaining = routeProgress.durationRemaining();
-    int timeFormatType = options.timeFormatType();
-    String arrivalTime = TimeFormatter.formatTime(time, durationRemaining, timeFormatType, isTwentyFourHourFormat);
-    String formattedArrivalTime = String.format(etaFormat, arrivalTime);
-    collapsedNotificationRemoteViews.setTextViewText(R.id.notificationArrivalText, formattedArrivalTime);
-    expandedNotificationRemoteViews.setTextViewText(R.id.notificationArrivalText, formattedArrivalTime);
-  }
+        // Sets up the top bar notification
+        val notificationBuilder =
+            NotificationCompat.Builder(context, NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL)
+                .setContentIntent(pendingOpenIntent)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setSmallIcon(R.drawable.ic_navigation)
+                .setCustomContentView(collapsedNotificationRemoteViews)
+                .setCustomBigContentView(expandedNotificationRemoteViews)
+                .setOngoing(true)
 
-  private void updateManeuverImage(LegStep step) {
-    if (newManeuverId(step)) {
-      int maneuverResource = ManeuverUtils.getManeuverResource(step);
-      currentManeuverId = maneuverResource;
-      collapsedNotificationRemoteViews.setImageViewResource(R.id.maneuverImage, maneuverResource);
-      expandedNotificationRemoteViews.setImageViewResource(R.id.maneuverImage, maneuverResource);
+        notification = notificationBuilder.build()
     }
-  }
 
-  private boolean newManeuverId(LegStep step) {
-    return currentManeuverId != ManeuverUtils.getManeuverResource(step);
-  }
-
-  private PendingIntent createPendingCloseIntent(Context context) {
-    Intent endNavigationBtn = new Intent(END_NAVIGATION_ACTION);
-    return PendingIntent.getBroadcast(context, 0, endNavigationBtn, INTENT_FLAGS);
-  }
-
-  private void onEndNavigationBtnClick() {
-    if (mapLibreNavigation != null) {
-      mapLibreNavigation.stopNavigation();
+    private fun createPendingOpenIntent(context: Context): PendingIntent {
+        val pm = context.packageManager
+        val intent = pm.getLaunchIntentForPackage(context.packageName)
+        intent!!.setPackage(null)
+        intent.setAction(NavigationNotification.OPEN_NAVIGATION_ACTION)
+        return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS)
     }
-  }
+
+    private fun registerReceiver(context: Context) {
+        ContextCompat.registerReceiver(
+            context,
+            endNavigationBtnReceiver,
+            IntentFilter(NavigationNotification.END_NAVIGATION_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    /**
+     * With each location update and new routeProgress, the notification is checked and updated if any
+     * information has changed.
+     *
+     * @param routeProgress the latest RouteProgress object
+     */
+    private fun updateNotificationViews(routeProgress: RouteProgress) {
+        updateInstructionText(routeProgress.currentLegProgress.currentStep)
+        updateDistanceText(routeProgress)
+        updateArrivalTime(routeProgress)
+        val step = if (routeProgress.currentLegProgress.upComingStep != null)
+            routeProgress.currentLegProgress.upComingStep
+        else
+            routeProgress.currentLegProgress.currentStep
+        updateManeuverImage(step!!)
+
+        notificationManager.notify(
+            NavigationConstants.NAVIGATION_NOTIFICATION_ID,
+            notification
+        )
+    }
+
+    private fun unregisterReceiver(context: Context) {
+        context.unregisterReceiver(endNavigationBtnReceiver)
+        notificationManager.cancel(NavigationConstants.NAVIGATION_NOTIFICATION_ID)
+    }
+
+    private fun updateInstructionText(step: LegStep) {
+        if (hasInstructions(step) && (instructionText == null || newInstructionText(step))) {
+            instructionText = step.bannerInstructions!![0].primary.text
+            collapsedNotificationRemoteViews.setTextViewText(
+                R.id.notificationInstructionText,
+                instructionText
+            )
+            expandedNotificationRemoteViews.setTextViewText(
+                R.id.notificationInstructionText,
+                instructionText
+            )
+        }
+    }
+
+    private fun hasInstructions(step: LegStep): Boolean {
+        return !step.bannerInstructions.isNullOrEmpty()
+    }
+
+    private fun newInstructionText(step: LegStep): Boolean {
+        return instructionText != step.bannerInstructions!![0].primary.text
+    }
+
+    private fun updateDistanceText(routeProgress: RouteProgress) {
+        if (currentDistanceText == null || newDistanceText(routeProgress)) {
+            currentDistanceText = distanceFormatter.formatDistance(
+                routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+            )
+            collapsedNotificationRemoteViews.setTextViewText(
+                R.id.notificationDistanceText,
+                currentDistanceText
+            )
+            expandedNotificationRemoteViews.setTextViewText(
+                R.id.notificationDistanceText,
+                currentDistanceText
+            )
+        }
+    }
+
+    private fun newDistanceText(routeProgress: RouteProgress): Boolean {
+        return currentDistanceText != null && currentDistanceText.toString() != distanceFormatter.formatDistance(
+            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+        ).toString()
+    }
+
+    private fun updateArrivalTime(routeProgress: RouteProgress) {
+        val options = mapLibreNavigation.options
+        val time = Calendar.getInstance()
+        val durationRemaining = routeProgress.durationRemaining
+        val timeFormatType = options.timeFormatType
+        val arrivalTime = TimeFormatter.formatTime(
+            time,
+            durationRemaining,
+            timeFormatType,
+            isTwentyFourHourFormat
+        )
+        val formattedArrivalTime = String.format(etaFormat, arrivalTime)
+        collapsedNotificationRemoteViews.setTextViewText(
+            R.id.notificationArrivalText,
+            formattedArrivalTime
+        )
+        expandedNotificationRemoteViews.setTextViewText(
+            R.id.notificationArrivalText,
+            formattedArrivalTime
+        )
+    }
+
+    private fun updateManeuverImage(step: LegStep) {
+        if (newManeuverId(step)) {
+            val maneuverResource = maneuverUtils.getManeuverResource(step)
+            currentManeuverId = maneuverResource
+            collapsedNotificationRemoteViews.setImageViewResource(
+                R.id.maneuverImage,
+                maneuverResource
+            )
+            expandedNotificationRemoteViews.setImageViewResource(
+                R.id.maneuverImage,
+                maneuverResource
+            )
+        }
+    }
+
+    private fun newManeuverId(step: LegStep): Boolean {
+        return currentManeuverId != maneuverUtils.getManeuverResource(step)
+    }
+
+    private fun createPendingCloseIntent(context: Context): PendingIntent {
+        val endNavigationBtn = Intent(NavigationNotification.END_NAVIGATION_ACTION)
+        return PendingIntent.getBroadcast(context, 0, endNavigationBtn, INTENT_FLAGS)
+    }
+
+    private fun onEndNavigationBtnClick() {
+        mapLibreNavigation.stopNavigation()
+    }
+
+    companion object {
+        private val INTENT_FLAGS =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+    }
 }

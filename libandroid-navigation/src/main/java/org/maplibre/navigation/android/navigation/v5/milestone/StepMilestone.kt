@@ -1,73 +1,47 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
-import org.maplibre.navigation.android.navigation.v5.exception.NavigationException;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
 
 /**
  * Using a Step Milestone will result in
- * {@link MilestoneEventListener#onMilestoneEvent(RouteProgress, String, Milestone)}
+ * [MilestoneEventListener.onMilestoneEvent]
  * being invoked every step if the condition validation returns true.
  *
  * @since 0.4.0
  */
-public class StepMilestone extends Milestone {
+open class StepMilestone(
+    identifier: Int,
+    instruction: Instruction? = null,
+    trigger: Trigger.Statement? = null,
+) : Milestone(identifier, instruction, trigger) {
+    private var called = false
 
-  private Builder builder;
-  private boolean called;
+    override fun isOccurring(
+        previousRouteProgress: RouteProgress?,
+        routeProgress: RouteProgress
+    ): Boolean {
+        return trigger?.let { trigger ->
+            if (called) {
+                // Determine if the step index has changed and set called accordingly. This prevents multiple calls to
+                // onMilestoneEvent per Step.
+                if (previousRouteProgress?.currentLegProgress?.stepIndex != routeProgress.currentLegProgress.stepIndex
+                ) {
+                    called = false
+                } else {
+                    // If milestone's been called already on current step, no need to check triggers.
+                    return@let false
+                }
+            }
 
-  private StepMilestone(Builder builder) {
-    super(builder);
-    this.builder = builder;
-  }
+            called = trigger.isOccurring(
+                TriggerProperty.getSparseArray(
+                    previousRouteProgress, routeProgress
+                )
+            )
 
-  @Override
-  public boolean isOccurring(RouteProgress previousRouteProgress, RouteProgress routeProgress) {
-
-    // Determine if the step index has changed and set called accordingly. This prevents multiple calls to
-    // onMilestoneEvent per Step.
-    if (previousRouteProgress.currentLegProgress().stepIndex()
-      != routeProgress.currentLegProgress().stepIndex()) {
-      called = false;
+            return@let called
+        } ?: false
     }
-    // If milestone's been called already on current step, no need to check triggers.
-    if (called) {
-      return false;
-    }
-    if (builder.getTrigger().isOccurring(
-      TriggerProperty.getSparseArray(previousRouteProgress, routeProgress))) {
-      called = true;
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Build a new {@link StepMilestone}
-   *
-   * @since 0.4.0
-   */
-  public static final class Builder extends Milestone.Builder {
-
-    private Trigger.Statement trigger;
-
-    public Builder() {
-      super();
-    }
-
-    @Override
-    public Builder setTrigger(Trigger.Statement trigger) {
-      this.trigger = trigger;
-      return this;
-    }
-
-    @Override
-    Trigger.Statement getTrigger() {
-      return trigger;
-    }
-
-    @Override
-    public StepMilestone build() throws NavigationException {
-      return new StepMilestone(this);
-    }
-  }
 }

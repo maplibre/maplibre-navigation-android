@@ -1,89 +1,80 @@
-package org.maplibre.navigation.android.navigation.v5.models;
+package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.StringDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Constants for the {@link StepManeuver#modifier()}.
+ * Constants for the [StepManeuver.modifier].
  *
  * @since 5.2.0
  */
-public final class ManeuverModifier {
+object ManeuverModifier {
 
-  /**
-   * Indicates "uturn" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String UTURN = "uturn";
+    @Serializable
+    enum class Type(val text: String) {
 
-  /**
-   * Indicates "sharp right" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String SHARP_RIGHT = "sharp right";
+        /**
+         * Indicates "uturn" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("uturn")
+        UTURN("uturn"),
 
-  /**
-   * Indicates "right" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String RIGHT = "right";
+        /**
+         * Indicates "sharp right" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("sharp right")
+        SHARP_RIGHT("sharp right"),
 
-  /**
-   * Indicates "slight right" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String SLIGHT_RIGHT = "slight right";
+        /**
+         * Indicates "right" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("right")
+        RIGHT("right"),
 
-  /**
-   * Indicates "straight" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String STRAIGHT = "straight";
+        /**
+         * Indicates "slight right" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("slight right")
+        SLIGHT_RIGHT("slight right"),
 
-  /**
-   * Indicates "slight left" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String SLIGHT_LEFT = "slight left";
+        /**
+         * Indicates "straight" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("straight")
+        STRAIGHT("straight"),
 
-  /**
-   * Indicates "left" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String LEFT = "left";
+        /**
+         * Indicates "slight left" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("slight left")
+        SLIGHT_LEFT("slight left"),
 
-  /**
-   * Indicates "sharp left" maneuver modifier.
-   *
-   * @since 5.2.0
-   */
-  public static final String SHARP_LEFT = "sharp left";
+        /**
+         * Indicates "left" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("left")
+        LEFT("left"),
 
-  /**
-   * Representation of ManeuverModifier in form of logical types.
-   *
-   * @since 5.2.1
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef({
-          ManeuverModifier.UTURN,
-          ManeuverModifier.SHARP_RIGHT,
-          ManeuverModifier.RIGHT,
-          ManeuverModifier.SLIGHT_RIGHT,
-          ManeuverModifier.STRAIGHT,
-          ManeuverModifier.SLIGHT_LEFT,
-          ManeuverModifier.LEFT,
-          ManeuverModifier.SHARP_LEFT
-  })
-  public @interface Type {
-  }
+        /**
+         * Indicates "sharp left" maneuver modifier.
+         *
+         * @since 5.2.0
+         */
+        @SerialName("sharp left")
+        SHARP_LEFT("sharp left"),
+    }
 }

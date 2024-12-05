@@ -71,7 +71,7 @@ class FeatureProcessingTask extends Thread {
   private FeatureCollection createRouteFeatureCollection(DirectionsRoute route, boolean isPrimary) {
     final List<Feature> features = new ArrayList<>();
 
-    LineString routeGeometry = LineString.fromPolyline(route.geometry(), Constants.PRECISION_6);
+    LineString routeGeometry = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
     Feature routeFeature = Feature.fromGeometry(routeGeometry);
     routeFeature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, isPrimary);
     features.add(routeFeature);
@@ -85,11 +85,11 @@ class FeatureProcessingTask extends Thread {
   private List<Feature> buildCongestionFeaturesFromRoute(DirectionsRoute route, LineString lineString,
                                                          boolean isPrimary) {
     final List<Feature> features = new ArrayList<>();
-    for (RouteLeg leg : route.legs()) {
-      if (leg.annotation() != null && leg.annotation().congestion() != null) {
-        for (int i = 0; i < leg.annotation().congestion().size(); i++) {
+    for (RouteLeg leg : route.getLegs()) {
+      if (leg.getAnnotation() != null && leg.getAnnotation().getCongestion() != null) {
+        for (int i = 0; i < leg.getAnnotation().getCongestion().size(); i++) {
           // See https://github.com/mapbox/mapbox-navigation-android/issues/353
-          if (leg.annotation().congestion().size() + 1 <= lineString.coordinates().size()) {
+          if (leg.getAnnotation().getCongestion().size() + 1 <= lineString.coordinates().size()) {
 
             List<Point> points = new ArrayList<>();
             points.add(lineString.coordinates().get(i));
@@ -97,7 +97,7 @@ class FeatureProcessingTask extends Thread {
 
             LineString congestionLineString = LineString.fromLngLats(points);
             Feature feature = Feature.fromGeometry(congestionLineString);
-            String congestionValue = leg.annotation().congestion().get(i);
+            String congestionValue = leg.getAnnotation().getCongestion().get(i);
             feature.addStringProperty(RouteConstants.CONGESTION_KEY, congestionValue);
             feature.addBooleanProperty(PRIMARY_ROUTE_PROPERTY_KEY, isPrimary);
             features.add(feature);

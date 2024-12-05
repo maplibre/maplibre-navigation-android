@@ -1,80 +1,75 @@
-package org.maplibre.navigation.android.navigation.v5.milestone;
+package org.maplibre.navigation.android.navigation.v5.milestone
 
 /**
  * Extracted operation methods are found in this class and are fundamental to how Triggers work.
  *
  * @since 0.4.0
  */
-class Operation {
+object Operation {
 
-  private Operation() {
-    // Private constructor to prevent initialization of class.
-  }
-
-  static boolean greaterThan(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return valueOne[0].doubleValue() > valueOne[1].doubleValue();
-      } else {
-        return valueOne[0].doubleValue() <= valueOne[1].doubleValue();
-      }
+    fun greaterThan(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0].toDouble() > valueOne[1].toDouble()
+            } else {
+                valueOne[0].toDouble() <= valueOne[1].toDouble()
+            }
+        }
+        return valueOne[0].toDouble() > valueTwo.toDouble()
     }
-    return valueOne[0].doubleValue() > valueTwo.doubleValue();
-  }
 
-  static boolean lessThan(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return valueOne[0].doubleValue() < valueOne[1].doubleValue();
-      } else {
-        return valueOne[0].doubleValue() >= valueOne[1].doubleValue();
-      }
+    fun lessThan(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0].toDouble() < valueOne[1].toDouble()
+            } else {
+                valueOne[0].toDouble() >= valueOne[1].toDouble()
+            }
+        }
+        return valueOne[0].toDouble() < valueTwo.toDouble()
     }
-    return valueOne[0].doubleValue() < valueTwo.doubleValue();
-  }
 
-  static boolean notEqual(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return !valueOne[0].equals(valueOne[1]);
-      } else {
-        return valueOne[0].equals(valueOne[1]);
-      }
+    fun notEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0] != valueOne[1]
+            } else {
+                valueOne[0] == valueOne[1]
+            }
+        }
+        return valueOne[0] != valueTwo
     }
-    return !valueOne[0].equals(valueTwo);
-  }
 
-  static boolean equal(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return valueOne[0].equals(valueOne[1]);
-      } else {
-        return !valueOne[0].equals(valueOne[1]);
-      }
+    fun equal(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0] == valueOne[1]
+            } else {
+                valueOne[0] != valueOne[1]
+            }
+        }
+        return valueOne[0] == valueTwo
     }
-    return valueOne[0].equals(valueTwo);
-  }
 
-  static boolean greaterThanEqual(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return valueOne[0].doubleValue() >= valueOne[1].doubleValue();
-      } else {
-        return valueOne[0].doubleValue() < valueOne[1].doubleValue();
-      }
+    fun greaterThanEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0].toDouble() >= valueOne[1].toDouble()
+            } else {
+                valueOne[0].toDouble() < valueOne[1].toDouble()
+            }
+        }
+        return valueOne[0].toDouble() >= valueTwo.toDouble()
     }
-    return valueOne[0].doubleValue() >= valueTwo.doubleValue();
-  }
 
-  static boolean lessThanEqual(Number[] valueOne, Number valueTwo) {
-    if (valueOne.length > 1) {
-      if (valueTwo.equals(TriggerProperty.TRUE)) {
-        return valueOne[0].doubleValue() <= valueOne[1].doubleValue();
-      } else {
-        return valueOne[0].doubleValue() > valueOne[1].doubleValue();
-      }
+    fun lessThanEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
+        if (valueOne.size > 1) {
+            return if (valueTwo == TriggerProperty.TRUE) {
+                valueOne[0].toDouble() <= valueOne[1].toDouble()
+            } else {
+                valueOne[0].toDouble() > valueOne[1].toDouble()
+            }
+        }
+        return valueOne[0].toDouble() <= valueTwo.toDouble()
     }
-    return valueOne[0].doubleValue() <= valueTwo.doubleValue();
-  }
-
 }
