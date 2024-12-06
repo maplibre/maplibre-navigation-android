@@ -177,7 +177,6 @@ class MapRouteLine {
         Timber.d("Style Already exists");
       }
     }
-
     // Waypoint attributes
     int originWaypointIcon = typedArray.getResourceId(
             R.styleable.NavigationMapRoute_originWaypointIcon, R.drawable.ic_route_origin);

@@ -18,6 +18,7 @@ import androidx.lifecycle.LifecycleRegistry
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.core.utils.TextUtils
 import okhttp3.Request
+import org.maplibre.android.MapLibre
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -280,6 +281,10 @@ class NavigationRouteView @JvmOverloads constructor(
                 baseCameraPosition?.let {
                     mapboxMap.cameraPosition = it
                 }
+                navigationMapRoute = NavigationMapRoute(
+                    mapView!!,
+                    mapboxMap
+                )
             }
         } else {
             mapboxMap.getStyle {
@@ -287,12 +292,12 @@ class NavigationRouteView @JvmOverloads constructor(
                 baseCameraPosition?.let {
                     mapboxMap.cameraPosition = it
                 }
+                navigationMapRoute = NavigationMapRoute(
+                    mapView!!,
+                    mapboxMap
+                )
             }
         }
-        navigationMapRoute = NavigationMapRoute(
-            mapView!!,
-            mapboxMap
-        )
         onNavigationReadyCallback!!.onMapReadyCallback()
     }
 
