@@ -471,20 +471,21 @@ object NavigationHelper {
      */
     @JvmStatic
     fun isUserOffRoute(
-        navigationLocationUpdate: NavigationLocationUpdate,
+        mapLibreNavigation: MapLibreNavigation,
+        location: Location,
         routeProgress: RouteProgress,
         callback: OffRouteCallback
     ): Boolean {
-        val options = navigationLocationUpdate.mapLibreNavigation.options
+        val options = mapLibreNavigation.options
         if (!options.enableOffRouteDetection) {
             return false
         }
 
-        val offRouteEngine = navigationLocationUpdate.mapLibreNavigation.offRouteEngine
+        val offRouteEngine = mapLibreNavigation.offRouteEngine
         (offRouteEngine as? OffRouteDetector)?.callback = callback
 
         return offRouteEngine.isUserOffRoute(
-            navigationLocationUpdate.location,
+            location,
             routeProgress,
             options
         )

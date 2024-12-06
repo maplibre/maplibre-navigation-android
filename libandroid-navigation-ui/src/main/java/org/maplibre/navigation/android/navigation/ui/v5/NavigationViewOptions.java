@@ -11,8 +11,8 @@ import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationList
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.RouteListener;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.SpeechAnnouncementListener;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
+import org.maplibre.navigation.android.navigation.v5.location.LocationEngine;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.android.location.engine.LocationEngine;
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;

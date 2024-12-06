@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.example
 
-import android.location.Location
+import android.location.Location as AndroidLocation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
@@ -22,6 +22,7 @@ import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
@@ -79,7 +80,9 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         this.mapLibreMap = mapLibreMap
-        mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
+        mapLibreMap.setStyle(
+            Style.Builder().fromUri(getString(R.string.map_style_light))
+        ) { style ->
             enableLocationComponent(style)
             navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapLibreMap)
             calculateRouteAndStartNavigation()
@@ -170,8 +173,17 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
         // Update own location with the snapped location
-        locationComponent?.forceLocationUpdate(location)
+        //TODO fabi755
+        locationComponent?.forceLocationUpdate(
+            AndroidLocation("snapped").apply {
+                latitude = location.latitude
+                longitude = location.longitude
+                bearing = location.bearing ?: 0f
+                accuracy = location.accuracyMeters ?: 0.0f
+            }
+        )
     }
+
 
     override fun onResume() {
         super.onResume()

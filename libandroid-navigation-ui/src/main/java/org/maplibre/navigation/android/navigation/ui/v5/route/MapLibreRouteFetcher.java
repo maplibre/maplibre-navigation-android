@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import android.content.Context;
-import android.location.Location;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -74,7 +74,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
             return null;
         }
         Point origin = Point.fromLngLat(location.getLongitude(), location.getLatitude());
-        Double bearing = location.hasBearing() ? Float.valueOf(location.getBearing()).doubleValue() : null;
+        Double bearing = location.getBearing() != null ? Float.valueOf(location.getBearing()).doubleValue() : null;
         RouteOptions options = progress.getDirectionsRoute().getRouteOptions();
         NavigationRoute.Builder builder = NavigationRoute.builder(context)
                 .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)

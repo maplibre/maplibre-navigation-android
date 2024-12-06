@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +8,7 @@ import org.maplibre.geojson.Geometry;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.MultiLineString;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;

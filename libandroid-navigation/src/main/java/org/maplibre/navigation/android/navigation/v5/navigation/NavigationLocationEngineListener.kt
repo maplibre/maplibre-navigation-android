@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import androidx.core.util.toHalf
 import org.maplibre.android.location.engine.LocationEngineCallback
 import org.maplibre.android.location.engine.LocationEngineResult
 import android.location.Location as AndroidLocation

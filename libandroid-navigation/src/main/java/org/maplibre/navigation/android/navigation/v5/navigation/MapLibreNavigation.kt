@@ -1,12 +1,16 @@
 package org.maplibre.navigation.android.navigation.v5.navigation
 
-import android.content.ComponentName
+//import android.content.ComponentName
+//import android.content.Context
+//import android.content.Intent
+//import android.content.ServiceConnection
+//import android.os.IBinder
+//import androidx.core.content.ContextCompat
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
-import android.os.IBinder
-import androidx.core.content.ContextCompat
-import org.maplibre.android.location.engine.LocationEngine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import org.maplibre.navigation.android.navigation.v5.location.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.location.engine.LocationEngineProvider
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
@@ -15,7 +19,6 @@ import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionM
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.BANNER_INSTRUCTION_MILESTONE_ID
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationService.LocalBinder
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera
 import org.maplibre.navigation.android.navigation.v5.navigation.camera.SimpleCamera
 import org.maplibre.navigation.android.navigation.v5.offroute.OffRoute
@@ -60,7 +63,7 @@ import timber.log.Timber
  * @see MapLibreNavigationOptions
  */
 open class MapLibreNavigation @JvmOverloads constructor(
-    private val applicationContext: Context,
+    applicationContext: Context,
     val options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
@@ -86,17 +89,21 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * - Setting the location engine interval to 0 will result in location updates occurring as
      *   quickly as possible within the fastest interval limit placed on it.
      */
-    locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(
-        applicationContext
-    ),
+    locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(applicationContext),
     var cameraEngine: Camera = SimpleCamera(),
     var snapEngine: Snap = SnapToRoute(),
     var offRouteEngine: OffRoute = OffRouteDetector(),
     var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
     val routeUtils: RouteUtils = RouteUtils(),
-) : ServiceConnection {
+) {
 
-    private var navigationService: NavigationService? = null
+    private val navigationRunnerJob = Job()
+    private var navigationRunner: NavigationRunner = NavigationRunner(
+        this, //TODO fabi755
+        routeUtils,
+        CoroutineScope(Dispatchers.Default + navigationRunnerJob) //TODO fabi755: which disptacher?
+    )
+//    private var navigationService: NavigationService? = null
 
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
@@ -125,7 +132,8 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var locationEngine: LocationEngine = locationEngine
         set(value) {
             field = value
-            navigationService?.updateLocationEngine(locationEngine)
+            //TODO fabi755
+//            navigationRunner?.updateLocationEngine(locationEngine)
         }
 
     private val mutableMilestones: MutableSet<Milestone> = mutableSetOf<Milestone>()
@@ -246,15 +254,18 @@ open class MapLibreNavigation @JvmOverloads constructor(
         this.route = directionsRoute
         Timber.d("MapLibreNavigation startNavigation called.")
 
-        // Start the NavigationService is not done before.
-        if (navigationService == null) {
-            val intent = Intent(applicationContext, NavigationService::class.java)
-            ContextCompat.startForegroundService(applicationContext, intent)
-            applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
+        navigationRunner.startNavigation(directionsRoute)
+        eventDispatcher.onNavigationEvent(true)
 
-            // Send navigation event running: true
-            eventDispatcher.onNavigationEvent(true)
-        }
+//        // Start the NavigationService is not done before.
+//        if (navigationService == null) {
+//            val intent = Intent(applicationContext, NavigationService::class.java)
+//            ContextCompat.startForegroundService(applicationContext, intent)
+//            applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
+//
+//            // Send navigation event running: true
+//            eventDispatcher.onNavigationEvent(true)
+//        }
     }
 
     /**
@@ -275,13 +286,16 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun stopNavigation() {
         Timber.d("MapLibreNavigation stopNavigation called")
 
-        navigationService?.let { navigationService ->
-            applicationContext.unbindService(this)
-            navigationService.endNavigation()
-            navigationService.stopSelf()
-            this@MapLibreNavigation.navigationService = null
-            eventDispatcher.onNavigationEvent(false)
-        }
+        navigationRunner.stopNavigation()
+        eventDispatcher.onNavigationEvent(false)
+
+//        navigationService?.let { navigationService ->
+//            applicationContext.unbindService(this)
+//            navigationService.endNavigation()
+//            navigationService.stopSelf()
+//            this@MapLibreNavigation.navigationService = null
+//            eventDispatcher.onNavigationEvent(false)
+//        }
     }
 
     // Listeners
@@ -482,17 +496,17 @@ open class MapLibreNavigation @JvmOverloads constructor(
         eventDispatcher.removeFasterRouteListener(fasterRouteListener)
     }
 
-    override fun onServiceConnected(name: ComponentName, service: IBinder) {
-        Timber.d("Connected to service.")
-
-        (service as LocalBinder).service?.let { navigationService ->
-            navigationService.startNavigation(this, routeUtils)
-            this@MapLibreNavigation.navigationService = navigationService
-        } ?: throw IllegalStateException("NavigationService must not be null")
-    }
-
-    override fun onServiceDisconnected(name: ComponentName) {
-        Timber.d("Disconnected from service.")
-        navigationService = null
-    }
+//    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+//        Timber.d("Connected to service.")
+//
+//        (service as LocalBinder).service?.let { navigationService ->
+//            navigationService.startNavigation(this, routeUtils)
+//            this@MapLibreNavigation.navigationService = navigationService
+//        } ?: throw IllegalStateException("NavigationService must not be null")
+//    }
+//
+//    override fun onServiceDisconnected(name: ComponentName) {
+//        Timber.d("Disconnected from service.")
+//        navigationService = null
+//    }
 }

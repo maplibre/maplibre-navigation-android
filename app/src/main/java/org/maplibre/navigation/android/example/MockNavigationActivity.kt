@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -36,6 +35,7 @@ import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityMockNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.instruction.Instruction
+import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.milestone.RouteMilestone
@@ -84,19 +84,21 @@ class MockNavigationActivity :
         }
 
         val context = applicationContext
-        val customNotification =
-            CustomNavigationNotification(
-                context
-            )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            customNotification.createNotificationChannel(this)
-        }
-        val options = MapLibreNavigationOptions(navigationNotification = customNotification)
+//        val customNotification =
+//            CustomNavigationNotification(
+//                context
+//            )
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            customNotification.createNotificationChannel(this)
+//        }
+//        val options = MapLibreNavigationOptions(
+////            navigationNotification = customNotification
+//        )
 
         navigation =
             MapLibreNavigation(
                 this,
-                options
+//                options
             )
 
         navigation.addMilestone(
@@ -116,8 +118,8 @@ class MockNavigationActivity :
                 ),
             )
         )
-        customNotification.register(MyBroadcastReceiver(navigation), context)
-
+//        customNotification.register(MyBroadcastReceiver(navigation), context)
+//
         binding.startRouteButton.setOnClickListener {
             route?.let { route ->
                 binding.startRouteButton.visibility = View.INVISIBLE
@@ -198,7 +200,7 @@ class MockNavigationActivity :
             // Set the component's render mode
             it.renderMode = RenderMode.GPS
 
-            it.locationEngine = locationEngine
+//            it.locationEngine = locationEngine
         }
     }
 

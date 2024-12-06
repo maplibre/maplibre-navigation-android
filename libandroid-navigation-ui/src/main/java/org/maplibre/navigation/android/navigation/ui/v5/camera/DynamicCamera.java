@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.camera;
 
-import android.location.Location;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import androidx.annotation.NonNull;
 
 import org.maplibre.navigation.android.navigation.v5.models.LegStep;
@@ -136,7 +136,7 @@ public class DynamicCamera extends SimpleCamera {
       Point stepManeuverPoint = upComingStep.getManeuver().getLocation();
 
       List<LatLng> latLngs = new ArrayList<>();
-      LatLng currentLatLng = new LatLng(location);
+      LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
       LatLng maneuverLatLng = new LatLng(stepManeuverPoint.latitude(), stepManeuverPoint.longitude());
       latLngs.add(currentLatLng);
       latLngs.add(maneuverLatLng);

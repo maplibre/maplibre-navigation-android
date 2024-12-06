@@ -1,13 +1,11 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME;
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
@@ -20,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.geometry.LatLng;
@@ -202,7 +201,13 @@ public class NavigationMapLibreMap {
    * @param location to update the icon and query the map
    */
   public void updateLocation(Location location) {
-    locationComponent.forceLocationUpdate(location);
+    //TODO fabi755
+    android.location.Location androidLocation = new android.location.Location("force");
+   androidLocation.setLatitude(location.getLatitude());
+   androidLocation.setLongitude(location.getLongitude());
+    androidLocation.setBearing(location.getBearing() != null ? location.getBearing() : 0.0f);
+
+    locationComponent.forceLocationUpdate(androidLocation);
     updateMapWayNameWithLocation(location);
   }
 
@@ -732,7 +737,7 @@ public class NavigationMapLibreMap {
     if (mapWayName == null) {
       return;
     }
-    LatLng latLng = new LatLng(location);
+    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     PointF mapPoint = mapLibreMap.getProjection().toScreenLocation(latLng);
     mapWayName.updateWayNameWithPoint(mapPoint);
   }

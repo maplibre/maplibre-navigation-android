@@ -3,7 +3,6 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -31,6 +30,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMa
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMapInstanceState;
 import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView;
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.geojson.Point;

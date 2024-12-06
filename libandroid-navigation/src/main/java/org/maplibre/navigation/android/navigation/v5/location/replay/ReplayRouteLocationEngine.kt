@@ -1,17 +1,15 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.os.Handler
-import android.os.Looper
-import android.location.Location as AndroidLocation
-import org.maplibre.android.location.engine.LocationEngine
-import org.maplibre.android.location.engine.LocationEngineCallback
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import org.maplibre.android.location.engine.LocationEngineRequest
-import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.v5.location.Location
+import org.maplibre.navigation.android.navigation.v5.location.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 
 open class ReplayRouteLocationEngine : LocationEngine, Runnable {
@@ -26,14 +24,11 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     var lastLocation: Location? = null
         private set
 
-    private val callbackList = mutableListOf<LocationEngineCallback<LocationEngineResult>>()
+    private val callbackList = mutableListOf<Callback>()
     private val replayLocationListener = ReplayLocationListener { location ->
         lastLocation = location
-        //TODO: this needs converted to platform specific LocationEngineResult
-//            val result = LocationEngineResult.create(location)
-        val result = LocationEngineResult.create(location.toAndroidLocation())
         for (callback in callbackList) {
-            callback.onSuccess(result)
+            callback.onLocationUpdate(location)
         }
         mockedLocations.removeFirstOrNull()
     }
@@ -149,34 +144,17 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         dispatcher?.removeReplayLocationListener(replayLocationListener)
     }
 
-    @Throws(SecurityException::class)
-    override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
-        lastLocation?.let { lastLocation ->
-            callback.onSuccess(LocationEngineResult.create(lastLocation.toAndroidLocation()))
-        } ?: callback.onFailure(Exception("No last location"))
-    }
+    override fun listenToLocation(request: LocationEngineRequest): Flow<Location> = callbackFlow {
+        val callback = Callback { location ->
+            trySend(location)
+        }
 
-    @Throws(SecurityException::class)
-    override fun requestLocationUpdates(
-        request: LocationEngineRequest,
-        callback: LocationEngineCallback<LocationEngineResult>,
-        looper: Looper?
-    ) {
         callbackList.add(callback)
+        awaitClose { callbackList.remove(callback) }
     }
 
-    @Throws(SecurityException::class)
-    override fun requestLocationUpdates(
-        request: LocationEngineRequest,
-        pendingIntent: PendingIntent
-    ) {
-    }
-
-    override fun removeLocationUpdates(callback: LocationEngineCallback<LocationEngineResult>) {
-        callbackList.remove(callback)
-    }
-
-    override fun removeLocationUpdates(pendingIntent: PendingIntent) {
+    override suspend fun getLastLocation(): Location? {
+        return lastLocation
     }
 
     companion object {
@@ -195,12 +173,7 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         private const val REPLAY_ROUTE = "ReplayRouteLocation"
     }
 
-    fun Location.toAndroidLocation() = AndroidLocation(REPLAY_ROUTE).also { androidLoc ->
-        androidLoc.latitude = this.latitude
-        androidLoc.longitude = this.longitude
-        androidLoc.bearing = this.bearing ?: 0f
-        androidLoc.speed = this.speedMetersPerSeconds ?: 0f
-        androidLoc.accuracy = this.accuracyMeters ?: 0f
-        androidLoc.elapsedRealtimeNanos = this.elapsedRealtimeMilliseconds * 1_000_000
+    fun interface Callback {
+        fun onLocationUpdate(location: Location)
     }
 }

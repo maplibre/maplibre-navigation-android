@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.camera;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
-import android.location.Location;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

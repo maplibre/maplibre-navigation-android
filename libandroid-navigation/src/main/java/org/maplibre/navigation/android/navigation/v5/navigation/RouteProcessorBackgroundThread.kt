@@ -26,11 +26,11 @@ open class RouteProcessorBackgroundThread(
     override fun onLooperPrepared() {
         super.onLooperPrepared()
 
-        workerHandler = Handler(
-            looper, RouteProcessorHandlerCallback(
-                NavigationRouteProcessor(routeUtils), responseHandler, listener
-            )
-        )
+//        workerHandler = Handler(
+//            looper, RouteProcessorHandlerCallback(
+//                NavigationRouteProcessor(routeUtils), responseHandler, listener
+//            )
+//        )
     }
 
     fun queueUpdate(navigationLocationUpdate: NavigationLocationUpdate?) {

@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 
 import android.app.Application;
 import android.content.Context;
-import android.location.Location;
+import org.maplibre.navigation.android.navigation.v5.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +10,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.maplibre.geojson.Point;
-import org.maplibre.android.location.engine.LocationEngine;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.DynamicCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.BannerInstructionModel;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionModel;
@@ -20,6 +19,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayerProvider;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
+import org.maplibre.navigation.android.navigation.v5.location.LocationEngine;
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;

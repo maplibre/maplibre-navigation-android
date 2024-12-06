@@ -6,7 +6,7 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 open class RouteProcessorThreadListener(
     private val eventDispatcher: NavigationEventDispatcher,
-    private val notificationProvider: NavigationNotificationProvider
+//    private val notificationProvider: NavigationNotificationProvider
 ) : RouteProcessorBackgroundThread.Listener {
 
     /**
@@ -14,7 +14,7 @@ open class RouteProcessorThreadListener(
      * to the navigation event dispatcher.
      */
     override fun onNewRouteProgress(location: Location, routeProgress: RouteProgress) {
-        notificationProvider.updateNavigationNotification(routeProgress)
+//        notificationProvider.updateNavigationNotification(routeProgress)
         eventDispatcher.onProgressChange(location, routeProgress)
     }
 

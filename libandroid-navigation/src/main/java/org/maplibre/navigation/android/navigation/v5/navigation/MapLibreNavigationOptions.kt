@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.RoundingIncrement
-import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
+//import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
 import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
 
 
@@ -94,7 +94,7 @@ data class MapLibreNavigationOptions(
      */
     val isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED,
 
-    val navigationNotification: NavigationNotification? = null,
+//    val navigationNotification: NavigationNotification? = null,
 
     @RoundingIncrement
     val roundingIncrement: Int = Defaults.ROUNDING_INCREMENT,
@@ -137,7 +137,7 @@ data class MapLibreNavigationOptions(
             .withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection)
             .withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection)
             .withIsDebugLoggingEnabled(isDebugLoggingEnabled)
-            .withNavigationNotification(navigationNotification)
+//            .withNavigationNotification(navigationNotification)
             .withRoundingIncrement(roundingIncrement)
             .withTimeFormatType(timeFormatType)
             .withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold)
@@ -191,7 +191,7 @@ data class MapLibreNavigationOptions(
         private var offRouteMinimumDistanceMetersBeforeWrongDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION
         private var offRouteMinimumDistanceMetersBeforeRightDirection: Double = Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION
         private var isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED
-        private var navigationNotification: NavigationNotification? = null
+//        private var navigationNotification: NavigationNotification? = null
         @RoundingIncrement private var roundingIncrement: Int = Defaults.ROUNDING_INCREMENT
         private var timeFormatType: TimeFormat = TimeFormat.NONE_SPECIFIED
         private var locationAcceptableAccuracyInMetersThreshold: Int = Defaults.LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD
@@ -214,7 +214,7 @@ data class MapLibreNavigationOptions(
         fun withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeWrongDirection = offRouteMinimumDistanceMetersBeforeWrongDirection }
         fun withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeRightDirection = offRouteMinimumDistanceMetersBeforeRightDirection }
         fun withIsDebugLoggingEnabled(isDebugLoggingEnabled: Boolean) = apply { this.isDebugLoggingEnabled = isDebugLoggingEnabled }
-        fun withNavigationNotification(navigationNotification: NavigationNotification?) = apply { this.navigationNotification = navigationNotification }
+//        fun withNavigationNotification(navigationNotification: NavigationNotification?) = apply { this.navigationNotification = navigationNotification }
         fun withRoundingIncrement(roundingIncrement: Int) = apply { this.roundingIncrement = roundingIncrement }
         fun withTimeFormatType(timeFormatType: TimeFormat) = apply { this.timeFormatType = timeFormatType }
         fun withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold: Int) = apply { this.locationAcceptableAccuracyInMetersThreshold = locationAcceptableAccuracyInMetersThreshold }
@@ -239,7 +239,7 @@ data class MapLibreNavigationOptions(
                 offRouteMinimumDistanceMetersBeforeWrongDirection,
                 offRouteMinimumDistanceMetersBeforeRightDirection,
                 isDebugLoggingEnabled,
-                navigationNotification,
+//                navigationNotification,
                 roundingIncrement,
                 timeFormatType,
                 locationAcceptableAccuracyInMetersThreshold,
