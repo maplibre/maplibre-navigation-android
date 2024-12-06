@@ -239,7 +239,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(PROFILE_DRIVING_TRAFFIC, PROFILE_DRIVING, PROFILE_WALKING, PROFILE_CYCLING)
+    //TODO fabi755
+//    @StringDef(PROFILE_DRIVING_TRAFFIC, PROFILE_DRIVING, PROFILE_WALKING, PROFILE_CYCLING)
     annotation class ProfileCriteria
 
     /**
@@ -248,7 +249,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(GEOMETRY_POLYLINE, GEOMETRY_POLYLINE6)
+    //TODO fabi755
+//    @StringDef(GEOMETRY_POLYLINE, GEOMETRY_POLYLINE6)
     annotation class GeometriesCriteria
 
     /**
@@ -257,7 +259,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(OVERVIEW_FALSE, OVERVIEW_FULL, OVERVIEW_SIMPLIFIED)
+    //TODO fabi755
+//    @StringDef(OVERVIEW_FALSE, OVERVIEW_FULL, OVERVIEW_SIMPLIFIED)
     annotation class OverviewCriteria
 
     /**
@@ -266,7 +269,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(ANNOTATION_CONGESTION, ANNOTATION_DISTANCE, ANNOTATION_DURATION, ANNOTATION_SPEED, ANNOTATION_MAXSPEED)
+    //TODO fabi755
+//    @StringDef(ANNOTATION_CONGESTION, ANNOTATION_DISTANCE, ANNOTATION_DURATION, ANNOTATION_SPEED, ANNOTATION_MAXSPEED)
     annotation class AnnotationCriteria
 
     /**
@@ -275,7 +279,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(EXCLUDE_FERRY, EXCLUDE_MOTORWAY, EXCLUDE_TOLL, EXCLUDE_TUNNEL, EXCLUDE_RESTRICTED)
+    //TODO fabi755
+//    @StringDef(EXCLUDE_FERRY, EXCLUDE_MOTORWAY, EXCLUDE_TOLL, EXCLUDE_TUNNEL, EXCLUDE_RESTRICTED)
     annotation class ExcludeCriteria
 
     /**
@@ -284,7 +289,8 @@ object DirectionsCriteria {
      * @since 0.3.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(IMPERIAL, METRIC)
+    //TODO fabi755
+//    @StringDef(IMPERIAL, METRIC)
     annotation class VoiceUnitCriteria
 
     /**
@@ -293,7 +299,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(SOURCE_ANY, SOURCE_FIRST)
+    //TODO fabi755
+//    @StringDef(SOURCE_ANY, SOURCE_FIRST)
     annotation class SourceCriteria
 
     /**
@@ -302,7 +309,8 @@ object DirectionsCriteria {
      * @since 3.0.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(DESTINATION_ANY, DESTINATION_LAST)
+    //TODO fabi755
+//    @StringDef(DESTINATION_ANY, DESTINATION_LAST)
     annotation class DestinationCriteria
 
     /**
@@ -311,6 +319,7 @@ object DirectionsCriteria {
      * @since 3.2.0
      */
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(APPROACH_UNRESTRICTED, APPROACH_CURB)
+    //TODO fabi755
+//    @StringDef(APPROACH_UNRESTRICTED, APPROACH_CURB)
     annotation class ApproachesCriteria
 }

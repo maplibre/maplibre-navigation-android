@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.milestone
 
-import android.util.SparseArray
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 
 /**
@@ -68,9 +67,9 @@ object TriggerProperty {
     fun getSparseArray(
         previousRouteProgress: RouteProgress?,
         routeProgress: RouteProgress
-    ): SparseArray<Array<Number>> {
+    ): HashMap<Int, Array<Number>> {
         // Build hashMap matching the trigger properties to their corresponding current values.
-        return SparseArray<Array<Number>>(13).apply {
+        return HashMap<Int, Array<Number>>(13).apply {
             val currentLegProgress = routeProgress.currentLegProgress
             val currentStep = currentLegProgress.currentStep
 

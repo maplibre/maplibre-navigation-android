@@ -18,7 +18,7 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 //import org.maplibre.navigation.android.navigation.v5.models.LegStep
 //import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
 //import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-//import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter
+//import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter
 //import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
 //import org.maplibre.navigation.android.navigation.v5.utils.ManeuverUtils
 //import org.maplibre.navigation.android.navigation.v5.utils.time.TimeFormatter

@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.android.navigation.ui.v5.utils
 
 import android.content.Context
 import android.graphics.Typeface
@@ -9,6 +9,7 @@ import android.text.style.StyleSpan
 import org.maplibre.navigation.android.navigation.R
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.RoundingIncrement
+import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfConversion
 import java.text.NumberFormat

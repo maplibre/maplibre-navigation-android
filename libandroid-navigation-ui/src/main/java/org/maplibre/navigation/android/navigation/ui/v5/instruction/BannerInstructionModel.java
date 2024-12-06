@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
 import org.maplibre.navigation.android.navigation.v5.models.BannerText;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 
 public class BannerInstructionModel extends InstructionModel {
 

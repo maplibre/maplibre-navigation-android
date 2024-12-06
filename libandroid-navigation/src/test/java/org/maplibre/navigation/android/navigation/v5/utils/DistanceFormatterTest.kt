@@ -204,7 +204,12 @@ class DistanceFormatterTest {
     ) {
         Assert.assertEquals(
             output,
-            DistanceFormatter(context, locale.language, unitType, roundIncrement).formatDistance(
+            org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter(
+                context,
+                locale.language,
+                unitType,
+                roundIncrement
+            ).formatDistance(
                 distance
             ).toString()
         )

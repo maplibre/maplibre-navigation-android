@@ -21,7 +21,7 @@ class TimeFormatterTest {
         val twelveHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWELVE_HOURS
         val indifferentDeviceTwentyFourHourFormat = true
 
-        val formattedTime = TimeFormatter.formatTime(
+        val formattedTime = org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter.formatTime(
             time, elevenMinutes, twelveHoursTimeFormatType,
             indifferentDeviceTwentyFourHourFormat
         )
@@ -44,7 +44,7 @@ class TimeFormatterTest {
         val twentyFourHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWENTY_FOUR_HOURS
         val indifferentDeviceTwentyFourHourFormat = false
 
-        val formattedTime = TimeFormatter.formatTime(
+        val formattedTime = org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter.formatTime(
             time, elevenMinutes, twentyFourHoursTimeFormatType,
             indifferentDeviceTwentyFourHourFormat
         )
@@ -67,7 +67,7 @@ class TimeFormatterTest {
         val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
         val deviceTwelveHourFormat = false
 
-        val formattedTime = TimeFormatter.formatTime(
+        val formattedTime = org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter.formatTime(
             time, elevenMinutes, noneSpecifiedTimeFormatType,
             deviceTwelveHourFormat
         )
@@ -90,7 +90,7 @@ class TimeFormatterTest {
         val noneSpecifiedTimeFormatType = MapLibreNavigationOptions.TimeFormat.NONE_SPECIFIED
         val deviceTwentyFourHourFormat = true
 
-        val formattedTime = TimeFormatter.formatTime(
+        val formattedTime = org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter.formatTime(
             time, elevenMinutes, noneSpecifiedTimeFormatType,
             deviceTwentyFourHourFormat
         )

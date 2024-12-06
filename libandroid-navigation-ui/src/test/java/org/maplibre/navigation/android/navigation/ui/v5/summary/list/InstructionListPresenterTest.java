@@ -9,11 +9,10 @@ import org.maplibre.navigation.android.navigation.v5.models.LegStep;
 import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
 
 import org.junit.Test;
-import org.mockito.MockedStatic;
 
 import java.util.ArrayList;
 import java.util.List;

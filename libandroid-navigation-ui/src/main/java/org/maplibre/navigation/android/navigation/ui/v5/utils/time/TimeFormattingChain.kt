@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time
+package org.maplibre.navigation.android.navigation.ui.v5.utils.time
 
 
 open class TimeFormattingChain {

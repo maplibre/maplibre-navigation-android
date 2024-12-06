@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.utils.span
+package org.maplibre.navigation.android.navigation.ui.v5.utils.span
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder

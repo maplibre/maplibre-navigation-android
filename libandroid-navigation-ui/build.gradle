@@ -1,9 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 java {
   toolchain {
     languageVersion.set(JavaLanguageVersion.of(17))
   }
+}
+
+kotlin {
+  jvmToolchain(17)
 }
 
 android {

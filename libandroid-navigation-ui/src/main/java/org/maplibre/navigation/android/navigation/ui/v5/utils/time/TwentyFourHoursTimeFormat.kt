@@ -1,11 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time
+package org.maplibre.navigation.android.navigation.ui.v5.utils.time
 
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import java.util.Calendar
 import java.util.Locale
 
 
-internal class TwelveHoursTimeFormat : TimeFormatResolver {
+open class TwentyFourHoursTimeFormat : TimeFormatResolver {
     private var chain: TimeFormatResolver? = null
 
     override fun nextChain(chain: TimeFormatResolver?) {
@@ -16,11 +16,10 @@ internal class TwelveHoursTimeFormat : TimeFormatResolver {
         type: MapLibreNavigationOptions.TimeFormat,
         time: Calendar
     ): String? {
-        return if (type == MapLibreNavigationOptions.TimeFormat.TWELVE_HOURS) {
+        return if (type == MapLibreNavigationOptions.TimeFormat.TWENTY_FOUR_HOURS) {
             String.format(
                 Locale.getDefault(),
-                TWELVE_HOURS_FORMAT,
-                time,
+                TWENTY_FOUR_HOURS_FORMAT,
                 time,
                 time
             )
@@ -30,6 +29,6 @@ internal class TwelveHoursTimeFormat : TimeFormatResolver {
     }
 
     companion object {
-        const val TWELVE_HOURS_FORMAT: String = "%tl:%tM %tp"
+        const val TWENTY_FOUR_HOURS_FORMAT: String = "%tk:%tM"
     }
 }

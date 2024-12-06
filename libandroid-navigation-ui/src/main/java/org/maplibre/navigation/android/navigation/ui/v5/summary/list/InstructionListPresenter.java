@@ -11,7 +11,7 @@ import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
 import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
 import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
 
 import java.util.ArrayList;

@@ -42,11 +42,9 @@ import org.maplibre.android.maps.OnMapReadyCallback;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
 import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
 
 /**
