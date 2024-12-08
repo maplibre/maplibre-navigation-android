@@ -1,7 +1,5 @@
 package org.maplibre.navigation.android.navigation.v5.models
 
-import androidx.annotation.StringDef
-
 /**
  * Constants and properties used to customize the directions request.
  *

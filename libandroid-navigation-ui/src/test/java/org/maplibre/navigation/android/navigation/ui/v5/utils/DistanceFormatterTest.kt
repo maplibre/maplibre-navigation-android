@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.android.navigation.ui.v5.utils
 
 import android.content.Context
 import io.mockk.every
@@ -204,7 +204,7 @@ class DistanceFormatterTest {
     ) {
         Assert.assertEquals(
             output,
-            org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter(
+            DistanceFormatter(
                 context,
                 locale.language,
                 unitType,

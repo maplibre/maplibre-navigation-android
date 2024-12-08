@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.utils.time
+package org.maplibre.navigation.android.navigation.ui.v5.utils.time
 
 import org.junit.Assert
 import org.junit.Test
@@ -21,7 +21,7 @@ class TimeFormatterTest {
         val twelveHoursTimeFormatType = MapLibreNavigationOptions.TimeFormat.TWELVE_HOURS
         val indifferentDeviceTwentyFourHourFormat = true
 
-        val formattedTime = org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter.formatTime(
+        val formattedTime = TimeFormatter.formatTime(
             time, elevenMinutes, twelveHoursTimeFormatType,
             indifferentDeviceTwentyFourHourFormat
         )

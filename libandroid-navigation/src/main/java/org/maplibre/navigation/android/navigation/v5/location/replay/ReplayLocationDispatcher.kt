@@ -1,13 +1,16 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
-import android.os.Handler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.maplibre.navigation.android.navigation.v5.location.Location
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class ReplayLocationDispatcher(
     locationsToReplay: List<Location>,
-    private var handler: Handler = Handler()
-) : Runnable {
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+) {
     private var locationsToReplay = locationsToReplay.toMutableList()
     private var current: Location? = null
     private val replayLocationListeners = mutableListOf<ReplayLocationListener>()
@@ -17,20 +20,12 @@ open class ReplayLocationDispatcher(
         initialize()
     }
 
-    override fun run() {
-        current?.let { current ->
-            dispatchLocation(current)
-            scheduleNextDispatch()
-        }
+    fun start() {
+        scheduleNextDispatch()
     }
 
     fun stop() {
         clearLocations()
-        stopDispatching()
-    }
-
-    fun pause() {
-        stopDispatching()
     }
 
     fun update(locationsToReplay: List<Location>) {
@@ -85,7 +80,15 @@ open class ReplayLocationDispatcher(
         current = locationsToReplay.removeFirstOrNull()
         val nextTime = current!!.elapsedRealtimeMilliseconds
         val diff = nextTime - currentTime
-        handler.postDelayed(this, diff)
+
+        coroutineScope.launch {
+            delay(diff)
+
+            current?.let { current ->
+                dispatchLocation(current)
+                scheduleNextDispatch()
+            }
+        }
     }
 
     private fun clearLocations() {
@@ -93,7 +96,7 @@ open class ReplayLocationDispatcher(
     }
 
     private fun stopDispatching() {
-        handler.removeCallbacks(this)
+        clearLocations()
     }
 
     companion object {

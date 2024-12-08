@@ -1,10 +1,13 @@
 package org.maplibre.navigation.android.navigation.v5.location.replay
 
 import android.annotation.SuppressLint
-import android.os.Handler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
@@ -12,11 +15,12 @@ import org.maplibre.navigation.android.navigation.v5.location.Location
 import org.maplibre.navigation.android.navigation.v5.location.LocationEngine
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
 
-open class ReplayRouteLocationEngine : LocationEngine, Runnable {
+open class ReplayRouteLocationEngine(
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+) : LocationEngine {
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED
     private var delay = DEFAULT_DELAY
-    private val handler = Handler()
     private var mockedLocations: MutableList<Location> = mutableListOf()
     private var dispatcher: ReplayLocationDispatcher? = null
 
@@ -61,32 +65,14 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
         this.delay = customDelayInSeconds
     }
 
-    override fun run() {
-        converter?.let { converter ->
-            var nextMockedLocations = converter.toLocations()
-            if (nextMockedLocations.isEmpty()) {
-                if (converter.isMultiLegRoute) {
-                    nextMockedLocations = converter.toLocations()
-                } else {
-                    handler.removeCallbacks(this)
-                    return
-                }
-            }
-            dispatcher?.add(nextMockedLocations)
-            mockedLocations.addAll(nextMockedLocations)
-            scheduleNextDispatch()
-        }
-    }
-
     private fun start(route: DirectionsRoute) {
-        handler.removeCallbacks(this)
         converter = ReplayRouteLocationConverter(route, speed, delay).apply {
             initializeTime()
             mockedLocations = toLocations()
         }
 
         dispatcher = obtainDispatcher().apply {
-            run()
+            start()
         }
 
         scheduleNextDispatch()
@@ -104,7 +90,6 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
 
     private fun startRoute(point: Point, lastLocation: Location) {
         converter?.let { converter ->
-            handler.removeCallbacks(this)
             converter.updateSpeed(speed)
             converter.updateDelay(delay)
             converter.initializeTime()
@@ -112,7 +97,7 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
             val route = obtainRoute(point, lastLocation)
             mockedLocations = converter.calculateMockLocations(converter.sliceRoute(route))
             dispatcher = obtainDispatcher()
-            dispatcher?.run()
+            dispatcher?.start()
         }
     }
 
@@ -124,22 +109,40 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
     }
 
     private fun scheduleNextDispatch() {
-        val currentMockedPoints = mockedLocations.size
-        if (currentMockedPoints == ZERO) {
-            handler.postDelayed(this, DO_NOT_DELAY.toLong())
-        } else if (currentMockedPoints <= MOCKED_POINTS_LEFT_THRESHOLD) {
-            handler.postDelayed(this, ONE_SECOND_IN_MILLISECONDS.toLong())
-        } else {
-            handler.postDelayed(
-                this,
-                ((currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * ONE_SECOND_IN_MILLISECONDS).toLong()
+        coroutineScope.launch {
+            val currentMockedPoints = mockedLocations.size
+            delay(
+                when {
+                    currentMockedPoints == ZERO -> 0
+                    currentMockedPoints <= MOCKED_POINTS_LEFT_THRESHOLD -> ONE_SECOND_IN_MILLISECONDS
+                    else -> (currentMockedPoints - MOCKED_POINTS_LEFT_THRESHOLD) * ONE_SECOND_IN_MILLISECONDS
+                }
             )
+
+            playNextLeg()
+        }
+    }
+
+    private fun playNextLeg() {
+        converter?.let { converter ->
+            var nextMockedLocations = converter.toLocations()
+            if (nextMockedLocations.isEmpty()) {
+                if (!converter.isMultiLegRoute) {
+                    return
+                }
+
+                nextMockedLocations = converter.toLocations()
+            }
+
+            dispatcher?.add(nextMockedLocations)
+            mockedLocations.addAll(nextMockedLocations)
+            scheduleNextDispatch()
         }
     }
 
     fun onStop() {
         dispatcher?.stop()
-        handler.removeCallbacks(this)
+        converter = null
         callbackList.removeAll(callbackList)
         dispatcher?.removeReplayLocationListener(replayLocationListener)
     }
@@ -159,7 +162,7 @@ open class ReplayRouteLocationEngine : LocationEngine, Runnable {
 
     companion object {
         private const val MOCKED_POINTS_LEFT_THRESHOLD = 5
-        private const val ONE_SECOND_IN_MILLISECONDS = 1000
+        private const val ONE_SECOND_IN_MILLISECONDS = 1000L
         private const val FORTY_FIVE_KM_PER_HOUR = 45
         private const val DEFAULT_SPEED = FORTY_FIVE_KM_PER_HOUR
         private const val ONE_SECOND = 1

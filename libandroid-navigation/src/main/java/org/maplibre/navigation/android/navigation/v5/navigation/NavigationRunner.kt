@@ -39,7 +39,6 @@ class NavigationRunner(
         get() = mapLibreNavigation.eventDispatcher
 
     private val navigationRouteProcessor = NavigationRouteProcessor(routeUtils)
-    private var locationEngineUpdater: NavigationLocationEngineUpdater? = null
 
     private var collectLocationJob: Job? = null
 

@@ -115,9 +115,8 @@ class NavigationHelperTest : BaseTest() {
             every { applicationContext } returns this
         }
         val mapLibreNavigation = MapLibreNavigation(context, options, mockk())
-        val model = NavigationLocationUpdate(mockk(), mapLibreNavigation)
 
-        val userOffRoute = isUserOffRoute(model, mockk(), mockk())
+        val userOffRoute = isUserOffRoute(mapLibreNavigation, mockk(), mockk(), mockk())
 
         Assert.assertFalse(userOffRoute)
     }
