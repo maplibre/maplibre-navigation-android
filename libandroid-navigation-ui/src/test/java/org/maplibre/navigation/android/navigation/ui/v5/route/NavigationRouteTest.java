@@ -4,11 +4,11 @@ import android.content.Context;
 
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.models.DirectionsCriteria;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
 
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
+import org.maplibre.navigation.core.utils.LocaleUtils;
 
 import org.junit.Before;
 import org.junit.Ignore;

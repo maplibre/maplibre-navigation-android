@@ -4,15 +4,15 @@ import androidx.annotation.NonNull;
 import android.text.SpannableString;
 import android.view.View;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.ManeuverModifier;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
-import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.LegStep;
+import org.maplibre.navigation.core.models.ManeuverModifier;
+import org.maplibre.navigation.core.models.RouteLeg;
+import org.maplibre.navigation.core.models.StepManeuver;
+import org.maplibre.navigation.core.routeprogress.RouteLegProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.utils.RouteUtils;
 
 import java.util.ArrayList;
 import java.util.List;

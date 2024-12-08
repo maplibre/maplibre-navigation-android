@@ -8,8 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.maplibre.navigation.android.navigation.R
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants
+import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 

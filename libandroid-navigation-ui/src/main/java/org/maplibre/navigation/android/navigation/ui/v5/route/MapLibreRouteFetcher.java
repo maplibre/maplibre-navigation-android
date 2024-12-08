@@ -1,20 +1,20 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import android.content.Context;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.route.RouteFetcher;
-import org.maplibre.navigation.android.navigation.v5.route.RouteListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.route.RouteFetcher;
+import org.maplibre.navigation.core.route.RouteListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.utils.RouteUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 import android.content.Context
 import io.mockk.every
@@ -6,15 +6,15 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.location.LocationEngine
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
-import org.maplibre.navigation.android.navigation.v5.milestone.StepMilestone
-import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRoute
-import org.maplibre.navigation.android.navigation.v5.snap.Snap
-import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
+import org.maplibre.navigation.core.milestone.Milestone
+import org.maplibre.navigation.core.milestone.StepMilestone
+import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone
+import org.maplibre.navigation.core.offroute.OffRoute
+import org.maplibre.navigation.core.snap.Snap
+import org.maplibre.navigation.core.snap.SnapToRoute
 
 class MapLibreNavigationTest : BaseTest() {
     @Test

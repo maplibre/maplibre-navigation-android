@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -7,7 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import org.maplibre.navigation.android.navigation.R
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.ui.v5.utils.span.SpanItem
 import org.maplibre.navigation.android.navigation.ui.v5.utils.span.SpanUtils
 import org.maplibre.navigation.android.navigation.ui.v5.utils.span.TextSpanItem

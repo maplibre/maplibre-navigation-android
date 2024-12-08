@@ -1,13 +1,13 @@
-package org.maplibre.navigation.android.navigation.v5.milestone
+package org.maplibre.navigation.core.milestone
 
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.navigation.android.json
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.gt
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.json
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.milestone.Trigger.gt
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)

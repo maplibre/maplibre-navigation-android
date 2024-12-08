@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.example
 import android.location.Location as AndroidLocation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.geojson.Point
 import org.maplibre.android.location.LocationComponent
 import org.maplibre.android.location.LocationComponentActivationOptions
@@ -14,18 +14,18 @@ import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
-import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.navigation.core.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
-import org.maplibre.navigation.android.navigation.v5.location.Location
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.navigation.MapLibreNavigation
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

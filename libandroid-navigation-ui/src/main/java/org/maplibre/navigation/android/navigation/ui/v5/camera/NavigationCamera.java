@@ -3,13 +3,13 @@ package org.maplibre.navigation.android.navigation.ui.v5.camera;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
 import org.maplibre.android.camera.CameraUpdate;
@@ -22,12 +22,12 @@ import org.maplibre.android.location.OnCameraTrackingChangedListener;
 import org.maplibre.android.location.OnLocationCameraTransitionListener;
 import org.maplibre.android.location.modes.CameraMode;
 import org.maplibre.android.maps.MapLibreMap;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.MathUtils;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.camera.Camera;
+import org.maplibre.navigation.core.navigation.camera.RouteInformation;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.utils.MathUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,9 +37,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import timber.log.Timber;
 
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION;
 
 /**
  * Updates the map camera while navigating.

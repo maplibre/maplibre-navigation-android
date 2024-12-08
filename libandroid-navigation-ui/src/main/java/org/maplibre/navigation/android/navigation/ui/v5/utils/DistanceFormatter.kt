@@ -7,9 +7,9 @@ import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import org.maplibre.navigation.android.navigation.R
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.RoundingIncrement
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils
+import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.navigation.NavigationConstants.RoundingIncrement
+import org.maplibre.navigation.core.utils.LocaleUtils
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfConversion
 import java.text.NumberFormat

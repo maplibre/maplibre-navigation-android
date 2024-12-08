@@ -20,10 +20,10 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.*
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.navigation.core.navigation.*
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.MediaType.Companion.toMediaType

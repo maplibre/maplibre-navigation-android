@@ -2,13 +2,13 @@ package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import android.os.Handler;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteLeg;
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.FeatureCollection;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.navigation.core.utils.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

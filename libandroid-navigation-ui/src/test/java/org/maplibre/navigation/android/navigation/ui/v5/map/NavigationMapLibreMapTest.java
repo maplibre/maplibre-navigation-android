@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.location.LocationComponent;
 import org.maplibre.android.location.modes.RenderMode;

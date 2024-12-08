@@ -7,19 +7,19 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
 import org.maplibre.android.geometry.LatLngBounds;
 import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.navigation.camera.RouteInformation;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.navigation.core.utils.Constants;
 
 import java.io.IOException;
 import java.util.Collections;

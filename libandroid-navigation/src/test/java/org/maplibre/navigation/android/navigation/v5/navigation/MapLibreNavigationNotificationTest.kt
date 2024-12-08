@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 //import android.app.NotificationManager
 //import io.mockk.mockk
@@ -7,10 +7,10 @@ package org.maplibre.navigation.android.navigation.v5.navigation
 //import org.junit.Before
 //import org.junit.Ignore
 //import org.junit.Test
-//import org.maplibre.navigation.android.navigation.v5.BaseTest
-//import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-//import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-//import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+//import org.maplibre.navigation.core.BaseTest
+//import org.maplibre.navigation.core.models.DirectionsResponse
+//import org.maplibre.navigation.core.models.DirectionsRoute
+//import org.maplibre.navigation.core.routeprogress.RouteProgress
 //import org.maplibre.navigation.android.navigation.R
 //
 //class MapLibreNavigationNotificationTest : BaseTest() {

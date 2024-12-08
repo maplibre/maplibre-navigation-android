@@ -38,24 +38,24 @@ import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.maneuver.ManeuverView;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.turnlane.TurnLaneAdapter;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.InstructionListListener;
-import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.BannerText;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.core.models.BannerComponents;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.BannerText;
+import org.maplibre.navigation.core.models.LegStep;
 
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 
 import org.maplibre.navigation.android.navigation.ui.v5.summary.list.InstructionListAdapter;
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
+import org.maplibre.navigation.core.milestone.Milestone;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
+import org.maplibre.navigation.core.offroute.OffRouteListener;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
+import org.maplibre.navigation.core.utils.LocaleUtils;
 
 import timber.log.Timber;
 

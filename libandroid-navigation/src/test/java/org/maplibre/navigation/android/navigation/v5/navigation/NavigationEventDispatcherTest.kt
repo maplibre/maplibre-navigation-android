@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
@@ -7,16 +7,16 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.location.Location
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.milestone.Milestone
+import org.maplibre.navigation.core.milestone.MilestoneEventListener
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.offroute.OffRouteListener
+import org.maplibre.navigation.core.route.FasterRouteListener
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)

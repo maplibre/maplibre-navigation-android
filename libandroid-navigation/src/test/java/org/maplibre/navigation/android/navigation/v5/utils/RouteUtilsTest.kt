@@ -1,17 +1,17 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.core.utils
 
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
+import org.maplibre.navigation.core.models.BannerInstructions
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.LegStep
+import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 
 
 class RouteUtilsTest : BaseTest() {

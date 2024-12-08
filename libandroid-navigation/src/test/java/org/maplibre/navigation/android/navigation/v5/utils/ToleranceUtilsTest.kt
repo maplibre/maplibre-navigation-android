@@ -1,11 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.core.utils
 
 import org.junit.Assert
 import org.junit.Test
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.utils.PolylineUtils
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 

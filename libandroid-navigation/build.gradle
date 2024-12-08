@@ -1,5 +1,5 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlinx-serialization'
 
@@ -10,8 +10,45 @@ java {
 }
 
 kotlin {
-    jvmToolchain(17)
+//    jvmToolchain(17)
+
+    androidTarget {
+//        compilations.all {
+//            compileTaskProvider.configure {
+//                compilerOptions {
+//                    jvmTarget.set(JvmTarget.JVM_1_8)
+//                }
+//            }
+//        }
+    }
+
+//    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach {
+//        it.binaries.framework {
+//            baseName = "station"
+//            isStatic = true
+//        }
+//    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation dependenciesList.kotlinxSerializationJson
+            implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+
+        }
+
+        commonTest.dependencies {
+        }
+
+        androidMain.dependencies {
+            implementation dependenciesList.mapLibre
+            api dependenciesList.mapLibreTurf
+        }
+    }
 }
+
+//kotlin {
+//    jvmToolchain(17)
+//}
 
 android {
     namespace 'org.maplibre.navigation.android.navigation'
@@ -64,32 +101,31 @@ android {
     }
 }
 
-dependencies {
-    api dependenciesList.mapLibreTurf
-    implementation dependenciesList.mapLibre
+//dependencies {
 
-    implementation dependenciesList.androidxCore
-    implementation dependenciesList.kotlinstdlib
-
-    compileOnly dependenciesList.gmsLocation
-
-    // Support
-    implementation dependenciesList.androidxAppcompat
-    implementation dependenciesList.supportAnnotation
-
-    // Logging
-    implementation dependenciesList.timber
-
-    implementation dependenciesList.kotlinxSerializationJson
-    
-    // Unit testing
-    testImplementation dependenciesList.junit
-    testImplementation dependenciesList.hamcrest
-    testImplementation dependenciesList.commonsIO
-    testImplementation dependenciesList.robolectric
-    testImplementation dependenciesList.androidxTestKtx
-    testImplementation dependenciesList.mockk
-}
+//
+//    implementation dependenciesList.androidxCore
+//    implementation dependenciesList.kotlinstdlib
+//
+//    compileOnly dependenciesList.gmsLocation
+//
+//    // Support
+//    implementation dependenciesList.androidxAppcompat
+//    implementation dependenciesList.supportAnnotation
+//
+//    // Logging
+//    implementation dependenciesList.timber
+//
+//    implementation dependenciesList.kotlinxSerializationJson
+//
+//    // Unit testing
+//    testImplementation dependenciesList.junit
+//    testImplementation dependenciesList.hamcrest
+//    testImplementation dependenciesList.commonsIO
+//    testImplementation dependenciesList.robolectric
+//    testImplementation dependenciesList.androidxTestKtx
+//    testImplementation dependenciesList.mockk
+//}
 
 apply from: 'javadoc.gradle'
 apply from: "${rootDir}/gradle/mvn-push-android.gradle"

@@ -9,12 +9,12 @@ import androidx.annotation.Nullable;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsCriteria;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.utils.LocaleUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -283,7 +283,7 @@ public final class NavigationRoute {
          * in the request is currently limited to 1.
          *
          * @param waypoint a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
-         *                 one of the {@link org.maplibre.navigation.android.navigation.v5.models.RouteLeg} to
+         *                 one of the {@link org.maplibre.navigation.core.models.RouteLeg} to
          *                 navigate the user to
          * @return this builder for chaining options together
          * @since 0.5.0
@@ -301,7 +301,7 @@ public final class NavigationRoute {
          * in the request is currently limited to 1.
          *
          * @param waypoint  a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
-         *                  one of the {@link org.maplibre.navigation.android.navigation.v5.models.RouteLeg} to
+         *                  one of the {@link org.maplibre.navigation.core.models.RouteLeg} to
          *                  navigate the user to
          * @param angle     double value used for setting the corresponding coordinate's angle of travel
          *                  when determining the route
@@ -384,7 +384,7 @@ public final class NavigationRoute {
          * </p>
          *
          * @param annotations string referencing one of the annotation direction criteria's. The strings
-         *                    restricted to one or multiple values inside the {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria.AnnotationCriteria}
+         *                    restricted to one or multiple values inside the {@link org.maplibre.navigation.core.models.DirectionsCriteria.AnnotationCriteria}
          *                    or null which will result in no annotations being used
          * @return this builder for chaining options together
          * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
@@ -453,10 +453,10 @@ public final class NavigationRoute {
 
         /**
          * Change the units used for voice announcements, this does not change the units provided in
-         * other fields outside of the {@link org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions}
+         * other fields outside of the {@link org.maplibre.navigation.core.models.VoiceInstructions}
          * object.
          *
-         * @param voiceUnits one of the values found inside the {@link org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria.VoiceUnitCriteria}
+         * @param voiceUnits one of the values found inside the {@link org.maplibre.navigation.core.models.DirectionsCriteria.VoiceUnitCriteria}
          * @return this builder for chaining options together
          * @since 0.8.0
          */

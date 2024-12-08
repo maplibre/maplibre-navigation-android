@@ -14,10 +14,10 @@ package org.maplibre.navigation.android.example;
 //import androidx.annotation.RequiresApi;
 //import androidx.core.app.NotificationCompat;
 //
-//import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
-//import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+//import org.maplibre.navigation.core.navigation.notification.NavigationNotification;
+//import org.maplibre.navigation.core.routeprogress.RouteProgress;
 //
-//import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL;
+//import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL;
 //
 //public class CustomNavigationNotification implements NavigationNotification {
 //

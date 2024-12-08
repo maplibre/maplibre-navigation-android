@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 
 class NavigationViewSubscriber implements LifecycleObserver {

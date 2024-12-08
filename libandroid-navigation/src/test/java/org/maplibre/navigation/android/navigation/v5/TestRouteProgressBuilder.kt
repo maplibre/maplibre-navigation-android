@@ -1,16 +1,16 @@
-package org.maplibre.navigation.android.navigation.v5
+package org.maplibre.navigation.core
 
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.models.StepIntersection
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createDistancesToIntersections
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.createIntersectionsList
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findCurrentIntersection
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.findUpcomingIntersection
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.LegStep
+import org.maplibre.navigation.core.models.StepIntersection
+import org.maplibre.navigation.core.navigation.NavigationHelper.createDistancesToIntersections
+import org.maplibre.navigation.core.navigation.NavigationHelper.createIntersectionsList
+import org.maplibre.navigation.core.navigation.NavigationHelper.findCurrentIntersection
+import org.maplibre.navigation.core.navigation.NavigationHelper.findUpcomingIntersection
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.navigation.core.utils.Constants
 
 internal class TestRouteProgressBuilder {
     @Throws(Exception::class)

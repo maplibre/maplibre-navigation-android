@@ -1,10 +1,10 @@
-package org.maplibre.navigation.android.navigation.v5
+package org.maplibre.navigation.core
 
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.location.Location
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 

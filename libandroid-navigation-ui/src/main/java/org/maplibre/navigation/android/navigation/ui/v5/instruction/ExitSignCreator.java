@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
+import org.maplibre.navigation.core.models.BannerComponents;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 
 import java.util.List;

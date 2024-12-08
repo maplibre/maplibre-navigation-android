@@ -1,20 +1,20 @@
-package org.maplibre.navigation.android.navigation.v5.milestone
+package org.maplibre.navigation.core.milestone
 
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.all
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.any
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.eq
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.gt
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.gte
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.lt
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.lte
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.neq
-import org.maplibre.navigation.android.navigation.v5.milestone.Trigger.none
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.milestone.Trigger.all
+import org.maplibre.navigation.core.milestone.Trigger.any
+import org.maplibre.navigation.core.milestone.Trigger.eq
+import org.maplibre.navigation.core.milestone.Trigger.gt
+import org.maplibre.navigation.core.milestone.Trigger.gte
+import org.maplibre.navigation.core.milestone.Trigger.lt
+import org.maplibre.navigation.core.milestone.Trigger.lte
+import org.maplibre.navigation.core.milestone.Trigger.neq
+import org.maplibre.navigation.core.milestone.Trigger.none
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)

@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.instruction;
 
 import android.text.SpannableString;
 
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 
 public class InstructionModel {

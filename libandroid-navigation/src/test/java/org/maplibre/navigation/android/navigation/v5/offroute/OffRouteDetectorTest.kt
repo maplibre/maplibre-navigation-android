@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.offroute
+package org.maplibre.navigation.core.offroute
 
 import io.mockk.every
 import io.mockk.mockk
@@ -7,12 +7,12 @@ import org.junit.Assert
 import org.junit.Test
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.location.Location
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
-import org.maplibre.navigation.android.navigation.v5.utils.Constants
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.models.LegStep
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.navigation.core.utils.Constants
 
 class OffRouteDetectorTest : BaseTest() {
 

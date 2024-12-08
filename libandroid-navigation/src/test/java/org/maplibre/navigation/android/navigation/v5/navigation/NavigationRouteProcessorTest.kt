@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 import android.content.Context
 import io.mockk.every
@@ -8,10 +8,10 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.maplibre.geojson.utils.PolylineUtils
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationHelper.buildSnappedLocation
-import org.maplibre.navigation.android.navigation.v5.utils.Constants
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
+import org.maplibre.navigation.core.utils.Constants
+import org.maplibre.navigation.core.utils.RouteUtils
 import java.io.IOException
 
 class NavigationRouteProcessorTest : BaseTest() {

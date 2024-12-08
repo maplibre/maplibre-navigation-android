@@ -1,12 +1,12 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 //import android.content.Context
 //import io.mockk.every
 //import io.mockk.mockk
 //import io.mockk.verify
 //import org.junit.Test
-//import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification
-//import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+//import org.maplibre.navigation.core.navigation.notification.NavigationNotification
+//import org.maplibre.navigation.core.routeprogress.RouteProgress
 //
 //class NavigationNotificationProviderTest {
 //

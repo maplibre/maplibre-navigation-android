@@ -1,9 +1,9 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.core.utils
 
 import com.google.common.collect.Lists
 import org.junit.Assert
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.BaseTest
+import org.maplibre.navigation.core.BaseTest
 
 class RingBufferTest : BaseTest() {
     @Test

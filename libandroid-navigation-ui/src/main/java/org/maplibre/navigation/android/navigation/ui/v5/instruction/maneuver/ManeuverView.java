@@ -1,20 +1,20 @@
 package org.maplibre.navigation.android.navigation.ui.v5.instruction.maneuver;
 
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.ManeuverModifier;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.ManeuverType;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_RIGHT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SHARP_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_UTURN;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROTARY;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_FORK;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_OFF_RAMP;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROTARY;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT_TURN;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.ManeuverModifier;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.ManeuverType;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_LEFT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_RIGHT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SHARP_LEFT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_UTURN;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROTARY;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_FORK;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_OFF_RAMP;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROTARY;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT_TURN;
 
 import android.content.Context;
 import android.content.res.TypedArray;

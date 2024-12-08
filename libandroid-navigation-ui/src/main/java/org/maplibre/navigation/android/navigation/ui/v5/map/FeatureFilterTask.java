@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 
 import java.util.List;
 

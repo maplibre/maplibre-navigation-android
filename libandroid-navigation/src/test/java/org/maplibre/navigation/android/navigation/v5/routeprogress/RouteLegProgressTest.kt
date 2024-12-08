@@ -1,12 +1,12 @@
-package org.maplibre.navigation.android.navigation.v5.routeprogress
+package org.maplibre.navigation.core.routeprogress
 
 import org.junit.Assert
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.LegStep
+import org.maplibre.navigation.core.models.RouteLeg
 
 class RouteLegProgressTest : BaseTest() {
     @Test

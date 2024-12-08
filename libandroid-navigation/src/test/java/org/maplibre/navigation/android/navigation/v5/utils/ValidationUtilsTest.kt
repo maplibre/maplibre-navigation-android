@@ -1,10 +1,10 @@
-package org.maplibre.navigation.android.navigation.v5.utils
+package org.maplibre.navigation.core.utils
 
 import org.junit.Test
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.RouteOptions
 import java.io.IOException
 import java.util.MissingFormatArgumentException
 

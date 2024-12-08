@@ -1,4 +1,4 @@
-package org.maplibre.navigation.android.navigation.v5.location
+package org.maplibre.navigation.core.location
 
 import io.mockk.every
 import io.mockk.mockk

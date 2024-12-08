@@ -8,7 +8,7 @@ import org.maplibre.geojson.Geometry;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.MultiLineString;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 import org.maplibre.turf.TurfMeasurement;
 
 import java.util.ArrayList;

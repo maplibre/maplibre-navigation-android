@@ -1,11 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5
+package org.maplibre.navigation.core
 
 import org.maplibre.geojson.Point
-import org.maplibre.navigation.android.json
-import org.maplibre.navigation.android.navigation.v5.BaseTest.Companion.ACCESS_TOKEN
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
+import org.maplibre.navigation.core.json
+import org.maplibre.navigation.core.BaseTest.Companion.ACCESS_TOKEN
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.RouteOptions
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.Scanner

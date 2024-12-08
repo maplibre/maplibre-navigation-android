@@ -5,11 +5,11 @@ import static com.google.common.base.Charsets.UTF_8;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.navigation.core.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

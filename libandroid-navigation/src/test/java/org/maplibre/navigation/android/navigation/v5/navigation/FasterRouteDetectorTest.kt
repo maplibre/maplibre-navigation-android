@@ -1,16 +1,16 @@
-package org.maplibre.navigation.android.navigation.v5.navigation
+package org.maplibre.navigation.core.navigation
 
 import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.route.FasterRoute
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteDetector
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.route.FasterRoute
+import org.maplibre.navigation.core.route.FasterRouteDetector
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 import java.io.IOException
 
 class FasterRouteDetectorTest : BaseTest() {

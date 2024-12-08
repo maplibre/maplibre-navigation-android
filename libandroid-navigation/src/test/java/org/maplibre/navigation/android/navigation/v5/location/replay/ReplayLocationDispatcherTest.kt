@@ -1,11 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5.location.replay
+package org.maplibre.navigation.core.location.replay
 
 import android.os.Handler
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.location.Location
+import org.maplibre.navigation.core.location.Location
 
 class ReplayLocationDispatcherTest {
 

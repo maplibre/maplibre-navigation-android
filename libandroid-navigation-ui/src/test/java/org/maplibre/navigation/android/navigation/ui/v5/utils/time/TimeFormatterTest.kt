@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.utils.time
 
 import org.junit.Assert
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import java.util.Calendar
 
 class TimeFormatterTest {

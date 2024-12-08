@@ -4,7 +4,7 @@ import android.location.Location;
 
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModelProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
 

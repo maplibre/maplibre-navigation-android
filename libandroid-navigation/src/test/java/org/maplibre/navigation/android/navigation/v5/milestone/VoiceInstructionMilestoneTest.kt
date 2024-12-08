@@ -1,11 +1,11 @@
-package org.maplibre.navigation.android.navigation.v5.milestone
+package org.maplibre.navigation.core.milestone
 
 import org.junit.Assert
 import org.junit.Test
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.models.LegStep
-import org.maplibre.navigation.android.navigation.v5.models.VoiceInstructions
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.models.LegStep
+import org.maplibre.navigation.core.models.VoiceInstructions
+import org.maplibre.navigation.core.routeprogress.RouteProgress
 
 class VoiceInstructionMilestoneTest : BaseTest() {
     @Test

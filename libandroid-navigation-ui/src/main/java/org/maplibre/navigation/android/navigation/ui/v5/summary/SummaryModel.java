@@ -4,8 +4,8 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 
 import java.util.Calendar;

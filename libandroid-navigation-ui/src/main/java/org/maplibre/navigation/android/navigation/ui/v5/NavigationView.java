@@ -30,9 +30,9 @@ import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMa
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMapInstanceState;
 import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView;
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
 import org.maplibre.android.location.modes.RenderMode;
@@ -41,11 +41,11 @@ import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.android.maps.OnMapReadyCallback;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
-import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
+import org.maplibre.navigation.core.utils.LocaleUtils;
 
 /**
  * View that creates the drop-in UI.

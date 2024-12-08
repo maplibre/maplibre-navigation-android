@@ -27,7 +27,7 @@ import org.maplibre.android.style.sources.GeoJsonSource;
 import org.maplibre.android.utils.MathUtils;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.MapImageUtils;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.turf.TurfConstants;
 import org.maplibre.turf.TurfMeasurement;
 import org.maplibre.turf.TurfMisc;

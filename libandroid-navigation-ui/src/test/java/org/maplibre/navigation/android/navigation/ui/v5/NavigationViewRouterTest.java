@@ -14,17 +14,17 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsWaypoint;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsWaypoint;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.navigation.core.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;

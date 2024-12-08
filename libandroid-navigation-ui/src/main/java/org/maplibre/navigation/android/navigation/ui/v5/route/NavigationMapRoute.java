@@ -13,12 +13,12 @@ import androidx.annotation.StyleRes;
 
 import androidx.fragment.app.Fragment;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.android.maps.MapView;
 import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.ArrayList;
 import java.util.List;

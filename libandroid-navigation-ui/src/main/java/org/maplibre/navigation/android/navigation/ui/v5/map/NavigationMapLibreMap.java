@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,8 +18,8 @@ import androidx.fragment.app.FragmentActivity;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.geometry.LatLng;
 import org.maplibre.android.location.LocationComponent;
@@ -37,8 +37,8 @@ import org.maplibre.android.style.sources.Source;
 import org.maplibre.android.style.sources.VectorSource;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

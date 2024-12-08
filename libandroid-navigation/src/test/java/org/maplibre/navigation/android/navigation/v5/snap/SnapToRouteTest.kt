@@ -1,13 +1,13 @@
-package org.maplibre.navigation.android.navigation.v5.snap
+package org.maplibre.navigation.core.snap
 
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.navigation.android.json
-import org.maplibre.navigation.android.navigation.v5.BaseTest
-import org.maplibre.navigation.android.navigation.v5.location.Location
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.core.json
+import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)

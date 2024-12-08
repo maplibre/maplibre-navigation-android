@@ -3,8 +3,8 @@ package org.maplibre.navigation.android.navigation.ui.v5.voice;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
 
 /**
  * Used with {@link NavigationSpeechPlayer#play(SpeechAnnouncement)}.

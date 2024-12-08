@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 
 import android.app.Application;
 import android.content.Context;
-import org.maplibre.navigation.android.navigation.v5.location.Location;
+import org.maplibre.navigation.core.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,24 +19,24 @@ import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayerProvider;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
-import org.maplibre.navigation.android.navigation.v5.location.LocationEngine;
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera;
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.location.LocationEngine;
+import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
+import org.maplibre.navigation.core.milestone.Milestone;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.navigation.NavigationEventListener;
+import org.maplibre.navigation.core.navigation.camera.Camera;
+import org.maplibre.navigation.core.offroute.OffRouteListener;
+import org.maplibre.navigation.core.route.FasterRouteListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.core.utils.RouteUtils;
 
 import org.jetbrains.annotations.TestOnly;
 
