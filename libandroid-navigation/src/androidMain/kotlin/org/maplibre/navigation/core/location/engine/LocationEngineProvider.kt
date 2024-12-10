@@ -35,13 +35,18 @@ object LocationEngineProvider {
 
     private fun getLocationEngine(context: Context, isGoogle: Boolean): LocationEngine {
         return PlatformLocationEngine(
-//                if (isGoogle)
-            GoogleLocationEngine(
-                context = context.applicationContext,
-                looper = Looper.getMainLooper()
-            )
-//        else
-//            MapLibreFusedLocationEngineImpl(context.applicationContext)
+            when (isGoogle) {
+                true -> GoogleLocationEngine(
+                    context = context.applicationContext,
+                    looper = Looper.getMainLooper()
+                )
+
+                false ->
+                    MapLibreLocationEngine(
+                        context = context.applicationContext,
+                        looper = Looper.getMainLooper()
+                    )
+            }
         )
     }
 

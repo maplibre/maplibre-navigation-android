@@ -19,100 +19,20 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
- * Wraps implementation of Fused Location Provider
+ * A [LocationEngine] that uses the Google Play Services Location API.
+ *
+ * @param context used to initialize the [FusedLocationProviderClient]
+ * @param looper looper that is ued by the [FusedLocationProviderClient] to listen on for location updates
  */
 open class GoogleLocationEngine(
     context: Context,
-    private val fusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context),
     private val looper: Looper
 ) : LocationEngine {
 
-    //    override fun createListener(callback: LocationEngineCallback<LocationEngineResult>): LocationCallback {
-//        return GoogleLocationEngineCallbackTransport(callback)
-//    }
-//
-//    @SuppressLint("MissingPermission")
-//    @Throws(SecurityException::class)
-//    override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
-//        val transport = GoogleLastLocationEngineCallbackTransport(callback)
-//        fusedLocationProviderClient.lastLocation
-//            .addOnSuccessListener(transport)
-//            .addOnFailureListener(transport)
-//    }
-//
-//    @SuppressLint("MissingPermission")
-//    @Throws(SecurityException::class)
-//    override fun requestLocationUpdates(
-//        request: LocationEngineRequest,
-//        listener: LocationCallback,
-//        looper: Looper?
-//    ) {
-//        fusedLocationProviderClient.requestLocationUpdates(
-//            toGMSLocationRequest(request),
-//            listener,
-//            looper
-//        )
-//    }
-//
-//    @SuppressLint("MissingPermission")
-//    @Throws(SecurityException::class)
-//    override fun requestLocationUpdates(
-//        request: LocationEngineRequest,
-//        pendingIntent: PendingIntent
-//    ) {
-//        fusedLocationProviderClient.requestLocationUpdates(
-//            toGMSLocationRequest(request),
-//            pendingIntent
-//        )
-//    }
-//
-//    override fun removeLocationUpdates(listener: LocationCallback) {
-//        // The listener is annotated with @NonNull, but there seems to be cases where a null
-//        // listener is somehow passed into this method.
-//        @Suppress("SENSELESS_COMPARISON")
-//        if (listener != null) {
-//            fusedLocationProviderClient.removeLocationUpdates(listener)
-//        }
-//    }
-//
-//    override fun removeLocationUpdates(pendingIntent: PendingIntent) {
-//        fusedLocationProviderClient.removeLocationUpdates(pendingIntent)
-//    }
-//
-//    private class GoogleLocationEngineCallbackTransport(
-//        private val callback: LocationEngineCallback<LocationEngineResult>
-//    ) : LocationCallback() {
-//
-//        override fun onLocationResult(locationResult: LocationResult) {
-//            super.onLocationResult(locationResult)
-//            val locations = locationResult.locations
-//            if (locations.isNotEmpty()) {
-//                callback.onSuccess(LocationEngineResult.create(locations))
-//            } else {
-//                callback.onFailure(Exception("Unavailable location"))
-//            }
-//        }
-//    }
-//
-//    @VisibleForTesting
-//    internal class GoogleLastLocationEngineCallbackTransport(
-//        private val callback: LocationEngineCallback<LocationEngineResult>
-//    ) : OnSuccessListener<AndroidLocation>, OnFailureListener {
-//
-//        override fun onSuccess(location: AndroidLocation?) {
-//            callback.onSuccess(
-//                if (location != null)
-//                    LocationEngineResult.create(location)
-//                else
-//                    LocationEngineResult.create(emptyList())
-//            )
-//        }
-//
-//        override fun onFailure(e: Exception) {
-//            callback.onFailure(e)
-//        }
-//    }
-
+    /**
+     * Underlying [FusedLocationProviderClient] that is used to fetch location and listen to location updates.
+     */
+    private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
     override fun listenToLocation(request: LocationEngineRequest): Flow<Location> = callbackFlow {
@@ -126,22 +46,6 @@ open class GoogleLocationEngine(
 
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(listener) }
     }
-//
-//
-//
-//    //TODO fabi755: implement stop location requests
-//    @SuppressLint("MissingPermission")
-//    override fun listenToLocation(request: LocationEngineRequest): Flow<Location> {
-//        val resultFlow = MutableStateFlow<Location?>(null)
-//
-//        fusedLocationProviderClient.requestLocationUpdates(
-//            toGMSLocationRequest(request),
-//            { location -> resultFlow.tryEmit(location.toLocation()) },
-//            looper
-//        )
-//
-//        return resultFlow.filterNotNull()
-//    }
 
     @SuppressLint("MissingPermission")
     override suspend fun getLastLocation(): Location = suspendCoroutine { continuation ->
