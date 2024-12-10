@@ -45,7 +45,7 @@ import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 /**
  * View that creates the drop-in UI.

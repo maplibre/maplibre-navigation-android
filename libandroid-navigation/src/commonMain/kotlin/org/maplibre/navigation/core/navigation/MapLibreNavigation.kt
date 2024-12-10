@@ -1,17 +1,9 @@
 package org.maplibre.navigation.core.navigation
 
-//import android.content.ComponentName
-//import android.content.Context
-//import android.content.Intent
-//import android.content.ServiceConnection
-//import android.os.IBinder
-//import androidx.core.content.ContextCompat
-import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.maplibre.navigation.core.location.LocationEngine
-import org.maplibre.navigation.core.location.engine.LocationEngineProvider
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
@@ -32,7 +24,7 @@ import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
 import org.maplibre.navigation.core.utils.RouteUtils
 import org.maplibre.navigation.core.utils.ValidationUtils
-import timber.log.Timber
+//import timber.log.Timber
 
 /**
  * A MapLibreNavigation class for interacting with and customizing a navigation session.
@@ -63,7 +55,6 @@ import timber.log.Timber
  * @see MapLibreNavigationOptions
  */
 open class MapLibreNavigation @JvmOverloads constructor(
-    applicationContext: Context,
     val options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
@@ -89,7 +80,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * - Setting the location engine interval to 0 will result in location updates occurring as
      *   quickly as possible within the fastest interval limit placed on it.
      */
-    locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(applicationContext),
+    locationEngine: LocationEngine,
     var cameraEngine: Camera = SimpleCamera(),
     var snapEngine: Snap = SnapToRoute(),
     var offRouteEngine: OffRoute = OffRouteDetector(),
@@ -183,7 +174,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun addMilestone(milestone: Milestone) {
         val milestoneAdded = mutableMilestones.add(milestone)
         if (!milestoneAdded) {
-            Timber.w("Milestone has already been added to the stack.")
+//            Timber.w("Milestone has already been added to the stack.")
         }
     }
 
@@ -201,7 +192,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun addMilestones(milestones: List<Milestone>) {
         val milestonesAdded = this.mutableMilestones.addAll(milestones)
         if (!milestonesAdded) {
-            Timber.w("These milestones have already been added to the stack.")
+//            Timber.w("These milestones have already been added to the stack.")
         }
     }
 
@@ -217,7 +208,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
         if (milestone == null) {
             mutableMilestones.clear()
         } else if (!mutableMilestones.remove(milestone)) {
-            Timber.w("Milestone attempting to remove does not exist in stack.")
+//            Timber.w("Milestone attempting to remove does not exist in stack.")
         }
     }
 
@@ -232,7 +223,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun removeMilestone(milestoneIdentifier: Int) {
         milestones.firstOrNull { m -> m.identifier == milestoneIdentifier }
             ?.let { removeMilestone(it) }
-            ?: run { Timber.w("No milestone found with the specified identifier.") }
+//            ?: run { Timber.w("No milestone found with the specified identifier.") }
     }
 
     /**
@@ -252,7 +243,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun startNavigation(directionsRoute: DirectionsRoute) {
         ValidationUtils.validDirectionsRoute(directionsRoute, options.defaultMilestonesEnabled)
         this.route = directionsRoute
-        Timber.d("MapLibreNavigation startNavigation called.")
+//        Timber.d("MapLibreNavigation startNavigation called.")
 
         navigationRunner.startNavigation(directionsRoute)
         eventDispatcher.onNavigationEvent(true)
@@ -284,7 +275,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * @since 0.1.0
      */
     fun stopNavigation() {
-        Timber.d("MapLibreNavigation stopNavigation called")
+//        Timber.d("MapLibreNavigation stopNavigation called")
 
         navigationRunner.stopNavigation()
         eventDispatcher.onNavigationEvent(false)
@@ -495,18 +486,4 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun removeFasterRouteListener(fasterRouteListener: FasterRouteListener?) {
         eventDispatcher.removeFasterRouteListener(fasterRouteListener)
     }
-
-//    override fun onServiceConnected(name: ComponentName, service: IBinder) {
-//        Timber.d("Connected to service.")
-//
-//        (service as LocalBinder).service?.let { navigationService ->
-//            navigationService.startNavigation(this, routeUtils)
-//            this@MapLibreNavigation.navigationService = navigationService
-//        } ?: throw IllegalStateException("NavigationService must not be null")
-//    }
-//
-//    override fun onServiceDisconnected(name: ComponentName) {
-//        Timber.d("Disconnected from service.")
-//        navigationService = null
-//    }
 }

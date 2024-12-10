@@ -35,7 +35,7 @@ import org.maplibre.navigation.core.offroute.OffRouteListener;
 import org.maplibre.navigation.core.route.FasterRouteListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 import org.maplibre.navigation.core.utils.RouteUtils;
 
 import org.jetbrains.annotations.TestOnly;
@@ -294,7 +294,7 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeNavigation(Context context, MapLibreNavigationOptions options, LocationEngine locationEngine) {
-        navigation = new MapLibreNavigation(context, options, locationEngine);
+        navigation = new MapLibreNavigation(options, locationEngine);
         addNavigationListeners();
     }
 

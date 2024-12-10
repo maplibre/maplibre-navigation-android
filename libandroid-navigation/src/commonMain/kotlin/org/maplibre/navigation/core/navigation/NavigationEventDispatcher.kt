@@ -8,7 +8,7 @@ import org.maplibre.navigation.core.offroute.OffRouteListener
 import org.maplibre.navigation.core.route.FasterRouteListener
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-import timber.log.Timber
+//import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class NavigationEventDispatcher {
@@ -20,7 +20,7 @@ open class NavigationEventDispatcher {
 
     fun addMilestoneEventListener(milestoneEventListener: MilestoneEventListener) {
         if (milestoneEventListeners.contains(milestoneEventListener)) {
-            Timber.w("The specified MilestoneEventListener has already been added to the stack.")
+//            Timber.w("The specified MilestoneEventListener has already been added to the stack.")
             return
         }
         milestoneEventListeners.add(milestoneEventListener)
@@ -30,7 +30,7 @@ open class NavigationEventDispatcher {
         if (milestoneEventListener == null) {
             milestoneEventListeners.clear()
         } else if (!milestoneEventListeners.contains(milestoneEventListener)) {
-            Timber.w("The specified MilestoneEventListener isn't found in stack, therefore, cannot be removed.")
+//            Timber.w("The specified MilestoneEventListener isn't found in stack, therefore, cannot be removed.")
         } else {
             milestoneEventListeners.remove(milestoneEventListener)
         }
@@ -38,7 +38,7 @@ open class NavigationEventDispatcher {
 
     fun addProgressChangeListener(progressChangeListener: ProgressChangeListener) {
         if (progressChangeListeners.contains(progressChangeListener)) {
-            Timber.w("The specified ProgressChangeListener has already been added to the stack.")
+//            Timber.w("The specified ProgressChangeListener has already been added to the stack.")
             return
         }
         progressChangeListeners.add(progressChangeListener)
@@ -48,7 +48,7 @@ open class NavigationEventDispatcher {
         if (progressChangeListener == null) {
             progressChangeListeners.clear()
         } else if (!progressChangeListeners.contains(progressChangeListener)) {
-            Timber.w("The specified ProgressChangeListener isn't found in stack, therefore, cannot be removed.")
+//            Timber.w("The specified ProgressChangeListener isn't found in stack, therefore, cannot be removed.")
         } else {
             progressChangeListeners.remove(progressChangeListener)
         }
@@ -56,7 +56,7 @@ open class NavigationEventDispatcher {
 
     fun addOffRouteListener(offRouteListener: OffRouteListener) {
         if (offRouteListeners.contains(offRouteListener)) {
-            Timber.w("The specified OffRouteListener has already been added to the stack.")
+//            Timber.w("The specified OffRouteListener has already been added to the stack.")
             return
         }
         offRouteListeners.add(offRouteListener)
@@ -66,7 +66,7 @@ open class NavigationEventDispatcher {
         if (offRouteListener == null) {
             offRouteListeners.clear()
         } else if (!offRouteListeners.contains(offRouteListener)) {
-            Timber.w("The specified OffRouteListener isn't found in stack, therefore, cannot be removed.")
+//            Timber.w("The specified OffRouteListener isn't found in stack, therefore, cannot be removed.")
         } else {
             offRouteListeners.remove(offRouteListener)
         }
@@ -74,7 +74,7 @@ open class NavigationEventDispatcher {
 
     fun addNavigationEventListener(navigationEventListener: NavigationEventListener) {
         if (navigationEventListeners.contains(navigationEventListener)) {
-            Timber.w("The specified NavigationEventListener has already been added to the stack.")
+//            Timber.w("The specified NavigationEventListener has already been added to the stack.")
             return
         }
         navigationEventListeners.add(navigationEventListener)
@@ -84,7 +84,7 @@ open class NavigationEventDispatcher {
         if (navigationEventListener == null) {
             navigationEventListeners.clear()
         } else if (!navigationEventListeners.contains(navigationEventListener)) {
-            Timber.w("The specified NavigationEventListener isn't found in stack, therefore, cannot be removed.")
+//            Timber.w("The specified NavigationEventListener isn't found in stack, therefore, cannot be removed.")
         } else {
             navigationEventListeners.remove(navigationEventListener)
         }
@@ -92,7 +92,7 @@ open class NavigationEventDispatcher {
 
     fun addFasterRouteListener(fasterRouteListener: FasterRouteListener) {
         if (fasterRouteListeners.contains(fasterRouteListener)) {
-            Timber.w("The specified FasterRouteListener has already been added to the stack.")
+//            Timber.w("The specified FasterRouteListener has already been added to the stack.")
             return
         }
         fasterRouteListeners.add(fasterRouteListener)
@@ -102,7 +102,7 @@ open class NavigationEventDispatcher {
         if (fasterRouteListener == null) {
             fasterRouteListeners.clear()
         } else if (!fasterRouteListeners.contains(fasterRouteListener)) {
-            Timber.w("The specified FasterRouteListener isn't found in stack, therefore, cannot be removed.")
+//            Timber.w("The specified FasterRouteListener isn't found in stack, therefore, cannot be removed.")
         } else {
             fasterRouteListeners.remove(fasterRouteListener)
         }

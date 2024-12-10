@@ -55,7 +55,7 @@ import org.maplibre.navigation.core.offroute.OffRouteListener;
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 import timber.log.Timber;
 

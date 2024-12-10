@@ -14,7 +14,7 @@ import org.maplibre.navigation.core.models.DirectionsCriteria;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
-import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 import java.io.IOException;
 import java.util.List;

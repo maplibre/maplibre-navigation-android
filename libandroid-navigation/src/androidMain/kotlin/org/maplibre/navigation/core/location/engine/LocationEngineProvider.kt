@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Looper
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl
 import org.maplibre.navigation.core.location.LocationEngine
 
 /**
@@ -33,14 +34,15 @@ object LocationEngineProvider {
     }
 
     private fun getLocationEngine(context: Context, isGoogle: Boolean): LocationEngine {
-            return AndroidPlatformLocationEngine(
+        return PlatformLocationEngine(
+//                if (isGoogle)
+            GoogleLocationEngine(
                 context = context.applicationContext,
                 looper = Looper.getMainLooper()
             )
-//        return if (isGoogle)
-//            GoogleLocationEngineImpl(context.applicationContext)
 //        else
 //            MapLibreFusedLocationEngineImpl(context.applicationContext)
+        )
     }
 
     /**

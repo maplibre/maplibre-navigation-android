@@ -24,6 +24,7 @@ import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNa
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import retrofit2.Call
@@ -58,7 +59,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         binding = ActivitySnapToRouteNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navigation = MapLibreNavigation(
+        navigation = AndroidMapLibreNavigation(
             this,
             MapLibreNavigationOptions(snapToRoute = true)
         ).apply {

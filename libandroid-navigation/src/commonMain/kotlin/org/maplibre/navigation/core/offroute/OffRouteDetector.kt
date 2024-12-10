@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.offroute
 
+import org.maplibre.navigation.core.utils.RingBuffer
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.core.location.Location
@@ -237,7 +238,7 @@ open class OffRouteDetector(
      */
     private fun movingAwayFromManeuver(
         routeProgress: RouteProgress,
-        distancesAwayFromManeuver: RingBuffer<Int>,
+        distancesAwayFromManeuver: org.maplibre.navigation.core.utils.RingBuffer<Int>,
         stepPoints: List<Point>,
         currentPoint: Point,
         options: MapLibreNavigationOptions

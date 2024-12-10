@@ -41,6 +41,7 @@ import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.RouteMilestone
 import org.maplibre.navigation.core.milestone.Trigger
 import org.maplibre.navigation.core.milestone.TriggerProperty
+import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationEventListener
@@ -91,15 +92,11 @@ class MockNavigationActivity :
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            customNotification.createNotificationChannel(this)
 //        }
-//        val options = MapLibreNavigationOptions(
+        val options = MapLibreNavigationOptions(
 ////            navigationNotification = customNotification
-//        )
-
-        navigation =
-            MapLibreNavigation(
-                this,
-//                options
-            )
+        )
+//
+        navigation = AndroidMapLibreNavigation(context, options)
 
         navigation.addMilestone(
             RouteMilestone(

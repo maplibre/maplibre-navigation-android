@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.utils
+package org.maplibre.navigation.android.navigation.ui.v5.utils
 
 import android.content.Context
 import android.os.Build

@@ -24,7 +24,7 @@ import org.maplibre.navigation.core.navigation.NavigationConstants;
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.core.utils.LocaleUtils;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 import java.text.DecimalFormat;
 

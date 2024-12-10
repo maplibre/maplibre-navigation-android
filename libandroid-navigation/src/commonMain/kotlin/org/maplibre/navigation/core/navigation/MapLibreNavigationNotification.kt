@@ -19,7 +19,7 @@ package org.maplibre.navigation.core.navigation
 //import org.maplibre.navigation.core.navigation.notification.NavigationNotification
 //import org.maplibre.navigation.core.routeprogress.RouteProgress
 //import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter
-//import org.maplibre.navigation.core.utils.LocaleUtils
+//import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils
 //import org.maplibre.navigation.core.utils.ManeuverUtils
 //import org.maplibre.navigation.core.utils.time.TimeFormatter
 //import java.util.Calendar

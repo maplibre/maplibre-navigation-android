@@ -42,6 +42,10 @@ kotlin {
         androidMain.dependencies {
             implementation dependenciesList.mapLibre
             api dependenciesList.mapLibreTurf
+
+            // Location by Play Services
+            // Will only used, when added by the client app
+            compileOnly dependenciesList.gmsLocation
         }
     }
 }
@@ -51,7 +55,7 @@ kotlin {
 //}
 
 android {
-    namespace 'org.maplibre.navigation.android.navigation'
+    namespace 'org.maplibre.navigation.core'
 
     compileSdkVersion androidVersions.compileSdkVersion
     buildToolsVersion androidVersions.buildToolsVersion
