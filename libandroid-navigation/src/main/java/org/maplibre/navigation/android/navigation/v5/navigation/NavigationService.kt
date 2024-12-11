@@ -41,7 +41,7 @@ open class NavigationService : Service() {
      * Only should be called once since we want the service to continue running until the navigation
      * session ends.
      */
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
     }
 
