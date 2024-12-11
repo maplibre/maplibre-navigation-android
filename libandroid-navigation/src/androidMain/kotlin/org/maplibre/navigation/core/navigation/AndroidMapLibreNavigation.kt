@@ -16,7 +16,7 @@ import org.maplibre.navigation.core.utils.RouteUtils
 /**
  * A Android platform specific wrapper for [MapLibreNavigation].
  *
- * You can also use [MapLibreNavigation] directly, but this lead to more configuration.
+ * You can also use [MapLibreNavigation] directly, but this leads to more configuration.
  *
  * Currently the only difference is, that the location engine is created depending on
  * your dependencies.

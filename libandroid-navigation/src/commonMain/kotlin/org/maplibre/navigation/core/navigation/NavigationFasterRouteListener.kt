@@ -1,10 +1,10 @@
 package org.maplibre.navigation.core.navigation
 
+import co.touchlab.kermit.Logger
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.route.FasterRoute
 import org.maplibre.navigation.core.route.RouteListener
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-//import timber.log.Timber
 
 open class NavigationFasterRouteListener(
     private val eventDispatcher: NavigationEventDispatcher,
@@ -18,6 +18,6 @@ open class NavigationFasterRouteListener(
     }
 
     override fun onErrorReceived(throwable: Throwable) {
-//        Timber.e(throwable)
+        Logger.e(throwable) { "Error occurred fetching a faster route" }
     }
 }

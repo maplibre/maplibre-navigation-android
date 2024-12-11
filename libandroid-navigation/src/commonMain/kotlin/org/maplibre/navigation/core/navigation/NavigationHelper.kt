@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
+import co.touchlab.kermit.Logger
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.utils.PolylineUtils
@@ -19,7 +20,6 @@ import org.maplibre.navigation.core.utils.MathUtils
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
-//import timber.log.Timber
 
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
@@ -75,10 +75,7 @@ object NavigationHelper {
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
         val distance = feature.getNumberProperty("dist")
         if (distance != null && distance.toDouble() > 1) {
-//            Timber.i(
-//                "Distance to step is larger than 1km, so we won't advance the step, distance: %s km",
-//                distance.toDouble()
-//            )
+            Logger.i { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
             return TurfMeasurement.length(stepPoints, TurfConstants.UNIT_METERS)
         }
 

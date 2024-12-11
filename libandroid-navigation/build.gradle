@@ -33,6 +33,7 @@ kotlin {
         commonMain.dependencies {
             implementation dependenciesList.kotlinxSerializationJson
             implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+            implementation 'co.touchlab:kermit:2.0.4'
 
         }
 
@@ -116,9 +117,6 @@ android {
 //    // Support
 //    implementation dependenciesList.androidxAppcompat
 //    implementation dependenciesList.supportAnnotation
-//
-//    // Logging
-//    implementation dependenciesList.timber
 //
 //    implementation dependenciesList.kotlinxSerializationJson
 //

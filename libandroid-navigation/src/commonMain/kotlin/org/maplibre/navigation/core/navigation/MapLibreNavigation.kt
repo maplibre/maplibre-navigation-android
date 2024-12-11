@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +25,6 @@ import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
 import org.maplibre.navigation.core.utils.RouteUtils
 import org.maplibre.navigation.core.utils.ValidationUtils
-//import timber.log.Timber
 
 /**
  * A MapLibreNavigation class for interacting with and customizing a navigation session.
@@ -174,7 +174,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun addMilestone(milestone: Milestone) {
         val milestoneAdded = mutableMilestones.add(milestone)
         if (!milestoneAdded) {
-//            Timber.w("Milestone has already been added to the stack.")
+            Logger.w { "Milestone has already been added to the stack." }
         }
     }
 
@@ -192,7 +192,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun addMilestones(milestones: List<Milestone>) {
         val milestonesAdded = this.mutableMilestones.addAll(milestones)
         if (!milestonesAdded) {
-//            Timber.w("These milestones have already been added to the stack.")
+            Logger.w { "These milestones have already been added to the stack." }
         }
     }
 
@@ -208,7 +208,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
         if (milestone == null) {
             mutableMilestones.clear()
         } else if (!mutableMilestones.remove(milestone)) {
-//            Timber.w("Milestone attempting to remove does not exist in stack.")
+            Logger.w { "Milestone attempting to remove does not exist in stack." }
         }
     }
 
@@ -223,7 +223,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun removeMilestone(milestoneIdentifier: Int) {
         milestones.firstOrNull { m -> m.identifier == milestoneIdentifier }
             ?.let { removeMilestone(it) }
-//            ?: run { Timber.w("No milestone found with the specified identifier.") }
+            ?: run { Logger.w { "No milestone found with the specified identifier." } }
     }
 
     /**
@@ -243,7 +243,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun startNavigation(directionsRoute: DirectionsRoute) {
         ValidationUtils.validDirectionsRoute(directionsRoute, options.defaultMilestonesEnabled)
         this.route = directionsRoute
-//        Timber.d("MapLibreNavigation startNavigation called.")
+        Logger.d { "MapLibreNavigation startNavigation called." }
 
         navigationRunner.startNavigation(directionsRoute)
         eventDispatcher.onNavigationEvent(true)
@@ -275,7 +275,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * @since 0.1.0
      */
     fun stopNavigation() {
-//        Timber.d("MapLibreNavigation stopNavigation called")
+        Logger.d { "MapLibreNavigation stopNavigation called" }
 
         navigationRunner.stopNavigation()
         eventDispatcher.onNavigationEvent(false)
