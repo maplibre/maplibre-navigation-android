@@ -2,6 +2,7 @@ package org.maplibre.navigation.core.location.replay
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.maplibre.navigation.core.location.Location
@@ -14,6 +15,7 @@ open class ReplayLocationDispatcher(
     private var locationsToReplay = locationsToReplay.toMutableList()
     private var current: Location? = null
     private val replayLocationListeners = mutableListOf<ReplayLocationListener>()
+    private var currentDispatcherJob: Job? = null
 
     init {
         checkValidInput(locationsToReplay)
@@ -26,6 +28,7 @@ open class ReplayLocationDispatcher(
 
     fun stop() {
         clearLocations()
+        stopDispatching()
     }
 
     fun update(locationsToReplay: List<Location>) {
@@ -81,13 +84,14 @@ open class ReplayLocationDispatcher(
         val nextTime = current!!.elapsedRealtimeMilliseconds
         val diff = nextTime - currentTime
 
-        coroutineScope.launch {
-            delay(diff)
-
+        currentDispatcherJob?.cancel()
+        currentDispatcherJob = coroutineScope.launch {
             current?.let { current ->
                 dispatchLocation(current)
-                scheduleNextDispatch()
             }
+
+            delay(diff)
+            scheduleNextDispatch()
         }
     }
 
@@ -96,7 +100,7 @@ open class ReplayLocationDispatcher(
     }
 
     private fun stopDispatching() {
-        clearLocations()
+        currentDispatcherJob?.cancel()
     }
 
     companion object {
