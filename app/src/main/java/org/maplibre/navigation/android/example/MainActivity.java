@@ -58,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             getString(R.string.description_snap_to_route),
             SnapToRouteNavigationActivity.class
         ));
+        list.add(new SampleItem(
+            getString(R.string.title_foreground_notification),
+            getString(R.string.description_foreground_notification),
+            NavigationWithForegroundNotificationActivity.class
+        ));
         RecyclerView.Adapter adapter = new MainAdapter(list);
         recyclerView.setAdapter(adapter);
 

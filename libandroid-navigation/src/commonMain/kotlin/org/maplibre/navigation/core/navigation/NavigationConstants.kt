@@ -25,16 +25,6 @@ object NavigationConstants {
     const val VOICE_INSTRUCTION_MILESTONE_ID: Int = 1
 
     /**
-     * String channel used to post the navigation notification (custom or default).
-     *
-     *
-     * If &gt; Android O, a notification channel needs to be created to properly post the notification.
-     *
-     * @since 0.8.0
-     */
-    const val NAVIGATION_NOTIFICATION_CHANNEL: String = "NAVIGATION_NOTIFICATION_CHANNEL"
-
-    /**
      * This identifier will be used to
      * differentiate the [BannerInstructionMilestone]
      * from custom milestones in the [MilestoneEventListener].
@@ -42,14 +32,6 @@ object NavigationConstants {
      * @since 0.8.0
      */
     const val BANNER_INSTRUCTION_MILESTONE_ID: Int = 2
-
-    /**
-     * Random integer value used for identifying the navigation notification.
-     *
-     * @since 0.5.0
-     */
-    const val NAVIGATION_NOTIFICATION_ID: Int = 5678
-
     /**
      * NavigationLauncher key for storing initial map position in Intent
      */
