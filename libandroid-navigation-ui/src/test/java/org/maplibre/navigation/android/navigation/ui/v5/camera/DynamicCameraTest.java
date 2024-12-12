@@ -1,12 +1,9 @@
 package org.maplibre.navigation.android.navigation.ui.v5.camera;
 
-import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import org.maplibre.navigation.core.location.Location;
 import org.maplibre.navigation.core.models.DirectionsResponse;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.LineString;
@@ -219,10 +216,10 @@ public class DynamicCameraTest extends BaseTest {
     Location location = mock(Location.class);
     when(location.getLongitude()).thenReturn(lng);
     when(location.getLatitude()).thenReturn(lat);
-    when(location.getSpeed()).thenReturn(30f);
+    when(location.getSpeedMetersPerSeconds()).thenReturn(30f);
     when(location.getBearing()).thenReturn(100f);
-    when(location.getAccuracy()).thenReturn(10f);
-    when(location.getTime()).thenReturn(time);
+    when(location.getAccuracyMeters()).thenReturn(10f);
+    when(location.getElapsedRealtimeMilliseconds()).thenReturn(time);
     return location;
   }
 

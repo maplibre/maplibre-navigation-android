@@ -7,7 +7,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.maplibre.navigation.android.navigation.R
+import org.maplibre.navigation.android.navigation.ui.v5.R
 import org.maplibre.navigation.core.models.DirectionsCriteria
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.robolectric.RobolectricTestRunner

@@ -1,9 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import android.location.Location;
-
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
-import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModelProgressChangeListener;
+import org.maplibre.navigation.core.location.Location;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
