@@ -43,6 +43,7 @@ internal class MockLocationBuilder {
         timeValue: Long
     ): Location {
         return Location(
+            provider = "test",
             latitude = latValue,
             longitude = lngValue,
             speedMetersPerSeconds = speedValue,

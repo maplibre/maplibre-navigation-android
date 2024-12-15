@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.location.toLocation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -77,12 +78,4 @@ open class GoogleLocationEngine(
             else -> Priority.PRIORITY_HIGH_ACCURACY
         }
     }
-
-    fun AndroidLocation.toLocation() = Location(
-        latitude = latitude,
-        longitude = longitude,
-        bearing = bearing.takeIf { hasBearing() },
-        speedMetersPerSeconds = speed.takeIf { hasSpeed() },
-        accuracyMeters = accuracy.takeIf { hasAccuracy() }
-    )
 }

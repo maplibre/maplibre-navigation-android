@@ -150,8 +150,7 @@ open class RouteUtils {
         )
         val firstRoutePoint = lineString.coordinates().first()
         return Location(
-            //TODO fabi755: provider?
-//            provider = FORCED_LOCATION,
+            provider = FORCED_LOCATION,
             latitude = firstRoutePoint.latitude(),
             longitude = firstRoutePoint.longitude()
         )

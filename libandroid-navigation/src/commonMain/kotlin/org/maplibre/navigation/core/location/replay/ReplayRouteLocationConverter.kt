@@ -119,8 +119,7 @@ open class ReplayRouteLocationConverter(
 
     private fun createMockLocationFrom(point: Point): Location {
         return Location(
-            //TODO fabi755
-//            provider = REPLAY_ROUTE,
+            provider = PROVIDER_NAME,
             latitude = point.latitude(),
             longitude = point.longitude(),
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
@@ -133,6 +132,6 @@ open class ReplayRouteLocationConverter(
         private const val ONE_SECOND_IN_MILLISECONDS = 1000
         private const val ONE_KM_IN_METERS = 1000.0
         private const val ONE_HOUR_IN_SECONDS = 3600
-        private const val REPLAY_ROUTE = "ReplayRouteLocation"
+        const val PROVIDER_NAME = "ReplayRouteLocation"
     }
 }

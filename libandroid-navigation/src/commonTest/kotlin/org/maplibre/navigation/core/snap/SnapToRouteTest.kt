@@ -10,22 +10,21 @@ import kotlin.test.assertEquals
 
 class SnapToRouteTest : BaseTest() {
 
-//    @Test
-//    fun snappedLocation_returnsProviderNameCorrectly() {
-//        val routeProgress = buildDefaultTestRouteProgress()
-//        val snap: Snap = SnapToRoute()
-//        val location = Location(
-//            //TODO fabi755
-////            provider = "test"
-//            latitude = 0.0,
-//            longitude = 0.0,
-//        )
-//
-//        val snappedLocation =
-//            snap.getSnappedLocation(location, routeProgress)
-//
-//        assertEquals("test", snappedLocation.provider)
-//    }
+    @Test
+    fun snappedLocation_returnsProviderNameCorrectly() {
+        val routeProgress = buildDefaultTestRouteProgress()
+        val snap: Snap = SnapToRoute()
+        val location = Location(
+            provider = "test",
+            latitude = 0.0,
+            longitude = 0.0,
+        )
+
+        val snappedLocation =
+            snap.getSnappedLocation(location, routeProgress)
+
+        assertEquals("test", snappedLocation.provider)
+    }
 
     @Test
     fun snappedLocation_locationOnStart() {
@@ -33,8 +32,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.7989792,
             longitude = -77.0638882,
             bearing = 20f
@@ -61,8 +59,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.7984052,
             longitude = -77.0629411,
             bearing = 20f
@@ -89,8 +86,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.9623092,
             longitude = -77.0282631,
             bearing = 20f
@@ -117,8 +113,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.7989792,
             longitude = -77.0638882,
             bearing = 20f
@@ -144,8 +139,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.79881,
             longitude = -77.0629411,
             bearing = 20f
@@ -171,8 +165,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.8943771,
             longitude = -77.0782341,
             bearing = 20f
@@ -198,8 +191,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute(SINGLE_STEP_LEG)
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.8943771,
             longitude = -77.0782341,
             bearing = 20f
@@ -240,8 +232,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute(SINGLE_STEP_LEG)
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.8943771,
             longitude = -77.0782341,
             bearing = 20f
@@ -268,8 +259,7 @@ class SnapToRouteTest : BaseTest() {
             buildMultipleLegRoute()
         val snap: Snap = SnapToRoute()
         val location = Location(
-            //TODO fabi755
-//            provider = "test"
+            provider = "test",
             latitude = 38.9623092,
             longitude = -77.0282631,
             bearing = 20f

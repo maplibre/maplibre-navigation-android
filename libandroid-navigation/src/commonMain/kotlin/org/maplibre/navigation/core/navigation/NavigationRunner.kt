@@ -23,14 +23,13 @@ import org.maplibre.navigation.core.utils.RouteUtils
 // - NavigationRunner
 // - NavigationRouteRunner
 //TODO: fabi755 add interface and allow to customize (open/inject/...)
+/**
+ *
+ */
 class NavigationRunner(
     private val mapLibreNavigation: MapLibreNavigation,
-
     private val routeUtils: RouteUtils,
-    // coroutineScope param
-
     private val coroutineScope: CoroutineScope
-
 ) {
     private val locationEngine: LocationEngine
         get() = mapLibreNavigation.locationEngine
@@ -41,24 +40,6 @@ class NavigationRunner(
     private val navigationRouteProcessor = NavigationRouteProcessor(routeUtils)
 
     private var collectLocationJob: Job? = null
-
-//    @SuppressLint("MissingPermission")
-//    fun forceLocationUpdate(route: DirectionsRoute) {
-//        locationEngine.getLastLocation(object : LocationEngineCallback<LocationEngineResult> {
-//            override fun onSuccess(result: LocationEngineResult) {
-//                listener.queueLocationUpdate(
-//                    result.lastLocation
-//                        ?.toLocation()
-//                        ?.takeIf { loc -> listener.isValidLocationUpdate(loc) }
-//                        ?: routeUtils.createFirstLocationFromRoute(route)
-//                )
-//            }
-//
-//            override fun onFailure(exception: Exception) {
-//                Timber.w(exception, "Cannot get a forced location update")
-//            }
-//        })
-//    }
 
     fun startNavigation(route: DirectionsRoute) {
         collectLocationJob?.cancel() // Cancel previous started run
@@ -74,15 +55,6 @@ class NavigationRunner(
                     .build(),
             ).collect(::processLocationUpdate)
         }
-
-
-//        val listener = NavigationLocationEngineListener(
-//            mapLibreNavigation = mapLibreNavigation,
-//            validator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
-//            thread = thread,
-//        )
-//        locationEngineUpdater =
-//            NavigationLocationEngineUpdater(locationEngine, listener, routeUtils)
     }
 
     fun stopNavigation() {

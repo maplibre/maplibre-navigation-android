@@ -13,6 +13,7 @@ import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.location.toLocation
 import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -57,12 +58,4 @@ open class MapLibreLocationEngine(
             }
         })
     }
-
-    fun AndroidLocation.toLocation() = Location(
-        latitude = latitude,
-        longitude = longitude,
-        bearing = bearing.takeIf { hasBearing() },
-        speedMetersPerSeconds = speed.takeIf { hasSpeed() },
-        accuracyMeters = accuracy.takeIf { hasAccuracy() }
-    )
 }

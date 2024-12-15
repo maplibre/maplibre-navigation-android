@@ -185,9 +185,8 @@ class NavigationWithForegroundNotificationActivity : AppCompatActivity(), OnMapR
 
     override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
         // Update own location with the snapped location
-        //TODO fabi755
         locationComponent?.forceLocationUpdate(
-            AndroidLocation("snapped").apply {
+            AndroidLocation(location.provider).apply {
                 latitude = location.latitude
                 longitude = location.longitude
                 bearing = location.bearing ?: 0f
