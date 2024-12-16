@@ -6,6 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.LocationValidator
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
@@ -31,6 +32,7 @@ class NavigationRunner(
     private val routeUtils: RouteUtils,
     private val coroutineScope: CoroutineScope
 ) {
+    private val locationValidator: LocationValidator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
     private val locationEngine: LocationEngine
         get() = mapLibreNavigation.locationEngine
 
@@ -45,7 +47,6 @@ class NavigationRunner(
         collectLocationJob?.cancel() // Cancel previous started run
 
         collectLocationJob = coroutineScope.launch {
-            //TODO fabi755: `isValidLocationUpdate` was called here
             processLocationUpdate(
                 locationEngine.getLastLocation() ?: routeUtils.createFirstLocationFromRoute(route)
             )
@@ -76,10 +77,13 @@ class NavigationRunner(
      *
      * @param update hold location, navigation (with options), and distances away from maneuver
      */
-    //TODO fabi755: `isValidLocationUpdate` was called here
-    private suspend fun processLocationUpdate(rawLocation: Location) {
-        val routeProgress =
-            navigationRouteProcessor.buildNewRouteProgress(mapLibreNavigation, rawLocation)
+    private fun processLocationUpdate(rawLocation: Location) {
+        if (!locationValidator.isValidUpdate(rawLocation)) {
+            return
+        }
+
+        val routeProgress = navigationRouteProcessor
+            .buildNewRouteProgress(mapLibreNavigation, rawLocation)
 
         val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
         val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
