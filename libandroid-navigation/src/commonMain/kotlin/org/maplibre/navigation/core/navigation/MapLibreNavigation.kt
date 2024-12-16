@@ -94,7 +94,6 @@ open class MapLibreNavigation @JvmOverloads constructor(
         routeUtils = routeUtils,
         coroutineScope = CoroutineScope(Dispatchers.Default + navigationRunnerJob)
     )
-//    private var navigationService: NavigationService? = null
 
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
@@ -247,16 +246,6 @@ open class MapLibreNavigation @JvmOverloads constructor(
 
         navigationRunner.startNavigation(directionsRoute)
         eventDispatcher.onNavigationEvent(true)
-
-//        // Start the NavigationService is not done before.
-//        if (navigationService == null) {
-//            val intent = Intent(applicationContext, NavigationService::class.java)
-//            ContextCompat.startForegroundService(applicationContext, intent)
-//            applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
-//
-//            // Send navigation event running: true
-//            eventDispatcher.onNavigationEvent(true)
-//        }
     }
 
     /**
@@ -279,17 +268,10 @@ open class MapLibreNavigation @JvmOverloads constructor(
 
         navigationRunner.stopNavigation()
         eventDispatcher.onNavigationEvent(false)
-
-//        navigationService?.let { navigationService ->
-//            applicationContext.unbindService(this)
-//            navigationService.endNavigation()
-//            navigationService.stopSelf()
-//            this@MapLibreNavigation.navigationService = null
-//            eventDispatcher.onNavigationEvent(false)
-//        }
     }
 
     // Listeners
+
     /**
      * This adds a new milestone event listener which is invoked when a milestone gets triggered. If
      * more then one milestone gets triggered on a location update, each milestone event listener will
