@@ -96,8 +96,10 @@ data class MapLibreNavigationOptions(
 
 //    val navigationNotification: NavigationNotification? = null,
 
-    @RoundingIncrement
-    val roundingIncrement: Int = Defaults.ROUNDING_INCREMENT,
+    /**
+     * The increment used for rounding the user's speed and the remaining duration of the route.
+     */
+    val roundingIncrement: RoundingIncrement = Defaults.roundingIncrement,
 
     val timeFormatType: TimeFormat = TimeFormat.NONE_SPECIFIED,
 
@@ -150,6 +152,14 @@ data class MapLibreNavigationOptions(
         TWENTY_FOUR_HOURS(1)
     }
 
+    enum class RoundingIncrement(val increment: Int) {
+        ROUNDING_INCREMENT_FIVE(5),
+        ROUNDING_INCREMENT_TEN(10),
+        ROUNDING_INCREMENT_TWENTY_FIVE(25),
+        ROUNDING_INCREMENT_FIFTY(50),
+        ROUNDING_INCREMENT_ONE_HUNDRED(100)
+    }
+
     object Defaults {
         const val MAX_TURN_COMPLETION_OFFSET = 30.0
         const val MANEUVER_ZONE_RADIUS = 40.0
@@ -168,9 +178,9 @@ data class MapLibreNavigationOptions(
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_WRONG_DIRECTION = 50.0
         const val OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION = 20.0
         const val IS_DEBUG_LOGGING_ENABLED = false
-        const val ROUNDING_INCREMENT = NavigationConstants.ROUNDING_INCREMENT_FIFTY
         const val LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD = 100
         const val FASTER_ROUTE_CHECK_INTERVAL_SECONDS = 120
+        val roundingIncrement = RoundingIncrement.ROUNDING_INCREMENT_FIFTY
     }
 
     class Builder {
@@ -197,7 +207,7 @@ data class MapLibreNavigationOptions(
             Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION
         private var isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED
 //        private var navigationNotification: NavigationNotification? = null
-        @RoundingIncrement private var roundingIncrement: Int = Defaults.ROUNDING_INCREMENT
+        private var roundingIncrement: RoundingIncrement = Defaults.roundingIncrement
         private var timeFormatType: TimeFormat = TimeFormat.NONE_SPECIFIED
         private var locationAcceptableAccuracyInMetersThreshold: Int =
             Defaults.LOCATION_ACCEPTABLE_ACCURACY_IN_METERS_THRESHOLD
@@ -222,7 +232,7 @@ data class MapLibreNavigationOptions(
         fun withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeRightDirection = offRouteMinimumDistanceMetersBeforeRightDirection }
         fun withIsDebugLoggingEnabled(isDebugLoggingEnabled: Boolean) = apply { this.isDebugLoggingEnabled = isDebugLoggingEnabled }
 //        fun withNavigationNotification(navigationNotification: NavigationNotification?) = apply { this.navigationNotification = navigationNotification }
-        fun withRoundingIncrement(roundingIncrement: Int) = apply { this.roundingIncrement = roundingIncrement }
+        fun withRoundingIncrement(roundingIncrement: RoundingIncrement) = apply { this.roundingIncrement = roundingIncrement }
         fun withTimeFormatType(timeFormatType: TimeFormat) = apply { this.timeFormatType = timeFormatType }
         fun withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold: Int) = apply { this.locationAcceptableAccuracyInMetersThreshold = locationAcceptableAccuracyInMetersThreshold }
         fun withFasterRouteCheckIntervalSeconds(fasterRouteCheckIntervalSeconds: Int) = apply { this.fasterRouteCheckIntervalSeconds = fasterRouteCheckIntervalSeconds }

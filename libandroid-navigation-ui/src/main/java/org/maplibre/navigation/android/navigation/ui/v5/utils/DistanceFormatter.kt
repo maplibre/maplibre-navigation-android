@@ -8,7 +8,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import org.maplibre.navigation.android.navigation.ui.v5.R
 import org.maplibre.navigation.core.models.DirectionsCriteria
-import org.maplibre.navigation.core.navigation.NavigationConstants.RoundingIncrement
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfConversion
 import java.text.NumberFormat
@@ -27,7 +27,7 @@ class DistanceFormatter(
     context: Context,
     language: String?,
     @DirectionsCriteria.VoiceUnitCriteria unitType: String?,
-    @property:RoundingIncrement @RoundingIncrement private val roundingIncrement: Int
+    private val roundingIncrement: MapLibreNavigationOptions.RoundingIncrement
 ) {
     private val unitStrings: Map<String, String> = mapOf(
         TurfConstants.UNIT_KILOMETERS to context.getString(R.string.kilometers),
@@ -97,7 +97,7 @@ class DistanceFormatter(
      * @return true if new formatter is needed, false otherwise
      */
     @Suppress("unused")
-    fun shouldUpdate(language: String, unitType: String, roundingIncrement: Int): Boolean {
+    fun shouldUpdate(language: String, unitType: String, roundingIncrement: MapLibreNavigationOptions.RoundingIncrement): Boolean {
         return this.language != language || this.unitType != unitType || this.roundingIncrement != roundingIncrement
     }
 
@@ -109,9 +109,9 @@ class DistanceFormatter(
      * @return number rounded to closest rounding increment, or rounding increment if distance is less
      */
     private fun roundToClosestIncrement(distance: Double): String {
-        val roundedNumber = (Math.round(distance).toInt()) / roundingIncrement * roundingIncrement
+        val roundedNumber = (Math.round(distance).toInt()) / roundingIncrement.increment * roundingIncrement.increment
 
-        return (if (roundedNumber < roundingIncrement) roundingIncrement else roundedNumber).toString()
+        return (if (roundedNumber < roundingIncrement.increment) roundingIncrement.increment else roundedNumber).toString()
     }
 
     /**

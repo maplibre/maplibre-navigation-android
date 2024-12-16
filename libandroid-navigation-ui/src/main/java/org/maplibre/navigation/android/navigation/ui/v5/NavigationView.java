@@ -660,7 +660,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
 
   private int establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
     MapLibreNavigationOptions mapLibreNavigationOptions = navigationViewOptions.navigationOptions();
-    return mapLibreNavigationOptions.getRoundingIncrement();
+    return mapLibreNavigationOptions.getRoundingIncrement().getIncrement();
   }
 
   private String establishLanguage(LocaleUtils localeUtils, NavigationViewOptions options) {

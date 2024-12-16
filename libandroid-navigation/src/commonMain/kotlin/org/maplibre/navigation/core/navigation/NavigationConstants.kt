@@ -1,8 +1,5 @@
 package org.maplibre.navigation.core.navigation
 
-//TODO fabi755
-//import androidx.annotation.IntDef
-//import androidx.annotation.StringDef
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.route.FasterRouteDetector
@@ -157,23 +154,4 @@ object NavigationConstants {
     const val TURN_LANE_INDICATION_RIGHT: String = "right"
     const val TURN_LANE_INDICATION_SLIGHT_RIGHT: String = "slight right"
     const val TURN_LANE_INDICATION_UTURN: String = "uturn"
-
-    // Distance Rounding Increments
-    const val ROUNDING_INCREMENT_FIVE: Int = 5
-    const val ROUNDING_INCREMENT_TEN: Int = 10
-    const val ROUNDING_INCREMENT_TWENTY_FIVE: Int = 25
-    const val ROUNDING_INCREMENT_FIFTY: Int = 50
-    const val ROUNDING_INCREMENT_ONE_HUNDRED: Int = 100
-
-    //TODO fabi755
-//    @StringDef(STEP_MANEUVER_TYPE_TURN, STEP_MANEUVER_TYPE_NEW_NAME, STEP_MANEUVER_TYPE_DEPART, STEP_MANEUVER_TYPE_ARRIVE, STEP_MANEUVER_TYPE_MERGE, STEP_MANEUVER_TYPE_ON_RAMP, STEP_MANEUVER_TYPE_OFF_RAMP, STEP_MANEUVER_TYPE_FORK, STEP_MANEUVER_TYPE_END_OF_ROAD, STEP_MANEUVER_TYPE_CONTINUE, STEP_MANEUVER_TYPE_ROUNDABOUT, STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT, STEP_MANEUVER_TYPE_ROTARY, STEP_MANEUVER_TYPE_ROUNDABOUT_TURN, STEP_MANEUVER_TYPE_NOTIFICATION)
-    annotation class ManeuverType
-
-    //TODO fabi755
-//    @StringDef(STEP_MANEUVER_MODIFIER_UTURN, STEP_MANEUVER_MODIFIER_SHARP_RIGHT, STEP_MANEUVER_MODIFIER_RIGHT, STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT, STEP_MANEUVER_MODIFIER_STRAIGHT, STEP_MANEUVER_MODIFIER_SLIGHT_LEFT, STEP_MANEUVER_MODIFIER_LEFT, STEP_MANEUVER_MODIFIER_SHARP_LEFT)
-    annotation class ManeuverModifier
-
-    //TODO fabi755
-//    @IntDef(ROUNDING_INCREMENT_FIVE, ROUNDING_INCREMENT_TEN, ROUNDING_INCREMENT_TWENTY_FIVE, ROUNDING_INCREMENT_FIFTY, ROUNDING_INCREMENT_ONE_HUNDRED)
-    annotation class RoundingIncrement
 }

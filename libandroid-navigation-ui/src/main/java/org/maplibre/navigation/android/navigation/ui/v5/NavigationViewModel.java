@@ -261,7 +261,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private int initializeRoundingIncrement(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
-        return navigationOptions.getRoundingIncrement();
+        return navigationOptions.getRoundingIncrement().getIncrement();
     }
 
     private void initializeDistanceFormatter(NavigationViewOptions options) {
