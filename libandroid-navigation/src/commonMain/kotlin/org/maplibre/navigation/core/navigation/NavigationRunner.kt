@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.navigation.core.location.Location
-import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation

@@ -1,7 +1,8 @@
-package org.maplibre.navigation.core.location
+package org.maplibre.navigation.core.location.engine
 
 import kotlinx.coroutines.flow.Flow
 import org.maplibre.android.location.engine.LocationEngineRequest
+import org.maplibre.navigation.core.location.Location
 
 interface LocationEngine {
 

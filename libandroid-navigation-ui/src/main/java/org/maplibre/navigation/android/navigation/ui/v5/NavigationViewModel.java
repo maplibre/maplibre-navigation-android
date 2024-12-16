@@ -19,7 +19,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayerProvider;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
-import org.maplibre.navigation.core.location.LocationEngine;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.core.milestone.Milestone;
 import org.maplibre.navigation.core.milestone.MilestoneEventListener;

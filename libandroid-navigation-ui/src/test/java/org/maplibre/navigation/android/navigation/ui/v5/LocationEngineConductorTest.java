@@ -12,7 +12,7 @@ import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.core.location.LocationEngine;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 
 import org.junit.Test;

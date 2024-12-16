@@ -4,8 +4,6 @@ import android.content.Context
 import android.os.Looper
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl
-import org.maplibre.navigation.core.location.LocationEngine
 
 /**
  * The main entry point for location engine integration.
@@ -34,20 +32,18 @@ object LocationEngineProvider {
     }
 
     private fun getLocationEngine(context: Context, isGoogle: Boolean): LocationEngine {
-        return PlatformLocationEngine(
-            when (isGoogle) {
-                true -> GoogleLocationEngine(
+        return when (isGoogle) {
+            true -> GoogleLocationEngine(
+                context = context.applicationContext,
+                looper = Looper.getMainLooper()
+            )
+
+            false ->
+                MapLibreLocationEngine(
                     context = context.applicationContext,
                     looper = Looper.getMainLooper()
                 )
-
-                false ->
-                    MapLibreLocationEngine(
-                        context = context.applicationContext,
-                        looper = Looper.getMainLooper()
-                    )
-            }
-        )
+        }
     }
 
     /**

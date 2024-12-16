@@ -1,10 +1,9 @@
 package org.maplibre.navigation.core.navigation
 
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.maplibre.navigation.core.BaseTest
-import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.milestone.StepMilestone
@@ -14,7 +13,6 @@ import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame

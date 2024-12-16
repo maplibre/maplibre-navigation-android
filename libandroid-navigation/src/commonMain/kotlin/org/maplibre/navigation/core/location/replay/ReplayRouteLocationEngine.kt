@@ -12,8 +12,7 @@ import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.core.location.Location
-import org.maplibre.navigation.core.location.LocationEngine
-import org.maplibre.navigation.core.location.replay.ReplayRouteLocationConverter.Companion
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.models.DirectionsRoute
 
 open class ReplayRouteLocationEngine(

@@ -1,7 +1,7 @@
 package org.maplibre.navigation.core.navigation
 
 import android.content.Context
-import org.maplibre.navigation.core.location.LocationEngine
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.location.engine.LocationEngineProvider
 import org.maplibre.navigation.core.navigation.camera.Camera
 import org.maplibre.navigation.core.navigation.camera.SimpleCamera

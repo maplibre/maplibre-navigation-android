@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import android.content.Context;
 
 
-import org.maplibre.navigation.core.location.LocationEngine;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.location.engine.LocationEngineProvider;
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
