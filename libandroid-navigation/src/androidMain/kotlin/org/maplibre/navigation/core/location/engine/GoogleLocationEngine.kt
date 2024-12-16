@@ -16,6 +16,7 @@ import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -48,13 +49,13 @@ open class GoogleLocationEngine(
     }
 
     @SuppressLint("MissingPermission")
-    override suspend fun getLastLocation(): Location = suspendCoroutine { continuation ->
+    override suspend fun getLastLocation(): Location? = suspendCoroutine { continuation ->
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { androidLocation: AndroidLocation ->
                 continuation.resume(androidLocation.toLocation())
             }
-            .addOnFailureListener {
-                //TODO fabi755
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
             }
     }
 

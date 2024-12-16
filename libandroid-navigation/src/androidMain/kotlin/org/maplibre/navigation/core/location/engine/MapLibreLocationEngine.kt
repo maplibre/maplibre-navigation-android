@@ -14,6 +14,7 @@ import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
 import java.lang.Exception
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -51,8 +52,8 @@ open class MapLibreLocationEngine(
                 continuation.resume(locationEngineResult.lastLocation?.toLocation())
             }
 
-            override fun onFailure(p0: Exception) {
-                //TODO fabi755
+            override fun onFailure(exception: Exception) {
+                continuation.resumeWithException(exception)
             }
         })
     }

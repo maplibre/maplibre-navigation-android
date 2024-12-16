@@ -201,7 +201,7 @@ public class NavigationMapLibreMap {
    * @param location to update the icon and query the map
    */
   public void updateLocation(Location location) {
-    // TODO (fabi755): use location extension, when converted to Kotlin
+    // TODO (fabi755): use location extension, when this file is converted to Kotlin
     android.location.Location androidLocation = new android.location.Location("force");
     androidLocation.setLatitude(location.getLatitude());
     androidLocation.setLongitude(location.getLongitude());
