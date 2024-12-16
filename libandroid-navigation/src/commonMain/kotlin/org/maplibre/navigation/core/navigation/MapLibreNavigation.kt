@@ -90,9 +90,9 @@ open class MapLibreNavigation @JvmOverloads constructor(
 
     private val navigationRunnerJob = Job()
     private var navigationRunner: NavigationRunner = NavigationRunner(
-        this, //TODO fabi755
-        routeUtils,
-        CoroutineScope(Dispatchers.Default + navigationRunnerJob) //TODO fabi755: which disptacher?
+        mapLibreNavigation = this, //TODO fabi755
+        routeUtils = routeUtils,
+        coroutineScope = CoroutineScope(Dispatchers.Default + navigationRunnerJob)
     )
 //    private var navigationService: NavigationService? = null
 

@@ -30,9 +30,9 @@ import org.maplibre.navigation.core.utils.RouteUtils
 class NavigationRunner(
     private val mapLibreNavigation: MapLibreNavigation,
     private val routeUtils: RouteUtils,
-    private val coroutineScope: CoroutineScope
-) {
     private val locationValidator: LocationValidator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    ) {
     private val locationEngine: LocationEngine
         get() = mapLibreNavigation.locationEngine
 
@@ -148,7 +148,6 @@ class NavigationRunner(
         location: Location,
         routeProgress: RouteProgress
     ) {
-        //TODO fabi755: need here to go back to main thread, or is that done on other callback?!
         coroutineScope.launch(Dispatchers.Main) {
             dispatchRouteProgress(location, routeProgress)
             dispatchTriggeredMilestones(milestones, routeProgress)
