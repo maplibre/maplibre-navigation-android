@@ -36,6 +36,7 @@ kotlin {
         // `commonTest` can not be used here, because `mockk` is only valid for JVM targets
         androidUnitTest.dependencies {
             implementation dependenciesList.kotlinTest
+            implementation dependenciesList.kotlinxCoroutinesTest
             implementation dependenciesList.mockk
         }
 

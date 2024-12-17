@@ -115,6 +115,7 @@ ext {
             androidxTestKtx         : "androidx.test:core-ktx:${version.androidxTestKtx}",
             mockk                   : "io.mockk:mockk:${version.mockk}",
             kotlinTest              : "org.jetbrains.kotlin:kotlin-test:${version.kotlinTest}",
+            kotlinxCoroutinesTest   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version.kotlinxCoroutines}",
 
             // play services
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",

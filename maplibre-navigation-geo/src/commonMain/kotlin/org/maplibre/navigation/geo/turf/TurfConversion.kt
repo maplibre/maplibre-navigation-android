@@ -69,16 +69,6 @@ object TurfConversion {
         return degrees * 180 / PI
     }
 
-//    /**
-//     * Convert a distance measurement (assuming a spherical Earth) from radians to a more friendly
-//     * unit.
-//     *
-//     * @param radians a double using unit radian
-//     * @param units   pass in one of the units defined in [TurfUnitCriteria]
-//     * @return converted radian to distance value
-//     * @since 1.2.0
-//     */
-
     /**
      * Convert a distance measurement (assuming a spherical Earth) from radians to a more friendly
      * unit. The units used here equals the default.

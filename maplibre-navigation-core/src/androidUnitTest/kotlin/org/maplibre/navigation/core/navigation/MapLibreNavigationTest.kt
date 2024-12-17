@@ -2,6 +2,12 @@ package org.maplibre.navigation.core.navigation
 
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.setMain
+import org.junit.Before
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
@@ -17,7 +23,15 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 
+@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 class MapLibreNavigationTest : BaseTest() {
+
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(mainThreadSurrogate)
+    }
 
     @Test
     fun sanityTest() {
@@ -279,7 +293,7 @@ class MapLibreNavigationTest : BaseTest() {
     }
 
     private fun buildMapLibreNavigation(): MapLibreNavigation {
-        return MapLibreNavigation(locationEngine = mockk())
+        return MapLibreNavigation(locationEngine = mockk(relaxed = true))
     }
 
     private fun buildMapLibreNavigationWithOptions(options: MapLibreNavigationOptions): MapLibreNavigation {

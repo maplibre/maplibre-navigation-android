@@ -26,7 +26,8 @@ open class MapLibreNavigationEngine(
     private val mapLibreNavigation: MapLibreNavigation,
     private val routeUtils: RouteUtils,
     private val locationValidator: LocationValidator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 ) : NavigationEngine {
     private val locationEngine: LocationEngine
         get() = mapLibreNavigation.locationEngine
@@ -47,7 +48,7 @@ open class MapLibreNavigationEngine(
     override fun startNavigation(route: DirectionsRoute) {
         collectLocationJob?.cancel() // Cancel previous started run
 
-        collectLocationJob = coroutineScope.launch {
+        collectLocationJob = backgroundScope.launch {
             processLocationUpdate(
                 locationEngine.getLastLocation() ?: routeUtils.createFirstLocationFromRoute(route)
             )
@@ -159,7 +160,7 @@ open class MapLibreNavigationEngine(
         location: Location,
         routeProgress: RouteProgress
     ) {
-        coroutineScope.launch(Dispatchers.Main) {
+        mainScope.launch {
             dispatchRouteProgress(location, routeProgress)
             dispatchTriggeredMilestones(milestones, routeProgress)
             dispatchOffRoute(location, userOffRoute)
