@@ -41,7 +41,11 @@ ext {
             jsonVersion              : '20240303',
             androidxTestKtx          : '1.6.1',
             mockk                    : '1.13.13',
-            kotlinxSerializationJson : '1.7.3'
+            kotlinxSerializationJson : '1.7.3',
+            kotlinTest               : '2.1.0',
+            kotlinxCoroutines        : '1.9.0',
+            kotlinxDateTime          : '0.6.1',
+            kermit                   : '2.0.4'
     ]
 
     pluginVersion = [
@@ -64,6 +68,11 @@ ext {
 
             // Mapbox (requests)
             mapboxGeoJson           : "com.mapbox.mapboxsdk:mapbox-sdk-services:${version.mapboxGeoJson}",
+
+            // Kotlin
+            kotlinxCoroutines       : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version.kotlinxCoroutines}",
+            kotlinxDateTime         : "org.jetbrains.kotlinx:kotlinx-datetime:${version.kotlinxDateTime}",
+            kermit                  : "co.touchlab:kermit:${version.kermit}",
 
             // AutoValue
             autoValue               : "com.google.auto.value:auto-value:${version.autoValue}",
@@ -107,6 +116,7 @@ ext {
             json                    : "org.json:json:${version.jsonVersion}",
             androidxTestKtx         : "androidx.test:core-ktx:${version.androidxTestKtx}",
             mockk                   : "io.mockk:mockk:${version.mockk}",
+            kotlinTest              : "org.jetbrains.kotlin:kotlin-test:${version.kotlinTest}",
 
             // play services
             gmsLocation             : "com.google.android.gms:play-services-location:${version.gmsLocation}",
