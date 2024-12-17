@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.navigation
+package org.maplibre.navigation.core.navigation.runner
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,29 +10,25 @@ import org.maplibre.navigation.core.location.LocationValidator
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.navigation.MapLibreNavigation
+import org.maplibre.navigation.core.navigation.NavigationEventDispatcher
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.navigation.NavigationHelper.checkMilestones
 import org.maplibre.navigation.core.navigation.NavigationHelper.isUserOffRoute
+import org.maplibre.navigation.core.navigation.NavigationRouteProcessor
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
 
-//TODO fabi755: discuss and find perfect name
-// - NavigationProcessor
-// - NavigationEngine
-// - NavigationRouteProcessor
-// - NavigationRouteEngine
-// - NavigationRunner
-// - NavigationRouteRunner
-//TODO: fabi755 add interface and allow to customize (open/inject/...)
 /**
- *
+ * Default implementation for [NavigationEngine] which is responsible for fetching location updates
+ * and processing them to set the current navigation state.
  */
-class NavigationRunner(
+open class MapLibreNavigationEngine(
     private val mapLibreNavigation: MapLibreNavigation,
     private val routeUtils: RouteUtils,
     private val locationValidator: LocationValidator = LocationValidator(mapLibreNavigation.options.locationAcceptableAccuracyInMetersThreshold),
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-    ) {
+) : NavigationEngine {
     private val locationEngine: LocationEngine
         get() = mapLibreNavigation.locationEngine
 
@@ -43,13 +39,20 @@ class NavigationRunner(
 
     private var collectLocationJob: Job? = null
 
-    fun startNavigation(route: DirectionsRoute) {
+    /**
+     * Start navigation for the given route.
+     *
+     * This call will starting listening to location updates and process this data to update to the current navigation state.
+     * This will run until the [stopNavigation] is called.
+     */
+    override fun startNavigation(route: DirectionsRoute) {
         collectLocationJob?.cancel() // Cancel previous started run
 
         collectLocationJob = coroutineScope.launch {
             processLocationUpdate(
                 locationEngine.getLastLocation() ?: routeUtils.createFirstLocationFromRoute(route)
             )
+
             locationEngine.listenToLocation(
                 LocationEngineRequest.Builder(LOCATION_ENGINE_INTERVAL)
                     .setFastestInterval(LOCATION_ENGINE_INTERVAL)
@@ -58,12 +61,22 @@ class NavigationRunner(
         }
     }
 
-    fun stopNavigation() {
+    /**
+     * Stop and cancel the current running navigation.
+     *
+     * This means listening to the location updates are stopped and not consumed anymore.
+     */
+    override fun stopNavigation() {
         collectLocationJob?.cancel()
         collectLocationJob = null
     }
 
-    fun isRunning(): Boolean {
+    /**
+     * Check if the navigation is running
+     *
+     * @return true if the navigation is running, false otherwise.
+     */
+    override fun isRunning(): Boolean {
         return collectLocationJob?.isActive == true
     }
 
@@ -71,13 +84,11 @@ class NavigationRunner(
      * Takes a new location model and runs all related engine checks against it
      * (off-route, milestones, snapped location, and faster-route).
      *
+     * After running through the engines, all data is submitted to [NavigationEventDispatcher].
      *
-     * After running through the engines, all data is submitted to [NavigationService] via
-     * [RouteProcessorBackgroundThread.Listener].
-     *
-     * @param update hold location, navigation (with options), and distances away from maneuver
+     * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
-    private fun processLocationUpdate(rawLocation: Location) {
+    protected fun processLocationUpdate(rawLocation: Location) {
         if (!locationValidator.isValidUpdate(rawLocation)) {
             return
         }
@@ -98,7 +109,7 @@ class NavigationRunner(
         dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
     }
 
-    private fun findTriggeredMilestones(
+    protected fun findTriggeredMilestones(
         mapLibreNavigation: MapLibreNavigation,
         routeProgress: RouteProgress
     ): List<Milestone> {
@@ -106,7 +117,7 @@ class NavigationRunner(
         return checkMilestones(previousRouteProgress, routeProgress, mapLibreNavigation)
     }
 
-    private fun findSnappedLocation(
+    protected fun findSnappedLocation(
         mapLibreNavigation: MapLibreNavigation,
         rawLocation: Location,
         routeProgress: RouteProgress,
@@ -122,7 +133,7 @@ class NavigationRunner(
         )
     }
 
-    private fun determineUserOffRoute(
+    protected fun determineUserOffRoute(
         mapLibreNavigation: MapLibreNavigation,
         location: Location,
         routeProgress: RouteProgress
@@ -137,12 +148,12 @@ class NavigationRunner(
         return userOffRoute
     }
 
-    private fun updateRouteProcessorWith(routeProgress: RouteProgress): RouteProgress {
+    protected fun updateRouteProcessorWith(routeProgress: RouteProgress): RouteProgress {
         navigationRouteProcessor.routeProgress = routeProgress
         return routeProgress
     }
 
-    private fun dispatchUpdate(
+    protected fun dispatchUpdate(
         userOffRoute: Boolean,
         milestones: List<Milestone>,
         location: Location,
@@ -155,11 +166,11 @@ class NavigationRunner(
         }
     }
 
-    private fun dispatchRouteProgress(location: Location, routeProgress: RouteProgress) {
+    protected fun dispatchRouteProgress(location: Location, routeProgress: RouteProgress) {
         eventDispatcher.onProgressChange(location, routeProgress)
     }
 
-    private fun dispatchTriggeredMilestones(
+    protected fun dispatchTriggeredMilestones(
         triggeredMilestones: List<Milestone>,
         routeProgress: RouteProgress
     ) {
@@ -169,13 +180,13 @@ class NavigationRunner(
         }
     }
 
-    private fun dispatchOffRoute(location: Location, isUSerOffRoute: Boolean) {
+    protected fun dispatchOffRoute(location: Location, isUSerOffRoute: Boolean) {
         if (isUSerOffRoute) {
             eventDispatcher.onUserOffRoute(location)
         }
     }
 
     companion object {
-        private const val LOCATION_ENGINE_INTERVAL = 1000L
+        const val LOCATION_ENGINE_INTERVAL = 1000L
     }
 }

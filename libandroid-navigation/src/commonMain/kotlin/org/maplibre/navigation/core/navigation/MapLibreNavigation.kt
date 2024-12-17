@@ -14,6 +14,7 @@ import org.maplibre.navigation.core.navigation.NavigationConstants.BANNER_INSTRU
 import org.maplibre.navigation.core.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID
 import org.maplibre.navigation.core.navigation.camera.Camera
 import org.maplibre.navigation.core.navigation.camera.SimpleCamera
+import org.maplibre.navigation.core.navigation.runner.MapLibreNavigationEngine
 import org.maplibre.navigation.core.offroute.OffRoute
 import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.offroute.OffRouteListener
@@ -89,7 +90,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
 ) {
 
     private val navigationRunnerJob = Job()
-    private var navigationRunner: NavigationRunner = NavigationRunner(
+    private var mapLibreNavigationEngine: MapLibreNavigationEngine = MapLibreNavigationEngine(
         mapLibreNavigation = this, //TODO fabi755
         routeUtils = routeUtils,
         coroutineScope = CoroutineScope(Dispatchers.Default + navigationRunnerJob)
@@ -244,7 +245,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
         this.route = directionsRoute
         Logger.d { "MapLibreNavigation startNavigation called." }
 
-        navigationRunner.startNavigation(directionsRoute)
+        mapLibreNavigationEngine.startNavigation(directionsRoute)
         eventDispatcher.onNavigationEvent(true)
     }
 
@@ -266,7 +267,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun stopNavigation() {
         Logger.d { "MapLibreNavigation stopNavigation called" }
 
-        navigationRunner.stopNavigation()
+        mapLibreNavigationEngine.stopNavigation()
         eventDispatcher.onNavigationEvent(false)
     }
 
