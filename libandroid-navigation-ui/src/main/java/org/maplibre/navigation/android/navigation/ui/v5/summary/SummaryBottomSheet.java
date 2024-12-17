@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
+import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.core.navigation.NavigationConstants;
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
@@ -196,9 +197,8 @@ public class SummaryBottomSheet extends FrameLayout implements LifecycleObserver
   private void initializeDistanceFormatter() {
     LocaleUtils localeUtils = new LocaleUtils();
     String language = localeUtils.inferDeviceLanguage(getContext());
-    String unitType = localeUtils.getUnitTypeForDeviceLocale(getContext());
-    int roundingIncrement = NavigationConstants.ROUNDING_INCREMENT_FIFTY;
-    distanceFormatter = new DistanceFormatter(getContext(), language, unitType, roundingIncrement);
+    UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(getContext());
+    distanceFormatter = new DistanceFormatter(getContext(), language, unitType, MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY);
   }
 
   /**

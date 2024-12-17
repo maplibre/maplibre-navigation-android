@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.utils
 
 import android.content.Context
 import android.os.Build
-import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.models.UnitType
 import java.util.Locale
 
 class LocaleUtils {
@@ -13,11 +13,10 @@ class LocaleUtils {
      * @param locale for which to return the default unit type
      * @return unit type for specified locale
      */
-    @DirectionsCriteria.VoiceUnitCriteria
-    fun getUnitTypeForLocale(locale: Locale): String {
+    fun getUnitTypeForLocale(locale: Locale): UnitType {
         return when (locale.country) {
-            "US", "LR", "MM" -> DirectionsCriteria.IMPERIAL
-            else -> DirectionsCriteria.METRIC
+            "US", "LR", "MM" -> UnitType.IMPERIAL
+            else -> UnitType.METRIC
         }
     }
 
@@ -63,7 +62,7 @@ class LocaleUtils {
      * @param context from which to get the configuration
      * @return the default unit type for the device
      */
-    fun getUnitTypeForDeviceLocale(context: Context): String {
+    fun getUnitTypeForDeviceLocale(context: Context): UnitType {
         return getUnitTypeForLocale(inferDeviceLocale(context))
     }
 
@@ -75,7 +74,7 @@ class LocaleUtils {
      * @param unitType to check if it is null
      * @return a non-null unitType, either the one passed in, or based on the device locale
      */
-    fun retrieveNonNullUnitType(context: Context, unitType: String?): String {
+    fun retrieveNonNullUnitType(context: Context, unitType: UnitType?): UnitType {
         if (unitType == null) {
             return getUnitTypeForDeviceLocale(context)
         }

@@ -20,6 +20,7 @@ import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter
 import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils
 import org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter
+import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.utils.ManeuverUtils
 import java.util.Calendar
@@ -85,7 +86,7 @@ open class MapLibreNavigationNotification(
         val routeOptions = mapLibreNavigation.route?.routeOptions
         val localeUtils = LocaleUtils()
         val language: String = routeOptions?.language ?: localeUtils.inferDeviceLanguage(context)
-        val unitType: String =
+        val unitType: UnitType =
             routeOptions?.voiceUnits ?: localeUtils.getUnitTypeForDeviceLocale(context)
 
         return DistanceFormatter(

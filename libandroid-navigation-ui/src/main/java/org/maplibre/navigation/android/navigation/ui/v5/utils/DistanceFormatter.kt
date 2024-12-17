@@ -7,7 +7,7 @@ import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import org.maplibre.navigation.android.navigation.ui.v5.R
-import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfConversion
@@ -26,7 +26,7 @@ import java.util.Locale
 class DistanceFormatter(
     context: Context,
     language: String?,
-    @DirectionsCriteria.VoiceUnitCriteria unitType: String?,
+    unitType: UnitType,
     private val roundingIncrement: MapLibreNavigationOptions.RoundingIncrement
 ) {
     private val unitStrings: Map<String, String> = mapOf(
@@ -38,12 +38,12 @@ class DistanceFormatter(
     private val numberFormat: NumberFormat
     private val localeUtils: LocaleUtils = LocaleUtils()
     private val language: String
-    private val unitType: String
+    private val unitType: UnitType
 
     private val largeUnit: String
-        get() = if (DirectionsCriteria.IMPERIAL == unitType) TurfConstants.UNIT_MILES else TurfConstants.UNIT_KILOMETERS
+        get() = if (UnitType.IMPERIAL == unitType) TurfConstants.UNIT_MILES else TurfConstants.UNIT_KILOMETERS
     private val smallUnit: String
-        get() = if (DirectionsCriteria.IMPERIAL == unitType) TurfConstants.UNIT_FEET else TurfConstants.UNIT_METERS
+        get() = if (UnitType.IMPERIAL == unitType) TurfConstants.UNIT_FEET else TurfConstants.UNIT_METERS
 
     init {
         val locale = language?.let { l -> Locale(l) } ?: localeUtils.inferDeviceLocale(context)
@@ -53,8 +53,8 @@ class DistanceFormatter(
         this.unitType = unitType
             .takeIf { type ->
                 type in listOf(
-                    DirectionsCriteria.IMPERIAL,
-                    DirectionsCriteria.METRIC
+                    UnitType.IMPERIAL,
+                    UnitType.METRIC
                 )
             }
             ?: localeUtils.getUnitTypeForDeviceLocale(context)
@@ -97,7 +97,7 @@ class DistanceFormatter(
      * @return true if new formatter is needed, false otherwise
      */
     @Suppress("unused")
-    fun shouldUpdate(language: String, unitType: String, roundingIncrement: MapLibreNavigationOptions.RoundingIncrement): Boolean {
+    fun shouldUpdate(language: String, unitType: UnitType, roundingIncrement: MapLibreNavigationOptions.RoundingIncrement): Boolean {
         return this.language != language || this.unitType != unitType || this.roundingIncrement != roundingIncrement
     }
 

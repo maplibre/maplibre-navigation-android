@@ -27,6 +27,7 @@ import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone;
 import org.maplibre.navigation.core.models.BannerInstructions;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.core.navigation.NavigationEventListener;
@@ -246,9 +247,9 @@ public class NavigationViewModel extends AndroidViewModel {
         }
     }
 
-    private String initializeUnitType(NavigationUiOptions options) {
+    private UnitType initializeUnitType(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
-        String unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
+        UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
         if (routeOptions != null && routeOptions.getVoiceUnits() != null) {
             unitType = routeOptions.getVoiceUnits();
         }
@@ -259,14 +260,14 @@ public class NavigationViewModel extends AndroidViewModel {
         timeFormatType = options.getTimeFormatType();
     }
 
-    private int initializeRoundingIncrement(NavigationViewOptions options) {
+    private MapLibreNavigationOptions.RoundingIncrement initializeRoundingIncrement(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
-        return navigationOptions.getRoundingIncrement().getIncrement();
+        return navigationOptions.getRoundingIncrement();
     }
 
     private void initializeDistanceFormatter(NavigationViewOptions options) {
-        String unitType = initializeUnitType(options);
-        int roundingIncrement = initializeRoundingIncrement(options);
+        UnitType unitType = initializeUnitType(options);
+        MapLibreNavigationOptions.RoundingIncrement roundingIncrement = initializeRoundingIncrement(options);
         distanceFormatter = new DistanceFormatter(getApplication(), language, unitType, roundingIncrement);
     }
 

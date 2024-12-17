@@ -23,7 +23,7 @@ import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.location.Location
-import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
@@ -133,7 +133,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
             this.origin(Point.fromLngLat(9.7536318, 52.3717979))
             this.addWaypoint(Point.fromLngLat(9.741052, 52.360496))
             this.destination(Point.fromLngLat(9.756259, 52.342620))
-            this.voiceUnits(DirectionsCriteria.METRIC)
+            this.voiceUnits(UnitType.METRIC.text)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }

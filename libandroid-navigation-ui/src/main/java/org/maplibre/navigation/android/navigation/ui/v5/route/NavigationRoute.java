@@ -6,17 +6,20 @@ import android.text.TextUtils;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 
 import org.maplibre.navigation.core.models.DirectionsResponse;
-import org.maplibre.navigation.core.models.DirectionsCriteria;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,10 +68,10 @@ public final class NavigationRoute {
 
     static Builder builder(Context context, LocaleUtils localeUtils) {
         return new Builder()
-            .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
+            .annotations(ANNOTATION_CONGESTION, ANNOTATION_DISTANCE)
             .language(context, localeUtils)
             .voiceUnits(context, localeUtils)
-            .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC);
+            .profile(PROFILE_DRIVING_TRAFFIC);
     }
 
     /**
@@ -183,7 +186,7 @@ public final class NavigationRoute {
 
         /**
          * The username for the account that the directions engine runs on. In most cases, this should
-         * always remain the default value of {@link DirectionsCriteria#PROFILE_DEFAULT_USER}.
+         * always remain the default value of {@link #PROFILE_DEFAULT_USER}.
          *
          * @param user a non-null string which will replace the default user used in the directions
          *             request
@@ -200,11 +203,11 @@ public final class NavigationRoute {
          * origin to the final destination. The options include driving, driving considering traffic,
          * walking, and cycling. Using each of these profiles will result in different routing biases.
          *
-         * @param profile required to be one of the String values found in the {@link com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria}
+         * @param profile required to be one of the String values found in the {@link ProfileCriteria}
          * @return this builder for chaining options together
          * @since 0.5.0
          */
-        public Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile) {
+        public Builder profile(@NonNull @ProfileCriteria String profile) {
             directionsBuilder.profile(profile);
             return this;
         }
@@ -279,7 +282,7 @@ public final class NavigationRoute {
         /**
          * This can be used to set up to 23 additional in-between points which will act as pit-stops
          * along the users route. Note that if you are using the
-         * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
+         * {@link #PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
          * in the request is currently limited to 1.
          *
          * @param waypoint a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
@@ -297,7 +300,7 @@ public final class NavigationRoute {
         /**
          * This can be used to set up to 23 additional in-between points which will act as pit-stops
          * along the users route. Note that if you are using the
-         * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
+         * {@link #PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
          * in the request is currently limited to 1.
          *
          * @param waypoint  a {@link org.maplibre.geojson.Point} which represents the pit-stop or waypoint where you'd like
@@ -374,24 +377,24 @@ public final class NavigationRoute {
 
         /**
          * Whether or not to return additional metadata along the route. Possible values are:
-         * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
-         * {@link DirectionsCriteria#ANNOTATION_DURATION},
-         * {@link DirectionsCriteria#ANNOTATION_DURATION} and
-         * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
+         * {@link #ANNOTATION_DISTANCE},
+         * {@link #ANNOTATION_DURATION},
+         * {@link #ANNOTATION_DURATION} and
+         * {@link #ANNOTATION_CONGESTION}. Several annotation can be used by
          * separating them with {@code ,}.
          * <p>
          * If left alone, this will automatically set Congestion to enabled
          * </p>
          *
          * @param annotations string referencing one of the annotation direction criteria's. The strings
-         *                    restricted to one or multiple values inside the {@link org.maplibre.navigation.core.models.DirectionsCriteria.AnnotationCriteria}
+         *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
          *                    or null which will result in no annotations being used
          * @return this builder for chaining options together
          * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
          * documentation</a>
          * @since 0.5.0
          */
-        public Builder annotations(@Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
+        public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
             directionsBuilder.annotations(annotations);
             return this;
         }
@@ -456,28 +459,28 @@ public final class NavigationRoute {
          * other fields outside of the {@link org.maplibre.navigation.core.models.VoiceInstructions}
          * object.
          *
-         * @param voiceUnits one of the values found inside the {@link org.maplibre.navigation.core.models.DirectionsCriteria.VoiceUnitCriteria}
+         * @param voiceUnits a unit type found in {@link UnitType}
          * @return this builder for chaining options together
          * @since 0.8.0
          */
-        public Builder voiceUnits(@DirectionsCriteria.VoiceUnitCriteria String voiceUnits) {
-            directionsBuilder.voiceUnits(voiceUnits);
+        public Builder voiceUnits(UnitType voiceUnits) {
+            directionsBuilder.voiceUnits(voiceUnits.getText());
             return this;
         }
 
         Builder voiceUnits(Context context, LocaleUtils localeUtils) {
-            directionsBuilder.voiceUnits(localeUtils.getUnitTypeForDeviceLocale(context));
+            directionsBuilder.voiceUnits(localeUtils.getUnitTypeForDeviceLocale(context).getText());
             return this;
         }
 
         /**
          * Exclude specific road classes such as highways, tolls, and more.
          *
-         * @param exclude one of the values found inside the {@link DirectionsCriteria.ExcludeCriteria}
+         * @param exclude one of the values found inside the {@link ExcludeCriteria}
          * @return this builder for chaining options together
          * @since 0.8.0
          */
-        public Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude) {
+        public Builder exclude(@Nullable @ExcludeCriteria String exclude) {
             directionsBuilder.exclude(exclude);
             return this;
         }
@@ -542,7 +545,7 @@ public final class NavigationRoute {
          *
          * @param approaches null if you'd like the default approaches,
          *                   else one of the options found in
-         *                   {@link DirectionsCriteria.ApproachesCriteria}.
+         *                   {@link ApproachesCriteria}.
          * @return this builder for chaining options together
          * @since 0.15.0
          */
@@ -570,7 +573,7 @@ public final class NavigationRoute {
          * Optionally create a {@link Builder} based on all variables
          * from given {@link RouteOptions}.
          * <p>
-         * Note: {@link RouteOptions#bearings()} are excluded because it's better
+         * Note: {@link RouteOptions#getBearings()} are excluded because it's better
          * to recalculate these at the time of the request, as your location bearing
          * is constantly changing.
          *
@@ -600,8 +603,8 @@ public final class NavigationRoute {
                 directionsBuilder.alternatives(options.getAlternatives());
             }
 
-            if (!TextUtils.isEmpty(options.getVoiceUnits())) {
-                directionsBuilder.voiceUnits(options.getVoiceUnits());
+            if (options.getVoiceUnits() != null && !TextUtils.isEmpty(options.getVoiceUnits().getText())) {
+                directionsBuilder.voiceUnits(options.getVoiceUnits().getText());
             }
 
             if (!TextUtils.isEmpty(options.getUser())) {
@@ -641,8 +644,8 @@ public final class NavigationRoute {
             directionsBuilder
                 .steps(true)
                 .continueStraight(true)
-                .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                .geometries(GEOMETRY_POLYLINE6)
+                .overview(OVERVIEW_FULL)
                 .voiceInstructions(true)
                 .bannerInstructions(true)
                 .roundaboutExits(true);
@@ -660,5 +663,322 @@ public final class NavigationRoute {
 
     private static com.mapbox.geojson.Point toMapboxPoint(org.maplibre.geojson.Point point) {
         return com.mapbox.geojson.Point.fromLngLat(point.longitude(), point.latitude());
+    }
+
+    /**
+     * Mapbox default username.
+     *
+     * @since 1.0.0
+     */
+    public static final String PROFILE_DEFAULT_USER = "mapbox";
+
+    /**
+     * For car and motorcycle routing. This profile factors in current and historic traffic
+     * conditions to avoid slowdowns.
+     *
+     * @since 2.0.0
+     */
+    public static final String PROFILE_DRIVING_TRAFFIC = "driving-traffic";
+
+    /**
+     * For car and motorcycle routing. This profile shows the fastest routes by preferring
+     * high-speed roads like highways.
+     *
+     * @since 1.0.0
+     */
+    public static final String PROFILE_DRIVING = "driving";
+
+    /**
+     * For pedestrian and hiking routing. This profile shows the shortest path by using sidewalks
+     * and trails.
+     *
+     * @since 1.0.0
+     */
+    public static final String PROFILE_WALKING = "walking";
+
+    /**
+     * For bicycle routing. This profile shows routes that are short and safe for cyclist, avoiding
+     * highways and preferring streets with bike lanes.
+     *
+     * @since 1.0.0
+     */
+    public static final String PROFILE_CYCLING = "cycling";
+
+    /**
+     * Format to return route geometry will be an encoded polyline.
+     *
+     * @since 1.0.0
+     */
+    public static final String GEOMETRY_POLYLINE = "polyline";
+
+    /**
+     * Format to return route geometry will be an encoded polyline with precision 6.
+     *
+     * @since 2.0.0
+     */
+    public static final String GEOMETRY_POLYLINE6 = "polyline6";
+
+    /**
+     * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is
+     * the default.
+     *
+     * @since 1.0.0
+     */
+    public static final String OVERVIEW_SIMPLIFIED = "simplified";
+
+    /**
+     * The most detailed geometry available.
+     *
+     * @since 1.0.0
+     */
+    public static final String OVERVIEW_FULL = "full";
+
+    /**
+     * No overview geometry.
+     *
+     * @since 1.0.0
+     */
+    public static final String OVERVIEW_FALSE = "false";
+
+    /**
+     * The duration, in seconds, between each pair of coordinates.
+     *
+     * @since 2.1.0
+     */
+    public static final String ANNOTATION_DURATION = "duration";
+
+    /**
+     * The distance, in meters, between each pair of coordinates.
+     *
+     * @since 2.1.0
+     */
+    public static final String ANNOTATION_DISTANCE = "distance";
+
+    /**
+     * The speed, in km/h, between each pair of coordinates.
+     *
+     * @since 2.1.0
+     */
+    public static final String ANNOTATION_SPEED = "speed";
+
+    /**
+     * The congestion, provided as a String, between each pair of coordinates.
+     *
+     * @since 2.2.0
+     */
+    public static final String ANNOTATION_CONGESTION = "congestion";
+
+    /**
+     * The posted speed limit, between each pair of coordinates.
+     *
+     * @since 2.1.0
+     */
+    public static final String ANNOTATION_MAXSPEED = "maxspeed";
+
+    /**
+     * The closure of sections of a route.
+     */
+    public static final String ANNOTATION_CLOSURE = "closure";
+
+    /**
+     * Exclude all tolls along the returned directions route.
+     *
+     * @since 3.0.0
+     */
+    public static final String EXCLUDE_TOLL = "toll";
+
+    /**
+     * Exclude all motorways along the returned directions route.
+     *
+     * @since 3.0.0
+     */
+    public static final String EXCLUDE_MOTORWAY = "motorway";
+
+    /**
+     * Exclude all ferries along the returned directions route.
+     *
+     * @since 3.0.0
+     */
+    public static final String EXCLUDE_FERRY = "ferry";
+
+    /**
+     * Exclude all tunnels along the returned directions route.
+     *
+     * @since 3.0.0
+     */
+    public static final String EXCLUDE_TUNNEL = "tunnel";
+
+    /**
+     * Exclude all roads with access restrictions along the returned directions route.
+     *
+     * @since 3.0.0
+     */
+    public static final String EXCLUDE_RESTRICTED = "restricted";
+
+    /**
+     * Returned route starts at the first provided coordinate in the list. Used specifically for the
+     * Optimization API.
+     *
+     * @since 2.1.0
+     */
+    public static final String SOURCE_FIRST = "first";
+
+    /**
+     * Returned route starts at any of the provided coordinate in the list. Used specifically for the
+     * Optimization API.
+     *
+     * @since 2.1.0
+     */
+    public static final String SOURCE_ANY = "any";
+
+
+    /**
+     * Returned route ends at any of the provided coordinate in the list. Used specifically for the
+     * Optimization API.
+     *
+     * @since 3.0.0
+     */
+    public static final String DESTINATION_ANY = "any";
+
+    /**
+     * Returned route ends at the last provided coordinate in the list. Used specifically for the
+     * Optimization API.
+     *
+     * @since 3.0.0
+     */
+    public static final String DESTINATION_LAST = "last";
+
+    /**
+     * The routes can approach waypoints from either side of the road. <p>
+     *
+     * Used in MapMatching and Directions API.
+     *
+     * @since 3.2.0
+     */
+    public static final String APPROACH_UNRESTRICTED = "unrestricted";
+
+    /**
+     * The route will be returned so that on arrival,
+     * the waypoint will be found on the side that corresponds with the  driving_side of
+     * the region in which the returned route is located. <p>
+     *
+     * Used in MapMatching and Directions API.
+     *
+     * @since 3.2.0
+     */
+    public static final String APPROACH_CURB = "curb";
+
+    /**
+     * Retention policy for the various direction profiles.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        PROFILE_DRIVING_TRAFFIC,
+        PROFILE_DRIVING,
+        PROFILE_WALKING,
+        PROFILE_CYCLING
+    })
+    public @interface ProfileCriteria {
+    }
+
+    /**
+     * Retention policy for the various direction geometries.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        GEOMETRY_POLYLINE,
+        GEOMETRY_POLYLINE6
+    })
+    public @interface GeometriesCriteria {
+    }
+
+    /**
+     * Retention policy for the various direction overviews.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        OVERVIEW_FALSE,
+        OVERVIEW_FULL,
+        OVERVIEW_SIMPLIFIED
+    })
+    public @interface OverviewCriteria {
+    }
+
+    /**
+     * Retention policy for the various direction annotations.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        ANNOTATION_CONGESTION,
+        ANNOTATION_DISTANCE,
+        ANNOTATION_DURATION,
+        ANNOTATION_SPEED,
+        ANNOTATION_MAXSPEED
+    })
+    public @interface AnnotationCriteria {
+    }
+
+    /**
+     * Retention policy for the various direction exclusions.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        EXCLUDE_FERRY,
+        EXCLUDE_MOTORWAY,
+        EXCLUDE_TOLL,
+        EXCLUDE_TUNNEL,
+        EXCLUDE_RESTRICTED
+    })
+    public @interface ExcludeCriteria {
+    }
+
+    /**
+     * Retention policy for the source parameter in the Optimization API.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        SOURCE_ANY,
+        SOURCE_FIRST
+    })
+    public @interface SourceCriteria {
+    }
+
+    /**
+     * Retention policy for the destination parameter in the Optimization API.
+     *
+     * @since 3.0.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        DESTINATION_ANY,
+        DESTINATION_LAST
+    })
+    public @interface DestinationCriteria {
+    }
+
+
+    /**
+     * Retention policy for the approaches parameter in the MapMatching and Directions API.
+     *
+     * @since 3.2.0
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef( {
+        APPROACH_UNRESTRICTED,
+        APPROACH_CURB
+    })
+    public @interface ApproachesCriteria {
     }
 }

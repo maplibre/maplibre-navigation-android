@@ -42,6 +42,7 @@ import org.maplibre.android.maps.OnMapReadyCallback;
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
@@ -649,27 +650,27 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   }
 
   private void establishDistanceFormatter(LocaleUtils localeUtils, NavigationViewOptions options) {
-    String unitType = establishUnitType(localeUtils, options);
+    UnitType unitType = establishUnitType(localeUtils, options);
     String language = establishLanguage(localeUtils, options);
-    int roundingIncrement = establishRoundingIncrement(options);
+    MapLibreNavigationOptions.RoundingIncrement roundingIncrement = establishRoundingIncrement(options);
     DistanceFormatter distanceFormatter = new DistanceFormatter(getContext(), language, unitType, roundingIncrement);
 
     instructionView.setDistanceFormatter(distanceFormatter);
     summaryBottomSheet.setDistanceFormatter(distanceFormatter);
   }
 
-  private int establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
+  private MapLibreNavigationOptions.RoundingIncrement establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
     MapLibreNavigationOptions mapLibreNavigationOptions = navigationViewOptions.navigationOptions();
-    return mapLibreNavigationOptions.getRoundingIncrement().getIncrement();
+    return mapLibreNavigationOptions.getRoundingIncrement();
   }
 
   private String establishLanguage(LocaleUtils localeUtils, NavigationViewOptions options) {
     return localeUtils.getNonEmptyLanguage(getContext(), options.directionsRoute().getVoiceLanguage());
   }
 
-  private String establishUnitType(LocaleUtils localeUtils, NavigationViewOptions options) {
+  private UnitType establishUnitType(LocaleUtils localeUtils, NavigationViewOptions options) {
     RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
-    String voiceUnits = routeOptions == null ? null : routeOptions.getVoiceUnits();
+    UnitType voiceUnits = routeOptions == null ? null : routeOptions.getVoiceUnits();
     return localeUtils.retrieveNonNullUnitType(getContext(), voiceUnits);
   }
 

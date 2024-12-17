@@ -8,7 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.maplibre.navigation.android.navigation.ui.v5.R
-import org.maplibre.navigation.core.models.DirectionsCriteria
+import org.maplibre.navigation.core.models.UnitType
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.robolectric.RobolectricTestRunner
 import java.util.Locale
@@ -35,8 +36,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale(Locale.ENGLISH.language),
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "11 mi"
         )
     }
@@ -46,8 +47,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale("", ""),
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "11 mi"
         )
     }
@@ -57,8 +58,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale.US,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "18 km"
         )
     }
@@ -68,8 +69,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale.US,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "11 mi"
         )
     }
@@ -79,8 +80,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "18 km"
         )
     }
@@ -90,8 +91,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_LARGE_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "18 km"
         )
     }
@@ -101,8 +102,8 @@ class DistanceFormatterTest {
         assertOutput(
             MEDIUM_LARGE_UNIT,
             Locale.US,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "6.1 mi"
         )
     }
@@ -112,8 +113,8 @@ class DistanceFormatterTest {
         assertOutput(
             MEDIUM_LARGE_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "9,8 km"
         )
     }
@@ -123,8 +124,8 @@ class DistanceFormatterTest {
         assertOutput(
             MEDIUM_LARGE_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "6,1 mi"
         )
     }
@@ -134,8 +135,8 @@ class DistanceFormatterTest {
         assertOutput(
             SMALL_SMALL_UNIT,
             Locale.US,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "50 ft"
         )
     }
@@ -145,8 +146,8 @@ class DistanceFormatterTest {
         assertOutput(
             SMALL_SMALL_UNIT,
             Locale.US,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_TEN,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_TEN,
             "40 ft"
         )
     }
@@ -156,8 +157,8 @@ class DistanceFormatterTest {
         assertOutput(
             SMALL_SMALL_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "50 m"
         )
     }
@@ -167,8 +168,8 @@ class DistanceFormatterTest {
         assertOutput(
             SMALL_SMALL_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_TEN,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_TEN,
             "10 m"
         )
     }
@@ -178,8 +179,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_SMALL_UNIT,
             Locale.US,
-            DirectionsCriteria.IMPERIAL,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.IMPERIAL,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "350 ft"
         )
     }
@@ -189,8 +190,8 @@ class DistanceFormatterTest {
         assertOutput(
             LARGE_SMALL_UNIT,
             Locale.FRANCE,
-            DirectionsCriteria.METRIC,
-            NavigationConstants.ROUNDING_INCREMENT_FIFTY,
+            UnitType.METRIC,
+            MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY,
             "100 m"
         )
     }
@@ -198,8 +199,8 @@ class DistanceFormatterTest {
     private fun assertOutput(
         distance: Double,
         locale: Locale,
-        unitType: String,
-        roundIncrement: Int,
+        unitType: UnitType,
+        roundIncrement: MapLibreNavigationOptions.RoundingIncrement,
         output: String
     ) {
         Assert.assertEquals(

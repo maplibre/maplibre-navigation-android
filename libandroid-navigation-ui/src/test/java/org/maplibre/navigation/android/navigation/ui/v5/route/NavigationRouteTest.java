@@ -4,7 +4,6 @@ import android.content.Context;
 
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
 
-import org.maplibre.navigation.core.models.DirectionsCriteria;
 import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
 
@@ -13,6 +12,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.maplibre.navigation.core.models.UnitType;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -36,7 +36,7 @@ public class NavigationRouteTest extends BaseTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         when(localeUtils.inferDeviceLocale(context)).thenReturn(Locale.getDefault());
-        when(localeUtils.getUnitTypeForDeviceLocale(context)).thenReturn(DirectionsCriteria.IMPERIAL);
+        when(localeUtils.getUnitTypeForDeviceLocale(context)).thenReturn(UnitType.IMPERIAL);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class NavigationRouteTest extends BaseTest {
             .accessToken(BaseTest.ACCESS_TOKEN)
             .origin(Point.fromLngLat(1.0, 2.0))
             .destination(Point.fromLngLat(1.0, 5.0))
-            .profile(DirectionsCriteria.PROFILE_CYCLING)
+            .profile(NavigationRoute.PROFILE_CYCLING)
             .build();
 
         assertThat(navigationRoute.getCall().request().url().toString(),
@@ -68,8 +68,8 @@ public class NavigationRouteTest extends BaseTest {
             .accessToken(BaseTest.ACCESS_TOKEN)
             .origin(Point.fromLngLat(1.0, 2.0))
             .destination(Point.fromLngLat(1.0, 5.0))
-            .profile(DirectionsCriteria.PROFILE_CYCLING)
-            .addApproaches(DirectionsCriteria.APPROACH_CURB, DirectionsCriteria.APPROACH_UNRESTRICTED)
+            .profile(NavigationRoute.PROFILE_CYCLING)
+            .addApproaches(NavigationRoute.APPROACH_CURB, NavigationRoute.APPROACH_UNRESTRICTED)
             .build();
 
         assertThat(navigationRoute.getCall().request().url().toString(),
@@ -82,7 +82,7 @@ public class NavigationRouteTest extends BaseTest {
             .accessToken(BaseTest.ACCESS_TOKEN)
             .origin(Point.fromLngLat(1.0, 2.0))
             .destination(Point.fromLngLat(1.0, 5.0))
-            .profile(DirectionsCriteria.PROFILE_CYCLING)
+            .profile(NavigationRoute.PROFILE_CYCLING)
             .addWaypointNames("Origin", "Destination")
             .build();
 
@@ -125,14 +125,14 @@ public class NavigationRouteTest extends BaseTest {
         RouteOptions routeOptions = new RouteOptions.Builder(
             "https://api-directions-traf.com",
             "example_user",
-            DirectionsCriteria.PROFILE_WALKING,
+            NavigationRoute.PROFILE_WALKING,
             coordinates,
             BaseTest.ACCESS_TOKEN,
             "XYZ_UUID"
         )
             .withAlternatives(true)
             .withLanguage(Locale.US.getLanguage())
-            .withVoiceUnits(DirectionsCriteria.METRIC)
+            .withVoiceUnits(UnitType.METRIC)
             .withGeometries("mocked_geometries")
             .withApproaches("curb;unrestricted")
             .withWaypointNames("Origin;Destination")

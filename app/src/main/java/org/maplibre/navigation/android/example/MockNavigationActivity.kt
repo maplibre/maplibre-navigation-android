@@ -24,7 +24,6 @@ import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
-import org.maplibre.navigation.core.models.DirectionsCriteria
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.offroute.OffRouteListener
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
@@ -41,6 +40,7 @@ import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.RouteMilestone
 import org.maplibre.navigation.core.milestone.Trigger
 import org.maplibre.navigation.core.milestone.TriggerProperty
+import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
@@ -244,7 +244,7 @@ class MockNavigationActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(DirectionsCriteria.METRIC)
+            this.voiceUnits(UnitType.METRIC.text)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }

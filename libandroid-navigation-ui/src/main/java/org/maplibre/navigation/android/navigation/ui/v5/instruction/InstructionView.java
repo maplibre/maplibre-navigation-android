@@ -49,7 +49,9 @@ import org.maplibre.navigation.android.navigation.ui.v5.summary.list.Instruction
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.core.milestone.Milestone;
 import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
 import org.maplibre.navigation.core.navigation.NavigationConstants;
 import org.maplibre.navigation.core.offroute.OffRouteListener;
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
@@ -377,9 +379,8 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
   private void initialize() {
     LocaleUtils localeUtils = new LocaleUtils();
     String language = localeUtils.inferDeviceLanguage(getContext());
-    String unitType = localeUtils.getUnitTypeForDeviceLocale(getContext());
-    int roundingIncrement = NavigationConstants.ROUNDING_INCREMENT_FIFTY;
-    distanceFormatter = new DistanceFormatter(getContext(), language, unitType, roundingIncrement);
+    UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(getContext());
+    distanceFormatter = new DistanceFormatter(getContext(), language, unitType, MapLibreNavigationOptions.RoundingIncrement.ROUNDING_INCREMENT_FIFTY);
     inflate(getContext(), R.layout.instruction_view_layout, this);
   }
 

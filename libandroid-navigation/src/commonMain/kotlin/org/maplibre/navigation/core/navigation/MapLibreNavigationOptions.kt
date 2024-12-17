@@ -2,8 +2,6 @@ package org.maplibre.navigation.core.navigation
 
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone
-import org.maplibre.navigation.core.navigation.NavigationConstants.RoundingIncrement
-//import org.maplibre.navigation.core.navigation.notification.NavigationNotification
 import org.maplibre.navigation.core.route.FasterRouteDetector
 
 

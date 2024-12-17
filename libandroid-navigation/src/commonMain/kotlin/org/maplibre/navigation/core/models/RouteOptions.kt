@@ -41,8 +41,8 @@ data class RouteOptions(
 
     /**
      * The routing profile to use. Possible values are
-     * [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC], [DirectionsCriteria.PROFILE_DRIVING],
-     * [DirectionsCriteria.PROFILE_WALKING], or [DirectionsCriteria.PROFILE_CYCLING].
+     * [NavigationRoute.PROFILE_DRIVING_TRAFFIC], [NavigationRoute.PROFILE_DRIVING],
+     * [NavigationRoute.PROFILE_WALKING], or [NavigationRoute.PROFILE_CYCLING].
      * The same profile which was used during the request that resulted in this root directions
      * response. <tt>MapboxDirections.Builder</tt> ensures that a profile is always set even if the
      * <tt>MapboxDirections</tt> requesting object doesn't specifically set a profile.
@@ -54,7 +54,7 @@ data class RouteOptions(
     /**
      * A list of Points to visit in order.
      * There can be between two and 25 coordinates for most requests, or up to three coordinates for
-     * [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC] requests.
+     * [NavigationRoute.PROFILE_DRIVING_TRAFFIC] requests.
      * Note that these coordinates are different than the direction responses
      * [DirectionsWaypoint]s that these are the non-snapped coordinates.
      *
@@ -66,8 +66,8 @@ data class RouteOptions(
      * Whether to try to return alternative routes (true) or not (false, default). An alternative
      * route is a route that is significantly different than the fastest route, but also still
      * reasonably fast. Such a route does not exist in all circumstances. Up to two alternatives may
-     * be returned. This is available for [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC],
-     * [DirectionsCriteria.PROFILE_DRIVING], [DirectionsCriteria.PROFILE_CYCLING].
+     * be returned. This is available for [NavigationRoute.PROFILE_DRIVING_TRAFFIC],
+     * [NavigationRoute.PROFILE_DRIVING], [NavigationRoute.PROFILE_CYCLING].
      *
      * @since 3.0.0
      */
@@ -108,8 +108,8 @@ data class RouteOptions(
     /**
      * The allowed direction of travel when departing intermediate waypoints. If true, the route
      * will continue in the same direction of travel. If false, the route may continue in the opposite
-     * direction of travel. Defaults to true for [DirectionsCriteria.PROFILE_DRIVING] and false
-     * for [DirectionsCriteria.PROFILE_WALKING] and [DirectionsCriteria.PROFILE_CYCLING].
+     * direction of travel. Defaults to true for [NavigationRoute.PROFILE_DRIVING] and false
+     * for [NavigationRoute.PROFILE_WALKING] and [NavigationRoute.PROFILE_CYCLING].
      *
      * @since 3.0.0
      */
@@ -130,8 +130,8 @@ data class RouteOptions(
 
     /**
      * The format of the returned geometry. Allowed values are:
-     * [DirectionsCriteria.GEOMETRY_POLYLINE] (default, a polyline with a precision of five
-     * decimal places), [DirectionsCriteria.GEOMETRY_POLYLINE6] (a polyline with a precision
+     * [NavigationRoute.GEOMETRY_POLYLINE] (default, a polyline with a precision of five
+     * decimal places), [NavigationRoute.GEOMETRY_POLYLINE6] (a polyline with a precision
      * of six decimal places).
      *
      * @since 3.1.0
@@ -140,9 +140,9 @@ data class RouteOptions(
 
     /**
      * Displays the requested type of overview geometry. Can be
-     * [DirectionsCriteria.OVERVIEW_FULL] (the most detailed geometry
-     * available), [DirectionsCriteria.OVERVIEW_SIMPLIFIED] (default, a simplified version of
-     * the full geometry), or [DirectionsCriteria.OVERVIEW_FALSE] (no overview geometry).
+     * [NavigationRoute.OVERVIEW_FULL] (the most detailed geometry
+     * available), [NavigationRoute.OVERVIEW_SIMPLIFIED] (default, a simplified version of
+     * the full geometry), or [NavigationRoute.OVERVIEW_FALSE] (no overview geometry).
      *
      * @since 3.1.0
      */
@@ -163,11 +163,11 @@ data class RouteOptions(
     /**
      * A comma-separated list of annotations. Defines whether to return additional metadata along the
      * route. Possible values are:
-     * [DirectionsCriteria.ANNOTATION_DURATION]
-     * [DirectionsCriteria.ANNOTATION_DISTANCE]
-     * [DirectionsCriteria.ANNOTATION_SPEED]
-     * [DirectionsCriteria.ANNOTATION_CONGESTION]
-     * [DirectionsCriteria.ANNOTATION_MAXSPEED]
+     * [NavigationRoute.ANNOTATION_DURATION]
+     * [NavigationRoute.ANNOTATION_DISTANCE]
+     * [NavigationRoute.ANNOTATION_SPEED]
+     * [NavigationRoute.ANNOTATION_CONGESTION]
+     * [NavigationRoute.ANNOTATION_MAXSPEED]
      * See the [RouteLeg] object for more details on what is included with annotations.
      * Must be used in conjunction with overview=full.
      *
@@ -179,16 +179,16 @@ data class RouteOptions(
      * Exclude certain road types from routing. The default is to not exclude anything from the
      * profile selected. The following exclude flags are available for each profile:
      *
-     * [DirectionsCriteria.PROFILE_DRIVING]: One of [DirectionsCriteria.EXCLUDE_TOLL],
-     * [DirectionsCriteria.EXCLUDE_MOTORWAY], or [DirectionsCriteria.EXCLUDE_FERRY].
+     * [NavigationRoute.PROFILE_DRIVING]: One of [NavigationRoute.EXCLUDE_TOLL],
+     * [NavigationRoute.EXCLUDE_MOTORWAY], or [NavigationRoute.EXCLUDE_FERRY].
      *
-     * [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC]: One of
-     * [DirectionsCriteria.EXCLUDE_TOLL], [DirectionsCriteria.EXCLUDE_MOTORWAY], or
-     * [DirectionsCriteria.EXCLUDE_FERRY].
+     * [NavigationRoute.PROFILE_DRIVING_TRAFFIC]: One of
+     * [NavigationRoute.EXCLUDE_TOLL], [NavigationRoute.EXCLUDE_MOTORWAY], or
+     * [NavigationRoute.EXCLUDE_FERRY].
      *
-     * [DirectionsCriteria.PROFILE_WALKING]: No excludes supported
+     * [NavigationRoute.PROFILE_WALKING]: No excludes supported
      *
-     * [DirectionsCriteria.PROFILE_CYCLING]: [DirectionsCriteria.EXCLUDE_FERRY]
+     * [NavigationRoute.PROFILE_CYCLING]: [NavigationRoute.EXCLUDE_FERRY]
      *
      * @since 3.0.0
      */
@@ -215,14 +215,13 @@ data class RouteOptions(
 
     /**
      * A type of units to return in the text for voice instructions.
-     * Can be [DirectionsCriteria.IMPERIAL] (default) or [DirectionsCriteria.METRIC].
+     * Can be [UnitType.IMPERIAL] (default) or [UnitType.METRIC].
      * Must be used in conjunction with [RouteOptions.steps]=true and
      * [RouteOptions.voiceInstructions] ()}=true.
      *
      * @since 3.0.0
      */
-    @SerialName("voice_units")
-    val voiceUnits: String? = null,
+    val voiceUnits: UnitType? = null,
 
     /**
      * A valid Mapbox access token used to making the request.
@@ -244,11 +243,11 @@ data class RouteOptions(
 
     /**
      * Indicates from which side of the road to approach a waypoint.
-     * Accepts  [DirectionsCriteria.APPROACH_UNRESTRICTED] (default) or
-     * [DirectionsCriteria.APPROACH_CURB] .
-     * If set to [DirectionsCriteria.APPROACH_UNRESTRICTED], the route can approach waypoints
+     * Accepts  [NavigationRoute.APPROACH_UNRESTRICTED] (default) or
+     * [NavigationRoute.APPROACH_CURB] .
+     * If set to [NavigationRoute.APPROACH_UNRESTRICTED], the route can approach waypoints
      * from either side of the road.
-     * If set to [DirectionsCriteria.APPROACH_CURB], the route will be returned so that on
+     * If set to [NavigationRoute.APPROACH_CURB], the route will be returned so that on
      * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
      * region in which the returned route is located.
      * If provided, the list of approaches must be the same length as the list of waypoints.
@@ -313,7 +312,7 @@ data class RouteOptions(
      * If false, they will not be considered for snapping.
      * If provided, the number of snappingClosures must be the same as the number of
      * coordinates.
-     * Must be used with [DirectionsCriteria.PROFILE_DRIVING_TRAFFIC]
+     * Must be used with [NavigationRoute.PROFILE_DRIVING_TRAFFIC]
      *
      * @return a String representing a list of booleans
      */
@@ -374,7 +373,7 @@ data class RouteOptions(
         private var exclude: String? = null
         private var voiceInstructions: Boolean? = null
         private var bannerInstructions: Boolean? = null
-        private var voiceUnits: String? = null
+        private var voiceUnits: UnitType? = null
         private var approaches: String? = null
         private var waypointIndices: String? = null
         private var waypointNames: String? = null
@@ -386,22 +385,37 @@ data class RouteOptions(
         fun withLanguage(language: String?) = apply { this.language = language }
         fun withRadiuses(radiuses: String?) = apply { this.radiuses = radiuses }
         fun withBearings(bearings: String?) = apply { this.bearings = bearings }
-        fun withContinueStraight(continueStraight: Boolean?) = apply { this.continueStraight = continueStraight }
-        fun withRoundaboutExits(roundaboutExits: Boolean?) = apply { this.roundaboutExits = roundaboutExits }
+        fun withContinueStraight(continueStraight: Boolean?) =
+            apply { this.continueStraight = continueStraight }
+
+        fun withRoundaboutExits(roundaboutExits: Boolean?) =
+            apply { this.roundaboutExits = roundaboutExits }
+
         fun withGeometries(geometries: String?) = apply { this.geometries = geometries }
         fun withOverview(overview: String?) = apply { this.overview = overview }
         fun withSteps(steps: Boolean?) = apply { this.steps = steps }
         fun withAnnotations(annotations: String?) = apply { this.annotations = annotations }
         fun withExclude(exclude: String?) = apply { this.exclude = exclude }
-        fun withVoiceInstructions(voiceInstructions: Boolean?) = apply { this.voiceInstructions = voiceInstructions }
-        fun withBannerInstructions(bannerInstructions: Boolean?) = apply { this.bannerInstructions = bannerInstructions }
-        fun withVoiceUnits(voiceUnits: String?) = apply { this.voiceUnits = voiceUnits }
+        fun withVoiceInstructions(voiceInstructions: Boolean?) =
+            apply { this.voiceInstructions = voiceInstructions }
+
+        fun withBannerInstructions(bannerInstructions: Boolean?) =
+            apply { this.bannerInstructions = bannerInstructions }
+
+        fun withVoiceUnits(voiceUnits: UnitType?) = apply { this.voiceUnits = voiceUnits }
         fun withApproaches(approaches: String?) = apply { this.approaches = approaches }
-        fun withWaypointIndices(waypointIndices: String?) = apply { this.waypointIndices = waypointIndices }
+        fun withWaypointIndices(waypointIndices: String?) =
+            apply { this.waypointIndices = waypointIndices }
+
         fun withWaypointNames(waypointNames: String?) = apply { this.waypointNames = waypointNames }
-        fun withWaypointTargets(waypointTargets: String?) = apply { this.waypointTargets = waypointTargets }
-        fun withWalkingOptions(walkingOptions: WalkingOptions?) = apply { this.walkingOptions = walkingOptions }
-        fun withSnappingClosures(snappingClosures: String?) = apply { this.snappingClosures = snappingClosures }
+        fun withWaypointTargets(waypointTargets: String?) =
+            apply { this.waypointTargets = waypointTargets }
+
+        fun withWalkingOptions(walkingOptions: WalkingOptions?) =
+            apply { this.walkingOptions = walkingOptions }
+
+        fun withSnappingClosures(snappingClosures: String?) =
+            apply { this.snappingClosures = snappingClosures }
 
         fun build(): RouteOptions {
             return RouteOptions(
