@@ -13,7 +13,7 @@ class RingBufferTest : BaseTest() {
         buffer.addFirst(2)
         buffer.addLast(3)
         buffer.addAll(ArrayList(4))
-        buffer.push(5)
+        buffer.addFirst(5)
         buffer.add(6)
 
         assertEquals(1, buffer.size)
@@ -26,7 +26,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
 
         assertEquals(1, buffer.size)
-        assertEquals(2.0, buffer.pop().toDouble(), DELTA)
+        assertEquals(2.0, buffer.removeLast().toDouble(), DELTA)
     }
 
     @Test
@@ -37,7 +37,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
 
         assertEquals(2, buffer.size)
-        assertEquals(1.0, buffer.pop().toDouble(), DELTA)
+        assertEquals(1.0, buffer.removeFirst().toDouble(), DELTA)
     }
 
     @Test
@@ -47,7 +47,7 @@ class RingBufferTest : BaseTest() {
         buffer.add(2)
         buffer.add(3)
         assertEquals(2, buffer.size)
-        assertEquals(2.0, buffer.peekFirst()!!.toDouble(), DELTA)
-        assertEquals(3.0, buffer.peekLast()!!.toDouble(), DELTA)
+        assertEquals(2.0, buffer.removeFirst().toDouble(), DELTA)
+        assertEquals(3.0, buffer.removeLast().toDouble(), DELTA)
     }
 }

@@ -1,10 +1,10 @@
 package org.maplibre.navigation.core.navigation.camera
 
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMeasurement
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 
 /**
@@ -31,9 +31,15 @@ open class SimpleCamera : Camera {
         return routeInformation.route?.let { route ->
             setupLineStringAndBearing(route)
             val firstPoint = routeCoordinates.first()
-            Point.fromLngLat(firstPoint.longitude(), firstPoint.latitude())
+            Point(
+                longitude = firstPoint.longitude,
+                latitude = firstPoint.latitude
+            )
         } ?: routeInformation.location?.let { location ->
-            Point.fromLngLat(location.longitude, location.latitude)
+            Point(
+                longitude = location.longitude,
+                latitude = location.latitude
+            )
         }
     }
 
@@ -69,18 +75,21 @@ open class SimpleCamera : Camera {
         initialRoute = route
         routeCoordinates = generateRouteCoordinates(route)
         initialBearing = TurfMeasurement.bearing(
-            Point.fromLngLat(
-                routeCoordinates.first().longitude(),
-                routeCoordinates.first().latitude()
+            Point(
+                longitude = routeCoordinates.first().longitude,
+                latitude = routeCoordinates.first().latitude
             ),
-            Point.fromLngLat(routeCoordinates[1].longitude(), routeCoordinates[1].latitude())
+            Point(
+                longitude = routeCoordinates[1].longitude,
+                latitude = routeCoordinates[1].latitude
+            )
         )
     }
 
     private fun generateRouteCoordinates(route: DirectionsRoute?): List<Point> {
         return route?.let { rte ->
             val lineString = LineString.fromPolyline(rte.geometry, Constants.PRECISION_6)
-            lineString.coordinates()
+            lineString.points
         } ?: emptyList()
     }
 

@@ -2,13 +2,14 @@ package org.maplibre.navigation.core.location.replay
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.models.DirectionsRoute
@@ -46,8 +47,8 @@ open class ReplayRouteLocationEngine(
     fun assignLastLocation(currentPosition: Point) {
         lastLocation = Location(
             provider = ReplayRouteLocationConverter.PROVIDER_NAME,
-            latitude = currentPosition.latitude(),
-            longitude = currentPosition.longitude()
+            latitude = currentPosition.latitude,
+            longitude = currentPosition.longitude
         )
     }
 
@@ -99,9 +100,9 @@ open class ReplayRouteLocationEngine(
 
     private fun obtainRoute(point: Point, lastLocation: Location): LineString {
         val pointList: MutableList<Point> = ArrayList()
-        pointList.add(Point.fromLngLat(lastLocation.longitude, lastLocation.latitude))
+        pointList.add(Point(longitude = lastLocation.longitude, latitude = lastLocation.latitude))
         pointList.add(point)
-        return LineString.fromLngLats(pointList)
+        return LineString(pointList)
     }
 
     private fun scheduleNextDispatch() {

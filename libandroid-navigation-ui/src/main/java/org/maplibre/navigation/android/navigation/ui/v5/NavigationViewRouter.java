@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
+
 import org.maplibre.navigation.core.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,7 +120,7 @@ public class NavigationViewRouter implements RouteListener {
   private void cacheRouteDestination() {
     boolean hasValidCoordinates = routeOptions != null && !routeOptions.getCoordinates().isEmpty();
     if (hasValidCoordinates) {
-      List<Point> coordinates = routeOptions.getCoordinates();
+      List<Point> coordinates = toMapLibrePoints(routeOptions.getCoordinates());
       int destinationCoordinate = coordinates.size() - 1;
       Point destinationPoint = coordinates.get(destinationCoordinate);
       listener.onDestinationSet(destinationPoint);

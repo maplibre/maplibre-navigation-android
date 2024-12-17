@@ -2,6 +2,8 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static com.google.common.base.Charsets.UTF_8;
 
+import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -44,7 +46,7 @@ class TestRouteBuilder {
             Constants.BASE_API_URL,
             "user",
             "profile",
-            coordinates,
+            toPoints(coordinates),
             ACCESS_TOKEN,
             "uuid"
         )

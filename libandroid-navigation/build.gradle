@@ -23,7 +23,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api dependenciesList.mapLibreTurf
+            api project(":geo")
 
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines

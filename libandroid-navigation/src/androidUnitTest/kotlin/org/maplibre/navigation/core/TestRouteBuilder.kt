@@ -1,6 +1,6 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.BaseTest.Companion.ACCESS_TOKEN
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute

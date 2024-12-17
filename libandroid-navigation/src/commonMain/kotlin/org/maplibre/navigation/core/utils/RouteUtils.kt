@@ -1,7 +1,7 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.Milestone
@@ -148,11 +148,11 @@ open class RouteUtils {
             route.legs.firstOrNull()?.steps?.firstOrNull()?.geometry ?: route.geometry,
             Constants.PRECISION_6
         )
-        val firstRoutePoint = lineString.coordinates().first()
+        val firstRoutePoint = lineString.points.first()
         return Location(
             provider = FORCED_LOCATION,
-            latitude = firstRoutePoint.latitude(),
-            longitude = firstRoutePoint.longitude()
+            latitude = firstRoutePoint.latitude,
+            longitude = firstRoutePoint.longitude
         )
     }
 

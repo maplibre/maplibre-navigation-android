@@ -1,17 +1,17 @@
 package org.maplibre.navigation.core.offroute
 
 import org.maplibre.navigation.core.utils.RingBuffer
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.MeasurementUtils.userTrueDistanceFromStep
 import org.maplibre.navigation.core.utils.ToleranceUtils.dynamicOffRouteRadiusTolerance
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import org.maplibre.turf.TurfMisc
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMisc
 import kotlin.jvm.JvmStatic
 import kotlin.math.max
 
@@ -76,7 +76,7 @@ open class OffRouteDetector(
         if (!validOffRoute(location, options)) {
             return false
         }
-        val currentPoint = Point.fromLngLat(location.longitude, location.latitude)
+        val currentPoint = Point(longitude = location.longitude, latitude = location.latitude)
         val isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint)
 
         if (!isOffRoute) {
@@ -128,7 +128,7 @@ open class OffRouteDetector(
      */
     private fun validOffRoute(location: Location, options: MapLibreNavigationOptions): Boolean {
         return lastReroutePoint?.let { lastReroutePoint ->
-            val currentPoint = Point.fromLngLat(location.longitude, location.latitude)
+            val currentPoint = Point(longitude = location.longitude, latitude = location.latitude)
 
             // Check if minimum amount of distance has been passed since last reroute
             val distanceFromLastReroute =
@@ -190,7 +190,7 @@ open class OffRouteDetector(
     }
 
     private fun updateLastReroutePoint(location: Location) {
-        lastReroutePoint = Point.fromLngLat(location.longitude, location.latitude)
+        lastReroutePoint = Point(longitude = location.longitude, latitude = location.latitude)
     }
 
     /**
@@ -239,7 +239,7 @@ open class OffRouteDetector(
      */
     private fun movingAwayFromManeuver(
         routeProgress: RouteProgress,
-        distancesAwayFromManeuver: org.maplibre.navigation.core.utils.RingBuffer<Int>,
+        distancesAwayFromManeuver: RingBuffer<Int>,
         stepPoints: List<Point>,
         currentPoint: Point,
         options: MapLibreNavigationOptions
@@ -250,43 +250,41 @@ open class OffRouteDetector(
             return false
         }
 
-        val stepLineString = LineString.fromLngLats(stepPoints)
+        val stepLineString = LineString(stepPoints)
         val maneuverPoint = stepPoints[stepPoints.size - 1]
 
-        (TurfMisc.nearestPointOnLine(currentPoint, stepPoints).geometry() as Point?)
-            ?.let { userPointOnStep ->
-                if (maneuverPoint == userPointOnStep) {
-                    return false
-                }
+        val userPointOnStep = TurfMisc.nearestPointOnLine(currentPoint, stepPoints)
+        if (maneuverPoint == userPointOnStep) {
+            return false
+        }
 
-                val remainingStepLineString =
-                    TurfMisc.lineSlice(userPointOnStep, maneuverPoint, stepLineString)
-                val userDistanceToManeuver =
-                    TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS)
-                        .toInt()
+        val remainingStepLineString =
+            TurfMisc.lineSlice(userPointOnStep, maneuverPoint, stepLineString)
+        val userDistanceToManeuver =
+            TurfMeasurement.length(remainingStepLineString, TurfConstants.UNIT_METERS)
+                .toInt()
 
-                if (distancesAwayFromManeuver.isEmpty()) {
-                    // No move-away positions before, add the current one to history stack
-                    distancesAwayFromManeuver.addLast(userDistanceToManeuver)
-                } else if (userDistanceToManeuver > distancesAwayFromManeuver.last()) {
-                    // If distance to maneuver increased (wrong way), add new position to history stack
+        if (distancesAwayFromManeuver.isEmpty()) {
+            // No move-away positions before, add the current one to history stack
+            distancesAwayFromManeuver.addLast(userDistanceToManeuver)
+        } else if (userDistanceToManeuver > distancesAwayFromManeuver.last()) {
+            // If distance to maneuver increased (wrong way), add new position to history stack
 
-                    if (distancesAwayFromManeuver.size >= 3) {
-                        // Replace the latest position with newest one, for keeping first position
-                        distancesAwayFromManeuver.removeLast()
-                    }
-                    distancesAwayFromManeuver.addLast(userDistanceToManeuver)
-                } else if ((distancesAwayFromManeuver.last() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection) {
-                    // If distance to maneuver decreased (right way) clean history
-                    distancesAwayFromManeuver.clear()
-                }
-
-                // Minimum 3 position updates in the wrong way are required before an off-route can occur
-                if (distancesAwayFromManeuver.size >= 3) {
-                    // Check for minimum distance traveled
-                    return (distancesAwayFromManeuver.last() - distancesAwayFromManeuver.first()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection
-                }
+            if (distancesAwayFromManeuver.size >= 3) {
+                // Replace the latest position with newest one, for keeping first position
+                distancesAwayFromManeuver.removeLast()
             }
+            distancesAwayFromManeuver.addLast(userDistanceToManeuver)
+        } else if ((distancesAwayFromManeuver.last() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection) {
+            // If distance to maneuver decreased (right way) clean history
+            distancesAwayFromManeuver.clear()
+        }
+
+        // Minimum 3 position updates in the wrong way are required before an off-route can occur
+        if (distancesAwayFromManeuver.size >= 3) {
+            // Check for minimum distance traveled
+            return (distancesAwayFromManeuver.last() - distancesAwayFromManeuver.first()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection
+        }
 
         return false
     }

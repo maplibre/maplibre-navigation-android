@@ -1,9 +1,8 @@
 package org.maplibre.navigation.core.navigation
 
 import co.touchlab.kermit.Logger
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
-import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
@@ -17,9 +16,11 @@ import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import org.maplibre.turf.TurfMisc
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMisc
+import org.maplibre.navigation.geo.util.PolylineUtils
+import kotlin.jvm.JvmStatic
 
 /**
  * This contains several single purpose methods that help out when a new location update occurs and
@@ -58,28 +59,23 @@ object NavigationHelper {
         legIndex: Int,
         stepIndex: Int,
         directionsRoute: DirectionsRoute,
-        stepPoints: List<Point?>
+        stepPoints: List<Point>
     ): Double {
         // If the linestring coordinate size is less than 2,the distance remaining is zero.
         if (stepPoints.size < 2) {
             return 0.0
         }
 
-        val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
-
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        val feature =
-            TurfMisc.nearestPointOnLine(locationToPoint, stepPoints, TurfConstants.UNIT_KILOMETERS)
+        val snappedPosition = TurfMisc.nearestPointOnLine(location.point, stepPoints, TurfConstants.UNIT_KILOMETERS)
 
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
-        val distance = feature.getNumberProperty("dist")
-        if (distance != null && distance.toDouble() > 1) {
+        val distance = TurfMeasurement.distance(location.point, snappedPosition, "kilometers")
+        if (distance > 1) {
             Logger.i { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
             return TurfMeasurement.length(stepPoints, TurfConstants.UNIT_METERS)
         }
-
-        val snappedPosition = (feature.geometry() as Point)
 
         val steps = directionsRoute.legs[legIndex].steps
         val nextManeuverPosition = nextManeuverPosition(
@@ -101,7 +97,7 @@ object NavigationHelper {
         val slicedLine = TurfMisc.lineSlice(
             snappedPosition,
             nextManeuverPosition,
-            LineString.fromLngLats(stepPoints)
+            LineString(stepPoints)
         )
         return TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
     }
@@ -308,7 +304,7 @@ object NavigationHelper {
             return emptyMap()
         }
 
-        val stepLineString = LineString.fromLngLats(stepPoints)
+        val stepLineString = LineString(stepPoints)
         val distancesToIntersections = mutableMapOf<StepIntersection, Double>()
         for (intersection in intersections) {
             val intersectionPoint = intersection.location
@@ -461,7 +457,8 @@ object NavigationHelper {
      * [OffRouteDetector.isUserOffRoute] is called
      * to determine if the location is on or off route.
      *
-     * @param navigationLocationUpdate containing new location and navigation objects
+     * @param mapLibreNavigation current running navigation instance
+     * @param location          new location
      * @param routeProgress    to be used in off route check
      * @param callback         only used if using our default [OffRouteDetector]
      * @return true if on route, false otherwise

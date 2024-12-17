@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import org.maplibre.navigation.core.models.DirectionsResponse
-import org.maplibre.geojson.Point
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
@@ -45,6 +44,8 @@ import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationEventListener
+import org.maplibre.navigation.geo.Point
+import org.maplibre.navigation.geo.toMapLibrePoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -204,8 +205,8 @@ class MockNavigationActivity :
     override fun onMapClick(point: LatLng): Boolean {
         var addMarker = true
         when {
-            destination == null -> destination = Point.fromLngLat(point.longitude, point.latitude)
-            waypoint == null -> waypoint = Point.fromLngLat(point.longitude, point.latitude)
+            destination == null -> destination = Point(point.longitude, point.latitude)
+            waypoint == null -> waypoint = Point(point.longitude, point.latitude)
             else -> {
                 Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
                 addMarker = false
@@ -234,16 +235,16 @@ class MockNavigationActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
+        val origin = Point(userLocation.longitude, userLocation.latitude)
+        if (TurfMeasurement.distance(origin.toMapLibrePoint(), destination.toMapLibrePoint(), TurfConstants.UNIT_METERS) < 50) {
             binding.startRouteButton.visibility = View.GONE
             return
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
-            this.origin(origin)
-            this.destination(destination)
+            this.origin(origin.toMapLibrePoint())
+            this.destination(destination.toMapLibrePoint())
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
@@ -346,7 +347,7 @@ class MockNavigationActivity :
         mapLibreMap.let {
             val latLng = LatLng(52.039176, 5.550339)
             locationEngine.assignLastLocation(
-                Point.fromLngLat(latLng.longitude, latLng.latitude),
+                Point(latLng.longitude, latLng.latitude),
             )
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0))
         }

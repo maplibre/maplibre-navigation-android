@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.utils
 
 import io.mockk.every
 import io.mockk.mockk
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.models.BannerInstructions
@@ -328,11 +328,11 @@ class RouteUtilsTest : BaseTest() {
 
         assertEquals(2, remainingWaypoints?.size)
         assertEquals(
-            Point.fromLngLat(7.890, 1.234),
+            Point(7.890, 1.234),
             remainingWaypoints?.first()
         )
         assertEquals(
-            Point.fromLngLat(5.678, 9.012),
+            Point(5.678, 9.012),
             remainingWaypoints?.get(1)
         )
     }
@@ -415,10 +415,10 @@ class RouteUtilsTest : BaseTest() {
 
     private fun buildCoordinateList(): List<Point> {
         val coordinates: MutableList<Point> = ArrayList()
-        coordinates.add(Point.fromLngLat(1.234, 5.678))
-        coordinates.add(Point.fromLngLat(9.012, 3.456))
-        coordinates.add(Point.fromLngLat(7.890, 1.234))
-        coordinates.add(Point.fromLngLat(5.678, 9.012))
+        coordinates.add(Point(1.234, 5.678))
+        coordinates.add(Point(9.012, 3.456))
+        coordinates.add(Point(7.890, 1.234))
+        coordinates.add(Point(5.678, 9.012))
         return coordinates
     }
 }

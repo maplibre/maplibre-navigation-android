@@ -1,6 +1,6 @@
 package org.maplibre.navigation.core.navigation.camera
 
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 
 /**

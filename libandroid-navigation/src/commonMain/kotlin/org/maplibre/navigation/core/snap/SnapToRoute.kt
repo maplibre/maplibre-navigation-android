@@ -1,15 +1,15 @@
 package org.maplibre.navigation.core.snap
 
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteLegProgress
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils.wrap
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import org.maplibre.turf.TurfMisc
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMisc
 
 
 /**
@@ -76,18 +76,14 @@ open class SnapToRoute : Snap() {
      * @since 0.4.0
      */
     private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
-        val locationToPoint = Point.fromLngLat(location.longitude, location.latitude)
-
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         return if (stepCoordinates.size > 1) {
-            val feature = TurfMisc.nearestPointOnLine(location.point, stepCoordinates)
-            (feature.geometry() as? Point)?.let { point ->
-                location.copy(
-                    latitude = point.latitude(),
-                    longitude = point.longitude()
-                )
-            } ?: location.copy()
+            val point = TurfMisc.nearestPointOnLine(location.point, stepCoordinates)
+            location.copy(
+                latitude = point.latitude,
+                longitude = point.longitude
+            )
         } else {
             location.copy()
         }
@@ -137,8 +133,8 @@ open class SnapToRoute : Snap() {
             .let { geometry ->
                 LineString.fromPolyline(geometry, Constants.PRECISION_6)
             }
-            .coordinates()
-            .takeIf { coordinates -> coordinates.isNotEmpty() }
+            .points
+            .takeIf { points -> points.isNotEmpty() }
             ?: return null
 
         return currentLegProgress.currentStepProgress.distanceTraveled.let { distanceTraveled ->
@@ -168,11 +164,11 @@ open class SnapToRoute : Snap() {
             ?.let { firstStep ->
                 val currentStepLineString =
                     LineString.fromPolyline(firstStep.geometry, Constants.PRECISION_6)
-                if (currentStepLineString.coordinates().isEmpty()) {
+                if (currentStepLineString.points.isEmpty()) {
                     return@let null
                 }
 
-                TurfMeasurement.along(currentStepLineString, 1.0, TurfConstants.UNIT_METERS)
+                TurfMeasurement.along(currentStepLineString.points, 1.0, TurfConstants.UNIT_METERS)
             }
     }
 }

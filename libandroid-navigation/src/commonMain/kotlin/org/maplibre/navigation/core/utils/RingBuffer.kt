@@ -31,10 +31,6 @@ class RingBuffer<T>(private val maxSize: Int) : List<T> {
         return result
     }
 
-    fun push(item: T) {
-        addFirst(item)
-    }
-
     fun removeFirst(): T {
         return values.removeFirst()
     }

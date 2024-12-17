@@ -2,8 +2,8 @@ package org.maplibre.navigation.core.navigation
 
 import io.mockk.every
 import io.mockk.mockk
-import org.maplibre.geojson.Point
-import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.geo.Point
+import org.maplibre.navigation.geo.util.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.milestone.StepMilestone
 import org.maplibre.navigation.core.milestone.Trigger.eq
@@ -255,7 +255,7 @@ class NavigationHelperTest : BaseTest() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val currentStepPoints: MutableList<Point> = ArrayList()
-        currentStepPoints.add(Point.fromLngLat(1.0, 1.0))
+        currentStepPoints.add(Point(1.0, 1.0))
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(

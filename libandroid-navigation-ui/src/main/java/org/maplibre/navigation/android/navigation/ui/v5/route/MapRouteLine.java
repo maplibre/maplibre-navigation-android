@@ -356,8 +356,8 @@ class MapRouteLine {
 
   private Feature buildWayPointFeatureFromLeg(RouteLeg leg, int index) {
     Feature feature = Feature.fromGeometry(Point.fromLngLat(
-      leg.getSteps().get(index).getManeuver().getLocation().longitude(),
-      leg.getSteps().get(index).getManeuver().getLocation().latitude()
+      leg.getSteps().get(index).getManeuver().getLocation().getLongitude(),
+      leg.getSteps().get(index).getManeuver().getLocation().getLatitude()
     ));
     feature.addStringProperty(WAYPOINT_PROPERTY_KEY, index == 0 ? WAYPOINT_ORIGIN_VALUE : WAYPOINT_DESTINATION_VALUE);
     return feature;

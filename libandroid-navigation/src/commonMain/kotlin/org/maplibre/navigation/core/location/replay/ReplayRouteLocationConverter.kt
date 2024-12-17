@@ -1,13 +1,14 @@
 package org.maplibre.navigation.core.location.replay
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
 
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
@@ -39,7 +40,7 @@ open class ReplayRouteLocationConverter(
     }
 
     fun initializeTime() {
-        time = System.currentTimeMillis()
+        time = Clock.System.now().toEpochMilliseconds()
     }
 
     /**
@@ -49,7 +50,7 @@ open class ReplayRouteLocationConverter(
      * @return list of sliced [Point]s.
      */
     fun sliceRoute(lineString: LineString): List<Point> {
-        if (lineString.coordinates().isEmpty()) {
+        if (lineString.points.isEmpty()) {
             return emptyList()
         }
 
@@ -61,7 +62,7 @@ open class ReplayRouteLocationConverter(
         val points: MutableList<Point> = ArrayList()
         var i = 0.0
         while (i < distanceMeters) {
-            val point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString.points, i, TurfConstants.UNIT_METERS)
             points.add(point)
             i += distance
         }
@@ -121,8 +122,8 @@ open class ReplayRouteLocationConverter(
     private fun createMockLocationFrom(point: Point): Location {
         return Location(
             provider = PROVIDER_NAME,
-            latitude = point.latitude(),
-            longitude = point.longitude(),
+            latitude = point.latitude,
+            longitude = point.longitude,
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
             accuracyMeters = 3f,
             time = Instant.fromEpochMilliseconds(time)

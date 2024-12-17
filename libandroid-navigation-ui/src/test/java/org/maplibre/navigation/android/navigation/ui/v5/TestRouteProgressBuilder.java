@@ -3,6 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createDistancesToIntersections;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createIntersectionsList;
 import static org.maplibre.navigation.core.utils.Constants.PRECISION_6;
+import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
 
 import android.util.Pair;
 
@@ -45,19 +46,19 @@ class TestRouteProgressBuilder {
 
         List<StepIntersection> intersections = createIntersectionsList(currentStep, upcomingStep);
         Map<StepIntersection, Double> intersectionDistances = createDistancesToIntersections(
-            currentStepPoints, intersections
+            toPoints(currentStepPoints), intersections
         );
 
         return new RouteProgress.Builder(
             route,
             legIndex,
             distanceRemaining,
-            currentStepPoints,
+            toPoints(currentStepPoints),
             stepIndex,
             legDistanceRemaining,
             stepDistanceRemaining
         )
-            .withUpcomingStepPoints(upcomingStepPoints)
+            .withUpcomingStepPoints(toPoints(upcomingStepPoints))
             .withIntersections(intersections)
             .withCurrentIntersection(intersections.get(0))
             .withIntersectionDistancesAlongStep(intersectionDistances)

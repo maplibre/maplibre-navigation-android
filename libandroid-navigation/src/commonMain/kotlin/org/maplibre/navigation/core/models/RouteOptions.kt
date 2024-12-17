@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.models.serializer.PointSerializer
 
 /**

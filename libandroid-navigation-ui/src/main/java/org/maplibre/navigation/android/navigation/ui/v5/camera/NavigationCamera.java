@@ -40,6 +40,7 @@ import timber.log.Timber;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION;
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
 
 /**
  * Updates the map camera while navigating.
@@ -435,7 +436,7 @@ public class NavigationCamera implements LifecycleObserver {
 
   private void animateCameraForRouteOverview(RouteInformation routeInformation, int[] padding) {
     Camera cameraEngine = navigation.getCameraEngine();
-    List<Point> routePoints = cameraEngine.overview(routeInformation);
+    List<Point> routePoints = toMapLibrePoints(cameraEngine.overview(routeInformation));
     if (!routePoints.isEmpty()) {
       animateMapLibreMapForRouteOverview(padding, routePoints);
     }

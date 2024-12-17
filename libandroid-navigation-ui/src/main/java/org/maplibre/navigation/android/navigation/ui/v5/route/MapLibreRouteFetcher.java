@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
+
 import android.content.Context;
 import org.maplibre.navigation.core.location.Location;
 import android.text.TextUtils;
@@ -80,7 +82,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
                 .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<Point> remainingWaypoints = toMapboxPointList(routeUtils.calculateRemainingWaypoints(progress));
+        List<Point> remainingWaypoints = toMapboxPointList(toMapLibrePoints(routeUtils.calculateRemainingWaypoints(progress)));
         if (remainingWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;

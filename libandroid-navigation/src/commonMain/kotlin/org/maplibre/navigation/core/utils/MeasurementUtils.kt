@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.models.LegStep
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import org.maplibre.turf.TurfMisc
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMisc
 import kotlin.jvm.JvmStatic
 
 object MeasurementUtils {
@@ -32,26 +32,25 @@ object MeasurementUtils {
 
         // Make sure that the step coordinates isn't less than size 2. If the points equal each other,
         // the distance is obviously zero, so return 0 to avoid executing additional unnecessary code.
-        if (lineString.coordinates().isEmpty() || usersRawLocation == lineString.coordinates()
+        if (lineString.points.isEmpty() || usersRawLocation == lineString.points
                 .first()
         ) {
             return 0.0
         }
 
-        if (lineString.coordinates().size == 1) {
+        if (lineString.points.size == 1) {
             return TurfMeasurement.distance(
                 usersRawLocation,
-                lineString.coordinates().first(),
+                lineString.points.first(),
                 TurfConstants.UNIT_METERS
             )
         }
 
-        val feature = TurfMisc.nearestPointOnLine(usersRawLocation, lineString.coordinates())
-        val snappedPoint = feature.geometry() as Point? ?: return 0.0
-        if (snappedPoint.latitude().isInfinite() || snappedPoint.longitude().isInfinite()) {
+        val snappedPoint = TurfMisc.nearestPointOnLine(usersRawLocation, lineString.points)
+        if (snappedPoint.latitude.isInfinite() || snappedPoint.longitude.isInfinite()) {
             return TurfMeasurement.distance(
                 usersRawLocation,
-                lineString.coordinates().first(),
+                lineString.points.first(),
                 TurfConstants.UNIT_METERS
             )
         }

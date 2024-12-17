@@ -1,9 +1,8 @@
 package org.maplibre.navigation.core.models
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.models.serializer.PointSerializer
 
 /**
@@ -92,7 +91,7 @@ data class StepIntersection(
     @SerialName("geometry_index")
     val geometryIndex: Int?,
 
-    @get:SerializedName("is_urban")
+    @SerialName("is_urban")
     val isUrban: Boolean?,
 
     /**

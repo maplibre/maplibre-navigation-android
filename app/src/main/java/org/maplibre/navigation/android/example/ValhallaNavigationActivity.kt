@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.geo.toPoints
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -255,7 +256,7 @@ class ValhallaNavigationActivity :
                                     voiceInstructions = true,
                                     bannerInstructions = true,
                                     language = language,
-                                    coordinates = listOf(origin, destination),
+                                    coordinates = listOf(origin, destination).toPoints(),
                                     requestUuid = "0000-0000-0000-0000"
                                 )
                             )

@@ -1,15 +1,15 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.util.PolylineUtils
 import org.maplibre.navigation.core.json
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import org.maplibre.turf.TurfMisc
+import org.maplibre.navigation.geo.turf.TurfConstants
+import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.navigation.geo.turf.TurfMisc
 import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -450,13 +450,13 @@ class RouteStepProgressTest : BaseTest() {
 
         assertEquals(currentStepTotal, routeStepProgress.intersections!!.size)
         assertEquals(
-            routeStepProgress.intersections!![0].location.latitude(),
-            lastStepLocation[0].latitude(),
+            routeStepProgress.intersections!![0].location.latitude,
+            lastStepLocation[0].latitude,
             DELTA
         )
         assertEquals(
-            routeStepProgress.intersections!![0].location.longitude(),
-            lastStepLocation[0].longitude(),
+            routeStepProgress.intersections!![0].location.longitude,
+            lastStepLocation[0].longitude,
             DELTA
         )
     }

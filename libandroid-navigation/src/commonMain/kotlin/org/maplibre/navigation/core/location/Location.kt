@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.location
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.Point
 
 /**
  * A generic model that represents a user location.
@@ -51,5 +51,5 @@ data class Location(
      * Returns a [Point] representation of this location.
      */
     val point: Point
-        get() = Point.fromLngLat(longitude, latitude)
+        get() = Point(longitude = longitude, latitude = latitude)
 }

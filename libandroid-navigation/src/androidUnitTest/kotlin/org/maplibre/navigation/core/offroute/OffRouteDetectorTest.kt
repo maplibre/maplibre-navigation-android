@@ -3,8 +3,8 @@ package org.maplibre.navigation.core.offroute
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.maplibre.geojson.LineString
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.geo.LineString
+import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.LegStep
@@ -56,7 +56,7 @@ class OffRouteDetectorTest : BaseTest() {
             mapLibreNavigationOptions.offRouteMinimumDistanceMetersBeforeWrongDirection + 1
         )
         val locationOverMinimumDistance =
-            buildDefaultLocationUpdate(target.longitude(), target.latitude())
+            buildDefaultLocationUpdate(target.longitude, target.latitude)
 
         val validOffRoute = offRouteDetector.isUserOffRoute(
             locationOverMinimumDistance,
@@ -80,7 +80,7 @@ class OffRouteDetectorTest : BaseTest() {
         val offRoutePoint =
             buildPointAwayFromPoint(stepManeuverPoint, 100.0, 90.0)
         val secondUpdate =
-            buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude())
+            buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude)
 
         val isUserOffRoute =
             offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, defaultOptions)
@@ -106,7 +106,7 @@ class OffRouteDetectorTest : BaseTest() {
         val offRoutePoint =
             buildPointAwayFromPoint(stepManeuverPoint, 50.0, 90.0)
         val secondUpdate =
-            buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude())
+            buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude)
 
         val isUserOffRoute = offRouteDetector.isUserOffRoute(
             secondUpdate,
@@ -130,7 +130,7 @@ class OffRouteDetectorTest : BaseTest() {
         val offRoutePoint =
             buildPointAwayFromPoint(stepManeuverPoint, 10.0, 90.0)
         val secondUpdate =
-            buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude())
+            buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude)
 
         val isUserOffRoute =
             offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, defaultOptions)
@@ -149,7 +149,7 @@ class OffRouteDetectorTest : BaseTest() {
 
         val offRoutePoint =
             buildPointAwayFromPoint(stepManeuverPoint, 250.0, 90.0)
-        val secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude()).copy(
+        val secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude).copy(
             accuracyMeters = 300f
         )
 
@@ -172,7 +172,7 @@ class OffRouteDetectorTest : BaseTest() {
         val offRoutePoint =
             buildPointAwayFromPoint(upcomingStepManeuverPoint, 30.0, 180.0)
         val secondUpdate =
-            buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude())
+            buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude)
 
         val isUserOffRoute =
             offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, defaultOptions)
@@ -189,7 +189,7 @@ class OffRouteDetectorTest : BaseTest() {
         //    offRouteDetector.isUserOffRoute(firstUpdate, routeProgress, options);
         //
         //    Point offRoutePoint = buildPointAwayFromPoint(upcomingStepManeuverPoint, 30, 180);
-        //    Location secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude(), offRoutePoint.latitude());
+        //    Location secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude);
         //
         //    boolean isUserOffRoute = offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, options);
         //    assertFalse(isUserOffRoute);
@@ -206,8 +206,7 @@ class OffRouteDetectorTest : BaseTest() {
             currentStep.geometry,
             Constants.PRECISION_6
         )
-        val coordinates =
-            lineString.coordinates()
+        val coordinates = lineString.points.toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -216,7 +215,7 @@ class OffRouteDetectorTest : BaseTest() {
         val lastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteFirstTry =
             offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, defaultOptions)
@@ -225,7 +224,7 @@ class OffRouteDetectorTest : BaseTest() {
         val secondLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val thirdLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSecondTry =
             offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, defaultOptions)
@@ -234,7 +233,7 @@ class OffRouteDetectorTest : BaseTest() {
         val thirdLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fourthLocationUpdate = buildDefaultLocationUpdate(
-            thirdLastPointInCurrentStep.longitude(), thirdLastPointInCurrentStep.latitude()
+            thirdLastPointInCurrentStep.longitude, thirdLastPointInCurrentStep.latitude
         )
         val isUserOffRouteThirdTry =
             offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, defaultOptions)
@@ -243,7 +242,7 @@ class OffRouteDetectorTest : BaseTest() {
         val fourthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fifthLocationUpdate = buildDefaultLocationUpdate(
-            fourthLastPointInCurrentStep.longitude(), fourthLastPointInCurrentStep.latitude()
+            fourthLastPointInCurrentStep.longitude, fourthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFourthTry =
             offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, defaultOptions)
@@ -252,7 +251,7 @@ class OffRouteDetectorTest : BaseTest() {
         val fifthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val sixthLocationUpdate = buildDefaultLocationUpdate(
-            fifthLastPointInCurrentStep.longitude(), fifthLastPointInCurrentStep.latitude()
+            fifthLastPointInCurrentStep.longitude, fifthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFifthTry =
             offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, defaultOptions)
@@ -270,8 +269,7 @@ class OffRouteDetectorTest : BaseTest() {
                 currentStep.geometry,
                 Constants.PRECISION_6
             )
-        val coordinates =
-            lineString.coordinates()
+        val coordinates = lineString.points.toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -279,7 +277,7 @@ class OffRouteDetectorTest : BaseTest() {
 
         val lastPointInCurrentStep = coordinates[7]
         val secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteFirstTry =
             offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, defaultOptions)
@@ -287,28 +285,28 @@ class OffRouteDetectorTest : BaseTest() {
 
         val pointSix = coordinates[6]
         val thirdLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+            pointSix.longitude, pointSix.latitude
         )
         val isUserOffRouteSecondTry =
             offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, defaultOptions)
         assertFalse(isUserOffRouteSecondTry)
 
         val fourthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+            pointSix.longitude, pointSix.latitude
         )
         val isUserOffRouteThirdTry =
             offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, defaultOptions)
         assertFalse(isUserOffRouteThirdTry)
 
         val fifthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+            pointSix.longitude, pointSix.latitude
         )
         val isUserOffRouteFourthTry =
             offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, defaultOptions)
         assertFalse(isUserOffRouteFourthTry)
 
         val sixthLocationUpdate = buildDefaultLocationUpdate(
-            pointSix.longitude(), pointSix.latitude()
+            pointSix.longitude, pointSix.latitude
         )
         val isUserOffRouteFifthTry =
             offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, defaultOptions)
@@ -316,7 +314,7 @@ class OffRouteDetectorTest : BaseTest() {
 
         val pointFive = coordinates[5]
         val seventhLocationUpdate = buildDefaultLocationUpdate(
-            pointFive.longitude(), pointFive.latitude()
+            pointFive.longitude, pointFive.latitude
         )
         val isUserOffRouteSixthTry =
             offRouteDetector.isUserOffRoute(seventhLocationUpdate, routeProgress, defaultOptions)
@@ -324,7 +322,7 @@ class OffRouteDetectorTest : BaseTest() {
 
         val pointFour = coordinates[4]
         val eighthLocationUpdate = buildDefaultLocationUpdate(
-            pointFour.longitude(), pointFour.latitude()
+            pointFour.longitude, pointFour.latitude
         )
         val isUserOffRouteSeventhTry =
             offRouteDetector.isUserOffRoute(eighthLocationUpdate, routeProgress, defaultOptions)
@@ -342,8 +340,7 @@ class OffRouteDetectorTest : BaseTest() {
                 currentStep.geometry,
                 Constants.PRECISION_6
             )
-        val coordinates =
-            lineString.coordinates()
+        val coordinates = lineString.points.toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -352,7 +349,7 @@ class OffRouteDetectorTest : BaseTest() {
         val lastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteFirstTry =
             offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, defaultOptions)
@@ -361,7 +358,7 @@ class OffRouteDetectorTest : BaseTest() {
         val secondLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val thirdLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSecondTry =
             offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, defaultOptions)
@@ -370,7 +367,7 @@ class OffRouteDetectorTest : BaseTest() {
         val thirdLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fourthLocationUpdate = buildDefaultLocationUpdate(
-            thirdLastPointInCurrentStep.longitude(), thirdLastPointInCurrentStep.latitude()
+            thirdLastPointInCurrentStep.longitude, thirdLastPointInCurrentStep.latitude
         )
         val isUserOffRouteThirdTry =
             offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, defaultOptions)
@@ -379,14 +376,14 @@ class OffRouteDetectorTest : BaseTest() {
         val fourthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fifthLocationUpdate = buildDefaultLocationUpdate(
-            fourthLastPointInCurrentStep.longitude(), fourthLastPointInCurrentStep.latitude()
+            fourthLastPointInCurrentStep.longitude, fourthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFourthTry =
             offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, defaultOptions)
         assertFalse(isUserOffRouteFourthTry)
 
         val eighthLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSeventhTry =
             offRouteDetector.isUserOffRoute(eighthLocationUpdate, routeProgress, defaultOptions)
@@ -395,7 +392,7 @@ class OffRouteDetectorTest : BaseTest() {
         val fifthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val sixthLocationUpdate = buildDefaultLocationUpdate(
-            fifthLastPointInCurrentStep.longitude(), fifthLastPointInCurrentStep.latitude()
+            fifthLastPointInCurrentStep.longitude, fifthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFifthTry =
             offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, defaultOptions)
@@ -416,8 +413,7 @@ class OffRouteDetectorTest : BaseTest() {
                 currentStep.geometry,
                 Constants.PRECISION_6
             )
-        val coordinates =
-            lineString.coordinates()
+        val coordinates = lineString.points.toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -426,7 +422,7 @@ class OffRouteDetectorTest : BaseTest() {
         val lastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteFirstTry =
             offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, options)
@@ -435,7 +431,7 @@ class OffRouteDetectorTest : BaseTest() {
         val secondLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val thirdLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSecondTry =
             offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, options)
@@ -444,7 +440,7 @@ class OffRouteDetectorTest : BaseTest() {
         val thirdLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fourthLocationUpdate = buildDefaultLocationUpdate(
-            thirdLastPointInCurrentStep.longitude(), thirdLastPointInCurrentStep.latitude()
+            thirdLastPointInCurrentStep.longitude, thirdLastPointInCurrentStep.latitude
         )
         val isUserOffRouteThirdTry =
             offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, options)
@@ -453,14 +449,14 @@ class OffRouteDetectorTest : BaseTest() {
         val fourthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val fifthLocationUpdate = buildDefaultLocationUpdate(
-            fourthLastPointInCurrentStep.longitude(), fourthLastPointInCurrentStep.latitude()
+            fourthLastPointInCurrentStep.longitude, fourthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFourthTry =
             offRouteDetector.isUserOffRoute(fifthLocationUpdate, routeProgress, options)
         assertFalse(isUserOffRouteFourthTry)
 
         val eighthLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSeventhTry =
             offRouteDetector.isUserOffRoute(eighthLocationUpdate, routeProgress, options)
@@ -469,7 +465,7 @@ class OffRouteDetectorTest : BaseTest() {
         val fifthLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val sixthLocationUpdate = buildDefaultLocationUpdate(
-            fifthLastPointInCurrentStep.longitude(), fifthLastPointInCurrentStep.latitude()
+            fifthLastPointInCurrentStep.longitude, fifthLastPointInCurrentStep.latitude
         )
         val isUserOffRouteFifthTry =
             offRouteDetector.isUserOffRoute(sixthLocationUpdate, routeProgress, options)
@@ -486,8 +482,7 @@ class OffRouteDetectorTest : BaseTest() {
             currentStep.geometry,
             Constants.PRECISION_6
         )
-        val coordinates =
-            lineString.coordinates()
+        val coordinates = lineString.points.toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -496,7 +491,7 @@ class OffRouteDetectorTest : BaseTest() {
         val lastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val secondLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteFirstTry =
             offRouteDetector.isUserOffRoute(secondLocationUpdate, routeProgress, defaultOptions)
@@ -505,14 +500,14 @@ class OffRouteDetectorTest : BaseTest() {
         val secondLastPointInCurrentStep =
             coordinates.removeAt(coordinates.size - 1)
         val thirdLocationUpdate = buildDefaultLocationUpdate(
-            secondLastPointInCurrentStep.longitude(), secondLastPointInCurrentStep.latitude()
+            secondLastPointInCurrentStep.longitude, secondLastPointInCurrentStep.latitude
         )
         val isUserOffRouteSecondTry =
             offRouteDetector.isUserOffRoute(thirdLocationUpdate, routeProgress, defaultOptions)
         assertFalse(isUserOffRouteSecondTry)
 
         val fourthLocationUpdate = buildDefaultLocationUpdate(
-            lastPointInCurrentStep.longitude(), lastPointInCurrentStep.latitude()
+            lastPointInCurrentStep.longitude, lastPointInCurrentStep.latitude
         )
         val isUserOffRouteThirdTry =
             offRouteDetector.isUserOffRoute(fourthLocationUpdate, routeProgress, defaultOptions)

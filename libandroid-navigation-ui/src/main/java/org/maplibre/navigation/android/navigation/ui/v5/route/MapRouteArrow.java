@@ -49,6 +49,7 @@ import static org.maplibre.android.style.layers.Property.VISIBLE;
 import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap;
 import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
 
 class MapRouteArrow {
 
@@ -110,11 +111,11 @@ class MapRouteArrow {
   }
 
   private List<Point> obtainArrowPointsFrom(RouteProgress routeProgress) {
-    List<Point> reversedCurrent = new ArrayList<>(routeProgress.getCurrentStepPoints());
+    List<Point> reversedCurrent = new ArrayList<>(toMapLibrePoints(routeProgress.getCurrentStepPoints()));
     Collections.reverse(reversedCurrent);
 
     LineString arrowLineCurrent = LineString.fromLngLats(reversedCurrent);
-    LineString arrowLineUpcoming = LineString.fromLngLats(routeProgress.getUpcomingStepPoints());
+    LineString arrowLineUpcoming = LineString.fromLngLats(toMapLibrePoints(routeProgress.getUpcomingStepPoints()));
 
     LineString arrowCurrentSliced = TurfMisc.lineSliceAlong(arrowLineCurrent, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
     LineString arrowUpcomingSliced = TurfMisc.lineSliceAlong(arrowLineUpcoming, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
