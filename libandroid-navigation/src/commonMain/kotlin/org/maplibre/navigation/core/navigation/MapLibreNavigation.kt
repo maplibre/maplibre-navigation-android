@@ -15,6 +15,7 @@ import org.maplibre.navigation.core.navigation.NavigationConstants.VOICE_INSTRUC
 import org.maplibre.navigation.core.navigation.camera.Camera
 import org.maplibre.navigation.core.navigation.camera.SimpleCamera
 import org.maplibre.navigation.core.navigation.runner.MapLibreNavigationEngine
+import org.maplibre.navigation.core.navigation.runner.NavigationEngine
 import org.maplibre.navigation.core.offroute.OffRoute
 import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.offroute.OffRouteListener
@@ -90,11 +91,12 @@ open class MapLibreNavigation @JvmOverloads constructor(
 ) {
 
     private val navigationRunnerJob = Job()
-    private var mapLibreNavigationEngine: MapLibreNavigationEngine = MapLibreNavigationEngine(
-        mapLibreNavigation = this, //TODO fabi755
-        routeUtils = routeUtils,
-        coroutineScope = CoroutineScope(Dispatchers.Default + navigationRunnerJob)
-    )
+    private var mapLibreNavigationEngine: NavigationEngine? = null
+        set(value) {
+            // Stop previous started navigation session to avoid leaks
+            field?.stopNavigation()
+            field = value
+        }
 
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
@@ -245,7 +247,7 @@ open class MapLibreNavigation @JvmOverloads constructor(
         this.route = directionsRoute
         Logger.d { "MapLibreNavigation startNavigation called." }
 
-        mapLibreNavigationEngine.startNavigation(directionsRoute)
+        getNavigationEngineInternal().startNavigation(directionsRoute)
         eventDispatcher.onNavigationEvent(true)
     }
 
@@ -267,8 +269,29 @@ open class MapLibreNavigation @JvmOverloads constructor(
     fun stopNavigation() {
         Logger.d { "MapLibreNavigation stopNavigation called" }
 
-        mapLibreNavigationEngine.stopNavigation()
+        getNavigationEngineInternal().stopNavigation()
         eventDispatcher.onNavigationEvent(false)
+    }
+
+    /**
+     * Get custom set navigation engine or create default instance if not set.
+     * The use of this inconvenient method is necessary because we can not pass
+     * `this` MapLibreNavigation instance by the constructor. This would cause memory leaks.
+     * Additionally, we want to allow the injection of [NavigationEngine].
+     *
+     * @return current instance of navigation engine
+     */
+    private fun getNavigationEngineInternal(): NavigationEngine {
+        if (mapLibreNavigationEngine == null) {
+            mapLibreNavigationEngine = MapLibreNavigationEngine(
+                mapLibreNavigation = this,
+                routeUtils = routeUtils,
+                coroutineScope = CoroutineScope(Dispatchers.Default + navigationRunnerJob)
+            )
+        }
+
+        return mapLibreNavigationEngine!!
+
     }
 
     // Listeners
