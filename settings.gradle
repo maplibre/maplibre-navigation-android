@@ -1,4 +1,4 @@
 include ':app'
-include ':geo'
-include ':libandroid-navigation'
+include ':maplibre-navigation-geo'
+include ':maplibre-navigation-core'
 include ':libandroid-navigation-ui'

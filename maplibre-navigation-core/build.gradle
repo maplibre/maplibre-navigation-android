@@ -23,7 +23,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api project(":geo")
+            api project(":maplibre-navigation-geo")
 
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines

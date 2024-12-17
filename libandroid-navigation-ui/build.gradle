@@ -68,7 +68,7 @@ android {
 
 dependencies {
   // Navigation SDK
-  api project(':libandroid-navigation')
+  api project(':maplibre-navigation-core')
 
   // Maplibre Maps SDK
   api dependenciesList.mapLibreTurf
