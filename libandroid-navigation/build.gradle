@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
@@ -25,6 +23,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            api dependenciesList.mapLibreTurf
+
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines
             api dependenciesList.kotlinxDateTime
@@ -39,7 +39,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation dependenciesList.mapLibre
-            api dependenciesList.mapLibreTurf
 
             // Location by Play Services
             // Will only used, when added by the client app

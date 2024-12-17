@@ -10,7 +10,7 @@ import kotlin.test.Test
 
 class ValidationUtilsTest : BaseTest() {
 
-    @Test(expected = MissingFormatArgumentException::class)
+    @Test(expected = IllegalStateException::class)
     @Throws(Exception::class)
     fun validDirectionsRoute_isInvalidWithNullRouteOptions() {
         var route = buildTestDirectionsRoute(DIRECTIONS_WITHOUT_VOICE_INSTRUCTIONS)
@@ -20,7 +20,7 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(route, true)
     }
 
-    @Test(expected = MissingFormatArgumentException::class)
+    @Test(expected = IllegalStateException::class)
     @Throws(Exception::class)
     fun validDirectionsRoute_isInvalidWithNullInstructions() {
         val routeWithNullInstructions = buildRouteWithNullInstructions()
@@ -28,7 +28,7 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(routeWithNullInstructions, true)
     }
 
-    @Test(expected = MissingFormatArgumentException::class)
+    @Test(expected = IllegalStateException::class)
     @Throws(Exception::class)
     fun validDirectionsRoute_isInvalidWithFalseVoiceInstructions() {
         val routeWithFalseVoiceInstructions = buildRouteWithFalseVoiceInstructions()
@@ -36,7 +36,7 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(routeWithFalseVoiceInstructions, true)
     }
 
-    @Test(expected = MissingFormatArgumentException::class)
+    @Test(expected = IllegalStateException::class)
     @Throws(Exception::class)
     fun validDirectionsRoute_isInvalidWithFalseBannerInstructions() {
         val routeWithFalseBannerInstructions = buildRouteWithFalseBannerInstructions()

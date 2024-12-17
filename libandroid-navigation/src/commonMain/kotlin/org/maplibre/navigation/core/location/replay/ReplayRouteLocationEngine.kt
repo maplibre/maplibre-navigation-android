@@ -7,7 +7,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.core.location.Location
@@ -23,7 +22,6 @@ open class ReplayRouteLocationEngine(
     private var mockedLocations: MutableList<Location> = mutableListOf()
     private var dispatcher: ReplayLocationDispatcher? = null
 
-    @get:SuppressLint("MissingPermission")
     var lastLocation: Location? = null
         private set
 

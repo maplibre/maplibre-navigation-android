@@ -9,8 +9,6 @@ import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.routeprogress.RouteStepProgress
-import java.util.Date
-import java.util.concurrent.TimeUnit
 
 open class FasterRouteDetector(
     private val navigationOptions: MapLibreNavigationOptions
@@ -127,12 +125,6 @@ open class FasterRouteDetector(
         return lastCheckedLocation?.let { lastCheckedLocation ->
             location.time.epochSeconds - lastCheckedLocation.time.epochSeconds
         } ?: -1
-    }
-
-    @Suppress("SameParameterValue")
-    private fun dateDiff(firstDate: Date, secondDate: Date, timeUnit: TimeUnit): Long {
-        val diffInMillis = secondDate.time - firstDate.time
-        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS)
     }
 
     companion object {

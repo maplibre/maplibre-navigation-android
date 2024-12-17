@@ -1,43 +1,44 @@
 package org.maplibre.navigation.core.utils
 
-import java.util.ArrayDeque
 
-class RingBuffer<T>(private val maxSize: Int) : ArrayDeque<T>() {
+class RingBuffer<T>(private val maxSize: Int) {
+
+    private val values = ArrayDeque<T>()
 
     init {
         require(maxSize > 0) { "Max size must be greater than 0." }
     }
 
-    override fun add(element: T): Boolean {
-        val result = super.add(element)
+    fun add(element: T): Boolean {
+        val result = values.add(element)
         resize()
         return result
     }
 
-    override fun addFirst(item: T) {
-        super.addFirst(item)
+    fun addFirst(item: T) {
+        values.addFirst(item)
         resize()
     }
 
-    override fun addLast(item: T) {
-        super.addLast(item)
+    fun addLast(item: T) {
+        values.addLast(item)
         resize()
     }
 
-    override fun addAll(elements: Collection<T>): Boolean {
-        val result = super.addAll(elements)
+    fun addAll(elements: Collection<T>): Boolean {
+        val result =  values.addAll(elements)
         resize()
         return result
     }
 
-    override fun push(item: T) {
-        super.push(item)
+    fun push(item: T) {
+        values.addFirst(item)
         resize()
     }
 
     private fun resize() {
-        while (size > maxSize) {
-            pop()
+        while (values.size > maxSize) {
+            values.removeFirst()
         }
     }
 }

@@ -1,8 +1,9 @@
 package org.maplibre.navigation.core.utils
 
 import kotlin.jvm.JvmStatic
-import org.maplibre.android.utils.MathUtils as MapLibreMathUtils
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 object MathUtils {
 
@@ -16,7 +17,7 @@ object MathUtils {
      */
     @JvmStatic
     fun clamp(value: Double, min: Double, max: Double): Double {
-        return MapLibreMathUtils.clamp(value, min, max)
+        return max(min, min(max, value));
     }
 
     /**
@@ -32,7 +33,10 @@ object MathUtils {
      */
     @JvmStatic
     fun wrap(value: Double, min: Double, max: Double): Double {
-        return MapLibreMathUtils.wrap(value, min, max)
+        val delta = max - min
+        val firstMod = (value - min) % delta
+        val secondMod = (firstMod + delta) % delta
+        return secondMod + min
     }
 
     /**

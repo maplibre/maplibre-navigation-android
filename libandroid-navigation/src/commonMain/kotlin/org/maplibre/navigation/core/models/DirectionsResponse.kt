@@ -3,6 +3,7 @@ package org.maplibre.navigation.core.models
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import org.maplibre.navigation.core.json
+import kotlin.jvm.JvmStatic
 
 /**
  * This is the root Mapbox Directions API response. Inside this class are several nested classes

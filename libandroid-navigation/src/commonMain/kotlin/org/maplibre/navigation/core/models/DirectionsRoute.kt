@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import org.maplibre.navigation.core.json
+import kotlin.jvm.JvmStatic
 
 /**
  * Detailed information about an individual route such as the duration, distance and geometry.

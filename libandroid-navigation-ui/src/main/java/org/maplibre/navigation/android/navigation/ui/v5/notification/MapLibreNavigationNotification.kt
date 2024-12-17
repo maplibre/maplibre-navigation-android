@@ -22,7 +22,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils
 import org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
-import org.maplibre.navigation.core.utils.ManeuverUtils
+import org.maplibre.navigation.android.navigation.ui.v5.utils.ManeuverUtils
 import java.util.Calendar
 
 /**
