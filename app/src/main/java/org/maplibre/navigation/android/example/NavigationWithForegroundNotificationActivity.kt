@@ -143,7 +143,7 @@ class NavigationWithForegroundNotificationActivity : AppCompatActivity(), OnMapR
             this.origin(Point.fromLngLat(9.7536318, 52.3717979))
             this.addWaypoint(Point.fromLngLat(9.741052, 52.360496))
             this.destination(Point.fromLngLat(9.756259, 52.342620))
-            this.voiceUnits(UnitType.METRIC.text)
+            this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
         }
