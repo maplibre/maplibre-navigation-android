@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
@@ -10,24 +12,16 @@ java {
 }
 
 kotlin {
-//    jvmToolchain(17)
+    jvmToolchain(17)
 
-    androidTarget {
-//        compilations.all {
-//            compileTaskProvider.configure {
-//                compilerOptions {
-//                    jvmTarget.set(JvmTarget.JVM_1_8)
-//                }
-//            }
-//        }
+    androidTarget()
+
+    [iosX64(), iosArm64(), iosSimulatorArm64()].forEach { target ->
+        target.binaries.framework {
+            baseName = "maplibre-navigation-core"
+            isStatic = true
+        }
     }
-
-//    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach {
-//        it.binaries.framework {
-//            baseName = "station"
-//            isStatic = true
-//        }
-//    }
 
     sourceSets {
         commonMain.dependencies {
@@ -37,7 +31,8 @@ kotlin {
             implementation dependenciesList.kermit
         }
 
-        commonTest.dependencies {
+        // `commonTest` can not be used here, because `mockk` is only valid for JVM targets
+        androidUnitTest.dependencies {
             implementation dependenciesList.kotlinTest
             implementation dependenciesList.mockk
         }
@@ -53,10 +48,6 @@ kotlin {
     }
 }
 
-//kotlin {
-//    jvmToolchain(17)
-//}
-
 android {
     namespace 'org.maplibre.navigation.core'
 
@@ -66,7 +57,7 @@ android {
     defaultConfig {
         minSdkVersion androidVersions.minSdkVersion
         targetSdkVersion androidVersions.targetSdkVersion
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String',
                 "MAPLIBRE_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "maplibre-navigation-android")
@@ -107,29 +98,6 @@ android {
         }
     }
 }
-
-//dependencies {
-
-//
-//    implementation dependenciesList.androidxCore
-//    implementation dependenciesList.kotlinstdlib
-//
-//    compileOnly dependenciesList.gmsLocation
-//
-//    // Support
-//    implementation dependenciesList.androidxAppcompat
-//    implementation dependenciesList.supportAnnotation
-//
-//    implementation dependenciesList.kotlinxSerializationJson
-//
-//    // Unit testing
-//    testImplementation dependenciesList.junit
-//    testImplementation dependenciesList.hamcrest
-//    testImplementation dependenciesList.commonsIO
-//    testImplementation dependenciesList.robolectric
-//    testImplementation dependenciesList.androidxTestKtx
-//    testImplementation dependenciesList.mockk
-//}
 
 apply from: 'javadoc.gradle'
 apply from: "${rootDir}/gradle/mvn-push-android.gradle"

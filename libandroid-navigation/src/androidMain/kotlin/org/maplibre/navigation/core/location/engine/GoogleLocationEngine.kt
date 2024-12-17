@@ -36,7 +36,7 @@ open class GoogleLocationEngine(
     private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
-    override fun listenToLocation(request: LocationEngineRequest): Flow<Location> = callbackFlow {
+    override fun listenToLocation(request: LocationEngine.Request): Flow<Location> = callbackFlow {
         val listener = LocationListener { location -> trySend(location.toLocation()) }
 
         fusedLocationProviderClient.requestLocationUpdates(
@@ -59,23 +59,22 @@ open class GoogleLocationEngine(
             }
     }
 
-    private fun toGMSLocationRequest(request: LocationEngineRequest): LocationRequest {
-        return with(LocationRequest.Builder(request.interval)) {
-            setMinUpdateIntervalMillis(request.fastestInterval)
-            setMinUpdateDistanceMeters(request.displacement)
-            setMaxUpdateDelayMillis(request.maxWaitTime)
-            setPriority(toGMSLocationPriority(request.priority))
+    private fun toGMSLocationRequest(request: LocationEngine.Request): LocationRequest {
+        return with(LocationRequest.Builder(request.maxIntervalMilliseconds)) {
+            setMinUpdateIntervalMillis(request.minIntervalMilliseconds)
+            setMinUpdateDistanceMeters(request.minUpdateDistanceMeters)
+            setMaxUpdateDelayMillis(request.maxUpdateDelayMilliseconds)
+            setPriority(toGMSLocationPriority(request.accuracy))
             build()
         }
     }
 
-    private fun toGMSLocationPriority(enginePriority: Int): Int {
-        return when (enginePriority) {
-            LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
-            LocationEngineRequest.PRIORITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
-            LocationEngineRequest.PRIORITY_NO_POWER -> Priority.PRIORITY_PASSIVE
-            LocationEngineRequest.PRIORITY_HIGH_ACCURACY -> Priority.PRIORITY_HIGH_ACCURACY
-            else -> Priority.PRIORITY_HIGH_ACCURACY
+    private fun toGMSLocationPriority(accuracy: LocationEngine.Request.Accuracy): Int {
+        return when (accuracy) {
+//            LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
+//            LocationEngineRequest.PRIORITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
+//            LocationEngineRequest.PRIORITY_NO_POWER -> Priority.PRIORITY_PASSIVE
+            LocationEngine.Request.Accuracy.HIGH -> Priority.PRIORITY_HIGH_ACCURACY
         }
     }
 }

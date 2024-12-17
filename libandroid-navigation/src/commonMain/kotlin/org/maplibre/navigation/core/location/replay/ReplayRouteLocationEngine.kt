@@ -148,7 +148,7 @@ open class ReplayRouteLocationEngine(
         dispatcher?.removeReplayLocationListener(replayLocationListener)
     }
 
-    override fun listenToLocation(request: LocationEngineRequest): Flow<Location> = callbackFlow {
+    override fun listenToLocation(request: LocationEngine.Request): Flow<Location> = callbackFlow {
         val callback = Callback { location ->
             trySend(location)
         }

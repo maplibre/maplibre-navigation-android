@@ -14,7 +14,7 @@ import java.util.Scanner
 internal class TestRouteBuilder {
     @Throws(IOException::class)
     fun loadJsonFixture(filename: String): String {
-        return FileInputStream("src/commonTest/resources/$filename").use { inputStream ->
+        return FileInputStream("src/androidUnitTest/resources/$filename").use { inputStream ->
             val scanner = Scanner(inputStream, StandardCharsets.UTF_8.name()).useDelimiter("\\A")
             if (scanner.hasNext()) scanner.next() else ""
         }

@@ -3,11 +3,12 @@ package org.maplibre.navigation.core.location.engine
 import android.content.Context
 import android.location.LocationListener
 import android.os.Looper
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.maplibre.android.location.engine.LocationEngineCallback
-import org.maplibre.android.location.engine.LocationEngineRequest
+import org.maplibre.android.location.engine.LocationEngineRequest as MapLibreLocationRequest
 import org.maplibre.android.location.engine.LocationEngineResult
 import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl
 import org.maplibre.navigation.core.location.Location
@@ -33,11 +34,11 @@ open class MapLibreLocationEngine(
      */
     private val maplibreLocationEngine = MapLibreFusedLocationEngineImpl(context)
 
-    override fun listenToLocation(request: LocationEngineRequest): Flow<Location> = callbackFlow {
+    override fun listenToLocation(request: LocationEngine.Request): Flow<Location> = callbackFlow {
         val listener = LocationListener { location -> trySend(location.toLocation()) }
 
         maplibreLocationEngine.requestLocationUpdates(
-            request,
+            toMapLibreLocationRequest(request),
             listener,
             looper,
         )
@@ -56,5 +57,23 @@ open class MapLibreLocationEngine(
                 continuation.resumeWithException(exception)
             }
         })
+    }
+
+    private fun toMapLibreLocationRequest(request: LocationEngine.Request): MapLibreLocationRequest {
+        return MapLibreLocationRequest.Builder(request.maxIntervalMilliseconds)
+            .setFastestInterval(request.minIntervalMilliseconds)
+            .setMaxWaitTime(request.maxUpdateDelayMilliseconds)
+            .setMaxWaitTime(request.maxUpdateDelayMilliseconds)
+            .setPriority(toMapLibrePriority(request.accuracy))
+            .build()
+    }
+
+    private fun toMapLibrePriority(accuracy: LocationEngine.Request.Accuracy): Int {
+        return when (accuracy) {
+//            LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY -> MapLibreLocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+//            LocationEngineRequest.PRIORITY_LOW_POWER -> MapLibreLocationRequest.PRIORITY_LOW_POWER
+//            LocationEngineRequest.PRIORITY_NO_POWER -> MapLibreLocationRequest.PRIORITY_PASSIVE
+            LocationEngine.Request.Accuracy.HIGH -> MapLibreLocationRequest.PRIORITY_HIGH_ACCURACY
+        }
     }
 }

@@ -54,9 +54,10 @@ open class MapLibreNavigationEngine(
             )
 
             locationEngine.listenToLocation(
-                LocationEngineRequest.Builder(LOCATION_ENGINE_INTERVAL)
-                    .setFastestInterval(LOCATION_ENGINE_INTERVAL)
-                    .build(),
+                LocationEngine.Request(
+                    minIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
+                    maxIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
+                )
             ).collect(::processLocationUpdate)
         }
     }
