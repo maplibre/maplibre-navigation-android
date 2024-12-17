@@ -5,6 +5,7 @@ Maplibre welcomes participation and contributions from everyone.
 ### unreleased
 
 **BREAKING CHANGES:**
+- Convert module `libandroid-navigation` to Kotlin Multiplatform. See description of [#133](https://github.com/maplibre/maplibre-navigation-android/issues/133) to get informed about all breaking changes 
 - Convert module `libandroid-navigation` to Kotlin. See description of PR [#127](https://github.com/maplibre/maplibre-navigation-android/pull/127) to get informed about all breaking changes
 - Updated startNavigation() in NavigationLauncher to just use a context instead of an activity [#126](https://github.com/maplibre/maplibre-navigation-android/pull/126)
 
