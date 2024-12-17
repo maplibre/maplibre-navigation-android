@@ -1,5 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
+import static org.maplibre.navigation.core.location.LocationExtKt.toAndroidLocation;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 import android.annotation.SuppressLint;
@@ -37,7 +38,6 @@ import org.maplibre.android.style.sources.Source;
 import org.maplibre.android.style.sources.VectorSource;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
-import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.List;
@@ -201,13 +201,7 @@ public class NavigationMapLibreMap {
    * @param location to update the icon and query the map
    */
   public void updateLocation(Location location) {
-    // TODO (fabi755): use location extension, when this file is converted to Kotlin
-    android.location.Location androidLocation = new android.location.Location("force");
-    androidLocation.setLatitude(location.getLatitude());
-    androidLocation.setLongitude(location.getLongitude());
-    androidLocation.setBearing(location.getBearing() != null ? location.getBearing() : 0.0f);
-
-    locationComponent.forceLocationUpdate(androidLocation);
+    locationComponent.forceLocationUpdate(toAndroidLocation(location));
     updateMapWayNameWithLocation(location);
   }
 
