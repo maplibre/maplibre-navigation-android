@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.location.replay
 
+import kotlinx.datetime.Instant
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.core.location.Location
@@ -124,7 +125,7 @@ open class ReplayRouteLocationConverter(
             longitude = point.longitude(),
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
             accuracyMeters = 3f,
-            elapsedRealtimeMilliseconds = time
+            time = Instant.fromEpochMilliseconds(time)
         )
     }
 

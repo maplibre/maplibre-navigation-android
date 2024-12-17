@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core
 
+import kotlinx.datetime.Instant
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.core.location.Location
@@ -48,7 +49,7 @@ internal class MockLocationBuilder {
             longitude = lngValue,
             speedMetersPerSeconds = speedValue,
             accuracyMeters = horizontalAccuracyValue,
-            elapsedRealtimeMilliseconds = timeValue
+            time = Instant.fromEpochMilliseconds(timeValue)
         )
     }
 }

@@ -79,9 +79,9 @@ open class ReplayLocationDispatcher(
             return
         }
 
-        val currentTime = current!!.elapsedRealtimeMilliseconds
+        val currentTime = current!!.time.epochSeconds
         current = locationsToReplay.removeFirstOrNull()
-        val nextTime = current!!.elapsedRealtimeMilliseconds
+        val nextTime = current!!.time.epochSeconds
         val diff = nextTime - currentTime
 
         currentDispatcherJob?.cancel()

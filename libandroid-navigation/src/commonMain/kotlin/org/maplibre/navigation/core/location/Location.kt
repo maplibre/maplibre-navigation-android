@@ -1,17 +1,15 @@
 package org.maplibre.navigation.core.location
 
 import android.os.SystemClock
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
 import org.maplibre.geojson.Point
 
 /**
  * A generic model that represents a user location.
  */
 data class Location(
-    /**
-     * Provider that generated this location.
-     */
-    val provider: String? = null,
-
     /**
      * Latitude, in degrees.
      */
@@ -41,10 +39,14 @@ data class Location(
     val bearing: Float? = null,
 
     /**
-     * Time of this location fix in milliseconds of elapsed time since system boot.
+     * Date & time of this location fix in UTC zone.
      */
-    //TODO fabi755 systemclock
-    val elapsedRealtimeMilliseconds: Long = SystemClock.elapsedRealtime()
+    val time: Instant = Clock.System.now(),
+
+    /**
+     * Provider that generated this location.
+     */
+    val provider: String? = null,
 ) {
 
     /**

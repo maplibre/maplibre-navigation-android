@@ -125,8 +125,7 @@ open class FasterRouteDetector(
 
     private fun secondsSinceLastCheck(location: Location): Long {
         return lastCheckedLocation?.let { lastCheckedLocation ->
-            // TODO: fabi755 millis are not date since 1900
-            dateDiff(Date(lastCheckedLocation.elapsedRealtimeMilliseconds), Date(location.elapsedRealtimeMilliseconds), TimeUnit.SECONDS)
+            location.time.epochSeconds - lastCheckedLocation.time.epochSeconds
         } ?: -1
     }
 

@@ -521,7 +521,7 @@ class OffRouteDetectorTest : BaseTest() {
 
     @Test
     fun isUserOffRoute_assertTrueWhenRouteDistanceRemainingIsZero() {
-        val location = Location("test", 0.0, 0.0)
+        val location = Location(provider = "test", latitude = 0.0, longitude = 0.0)
         val routeProgress = mockk<RouteProgress>()
         every { routeProgress.distanceRemaining } returns 0.0
 

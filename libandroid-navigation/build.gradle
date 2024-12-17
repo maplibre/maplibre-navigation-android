@@ -33,6 +33,7 @@ kotlin {
         commonMain.dependencies {
             implementation dependenciesList.kotlinxSerializationJson
             implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+            api("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
             implementation 'co.touchlab:kermit:2.0.4'
         }
 
