@@ -9,14 +9,13 @@ import org.maplibre.navigation.core.offroute.OffRouteListener
 import org.maplibre.navigation.core.route.FasterRouteListener
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-import java.util.concurrent.CopyOnWriteArrayList
 
 open class NavigationEventDispatcher {
-    private val navigationEventListeners = CopyOnWriteArrayList<NavigationEventListener>()
-    private val milestoneEventListeners = CopyOnWriteArrayList<MilestoneEventListener>()
-    private val progressChangeListeners = CopyOnWriteArrayList<ProgressChangeListener>()
-    private val offRouteListeners = CopyOnWriteArrayList<OffRouteListener>()
-    private val fasterRouteListeners = CopyOnWriteArrayList<FasterRouteListener>()
+    private val navigationEventListeners = mutableListOf<NavigationEventListener>()
+    private val milestoneEventListeners = mutableListOf<MilestoneEventListener>()
+    private val progressChangeListeners = mutableListOf<ProgressChangeListener>()
+    private val offRouteListeners = mutableListOf<OffRouteListener>()
+    private val fasterRouteListeners = mutableListOf<FasterRouteListener>()
 
     fun addMilestoneEventListener(milestoneEventListener: MilestoneEventListener) {
         if (milestoneEventListeners.contains(milestoneEventListener)) {

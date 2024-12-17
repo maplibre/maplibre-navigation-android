@@ -12,7 +12,6 @@ import com.google.android.gms.location.Priority
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import org.maplibre.android.location.engine.LocationEngineRequest
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
 import kotlin.coroutines.resume

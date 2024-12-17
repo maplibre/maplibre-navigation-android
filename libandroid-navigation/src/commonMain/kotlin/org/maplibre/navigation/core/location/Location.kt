@@ -1,8 +1,6 @@
 package org.maplibre.navigation.core.location
 
-import android.os.SystemClock
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import org.maplibre.geojson.Point
 

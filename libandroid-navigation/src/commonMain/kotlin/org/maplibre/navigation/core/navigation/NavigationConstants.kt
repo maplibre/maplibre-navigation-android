@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.navigation
 
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
-import org.maplibre.navigation.core.route.FasterRouteDetector
+import kotlin.jvm.JvmField
 
 /**
  * Navigation constants

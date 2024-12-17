@@ -6,6 +6,7 @@ import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.turf.TurfClassification
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
+import kotlin.jvm.JvmStatic
 
 object ToleranceUtils {
 

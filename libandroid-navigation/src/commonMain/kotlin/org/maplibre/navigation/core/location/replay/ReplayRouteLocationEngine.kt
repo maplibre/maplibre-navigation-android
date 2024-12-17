@@ -1,6 +1,5 @@
 package org.maplibre.navigation.core.location.replay
 
-import android.annotation.SuppressLint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -37,12 +36,10 @@ open class ReplayRouteLocationEngine(
         mockedLocations.removeFirstOrNull()
     }
 
-    @SuppressLint("MissingPermission")
     fun assign(route: DirectionsRoute) {
         start(route)
     }
 
-    @SuppressLint("MissingPermission")
     fun moveTo(point: Point) {
         val lastLocation = lastLocation ?: return
         startRoute(point, lastLocation)

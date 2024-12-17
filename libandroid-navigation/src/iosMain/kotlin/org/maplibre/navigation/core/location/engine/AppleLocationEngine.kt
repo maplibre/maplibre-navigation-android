@@ -17,8 +17,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * A [LocationEngine] that uses the Apple CLLocationManager API.
  */
-open class AppleLocationEngine(
-) : LocationEngine {
+open class AppleLocationEngine : LocationEngine {
 
     /**
      * Underlying CLLocationManager that is used to fetch location and listen to location updates.

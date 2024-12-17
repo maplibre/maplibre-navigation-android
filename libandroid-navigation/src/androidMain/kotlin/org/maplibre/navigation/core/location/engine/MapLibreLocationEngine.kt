@@ -3,7 +3,6 @@ package org.maplibre.navigation.core.location.engine
 import android.content.Context
 import android.location.LocationListener
 import android.os.Looper
-import com.google.android.gms.location.Priority
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

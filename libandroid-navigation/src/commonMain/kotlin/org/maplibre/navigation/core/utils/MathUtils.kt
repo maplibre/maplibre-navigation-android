@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.utils
 
+import kotlin.jvm.JvmStatic
 import org.maplibre.android.utils.MathUtils as MapLibreMathUtils
 import kotlin.math.abs
 

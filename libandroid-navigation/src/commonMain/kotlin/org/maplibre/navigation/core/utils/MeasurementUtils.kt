@@ -6,6 +6,7 @@ import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
+import kotlin.jvm.JvmStatic
 
 object MeasurementUtils {
 

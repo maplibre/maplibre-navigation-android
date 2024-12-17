@@ -6,11 +6,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.maplibre.navigation.core.location.Location
-import java.util.concurrent.CopyOnWriteArrayList
 
 open class ReplayLocationDispatcher(
     locationsToReplay: List<Location>,
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
     private var locationsToReplay = locationsToReplay.toMutableList()
     private var current: Location? = null
@@ -33,7 +32,7 @@ open class ReplayLocationDispatcher(
 
     fun update(locationsToReplay: List<Location>) {
         checkValidInput(locationsToReplay)
-        this.locationsToReplay = CopyOnWriteArrayList(locationsToReplay)
+        this.locationsToReplay = locationsToReplay.toMutableList()
         initialize()
     }
 

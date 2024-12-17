@@ -6,7 +6,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection
-import java.lang.Double.max
+import kotlin.math.max
 
 /**
  * This is a progress object specific to the current leg the user is on. If there is only one leg

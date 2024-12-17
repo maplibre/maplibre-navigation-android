@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.utils
 
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import java.util.MissingFormatArgumentException
+import kotlin.jvm.JvmStatic
 
 object ValidationUtils {
 
@@ -12,7 +12,7 @@ object ValidationUtils {
         defaultMilestonesEnabled: Boolean
     ) {
         if (defaultMilestonesEnabled) {
-            val routeOptions = directionsRoute.routeOptions ?: throw MissingFormatArgumentException(
+            val routeOptions = directionsRoute.routeOptions ?: throw IllegalStateException(
                 "Using the default milestones requires the "
                         + "directions route to include the route options object."
             )
@@ -23,7 +23,7 @@ object ValidationUtils {
 
     private fun checkInvalidVoiceInstructions(routeOptions: RouteOptions) {
         if (routeOptions.voiceInstructions != true) {
-            throw MissingFormatArgumentException(
+            throw IllegalStateException(
                 "Using the default milestones requires the "
                         + "directions route to be requested with voice instructions enabled."
             )
@@ -32,7 +32,7 @@ object ValidationUtils {
 
     private fun checkInvalidBannerInstructions(routeOptions: RouteOptions) {
         if (routeOptions.bannerInstructions != true) {
-            throw MissingFormatArgumentException(
+            throw IllegalStateException(
                 "Using the default milestones requires the "
                         + "directions route to be requested with banner instructions enabled."
             )

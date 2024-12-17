@@ -1,5 +1,7 @@
 package org.maplibre.navigation.core.milestone
 
+import kotlin.jvm.JvmStatic
+
 /**
  * Utility to build Trigger expressions more easily.
  *

@@ -27,6 +27,7 @@ import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
 import org.maplibre.navigation.core.utils.RouteUtils
 import org.maplibre.navigation.core.utils.ValidationUtils
+import kotlin.jvm.JvmOverloads
 
 /**
  * A MapLibreNavigation class for interacting with and customizing a navigation session.

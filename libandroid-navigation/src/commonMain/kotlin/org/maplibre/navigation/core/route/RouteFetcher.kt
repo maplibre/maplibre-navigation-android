@@ -2,16 +2,17 @@ package org.maplibre.navigation.core.route
 
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-import java.util.concurrent.CopyOnWriteArrayList
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
+import kotlin.jvm.JvmField
 
 /**
  * You can extend this to fetch a route. When a route was successfully fetched, you should notify the routeListeners about the new route
  */
 abstract class RouteFetcher {
+
     @JvmField
-    protected val routeListeners: MutableList<RouteListener> = CopyOnWriteArrayList()
+    protected val routeListeners: MutableList<RouteListener> = mutableListOf()
 
     fun addRouteListener(listener: RouteListener) {
         if (!routeListeners.contains(listener)) {

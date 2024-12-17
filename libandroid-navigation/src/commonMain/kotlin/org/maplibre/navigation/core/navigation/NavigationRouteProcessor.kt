@@ -23,6 +23,7 @@ import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
+import kotlin.jvm.JvmField
 
 open class NavigationRouteProcessor(
     private val routeUtils: RouteUtils
