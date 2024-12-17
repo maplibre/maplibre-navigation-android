@@ -1,7 +1,7 @@
 package org.maplibre.navigation.core.utils
 
 
-class RingBuffer<T>(private val maxSize: Int) {
+class RingBuffer<T>(private val maxSize: Int) : List<T> {
 
     private val values = ArrayDeque<T>()
 
@@ -26,19 +26,53 @@ class RingBuffer<T>(private val maxSize: Int) {
     }
 
     fun addAll(elements: Collection<T>): Boolean {
-        val result =  values.addAll(elements)
+        val result = values.addAll(elements)
         resize()
         return result
     }
 
     fun push(item: T) {
-        values.addFirst(item)
-        resize()
+        addFirst(item)
+    }
+
+    fun removeFirst(): T {
+        return values.removeFirst()
+    }
+
+    fun removeLast(): T {
+        return values.removeLast()
+    }
+
+    fun clear() {
+        values.clear()
     }
 
     private fun resize() {
-        while (values.size > maxSize) {
+        while (size > maxSize) {
             values.removeFirst()
         }
     }
+
+    override val size: Int
+        get() = values.size
+
+    override fun get(index: Int) = values[index]
+
+    override fun isEmpty() = values.isEmpty()
+
+    override fun iterator() = values.iterator()
+
+    override fun listIterator() = values.listIterator()
+
+    override fun listIterator(index: Int) = values.listIterator(index)
+
+    override fun subList(fromIndex: Int, toIndex: Int) = values.subList(fromIndex, toIndex)
+
+    override fun lastIndexOf(element: T) = values.lastIndexOf(element)
+
+    override fun indexOf(element: T) = values.indexOf(element)
+
+    override fun containsAll(elements: Collection<T>) = values.containsAll(elements)
+
+    override fun contains(element: T) = values.contains(element)
 }

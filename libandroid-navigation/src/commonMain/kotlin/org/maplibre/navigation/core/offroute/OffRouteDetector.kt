@@ -12,6 +12,7 @@ import org.maplibre.navigation.core.utils.ToleranceUtils.dynamicOffRouteRadiusTo
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import org.maplibre.turf.TurfMisc
+import kotlin.jvm.JvmStatic
 import kotlin.math.max
 
 /**
@@ -267,7 +268,7 @@ open class OffRouteDetector(
                 if (distancesAwayFromManeuver.isEmpty()) {
                     // No move-away positions before, add the current one to history stack
                     distancesAwayFromManeuver.addLast(userDistanceToManeuver)
-                } else if (userDistanceToManeuver > distancesAwayFromManeuver.last) {
+                } else if (userDistanceToManeuver > distancesAwayFromManeuver.last()) {
                     // If distance to maneuver increased (wrong way), add new position to history stack
 
                     if (distancesAwayFromManeuver.size >= 3) {
@@ -275,7 +276,7 @@ open class OffRouteDetector(
                         distancesAwayFromManeuver.removeLast()
                     }
                     distancesAwayFromManeuver.addLast(userDistanceToManeuver)
-                } else if ((distancesAwayFromManeuver.last - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection) {
+                } else if ((distancesAwayFromManeuver.last() - userDistanceToManeuver) > options.offRouteMinimumDistanceMetersBeforeRightDirection) {
                     // If distance to maneuver decreased (right way) clean history
                     distancesAwayFromManeuver.clear()
                 }
@@ -283,7 +284,7 @@ open class OffRouteDetector(
                 // Minimum 3 position updates in the wrong way are required before an off-route can occur
                 if (distancesAwayFromManeuver.size >= 3) {
                     // Check for minimum distance traveled
-                    return (distancesAwayFromManeuver.last - distancesAwayFromManeuver.first) > options.offRouteMinimumDistanceMetersBeforeWrongDirection
+                    return (distancesAwayFromManeuver.last() - distancesAwayFromManeuver.first()) > options.offRouteMinimumDistanceMetersBeforeWrongDirection
                 }
             }
 
