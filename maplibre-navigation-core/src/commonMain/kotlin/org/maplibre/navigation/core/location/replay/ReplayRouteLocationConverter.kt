@@ -1,7 +1,5 @@
 package org.maplibre.navigation.core.location.replay
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import org.maplibre.navigation.geo.LineString
 import org.maplibre.navigation.geo.Point
 import org.maplibre.navigation.core.location.Location
@@ -40,7 +38,7 @@ open class ReplayRouteLocationConverter(
     }
 
     fun initializeTime() {
-        time = Clock.System.now().toEpochMilliseconds()
+        time = 0
     }
 
     /**
@@ -126,7 +124,7 @@ open class ReplayRouteLocationConverter(
             longitude = point.longitude,
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
             accuracyMeters = 3f,
-            time = Instant.fromEpochMilliseconds(time)
+            time = time
         )
     }
 

@@ -1,8 +1,8 @@
 package org.maplibre.navigation.core.location
 
 import kotlinx.cinterop.useContents
-import kotlinx.datetime.toKotlinInstant
 import platform.CoreLocation.CLLocation
+import platform.Foundation.timeIntervalSince1970
 
 /**
  * Converts the Apple platform location to our generic MapLibre location.
@@ -15,5 +15,5 @@ fun CLLocation.toLocation() = Location(
     bearing = course.toFloat(),
     speedMetersPerSeconds = speed.toFloat(),
     accuracyMeters = horizontalAccuracy.toFloat(),
-    time = timestamp.toKotlinInstant()
+    time = timestamp.timeIntervalSince1970.toLong()
 )

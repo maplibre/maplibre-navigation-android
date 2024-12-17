@@ -13,5 +13,5 @@ fun Location.toAndroidLocation() = AndroidLocation(provider)
         androidLoc.bearing = bearing ?: 0f
         androidLoc.speed = speedMetersPerSeconds ?: 0f
         androidLoc.accuracy = accuracyMeters ?: 0.0f
-        androidLoc.time = time.toEpochMilliseconds()
+        androidLoc.time = time ?: 0L
     }

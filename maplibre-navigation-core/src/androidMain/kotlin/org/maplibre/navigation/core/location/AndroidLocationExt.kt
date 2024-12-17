@@ -1,6 +1,5 @@
 package org.maplibre.navigation.core.location
 
-import kotlinx.datetime.Instant
 import android.location.Location as AndroidLocation
 
 /**
@@ -13,5 +12,5 @@ fun AndroidLocation.toLocation() = Location(
     bearing = bearing.takeIf { hasBearing() },
     speedMetersPerSeconds = speed.takeIf { hasSpeed() },
     accuracyMeters = accuracy.takeIf { hasAccuracy() },
-    time = Instant.fromEpochMilliseconds(time)
+    time = time
 )

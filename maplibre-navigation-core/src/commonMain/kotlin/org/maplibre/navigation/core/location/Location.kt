@@ -1,7 +1,5 @@
 package org.maplibre.navigation.core.location
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import org.maplibre.navigation.geo.Point
 
 /**
@@ -37,9 +35,10 @@ data class Location(
     val bearing: Float? = null,
 
     /**
-     * Date & time of this location fix in UTC zone.
+     * Date time of this location fix. This value is in milliseconds
+     * since epoch (1970-01-01T00:00:00Z) in UTC.
      */
-    val time: Instant = Clock.System.now(),
+    val time: Long? = null,
 
     /**
      * Provider that generated this location.

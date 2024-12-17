@@ -30,7 +30,6 @@ kotlin {
 
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines
-            api dependenciesList.kotlinxDateTime
             implementation dependenciesList.kermit
         }
 
