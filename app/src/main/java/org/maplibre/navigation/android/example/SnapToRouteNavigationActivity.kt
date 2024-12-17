@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.example
 
-import android.location.Location as AndroidLocation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.maplibre.navigation.core.models.DirectionsResponse
@@ -23,6 +22,7 @@ import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.toAndroidLocation
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
@@ -146,7 +146,7 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { responseBody ->
                     if (responseBody.routes.isNotEmpty()) {
-                        val maplibreResponse = DirectionsResponse.fromJson(responseBody.toJson());
+                        val maplibreResponse = DirectionsResponse.fromJson(responseBody.toJson())
                         val directionsRoute = maplibreResponse.routes.first()
                         this@SnapToRouteNavigationActivity.route = directionsRoute
                         navigationMapRoute?.addRoutes(maplibreResponse.routes)
@@ -174,16 +174,8 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
         // Update own location with the snapped location
-        locationComponent?.forceLocationUpdate(
-            AndroidLocation(location.provider).apply {
-                latitude = location.latitude
-                longitude = location.longitude
-                bearing = location.bearing ?: 0f
-                accuracy = location.accuracyMeters ?: 0.0f
-            }
-        )
+        locationComponent?.forceLocationUpdate(location.toAndroidLocation())
     }
-
 
     override fun onResume() {
         super.onResume()
