@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.navigation.runner
+package org.maplibre.navigation.core.navigation.engine
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -14,8 +14,8 @@ import org.maplibre.navigation.core.navigation.NavigationConstants.BANNER_INSTRU
 import org.maplibre.navigation.core.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID
 import org.maplibre.navigation.core.navigation.camera.Camera
 import org.maplibre.navigation.core.navigation.camera.SimpleCamera
-import org.maplibre.navigation.core.navigation.runner.MapLibreNavigationEngine
-import org.maplibre.navigation.core.navigation.runner.NavigationEngine
+import org.maplibre.navigation.core.navigation.engine.MapLibreNavigationEngine
+import org.maplibre.navigation.core.navigation.engine.NavigationEngine
 import org.maplibre.navigation.core.offroute.OffRoute
 import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.offroute.OffRouteListener
