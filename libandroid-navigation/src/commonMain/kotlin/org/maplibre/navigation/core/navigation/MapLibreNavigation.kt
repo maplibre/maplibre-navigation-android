@@ -125,8 +125,14 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var locationEngine: LocationEngine = locationEngine
         set(value) {
             field = value
-            //TODO fabi755
-//            navigationRunner?.updateLocationEngine(locationEngine)
+
+            // Restart current running navigation session to apply the new location engine
+            route?.let {route ->
+                if (getNavigationEngineInternal().isRunning()) {
+                    getNavigationEngineInternal().stopNavigation()
+                    getNavigationEngineInternal().startNavigation(route)
+                }
+            }
         }
 
     private val mutableMilestones: MutableSet<Milestone> = mutableSetOf<Milestone>()
