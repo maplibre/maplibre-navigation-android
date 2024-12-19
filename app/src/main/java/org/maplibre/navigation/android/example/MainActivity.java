@@ -63,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             getString(R.string.description_foreground_notification),
             NavigationWithForegroundNotificationActivity.class
         ));
+        list.add(new SampleItem(
+            getString(R.string.title_custom_foreground_notification),
+            getString(R.string.description_custom_foreground_notification),
+            NavigationWithForegroundNotificationActivity.class
+        ));
         RecyclerView.Adapter adapter = new MainAdapter(list);
         recyclerView.setAdapter(adapter);
 

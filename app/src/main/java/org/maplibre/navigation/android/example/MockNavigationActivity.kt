@@ -85,20 +85,7 @@ class MockNavigationActivity :
             getMapAsync(this@MockNavigationActivity)
         }
 
-        val context = applicationContext
-//        val customNotification =
-//            CustomNavigationNotification(
-//                context
-//            )
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            customNotification.createNotificationChannel(this)
-//        }
-        val options = MapLibreNavigationOptions(
-////            navigationNotification = customNotification
-        )
-//
-        navigation = AndroidMapLibreNavigation(context, options)
-
+        navigation = AndroidMapLibreNavigation(applicationContext)
         navigation.addMilestone(
             RouteMilestone(
                 identifier = BEGIN_ROUTE_MILESTONE,
@@ -116,8 +103,7 @@ class MockNavigationActivity :
                 ),
             )
         )
-//        customNotification.register(MyBroadcastReceiver(navigation), context)
-//
+
         binding.startRouteButton.setOnClickListener {
             route?.let { route ->
                 binding.startRouteButton.visibility = View.INVISIBLE

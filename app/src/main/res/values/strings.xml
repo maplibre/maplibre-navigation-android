@@ -13,6 +13,9 @@
     <string name="title_foreground_notification">Foreground notification</string>
     <string name="description_foreground_notification">Show a foreground notification that allows continue navigation when app is minimized.</string>
 
+    <string name="title_custom_foreground_notification">Custom foreground notification</string>
+    <string name="description_custom_foreground_notification">Show a custom foreground notification instead of the default one.</string>
+
     <string name="title_valhalla_navigation">Valhalla Navigation</string>
     <string name="description_vallhalla_navigation">Use Valhalla routing server to generate directions.</string>
 
