@@ -1,10 +1,10 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import android.location.Location;
 import android.os.AsyncTask;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.core.location.Location;
 
 import java.util.List;
 

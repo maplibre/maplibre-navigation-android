@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation project(':libandroid-navigation')
+    implementation project(':maplibre-navigation-core')
     implementation project(':libandroid-navigation-ui')
     implementation dependenciesList.mapLibre
 

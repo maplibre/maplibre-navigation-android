@@ -1,6 +1,0 @@
-<resources>
-    <!-- Notification Strings -->
-    <string name="end_navigation">סיום ניווט</string>
-    <string name="channel_name">הודעות ניווט</string>
-    <string name="notification_arrival_time_format">הגעה ב%s</string>
-</resources>

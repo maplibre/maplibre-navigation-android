@@ -1,5 +1,6 @@
 package org.maplibre.navigation.android.example;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,10 +15,10 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.notification.NavigationNotification;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.ui.v5.notification.NavigationNotification;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_NOTIFICATION_CHANNEL;
+import static org.maplibre.navigation.android.navigation.ui.v5.notification.MapLibreNavigationNotification.NAVIGATION_NOTIFICATION_CHANNEL;
 
 public class CustomNavigationNotification implements NavigationNotification {
 
@@ -66,6 +67,7 @@ public class CustomNavigationNotification implements NavigationNotification {
         notificationManager.cancel(CUSTOM_NOTIFICATION_ID);
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void register(BroadcastReceiver stopNavigationReceiver, Context applicationContext) {
         this.stopNavigationReceiver = stopNavigationReceiver;
 

@@ -9,9 +9,9 @@ import static org.mockito.Mockito.when;
 
 import android.app.Application;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewRouteEngineListener;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 
 import org.junit.Test;

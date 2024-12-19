@@ -3,9 +3,9 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteLeg;
 
 import java.util.List;
 

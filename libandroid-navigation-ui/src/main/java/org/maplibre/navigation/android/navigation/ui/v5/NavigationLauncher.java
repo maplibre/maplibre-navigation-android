@@ -9,9 +9,9 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 
 /**
  * Use this class to launch the navigation UI

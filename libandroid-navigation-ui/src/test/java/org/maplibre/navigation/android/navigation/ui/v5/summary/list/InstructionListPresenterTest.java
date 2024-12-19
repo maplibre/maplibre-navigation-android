@@ -3,17 +3,16 @@ package org.maplibre.navigation.android.navigation.ui.v5.summary.list;
 import androidx.annotation.NonNull;
 import android.text.SpannableString;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.LegStep;
+import org.maplibre.navigation.core.models.RouteLeg;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.core.utils.RouteUtils;
 
 import org.junit.Test;
-import org.mockito.MockedStatic;
 
 import java.util.ArrayList;
 import java.util.List;
