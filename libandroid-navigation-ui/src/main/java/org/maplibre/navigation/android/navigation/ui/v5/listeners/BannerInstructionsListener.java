@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.listeners;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
+import org.maplibre.navigation.core.models.BannerInstructions;
 
 /**
  * This listener will be triggered when a {@link BannerInstructions} is about to be displayed.

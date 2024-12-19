@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import java.io.IOException;
 

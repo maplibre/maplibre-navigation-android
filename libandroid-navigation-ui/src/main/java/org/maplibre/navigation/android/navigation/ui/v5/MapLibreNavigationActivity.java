@@ -8,10 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationListener;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.android.camera.CameraPosition;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
 
 /**
  * Serves as a launching point for the custom drop-in UI, {@link NavigationView}.

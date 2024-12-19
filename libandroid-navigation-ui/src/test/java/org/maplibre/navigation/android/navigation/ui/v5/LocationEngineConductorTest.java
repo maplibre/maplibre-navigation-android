@@ -12,8 +12,8 @@ import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 
-import org.maplibre.android.location.engine.LocationEngine;
-import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 
 import org.junit.Test;
 

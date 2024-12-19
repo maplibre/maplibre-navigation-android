@@ -10,6 +10,9 @@
     <string name="title_snap_to_route">Snap to route</string>
     <string name="description_snap_to_route">Use snap to route option to show smoother location updates.</string>
 
+    <string name="title_foreground_notification">Foreground notification</string>
+    <string name="description_foreground_notification">Show a foreground notification that allows continue navigation when app is minimized.</string>
+
     <string name="title_valhalla_navigation">Valhalla Navigation</string>
     <string name="description_vallhalla_navigation">Use Valhalla routing server to generate directions.</string>
 

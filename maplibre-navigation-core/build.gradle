@@ -1,0 +1,109 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
+
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'kotlinx-serialization'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+
+    androidTarget()
+
+    def xcf = new XCFrameworkConfig(project)
+    [iosX64(), iosArm64(), iosSimulatorArm64()].forEach { target ->
+        target.binaries.framework { framework ->
+            baseName = "maplibre-navigation-core"
+            xcf.add(framework)
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api project(":maplibre-navigation-geo")
+
+            implementation dependenciesList.kotlinxSerializationJson
+            implementation dependenciesList.kotlinxCoroutines
+            implementation dependenciesList.kermit
+        }
+
+        // `commonTest` can not be used here, because `mockk` is only valid for JVM targets
+        androidUnitTest.dependencies {
+            implementation dependenciesList.kotlinTest
+            implementation dependenciesList.kotlinxCoroutinesTest
+            implementation dependenciesList.mockk
+        }
+
+        androidMain.dependencies {
+            implementation dependenciesList.mapLibre
+
+            // Location by Play Services
+            // Will only used, when added by the client app
+            compileOnly dependenciesList.gmsLocation
+        }
+    }
+}
+
+android {
+    namespace 'org.maplibre.navigation.core'
+
+    compileSdkVersion androidVersions.compileSdkVersion
+    buildToolsVersion androidVersions.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidVersions.minSdkVersion
+        targetSdkVersion androidVersions.targetSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField('String',
+                "MAPLIBRE_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "maplibre-navigation-android")
+        )
+        buildConfigField('String',
+                "MAPLIBRE_NAVIGATION_VERSION_NAME", String.format("\"%s\"", project.VERSION_NAME)
+        )
+        buildConfigField "String",
+                "MAPLIBRE_NAVIGATION_EVENTS_USER_AGENT", String.format("\"maplibre-navigation-android/%s\"",
+                project.VERSION_NAME
+        )
+        consumerProguardFiles 'proguard-consumer.pro'
+    }
+
+    configurations {
+        javadocDeps
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/mvn-push-android.gradle"
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/dependencies-graph.gradle"
+apply from: "${rootDir}/gradle/dependency-updates.gradle"
+

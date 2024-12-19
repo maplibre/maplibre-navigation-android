@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.route;
 
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;

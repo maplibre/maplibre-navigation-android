@@ -20,10 +20,10 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.*
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.navigation.core.navigation.*
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.geo.toPoints
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -255,7 +256,7 @@ class ValhallaNavigationActivity :
                                     voiceInstructions = true,
                                     bannerInstructions = true,
                                     language = language,
-                                    coordinates = listOf(origin, destination),
+                                    coordinates = listOf(origin, destination).toPoints(),
                                     requestUuid = "0000-0000-0000-0000"
                                 )
                             )

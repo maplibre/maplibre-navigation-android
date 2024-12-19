@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.instruction;
 
 import android.widget.TextView;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
+import org.maplibre.navigation.core.models.BannerComponents;
 
 import java.util.List;
 

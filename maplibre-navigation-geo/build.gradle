@@ -1,0 +1,48 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'kotlinx-serialization'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+kotlin {
+    jvmToolchain(11)
+
+    androidTarget()
+
+    [iosX64(), iosArm64(), iosSimulatorArm64()].forEach { target ->
+        target.binaries.framework {
+            baseName = "maplibre-navigation-geo"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        commonMain {}
+
+        androidMain.dependencies {
+            implementation dependenciesList.mapLibreTurf
+        }
+    }
+}
+
+android {
+    namespace = "org.maplibre.navigation.geo"
+
+    compileSdkVersion androidVersions.compileSdkVersion
+    buildToolsVersion androidVersions.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidVersions.minSdkVersion
+        targetSdkVersion androidVersions.targetSdkVersion
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}

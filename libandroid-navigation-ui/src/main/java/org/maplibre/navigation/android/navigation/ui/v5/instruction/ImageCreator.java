@@ -7,10 +7,10 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerComponents;
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.BannerText;
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.core.models.BannerComponents;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.BannerText;
+import org.maplibre.navigation.core.models.LegStep;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

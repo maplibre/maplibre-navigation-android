@@ -2,15 +2,15 @@ package org.maplibre.navigation.android.navigation.ui.v5.map;
 
 import android.content.Context;
 
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
-import org.maplibre.navigation.android.navigation.v5.models.ManeuverModifier;
-import org.maplibre.navigation.android.navigation.v5.models.StepManeuver;
+import org.maplibre.navigation.core.models.LegStep;
+import org.maplibre.navigation.core.models.ManeuverModifier;
+import org.maplibre.navigation.core.models.StepManeuver;
 import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteStepProgress;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.routeprogress.RouteLegProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteStepProgress;
 
 import org.junit.Test;
 

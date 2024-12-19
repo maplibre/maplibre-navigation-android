@@ -1,30 +1,30 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static junit.framework.Assert.assertNotNull;
+import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoint;
+import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoint;
+import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsWaypoint;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsWaypoint;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
-import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.navigation.core.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -178,7 +178,7 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private Point findDestinationPoint(NavigationViewOptions options) {
-        List<Point> coordinates = options.directionsRoute().getRouteOptions().getCoordinates();
+        List<Point> coordinates = toMapLibrePoints(options.directionsRoute().getRouteOptions().getCoordinates());
         return coordinates.get(coordinates.size() - 1);
     }
 
@@ -197,13 +197,13 @@ public class NavigationViewRouterTest extends BaseTest {
     private RouteOptions buildRouteOptionsWithCoordinates(DirectionsResponse response) {
         List<Point> coordinates = new ArrayList<>();
         for (DirectionsWaypoint waypoint : response.getWaypoints()) {
-            coordinates.add(waypoint.getLocation());
+            coordinates.add(toMapLibrePoint(waypoint.getLocation()));
         }
         return new RouteOptions.Builder(
             Constants.BASE_API_URL,
             "user",
             "profile",
-            coordinates,
+            toPoints(coordinates),
             ACCESS_TOKEN,
             "uuid"
         )

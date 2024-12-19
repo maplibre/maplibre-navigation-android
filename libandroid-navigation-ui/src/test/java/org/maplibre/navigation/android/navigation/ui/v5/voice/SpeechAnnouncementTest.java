@@ -1,7 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.voice;
 
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement;
-import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone;
+import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone;
 
 import org.junit.Test;
 

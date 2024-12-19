@@ -3,8 +3,6 @@ package org.maplibre.navigation.android.navigation.ui.v5.map;
 import static com.google.common.base.Charsets.UTF_8;
 import static org.mockito.Mockito.mock;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
@@ -12,7 +10,7 @@ import org.maplibre.geojson.LineString;
 import org.maplibre.geojson.Point;
 
 import org.junit.Test;
-import org.maplibre.navigation.android.navigation.ui.v5.map.WaynameFeatureFilter;
+import org.maplibre.navigation.core.location.Location;
 
 import java.io.InputStream;
 import java.util.ArrayList;
