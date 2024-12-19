@@ -2,7 +2,6 @@ package org.maplibre.navigation.geo.turf
 
 import org.maplibre.navigation.geo.LineString
 import org.maplibre.navigation.geo.Point
-import org.maplibre.navigation.geo.turf.TurfConversion
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -152,71 +151,22 @@ object TurfMeasurement {
         return length(lineString.points, units)
     }
 
-//    /**
-//     * Takes a [MultiLineString] and measures its length in the specified units.
-//     *
-//     * @param multiLineString geometry to measure
-//     * @param units           one of the units found inside [TurfConstants.TurfUnitCriteria]
-//     * @return length of the input lines combined, in the units specified
-//     * @see [Turf Line Distance documentation](http://turfjs.org/docs/.linedistance)
-//     *
-//     * @since 1.2.0
-//     */
-//    fun length(multiLineString: MultiLineString, units: String?
-//    ): Double {
-//        var len = 0.0
-//        for (points in multiLineString.coordinates()) {
-//            len += length(points, units)
-//        }
-//        return len
-//    }
-
-//    /**
-//     * Takes a [Polygon] and measures its perimeter in the specified units. if the polygon
-//     * contains holes, the perimeter will also be included.
-//     *
-//     * @param polygon geometry to measure
-//     * @param units   one of the units found inside [TurfConstants.TurfUnitCriteria]
-//     * @return total perimeter of the input polygon in the units specified
-//     * @see [Turf Line Distance documentation](http://turfjs.org/docs/.linedistance)
-//     *
-//     * @since 1.2.0
-//     */
-//    fun length(
-//        @NonNull polygon: Polygon,
-//        @NonNull @TurfUnitCriteria units: String?
-//    ): Double {
-//        var len = 0.0
-//        for (points in polygon.coordinates()) {
-//            len += length(points, units)
-//        }
-//        return len
-//    }
-
-//    /**
-//     * Takes a [MultiPolygon] and measures each polygons perimeter in the specified units. if
-//     * one of the polygons contains holes, the perimeter will also be included.
-//     *
-//     * @param multiPolygon geometry to measure
-//     * @param units        one of the units found inside [TurfConstants.TurfUnitCriteria]
-//     * @return total perimeter of the input polygons combined, in the units specified
-//     * @see [Turf Line Distance documentation](http://turfjs.org/docs/.linedistance)
-//     *
-//     * @since 1.2.0
-//     */
-//    fun length(
-//        @NonNull multiPolygon: MultiPolygon,
-//        @NonNull @TurfUnitCriteria units: String?
-//    ): Double {
-//        var len = 0.0
-//        val coordinates: List<List<List<Point?>?>> = multiPolygon.coordinates()
-//        for (coordinate in coordinates) {
-//            for (theCoordinate in coordinate) {
-//                len += length(theCoordinate, units)
-//            }
-//        }
-//        return len
-//    }
+    /**
+     * Takes two [Point]s and returns a point midway between them. The midpoint is calculated
+     * geodesically, meaning the curvature of the earth is taken into account.
+     *
+     * @param from first point used for calculating the midpoint
+     * @param to   second point used for calculating the midpoint
+     * @return a [Point] midway between point1 and point2
+     * @see [Turf Midpoint documentation](http://turfjs.org/docs/.midpoint)
+     *
+     * @since 1.3.0
+     */
+    fun midpoint(from: Point, to: Point): Point {
+        val dist = distance(from, to, TurfConstants.UNIT_MILES)
+        val heading = bearing(from, to)
+        return destination(from, dist / 2, heading, TurfConstants.UNIT_MILES)
+    }
 
     /**
      * Takes a [List] of [Point] and measures its length in the specified units.

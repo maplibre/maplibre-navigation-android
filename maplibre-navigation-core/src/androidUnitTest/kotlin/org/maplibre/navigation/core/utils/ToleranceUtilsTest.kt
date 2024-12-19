@@ -14,21 +14,20 @@ class ToleranceUtilsTest : BaseTest() {
     @Test
     @Throws(Exception::class)
     fun dynamicRerouteDistanceTolerance_userFarAwayFromIntersection() {
-        //TODO fabi7555
-//        val route = buildTestDirectionsRoute()
-//        val routeProgress = buildDefaultTestRouteProgress()
-//        val stepPoints = PolylineUtils.decode(
-//            route.geometry, Constants.PRECISION_6
-//        )
-//        val midPoint = TurfMeasurement.midpoint(stepPoints[0], stepPoints[1])
-//
-//        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
-//            midPoint,
-//            routeProgress,
-//            MapLibreNavigationOptions()
-//        )
-//
-//        assertEquals(25.0, tolerance, DELTA)
+        val route = buildTestDirectionsRoute()
+        val routeProgress = buildDefaultTestRouteProgress()
+        val stepPoints = PolylineUtils.decode(
+            route.geometry, Constants.PRECISION_6
+        )
+        val midPoint = TurfMeasurement.midpoint(stepPoints[0], stepPoints[1])
+
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
+            midPoint,
+            routeProgress,
+            MapLibreNavigationOptions()
+        )
+
+        assertEquals(25.0, tolerance, DELTA)
     }
 
 
