@@ -30,8 +30,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import kotlinx.datetime.Instant;
-
 public class DynamicCameraTest extends BaseTest {
 
   private static final String DIRECTIONS_PRECISION_6 = "directions_v5_precision_6.json";
@@ -222,7 +220,7 @@ public class DynamicCameraTest extends BaseTest {
     when(location.getSpeedMetersPerSeconds()).thenReturn(30f);
     when(location.getBearing()).thenReturn(100f);
     when(location.getAccuracyMeters()).thenReturn(10f);
-    when(location.getTime()).thenReturn(Instant.Companion.fromEpochMilliseconds(time));
+    when(location.getTime()).thenReturn(time);
     return location;
   }
 
