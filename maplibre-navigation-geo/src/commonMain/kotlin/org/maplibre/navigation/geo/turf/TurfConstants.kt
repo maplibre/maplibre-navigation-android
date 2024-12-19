@@ -137,16 +137,4 @@ object TurfConstants {
      * @since 1.2.0
      */
     const val UNIT_DEFAULT: String = UNIT_KILOMETERS
-
-//    /**
-//     * Retention policy for the various Turf units.
-//     *
-//     * @since 3.0.0
-//     */
-//    @Retention(AnnotationRetention.SOURCE)
-//    @StringDef(
-//        [UNIT_KILOMETRES, UNIT_METRES, UNIT_CENTIMETRES, UNIT_FEET, UNIT_CENTIMETERS, UNIT_METERS, UNIT_YARDS, UNIT_INCHES, UNIT_DEGREES, UNIT_RADIANS, UNIT_KILOMETERS, UNIT_MILES, UNIT_NAUTICAL_MILES
-//        ]
-//    )
-//    annotation class TurfUnitCriteria
 }

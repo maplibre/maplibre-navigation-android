@@ -17,28 +17,13 @@ import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import java.lang.ref.WeakReference
 
-
-///**
-// * Internal usage only, use navigation by initializing a new instance of [MapLibreNavigation]
-// * and customizing the navigation experience through that class.
-// *
-// *
-// * This class is first created and started when [MapLibreNavigation.startNavigation]
-// * get's called and runs in the background until either the navigation sessions ends implicitly or
-// * the hosting activity gets destroyed. Location updates are also tracked and handled inside this
-// * service. Thread creation gets created in this service and maintains the thread until the service
-// * gets destroyed.
-// *
-// */
+/**
+ * Foreground service that connected to [NavigationNotification]. This service is also
+ * a [ProgressChangeListener] that will forward progress changes to the notification.
+ */
 open class NavigationNotificationService : Service(), ProgressChangeListener, NavigationEventListener {
     private val localBinder = LocalBinder()
 
-    //    private var thread: RouteProcessorBackgroundThread? = null
-//    private var locationEngineUpdater: NavigationLocationEngineUpdater? = null
-//    private var notificationProvider: NavigationNotificationProvider? = null
-//
-
-//    var navigation: MapLibreNavigation? = null
     var navigationNotification: NavigationNotification? = null
 
     override fun onBind(intent: Intent): IBinder {
@@ -46,7 +31,7 @@ open class NavigationNotificationService : Service(), ProgressChangeListener, Na
     }
 
     override fun onRunning(running: Boolean) {
-        navigationNotification?.let {navigationNotification ->
+        navigationNotification?.let { navigationNotification ->
             if (running) {
                 startForegroundNotification(navigationNotification)
             } else {

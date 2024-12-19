@@ -61,7 +61,7 @@ open class MapLibreLocationEngine(
     private fun toMapLibreLocationRequest(request: LocationEngine.Request): MapLibreLocationRequest {
         return MapLibreLocationRequest.Builder(request.maxIntervalMilliseconds)
             .setFastestInterval(request.minIntervalMilliseconds)
-            .setMaxWaitTime(request.maxUpdateDelayMilliseconds)
+            .setDisplacement(request.minUpdateDistanceMeters)
             .setMaxWaitTime(request.maxUpdateDelayMilliseconds)
             .setPriority(toMapLibrePriority(request.accuracy))
             .build()
@@ -69,9 +69,9 @@ open class MapLibreLocationEngine(
 
     private fun toMapLibrePriority(accuracy: LocationEngine.Request.Accuracy): Int {
         return when (accuracy) {
-//            LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY -> MapLibreLocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-//            LocationEngineRequest.PRIORITY_LOW_POWER -> MapLibreLocationRequest.PRIORITY_LOW_POWER
-//            LocationEngineRequest.PRIORITY_NO_POWER -> MapLibreLocationRequest.PRIORITY_PASSIVE
+            LocationEngine.Request.Accuracy.PASSIVE -> MapLibreLocationRequest.PRIORITY_NO_POWER
+            LocationEngine.Request.Accuracy.LOW -> MapLibreLocationRequest.PRIORITY_LOW_POWER
+            LocationEngine.Request.Accuracy.BALANCED -> MapLibreLocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
             LocationEngine.Request.Accuracy.HIGH -> MapLibreLocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }

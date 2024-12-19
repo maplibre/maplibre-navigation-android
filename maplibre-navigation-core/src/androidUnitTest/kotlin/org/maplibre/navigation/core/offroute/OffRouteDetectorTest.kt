@@ -181,19 +181,6 @@ class OffRouteDetectorTest : BaseTest() {
         verify {
             callback.onShouldIncreaseIndex()
         }
-
-        //     RouteProgress routeProgress = buildDefaultTestRouteProgress();
-        //    Point upcomingStepManeuverPoint = routeProgress.currentLegProgress().upComingStep().maneuver().location();
-        //
-        //    Location firstUpdate = buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637);
-        //    offRouteDetector.isUserOffRoute(firstUpdate, routeProgress, options);
-        //
-        //    Point offRoutePoint = buildPointAwayFromPoint(upcomingStepManeuverPoint, 30, 180);
-        //    Location secondUpdate = buildDefaultLocationUpdate(offRoutePoint.longitude, offRoutePoint.latitude);
-        //
-        //    boolean isUserOffRoute = offRouteDetector.isUserOffRoute(secondUpdate, routeProgress, options);
-        //    assertFalse(isUserOffRoute);
-        //    verify(mockCallback, times(1)).onShouldIncreaseIndex();
     }
 
     @Test

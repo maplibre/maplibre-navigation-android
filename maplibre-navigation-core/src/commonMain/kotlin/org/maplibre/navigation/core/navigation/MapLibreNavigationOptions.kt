@@ -92,8 +92,6 @@ data class MapLibreNavigationOptions(
      */
     val isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED,
 
-//    val navigationNotification: NavigationNotification? = null,
-
     /**
      * The increment used for rounding the user's speed and the remaining duration of the route.
      */
@@ -137,7 +135,6 @@ data class MapLibreNavigationOptions(
             .withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection)
             .withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection)
             .withIsDebugLoggingEnabled(isDebugLoggingEnabled)
-//            .withNavigationNotification(navigationNotification)
             .withRoundingIncrement(roundingIncrement)
             .withTimeFormatType(timeFormatType)
             .withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold)
@@ -204,7 +201,6 @@ data class MapLibreNavigationOptions(
         private var offRouteMinimumDistanceMetersBeforeRightDirection: Double =
             Defaults.OFF_ROUTE_MINIMUM_DISTANCE_METERS_BEFORE_RIGHT_DIRECTION
         private var isDebugLoggingEnabled: Boolean = Defaults.IS_DEBUG_LOGGING_ENABLED
-//        private var navigationNotification: NavigationNotification? = null
         private var roundingIncrement: RoundingIncrement = Defaults.roundingIncrement
         private var timeFormatType: TimeFormat = TimeFormat.NONE_SPECIFIED
         private var locationAcceptableAccuracyInMetersThreshold: Int =
@@ -229,7 +225,6 @@ data class MapLibreNavigationOptions(
         fun withOffRouteMinimumDistanceMetersBeforeWrongDirection(offRouteMinimumDistanceMetersBeforeWrongDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeWrongDirection = offRouteMinimumDistanceMetersBeforeWrongDirection }
         fun withOffRouteMinimumDistanceMetersBeforeRightDirection(offRouteMinimumDistanceMetersBeforeRightDirection: Double) = apply { this.offRouteMinimumDistanceMetersBeforeRightDirection = offRouteMinimumDistanceMetersBeforeRightDirection }
         fun withIsDebugLoggingEnabled(isDebugLoggingEnabled: Boolean) = apply { this.isDebugLoggingEnabled = isDebugLoggingEnabled }
-//        fun withNavigationNotification(navigationNotification: NavigationNotification?) = apply { this.navigationNotification = navigationNotification }
         fun withRoundingIncrement(roundingIncrement: RoundingIncrement) = apply { this.roundingIncrement = roundingIncrement }
         fun withTimeFormatType(timeFormatType: TimeFormat) = apply { this.timeFormatType = timeFormatType }
         fun withLocationAcceptableAccuracyInMetersThreshold(locationAcceptableAccuracyInMetersThreshold: Int) = apply { this.locationAcceptableAccuracyInMetersThreshold = locationAcceptableAccuracyInMetersThreshold }
@@ -254,7 +249,6 @@ data class MapLibreNavigationOptions(
                 offRouteMinimumDistanceMetersBeforeWrongDirection,
                 offRouteMinimumDistanceMetersBeforeRightDirection,
                 isDebugLoggingEnabled,
-//                navigationNotification,
                 roundingIncrement,
                 timeFormatType,
                 locationAcceptableAccuracyInMetersThreshold,

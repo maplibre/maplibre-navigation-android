@@ -32,7 +32,8 @@ open class GoogleLocationEngine(
     /**
      * Underlying [FusedLocationProviderClient] that is used to fetch location and listen to location updates.
      */
-    private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    private val fusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
     override fun listenToLocation(request: LocationEngine.Request): Flow<Location> = callbackFlow {
@@ -70,9 +71,9 @@ open class GoogleLocationEngine(
 
     private fun toGMSLocationPriority(accuracy: LocationEngine.Request.Accuracy): Int {
         return when (accuracy) {
-//            LocationEngineRequest.PRIORITY_BALANCED_POWER_ACCURACY -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
-//            LocationEngineRequest.PRIORITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
-//            LocationEngineRequest.PRIORITY_NO_POWER -> Priority.PRIORITY_PASSIVE
+            LocationEngine.Request.Accuracy.PASSIVE -> Priority.PRIORITY_PASSIVE
+            LocationEngine.Request.Accuracy.LOW -> Priority.PRIORITY_LOW_POWER
+            LocationEngine.Request.Accuracy.BALANCED -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
             LocationEngine.Request.Accuracy.HIGH -> Priority.PRIORITY_HIGH_ACCURACY
         }
     }

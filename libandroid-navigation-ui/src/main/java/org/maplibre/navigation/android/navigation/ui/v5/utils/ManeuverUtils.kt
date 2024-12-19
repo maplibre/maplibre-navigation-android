@@ -155,6 +155,5 @@ open class ManeuverUtils {
 
         val maneuverKey = listOfNotNull(maneuver.type?.text, maneuver.modifier)
         return maneuverResources[maneuverKey.joinToString("")] ?: R.drawable.ic_maneuver_turn_0
-        return 0
     }
 }

@@ -24,7 +24,7 @@ interface NavigationEngine {
      */
     fun stopNavigation()
 
-    /**+
+    /**
      * Check if the navigation is running
      *
      * @return true if the navigation is running, false otherwise.
