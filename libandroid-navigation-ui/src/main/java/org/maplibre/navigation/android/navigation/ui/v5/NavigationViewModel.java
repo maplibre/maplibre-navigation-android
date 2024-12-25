@@ -42,7 +42,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import java.util.List;
 
-public class NavigationViewModel {
+public final class NavigationViewModel {
 
     private static final String EMPTY_STRING = "";
     private static final String OKHTTP_INSTRUCTION_CACHE = "okhttp-instruction-cache";
@@ -77,7 +77,7 @@ public class NavigationViewModel {
     private Context context;
 
     public NavigationViewModel(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         initializeLocationEngine();
         initializeRouter();
         this.localeUtils = new LocaleUtils();
