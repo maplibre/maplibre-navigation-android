@@ -30,7 +30,7 @@ public class NavigationLauncher {
    * Starts the UI with a {@link DirectionsRoute} already retrieved from
    * {@link NavigationRoute}
    *
-   * @param activity must be launched from another {@link Activity}
+   * @param context to launch the navigation {@link Activity}
    * @param options  with fields to customize the navigation view
    */
   public static void startNavigation(Context context, NavigationLauncherOptions options) {

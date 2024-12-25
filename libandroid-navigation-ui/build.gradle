@@ -76,7 +76,7 @@ dependencies {
     api dependenciesList.mapLibreAnnotations
     implementation dependenciesList.mapLibre
 
-    // Mapbox SDKs (needed for requests)
+  // Mapbox SDKs (needed for requests)
     api dependenciesList.mapboxGeoJson
 
     // Support libraries

@@ -57,7 +57,7 @@ Step 1. Add it to your root `build.gradle` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  implementation 'com.github.maplibre:maplibre-navigation-android:3.0.0'
+  implementation 'com.github.maplibre:maplibre-navigation-android:4.0.0'
 ```
 
 ### Maven
@@ -75,7 +75,7 @@ Step 2. Add the dependency
   <dependency>
 	    <groupId>com.github.maplibre</groupId>
 	    <artifactId>maplibre-navigation-android</artifactId>
-	    <version>3.0.0</version>
+	    <version>4.0.0</version>
 	</dependency>
 ```
 
@@ -86,7 +86,7 @@ Step 1. Add it in your `build.sbt` at the end of resolvers:
 ```
 Step 2. Add the dependency
 ```
-  libraryDependencies += "com.github.maplibre" % "maplibre-navigation-android" % "3.0.0"
+  libraryDependencies += "com.github.maplibre" % "maplibre-navigation-android" % "4.0.0"
 ```
 
 ### leiningen
@@ -96,7 +96,7 @@ Step 1. Add it in your `project.clj` at the end of repositories:
 ```
 Step 2. Add the dependency
 ```
-  :dependencies [[com.github.maplibre/maplibre-navigation-android "3.0.0"]]	
+  :dependencies [[com.github.maplibre/maplibre-navigation-android "4.0.0"]]	
 ```
 
 To run the [sample code](#sample-code) on a device or emulator, include your [Mapbox access token](https://www.mapbox.com/help/define-access-token/) and map tile provider URL in `developer-config.xml` found in the project. 

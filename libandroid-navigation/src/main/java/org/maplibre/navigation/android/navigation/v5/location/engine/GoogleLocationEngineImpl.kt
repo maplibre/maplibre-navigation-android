@@ -68,10 +68,7 @@ open class GoogleLocationEngineImpl(
         )
     }
 
-    override fun removeLocationUpdates(listener: LocationCallback) {
-        // The listener is annotated with @NonNull, but there seems to be cases where a null
-        // listener is somehow passed into this method.
-        @Suppress("SENSELESS_COMPARISON")
+    override fun removeLocationUpdates(listener: LocationCallback?) {
         if (listener != null) {
             fusedLocationProviderClient.removeLocationUpdates(listener)
         }

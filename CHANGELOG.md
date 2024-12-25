@@ -4,6 +4,18 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+**BREAKING CHANGES:**
+- Convert module `libandroid-navigation` to Kotlin. See description of PR [#127](https://github.com/maplibre/maplibre-navigation-android/pull/127) to get informed about all breaking changes
+- Updated startNavigation() in NavigationLauncher to just use a context instead of an activity [#126](https://github.com/maplibre/maplibre-navigation-android/pull/126)
+
+### v4.0.0 - November 9, 2024
+
+**BREAKING CHANGES:**
+- Update naming and packages to MapLibre (`org.maplibre.navigation.android`)
+- Update MapLibre native to v11
+
+### v3.0.1 - November 7, 2024
+
 - Update dependencies, build tools & configurations
 - Use last snapped bearing if no previous step is available
 - Fix crash on snap-to-route engine, caused by legs with only single step
@@ -16,6 +28,7 @@ Maplibre welcomes participation and contributions from everyone.
   ```xml
     <string name="valhalla_url" translatable="false">https://valhalla1.openstreetmap.de/route</string>
   ```
+- Fix crash on ManeuverView, caused by `contains` not being able to handle null values [#122](https://github.com/maplibre/maplibre-navigation-android/issues/122)
 
 ### v3.0.0 - November 5, 2023
 

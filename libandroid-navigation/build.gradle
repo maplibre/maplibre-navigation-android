@@ -81,7 +81,7 @@ dependencies {
     implementation dependenciesList.timber
 
     implementation dependenciesList.kotlinxSerializationJson
-    
+
     // Unit testing
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.hamcrest
@@ -89,7 +89,6 @@ dependencies {
     testImplementation dependenciesList.robolectric
     testImplementation dependenciesList.androidxTestKtx
     testImplementation dependenciesList.mockk
-    implementation dependenciesList.materialDesign
 }
 
 apply from: 'javadoc.gradle'
