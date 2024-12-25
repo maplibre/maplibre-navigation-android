@@ -520,7 +520,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     mapView = findViewById(R.id.navigationMapView);
     instructionView = findViewById(R.id.instructionView);
     ViewCompat.setElevation(instructionView, 10);
-    summaryBottomSheet = findViewById(R.id.summaryBottomSheet);
     cancelBtn = findViewById(R.id.cancelBtn);
     recenterBtn = findViewById(R.id.recenterBtn);
     wayNameView = findViewById(R.id.wayNameView);

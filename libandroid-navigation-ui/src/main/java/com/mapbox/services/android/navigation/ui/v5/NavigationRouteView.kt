@@ -99,12 +99,9 @@ class NavigationRouteView @JvmOverloads constructor(
     NavigationContract.View {
     private var mapView: MapView? = null
     private var instructionView: InstructionView? = null
-    private var summaryBottomSheet: SummaryBottomSheet? = null
     private var summaryBehavior: BottomSheetBehavior<*>? = null
-    private var cancelBtn: ImageButton? = null
     private var recenterBtn: RecenterButton? = null
     private var wayNameView: WayNameView? = null
-    private var routeOverviewBtn: ImageButton? = null
 
     private var navigationPresenter: NavigationPresenter? = null
     private var navigationViewEventDispatcher: NavigationViewEventDispatcher? = null
@@ -139,6 +136,7 @@ class NavigationRouteView @JvmOverloads constructor(
         initializeNavigationViewModel(context)
         initializeView()
         ThemeSwitcher.setTheme(context, attrs, style)
+        mapStyle = style
         mapView?.let {
             it.apply {
                 if (!isMapInitialized) {
@@ -218,7 +216,6 @@ class NavigationRouteView @JvmOverloads constructor(
         wayNameView!!.visibility =
             if (navigationViewInstanceState.isWayNameVisible) VISIBLE else INVISIBLE
         wayNameView!!.updateWayNameText(navigationViewInstanceState.wayNameText)
-        resetBottomSheetState(navigationViewInstanceState.bottomSheetBehaviorState)
         updateInstructionListState(navigationViewInstanceState.isInstructionViewVisible)
         updateInstructionMutedState(navigationViewInstanceState.isMuted)
         mapInstanceState = savedInstanceState.getParcelable(MAP_INSTANCE_STATE_KEY)
@@ -331,14 +328,13 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     fun calculateRoute(mapRouteData: MapRouteData) {
-            mapStyle = mapRouteData.mapStyle
+
 //        startRouteButton.setOnClickListener {
             val destination = Point.fromLngLat(76.930137, 43.230361)
             val origin = Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second)
             val navigationRouteBuilder = NavigationRoute.builder(context).apply {
                 this.accessToken(mapRouteData.accessToken)
                 this.origin(origin)
-
                 this.voiceUnits(DirectionsCriteria.PROFILE_DRIVING)
                 this.alternatives(true)
                 // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
@@ -676,7 +672,6 @@ class NavigationRouteView @JvmOverloads constructor(
         initializeNavigationEventDispatcher()
         initializeNavigationPresenter()
         initializeInstructionListListener()
-        initializeSummaryBottomSheet()
         initializeClickListeners()
     }
 
@@ -686,11 +681,8 @@ class NavigationRouteView @JvmOverloads constructor(
         instructionView?.let {
             ViewCompat.setElevation(it, 10f)
         }
-        summaryBottomSheet = findViewById(R.id.summaryBottomSheet)
-        cancelBtn = findViewById(R.id.cancelBtn)
         recenterBtn = findViewById(R.id.recenterBtn)
         wayNameView = findViewById(R.id.wayNameView)
-        routeOverviewBtn = findViewById(R.id.routeOverviewBtn)
     }
 
     fun initializeNavigationViewModel(context: ComponentActivity) {
@@ -698,19 +690,6 @@ class NavigationRouteView @JvmOverloads constructor(
             navigationViewModel = NavigationViewModel(context)
         } catch (exception: ClassCastException) {
             throw ClassCastException("Please ensure that the provided Context is a valid FragmentActivity")
-        }
-    }
-
-    private fun initializeSummaryBottomSheet() {
-        summaryBehavior = BottomSheetBehavior.from(summaryBottomSheet!!)
-        summaryBehavior?.let {
-            it.isHideable = false
-            it.addBottomSheetCallback(
-                SummaryBottomSheetCallback(
-                    navigationPresenter,
-                    navigationViewEventDispatcher
-                )
-            )
         }
     }
 
@@ -748,14 +727,6 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun saveNavigationMapInstanceState(outState: Bundle) {
         if (navigationMap != null) {
             navigationMap!!.saveStateWith(MAP_INSTANCE_STATE_KEY, outState)
-        }
-    }
-
-    private fun resetBottomSheetState(bottomSheetState: Int) {
-        if (bottomSheetState > INVALID_STATE) {
-            val isShowing = bottomSheetState == BottomSheetBehavior.STATE_EXPANDED
-            summaryBehavior!!.isHideable = !isShowing
-            summaryBehavior!!.state = bottomSheetState
         }
     }
 
@@ -820,9 +791,7 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     private fun initializeClickListeners() {
-        cancelBtn!!.setOnClickListener(CancelBtnClickListener(navigationViewEventDispatcher))
         recenterBtn!!.addOnClickListener(RecenterBtnClickListener(navigationPresenter))
-        routeOverviewBtn!!.setOnClickListener(RouteOverviewBtnClickListener(navigationPresenter))
     }
 
     private fun initializeOnCameraTrackingChangedListener() {
@@ -847,7 +816,6 @@ class NavigationRouteView @JvmOverloads constructor(
         val distanceFormatter = DistanceFormatter(context, language, unitType, roundingIncrement)
 
         instructionView!!.setDistanceFormatter(distanceFormatter)
-        summaryBottomSheet!!.setDistanceFormatter(distanceFormatter)
     }
 
     private fun establishRoundingIncrement(navigationViewOptions: NavigationViewOptions): Int {
@@ -873,7 +841,6 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private fun establishTimeFormat(options: NavigationViewOptions) {
         @NavigationTimeFormat.Type val timeFormatType = options.navigationOptions().timeFormatType()
-        summaryBottomSheet!!.setTimeFormat(timeFormatType)
     }
 
     private fun initializeNavigationListeners(
@@ -900,7 +867,6 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     private fun subscribeViewModels() {
         instructionView!!.subscribe(this, navigationViewModel)
-        summaryBottomSheet!!.subscribe(this, navigationViewModel)
 
         NavigationViewSubscriber(this, navigationViewModel, navigationPresenter).subscribe()
         isSubscribed = true

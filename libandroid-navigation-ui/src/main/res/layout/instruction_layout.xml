@@ -5,9 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?attr/navigationViewBannerBackground"
     android:elevation="6dp"
-    android:foreground="?attr/selectableItemBackground"
     tools:showIn="@layout/instruction_view_layout">
 
     <include
@@ -40,7 +38,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:text="@string/rerouting"
-            android:textColor="?attr/navigationViewBannerPrimaryText"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
