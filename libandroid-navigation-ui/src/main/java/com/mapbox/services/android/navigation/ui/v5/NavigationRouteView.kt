@@ -332,9 +332,11 @@ class NavigationRouteView @JvmOverloads constructor(
 //        startRouteButton.setOnClickListener {
             val destination = Point.fromLngLat(76.930137, 43.230361)
             val origin = Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second)
+        val userLocation = mapboxMap!!.locationComponent.lastKnownLocation
+
             val navigationRouteBuilder = NavigationRoute.builder(context).apply {
                 this.accessToken(mapRouteData.accessToken)
-                this.origin(origin)
+                this.origin(Point.fromLngLat(userLocation!!.longitude, userLocation.latitude))
                 this.voiceUnits(DirectionsCriteria.PROFILE_DRIVING)
                 this.alternatives(true)
                 // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.

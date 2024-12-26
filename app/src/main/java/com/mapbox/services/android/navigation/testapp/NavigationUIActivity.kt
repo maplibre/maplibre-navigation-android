@@ -83,7 +83,7 @@ class NavigationUIActivity :
             points.add(Pair(76.930137, 43.230361))
             points.add(Pair(76.928316, 43.236109))
             points.add(Pair(76.920187, 43.236783))
-            binding.navigationView.calculateRoute(MapRouteData(getString(R.string.mapbox_access_token), "getString(R.string.mapbox_access_token)",
+            binding.navigationView.calculateRoute(MapRouteData("pk.cb243ba3-cb94-41c4-a91f-5f3074824d3a", "getString(R.string.mapbox_access_token)",
                 points, Pair(76.930137, 43.230361), MapRouteData.DARK_THEME))
         }
 //        binding.clearPoints.setOnClickListener {
