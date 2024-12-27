@@ -99,7 +99,6 @@ class NavigationRouteView @JvmOverloads constructor(
     NavigationContract.View {
     private var mapView: MapView? = null
     private var instructionView: InstructionView? = null
-    private var summaryBehavior: BottomSheetBehavior<*>? = null
     private var recenterBtn: RecenterButton? = null
     private var wayNameView: WayNameView? = null
 
@@ -180,11 +179,8 @@ class NavigationRouteView @JvmOverloads constructor(
      * @param outState to store state variables
      */
     fun onSaveInstanceState(outState: Bundle) {
-        val bottomSheetBehaviorState =
-            if (summaryBehavior == null) INVALID_STATE else summaryBehavior!!.state
         val isWayNameVisible = wayNameView!!.visibility == VISIBLE
         val navigationViewInstanceState = NavigationViewInstanceState(
-            bottomSheetBehaviorState,
             recenterBtn!!.visibility,
             instructionView!!.isShowingInstructionList,
             isWayNameVisible,
@@ -404,18 +400,6 @@ class NavigationRouteView @JvmOverloads constructor(
                     Timber.e(throwable, "onFailure: navigation.getRoute()")
                 }
             })
-    }
-
-    override fun setSummaryBehaviorState(state: Int) {
-        summaryBehavior!!.state = state
-    }
-
-    override fun setSummaryBehaviorHideable(isHideable: Boolean) {
-        summaryBehavior!!.isHideable = isHideable
-    }
-
-    override fun isSummaryBottomSheetHidden(): Boolean {
-        return summaryBehavior!!.state == BottomSheetBehavior.STATE_HIDDEN
     }
 
     override fun resetCameraPosition() {
@@ -798,7 +782,7 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private fun initializeOnCameraTrackingChangedListener() {
         onTrackingChangedListener =
-            NavigationOnCameraTrackingChangedListener(navigationPresenter, summaryBehavior)
+            NavigationOnCameraTrackingChangedListener(navigationPresenter)
         navigationMap!!.addOnCameraTrackingChangedListener(onTrackingChangedListener)
     }
 

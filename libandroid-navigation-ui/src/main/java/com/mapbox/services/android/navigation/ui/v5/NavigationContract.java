@@ -10,12 +10,6 @@ public interface NavigationContract {
 
   interface View {
 
-    void setSummaryBehaviorState(int state);
-
-    void setSummaryBehaviorHideable(boolean isHideable);
-
-    boolean isSummaryBottomSheetHidden();
-
     void updateWayNameVisibility(boolean isVisible);
 
     void updateWayNameView(@NonNull String wayName);

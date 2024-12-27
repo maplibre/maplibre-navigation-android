@@ -12,19 +12,14 @@ import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
 class NavigationOnCameraTrackingChangedListener implements OnCameraTrackingChangedListener {
 
   private final NavigationPresenter navigationPresenter;
-  private final BottomSheetBehavior summaryBehavior;
 
-  NavigationOnCameraTrackingChangedListener(NavigationPresenter navigationPresenter,
-                                            BottomSheetBehavior summaryBehavior) {
+  NavigationOnCameraTrackingChangedListener(NavigationPresenter navigationPresenter) {
     this.navigationPresenter = navigationPresenter;
-    this.summaryBehavior = summaryBehavior;
   }
 
   @Override
   public void onCameraTrackingDismissed() {
-    if (summaryBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
       navigationPresenter.onCameraTrackingDismissed();
-    }
   }
 
   @Override

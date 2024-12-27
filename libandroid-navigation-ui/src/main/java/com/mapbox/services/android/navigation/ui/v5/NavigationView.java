@@ -76,8 +76,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   private static final int INVALID_STATE = 0;
   private MapView mapView;
   private InstructionView instructionView;
-  private SummaryBottomSheet summaryBottomSheet;
-  private BottomSheetBehavior summaryBehavior;
   private ImageButton cancelBtn;
   private RecenterButton recenterBtn;
   private WayNameView wayNameView;
@@ -147,10 +145,8 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    * @param outState to store state variables
    */
   public void onSaveInstanceState(Bundle outState) {
-    int bottomSheetBehaviorState = summaryBehavior == null ? INVALID_STATE : summaryBehavior.getState();
     boolean isWayNameVisible = wayNameView.getVisibility() == VISIBLE;
-    NavigationViewInstanceState navigationViewInstanceState = new NavigationViewInstanceState(
-      bottomSheetBehaviorState, recenterBtn.getVisibility(), instructionView.isShowingInstructionList(),
+    NavigationViewInstanceState navigationViewInstanceState = new NavigationViewInstanceState(recenterBtn.getVisibility(), instructionView.isShowingInstructionList(),
       isWayNameVisible, wayNameView.retrieveWayNameText(), navigationViewModel.isMuted());
     String instanceKey = getContext().getString(R.string.navigation_view_instance_state);
     outState.putParcelable(instanceKey, navigationViewInstanceState);
@@ -172,7 +168,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     recenterBtn.setVisibility(navigationViewInstanceState.getRecenterButtonVisibility());
     wayNameView.setVisibility(navigationViewInstanceState.isWayNameVisible() ? VISIBLE : INVISIBLE);
     wayNameView.updateWayNameText(navigationViewInstanceState.getWayNameText());
-    resetBottomSheetState(navigationViewInstanceState.getBottomSheetBehaviorState());
     updateInstructionListState(navigationViewInstanceState.isInstructionViewVisible());
     updateInstructionMutedState(navigationViewInstanceState.isMuted());
     mapInstanceState = savedInstanceState.getParcelable(MAP_INSTANCE_STATE_KEY);
@@ -251,21 +246,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
 
   private void calculateRoute() {
 
-  }
-
-  @Override
-  public void setSummaryBehaviorState(int state) {
-    summaryBehavior.setState(state);
-  }
-
-  @Override
-  public void setSummaryBehaviorHideable(boolean isHideable) {
-    summaryBehavior.setHideable(isHideable);
-  }
-
-  @Override
-  public boolean isSummaryBottomSheetHidden() {
-    return summaryBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN;
   }
 
   @Override
@@ -513,7 +493,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     initializeNavigationEventDispatcher();
     initializeNavigationPresenter();
     initializeInstructionListListener();
-    initializeSummaryBottomSheet();
   }
 
   private void bind() {
@@ -532,13 +511,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     } catch (ClassCastException exception) {
       throw new ClassCastException("Please ensure that the provided Context is a valid FragmentActivity");
     }
-  }
-
-  private void initializeSummaryBottomSheet() {
-    summaryBehavior = BottomSheetBehavior.from(summaryBottomSheet);
-    summaryBehavior.setHideable(false);
-    summaryBehavior.setBottomSheetCallback(new SummaryBottomSheetCallback(navigationPresenter,
-      navigationViewEventDispatcher));
   }
 
   private void initializeNavigationEventDispatcher() {
@@ -571,14 +543,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   private void saveNavigationMapInstanceState(Bundle outState) {
     if (navigationMap != null) {
       navigationMap.saveStateWith(MAP_INSTANCE_STATE_KEY, outState);
-    }
-  }
-
-  private void resetBottomSheetState(int bottomSheetState) {
-    if (bottomSheetState > INVALID_STATE) {
-      boolean isShowing = bottomSheetState == BottomSheetBehavior.STATE_EXPANDED;
-      summaryBehavior.setHideable(!isShowing);
-      summaryBehavior.setState(bottomSheetState);
     }
   }
 
@@ -645,7 +609,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   }
 
   private void initializeOnCameraTrackingChangedListener() {
-    onTrackingChangedListener = new NavigationOnCameraTrackingChangedListener(navigationPresenter, summaryBehavior);
+    onTrackingChangedListener = new NavigationOnCameraTrackingChangedListener(navigationPresenter);
     navigationMap.addOnCameraTrackingChangedListener(onTrackingChangedListener);
   }
 
@@ -662,7 +626,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     DistanceFormatter distanceFormatter = new DistanceFormatter(getContext(), language, unitType, roundingIncrement);
 
     instructionView.setDistanceFormatter(distanceFormatter);
-    summaryBottomSheet.setDistanceFormatter(distanceFormatter);
   }
 
   private int establishRoundingIncrement(NavigationViewOptions navigationViewOptions) {
@@ -683,7 +646,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
   private void establishTimeFormat(NavigationViewOptions options) {
     @NavigationTimeFormat.Type
     int timeFormatType = options.navigationOptions().timeFormatType();
-    summaryBottomSheet.setTimeFormat(timeFormatType);
   }
 
   private void initializeNavigationListeners(NavigationViewOptions options, NavigationViewModel navigationViewModel) {
@@ -705,7 +667,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
    */
   private void subscribeViewModels() {
     instructionView.subscribe(this, navigationViewModel);
-    summaryBottomSheet.subscribe(this, navigationViewModel);
 
     new NavigationViewSubscriber(this, navigationViewModel, navigationPresenter).subscribe();
     isSubscribed = true;
