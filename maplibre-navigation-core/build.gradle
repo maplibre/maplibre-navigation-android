@@ -14,7 +14,9 @@ java {
 kotlin {
     jvmToolchain(17)
 
-    androidTarget()
+    androidTarget {
+        publishLibraryVariants("release")
+    }
 
     def xcf = new XCFrameworkConfig(project)
     [iosX64(), iosArm64(), iosSimulatorArm64()].forEach { target ->
@@ -91,13 +93,6 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
-    }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
     }
 }
 

@@ -59,10 +59,6 @@ publishing {
                     url = project.ext.navigationArtifactUrl
                 }
             }
-
-            afterEvaluate {
-                from components.release
-            }
         }
     }
 }

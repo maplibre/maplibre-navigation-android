@@ -71,15 +71,6 @@ object TurfConversion {
      * Convert a distance measurement (assuming a spherical Earth) from a real-world unit into
      * radians.
      *
-     * @param distance double representing a distance value
-     * @param units    pass in one of the units defined in [TurfUnitCriteria]
-     * @return converted distance to radians value
-     * @since 1.2.0
-     */
-    /**
-     * Convert a distance measurement (assuming a spherical Earth) from a real-world unit into
-     * radians.
-     *
      * @param distance double representing a distance value assuming the distance units is in
      * kilometers
      * @return converted distance to radians value
