@@ -6,7 +6,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -17,6 +19,7 @@ import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone
 import org.maplibre.navigation.core.offroute.OffRoute
 import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertNotNull
@@ -31,6 +34,11 @@ class MapLibreNavigationTest : BaseTest() {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
+    }
+
+    @After
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test
