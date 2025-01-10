@@ -26,4 +26,4 @@ jobs:
           java-version: '17'
 
       - name: Run Unit Tests
-        run: ./gradlew libandroid-navigation:test
+        run: ./gradlew test
