@@ -15,7 +15,7 @@ internal class MockLocationBuilder {
 
     fun buildPointAwayFromLocation(location: Location, distanceAway: Double): Point {
         val fromLocation = Point(
-            location.longitude, location.latitude
+            location.longitude, location.latitude, location.altitude
         )
         return TurfMeasurement.destination(
             fromLocation,

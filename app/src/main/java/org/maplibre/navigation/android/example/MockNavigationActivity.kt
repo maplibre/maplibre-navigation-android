@@ -191,8 +191,8 @@ class MockNavigationActivity :
     override fun onMapClick(point: LatLng): Boolean {
         var addMarker = true
         when {
-            destination == null -> destination = Point(point.longitude, point.latitude)
-            waypoint == null -> waypoint = Point(point.longitude, point.latitude)
+            destination == null -> destination = Point(point.longitude, point.latitude, point.altitude)
+            waypoint == null -> waypoint = Point(point.longitude, point.latitude, point.altitude)
             else -> {
                 Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
                 addMarker = false
@@ -221,7 +221,7 @@ class MockNavigationActivity :
             return
         }
 
-        val origin = Point(userLocation.longitude, userLocation.latitude)
+        val origin = Point(userLocation.longitude, userLocation.latitude, userLocation.altitude)
         if (TurfMeasurement.distance(origin.toMapLibrePoint(), destination.toMapLibrePoint(), TurfConstants.UNIT_METERS) < 50) {
             binding.startRouteButton.visibility = View.GONE
             return

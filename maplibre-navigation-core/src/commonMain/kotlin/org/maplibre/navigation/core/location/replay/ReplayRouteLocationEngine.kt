@@ -101,7 +101,7 @@ open class ReplayRouteLocationEngine(
 
     private fun obtainRoute(point: Point, lastLocation: Location): LineString {
         val pointList: MutableList<Point> = ArrayList()
-        pointList.add(Point(longitude = lastLocation.longitude, latitude = lastLocation.latitude))
+        pointList.add(Point(longitude = lastLocation.longitude, latitude = lastLocation.latitude, lastLocation.altitude))
         pointList.add(point)
         return LineString(pointList)
     }

@@ -19,7 +19,7 @@ data class Location(
     /**
      * Altitude, in degrees.
      */
-    val altitude: Double = null,
+    val altitude: Double? = null,
 
     /**
      * Horizontal accuracy of the latitude and longitude, in meters.
@@ -55,5 +55,5 @@ data class Location(
      * Returns a [Point] representation of this location.
      */
     val point: Point
-        get() = Point(longitude = longitude, latitude = latitude)
+        get() = Point(longitude = longitude, latitude = latitude, altitude = altitude)
 }

@@ -33,12 +33,14 @@ open class SimpleCamera : Camera {
             val firstPoint = routeCoordinates.first()
             Point(
                 longitude = firstPoint.longitude,
-                latitude = firstPoint.latitude
+                latitude = firstPoint.latitude,
+                altitude = firstPoint.altitude
             )
         } ?: routeInformation.location?.let { location ->
             Point(
                 longitude = location.longitude,
-                latitude = location.latitude
+                latitude = location.latitude,
+                altitude = location.altitude
             )
         }
     }
@@ -77,11 +79,13 @@ open class SimpleCamera : Camera {
         initialBearing = TurfMeasurement.bearing(
             Point(
                 longitude = routeCoordinates.first().longitude,
-                latitude = routeCoordinates.first().latitude
+                latitude = routeCoordinates.first().latitude,
+                altitude = routeCoordinates.first().altitude
             ),
             Point(
                 longitude = routeCoordinates[1].longitude,
-                latitude = routeCoordinates[1].latitude
+                latitude = routeCoordinates[1].latitude,
+                altitude = routeCoordinates[1].altitude
             )
         )
     }

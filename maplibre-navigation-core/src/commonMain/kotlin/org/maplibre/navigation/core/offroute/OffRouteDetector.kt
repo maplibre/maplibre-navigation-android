@@ -76,7 +76,7 @@ open class OffRouteDetector(
         if (!validOffRoute(location, options)) {
             return false
         }
-        val currentPoint = Point(longitude = location.longitude, latitude = location.latitude)
+        val currentPoint = Point(longitude = location.longitude, latitude = location.latitude, altitude = location.altitude)
         val isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint)
 
         if (!isOffRoute) {
@@ -128,7 +128,7 @@ open class OffRouteDetector(
      */
     private fun validOffRoute(location: Location, options: MapLibreNavigationOptions): Boolean {
         return lastReroutePoint?.let { lastReroutePoint ->
-            val currentPoint = Point(longitude = location.longitude, latitude = location.latitude)
+            val currentPoint = Point(longitude = location.longitude, latitude = location.latitude, location.altitude)
 
             // Check if minimum amount of distance has been passed since last reroute
             val distanceFromLastReroute =
@@ -190,7 +190,7 @@ open class OffRouteDetector(
     }
 
     private fun updateLastReroutePoint(location: Location) {
-        lastReroutePoint = Point(longitude = location.longitude, latitude = location.latitude)
+        lastReroutePoint = Point(longitude = location.longitude, latitude = location.latitude, location.altitude)
     }
 
     /**
