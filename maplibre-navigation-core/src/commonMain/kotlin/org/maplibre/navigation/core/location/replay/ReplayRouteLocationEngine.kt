@@ -48,7 +48,8 @@ open class ReplayRouteLocationEngine(
         lastLocation = Location(
             provider = ReplayRouteLocationConverter.PROVIDER_NAME,
             latitude = currentPosition.latitude,
-            longitude = currentPosition.longitude
+            longitude = currentPosition.longitude,
+            altitude = currentPosition.altitude
         )
     }
 

@@ -17,6 +17,11 @@ data class Location(
     val longitude: Double,
 
     /**
+     * Altitude, in degrees.
+     */
+    val altitude: Double = null,
+
+    /**
      * Horizontal accuracy of the latitude and longitude, in meters.
      * If not available, it will be `null`.
      */

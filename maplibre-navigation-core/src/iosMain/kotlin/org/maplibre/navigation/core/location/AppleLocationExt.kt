@@ -12,6 +12,7 @@ fun CLLocation.toLocation() = Location(
     provider = "CLLocationManager",
     latitude = coordinate.useContents { latitude },
     longitude = coordinate.useContents { longitude },
+    altitude = coordinate.useContents { altitude },
     bearing = course.toFloat(),
     speedMetersPerSeconds = speed.toFloat(),
     accuracyMeters = horizontalAccuracy.toFloat(),

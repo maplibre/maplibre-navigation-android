@@ -152,7 +152,8 @@ open class RouteUtils {
         return Location(
             provider = FORCED_LOCATION,
             latitude = firstRoutePoint.latitude,
-            longitude = firstRoutePoint.longitude
+            longitude = firstRoutePoint.longitude,
+            altitude = firstRoutePoint.altitude,
         )
     }
 

@@ -122,6 +122,7 @@ open class ReplayRouteLocationConverter(
             provider = PROVIDER_NAME,
             latitude = point.latitude,
             longitude = point.longitude,
+            altitude = point.altitude,
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
             accuracyMeters = 3f,
             time = time
