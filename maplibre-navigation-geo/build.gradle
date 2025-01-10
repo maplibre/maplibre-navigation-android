@@ -46,3 +46,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+apply from: "${rootDir}/gradle/mvn-push-android.gradle"
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/dependencies-graph.gradle"
+apply from: "${rootDir}/gradle/dependency-updates.gradle"
