@@ -26,7 +26,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 open class GoogleLocationEngine(
     context: Context,
-    private val looper: Looper
+    private val looper: Looper?
 ) : LocationEngine {
 
     /**

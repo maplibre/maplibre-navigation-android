@@ -25,7 +25,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 open class MapLibreLocationEngine(
     context: Context,
-    private val looper: Looper
+    private val looper: Looper?
 ) : LocationEngine {
 
     /**
