@@ -25,7 +25,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -170,7 +170,7 @@ public class DynamicCameraTest extends BaseTest {
     List<Point> routePoints = generateRouteCoordinates(route);
     RouteInformation routeInformation = new RouteInformation(route, null, null);
 
-    List<Point> overviewPoints = toMapLibrePoints(cameraEngine.overview(routeInformation));
+    List<Point> overviewPoints = toJvmPoints(cameraEngine.overview(routeInformation));
 
     assertEquals(routePoints, overviewPoints);
   }
@@ -182,7 +182,7 @@ public class DynamicCameraTest extends BaseTest {
     List<Point> routePoints = buildRouteCoordinatesFrom(routeProgress);
     RouteInformation routeInformation = new RouteInformation(null, null, routeProgress);
 
-    List<Point> overviewPoints = toMapLibrePoints(cameraEngine.overview(routeInformation));
+    List<Point> overviewPoints = toJvmPoints(cameraEngine.overview(routeInformation));
 
     assertEquals(routePoints, overviewPoints);
   }
@@ -192,7 +192,7 @@ public class DynamicCameraTest extends BaseTest {
     DynamicCamera cameraEngine = buildDynamicCamera();
     RouteInformation routeInformation = new RouteInformation(null, null, null);
 
-    List<Point> overviewPoints = toMapLibrePoints(cameraEngine.overview(routeInformation));
+    List<Point> overviewPoints = toJvmPoints(cameraEngine.overview(routeInformation));
 
     assertTrue(overviewPoints.isEmpty());
   }

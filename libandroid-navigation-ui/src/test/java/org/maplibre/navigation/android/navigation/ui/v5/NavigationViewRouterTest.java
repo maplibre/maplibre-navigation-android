@@ -1,10 +1,8 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoint;
-import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
-import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoint;
-import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
+import static org.maplibre.geojson.common.CommonExtKt.toJvm;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -178,7 +176,7 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private Point findDestinationPoint(NavigationViewOptions options) {
-        List<Point> coordinates = toMapLibrePoints(options.directionsRoute().getRouteOptions().getCoordinates());
+        List<Point> coordinates = toJvmPoints(options.directionsRoute().getRouteOptions().getCoordinates());
         return coordinates.get(coordinates.size() - 1);
     }
 
@@ -197,13 +195,13 @@ public class NavigationViewRouterTest extends BaseTest {
     private RouteOptions buildRouteOptionsWithCoordinates(DirectionsResponse response) {
         List<Point> coordinates = new ArrayList<>();
         for (DirectionsWaypoint waypoint : response.getWaypoints()) {
-            coordinates.add(toMapLibrePoint(waypoint.getLocation()));
+            coordinates.add(toJvm(waypoint.getLocation()));
         }
         return new RouteOptions.Builder(
             Constants.BASE_API_URL,
             "user",
             "profile",
-            toPoints(coordinates),
+            toJvmPoints(coordinates),
             ACCESS_TOKEN,
             "uuid"
         )

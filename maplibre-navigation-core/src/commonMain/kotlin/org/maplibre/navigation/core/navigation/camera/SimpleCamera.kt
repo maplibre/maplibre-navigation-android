@@ -1,10 +1,10 @@
 package org.maplibre.navigation.core.navigation.camera
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 
 /**
@@ -92,8 +92,8 @@ open class SimpleCamera : Camera {
 
     private fun generateRouteCoordinates(route: DirectionsRoute?): List<Point> {
         return route?.let { rte ->
-            val lineString = LineString.fromPolyline(rte.geometry, Constants.PRECISION_6)
-            lineString.points
+            val lineString = LineString(rte.geometry, Constants.PRECISION_6)
+            lineString.coordinates
         } ?: emptyList()
     }
 

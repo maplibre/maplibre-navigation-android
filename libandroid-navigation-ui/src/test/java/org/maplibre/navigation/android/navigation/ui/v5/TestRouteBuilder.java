@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static com.google.common.base.Charsets.UTF_8;
 
-import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +46,7 @@ class TestRouteBuilder {
             Constants.BASE_API_URL,
             "user",
             "profile",
-            toPoints(coordinates),
+            toJvmPoints(coordinates),
             ACCESS_TOKEN,
             "uuid"
         )

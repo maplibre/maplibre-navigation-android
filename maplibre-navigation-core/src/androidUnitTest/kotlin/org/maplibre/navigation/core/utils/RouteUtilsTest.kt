@@ -2,7 +2,7 @@ package org.maplibre.navigation.core.utils
 
 import io.mockk.every
 import io.mockk.mockk
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.models.BannerInstructions

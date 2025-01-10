@@ -28,7 +28,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api project(":maplibre-navigation-geo")
+            api "maplibre-java:services-geojson:unspecified"
+            api "maplibre-java:services-turf:unspecified"
 
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines
@@ -43,7 +44,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation dependenciesList.mapLibre
+            implementation(dependenciesList.mapLibre)
 
             // Location by Play Services
             // Will only used, when added by the client app
@@ -93,6 +94,15 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
+    }
+}
+
+// Exclude old version of GeoJSON libs
+// At the moment a newer version that supports Kotlin Multiplatform is required to run navigation
+configurations {
+    configureEach {
+        exclude group: "org.maplibre.gl", module: "android-sdk-geojson"
+        exclude group: "org.maplibre.gl", module: "android-sdk-turf"
     }
 }
 

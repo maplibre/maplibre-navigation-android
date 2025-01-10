@@ -5,7 +5,7 @@ ext {
             targetSdkVersion : 34,
             compileSdkVersion: 34,
             buildToolsVersion: '34.0.0',
-            kotlinVersion    : '2.0.0'
+            kotlinVersion    : '2.1.0'
     ]
 
     version = [
@@ -62,7 +62,6 @@ ext {
     dependenciesList = [
             // maplibre
             mapLibre                : "org.maplibre.gl:android-sdk:${version.mapLibreVersion}",
-            mapLibreTurf            : "org.maplibre.gl:android-sdk-turf:${version.mapLibreTurf}",
             mapLibreAnnotations     : "org.maplibre.gl:android-plugin-annotation-v9:${version.mapLibreAnnotations}",
 
             // Mapbox (requests)
@@ -85,7 +84,6 @@ ext {
             androidxRecyclerView    : "androidx.recyclerview:recyclerview:${version.recyclerViewVersion}",
             androidxCardView        : "androidx.cardview:cardview:${version.cardViewVersion}",
             androidxConstraintLayout: "androidx.constraintlayout:constraintlayout:${version.constraintLayoutVersion}",
-            kotlinstdlib            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${androidVersions.kotlinVersion}",
             supportAnnotation       : "androidx.annotation:annotation:${version.annotation}",
 
             // architecture
@@ -134,5 +132,6 @@ ext {
             dependencyUpdates   : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
             kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
             kotlinxSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
+            kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}"
     ]
 }

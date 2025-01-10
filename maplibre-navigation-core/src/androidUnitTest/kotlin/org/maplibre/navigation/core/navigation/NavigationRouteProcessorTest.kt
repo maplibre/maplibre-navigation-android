@@ -1,7 +1,7 @@
 package org.maplibre.navigation.core.navigation
 
 import io.mockk.mockk
-import org.maplibre.navigation.geo.util.PolylineUtils
+import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.utils.Constants

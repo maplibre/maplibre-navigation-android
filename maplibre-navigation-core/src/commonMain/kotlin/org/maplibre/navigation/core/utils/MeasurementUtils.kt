@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.LegStep
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
-import org.maplibre.navigation.geo.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfUnit
 import kotlin.jvm.JvmStatic
 
 object MeasurementUtils {
@@ -28,35 +28,36 @@ object MeasurementUtils {
         }
 
         // Get the lineString from the step geometry.
-        val lineString = LineString.fromPolyline(step.geometry, Constants.PRECISION_6)
+        val lineString = LineString(step.geometry, Constants.PRECISION_6)
 
         // Make sure that the step coordinates isn't less than size 2. If the points equal each other,
         // the distance is obviously zero, so return 0 to avoid executing additional unnecessary code.
-        if (lineString.points.isEmpty() || usersRawLocation == lineString.points
+        if (lineString.coordinates.isEmpty() || usersRawLocation == lineString.coordinates
                 .first()
         ) {
             return 0.0
         }
 
-        if (lineString.points.size == 1) {
+        if (lineString.coordinates.size == 1) {
             return TurfMeasurement.distance(
                 usersRawLocation,
-                lineString.points.first(),
-                TurfConstants.UNIT_METERS
+                lineString.coordinates.first(),
+                TurfUnit.METERS
             )
         }
 
-        val snappedPoint = TurfMisc.nearestPointOnLine(usersRawLocation, lineString.points)
+        val snappedPointFeature = TurfMisc.nearestPointOnLine(usersRawLocation, lineString.coordinates)
+        val snappedPoint = snappedPointFeature.geometry as Point
         if (snappedPoint.latitude.isInfinite() || snappedPoint.longitude.isInfinite()) {
             return TurfMeasurement.distance(
                 usersRawLocation,
-                lineString.points.first(),
-                TurfConstants.UNIT_METERS
+                lineString.coordinates.first(),
+                TurfUnit.METERS
             )
         }
 
         val distance =
-            TurfMeasurement.distance(usersRawLocation, snappedPoint, TurfConstants.UNIT_METERS)
+            TurfMeasurement.distance(usersRawLocation, snappedPoint, TurfUnit.METERS)
         return if (!distance.isNaN()) distance else 0.0
     }
 }

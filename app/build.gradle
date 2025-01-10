@@ -61,9 +61,14 @@ android {
 }
 
 dependencies {
-    implementation project(':maplibre-navigation-core')
     implementation project(':libandroid-navigation-ui')
-    implementation dependenciesList.mapLibre
+
+    implementation(dependenciesList.mapLibre) {
+        // Exclude old version of GeoJSON libs
+        // At the moment a newer version that supports Kotlin Multiplatform is required to run navigation
+        exclude group: "org.maplibre.gl", module: "android-sdk-geojson"
+        exclude group: "org.maplibre.gl", module: "android-sdk-turf"
+    }
 
     // Support libraries
     implementation dependenciesList.androidxAppcompat
@@ -92,7 +97,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation dependenciesList.androidxCore
-    implementation dependenciesList.kotlinstdlib
 
     // Separate dependencies of the app that don't need to be in the public dependencies API
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1"

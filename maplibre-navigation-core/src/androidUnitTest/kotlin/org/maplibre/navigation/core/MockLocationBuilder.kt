@@ -1,12 +1,12 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfUnit
 
 internal class MockLocationBuilder {
     fun buildDefaultMockLocationUpdate(lng: Double, lat: Double): Location {
@@ -21,18 +21,18 @@ internal class MockLocationBuilder {
             fromLocation,
             distanceAway,
             90.0,
-            TurfConstants.UNIT_METERS
+            TurfUnit.METERS
         )
     }
 
     fun buildPointAwayFromPoint(point: Point, distanceAway: Double, bearing: Double): Point {
-        return TurfMeasurement.destination(point, distanceAway, bearing, TurfConstants.UNIT_METERS)
+        return TurfMeasurement.destination(point, distanceAway, bearing, TurfUnit.METERS)
     }
 
     fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
         val currentStep = progress.currentLegProgress.currentStep
-        val lineString = LineString.fromPolyline(currentStep.geometry, Constants.PRECISION_6)
-        return lineString.points
+        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
+        return lineString.coordinates
     }
 
     private fun buildMockLocationUpdate(

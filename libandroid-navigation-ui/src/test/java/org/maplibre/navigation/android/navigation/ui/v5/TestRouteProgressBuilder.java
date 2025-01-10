@@ -1,11 +1,9 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createDistancesToIntersections;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createIntersectionsList;
 import static org.maplibre.navigation.core.utils.Constants.PRECISION_6;
-import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
-
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -46,19 +44,19 @@ class TestRouteProgressBuilder {
 
         List<StepIntersection> intersections = createIntersectionsList(currentStep, upcomingStep);
         Map<StepIntersection, Double> intersectionDistances = createDistancesToIntersections(
-            toPoints(currentStepPoints), intersections
+            toJvmPoints(currentStepPoints), intersections
         );
 
         return new RouteProgress.Builder(
             route,
             legIndex,
             distanceRemaining,
-            toPoints(currentStepPoints),
+            toJvmPoints(currentStepPoints),
             stepIndex,
             legDistanceRemaining,
             stepDistanceRemaining
         )
-            .withUpcomingStepPoints(toPoints(upcomingStepPoints))
+            .withUpcomingStepPoints(upcomingStepPoints)
             .withIntersections(intersections)
             .withCurrentIntersection(intersections.get(0))
             .withIntersectionDistancesAlongStep(intersectionDistances)
@@ -72,6 +70,6 @@ class TestRouteProgressBuilder {
     }
 
     private List<Point> buildStepPointsFromGeometry(String stepGeometry) {
-        return PolylineUtils.decode(stepGeometry, PRECISION_6);
+        return toJvmPoints(PolylineUtils.decode(stepGeometry, PRECISION_6));
     }
 }

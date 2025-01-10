@@ -42,10 +42,8 @@ import org.maplibre.navigation.core.milestone.TriggerProperty
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
-import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationEventListener
-import org.maplibre.navigation.geo.Point
-import org.maplibre.navigation.geo.toMapLibrePoint
+import org.maplibre.geojson.Point
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -191,8 +189,8 @@ class MockNavigationActivity :
     override fun onMapClick(point: LatLng): Boolean {
         var addMarker = true
         when {
-            destination == null -> destination = Point(point.longitude, point.latitude, point.altitude)
-            waypoint == null -> waypoint = Point(point.longitude, point.latitude, point.altitude)
+            destination == null -> destination = Point.fromLngLat(point.longitude, point.latitude, point.altitude)
+            waypoint == null -> waypoint = Point.fromLngLat(point.longitude, point.latitude, point.altitude)
             else -> {
                 Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
                 addMarker = false
@@ -221,16 +219,16 @@ class MockNavigationActivity :
             return
         }
 
-        val origin = Point(userLocation.longitude, userLocation.latitude, userLocation.altitude)
-        if (TurfMeasurement.distance(origin.toMapLibrePoint(), destination.toMapLibrePoint(), TurfConstants.UNIT_METERS) < 50) {
+        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude, userLocation.altitude ?: 0.0)
+        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
             binding.startRouteButton.visibility = View.GONE
             return
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
-            this.origin(origin.toMapLibrePoint())
-            this.destination(destination.toMapLibrePoint())
+            this.origin(origin)
+            this.destination(destination)
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
@@ -333,7 +331,7 @@ class MockNavigationActivity :
         mapLibreMap.let {
             val latLng = LatLng(52.039176, 5.550339)
             locationEngine.assignLastLocation(
-                Point(latLng.longitude, latLng.latitude),
+                Point.fromLngLat(latLng.longitude, latLng.latitude),
             )
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0))
         }

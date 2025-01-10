@@ -1,20 +1,19 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.util.PolylineUtils
-import org.maplibre.navigation.core.json
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
+import org.maplibre.navigation.core.json
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
-import org.maplibre.navigation.geo.turf.TurfMisc
 import java.io.IOException
 import kotlin.test.Test
-import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class RouteStepProgressTest : BaseTest() {
     @Test
@@ -43,7 +42,7 @@ class RouteStepProgressTest : BaseTest() {
 
         assertNotNull(routeStepProgress)
         assertEquals(1.0, routeStepProgress.fractionTraveled.toDouble(), DELTA)
-        assertEquals(0.0, routeStepProgress.distanceRemaining,DELTA)
+        assertEquals(0.0, routeStepProgress.distanceRemaining, DELTA)
         assertEquals(0.0, routeStepProgress.distanceTraveled, DELTA)
         assertEquals(0.0, routeStepProgress.durationRemaining, DELTA)
     }
@@ -53,10 +52,10 @@ class RouteStepProgressTest : BaseTest() {
     fun distanceRemaining_equalsStepDistanceAtBeginning() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
-        val lineString = LineString.fromPolyline(
+        val lineString = LineString(
             firstLeg.steps[5].geometry, Constants.PRECISION_6
         )
-        val stepDistance = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS)
+        val stepDistance = TurfMeasurement.length(lineString, TurfUnit.METERS)
 
         val stepDistanceRemaining = firstLeg.steps[5].distance
         val legDistanceRemaining = firstLeg.distance
@@ -82,15 +81,15 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString.fromPolyline(
+        val lineString = LineString(
             firstStep.geometry, Constants.PRECISION_6
         )
-        val stepDistance = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS)
+        val stepDistance = TurfMeasurement.length(lineString, TurfUnit.METERS)
         val stepSegments = 5.0
 
         var i = 0.0
         while (i < stepDistance) {
-            val point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
 
             if (point == route.legs[0].steps[1].maneuver.location) {
                 return
@@ -102,7 +101,7 @@ class RouteStepProgressTest : BaseTest() {
             )
 
             val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
+                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
             val legDistanceRemaining = firstLeg.distance
             val distanceRemaining = route.distance
             val routeProgress = buildTestRouteProgress(
@@ -158,21 +157,19 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString.fromPolyline(
-            firstStep.geometry, Constants.PRECISION_6
-        )
+        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
         val stepSegments = 5.0
         val distances: MutableList<Double> = ArrayList()
         val routeProgressDistancesTraveled: MutableList<Double> = ArrayList()
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
             val slicedLine = TurfMisc.lineSlice(
                 point,
                 route.legs[0].steps[1].maneuver.location, lineString
             )
-            var distance = TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
+            var distance = TurfMeasurement.length(slicedLine, TurfUnit.METERS)
             distance = firstStep.distance - distance
             if (distance < 0) {
                 distance = 0.0
@@ -194,7 +191,7 @@ class RouteStepProgressTest : BaseTest() {
             i += stepSegments
         }
 
-        assertTrue(distances == routeProgressDistancesTraveled)
+        assertEquals(distances, routeProgressDistancesTraveled)
     }
 
     @Test
@@ -247,22 +244,20 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString.fromPolyline(
-            firstStep.geometry, Constants.PRECISION_6
-        )
+        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
         val fractionsRemaining: MutableList<Float> = ArrayList()
         val routeProgressFractionsTraveled: MutableList<Float> = ArrayList()
         val stepSegments = 5.0
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
             val slicedLine = TurfMisc.lineSlice(
                 point,
                 route.legs[0].steps[1].maneuver.location, lineString
             )
             val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
+                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
             val stepIndex = 0
             val legIndex = 0
             val legDistanceRemaining = firstLeg.distance
@@ -283,7 +278,7 @@ class RouteStepProgressTest : BaseTest() {
             i += stepSegments
         }
 
-        assertTrue(fractionsRemaining == routeProgressFractionsTraveled)
+        assertEquals(fractionsRemaining, routeProgressFractionsTraveled)
     }
 
     @Test
@@ -308,33 +303,33 @@ class RouteStepProgressTest : BaseTest() {
 
     @Test
     fun durationRemaining_equalsStepDurationAtBeginning() {
-            val route =
-                buildTestDirectionsRoute()
-            val firstLeg =
-                route.legs[0]
-            val fourthStep =
-                firstLeg.steps[5]
-            val stepDuration = fourthStep.duration
-            val stepIndex = 5
-            val legIndex = 0
-            val stepDistanceRemaining = firstLeg.steps[stepIndex].distance
-            val legDistanceRemaining = firstLeg.distance
-            val distanceRemaining = route.distance
-            val routeProgress = buildTestRouteProgress(
-                route, stepDistanceRemaining,
-                legDistanceRemaining, distanceRemaining, stepIndex, legIndex
-            )
+        val route =
+            buildTestDirectionsRoute()
+        val firstLeg =
+            route.legs[0]
+        val fourthStep =
+            firstLeg.steps[5]
+        val stepDuration = fourthStep.duration
+        val stepIndex = 5
+        val legIndex = 0
+        val stepDistanceRemaining = firstLeg.steps[stepIndex].distance
+        val legDistanceRemaining = firstLeg.distance
+        val distanceRemaining = route.distance
+        val routeProgress = buildTestRouteProgress(
+            route, stepDistanceRemaining,
+            legDistanceRemaining, distanceRemaining, stepIndex, legIndex
+        )
 
-            val routeStepProgress: RouteStepProgress =
-                routeProgress.currentLegProgress.currentStepProgress
-            val durationRemaining: Double = routeStepProgress.durationRemaining
+        val routeStepProgress: RouteStepProgress =
+            routeProgress.currentLegProgress.currentStepProgress
+        val durationRemaining: Double = routeStepProgress.durationRemaining
 
-            assertEquals(
-                stepDuration,
-                durationRemaining,
-                DELTA
-            )
-        }
+        assertEquals(
+            stepDuration,
+            durationRemaining,
+            DELTA
+        )
+    }
 
     @Test
     @Throws(Exception::class)
@@ -342,16 +337,14 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString.fromPolyline(
-            firstStep.geometry, Constants.PRECISION_6
-        )
+        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
         val stepSegments = 5.0
         val fractionsRemaining: MutableList<Double> = ArrayList()
         val routeProgressDurationsTraveled: MutableList<Double> = ArrayList()
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
             val slicedLine = TurfMisc.lineSlice(
                 point,
                 route.legs[0].steps[1].maneuver.location, lineString
@@ -359,7 +352,7 @@ class RouteStepProgressTest : BaseTest() {
             val stepIndex = 0
             val legIndex = 0
             val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
+                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
             val legDistanceRemaining = firstLeg.distance
             val distanceRemaining = route.distance
             val routeProgress = buildTestRouteProgress(
@@ -368,7 +361,8 @@ class RouteStepProgressTest : BaseTest() {
             )
             val routeStepProgress: RouteStepProgress =
                 routeProgress.currentLegProgress.currentStepProgress
-            val fractionRemaining = (firstStep.distance - stepDistanceRemaining) / firstStep.distance
+            val fractionRemaining =
+                (firstStep.distance - stepDistanceRemaining) / firstStep.distance
 
             val expectedFractionRemaining = (1.0 - fractionRemaining) * firstStep.duration
             fractionsRemaining.add(Math.round(expectedFractionRemaining * 100.0) / 100.0)

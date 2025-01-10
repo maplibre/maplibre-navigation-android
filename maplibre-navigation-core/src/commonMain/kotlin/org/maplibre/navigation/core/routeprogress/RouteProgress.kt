@@ -1,6 +1,6 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection

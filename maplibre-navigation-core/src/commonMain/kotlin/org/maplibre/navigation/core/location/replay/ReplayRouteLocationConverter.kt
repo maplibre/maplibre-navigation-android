@@ -1,12 +1,12 @@
 package org.maplibre.navigation.core.location.replay
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfUnit
 
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
@@ -48,11 +48,11 @@ open class ReplayRouteLocationConverter(
      * @return list of sliced [Point]s.
      */
     fun sliceRoute(lineString: LineString): List<Point> {
-        if (lineString.points.isEmpty()) {
+        if (lineString.coordinates.isEmpty()) {
             return emptyList()
         }
 
-        val distanceMeters = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS)
+        val distanceMeters = TurfMeasurement.length(lineString, TurfUnit.METERS)
         if (distanceMeters <= 0) {
             return emptyList()
         }
@@ -60,7 +60,7 @@ open class ReplayRouteLocationConverter(
         val points: MutableList<Point> = ArrayList()
         var i = 0.0
         while (i < distanceMeters) {
-            val point = TurfMeasurement.along(lineString.points, i, TurfConstants.UNIT_METERS)
+            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
             points.add(point)
             i += distance
         }
@@ -98,7 +98,7 @@ open class ReplayRouteLocationConverter(
     }
 
     private fun calculateStepPoints(): List<Point> {
-        val line = LineString.fromPolyline(
+        val line = LineString(
             route.legs[currentLeg].steps[currentStep].geometry,
             Constants.PRECISION_6
         )

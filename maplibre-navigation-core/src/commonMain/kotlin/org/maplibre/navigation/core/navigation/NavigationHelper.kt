@@ -1,8 +1,8 @@
 package org.maplibre.navigation.core.navigation
 
 import co.touchlab.kermit.Logger
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
@@ -16,10 +16,10 @@ import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
-import org.maplibre.navigation.geo.turf.TurfMisc
-import org.maplibre.navigation.geo.util.PolylineUtils
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.geojson.utils.PolylineUtils
 import kotlin.jvm.JvmStatic
 
 /**
@@ -68,13 +68,14 @@ object NavigationHelper {
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        val snappedPosition = TurfMisc.nearestPointOnLine(location.point, stepPoints, TurfConstants.UNIT_KILOMETERS)
+        val snappedPositionFeature = TurfMisc.nearestPointOnLine(location.point, stepPoints, TurfUnit.KILOMETERS)
+        val snappedPosition = snappedPositionFeature.geometry as Point
 
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
-        val distance = TurfMeasurement.distance(location.point, snappedPosition, "kilometers")
+        val distance = TurfMeasurement.distance(location.point, snappedPosition, TurfUnit.KILOMETERS)
         if (distance > 1) {
             Logger.i { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
-            return TurfMeasurement.length(stepPoints, TurfConstants.UNIT_METERS)
+            return TurfMeasurement.length(stepPoints, TurfUnit.METERS)
         }
 
         val steps = directionsRoute.legs[legIndex].steps
@@ -99,7 +100,7 @@ object NavigationHelper {
             nextManeuverPosition,
             LineString(stepPoints)
         )
-        return TurfMeasurement.length(slicedLine, TurfConstants.UNIT_METERS)
+        return TurfMeasurement.length(slicedLine, TurfUnit.METERS)
     }
 
     /**
@@ -314,7 +315,7 @@ object NavigationHelper {
                 val beginningLineString =
                     TurfMisc.lineSlice(stepPoints.first(), intersectionPoint, stepLineString)
                 val distanceToIntersectionInMeters =
-                    TurfMeasurement.length(beginningLineString, TurfConstants.UNIT_METERS)
+                    TurfMeasurement.length(beginningLineString, TurfUnit.METERS)
                 distancesToIntersections[intersection] = distanceToIntersectionInMeters
             }
         }

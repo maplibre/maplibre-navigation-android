@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.navigation.geo.Point
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
-import org.maplibre.navigation.geo.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMisc
+import org.maplibre.geojson.turf.TurfUnit
 import kotlin.jvm.JvmStatic
 
 object ToleranceUtils {
@@ -27,7 +27,8 @@ object ToleranceUtils {
                 intersectionsPoints.add(intersection.location)
             }
 
-            val closestIntersection = TurfMisc.nearestPoint(snappedPoint, intersectionsPoints)
+            val closestIntersectionFeature = TurfMisc.nearestPointOnLine(snappedPoint, intersectionsPoints)
+            val closestIntersection = closestIntersectionFeature.geometry as Point
             if (closestIntersection == snappedPoint) {
                 return navigationOptions.offRouteThresholdRadiusMeters
             }
@@ -35,7 +36,7 @@ object ToleranceUtils {
             val distanceToNextIntersection = TurfMeasurement.distance(
                 snappedPoint,
                 closestIntersection,
-                TurfConstants.UNIT_METERS
+                TurfUnit.METERS
             )
 
             if (distanceToNextIntersection <= navigationOptions.maneuverZoneRadius) {

@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.navigation.geo.LineString
-import org.maplibre.navigation.geo.util.PolylineUtils
+import org.maplibre.geojson.model.LineString
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
-import org.maplibre.navigation.geo.turf.TurfConstants
-import org.maplibre.navigation.geo.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfMeasurement
+import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.geojson.utils.PolylineUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -37,11 +37,9 @@ class ToleranceUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
         val distanceToIntersection = route.distance - 39
-        val lineString = LineString.fromPolyline(
-            route.geometry, Constants.PRECISION_6
-        )
+        val lineString = LineString(route.geometry, Constants.PRECISION_6)
         val closePoint =
-            TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS)
+            TurfMeasurement.along(lineString, distanceToIntersection, TurfUnit.METERS)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,
@@ -58,11 +56,9 @@ class ToleranceUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
         val distanceToIntersection = route.distance
-        val lineString = LineString.fromPolyline(
-            route.geometry, Constants.PRECISION_6
-        )
+        val lineString = LineString(route.geometry, Constants.PRECISION_6)
         val closePoint =
-            TurfMeasurement.along(lineString, distanceToIntersection, TurfConstants.UNIT_METERS)
+            TurfMeasurement.along(lineString, distanceToIntersection, TurfUnit.METERS)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,

@@ -68,12 +68,10 @@ android {
 
 dependencies {
   // Navigation SDK
-  api project(':maplibre-navigation-core')
+  api(project(':maplibre-navigation-core'))
 
-  // Maplibre Maps SDK
-  api dependenciesList.mapLibreTurf
   api dependenciesList.mapLibreAnnotations
-  implementation dependenciesList.mapLibre
+  implementation(dependenciesList.mapLibre)
 
   // Mapbox SDKs (needed for requests)
   api dependenciesList.mapboxGeoJson
@@ -105,6 +103,16 @@ dependencies {
   testImplementation dependenciesList.json
   testImplementation dependenciesList.mockk
 }
+
+// Exclude old version of GeoJSON libs
+// At the moment a newer version that supports Kotlin Multiplatform is required to run navigation
+configurations {
+  configureEach {
+    exclude group: "org.maplibre.gl", module: "android-sdk-geojson"
+    exclude group: "org.maplibre.gl", module: "android-sdk-turf"
+  }
+}
+
 
 apply from: 'javadoc.gradle'
 apply from: "${rootDir}/gradle/mvn-push-android.gradle"

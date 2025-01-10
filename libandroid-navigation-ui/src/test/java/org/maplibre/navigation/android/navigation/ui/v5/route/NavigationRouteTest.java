@@ -23,8 +23,7 @@ import java.util.Locale;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
-import static org.maplibre.navigation.geo.MapLibrePointExtKt.toPoints;
-import static org.maplibre.navigation.geo.PointExtKt.toMapLibrePoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 import static org.mockito.Mockito.when;
 
 public class NavigationRouteTest extends BaseTest {
@@ -128,7 +127,7 @@ public class NavigationRouteTest extends BaseTest {
             "https://api-directions-traf.com",
             "example_user",
             NavigationRoute.PROFILE_WALKING,
-            toPoints(coordinates),
+            toJvmPoints(coordinates),
             BaseTest.ACCESS_TOKEN,
             "XYZ_UUID"
         )
