@@ -24,4 +24,19 @@
     <!-- Test app dialog text cancel navigation -->
     <string name="dropoff_dialog_negative_text">Abbrechen</string>
 
-    </resources>
+    <string name="kilometers">km</string>
+    <string name="meters">m</string>
+    <string name="miles">mile</string>
+    <string name="feet">Fuß</string>
+    <string name="eta_format">%s ETA</string>
+
+    <!-- Time formatting -->
+    <plurals name="numberOfDays">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
+    </plurals>
+    <!-- Hour -->
+    <string name="hr">Std.</string>
+    <!-- Minute -->
+    <string name="min">Min.</string>
+</resources>

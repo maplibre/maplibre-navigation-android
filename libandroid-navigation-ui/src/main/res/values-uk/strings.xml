@@ -24,4 +24,8 @@
     <!-- Test app dialog text cancel navigation -->
     <string name="dropoff_dialog_negative_text">Скасувати</string>
 
-    </resources>
+    <string name="kilometers">км</string>
+    <string name="meters">м</string>
+    <string name="miles">mi</string>
+    <string name="feet">фт</string>
+</resources>
