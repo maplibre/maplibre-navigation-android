@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <FrameLayout
+        android:id="@+id/flOverlayContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/tvManuever"
         android:layout_width="match_parent"
@@ -18,5 +23,7 @@
         android:layout_margin="16dp"
         android:background="#FFFFFF"
         android:padding="16dp" />
+
+    </FrameLayout>
 
 </FrameLayout>
