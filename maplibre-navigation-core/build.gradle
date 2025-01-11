@@ -4,6 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'org.jetbrains.kotlin.native.cocoapods'
 
 apply from: file("${rootDir}/gradle/artifact-settings.gradle")
 
@@ -52,6 +53,37 @@ kotlin {
             // Will only used, when added by the client app
             compileOnly dependenciesList.gmsLocation
         }
+    }
+
+    cocoapods {
+        // Required properties
+        // Specify the required Pod version here
+        // Otherwise, the Gradle project version is used
+        version = "0.1.0"
+        summary = "MapLibre navigation core library"
+        homepage = "https://github.com/maplibre/maplibre-navigation-android/"
+
+        // Optional properties
+        // Configure the Pod name here instead of changing the Gradle project name
+        name = "MapLibreNavigationCore"
+
+        framework {
+            // Required properties
+            // Framework name configuration. Use this property instead of deprecated 'frameworkName'
+            baseName = "MapLibreNavigationCore"
+
+            // Optional properties
+            // Specify the framework linking type. It's dynamic by default.
+            isStatic = false
+            // Dependency export
+            // Uncomment and specify another project module if you have one:
+            // export(project(":<your other KMP module>"))
+            transitiveExport = false // This is default.
+        }
+
+        // Maps custom Xcode configuration to NativeBuildType
+//        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
+//        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
     }
 }
 

@@ -133,6 +133,8 @@ ext {
             dependencyUpdates   : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
             kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
             kotlinxSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
-            kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}"
+            kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}",
+            kotlinCocoapods     : "org.jetbrains.kotlin.native.cocoapods:org.jetbrains.kotlin.native.cocoapods.gradle.plugin:${androidVersions.kotlinVersion}"
+
     ]
 }
