@@ -60,9 +60,9 @@ object TriggerProperty {
 
     const val LAST_LEG: Int = 0x000000010
 
-    const val TRUE: Int = 0x00000124
+    const val TRUE_VALUE: Int = 0x00000124
 
-    const val FALSE: Int = 0x00000100
+    const val FALSE_VALUE: Int = 0x00000100
 
     fun getSparseArray(
         previousRouteProgress: RouteProgress?,

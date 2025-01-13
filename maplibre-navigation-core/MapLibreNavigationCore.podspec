@@ -6,15 +6,15 @@ Pod::Spec.new do |spec|
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'MapLibre navigation core library'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/maplibre_navigation_core.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/MapLibreNavigationCore.framework'
     spec.libraries                = 'c++'
                 
                 
                 
-    if !Dir.exist?('build/cocoapods/framework/maplibre_navigation_core.framework') || Dir.empty?('build/cocoapods/framework/maplibre_navigation_core.framework')
+    if !Dir.exist?('build/cocoapods/framework/MapLibreNavigationCore.framework') || Dir.empty?('build/cocoapods/framework/MapLibreNavigationCore.framework')
         raise "
 
-        Kotlin framework 'maplibre_navigation_core' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'MapLibreNavigationCore' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
             ./gradlew :maplibre-navigation-core:generateDummyFramework
@@ -28,7 +28,7 @@ Pod::Spec.new do |spec|
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':maplibre-navigation-core',
-        'PRODUCT_MODULE_NAME' => 'maplibre_navigation_core',
+        'PRODUCT_MODULE_NAME' => 'MapLibreNavigationCore',
     }
                 
     spec.script_phases = [

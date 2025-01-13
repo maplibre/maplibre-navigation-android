@@ -49,7 +49,7 @@ class TriggerTest : BaseTest() {
         val routeProgress = buildTriggerRouteProgress()
         val milestone = StepMilestone(identifier = 42, trigger = all(
             gt(TriggerProperty.STEP_DISTANCE_TOTAL_METERS, 100.0),
-            eq(TriggerProperty.NEW_STEP, TriggerProperty.FALSE)
+            eq(TriggerProperty.NEW_STEP, TriggerProperty.FALSE_VALUE)
         ))
 
         val result = milestone.isOccurring(routeProgress, routeProgress)
