@@ -11,21 +11,48 @@ fun Location.toAndroidLocation() = AndroidLocation(provider)
         androidLoc.provider = provider
         androidLoc.latitude = latitude
         androidLoc.longitude = longitude
-        androidLoc.bearing = bearing ?: 0f
-        androidLoc.speed = speedMetersPerSeconds ?: 0f
-        androidLoc.accuracy = accuracyMeters ?: 0.0f
-        androidLoc.altitude = altitude ?: Double.NaN
-        androidLoc.bearing = bearing ?: Float.NaN
-        androidLoc.speed = speedMetersPerSeconds ?: Float.NaN
-        androidLoc.accuracy = accuracyMeters ?: Float.NaN
-        androidLoc.time = time ?: 0L
+
+        bearing?.let { bearing ->
+            androidLoc.bearing = bearing
+        }
+
+        speedMetersPerSeconds?.let { speed ->
+            androidLoc.speed = speed
+        }
+
+        accuracyMeters?.let { accuracy ->
+            androidLoc.accuracy = accuracy
+        }
+
+        altitude?.let { altitude ->
+            androidLoc.altitude = altitude
+        }
+
+        bearing?.let { bearing ->
+            androidLoc.bearing = bearing
+        }
+
+        speedMetersPerSeconds?.let { speed ->
+            androidLoc.speed = speed
+        }
+
+        time?.let { time ->
+            androidLoc.time = time
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            androidLoc.verticalAccuracyMeters = altitudeAccuracyMeters ?: Float.NaN
+            altitudeAccuracyMeters?.let { altitudeAccuracyMeters ->
+                androidLoc.verticalAccuracyMeters = altitudeAccuracyMeters
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            androidLoc.mslAltitudeMeters = mslAltitude ?: Double.NaN
-            androidLoc.mslAltitudeAccuracyMeters = mslAltitudeAccuracyMeters ?: Float.NaN
+            mslAltitude?.let { mslAltitude ->
+                androidLoc.mslAltitudeMeters = mslAltitude
+            }
+            
+            mslAltitudeAccuracyMeters?.let { mslAltitudeAccuracyMeters ->
+                androidLoc.mslAltitudeAccuracyMeters = mslAltitudeAccuracyMeters
+            }
         }
     }
