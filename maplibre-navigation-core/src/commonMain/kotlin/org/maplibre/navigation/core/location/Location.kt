@@ -17,15 +17,32 @@ data class Location(
     val longitude: Double,
 
     /**
-     * Altitude, in degrees.
-     */
-    val altitude: Double? = null,
-
-    /**
      * Horizontal accuracy of the latitude and longitude, in meters.
      * If not available, it will be `null`.
      */
     val accuracyMeters: Float? = null,
+
+    /**
+     * Altitude of this location, in meters above the WGS84 reference ellipsoid.
+     */
+    val altitude: Double? = null,
+
+    /**
+     * Vertical accuracy of the [altitude], in meters.
+     * If not available, it will be `null`.
+     */
+    val altitudeAccuracyMeters: Float? = null,
+
+    /**
+     * Altitude of this location, in meters above the Mean Sea Level
+     */
+    val mslAltitude: Double? = null,
+
+    /**
+     * Vertical accuracy of the [mslAltitude], in meters.
+     * If not available, it will be `null`.
+     */
+    val mslAltitudeAccuracyMeters: Float? = null,
 
     /**
      * Speed of user in meters per second.

@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.location
 
+import android.os.Build
 import android.location.Location as AndroidLocation
 
 /**
@@ -9,9 +10,21 @@ fun AndroidLocation.toLocation() = Location(
     provider = provider,
     latitude = latitude,
     longitude = longitude,
+    accuracyMeters = accuracy.takeIf { hasAccuracy() },
     altitude = altitude,
     bearing = bearing.takeIf { hasBearing() },
     speedMetersPerSeconds = speed.takeIf { hasSpeed() },
-    accuracyMeters = accuracy.takeIf { hasAccuracy() },
-    time = time
+    time = time,
+    altitudeAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        verticalAccuracyMeters.takeIf { hasVerticalAccuracy() }
+    else
+        null,
+    mslAltitude = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        mslAltitudeMeters.takeIf { hasMslAltitude() }
+    else
+        null,
+    mslAltitudeAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        mslAltitudeAccuracyMeters.takeIf { hasMslAltitudeAccuracy() }
+    else
+        null,
 )
