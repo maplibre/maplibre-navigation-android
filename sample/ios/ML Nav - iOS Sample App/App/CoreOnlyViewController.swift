@@ -127,8 +127,8 @@ class CoreOnlyViewController: UIViewController, MLNMapViewDelegate, ProgressChan
             user: "valhalla",
             profile: "valhalla",
             coordinates: [
-                Services_geojsonPoint(longitude: 9.6935451, latitude: 52.3758408, altitude: nil, bbox: nil),
-                Services_geojsonPoint(longitude: 9.9769191, latitude: 53.5426183, altitude: nil, bbox: nil)
+                Point(longitude: 9.6935451, latitude: 52.3758408, altitude: nil, bbox: nil),
+                Point(longitude: 9.9769191, latitude: 53.5426183, altitude: nil, bbox: nil)
             ],
             alternatives: nil,
             language: "en-US",
@@ -160,8 +160,7 @@ class CoreOnlyViewController: UIViewController, MLNMapViewDelegate, ProgressChan
     }
     
     private func drawRoute(style: MLNStyle, route: DirectionsRoute) {
-        // TODO (fabi755): fix naming prefix of KMP GeoJSON
-        let routeLine = Services_geojsonLineString(polyline: route.geometry, precision: Int32(6.0), bbox: nil)
+        let routeLine = LineString(polyline: route.geometry, precision: Int32(6.0), bbox: nil)
         
         // TODO (fabi755): should be done by MapLibre GeoJSON library
         // But before this is possible, we need to update the MapLibre native iOS one to the new KMP library

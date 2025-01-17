@@ -40,7 +40,6 @@ import org.maplibre.navigation.core.models.RouteOptions
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.sample.android.R
 import org.maplibre.navigation.sample.android.databinding.FragmentCoreOnlyBinding
 import java.io.IOException
 import kotlin.coroutines.resume
