@@ -51,6 +51,23 @@ kotlin {
             compileOnly dependenciesList.gmsLocation
         }
     }
+
+    cocoapods {
+        version = "0.1.0"
+        summary = "MapLibre navigation core library"
+        homepage = "https://github.com/maplibre/maplibre-navigation-android/"
+
+        name = "MapLibreNavigationCore"
+
+        framework {
+            baseName = "MapLibreNavigationCore"
+            isStatic = false
+
+            transitiveExport = false
+            export("maplibre-java:services-geojson:unspecified")
+            export("maplibre-java:services-turf:unspecified")
+        }
+    }
 }
 
 android {
