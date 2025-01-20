@@ -108,7 +108,7 @@ To run the [sample code](#sample-code) on a device or emulator, include your [Ma
 
 ### <a name="sample-code">Sample code
 
-We've added one [navigation example](https://github.com/maplibre/maplibre-navigation-android/tree/main/app/src/main/java/com/mapbox/services/android/navigation/testapp/) to this repo's test app. We are planning to add more to help you get started with the SDK and to inspire you.
+We've added some [examples](https://github.com/maplibre/maplibre-navigation-android/tree/main/app/src/main/java/org/maplibre/navigation/android/example) to this repo's test app. We are planning to add more to help you get started with the SDK and to inspire you.
 
 In order to see the map or calculate a route you need your own Maptile and Direction services.
 
