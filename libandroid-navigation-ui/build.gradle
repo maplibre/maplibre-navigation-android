@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+
 java {
   toolchain {
     languageVersion.set(JavaLanguageVersion.of(17))
@@ -28,7 +30,7 @@ android {
     )
     buildConfigField 'String',
         "MAPLIBRE_NAVIGATION_EVENTS_USER_AGENT", String.format("\"maplibre-navigation-ui-android/%s\"",
-        project.VERSION_NAME
+        project.ext.versionName
     )
     consumerProguardFiles 'proguard-consumer.pro'
   }

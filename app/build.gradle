@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
@@ -27,7 +29,7 @@ android {
         minSdkVersion androidVersions.minSdkVersion
         targetSdkVersion androidVersions.targetSdkVersion
         versionCode 1
-        versionName "0.1"
+        versionName project.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

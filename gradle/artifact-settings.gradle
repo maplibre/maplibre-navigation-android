@@ -10,5 +10,5 @@ ext {
     navigationArtifactScmUrl = 'scm:git@github.com:maplibre/maplibre-navigation-android.git'
     navigationArtifactLicenseName = 'MIT'
     navigationArtifactLicenseUrl = 'https://opensource.org/license/MIT'
-    versionName = project.hasProperty('VERSION_NAME') ? project.property('VERSION_NAME') : System.getenv('VERSION_NAME')
+    versionName = System.getenv('VERSION') != null ? System.getenv('VERSION') : project.property('VERSION')
 }

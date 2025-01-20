@@ -29,42 +29,45 @@ artifacts {
     archives androidJavadocsJar
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId project.ext.navigationArtifactGroupId
-            artifactId project.name
-            version VERSION_NAME
+afterEvaluate {
+    // Define group & version for Kotlin Multiplatform artifacts
+    group = project.ext.navigationArtifactGroupId
+    version = project.ext.versionName
 
-            pom {
-                name = project.ext.navigationArtifactTitle
-                description = project.ext.navigationArtifactTitle
-                url = project.ext.navigationArtifactUrl
-                licenses {
-                    license {
-                        name = project.ext.navigationArtifactLicenseName
-                        url = project.ext.navigationArtifactLicenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id = project.ext.navigationDeveloperId
-                        name = project.ext.navigationDeveloperName
-                        email = project.ext.navigationDeveloperMail
-                    }
-                }
-                scm {
-                    connection = project.ext.navigationArtifactScmUrl
-                    developerConnection = project.ext.navigationArtifactScmUrl
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId project.ext.navigationArtifactGroupId
+                artifactId project.name
+                version project.ext.versionName
+
+                pom {
+                    name = project.ext.navigationArtifactTitle
+                    description = project.ext.navigationArtifactTitle
                     url = project.ext.navigationArtifactUrl
+                    licenses {
+                        license {
+                            name = project.ext.navigationArtifactLicenseName
+                            url = project.ext.navigationArtifactLicenseUrl
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = project.ext.navigationDeveloperId
+                            name = project.ext.navigationDeveloperName
+                            email = project.ext.navigationDeveloperMail
+                        }
+                    }
+                    scm {
+                        connection = project.ext.navigationArtifactScmUrl
+                        developerConnection = project.ext.navigationArtifactScmUrl
+                        url = project.ext.navigationArtifactUrl
+                    }
                 }
             }
         }
     }
-}
 
-
-afterEvaluate { project ->
     android.libraryVariants.all { variant ->
         tasks.androidJavadocs.doFirst {
             classpath += files(variant.javaCompileProvider.get().classpath.files)

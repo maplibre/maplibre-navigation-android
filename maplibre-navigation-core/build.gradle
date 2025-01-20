@@ -5,6 +5,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlinx-serialization'
 
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
@@ -68,11 +70,11 @@ android {
                 "MAPLIBRE_NAVIGATION_SDK_IDENTIFIER", String.format("\"%s\"", "maplibre-navigation-android")
         )
         buildConfigField('String',
-                "MAPLIBRE_NAVIGATION_VERSION_NAME", String.format("\"%s\"", project.VERSION_NAME)
+                "MAPLIBRE_NAVIGATION_VERSION_NAME", String.format("\"%s\"", project.versionName)
         )
         buildConfigField "String",
                 "MAPLIBRE_NAVIGATION_EVENTS_USER_AGENT", String.format("\"maplibre-navigation-android/%s\"",
-                project.VERSION_NAME
+                project.ext.versionName
         )
         consumerProguardFiles 'proguard-consumer.pro'
     }

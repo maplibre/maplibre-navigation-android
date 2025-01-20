@@ -8,9 +8,9 @@ android.libraryVariants.all { variant ->
     doFirst {
       classpath = files(variant.javaCompile.classpath.files) + files(android.bootClasspath) + configurations.javadocDeps
     }
-    options.windowTitle("MapLibre Android Navigation SDK $VERSION_NAME Reference")
-    options.docTitle("MapLibre Android Navigation SDK $VERSION_NAME")
-    options.header("MapLibre Android Navigation SDK $VERSION_NAME Reference")
+    options.windowTitle("MapLibre Android Navigation SDK ${project.ext.versionName} Reference")
+    options.docTitle("MapLibre Android Navigation SDK ${project.ext.versionName}")
+    options.header("MapLibre Android Navigation SDK ${project.ext.versionName} Reference")
     options.linksOffline("http://d.android.com/reference/", "$System.env.ANDROID_HOME/docs/reference")
     exclude '**/R.java', '**/BuildConfig.java'
   }
