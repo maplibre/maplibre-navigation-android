@@ -28,8 +28,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api "maplibre-java:services-geojson:unspecified"
-            api "maplibre-java:services-turf:unspecified"
+            api "org.maplibre.gl:services-geojson:unspecified"
+            api "org.maplibre.gl:services-turf:unspecified"
 
             implementation dependenciesList.kotlinxSerializationJson
             implementation dependenciesList.kotlinxCoroutines
