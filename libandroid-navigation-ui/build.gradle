@@ -33,6 +33,10 @@ android {
     consumerProguardFiles 'proguard-consumer.pro'
   }
 
+  lint {
+    baseline = file("lint-baseline.xml")
+  }
+
   configurations {
     javadocDeps
   }
