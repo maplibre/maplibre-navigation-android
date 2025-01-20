@@ -25,7 +25,7 @@ okhttp =  { group = "com.squareup.okhttp3", name ="okhttp", version = "4.12.0" }
 # MapLibre
 maplibre = { group = "org.maplibre.gl", name = "android-sdk", version = "11.6.1" }
 # `maplibre-java` comes from local maven repository
-maplibre-geojson = { group = "maplibre-java", name = "services-geojson", version = "unspecified" }
+maplibre-geojson = { group = "org.maplibre.gl", name = "services-geojson", version = "unspecified" }
 #api "maplibre-java:services-turf:unspecified"
 # `maplibre-navigation-core` comes from local maven repository
 maplibre-navigation-core = { group = "maplibre-navigation-android", name = "maplibre-navigation-core", version = "unspecified" }
