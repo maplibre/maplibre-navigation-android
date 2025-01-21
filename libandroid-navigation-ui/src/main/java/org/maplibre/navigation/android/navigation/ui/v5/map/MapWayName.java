@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
+import org.maplibre.geojson.common.CommonExtKt;
 import org.maplibre.navigation.core.location.Location;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
