@@ -17,8 +17,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // KMP dependencies currently only build locally
-        mavenLocal()
+//        // KMP dependencies currently only build locally
+//        mavenLocal()
+        maven { url = uri("https://mvn.fabiankeunecke.de") }
     }
 }
 
