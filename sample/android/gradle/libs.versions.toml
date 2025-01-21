@@ -3,8 +3,8 @@ agp = "8.7.3"
 kotlin = "2.1.0"
 
 maplibre = "11.6.1"
-maplibre-geojson = "490a1838"
-maplibre-navigation = "84a4cf99"
+maplibre-geojson = "343269b2"
+maplibre-navigation = "411fb14c"
 
 coreKtx = "1.15.0"
 junit = "4.13.2"
