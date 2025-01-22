@@ -26,7 +26,7 @@ data class StepIntersection(
      *
      * @since 1.3.0
      */
-    val bearings: List<Int>?,
+    val bearings: List<Int>? = null,
 
     /**
      * A list of strings signifying the classes of the road exiting the intersection. Possible
@@ -41,7 +41,7 @@ data class StepIntersection(
      *
      * @since 3.0.0
      */
-    val classes: List<String>?,
+    val classes: List<String>? = null,
 
     /**
      * A list of entry flags, corresponding in a 1:1 relationship to the bearings. A value of true
@@ -50,7 +50,7 @@ data class StepIntersection(
      *
      * @since 1.3.0
      */
-    val entry: List<Boolean>?,
+    val entry: List<Boolean>? = null,
 
     /**
      * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the
@@ -62,7 +62,7 @@ data class StepIntersection(
      * @since 1.3.0
      */
     @SerialName("in")
-    val inIndex: Int?,
+    val inIndex: Int? = null,
 
     /**
      * Index out of the bearings/entry array. Used to extract the bearing after the turn. Namely, The
@@ -72,7 +72,7 @@ data class StepIntersection(
      * @since 1.3.0
      */
     @SerialName("out")
-    val outIndex: Int?,
+    val outIndex: Int? = null,
 
     /**
      * Array of lane objects that represent the available turn lanes at the intersection. If no lane
@@ -81,7 +81,7 @@ data class StepIntersection(
      *
      * @since 2.0.0
      */
-    val lanes: List<IntersectionLanes>?,
+    val lanes: List<IntersectionLanes>? = null,
 
     /**
      * The zero-based index for the intersection.
@@ -89,10 +89,10 @@ data class StepIntersection(
      * Only available on the driving profile.
      */
     @SerialName("geometry_index")
-    val geometryIndex: Int?,
+    val geometryIndex: Int? = null,
 
     @SerialName("is_urban")
-    val isUrban: Boolean?,
+    val isUrban: Boolean? = null,
 
     /**
      * The zero-based index into the admin list on the route leg for this intersection.
@@ -102,14 +102,14 @@ data class StepIntersection(
      * @see RouteLeg.admins
      */
     @SerialName("admin_index")
-    val adminIndex: Int?,
+    val adminIndex: Int? = null,
 
     /**
      * An object containing information about passing rest stops along the route.
      * Only available on the `driving` profile.
      */
     @SerialName("rest_stop")
-    val restStop: RestStop?,
+    val restStop: RestStop? = null,
 
     /**
      * An object containing information about a toll collection point along the route.
@@ -119,11 +119,11 @@ data class StepIntersection(
      * Only available on the [DirectionsCriteria.PROFILE_DRIVING] profile.
      */
     @SerialName("toll_collection")
-    val tollCollection: TollCollection?,
+    val tollCollection: TollCollection? = null,
 
     /**
      * Name of the tunnel. Value may be present if [.classes] contains "tunnel".
      */
     @SerialName("tunnel_name")
-    val tunnelName: String?,
+    val tunnelName: String? = null,
 )

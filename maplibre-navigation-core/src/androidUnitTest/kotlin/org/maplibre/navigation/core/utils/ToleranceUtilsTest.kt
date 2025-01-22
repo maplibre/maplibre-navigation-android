@@ -1,18 +1,19 @@
 package org.maplibre.navigation.core.utils
 
 import org.maplibre.geojson.model.LineString
+import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.geojson.turf.TurfUnit
 import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.core.models.StepIntersection
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ToleranceUtilsTest : BaseTest() {
 
     @Test
-    @Throws(Exception::class)
     fun dynamicRerouteDistanceTolerance_userFarAwayFromIntersection() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
@@ -30,9 +31,7 @@ class ToleranceUtilsTest : BaseTest() {
         assertEquals(25.0, tolerance, DELTA)
     }
 
-
     @Test
-    @Throws(Exception::class)
     fun dynamicRerouteDistanceTolerance_userCloseToIntersection() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
@@ -51,7 +50,6 @@ class ToleranceUtilsTest : BaseTest() {
     }
 
     @Test
-    @Throws(Exception::class)
     fun dynamicRerouteDistanceTolerance_userJustPastTheIntersection() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
@@ -62,6 +60,34 @@ class ToleranceUtilsTest : BaseTest() {
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,
+            routeProgress,
+            MapLibreNavigationOptions()
+        )
+
+        assertEquals(50.0, tolerance, DELTA)
+    }
+
+    @Test
+    fun dynamicRerouteDistanceTolerance_noIntersections() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(intersections = listOf())
+
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
+            routeProgress.currentStepPoints[0],
+            routeProgress,
+            MapLibreNavigationOptions()
+        )
+
+        assertEquals(50.0, tolerance, DELTA)
+    }
+
+    @Test
+    fun dynamicRerouteDistanceTolerance_singleIntersection() {
+        val routeProgress = buildDefaultTestRouteProgress().copy(
+            intersections = listOf(StepIntersection(location = Point(-122.416686, 37.783425)))
+        )
+
+        val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
+            routeProgress.currentStepPoints[0],
             routeProgress,
             MapLibreNavigationOptions()
         )
