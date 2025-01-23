@@ -7,6 +7,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.navigation.core.utils.getCurrentSystemTimeSeconds
 
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
@@ -20,7 +21,6 @@ open class ReplayRouteLocationConverter(
 
     val isMultiLegRoute: Boolean
         get() = route.legs.size > 1
-
 
     fun updateSpeed(customSpeedInKmPerHour: Int) {
         this.speed = customSpeedInKmPerHour
@@ -38,7 +38,7 @@ open class ReplayRouteLocationConverter(
     }
 
     fun initializeTime() {
-        time = 0
+        time = getCurrentSystemTimeSeconds() * ONE_SECOND_IN_MILLISECONDS
     }
 
     /**
