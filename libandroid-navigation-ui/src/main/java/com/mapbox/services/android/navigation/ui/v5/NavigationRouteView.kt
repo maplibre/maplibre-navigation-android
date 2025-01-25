@@ -318,7 +318,7 @@ class NavigationRouteView @JvmOverloads constructor(
 
             val navigationRouteBuilder = NavigationRoute.builder(context).apply {
                 this.accessToken(mapRouteData.accessToken)
-                this.origin(Point.fromLngLat(userLocation!!.longitude, userLocation.latitude))
+                this.origin(Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second))
                 this.voiceUnits(DirectionsCriteria.PROFILE_DRIVING)
                 this.alternatives(true)
                 // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
