@@ -57,6 +57,8 @@ class NavigationUIActivity :
 
     private var simulateRoute = false
 
+    private var isStarted = false
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,18 +76,36 @@ class NavigationUIActivity :
 //            getMapAsync(this@NavigationUIActivity)
 //        }
 
-//        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
-//            simulateRoute = checked
-//        }
+        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                binding.navigationView.resetCameraPosition()
+            } else {
+                binding.navigationView.updateCameraRouteOverview()
+            }
+        }
 
         binding.startRouteButton.setOnClickListener {
-            val points = mutableListOf<Pair<Double, Double>>()
-            points.add(Pair(76.930137, 43.230361))
-            points.add(Pair(76.928316, 43.236109))
-            points.add(Pair(76.920187, 43.236783))
-            binding.navigationView.calculateRoute(MapRouteData("pk.cb243ba3-cb94-41c4-a91f-5f3074824d3a", "getString(R.string.mapbox_access_token)",
-                points, Pair(76.930137, 43.230361), MapRouteData.DARK_THEME))
+            if (isStarted) {
+                binding.navigationView.stopNavigation()
+                isStarted = false
+            } else {
+                val points = mutableListOf<Pair<Double, Double>>()
+                points.add(Pair(76.930137, 43.230361))
+                points.add(Pair(76.928316, 43.236109))
+                points.add(Pair(76.920187, 43.236783))
+                binding.navigationView.calculateRoute(
+                    MapRouteData(
+                        "pk.cb243ba3-cb94-41c4-a91f-5f3074824d3a",
+                        "getString(R.string.mapbox_access_token)",
+                        points,
+                        Pair(76.930137, 43.230361),
+                        MapRouteData.DARK_THEME
+                    )
+                )
+                isStarted = true
+            }
         }
+
 //        binding.clearPoints.setOnClickListener {
 //            if (::mapboxMap.isInitialized) {
 //                mapboxMap.markers.forEach {

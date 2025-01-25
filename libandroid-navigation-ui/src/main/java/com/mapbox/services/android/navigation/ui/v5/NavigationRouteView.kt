@@ -3,30 +3,20 @@ package com.mapbox.services.android.navigation.ui.v5
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
-import androidx.activity.ComponentActivity
 import androidx.annotation.UiThread
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.core.utils.TextUtils
 import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -39,8 +29,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Projection
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import com.mapbox.services.android.navigation.ui.v5.NavigationContract.View
 import com.mapbox.services.android.navigation.ui.v5.camera.NavigationCamera
 import com.mapbox.services.android.navigation.ui.v5.instruction.ImageCreator
 import com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
@@ -131,7 +119,7 @@ class NavigationRouteView @JvmOverloads constructor(
      *
      * @param savedInstanceState to restore state if not null
      */
-    fun onCreate(navigationCallback: OnNavigationReadyCallback, savedInstanceState: Bundle?, context: ComponentActivity, style: String) {
+    fun onCreate(navigationCallback: OnNavigationReadyCallback, savedInstanceState: Bundle?, context: Context, style: String) {
         initializeNavigationViewModel(context)
         initializeView()
         ThemeSwitcher.setTheme(context, attrs, style)
@@ -282,6 +270,7 @@ class NavigationRouteView @JvmOverloads constructor(
             mapboxMap.setStyle((builder)) {
                 isMapInitialized = true
                 enableLocationComponent(it)
+                mapboxMap.cameraPosition = CameraPosition.Builder().zoom(16.0).build()
                 baseCameraPosition?.let {
                     mapboxMap.cameraPosition = it
                 }
@@ -289,6 +278,7 @@ class NavigationRouteView @JvmOverloads constructor(
         } else {
             mapboxMap.getStyle {
                 enableLocationComponent(it)
+                mapboxMap.cameraPosition = CameraPosition.Builder().zoom(16.0).build()
                 baseCameraPosition?.let {
                     mapboxMap.cameraPosition = it
                 }
@@ -324,10 +314,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     fun calculateRoute(mapRouteData: MapRouteData) {
-
-//        startRouteButton.setOnClickListener {
-            val destination = Point.fromLngLat(76.930137, 43.230361)
-            val origin = Point.fromLngLat(mapRouteData.userLocation.first, mapRouteData.userLocation.second)
         val userLocation = mapboxMap!!.locationComponent.lastKnownLocation
 
             val navigationRouteBuilder = NavigationRoute.builder(context).apply {
@@ -362,7 +348,6 @@ class NavigationRouteView @JvmOverloads constructor(
 
                             val options = NavigationLauncherOptions.builder()
                                 .directionsRoute(route)
-//                    .shouldSimulateRoute(simulateRoute)
                                 .initialMapCameraPosition(
                                     CameraPosition.Builder().target(
                                         LatLng(
@@ -390,7 +375,6 @@ class NavigationRouteView @JvmOverloads constructor(
                                     }
                                 }
                             }
-//                        binding.startRouteLayout.visibility = View.VISIBLE
                         }
                     }
 
@@ -404,6 +388,8 @@ class NavigationRouteView @JvmOverloads constructor(
 
     override fun resetCameraPosition() {
         if (navigationMap != null) {
+            updateWayNameVisibility(true);
+            hideRecenterBtn()
             navigationMap!!.resetPadding()
             navigationMap!!.resetCameraPositionWith(NavigationCamera.NAVIGATION_TRACKING_MODE_GPS)
         }
@@ -532,6 +518,7 @@ class NavigationRouteView @JvmOverloads constructor(
      *
      * @since 0.16.0
      */
+    @SuppressLint("MissingPermission")
     @UiThread
     fun stopNavigation() {
         instructionView!!.visibility = GONE
@@ -540,6 +527,7 @@ class NavigationRouteView @JvmOverloads constructor(
         baseCameraPosition?.let {
             mapboxMap!!.cameraPosition = it
         }
+
         if (navigationMap != null) {
             navigationMap!!.removeOnCameraTrackingChangedListener(onTrackingChangedListener)
             navigationMap!!.removeRoute()
@@ -548,6 +536,7 @@ class NavigationRouteView @JvmOverloads constructor(
         mapboxMap!!.markers.forEach {
             mapboxMap!!.removeMarker(it)
         }
+        route = null
         navigationMapRoute?.removeRoute()
 
     }
@@ -671,7 +660,7 @@ class NavigationRouteView @JvmOverloads constructor(
         wayNameView = findViewById(R.id.wayNameView)
     }
 
-    fun initializeNavigationViewModel(context: ComponentActivity) {
+    fun initializeNavigationViewModel(context: Context) {
         try {
             navigationViewModel = NavigationViewModel(context)
         } catch (exception: ClassCastException) {
@@ -773,7 +762,7 @@ class NavigationRouteView @JvmOverloads constructor(
             initializeOnCameraTrackingChangedListener()
             subscribeViewModels()
         }
-        instructionView!!.visibility = VISIBLE
+        instructionView!!.visibility = GONE
     }
 
     private fun initializeClickListeners() {
@@ -931,8 +920,6 @@ class NavigationRouteView @JvmOverloads constructor(
 //        val markerOptions = MarkerOptions()
 //            .position(position)
 //            .icon(icon)
-//        mapboxMap!!.setOnMarkerClickListener {
-//        }
     }
 
     companion object {
