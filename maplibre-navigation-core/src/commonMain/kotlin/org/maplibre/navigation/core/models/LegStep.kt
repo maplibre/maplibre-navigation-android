@@ -172,7 +172,36 @@ data class LegStep(
      * @since 3.0.0
      */
     val exits: String? = null
-) {
+)  {
+
+    /**
+     * Creates a builder initialized with the current values of the `LegStep` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            geometry = geometry,
+            distance = distance,
+            duration = duration,
+            mode = mode,
+            maneuver = maneuver,
+            weight = weight
+        ).apply {
+            withDurationTypical(durationTypical)
+            withSpeedLimitUnit(speedLimitUnit)
+            withSpeedLimitSign(speedLimitSign)
+            withName(name)
+            withRef(ref)
+            withDestinations(destinations)
+            withPronunciation(pronunciation)
+            withRotaryName(rotaryName)
+            withRotaryPronunciation(rotaryPronunciation)
+            withVoiceInstructions(voiceInstructions)
+            withBannerInstructions(bannerInstructions)
+            withDrivingSide(drivingSide)
+            withIntersections(intersections)
+            withExits(exits)
+        }
+    }
 
     enum class SpeedLimitSign(val text: String) {
         @SerialName("mutcd")
@@ -180,5 +209,180 @@ data class LegStep(
 
         @SerialName("vienna")
         VIENNA("vienna")
+    }
+
+    /**
+     * Builder class for creating `LegStep` instances.
+     * @param geometry Gives the geometry of the leg step as encoded polyline string.
+     * @param distance The distance traveled from the maneuver to the next [LegStep] in meters.
+     * @param duration The estimated travel time from the maneuver to the next [LegStep] in seconds.
+     * @param mode Indicates the mode of transportation in the step.
+     * @param maneuver A [StepManeuver] object that typically represents the first coordinate making up the [LegStep.geometry].
+     * @param weight Specifies a decimal precision of edge weights, default value 1.
+     */
+    class Builder(
+        private var geometry: String,
+        private var distance: Double,
+        private var duration: Double,
+        private var mode: String,
+        private var maneuver: StepManeuver,
+        private var weight: Double
+    ) {
+        private var durationTypical: Double? = null
+        private var speedLimitUnit: SpeedLimit.Unit? = null
+        private var speedLimitSign: SpeedLimitSign? = null
+        private var name: String? = null
+        private var ref: String? = null
+        private var destinations: String? = null
+        private var pronunciation: String? = null
+        private var rotaryName: String? = null
+        private var rotaryPronunciation: String? = null
+        private var voiceInstructions: List<VoiceInstructions>? = null
+        private var bannerInstructions: List<BannerInstructions>? = null
+        private var drivingSide: String? = null
+        private var intersections: List<StepIntersection>? = null
+        private var exits: String? = null
+
+        /**
+         * Sets the typical duration.
+         *
+         * @param durationTypical The typical duration.
+         * @return The builder instance.
+         */
+        fun withDurationTypical(durationTypical: Double?) = apply { this.durationTypical = durationTypical }
+
+        /**
+         * Sets the speed limit unit.
+         *
+         * @param speedLimitUnit The speed limit unit.
+         * @return The builder instance.
+         */
+        fun withSpeedLimitUnit(speedLimitUnit: SpeedLimit.Unit?) = apply { this.speedLimitUnit = speedLimitUnit }
+
+        /**
+         * Sets the speed limit sign.
+         *
+         * @param speedLimitSign The speed limit sign.
+         * @return The builder instance.
+         */
+        fun withSpeedLimitSign(speedLimitSign: SpeedLimitSign?) = apply { this.speedLimitSign = speedLimitSign }
+
+        /**
+         * Sets the name.
+         *
+         * @param name The name.
+         * @return The builder instance.
+         */
+        fun withName(name: String?) = apply { this.name = name }
+
+        /**
+         * Sets the reference.
+         *
+         * @param ref The reference.
+         * @return The builder instance.
+         */
+        fun withRef(ref: String?) = apply { this.ref = ref }
+
+        /**
+         * Sets the destinations.
+         *
+         * @param destinations The destinations.
+         * @return The builder instance.
+         */
+        fun withDestinations(destinations: String?) = apply { this.destinations = destinations }
+
+        /**
+         * Sets the pronunciation.
+         *
+         * @param pronunciation The pronunciation.
+         * @return The builder instance.
+         */
+        fun withPronunciation(pronunciation: String?) = apply { this.pronunciation = pronunciation }
+
+        /**
+         * Sets the rotary name.
+         *
+         * @param rotaryName The rotary name.
+         * @return The builder instance.
+         */
+        fun withRotaryName(rotaryName: String?) = apply { this.rotaryName = rotaryName }
+
+        /**
+         * Sets the rotary pronunciation.
+         *
+         * @param rotaryPronunciation The rotary pronunciation.
+         * @return The builder instance.
+         */
+        fun withRotaryPronunciation(rotaryPronunciation: String?) = apply { this.rotaryPronunciation = rotaryPronunciation }
+
+        /**
+         * Sets the voice instructions.
+         *
+         * @param voiceInstructions The voice instructions.
+         * @return The builder instance.
+         */
+        fun withVoiceInstructions(voiceInstructions: List<VoiceInstructions>?) = apply { this.voiceInstructions = voiceInstructions }
+
+        /**
+         * Sets the banner instructions.
+         *
+         * @param bannerInstructions The banner instructions.
+         * @return The builder instance.
+         */
+        fun withBannerInstructions(bannerInstructions: List<BannerInstructions>?) = apply { this.bannerInstructions = bannerInstructions }
+
+        /**
+         * Sets the driving side.
+         *
+         * @param drivingSide The driving side.
+         * @return The builder instance.
+         */
+        fun withDrivingSide(drivingSide: String?) = apply { this.drivingSide = drivingSide }
+
+        /**
+         * Sets the intersections.
+         *
+         * @param intersections The intersections.
+         * @return The builder instance.
+         */
+        fun withIntersections(intersections: List<StepIntersection>?) = apply { this.intersections = intersections }
+
+        /**
+         * Sets the exits.
+         *
+         * @param exits The exits.
+         * @return The builder instance.
+         */
+        fun withExits(exits: String?) = apply { this.exits = exits }
+
+        /**
+         * Builds a `LegStep` instance with the current builder values.
+         *
+         * @return A new `LegStep` instance.
+         */
+        fun build(): LegStep {
+            return LegStep(
+                geometry = geometry,
+                distance = distance,
+                duration = duration,
+                durationTypical = durationTypical,
+                speedLimitUnit = speedLimitUnit,
+                speedLimitSign = speedLimitSign,
+                name = name,
+                ref = ref,
+                destinations = destinations,
+                mode = mode,
+                pronunciation = pronunciation,
+                rotaryName = rotaryName,
+                rotaryPronunciation = rotaryPronunciation,
+                maneuver = maneuver,
+                voiceInstructions = voiceInstructions,
+                bannerInstructions = bannerInstructions,
+                drivingSide = drivingSide,
+                weight = weight,
+                intersections = intersections,
+                exits = exits
+            )
+        }
     }
 }

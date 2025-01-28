@@ -43,4 +43,68 @@ data class BannerView(
      * @since 5.0.0
      */
     val modifier: ManeuverModifier.Type? = null,
-)
+){
+
+    /**
+     * Creates a builder initialized with the current values of the `BannerView` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            text = text
+        ).apply {
+            withComponents(components)
+            withType(type)
+            withModifier(modifier)
+        }
+    }
+
+    /**
+     * Builder class for creating `BannerView` instances.
+     * @param text Plain text with all the [BannerComponents] text combined.
+     */
+    class Builder(
+        private var text: String
+    ) {
+        private var components: List<BannerComponents>? = null
+        private var type: StepManeuver.Type? = null
+        private var modifier: ManeuverModifier.Type? = null
+
+        /**
+         * Sets the components.
+         *
+         * @param components The components.
+         * @return The builder instance.
+         */
+        fun withComponents(components: List<BannerComponents>?) = apply { this.components = components }
+
+        /**
+         * Sets the type.
+         *
+         * @param type The type.
+         * @return The builder instance.
+         */
+        fun withType(type: StepManeuver.Type?) = apply { this.type = type }
+
+        /**
+         * Sets the modifier.
+         *
+         * @param modifier The modifier.
+         * @return The builder instance.
+         */
+        fun withModifier(modifier: ManeuverModifier.Type?) = apply { this.modifier = modifier }
+
+        /**
+         * Builds a `BannerView` instance with the current builder values.
+         *
+         * @return A new `BannerView` instance.
+         */
+        fun build(): BannerView {
+            return BannerView(
+                text = text,
+                components = components,
+                type = type,
+                modifier = modifier
+            )
+        }
+    }
+}

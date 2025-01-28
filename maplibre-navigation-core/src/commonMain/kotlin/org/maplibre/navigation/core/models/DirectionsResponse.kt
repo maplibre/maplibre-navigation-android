@@ -69,9 +69,77 @@ data class DirectionsResponse(
 
     fun toJson(): String = json.encodeToString(this)
 
+    /**
+     * Creates a builder initialized with the current values of the `DirectionsResponse` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            code = code,
+            routes = routes
+        ).apply {
+            withMessage(message)
+            withWaypoints(waypoints)
+            withUuid(uuid)
+        }
+    }
+
     companion object {
 
         @JvmStatic
         fun fromJson(jsonString: String): DirectionsResponse = json.decodeFromString(jsonString)
+    }
+
+    /**
+     * Builder class for creating `DirectionsResponse` instances.
+     * @param code String indicating the state of the response.
+     * @param routes List containing all the different route options.
+     */
+    class Builder(
+        private var code: String,
+        private var routes: List<DirectionsRoute>
+    ) {
+        private var message: String? = null
+        private var waypoints: List<DirectionsWaypoint>? = null
+        private var uuid: String? = null
+
+        /**
+         * Sets the message.
+         *
+         * @param message The message.
+         * @return The builder instance.
+         */
+        fun withMessage(message: String?) = apply { this.message = message }
+
+        /**
+         * Sets the waypoints.
+         *
+         * @param waypoints The waypoints.
+         * @return The builder instance.
+         */
+        fun withWaypoints(waypoints: List<DirectionsWaypoint>?) =
+            apply { this.waypoints = waypoints }
+
+        /**
+         * Sets the UUID.
+         *
+         * @param uuid The UUID.
+         * @return The builder instance.
+         */
+        fun withUuid(uuid: String?) = apply { this.uuid = uuid }
+
+        /**
+         * Builds a `DirectionsResponse` instance with the current builder values.
+         *
+         * @return A new `DirectionsResponse` instance.
+         */
+        fun build(): DirectionsResponse {
+            return DirectionsResponse(
+                code = code,
+                routes = routes,
+                message = message,
+                waypoints = waypoints,
+                uuid = uuid
+            )
+        }
     }
 }

@@ -85,4 +85,109 @@ data class RouteLeg(
      * @return a list of [Incident]
      */
     val closures: List<Closure>? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `RouteLeg` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            distance = distance,
+            duration = duration,
+            steps = steps
+        ).apply {
+            withDurationTypical(durationTypical)
+            withSummary(summary)
+            withAdmins(admins)
+            withIncidents(incidents)
+            withAnnotation(annotation)
+            withClosures(closures)
+        }
+    }
+
+    /**
+     * Builder class for creating `RouteLeg` instances.
+     * @param distance The distance traveled from one waypoint to another.
+     * @param duration The estimated travel time from one waypoint to another.
+     * @param steps Gives a List including all the steps to get from one waypoint to another.
+     */
+    class Builder(
+        private var distance: Double,
+        private var duration: Double,
+        private var steps: List<LegStep>
+    ) {
+        private var durationTypical: Double? = null
+        private var summary: String? = null
+        private var admins: List<Admin>? = null
+        private var incidents: List<Incident>? = null
+        private var annotation: LegAnnotation? = null
+        private var closures: List<Closure>? = null
+
+        /**
+         * Sets the typical duration.
+         *
+         * @param durationTypical The typical duration.
+         * @return The builder instance.
+         */
+        fun withDurationTypical(durationTypical: Double?) = apply { this.durationTypical = durationTypical }
+
+        /**
+         * Sets the summary.
+         *
+         * @param summary The summary.
+         * @return The builder instance.
+         */
+        fun withSummary(summary: String?) = apply { this.summary = summary }
+
+        /**
+         * Sets the admins.
+         *
+         * @param admins The admins.
+         * @return The builder instance.
+         */
+        fun withAdmins(admins: List<Admin>?) = apply { this.admins = admins }
+
+        /**
+         * Sets the incidents.
+         *
+         * @param incidents The incidents.
+         * @return The builder instance.
+         */
+        fun withIncidents(incidents: List<Incident>?) = apply { this.incidents = incidents }
+
+        /**
+         * Sets the annotation.
+         *
+         * @param annotation The annotation.
+         * @return The builder instance.
+         */
+        fun withAnnotation(annotation: LegAnnotation?) = apply { this.annotation = annotation }
+
+        /**
+         * Sets the closures.
+         *
+         * @param closures The closures.
+         * @return The builder instance.
+         */
+        fun withClosures(closures: List<Closure>?) = apply { this.closures = closures }
+
+        /**
+         * Builds a `RouteLeg` instance with the current builder values.
+         *
+         * @return A new `RouteLeg` instance.
+         */
+        fun build(): RouteLeg {
+            return RouteLeg(
+                distance = distance,
+                duration = duration,
+                steps = steps,
+                durationTypical = durationTypical,
+                summary = summary,
+                admins = admins,
+                incidents = incidents,
+                annotation = annotation,
+                closures = closures
+            )
+        }
+    }
+}

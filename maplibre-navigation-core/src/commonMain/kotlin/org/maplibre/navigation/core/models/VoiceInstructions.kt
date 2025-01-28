@@ -37,4 +37,58 @@ data class VoiceInstructions(
      * @since 3.0.0
      */
     val ssmlAnnouncement: String? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `VoiceInstructions` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            distanceAlongGeometry = distanceAlongGeometry
+        ).apply {
+            withAnnouncement(announcement)
+            withSsmlAnnouncement(ssmlAnnouncement)
+        }
+    }
+
+    /**
+     * Builder class for creating `VoiceInstructions` instances.
+     * @param distanceAlongGeometry The distance along the geometry.
+     */
+    class Builder(
+        private var distanceAlongGeometry: Double
+    ) {
+        private var announcement: String? = null
+        private var ssmlAnnouncement: String? = null
+
+        /**
+         * Sets the announcement.
+         *
+         * @param announcement The instruction string.
+         * @return The builder instance.
+         */
+        fun withAnnouncement(announcement: String?) = apply { this.announcement = announcement }
+
+        /**
+         * Sets the SSML announcement.
+         *
+         * @param ssmlAnnouncement The SSML instruction string.
+         * @return The builder instance.
+         */
+        fun withSsmlAnnouncement(ssmlAnnouncement: String?) =
+            apply { this.ssmlAnnouncement = ssmlAnnouncement }
+
+        /**
+         * Builds a `VoiceInstructions` instance with the current builder values.
+         *
+         * @return A new `VoiceInstructions` instance.
+         */
+        fun build(): VoiceInstructions {
+            return VoiceInstructions(
+                distanceAlongGeometry = distanceAlongGeometry,
+                announcement = announcement,
+                ssmlAnnouncement = ssmlAnnouncement
+            )
+        }
+    }
+}

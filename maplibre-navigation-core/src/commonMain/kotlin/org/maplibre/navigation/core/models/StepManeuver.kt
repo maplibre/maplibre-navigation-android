@@ -83,6 +83,22 @@ data class StepManeuver(
     val exit: Int? = null,
 ) {
 
+    /**
+     * Creates a builder initialized with the current values of the `StepManeuver` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            location = location,
+            bearingBefore = bearingBefore,
+            bearingAfter = bearingAfter
+        ).apply {
+            withInstruction(instruction)
+            withType(type)
+            withModifier(modifier)
+            withExit(exit)
+        }
+    }
+
     @Serializable
     enum class Type(val text: String) {
         /**
@@ -229,5 +245,71 @@ data class StepManeuver(
 
         @SerialName("use lane")
         USE_LANE("use lane"),
+    }
+
+    /**
+     * Builder class for creating `StepManeuver` instances.
+     * @param location A [Point] representing this intersection location.
+     * @param bearingBefore Number between 0 and 360 indicating the clockwise angle from true north to the direction of travel right before the maneuver.
+     * @param bearingAfter Number between 0 and 360 indicating the clockwise angle from true north to the direction of travel right after the maneuver.
+     */
+    class Builder(
+        private var location: Point,
+        private var bearingBefore: Double,
+        private var bearingAfter: Double
+    ) {
+        private var instruction: String? = null
+        private var type: Type? = null
+        private var modifier: ManeuverModifier.Type? = null
+        private var exit: Int? = null
+
+        /**
+         * Sets the instruction.
+         *
+         * @param instruction A human-readable instruction of how to execute the returned maneuver.
+         * @return The builder instance.
+         */
+        fun withInstruction(instruction: String?) = apply { this.instruction = instruction }
+
+        /**
+         * Sets the type.
+         *
+         * @param type This indicates the type of maneuver.
+         * @return The builder instance.
+         */
+        fun withType(type: Type?) = apply { this.type = type }
+
+        /**
+         * Sets the modifier.
+         *
+         * @param modifier This indicates the mode of the maneuver.
+         * @return The builder instance.
+         */
+        fun withModifier(modifier: ManeuverModifier.Type?) = apply { this.modifier = modifier }
+
+        /**
+         * Sets the exit.
+         *
+         * @param exit An optional integer indicating number of the exit to take.
+         * @return The builder instance.
+         */
+        fun withExit(exit: Int?) = apply { this.exit = exit }
+
+        /**
+         * Builds a `StepManeuver` instance with the current builder values.
+         *
+         * @return A new `StepManeuver` instance.
+         */
+        fun build(): StepManeuver {
+            return StepManeuver(
+                location = location,
+                bearingBefore = bearingBefore,
+                bearingAfter = bearingAfter,
+                instruction = instruction,
+                type = type,
+                modifier = modifier,
+                exit = exit
+            )
+        }
     }
 }

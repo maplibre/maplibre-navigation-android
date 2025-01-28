@@ -93,6 +93,9 @@ data class DirectionsRoute(
 
     fun toJson(): String = json.encodeToString(this)
 
+    /**
+     * Creates a builder initialized with the current values of the `DirectionsRoute` instance.
+     */
     fun toBuilder(): Builder {
         return Builder(
             geometry = geometry,
@@ -100,7 +103,7 @@ data class DirectionsRoute(
             distance = distance,
             duration = duration
         ).apply {
-            durationTypical(durationTypical)
+            withDurationTypical(durationTypical)
             withWeight(weight)
             withWeightName(weightName)
             withRouteOptions(routeOptions)
@@ -108,6 +111,19 @@ data class DirectionsRoute(
         }
     }
 
+    companion object {
+
+        @JvmStatic
+        fun fromJson(jsonString: String): DirectionsRoute = json.decodeFromString(jsonString)
+    }
+
+    /**
+     * Builder class for creating `DirectionsRoute` instances.
+     * @param geometry Gives the geometry of the route.
+     * @param legs A Leg is a route between only two waypoints.
+     * @param distance The distance traveled from origin to destination.
+     * @param duration The estimated travel time from origin to destination.
+     */
     class Builder(
         private var geometry: String,
         private var legs: List<RouteLeg>,
@@ -120,18 +136,51 @@ data class DirectionsRoute(
         private var routeOptions: RouteOptions? = null
         private var voiceLanguage: String? = null
 
-        fun durationTypical(durationTypical: Double?) =
-            apply { this.durationTypical = durationTypical }
+        /**
+         * Sets the typical duration.
+         *
+         * @param durationTypical The typical duration.
+         * @return The builder instance.
+         */
+        fun withDurationTypical(durationTypical: Double?) = apply { this.durationTypical = durationTypical }
 
+        /**
+         * Sets the weight.
+         *
+         * @param weight The weight.
+         * @return The builder instance.
+         */
         fun withWeight(weight: Double?) = apply { this.weight = weight }
 
+        /**
+         * Sets the weight name.
+         *
+         * @param weightName The weight name.
+         * @return The builder instance.
+         */
         fun withWeightName(weightName: String?) = apply { this.weightName = weightName }
 
-        fun withRouteOptions(routeOptions: RouteOptions?) =
-            apply { this.routeOptions = routeOptions }
+        /**
+         * Sets the route options.
+         *
+         * @param routeOptions The route options.
+         * @return The builder instance.
+         */
+        fun withRouteOptions(routeOptions: RouteOptions?) = apply { this.routeOptions = routeOptions }
 
+        /**
+         * Sets the voice language.
+         *
+         * @param voiceLanguage The voice language.
+         * @return The builder instance.
+         */
         fun withVoiceLanguage(voiceLanguage: String?) = apply { this.voiceLanguage = voiceLanguage }
 
+        /**
+         * Builds a `DirectionsRoute` instance with the current builder values.
+         *
+         * @return A new `DirectionsRoute` instance.
+         */
         fun build(): DirectionsRoute {
             return DirectionsRoute(
                 geometry = geometry,
@@ -145,11 +194,5 @@ data class DirectionsRoute(
                 voiceLanguage = voiceLanguage
             )
         }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun fromJson(jsonString: String): DirectionsRoute = json.decodeFromString(jsonString)
     }
 }

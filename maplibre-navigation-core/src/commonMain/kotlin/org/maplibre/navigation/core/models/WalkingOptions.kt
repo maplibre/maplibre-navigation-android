@@ -39,4 +39,62 @@ data class WalkingOptions(
      */
     @SerialName("alley_bias")
     val alleyBias: Double? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `WalkingOptions` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder().apply {
+            withWalkingSpeed(walkingSpeed)
+            withWalkwayBias(walkwayBias)
+            withAlleyBias(alleyBias)
+        }
+    }
+
+    /**
+     * Builder class for creating `WalkingOptions` instances.
+     */
+    class Builder {
+        private var walkingSpeed: Double? = null
+        private var walkwayBias: Double? = null
+        private var alleyBias: Double? = null
+
+        /**
+         * Sets the walking speed.
+         *
+         * @param walkingSpeed Walking speed in meters per second.
+         * @return The builder instance.
+         */
+        fun withWalkingSpeed(walkingSpeed: Double?) = apply { this.walkingSpeed = walkingSpeed }
+
+        /**
+         * Sets the walkway bias.
+         *
+         * @param walkwayBias Bias for preferring or avoiding walkways.
+         * @return The builder instance.
+         */
+        fun withWalkwayBias(walkwayBias: Double?) = apply { this.walkwayBias = walkwayBias }
+
+        /**
+         * Sets the alley bias.
+         *
+         * @param alleyBias Bias for preferring or avoiding alleys.
+         * @return The builder instance.
+         */
+        fun withAlleyBias(alleyBias: Double?) = apply { this.alleyBias = alleyBias }
+
+        /**
+         * Builds a `WalkingOptions` instance with the current builder values.
+         *
+         * @return A new `WalkingOptions` instance.
+         */
+        fun build(): WalkingOptions {
+            return WalkingOptions(
+                walkingSpeed = walkingSpeed,
+                walkwayBias = walkwayBias,
+                alleyBias = alleyBias
+            )
+        }
+    }
+}

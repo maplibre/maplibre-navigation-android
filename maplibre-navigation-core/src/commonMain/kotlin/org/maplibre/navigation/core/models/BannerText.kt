@@ -68,6 +68,93 @@ data class BannerText(
      */
     @SerialName("driving_side")
     val drivingSide: String? = null,
-)
+) {
 
-//TODO: Builder
+    /**
+     * Creates a builder initialized with the current values of the `BannerText` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            text = text
+        ).apply {
+            withComponents(components)
+            withType(type)
+            withModifier(modifier)
+            withDegrees(degrees)
+            withDrivingSide(drivingSide)
+        }
+    }
+
+    /**
+     * Builder class for creating `BannerText` instances.
+     * @param text Plain text with all the [BannerComponents] text combined.
+     */
+    class Builder(
+        private var text: String
+    ) {
+        private var components: List<BannerComponents>? = null
+        private var type: StepManeuver.Type? = null
+        private var modifier: ManeuverModifier.Type? = null
+        private var degrees: Double? = null
+        private var drivingSide: String? = null
+
+        /**
+         * Sets the components.
+         *
+         * @param components The components.
+         * @return The builder instance.
+         */
+        fun withComponents(components: List<BannerComponents>?) =
+            apply { this.components = components }
+
+        /**
+         * Sets the type.
+         *
+         * @param type The type.
+         * @return The builder instance.
+         */
+        fun withType(type: StepManeuver.Type?) = apply { this.type = type }
+
+        /**
+         * Sets the modifier.
+         *
+         * @param modifier The modifier.
+         * @return The builder instance.
+         */
+        fun withModifier(modifier: ManeuverModifier.Type?) = apply { this.modifier = modifier }
+
+        /**
+         * Sets the degrees.
+         *
+         * @param degrees The degrees.
+         * @return The builder instance.
+         */
+        fun withDegrees(degrees: Double?) = apply { this.degrees = degrees }
+
+        /**
+         * Sets the driving side.
+         *
+         * @param drivingSide The driving side.
+         * @return The builder instance.
+         */
+        fun withDrivingSide(drivingSide: String?) = apply { this.drivingSide = drivingSide }
+
+        /**
+         * Builds a `BannerText` instance with the current builder values.
+         *
+         * @return A new `BannerText` instance.
+         */
+        fun build(): BannerText {
+            return BannerText(
+                text = text,
+                components = components,
+                type = type,
+                modifier = modifier,
+                degrees = degrees,
+                drivingSide = drivingSide
+            )
+        }
+    }
+}
+
+

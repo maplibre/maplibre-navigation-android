@@ -50,4 +50,88 @@ data class LegAnnotation(
      * @since 2.2.0
      */
     val congestion: List<String>? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `LegAnnotation` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder()
+            .withDistance(distance)
+            .withDuration(duration)
+            .withSpeed(speed)
+            .withMaxSpeed(maxSpeed)
+            .withCongestion(congestion)
+    }
+
+    /**
+     * Builder class for creating `LegAnnotation` instances.
+     * @param distance The distance, in meters, between each pair of coordinates.
+     * @param duration The speed, in meters per second, between each pair of coordinates.
+     * @param speed The speed, in meters per second, between each pair of coordinates.
+     * @param maxSpeed The posted speed limit, between each pair of coordinates.
+     * @param congestion The congestion between each pair of coordinates.
+     */
+    class Builder {
+        private var distance: List<Double>? = null
+        private var duration: List<Double>? = null
+        private var speed: List<Double>? = null
+        private var maxSpeed: List<MaxSpeed>? = null
+        private var congestion: List<String>? = null
+
+        /**
+         * Sets the distance.
+         *
+         * @param distance The distance.
+         * @return The builder instance.
+         */
+        fun withDistance(distance: List<Double>?) = apply { this.distance = distance }
+
+        /**
+         * Sets the duration.
+         *
+         * @param duration The duration.
+         * @return The builder instance.
+         */
+        fun withDuration(duration: List<Double>?) = apply { this.duration = duration }
+
+        /**
+         * Sets the speed.
+         *
+         * @param speed The speed.
+         * @return The builder instance.
+         */
+        fun withSpeed(speed: List<Double>?) = apply { this.speed = speed }
+
+        /**
+         * Sets the max speed.
+         *
+         * @param maxSpeed The max speed.
+         * @return The builder instance.
+         */
+        fun withMaxSpeed(maxSpeed: List<MaxSpeed>?) = apply { this.maxSpeed = maxSpeed }
+
+        /**
+         * Sets the congestion.
+         *
+         * @param congestion The congestion.
+         * @return The builder instance.
+         */
+        fun withCongestion(congestion: List<String>?) = apply { this.congestion = congestion }
+
+        /**
+         * Builds a `LegAnnotation` instance with the current builder values.
+         *
+         * @return A new `LegAnnotation` instance.
+         */
+        fun build(): LegAnnotation {
+            return LegAnnotation(
+                distance = distance,
+                duration = duration,
+                speed = speed,
+                maxSpeed = maxSpeed,
+                congestion = congestion
+            )
+        }
+    }
+}

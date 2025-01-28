@@ -126,4 +126,168 @@ data class StepIntersection(
      */
     @SerialName("tunnel_name")
     val tunnelName: String? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `StepIntersection` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            location = location
+        ).apply {
+            withBearings(bearings)
+            withClasses(classes)
+            withEntry(entry)
+            withInIndex(inIndex)
+            withOutIndex(outIndex)
+            withLanes(lanes)
+            withGeometryIndex(geometryIndex)
+            withIsUrban(isUrban)
+            withAdminIndex(adminIndex)
+            withRestStop(restStop)
+            withTollCollection(tollCollection)
+            withTunnelName(tunnelName)
+        }
+    }
+
+    /**
+     * Builder class for creating `StepIntersection` instances.
+     * @param location A [Point] representing this intersection location.
+     */
+    class Builder(
+        private var location: Point
+    ) {
+        private var bearings: List<Int>? = null
+        private var classes: List<String>? = null
+        private var entry: List<Boolean>? = null
+        private var inIndex: Int? = null
+        private var outIndex: Int? = null
+        private var lanes: List<IntersectionLanes>? = null
+        private var geometryIndex: Int? = null
+        private var isUrban: Boolean? = null
+        private var adminIndex: Int? = null
+        private var restStop: RestStop? = null
+        private var tollCollection: TollCollection? = null
+        private var tunnelName: String? = null
+
+        /**
+         * Sets the bearings.
+         *
+         * @param bearings An integer list of bearing values available at the step intersection.
+         * @return The builder instance.
+         */
+        fun withBearings(bearings: List<Int>?) = apply { this.bearings = bearings }
+
+        /**
+         * Sets the classes.
+         *
+         * @param classes A list of strings signifying the classes of the road exiting the intersection.
+         * @return The builder instance.
+         */
+        fun withClasses(classes: List<String>?) = apply { this.classes = classes }
+
+        /**
+         * Sets the entry flags.
+         *
+         * @param entry A list of entry flags, corresponding in a 1:1 relationship to the bearings.
+         * @return The builder instance.
+         */
+        fun withEntry(entry: List<Boolean>?) = apply { this.entry = entry }
+
+        /**
+         * Sets the inIndex.
+         *
+         * @param inIndex Index into bearings/entry array.
+         * @return The builder instance.
+         */
+        fun withInIndex(inIndex: Int?) = apply { this.inIndex = inIndex }
+
+        /**
+         * Sets the outIndex.
+         *
+         * @param outIndex Index out of the bearings/entry array.
+         * @return The builder instance.
+         */
+        fun withOutIndex(outIndex: Int?) = apply { this.outIndex = outIndex }
+
+        /**
+         * Sets the lanes.
+         *
+         * @param lanes Array of lane objects that represent the available turn lanes at the intersection.
+         * @return The builder instance.
+         */
+        fun withLanes(lanes: List<IntersectionLanes>?) = apply { this.lanes = lanes }
+
+        /**
+         * Sets the geometryIndex.
+         *
+         * @param geometryIndex The zero-based index for the intersection.
+         * @return The builder instance.
+         */
+        fun withGeometryIndex(geometryIndex: Int?) = apply { this.geometryIndex = geometryIndex }
+
+        /**
+         * Sets the isUrban flag.
+         *
+         * @param isUrban Whether the intersection is in an urban area.
+         * @return The builder instance.
+         */
+        fun withIsUrban(isUrban: Boolean?) = apply { this.isUrban = isUrban }
+
+        /**
+         * Sets the adminIndex.
+         *
+         * @param adminIndex The zero-based index into the admin list on the route leg for this intersection.
+         * @return The builder instance.
+         */
+        fun withAdminIndex(adminIndex: Int?) = apply { this.adminIndex = adminIndex }
+
+        /**
+         * Sets the restStop.
+         *
+         * @param restStop An object containing information about passing rest stops along the route.
+         * @return The builder instance.
+         */
+        fun withRestStop(restStop: RestStop?) = apply { this.restStop = restStop }
+
+        /**
+         * Sets the tollCollection.
+         *
+         * @param tollCollection An object containing information about a toll collection point along the route.
+         * @return The builder instance.
+         */
+        fun withTollCollection(tollCollection: TollCollection?) =
+            apply { this.tollCollection = tollCollection }
+
+        /**
+         * Sets the tunnelName.
+         *
+         * @param tunnelName Name of the tunnel.
+         * @return The builder instance.
+         */
+        fun withTunnelName(tunnelName: String?) = apply { this.tunnelName = tunnelName }
+
+        /**
+         * Builds a `StepIntersection` instance with the current builder values.
+         *
+         * @return A new `StepIntersection` instance.
+         */
+        fun build(): StepIntersection {
+            return StepIntersection(
+                location = location,
+                bearings = bearings,
+                classes = classes,
+                entry = entry,
+                inIndex = inIndex,
+                outIndex = outIndex,
+                lanes = lanes,
+                geometryIndex = geometryIndex,
+                isUrban = isUrban,
+                adminIndex = adminIndex,
+                restStop = restStop,
+                tollCollection = tollCollection,
+                tunnelName = tunnelName
+            )
+        }
+    }
+}

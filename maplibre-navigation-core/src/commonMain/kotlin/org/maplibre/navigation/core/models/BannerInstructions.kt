@@ -52,6 +52,72 @@ data class BannerInstructions(
      * @since 5.0.0
      */
     val view: BannerView? = null,
-)
+) {
 
-//TODO: builder
+    /**
+     * Creates a builder initialized with the current values of the `BannerInstructions` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder(
+            distanceAlongGeometry = distanceAlongGeometry,
+            primary = primary
+        ).apply {
+            withSecondary(secondary)
+            withSub(sub)
+            withView(view)
+        }
+    }
+
+    /**
+     * Builder class for creating `BannerInstructions` instances.
+     * @param distanceAlongGeometry Distance in meters from the beginning of the step at which the visual instruction should be visible.
+     * @param primary A plain text representation stored inside a [BannerText] object.
+     */
+    class Builder(
+        private var distanceAlongGeometry: Double,
+        private var primary: BannerText
+    ) {
+        private var secondary: BannerText? = null
+        private var sub: BannerText? = null
+        private var view: BannerView? = null
+
+        /**
+         * Sets the secondary visual information.
+         *
+         * @param secondary The secondary visual information.
+         * @return The builder instance.
+         */
+        fun withSecondary(secondary: BannerText?) = apply { this.secondary = secondary }
+
+        /**
+         * Sets the additional information.
+         *
+         * @param sub The additional information.
+         * @return The builder instance.
+         */
+        fun withSub(sub: BannerText?) = apply { this.sub = sub }
+
+        /**
+         * Sets the optional image to display for an upcoming maneuver.
+         *
+         * @param view The optional image.
+         * @return The builder instance.
+         */
+        fun withView(view: BannerView?) = apply { this.view = view }
+
+        /**
+         * Builds a `BannerInstructions` instance with the current builder values.
+         *
+         * @return A new `BannerInstructions` instance.
+         */
+        fun build(): BannerInstructions {
+            return BannerInstructions(
+                distanceAlongGeometry = distanceAlongGeometry,
+                primary = primary,
+                secondary = secondary,
+                sub = sub,
+                view = view
+            )
+        }
+    }
+}

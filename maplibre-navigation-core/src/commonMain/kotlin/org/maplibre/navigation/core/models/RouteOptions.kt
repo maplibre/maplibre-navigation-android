@@ -320,6 +320,9 @@ data class RouteOptions(
     val snappingClosures: String? = null,
 ) {
 
+    /**
+     * Creates a builder initialized with the current values of the `RouteOptions` instance.
+     */
     fun toBuilder(): Builder {
         return Builder(
             baseUrl = baseUrl,
@@ -352,6 +355,15 @@ data class RouteOptions(
         }
     }
 
+    /**
+     * Builder class for creating `RouteOptions` instances.
+     * @param baseUrl The same base URL which was used during the request that resulted in this root directions response.
+     * @param user The same user which was used during the request that resulted in this root directions response.
+     * @param profile The routing profile to use.
+     * @param coordinates A list of Points to visit in order.
+     * @param accessToken A valid Mapbox access token used to making the request.
+     * @param requestUuid A universally unique identifier (UUID) for identifying and executing a similar specific route in the future.
+     */
     class Builder(
         private var baseUrl: String,
         private var user: String,
@@ -381,50 +393,185 @@ data class RouteOptions(
         private var walkingOptions: WalkingOptions? = null
         private var snappingClosures: String? = null
 
+        /**
+         * Sets the alternatives.
+         *
+         * @param alternatives Whether to try to return alternative routes.
+         * @return The builder instance.
+         */
         fun withAlternatives(alternatives: Boolean?) = apply { this.alternatives = alternatives }
+
+        /**
+         * Sets the language.
+         *
+         * @param language The language of returned turn-by-turn text instructions.
+         * @return The builder instance.
+         */
         fun withLanguage(language: String?) = apply { this.language = language }
+
+        /**
+         * Sets the radiuses.
+         *
+         * @param radiuses The maximum distance a coordinate can be moved to snap to the road network in meters.
+         * @return The builder instance.
+         */
         fun withRadiuses(radiuses: String?) = apply { this.radiuses = radiuses }
+
+        /**
+         * Sets the bearings.
+         *
+         * @param bearings Influences the direction in which a route starts from a waypoint.
+         * @return The builder instance.
+         */
         fun withBearings(bearings: String?) = apply { this.bearings = bearings }
+
+        /**
+         * Sets the continue straight option.
+         *
+         * @param continueStraight The allowed direction of travel when departing intermediate waypoints.
+         * @return The builder instance.
+         */
         fun withContinueStraight(continueStraight: Boolean?) =
             apply { this.continueStraight = continueStraight }
 
+        /**
+         * Sets the roundabout exits option.
+         *
+         * @param roundaboutExits Whether to emit instructions at roundabout exits.
+         * @return The builder instance.
+         */
         fun withRoundaboutExits(roundaboutExits: Boolean?) =
             apply { this.roundaboutExits = roundaboutExits }
 
+        /**
+         * Sets the geometries.
+         *
+         * @param geometries The format of the returned geometry.
+         * @return The builder instance.
+         */
         fun withGeometries(geometries: String?) = apply { this.geometries = geometries }
+
+        /**
+         * Sets the overview.
+         *
+         * @param overview Displays the requested type of overview geometry.
+         * @return The builder instance.
+         */
         fun withOverview(overview: String?) = apply { this.overview = overview }
+
+        /**
+         * Sets the steps option.
+         *
+         * @param steps Whether to return steps and turn-by-turn instructions.
+         * @return The builder instance.
+         */
         fun withSteps(steps: Boolean?) = apply { this.steps = steps }
+
+        /**
+         * Sets the annotations.
+         *
+         * @param annotations A comma-separated list of annotations.
+         * @return The builder instance.
+         */
         fun withAnnotations(annotations: String?) = apply { this.annotations = annotations }
+
+        /**
+         * Sets the exclude option.
+         *
+         * @param exclude Exclude certain road types from routing.
+         * @return The builder instance.
+         */
         fun withExclude(exclude: String?) = apply { this.exclude = exclude }
+
+        /**
+         * Sets the voice instructions option.
+         *
+         * @param voiceInstructions Whether to return SSML marked-up text for voice guidance along the route.
+         * @return The builder instance.
+         */
         fun withVoiceInstructions(voiceInstructions: Boolean?) =
             apply { this.voiceInstructions = voiceInstructions }
 
+        /**
+         * Sets the banner instructions option.
+         *
+         * @param bannerInstructions Whether to return banner objects associated with the route steps.
+         * @return The builder instance.
+         */
         fun withBannerInstructions(bannerInstructions: Boolean?) =
             apply { this.bannerInstructions = bannerInstructions }
 
+        /**
+         * Sets the voice units.
+         *
+         * @param voiceUnits A type of units to return in the text for voice instructions.
+         * @return The builder instance.
+         */
         fun withVoiceUnits(voiceUnits: UnitType?) = apply { this.voiceUnits = voiceUnits }
+
+        /**
+         * Sets the approaches.
+         *
+         * @param approaches Indicates from which side of the road to approach a waypoint.
+         * @return The builder instance.
+         */
         fun withApproaches(approaches: String?) = apply { this.approaches = approaches }
+
+        /**
+         * Sets the waypoint indices.
+         *
+         * @param waypointIndices Indicates which input coordinates should be treated as waypoints.
+         * @return The builder instance.
+         */
         fun withWaypointIndices(waypointIndices: String?) =
             apply { this.waypointIndices = waypointIndices }
 
+        /**
+         * Sets the waypoint names.
+         *
+         * @param waypointNames A semicolon-separated list of custom names for entries in the list of coordinates.
+         * @return The builder instance.
+         */
         fun withWaypointNames(waypointNames: String?) = apply { this.waypointNames = waypointNames }
+
+        /**
+         * Sets the waypoint targets.
+         *
+         * @param waypointTargets A semicolon-separated list of coordinate pairs used to specify drop-off locations.
+         * @return The builder instance.
+         */
         fun withWaypointTargets(waypointTargets: String?) =
             apply { this.waypointTargets = waypointTargets }
 
+        /**
+         * Sets the walking options.
+         *
+         * @param walkingOptions To be used to specify settings for use with the walking profile.
+         * @return The builder instance.
+         */
         fun withWalkingOptions(walkingOptions: WalkingOptions?) =
             apply { this.walkingOptions = walkingOptions }
 
+        /**
+         * Sets the snapping closures.
+         *
+         * @param snappingClosures A semicolon-separated list of booleans affecting snapping of waypoint locations to road segments.
+         * @return The builder instance.
+         */
         fun withSnappingClosures(snappingClosures: String?) =
             apply { this.snappingClosures = snappingClosures }
 
+        /**
+         * Builds a `RouteOptions` instance with the current builder values.
+         *
+         * @return A new `RouteOptions` instance.
+         */
         fun build(): RouteOptions {
             return RouteOptions(
                 baseUrl = baseUrl,
                 user = user,
                 profile = profile,
                 coordinates = coordinates,
-                accessToken = accessToken,
-                requestUuid = requestUuid,
                 alternatives = alternatives,
                 language = language,
                 radiuses = radiuses,
@@ -439,6 +586,8 @@ data class RouteOptions(
                 voiceInstructions = voiceInstructions,
                 bannerInstructions = bannerInstructions,
                 voiceUnits = voiceUnits,
+                accessToken = accessToken,
+                requestUuid = requestUuid,
                 approaches = approaches,
                 waypointIndices = waypointIndices,
                 waypointNames = waypointNames,

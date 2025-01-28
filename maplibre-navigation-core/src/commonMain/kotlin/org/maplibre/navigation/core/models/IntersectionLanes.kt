@@ -51,4 +51,77 @@ data class IntersectionLanes(
      * @since 2.0.0
      */
     val indications: List<String>? = null,
-)
+) {
+
+    /**
+     * Creates a builder initialized with the current values of the `IntersectionLanes` instance.
+     */
+    fun toBuilder(): Builder {
+        return Builder()
+            .withValid(valid)
+            .withActive(active)
+            .withValidIndication(validIndication)
+            .withIndications(indications)
+    }
+
+    /**
+     * Builder class for creating `IntersectionLanes` instances.
+     * @param valid Provides a boolean value you can use to determine if the given lane is valid for the user to complete the maneuver.
+     * @param active Indicates whether this lane is a preferred lane (true) or not (false).
+     * @param validIndication When either valid or active is set to true, this property shows which of the lane indications is applicable to the current route.
+     * @param indications Array that can be made up of multiple signs such as `left`, `right`, etc.
+     */
+    class Builder {
+        private var valid: Boolean? = null
+        private var active: Boolean? = null
+        private var validIndication: String? = null
+        private var indications: List<String>? = null
+
+        /**
+         * Sets the valid status.
+         *
+         * @param valid The valid status.
+         * @return The builder instance.
+         */
+        fun withValid(valid: Boolean?) = apply { this.valid = valid }
+
+        /**
+         * Sets the active status.
+         *
+         * @param active The active status.
+         * @return The builder instance.
+         */
+        fun withActive(active: Boolean?) = apply { this.active = active }
+
+        /**
+         * Sets the valid indication.
+         *
+         * @param validIndication The valid indication.
+         * @return The builder instance.
+         */
+        fun withValidIndication(validIndication: String?) =
+            apply { this.validIndication = validIndication }
+
+        /**
+         * Sets the indications.
+         *
+         * @param indications The indications.
+         * @return The builder instance.
+         */
+        fun withIndications(indications: List<String>?) = apply { this.indications = indications }
+
+        /**
+         * Builds an `IntersectionLanes` instance with the current builder values.
+         *
+         * @return A new `IntersectionLanes` instance.
+         */
+        fun build(): IntersectionLanes {
+            return IntersectionLanes(
+                valid = valid,
+                active = active,
+                validIndication = validIndication,
+                indications = indications
+            )
+        }
+    }
+}

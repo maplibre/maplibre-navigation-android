@@ -122,6 +122,9 @@ data class BannerComponents(
     val active: Boolean? = null,
 ) {
 
+    /**
+     * Creates a builder initialized with the current values of the `BannerComponents` instance.
+     */
     fun toBuilder(): Builder {
         return Builder(
             text = text,
@@ -205,6 +208,11 @@ data class BannerComponents(
         JCT("jct")
     }
 
+    /**
+     * Builder class for creating `BannerComponents` instances.
+     * @param text  A snippet of the full [BannerText.text] which can be used for visually altering parts of the full string.
+     * @param type  String giving you more context about the component which may help in visual markup/display choices. If the type of the components is unknown it should be treated as text.
+     */
     class Builder(
         private var text: String,
         private var type: Type
@@ -217,14 +225,68 @@ data class BannerComponents(
         private var directions: List<String>? = null
         private var active: Boolean? = null
 
+        /**
+         * Sets the subType.
+         *
+         * @param subType The subType.
+         * @return The builder instance.
+         */
         fun withSubType(subType: Type?) = apply { this.subType = subType }
+
+        /**
+         * Sets the abbreviation.
+         *
+         * @param abbreviation The abbreviation.
+         * @return The builder instance.
+         */
         fun withAbbreviation(abbreviation: String?) = apply { this.abbreviation = abbreviation }
-        fun withAbbreviationPriority(abbreviationPriority: Int?) = apply { this.abbreviationPriority = abbreviationPriority }
+
+        /**
+         * Sets the abbreviation priority.
+         *
+         * @param abbreviationPriority The abbreviation priority.
+         * @return The builder instance.
+         */
+        fun withAbbreviationPriority(abbreviationPriority: Int?) =
+            apply { this.abbreviationPriority = abbreviationPriority }
+
+        /**
+         * Sets the image base URL.
+         *
+         * @param imageBaseUrl The image base URL.
+         * @return The builder instance.
+         */
         fun withImageBaseUrl(imageBaseUrl: String?) = apply { this.imageBaseUrl = imageBaseUrl }
+
+        /**
+         * Sets the image URL.
+         *
+         * @param imageUrl The image URL.
+         * @return The builder instance.
+         */
         fun withImageUrl(imageUrl: String?) = apply { this.imageUrl = imageUrl }
+
+        /**
+         * Sets the directions.
+         *
+         * @param directions The directions.
+         * @return The builder instance.
+         */
         fun withDirections(directions: List<String>?) = apply { this.directions = directions }
+
+        /**
+         * Sets the active status.
+         *
+         * @param active The active status.
+         * @return The builder instance.
+         */
         fun withActive(active: Boolean?) = apply { this.active = active }
 
+        /**
+         * Builds a `BannerComponents` instance with the current builder values.
+         *
+         * @return A new `BannerComponents` instance.
+         */
         fun build(): BannerComponents {
             return BannerComponents(
                 text = text,
