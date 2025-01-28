@@ -13,5 +13,5 @@ data class RestStop(
      * (includes amenities such as gas or restaurants).
      * Note that adding new possible types is not considered a breaking change.
      */
-    val type: String?
+    val type: String? = null
 )

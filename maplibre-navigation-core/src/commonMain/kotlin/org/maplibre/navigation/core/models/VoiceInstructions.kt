@@ -28,7 +28,7 @@ data class VoiceInstructions(
      *
      * @since 3.0.0
      */
-    val announcement: String?,
+    val announcement: String? = null,
 
     /**
      * Get the same instruction string you'd get from [.announcement] but this one includes
@@ -36,5 +36,5 @@ data class VoiceInstructions(
      *
      * @since 3.0.0
      */
-    val ssmlAnnouncement: String?,
+    val ssmlAnnouncement: String? = null,
 )

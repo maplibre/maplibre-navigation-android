@@ -18,21 +18,21 @@ data class LegAnnotation(
      *
      * @since 2.1.0
      */
-    val distance: List<Double>?,
+    val distance: List<Double>? = null,
 
     /**
      * The speed, in meters per second, between each pair of coordinates.
      *
      * @since 2.1.0
      */
-    val duration: List<Double>?,
+    val duration: List<Double>? = null,
 
     /**
      * The speed, in meters per second, between each pair of coordinates.
      *
      * @since 2.1.0
      */
-    val speed: List<Double>?,
+    val speed: List<Double>? = null,
 
     /**
      * The posted speed limit, between each pair of coordinates.
@@ -42,12 +42,12 @@ data class LegAnnotation(
      * @since 3.0.0
      */
     @SerialName("maxspeed")
-    val maxSpeed: List<MaxSpeed>?,
+    val maxSpeed: List<MaxSpeed>? = null,
 
     /**
      * The congestion between each pair of coordinates.
      *
      * @since 2.2.0
      */
-    val congestion: List<String>?,
+    val congestion: List<String>? = null,
 )

@@ -33,22 +33,6 @@ data class DirectionsResponse(
     val code: String,
 
     /**
-     * Optionally shows up in a directions response if an error or something unexpected occurred.
-     *
-     * @since 3.0.0
-     */
-    val message: String?,
-
-    /**
-     * List of [DirectionsWaypoint] objects. Each `waypoint` is an input coordinate
-     * snapped to the road and path network. The `waypoint` appear in the list in the order of
-     * the input coordinates.
-     *
-     * @since 1.0.0
-     */
-    val waypoints: List<DirectionsWaypoint>?,
-
-    /**
      * List containing all the different route options. It's ordered by descending recommendation
      * rank. In other words, object 0 in the List is the highest recommended route. if you don't
      * setAlternatives to true (default is false) in your builder this should always be a List of
@@ -59,12 +43,28 @@ data class DirectionsResponse(
     val routes: List<DirectionsRoute>,
 
     /**
+     * Optionally shows up in a directions response if an error or something unexpected occurred.
+     *
+     * @since 3.0.0
+     */
+    val message: String? = null,
+
+    /**
+     * List of [DirectionsWaypoint] objects. Each `waypoint` is an input coordinate
+     * snapped to the road and path network. The `waypoint` appear in the list in the order of
+     * the input coordinates.
+     *
+     * @since 1.0.0
+     */
+    val waypoints: List<DirectionsWaypoint>? = null,
+
+    /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route
      * in the future.
      *
      * @since 3.0.0
      */
-    val uuid: String?,
+    val uuid: String? = null,
 ) {
 
     fun toJson(): String = json.encodeToString(this)

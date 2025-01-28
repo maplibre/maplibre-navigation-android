@@ -54,7 +54,7 @@ data class BannerComponents(
      *  * **jct**: indicates a junction guidance view.
      *  * **signboard**: indicates a signboard guidance view.
      */
-    val subType: Type?,
+    val subType: Type? = null,
 
     /**
      * The abbreviated form of text.
@@ -64,7 +64,7 @@ data class BannerComponents(
      *  @since 3.0.0
      */
     @SerialName("abbr")
-    val abbreviation: String?,
+    val abbreviation: String? = null,
 
     /**
      * An integer indicating the order in which the abbreviation abbr should be used in
@@ -80,7 +80,7 @@ data class BannerComponents(
      * @since 3.0.0
      */
     @SerialName("abbr_priority")
-    val abbreviationPriority: Int?,
+    val abbreviationPriority: Int? = null,
 
     /**
      * In some cases when the [LegStep] is a highway or major roadway, there might be a shield
@@ -90,7 +90,7 @@ data class BannerComponents(
      * @since 3.0.0
      */
     @SerialName("imageBaseURL")
-    val imageBaseUrl: String?,
+    val imageBaseUrl: String? = null,
 
     /**
      * In some cases when the [StepManeuver] will be difficult to navigate, an image
@@ -100,7 +100,7 @@ data class BannerComponents(
      * @since 5.0.0
      */
     @SerialName("imageURL")
-    val imageUrl: String?,
+    val imageUrl: String? = null,
 
     /**
      * A List of directions indicating which way you can go from a lane
@@ -110,7 +110,7 @@ data class BannerComponents(
      *
      * @since 3.2.0
      */
-    val directions: List<String>?,
+    val directions: List<String>? = null,
 
     /**
      * A boolean telling you if that lane can be used to complete the upcoming maneuver.
@@ -119,7 +119,7 @@ data class BannerComponents(
      *
      * @since 3.2.0
      */
-    val active: Boolean?,
+    val active: Boolean? = null,
 ) {
 
     fun toBuilder(): Builder {

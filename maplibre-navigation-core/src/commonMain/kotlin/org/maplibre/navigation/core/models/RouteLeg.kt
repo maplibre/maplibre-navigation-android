@@ -45,7 +45,7 @@ data class RouteLeg(
      * @since 5.5.0
      */
     @SerialName("duration_typical")
-    val durationTypical: Double?,
+    val durationTypical: Double? = null,
 
     /**
      * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.
@@ -53,7 +53,7 @@ data class RouteLeg(
      * @return String with summary
      * @since 1.0.0
      */
-    val summary: String?,
+    val summary: String? = null,
 
     /**
      * An array of objects describing the administrative boundaries the route leg travels through.
@@ -67,7 +67,7 @@ data class RouteLeg(
      *
      * @return a list of [Incident]
      */
-    val incidents: List<Incident>?,
+    val incidents: List<Incident>? = null,
 
     /**
      * A [LegAnnotation] that contains additional details about each line segment along the
@@ -77,12 +77,12 @@ data class RouteLeg(
      * @return a [LegAnnotation] object
      * @since 2.1.0
      */
-    val annotation: LegAnnotation?,
+    val annotation: LegAnnotation? = null,
 
     /**
      * A list of closures that occur on this leg.
      *
      * @return a list of [Incident]
      */
-    val closures: List<Closure>?,
+    val closures: List<Closure>? = null,
 )

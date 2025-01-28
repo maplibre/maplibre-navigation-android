@@ -24,7 +24,7 @@ data class BannerView(
      *
      * @since 5.0.0
      */
-    val components: List<BannerComponents>?,
+    val components: List<BannerComponents>? = null,
 
     /**
      * This indicates the type of maneuver.
@@ -33,7 +33,7 @@ data class BannerView(
      *
      * @since 5.0.0
      */
-    val type: StepManeuver.Type?,
+    val type: StepManeuver.Type? = null,
 
     /**
      * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
@@ -42,5 +42,5 @@ data class BannerView(
      *
      * @since 5.0.0
      */
-    val modifier: ManeuverModifier.Type?,
+    val modifier: ManeuverModifier.Type? = null,
 )

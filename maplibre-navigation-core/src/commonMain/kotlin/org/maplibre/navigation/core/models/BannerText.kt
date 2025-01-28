@@ -28,7 +28,7 @@ data class BannerText(
      * @return a [BannerComponents] specific to a [LegStep]
      * @since 3.0.0
      */
-    val components: List<BannerComponents>?,
+    val components: List<BannerComponents>? = null,
 
     /**
      * This indicates the type of maneuver.
@@ -38,7 +38,7 @@ data class BannerText(
      *
      * @since 3.0.0
      */
-    val type: StepManeuver.Type?,
+    val type: StepManeuver.Type? = null,
 
     /**
      * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
@@ -48,7 +48,7 @@ data class BannerText(
      * @return String with modifier
      * @since 3.0.0
      */
-    val modifier: ManeuverModifier.Type?,
+    val modifier: ManeuverModifier.Type? = null,
 
     /**
      * The degrees at which you will be exiting a roundabout, assuming `180` indicates
@@ -57,7 +57,7 @@ data class BannerText(
      * @return at which you will be exiting a roundabout
      * @since 3.0.0
      */
-    val degrees: Double?,
+    val degrees: Double? = null,
 
     /**
      * A string representing which side the of the street people drive on
@@ -67,5 +67,7 @@ data class BannerText(
      * @since 3.0.0
      */
     @SerialName("driving_side")
-    val drivingSide: String?,
+    val drivingSide: String? = null,
 )
+
+//TODO: Builder

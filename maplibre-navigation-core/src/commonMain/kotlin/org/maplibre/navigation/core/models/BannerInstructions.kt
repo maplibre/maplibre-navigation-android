@@ -32,7 +32,7 @@ data class BannerInstructions(
      *
      * @since 3.0.0
      */
-    val secondary: BannerText?,
+    val secondary: BannerText? = null,
 
     /**
      * Additional information that is included if we feel the driver needs a heads up about something.
@@ -42,7 +42,7 @@ data class BannerInstructions(
      *
      * @since 3.2.0
      */
-    val sub: BannerText?,
+    val sub: BannerText? = null,
 
     /**
      * Optional image to display for an upcoming maneuver. Used to provide a visual
@@ -51,5 +51,7 @@ data class BannerInstructions(
      *
      * @since 5.0.0
      */
-    val view: BannerView?,
+    val view: BannerView? = null,
 )
+
+//TODO: builder

@@ -17,7 +17,7 @@ data class DirectionsWaypoint(
      *
      * @since 1.0.0
      */
-    val name: String?,
+    val name: String? = null,
 
     /**
      * A [Point] representing this waypoint location.
@@ -25,5 +25,5 @@ data class DirectionsWaypoint(
      * @since 3.0.0
      */
     @Serializable(with = PointSerializer::class)
-    val location: Point?
+    val location: Point? = null
 )

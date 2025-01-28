@@ -16,5 +16,5 @@ data class TollCollection(
      * The type of toll collection point, either `toll_booth` or `toll_gantry`.
      * Note that adding new possible types is not considered a breaking change.
      */
-    val type: String?
+    val type: String? = null
 )

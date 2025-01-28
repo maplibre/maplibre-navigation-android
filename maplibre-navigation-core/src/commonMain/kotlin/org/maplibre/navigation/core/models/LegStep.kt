@@ -43,26 +43,26 @@ data class LegStep(
      * @since 5.5.0
      */
     @SerialName("duration_typical")
-    val durationTypical: Double?,
+    val durationTypical: Double? = null,
 
     /**
      * Speed limit unit as per the locale.
      */
-    val speedLimitUnit: SpeedLimit.Unit?,
+    val speedLimitUnit: SpeedLimit.Unit? = null,
 
     /**
      * Speed limit sign type.
      *
      * @see SpeedLimitSign
      */
-    val speedLimitSign: SpeedLimitSign?,
+    val speedLimitSign: SpeedLimitSign? = null,
 
     /**
      * String with the name of the way along which the travel proceeds.
      *
      * @since 1.0.0
      */
-    val name: String?,
+    val name: String? = null,
 
     /**
      * Any road designations associated with the road or path leading from this step&#39;s
@@ -76,14 +76,14 @@ data class LegStep(
      *
      * @since 2.0.0
      */
-    val ref: String?,
+    val ref: String? = null,
 
     /**
      * String with the destinations of the way along which the travel proceeds.
      *
      * @since 2.0.0
      */
-    val destinations: String?,
+    val destinations: String? = null,
 
     /**
      * indicates the mode of transportation in the step.
@@ -97,7 +97,7 @@ data class LegStep(
      *
      * @since 2.0.0
      */
-    val pronunciation: String?,
+    val pronunciation: String? = null,
 
     /**
      * An optional string indicating the name of the rotary. This will only be a nonnull when the
@@ -106,7 +106,7 @@ data class LegStep(
      * @since 2.0.0
      */
     @SerialName("rotary_name")
-    val rotaryName: String?,
+    val rotaryName: String? = null,
 
     /**
      * An optional string indicating the pronunciation of the name of the rotary. This will only be a
@@ -115,7 +115,7 @@ data class LegStep(
      * @since 2.0.0
      */
     @SerialName("rotary_pronunciation")
-    val rotaryPronunciation: String?,
+    val rotaryPronunciation: String? = null,
 
     /**
      * A [StepManeuver] object that typically represents the first coordinate making up the
@@ -131,7 +131,7 @@ data class LegStep(
      *
      * @since 3.0.0
      */
-    val voiceInstructions: List<VoiceInstructions>?,
+    val voiceInstructions: List<VoiceInstructions>? = null,
 
     /**
      * If in your request you set <tt>MapboxDirections.Builder#bannerInstructions()</tt> to true,
@@ -140,7 +140,7 @@ data class LegStep(
      *
      * @since 3.0.0
      */
-    val bannerInstructions: List<BannerInstructions>?,
+    val bannerInstructions: List<BannerInstructions>? = null,
 
     /**
      * The legal driving side at the location for this step. Result will either be `left` or
@@ -149,7 +149,7 @@ data class LegStep(
      * @since 3.0.0
      */
     @SerialName("driving_side")
-    val drivingSide: String?,
+    val drivingSide: String? = null,
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.
@@ -164,14 +164,14 @@ data class LegStep(
      *
      * @since 1.3.0
      */
-    val intersections: List<StepIntersection>?,
+    val intersections: List<StepIntersection>? = null,
 
     /**
      * String with the exit numbers or names of the way. Optionally included, if data is available.
      *
      * @since 3.0.0
      */
-    val exits: String?
+    val exits: String? = null
 ) {
 
     enum class SpeedLimitSign(val text: String) {

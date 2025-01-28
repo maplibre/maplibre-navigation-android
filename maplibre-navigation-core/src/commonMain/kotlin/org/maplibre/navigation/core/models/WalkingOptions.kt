@@ -17,7 +17,7 @@ data class WalkingOptions(
      * @since 4.8.0
      */
     @SerialName("walking_speed")
-    val walkingSpeed: Double?,
+    val walkingSpeed: Double? = null,
 
     /**
      * A bias which determines whether the route should prefer or avoid the use of roads or paths
@@ -28,7 +28,7 @@ data class WalkingOptions(
      * @since 4.8.0
      */
     @SerialName("walkway_bias")
-    val walkwayBias: Double?,
+    val walkwayBias: Double? = null,
 
     /**
      * A bias which determines whether the route should prefer or avoid the use of alleys. The
@@ -38,5 +38,5 @@ data class WalkingOptions(
      * @since 4.8.0
      */
     @SerialName("alley_bias")
-    val alleyBias: Double?,
+    val alleyBias: Double? = null,
 )

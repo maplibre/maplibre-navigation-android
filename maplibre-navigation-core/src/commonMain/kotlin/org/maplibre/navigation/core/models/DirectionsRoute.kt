@@ -53,14 +53,14 @@ data class DirectionsRoute(
      * @since 5.5.0
      */
     @SerialName("duration_typical")
-    val durationTypical: Double?,
+    val durationTypical: Double? = null,
 
     /**
      * The calculated weight of the route.
      *
      * @since 2.1.0
      */
-    val weight: Double?,
+    val weight: Double? = null,
 
     /**
      * The name of the weight profile used while calculating during extraction phase. The default is
@@ -70,7 +70,7 @@ data class DirectionsRoute(
      * @since 2.1.0
      */
     @SerialName("weight_name")
-    val weightName: String?,
+    val weightName: String? = null,
 
     /**
      * Holds onto the parameter information used when making the directions request. Useful for
@@ -78,7 +78,7 @@ data class DirectionsRoute(
      *
      * @since 3.0.0
      */
-    val routeOptions: RouteOptions?,
+    val routeOptions: RouteOptions? = null,
 
     /**
      * String of the language to be used for voice instructions.  Defaults to en, and
@@ -88,7 +88,7 @@ data class DirectionsRoute(
      * @since 3.1.0
      */
     @SerialName("voiceLocale")
-    val voiceLanguage: String?,
+    val voiceLanguage: String? = null,
 ) {
 
     fun toJson(): String = json.encodeToString(this)

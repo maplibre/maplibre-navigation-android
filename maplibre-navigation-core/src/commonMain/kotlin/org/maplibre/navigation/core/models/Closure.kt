@@ -13,11 +13,11 @@ data class Closure(
      * Closure's geometry index start point.
      */
     @SerialName("geometry_index_start")
-    val geometryIndexStart: Int?,
+    val geometryIndexStart: Int? = null,
 
     /**
      * Closure's geometry index end point.
      */
     @SerialName("geometry_index_end")
-    val geometryIndexEnd: Int?
+    val geometryIndexEnd: Int? = null
 )

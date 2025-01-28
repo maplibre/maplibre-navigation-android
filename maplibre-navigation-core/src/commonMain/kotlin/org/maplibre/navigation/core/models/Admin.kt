@@ -13,12 +13,14 @@ data class Admin(
      * Example: `"US"`.
      */
     @SerialName("iso_3166_1")
-    val countryCode: String?,
+    val countryCode: String? = null,
 
     /**
      * Contains the 3 character ISO 3166-1 alpha-3 code that applies to a country boundary.
      * Example: `"USA"`.
      */
     @SerialName("iso_3166_1_alpha3")
-    val countryCodeAlpha3: String?
+    val countryCodeAlpha3: String? = null
 )
+
+//TODO builder

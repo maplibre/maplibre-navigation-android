@@ -17,7 +17,7 @@ data class IntersectionLanes(
      *
      * @since 2.0.0
      */
-    val valid: Boolean?,
+    val valid: Boolean? = null,
 
     /**
      * Indicates whether this lane is a preferred lane (true) or not (false).
@@ -28,7 +28,7 @@ data class IntersectionLanes(
      * Only available on the mapbox/driving profile.
      *
      */
-    val active: Boolean?,
+    val active: Boolean? = null,
 
     /**
      * When either valid or active is set to true, this property shows which of the lane indications
@@ -40,7 +40,7 @@ data class IntersectionLanes(
      * Only available on the mapbox/driving profile.
      */
     @SerialName("valid_indication")
-    val validIndication: String?,
+    val validIndication: String? = null,
 
     /**
      * Array that can be made up of multiple signs such as `left`, `right`, etc.
@@ -50,5 +50,5 @@ data class IntersectionLanes(
      *
      * @since 2.0.0
      */
-    val indications: List<String>?,
+    val indications: List<String>? = null,
 )

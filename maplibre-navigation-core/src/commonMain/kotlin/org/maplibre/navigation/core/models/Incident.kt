@@ -21,48 +21,48 @@ data class Incident(
      *
      * @see Type
      */
-    val type: Type?,
+    val type: Type? = null,
 
     /**
      * **True** if road is closed and no possibility to pass through there. **False**
      * otherwise.
      */
-    val closed: Boolean?,
+    val closed: Boolean? = null,
 
     /**
      * Quantitative descriptor of congestion.
      */
-    val congestion: Congestion?,
+    val congestion: Congestion? = null,
 
     /**
      * Human-readable description of the incident suitable for displaying to the users.
      */
-    val description: String?,
+    val description: String? = null,
 
     /**
      * Human-readable long description of the incident suitable for displaying to the users.
      */
     @SerialName("long_description")
-    val longDescription: String?,
+    val longDescription: String? = null,
 
     /**
      * Severity level of incident.
      *
      * @see Impact
      */
-    val impact: Impact?,
+    val impact: Impact? = null,
 
     /**
      * Sub-type of the incident.
      */
     @SerialName("sub_type")
-    val subType: String?,
+    val subType: String? = null,
 
     /**
      * Sub-type-specific description.
      */
     @SerialName("sub_type_description")
-    val subTypeDescription: String?,
+    val subTypeDescription: String? = null,
 
     /**
      * AlertC codes.
@@ -70,38 +70,38 @@ data class Incident(
      * @see [AlertC](https://www.iso.org/standard/59231.html)
      */
     @SerialName("alertc_codes")
-    val alertcCodes: List<Int>?,
+    val alertcCodes: List<Int>? = null,
 
     /**
      * Incident's geometry index start point.
      */
     @SerialName("geometry_index_start")
-    val geometryIndexStart: Int?,
+    val geometryIndexStart: Int? = null,
 
     /**
      * Incident's geometry index end point.
      */
     @SerialName("geometry_index_end")
-    val geometryIndexEnd: Int?,
+    val geometryIndexEnd: Int? = null,
 
     /**
      * Time the incident was created/updated in ISO8601 format. Not the same
      * [.startTime]/[.endTime], incident can be created/updated before the incident.
      */
     @SerialName("creation_time")
-    val creationTime: String?,
+    val creationTime: String? = null,
 
     /**
      * Start time of the incident in ISO8601 format.
      */
     @SerialName("start_time")
-    val startTime: String?,
+    val startTime: String? = null,
 
     /**
      * End time of the incident in ISO8601 format.
      */
     @SerialName("end_time")
-    val endTime: String?,
+    val endTime: String? = null,
 ) {
 
     enum class Type(val text: String) {

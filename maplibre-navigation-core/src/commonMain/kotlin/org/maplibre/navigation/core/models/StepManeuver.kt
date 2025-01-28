@@ -50,14 +50,14 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    val instruction: String?,
+    val instruction: String? = null,
 
     /**
      * This indicates the type of maneuver.
      *
      * @since 1.0.0
      */
-    val type: Type?,
+    val type: Type? = null,
 
     /**
      * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
@@ -66,7 +66,7 @@ data class StepManeuver(
      *
      * @since 1.0.0
      */
-    val modifier: ManeuverModifier.Type?,
+    val modifier: ManeuverModifier.Type? = null,
 
     /**
      * An optional integer indicating number of the exit to take. If exit is undefined the destination
@@ -80,7 +80,7 @@ data class StepManeuver(
      *
      * @since 2.0.0
      */
-    val exit: Int?,
+    val exit: Int? = null,
 ) {
 
     @Serializable
