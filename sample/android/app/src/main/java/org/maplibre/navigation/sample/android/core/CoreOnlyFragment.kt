@@ -72,7 +72,7 @@ class CoreOnlyFragment : Fragment() {
         binding.map.getMapAsync { map ->
             map.setStyle(
                 Style.Builder()
-                    .fromUri("https://tiles.versatiles.org/assets/styles/colorful.json")
+                    .fromUri("https://tiles.versatiles.org/assets/styles/colorful/style.json")
             ) { style ->
                 loadRoute(map, style)
             }

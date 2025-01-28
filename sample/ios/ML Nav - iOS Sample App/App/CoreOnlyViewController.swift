@@ -16,7 +16,7 @@ class CoreOnlyViewController: UIViewController, MLNMapViewDelegate, ProgressChan
         
         mapView.delegate = self
         mapView.styleURL = URL(
-            string: "https://tiles.versatiles.org/assets/styles/colorful.json"
+            string: "https://tiles.versatiles.org/assets/styles/colorful/style.json"
         )
         
         view.addSubview(mapView)
