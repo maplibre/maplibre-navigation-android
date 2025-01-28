@@ -1,0 +1,58 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+//TODO (fabi755): add signing config
+//apply from: file("${rootDir}/gradle/publish-root.gradle")
+
+// Define group & version for Kotlin Multiplatform artifacts
+group = project.ext.navigationArtifactGroupId
+version = project.ext.versionName
+
+// TODO (fabi755): add dokka
+//tasks.register('dokkaHtmlJar', Jar.class) {
+//    dependsOn(dokkaHtml)
+//    from(dokkaHtml)
+//    archiveClassifier.set("javadoc")
+//}
+
+publishing {
+    publications.withType(MavenPublication) {
+        groupId project.ext.navigationArtifactGroupId
+        version project.ext.versionName
+
+        project.logger.info("Publishing project $artifactId with version: ${version}")
+
+        // TODO (fabi755): add dokka
+//        artifact tasks.dokkaHtmlJar
+
+        pom {
+            name = project.ext.navigationArtifactTitle
+            description = project.ext.navigationArtifactDescription
+            url = project.ext.navigationArtifactUrl
+            licenses {
+                license {
+                    name = project.ext.navigationArtifactLicenseName
+                    url = project.ext.navigationArtifactLicenseUrl
+                }
+            }
+            developers {
+                developer {
+                    id = project.ext.navigationDeveloperId
+                    name = project.ext.navigationDeveloperName
+                    email = project.ext.navigationDeveloperMail
+                }
+            }
+            scm {
+                connection = project.ext.navigationArtifactScmUrl
+                developerConnection = project.ext.navigationArtifactScmUrl
+                url = project.ext.navigationArtifactUrl
+            }
+        }
+    }
+}
+
+//signing {
+//    required { project.ext["signing.keyId"] != null }
+//    sign publishing.publications
+//}

@@ -108,9 +108,9 @@ configurations {
     }
 }
 
-apply from: 'javadoc.gradle'
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"
+//TODO (fabi755) add dokka
+//apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/publish-kmp.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/dependencies-graph.gradle"
 apply from: "${rootDir}/gradle/dependency-updates.gradle"
-
