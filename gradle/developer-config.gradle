@@ -20,9 +20,9 @@ task accessToken {
                 "    <!-- Your Mapbox access token (example: pk.abc...) -->\n" +
                 "    <string name=\"mapbox_access_token\" translatable=\"false\">" + mapboxAccessToken + "</string>\n" +
                 "    <!-- Map tile provider for light design (example: https://api.maptiler.com/maps/basic-v2/style.json?key=...) -->\n" +
-                "    <string name=\"map_style_light\" translatable=\"false\">https://tiles.versatiles.org/assets/styles/colorful.json</string>\n" +
+                "    <string name=\"map_style_light\" translatable=\"false\">https://tiles.versatiles.org/assets/styles/colorful/style.json</string>\n" +
                 "    <!-- Map tile provider for dark design (example: \"https://api.maptiler.com/maps/basic-v2-dark/style.json?key=...) -->\n" +
-                "    <string name=\"map_style_dark\" translatable=\"false\">https://tiles.versatiles.org/assets/styles/eclipse.json</string>\n" +
+                "    <string name=\"map_style_dark\" translatable=\"false\">https://tiles.versatiles.org/assets/styles/eclipse/style.json</string>\n" +
                 "</resources>"
         tokenFile.write(tokenFileContents)
     }
