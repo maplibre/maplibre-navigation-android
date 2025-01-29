@@ -1,0 +1,23 @@
+name: "Test, build and release"
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        type: boolean
+        default: false
+        description: Whether to make a release
+  pull_request:
+  push:
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Placeholder
+        run: echo "Hello world!!11!!1"
