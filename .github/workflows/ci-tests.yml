@@ -10,7 +10,7 @@
 #    steps:
 #      - uses: actions/checkout@v3
 #      - name: Set up Gradle # TODO cache
-#        uses: gradle/gradle-build-action@v2.3.3
+#        uses: gradle/gradle-build-action@2.4.2
 #        with:
 #          gradle-version: current
 #          wrapper-cache-enabled: true
