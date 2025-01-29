@@ -121,7 +121,4 @@ configurations {
 
 
 apply from: 'javadoc.gradle'
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/dependencies-graph.gradle"
-apply from: "${rootDir}/gradle/dependency-updates.gradle"
+apply from: "${rootDir}/gradle/publish-android.gradle"

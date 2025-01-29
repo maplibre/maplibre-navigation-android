@@ -4,6 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'org.jetbrains.dokka'
 
 apply from: file("${rootDir}/gradle/artifact-settings.gradle")
 
@@ -108,9 +109,4 @@ configurations {
     }
 }
 
-//TODO (fabi755) add dokka
-//apply from: 'javadoc.gradle'
 apply from: "${rootDir}/gradle/publish-kmp.gradle"
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/dependencies-graph.gradle"
-apply from: "${rootDir}/gradle/dependency-updates.gradle"

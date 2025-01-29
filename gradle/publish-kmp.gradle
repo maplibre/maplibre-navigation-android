@@ -2,47 +2,54 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 apply from: file("${rootDir}/gradle/artifact-settings.gradle")
-//TODO (fabi755): add signing config
-//apply from: file("${rootDir}/gradle/publish-root.gradle")
+apply from: file("${rootDir}/gradle/publish-root.gradle")
 
 // Define group & version for Kotlin Multiplatform artifacts
 group = project.ext.navigationArtifactGroupId
 version = project.ext.versionName
 
-// TODO (fabi755): add dokka
-//tasks.register('dokkaHtmlJar', Jar.class) {
-//    dependsOn(dokkaHtml)
-//    from(dokkaHtml)
-//    archiveClassifier.set("javadoc")
-//}
+tasks.register('dokkaHtmlJar', Jar.class) {
+    dependsOn(dokkaHtml)
+    from(dokkaHtml)
+    archiveClassifier.set("javadoc")
+}
 
 publishing {
     publications.withType(MavenPublication) {
         groupId project.ext.navigationArtifactGroupId
         version project.ext.versionName
 
+        // Drop the `maplibre` from artifact ID
+        // `afterEvaluate` is needed to force set ID for Android target
+        // See: https://youtrack.jetbrains.com/issue/KT-53520/MPP-Unable-to-set-published-artifact-id-for-android-library
+        afterEvaluate {
+            artifactId artifactId.replace("maplibre-", "")
+        }
+
         project.logger.info("Publishing project $artifactId with version: ${version}")
 
-        // TODO (fabi755): add dokka
-//        artifact tasks.dokkaHtmlJar
+        artifact tasks.dokkaHtmlJar
 
         pom {
             name = project.ext.navigationArtifactTitle
-            description = project.ext.navigationArtifactDescription
+            description = project.ext.navigationArtifactTitle
             url = project.ext.navigationArtifactUrl
+
             licenses {
                 license {
                     name = project.ext.navigationArtifactLicenseName
                     url = project.ext.navigationArtifactLicenseUrl
                 }
             }
+
             developers {
                 developer {
-                    id = project.ext.navigationDeveloperId
-                    name = project.ext.navigationDeveloperName
-                    email = project.ext.navigationDeveloperMail
+                    id = project.ext.mapLibreDeveloperId
+                    name = project.ext.mapLibreDeveloperName
+                    email = project.ext.mapLibreDeveloperMail
                 }
             }
+
             scm {
                 connection = project.ext.navigationArtifactScmUrl
                 developerConnection = project.ext.navigationArtifactScmUrl
@@ -52,7 +59,13 @@ publishing {
     }
 }
 
-//signing {
-//    required { project.ext["signing.keyId"] != null }
-//    sign publishing.publications
-//}
+signing {
+    required { project.ext["signing.keyId"] != null }
+    sign publishing.publications
+}
+
+// Fix Gradle warning about signing tasks using publishing task outputs without explicit dependencies
+// See: https://github.com/gradle/gradle/issues/26091
+tasks.withType(AbstractPublishToMaven.class).configureEach {
+    dependsOn(tasks.withType(Sign.class))
+}

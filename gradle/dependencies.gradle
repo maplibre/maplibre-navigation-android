@@ -56,6 +56,8 @@ ext {
             gradle           : '8.6.0',
             dependencyGraph  : '0.3.0',
             dependencyUpdates: '0.44.0',
+            kotlinDokka      : '2.0.0',
+            nexus            : '2.0.0'
     ]
 
     dependenciesList = [
@@ -133,6 +135,8 @@ ext {
             dependencyUpdates   : "com.github.ben-manes:gradle-versions-plugin:${pluginVersion.dependencyUpdates}",
             kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
             kotlinxSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
-            kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}"
+            kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}",
+            kotlinDokka         : "org.jetbrains.dokka:dokka-gradle-plugin:${pluginVersion.kotlinDokka}",
+            nexus               : "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin:${pluginVersion.nexus}",
     ]
 }

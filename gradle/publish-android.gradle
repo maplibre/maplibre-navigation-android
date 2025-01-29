@@ -1,6 +1,8 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-apply from: "${rootDir}/gradle/artifact-settings.gradle"
+
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+apply from: file("${rootDir}/gradle/publish-root.gradle")
 
 task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
@@ -30,34 +32,37 @@ artifacts {
 }
 
 afterEvaluate {
-    // Define group & version for Kotlin Multiplatform artifacts
-    group = project.ext.navigationArtifactGroupId
-    version = project.ext.versionName
-
     publishing {
         publications {
             release(MavenPublication) {
                 groupId project.ext.navigationArtifactGroupId
-                artifactId project.name
                 version project.ext.versionName
+
+                artifactId "${artifactId.replace("libandroid-", "")}-android"
+
+                artifact tasks.androidJavadocsJar
+                artifact tasks.androidSourcesJar
 
                 pom {
                     name = project.ext.navigationArtifactTitle
                     description = project.ext.navigationArtifactTitle
                     url = project.ext.navigationArtifactUrl
+
                     licenses {
                         license {
                             name = project.ext.navigationArtifactLicenseName
                             url = project.ext.navigationArtifactLicenseUrl
                         }
                     }
+
                     developers {
                         developer {
-                            id = project.ext.navigationDeveloperId
-                            name = project.ext.navigationDeveloperName
-                            email = project.ext.navigationDeveloperMail
+                            id = project.ext.mapLibreDeveloperId
+                            name = project.ext.mapLibreDeveloperName
+                            email = project.ext.mapLibreDeveloperMail
                         }
                     }
+
                     scm {
                         connection = project.ext.navigationArtifactScmUrl
                         developerConnection = project.ext.navigationArtifactScmUrl
@@ -75,7 +80,7 @@ afterEvaluate {
     }
 }
 
-//TODO: currently not used, while only published with JitPack
-//signing {
-//  sign publishing.publications
-//}
+signing {
+    required { project.ext["signing.keyId"] != null }
+    sign publishing.publications
+}
