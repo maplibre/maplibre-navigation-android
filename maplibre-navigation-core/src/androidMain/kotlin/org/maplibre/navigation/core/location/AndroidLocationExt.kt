@@ -10,21 +10,21 @@ fun AndroidLocation.toLocation() = Location(
     provider = provider,
     latitude = latitude,
     longitude = longitude,
-    accuracyMeters = accuracy.takeIf { hasAccuracy() },
+    accuracyMeters = if (hasAccuracy()) accuracy else null,
     altitude = altitude,
-    bearing = bearing.takeIf { hasBearing() },
-    speedMetersPerSeconds = speed.takeIf { hasSpeed() },
+    bearing = if (hasBearing()) bearing else null,
+    speedMetersPerSeconds = if (hasSpeed()) speed else null,
     time = time,
     altitudeAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        verticalAccuracyMeters.takeIf { hasVerticalAccuracy() }
+        if (hasVerticalAccuracy()) verticalAccuracyMeters else null
     else
         null,
     mslAltitude = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-        mslAltitudeMeters.takeIf { hasMslAltitude() }
+        if (hasMslAltitude()) mslAltitudeMeters else null
     else
         null,
     mslAltitudeAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-        mslAltitudeAccuracyMeters.takeIf { hasMslAltitudeAccuracy() }
+        if (hasMslAltitudeAccuracy()) mslAltitudeAccuracyMeters else null
     else
         null,
 )
