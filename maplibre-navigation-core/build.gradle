@@ -44,6 +44,9 @@ kotlin {
             implementation dependenciesList.kotlinTest
             implementation dependenciesList.kotlinxCoroutinesTest
             implementation dependenciesList.mockk
+
+            // For Android specific tests
+            implementation dependenciesList.robolectric
         }
 
         androidMain.dependencies {
