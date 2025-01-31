@@ -90,7 +90,7 @@ data class LegStep(
      *
      * @since 1.0.0
      */
-    val mode: String,
+    val mode: String = "driving",
 
     /**
      * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
@@ -156,7 +156,7 @@ data class LegStep(
      *
      * @since 2.1.0
      */
-    val weight: Double,
+    val weight: Double = 1.0,
 
     /**
      * Provides a list of all the intersections connected to the current way the user is traveling
