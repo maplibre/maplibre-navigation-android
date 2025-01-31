@@ -127,10 +127,10 @@ public class NavigationRouteTest extends BaseTest {
             "https://api-directions-traf.com",
             "example_user",
             NavigationRoute.PROFILE_WALKING,
-            toJvmPoints(coordinates),
-            BaseTest.ACCESS_TOKEN,
-            "XYZ_UUID"
+            toJvmPoints(coordinates)
         )
+            .withAccessToken(BaseTest.ACCESS_TOKEN)
+            .withRequestUuid("XYZ_UUID")
             .withAlternatives(true)
             .withLanguage(Locale.US.getLanguage())
             .withVoiceUnits(UnitType.METRIC)

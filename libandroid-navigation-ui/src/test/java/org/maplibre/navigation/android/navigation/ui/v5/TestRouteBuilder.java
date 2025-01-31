@@ -46,10 +46,10 @@ class TestRouteBuilder {
             Constants.BASE_API_URL,
             "user",
             "profile",
-            toJvmPoints(coordinates),
-            ACCESS_TOKEN,
-            "uuid"
+            toJvmPoints(coordinates)
         )
+            .withAccessToken(ACCESS_TOKEN)
+            .withRequestUuid("uuid")
             .withGeometries("mocked_geometries")
             .withVoiceInstructions(true)
             .withBannerInstructions(true)
