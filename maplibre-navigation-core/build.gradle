@@ -71,8 +71,8 @@ kotlin {
             isStatic = false
 
             transitiveExport = false
-            export("maplibre-java:services-geojson:unspecified")
-            export("maplibre-java:services-turf:unspecified")
+            export(dependenciesList.geojson)
+            export(dependenciesList.turf)
         }
     }
 }
