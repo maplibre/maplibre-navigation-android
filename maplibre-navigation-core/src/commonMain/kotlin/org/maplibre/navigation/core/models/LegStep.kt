@@ -203,6 +203,7 @@ data class LegStep(
         }
     }
 
+    @Serializable
     enum class SpeedLimitSign(val text: String) {
         @SerialName("mutcd")
         MUTCD("mutcd"),

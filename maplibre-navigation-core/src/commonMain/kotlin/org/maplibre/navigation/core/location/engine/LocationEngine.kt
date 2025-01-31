@@ -1,6 +1,7 @@
 package org.maplibre.navigation.core.location.engine
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.Serializable
 import org.maplibre.navigation.core.location.Location
 
 /**

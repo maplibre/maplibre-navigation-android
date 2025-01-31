@@ -140,6 +140,7 @@ data class BannerComponents(
         }
     }
 
+    @Serializable
     enum class Type(val text: String) {
         /**
          * Default. Indicates the text is part of the instructions and no other type.

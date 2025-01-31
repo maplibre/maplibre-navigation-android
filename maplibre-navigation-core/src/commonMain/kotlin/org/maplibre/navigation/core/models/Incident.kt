@@ -290,6 +290,7 @@ data class Incident(
         }
     }
 
+    @Serializable
     enum class Type(val text: String) {
 
         /**
@@ -365,6 +366,7 @@ data class Incident(
         WEATHER("weather"),
     }
 
+    @Serializable
     enum class Impact(val text: String) {
 
         /**
