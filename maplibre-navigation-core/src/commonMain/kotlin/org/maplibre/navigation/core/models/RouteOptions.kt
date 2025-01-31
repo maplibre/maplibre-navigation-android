@@ -225,22 +225,21 @@ data class RouteOptions(
     val voiceUnits: UnitType? = null,
 
     /**
-     * A valid Mapbox access token used to making the request.
+     * A valid access token that will included to the request.
      *
      * @since 3.0.0
      */
     @SerialName("access_token")
-    val accessToken: String,
+    val accessToken: String? = null,
 
     /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route
-     * in the future. <tt>MapboxDirections</tt> always waits for the response object which ensures
-     * this value will never be null.
+     * in the future.
      *
      * @since 3.0.0
      */
     @SerialName("uuid")
-    val requestUuid: String,
+    val requestUuid: String? = null,
 
     /**
      * Indicates from which side of the road to approach a waypoint.
@@ -330,9 +329,9 @@ data class RouteOptions(
             user = user,
             profile = profile,
             coordinates = coordinates,
-            accessToken = accessToken,
-            requestUuid = requestUuid
         ).apply {
+            withAccessToken(accessToken)
+            withRequestUuid(requestUuid)
             withAlternatives(alternatives)
             withLanguage(language)
             withRadiuses(radiuses)
@@ -362,7 +361,6 @@ data class RouteOptions(
      * @param user The same user which was used during the request that resulted in this root directions response.
      * @param profile The routing profile to use.
      * @param coordinates A list of Points to visit in order.
-     * @param accessToken A valid Mapbox access token used to making the request.
      * @param requestUuid A universally unique identifier (UUID) for identifying and executing a similar specific route in the future.
      */
     class Builder(
@@ -370,9 +368,9 @@ data class RouteOptions(
         private var user: String,
         private var profile: String,
         private var coordinates: List<@Serializable(with = PointSerializer::class) Point>,
-        private var accessToken: String,
-        private var requestUuid: String
     ) {
+        private var accessToken: String? = null
+        private var requestUuid: String? = null
         private var alternatives: Boolean? = null
         private var language: String? = null
         private var radiuses: String? = null
@@ -393,6 +391,22 @@ data class RouteOptions(
         private var waypointTargets: String? = null
         private var walkingOptions: WalkingOptions? = null
         private var snappingClosures: String? = null
+
+        /**
+         * Sets the access token.
+         *
+         * @param accessToken A valid access token used to making the request.
+         * @return The builder instance.
+         */
+        fun withAccessToken(accessToken: String?) = apply { this.accessToken = accessToken }
+
+        /**
+         * Sets the UUID for requests.
+         *
+         * @param requestUuid A valid access token used to making the request.
+         * @return The builder instance.
+         */
+        fun withRequestUuid(requestUuid: String?) = apply { this.requestUuid = requestUuid }
 
         /**
          * Sets the alternatives.
