@@ -221,6 +221,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
+    @SerialName("voice_units")
     val voiceUnits: UnitType? = null,
 
     /**
