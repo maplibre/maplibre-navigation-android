@@ -86,7 +86,7 @@ data class LegStep(
     val destinations: String? = null,
 
     /**
-     * indicates the mode of transportation in the step.
+     * Indicates the mode of transportation in the step.
      *
      * @since 1.0.0
      */
@@ -182,10 +182,10 @@ data class LegStep(
             geometry = geometry,
             distance = distance,
             duration = duration,
-            mode = mode,
             maneuver = maneuver,
-            weight = weight
         ).apply {
+            withMode(mode)
+            withWeight(weight)
             withDurationTypical(durationTypical)
             withSpeedLimitUnit(speedLimitUnit)
             withSpeedLimitSign(speedLimitSign)
@@ -225,10 +225,10 @@ data class LegStep(
         private var geometry: String,
         private var distance: Double,
         private var duration: Double,
-        private var mode: String,
         private var maneuver: StepManeuver,
-        private var weight: Double
     ) {
+        private var weight: Double = 1.0
+        private var mode: String = "driving"
         private var durationTypical: Double? = null
         private var speedLimitUnit: SpeedLimit.Unit? = null
         private var speedLimitSign: SpeedLimitSign? = null
@@ -243,6 +243,22 @@ data class LegStep(
         private var drivingSide: String? = null
         private var intersections: List<StepIntersection>? = null
         private var exits: String? = null
+
+        /**
+         * Set the mode of transportation in the step. Default value is `driving`.
+         *
+         * @param mode The mode of transportation in the step.
+         * @return The builder instance.
+         */
+        fun withMode(mode: String) = apply { this.mode = mode }
+
+        /**
+         * Set a decimal precision of edge weights. Default value is `1`.
+         *
+         * @param weight The decimal precision of edge weights.
+         * @return The builder instance.
+         */
+        fun withWeight(weight: Double) = apply { this.weight = weight }
 
         /**
          * Sets the typical duration.
