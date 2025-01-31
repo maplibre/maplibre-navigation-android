@@ -60,7 +60,7 @@ data class RouteLeg(
      * Use [StepIntersection.adminIndex] on the intersection object
      * to look up the admin for each intersection in this array.
      */
-    val admins: List<Admin>?,
+    val admins: List<Admin>? = null,
 
     /**
      * A list of incidents that occur on this leg.
