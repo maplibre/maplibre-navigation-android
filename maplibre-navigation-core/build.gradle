@@ -4,6 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'org.jetbrains.kotlin.native.cocoapods'
 apply plugin: 'org.jetbrains.dokka'
 
 apply from: file("${rootDir}/gradle/artifact-settings.gradle")
@@ -57,6 +58,23 @@ kotlin {
             compileOnly dependenciesList.gmsLocation
         }
     }
+
+    cocoapods {
+        version = "0.1.0"
+        summary = "MapLibre navigation core library"
+        homepage = "https://github.com/maplibre/maplibre-navigation-android/"
+
+        name = "MapLibreNavigationCore"
+
+        framework {
+            baseName = "MapLibreNavigationCore"
+            isStatic = false
+
+            transitiveExport = false
+            export("maplibre-java:services-geojson:unspecified")
+            export("maplibre-java:services-turf:unspecified")
+        }
+    }
 }
 
 android {
@@ -104,7 +122,7 @@ android {
 }
 
 // Exclude old version of GeoJSON libs
-// At the moment a newer version that supports Kotlin Multiplatform is required to run navigation
+// At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
 configurations {
     configureEach {
         exclude group: "org.maplibre.gl", module: "android-sdk-geojson"

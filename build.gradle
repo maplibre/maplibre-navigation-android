@@ -18,6 +18,7 @@ buildscript {
     classpath pluginDependencies.kotlinGradle
     classpath pluginDependencies.kotlinxSerialization
     classpath pluginDependencies.kotlinMultiplatform
+    classpath pluginDependencies.kotlinCocoapods
     classpath pluginDependencies.kotlinDokka
     classpath pluginDependencies.nexus
   }

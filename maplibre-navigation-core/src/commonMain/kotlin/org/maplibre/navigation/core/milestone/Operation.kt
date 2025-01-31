@@ -9,7 +9,7 @@ object Operation {
 
     fun greaterThan(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0].toDouble() > valueOne[1].toDouble()
             } else {
                 valueOne[0].toDouble() <= valueOne[1].toDouble()
@@ -20,7 +20,7 @@ object Operation {
 
     fun lessThan(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0].toDouble() < valueOne[1].toDouble()
             } else {
                 valueOne[0].toDouble() >= valueOne[1].toDouble()
@@ -31,7 +31,7 @@ object Operation {
 
     fun notEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0] != valueOne[1]
             } else {
                 valueOne[0] == valueOne[1]
@@ -42,7 +42,7 @@ object Operation {
 
     fun equal(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0] == valueOne[1]
             } else {
                 valueOne[0] != valueOne[1]
@@ -53,7 +53,7 @@ object Operation {
 
     fun greaterThanEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0].toDouble() >= valueOne[1].toDouble()
             } else {
                 valueOne[0].toDouble() < valueOne[1].toDouble()
@@ -64,7 +64,7 @@ object Operation {
 
     fun lessThanEqual(valueOne: Array<Number>, valueTwo: Number): Boolean {
         if (valueOne.size > 1) {
-            return if (valueTwo == TriggerProperty.TRUE) {
+            return if (valueTwo == TriggerProperty.TRUE_VALUE) {
                 valueOne[0].toDouble() <= valueOne[1].toDouble()
             } else {
                 valueOne[0].toDouble() > valueOne[1].toDouble()

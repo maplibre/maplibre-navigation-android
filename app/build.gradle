@@ -67,7 +67,7 @@ dependencies {
 
     implementation(dependenciesList.mapLibre) {
         // Exclude old version of GeoJSON libs
-        // At the moment a newer version that supports Kotlin Multiplatform is required to run navigation
+        // At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
         exclude group: "org.maplibre.gl", module: "android-sdk-geojson"
         exclude group: "org.maplibre.gl", module: "android-sdk-turf"
     }

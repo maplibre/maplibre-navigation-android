@@ -136,6 +136,7 @@ ext {
             kotlinGradle        : "org.jetbrains.kotlin:kotlin-gradle-plugin:${androidVersions.kotlinVersion}",
             kotlinxSerialization: "org.jetbrains.kotlin:kotlin-serialization:${androidVersions.kotlinVersion}",
             kotlinMultiplatform : "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:${androidVersions.kotlinVersion}",
+            kotlinCocoapods     : "org.jetbrains.kotlin.native.cocoapods:org.jetbrains.kotlin.native.cocoapods.gradle.plugin:${androidVersions.kotlinVersion}",
             kotlinDokka         : "org.jetbrains.dokka:dokka-gradle-plugin:${pluginVersion.kotlinDokka}",
             nexus               : "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin:${pluginVersion.nexus}",
     ]

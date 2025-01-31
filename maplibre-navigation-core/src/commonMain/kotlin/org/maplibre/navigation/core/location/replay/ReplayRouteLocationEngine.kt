@@ -17,6 +17,9 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 open class ReplayRouteLocationEngine(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : LocationEngine {
+
+    constructor(): this(CoroutineScope(Dispatchers.IO))
+
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED
     private var delay = DEFAULT_DELAY
