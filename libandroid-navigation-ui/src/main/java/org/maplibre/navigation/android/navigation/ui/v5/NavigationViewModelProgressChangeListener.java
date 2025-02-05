@@ -1,9 +1,8 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import android.location.Location;
-
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 class NavigationViewModelProgressChangeListener implements ProgressChangeListener {
 

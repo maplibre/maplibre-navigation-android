@@ -27,7 +27,7 @@ import org.maplibre.android.style.sources.GeoJsonSource;
 import org.maplibre.android.utils.MathUtils;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.MapImageUtils;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.turf.TurfConstants;
 import org.maplibre.turf.TurfMeasurement;
 import org.maplibre.turf.TurfMisc;
@@ -49,6 +49,8 @@ import static org.maplibre.android.style.layers.Property.VISIBLE;
 import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap;
 import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.geojson.common.CommonExtKt.toJvm;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 
 class MapRouteArrow {
 
@@ -110,11 +112,11 @@ class MapRouteArrow {
   }
 
   private List<Point> obtainArrowPointsFrom(RouteProgress routeProgress) {
-    List<Point> reversedCurrent = new ArrayList<>(routeProgress.getCurrentStepPoints());
+    List<Point> reversedCurrent = new ArrayList<>(toJvmPoints(routeProgress.getCurrentStepPoints()));
     Collections.reverse(reversedCurrent);
 
     LineString arrowLineCurrent = LineString.fromLngLats(reversedCurrent);
-    LineString arrowLineUpcoming = LineString.fromLngLats(routeProgress.getUpcomingStepPoints());
+    LineString arrowLineUpcoming = LineString.fromLngLats(toJvmPoints(routeProgress.getUpcomingStepPoints()));
 
     LineString arrowCurrentSliced = TurfMisc.lineSliceAlong(arrowLineCurrent, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
     LineString arrowUpcomingSliced = TurfMisc.lineSliceAlong(arrowLineUpcoming, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);

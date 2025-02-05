@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 
 import org.maplibre.android.utils.BitmapUtils;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
 
 /**
  * This class is used to switch theme colors in {@link NavigationView}.

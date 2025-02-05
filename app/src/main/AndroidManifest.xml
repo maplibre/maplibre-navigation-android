@@ -43,6 +43,20 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:name=".NavigationWithForegroundNotificationActivity"
+            android:label="@string/title_foreground_notification">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".NavigationWithCustomForegroundNotificationActivity"
+            android:label="@string/title_custom_foreground_notification">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

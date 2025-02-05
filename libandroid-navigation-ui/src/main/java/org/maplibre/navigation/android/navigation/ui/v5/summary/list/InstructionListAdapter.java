@@ -7,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maplibre.navigation.android.navigation.ui.v5.R;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 
 public class InstructionListAdapter extends RecyclerView.Adapter<InstructionViewHolder> {
 

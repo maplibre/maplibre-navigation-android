@@ -1,13 +1,14 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
 import android.graphics.PointF;
-import android.location.Location;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.geojson.common.CommonExtKt;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.ArrayList;
 import java.util.HashSet;

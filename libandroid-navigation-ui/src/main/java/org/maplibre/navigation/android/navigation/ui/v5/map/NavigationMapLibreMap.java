@@ -1,13 +1,12 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
+import static org.maplibre.navigation.core.location.LocationExtKt.toAndroidLocation;
+import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
@@ -20,7 +19,8 @@ import androidx.fragment.app.FragmentActivity;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.geometry.LatLng;
 import org.maplibre.android.location.LocationComponent;
@@ -38,8 +38,7 @@ import org.maplibre.android.style.sources.Source;
 import org.maplibre.android.style.sources.VectorSource;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -202,7 +201,7 @@ public class NavigationMapLibreMap {
    * @param location to update the icon and query the map
    */
   public void updateLocation(Location location) {
-    locationComponent.forceLocationUpdate(location);
+    locationComponent.forceLocationUpdate(toAndroidLocation(location));
     updateMapWayNameWithLocation(location);
   }
 
@@ -732,7 +731,7 @@ public class NavigationMapLibreMap {
     if (mapWayName == null) {
       return;
     }
-    LatLng latLng = new LatLng(location);
+    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     PointF mapPoint = mapLibreMap.getProjection().toScreenLocation(latLng);
     mapWayName.updateWayNameWithPoint(mapPoint);
   }

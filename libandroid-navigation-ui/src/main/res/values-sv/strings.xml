@@ -21,4 +21,9 @@
     <!-- Test app dialog text cancel navigation -->
     <string name="dropoff_dialog_negative_text">Avbryt</string>
 
-    </resources>
+    <string name="kilometers">km</string>
+    <string name="meters">m</string>
+    <string name="miles">mi</string>
+    <string name="feet">fot</string>
+    <string name="eta_format">%s ETA</string>
+</resources>

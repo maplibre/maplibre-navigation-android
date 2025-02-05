@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+apply from: file("${rootDir}/gradle/artifact-settings.gradle") // For version property
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
@@ -27,7 +29,7 @@ android {
         minSdkVersion androidVersions.minSdkVersion
         targetSdkVersion androidVersions.targetSdkVersion
         versionCode 1
-        versionName "0.1"
+        versionName project.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -61,9 +63,14 @@ android {
 }
 
 dependencies {
-    implementation project(':libandroid-navigation')
     implementation project(':libandroid-navigation-ui')
-    implementation dependenciesList.mapLibre
+
+    implementation(dependenciesList.mapLibre) {
+        // Exclude old version of GeoJSON libs
+        // At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
+        exclude group: "org.maplibre.gl", module: "android-sdk-geojson"
+        exclude group: "org.maplibre.gl", module: "android-sdk-turf"
+    }
 
     // Support libraries
     implementation dependenciesList.androidxAppcompat
@@ -92,7 +99,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation dependenciesList.androidxCore
-    implementation dependenciesList.kotlinstdlib
 
     // Separate dependencies of the app that don't need to be in the public dependencies API
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1"
@@ -100,8 +106,7 @@ dependencies {
 }
 
 apply from: "${rootDir}/gradle/developer-config.gradle"
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/dependency-updates.gradle"
+
 repositories {
     mavenCentral()
 }

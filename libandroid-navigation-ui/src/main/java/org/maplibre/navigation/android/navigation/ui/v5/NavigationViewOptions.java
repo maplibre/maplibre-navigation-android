@@ -11,12 +11,12 @@ import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationList
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.RouteListener;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.SpeechAnnouncementListener;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.android.location.engine.LocationEngine;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.milestone.Milestone;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
 
 import java.util.List;
 

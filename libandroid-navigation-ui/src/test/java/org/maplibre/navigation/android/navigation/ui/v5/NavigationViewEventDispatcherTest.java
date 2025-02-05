@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.BannerInstructionsListener;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.InstructionListListener;
@@ -19,9 +19,9 @@ import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationList
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.RouteListener;
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.SpeechAnnouncementListener;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
 
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.listeners;
 
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationView;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 
 /**
  * A listener that can be implemented and

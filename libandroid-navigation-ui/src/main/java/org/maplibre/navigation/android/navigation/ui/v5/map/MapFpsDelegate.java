@@ -6,11 +6,11 @@ import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeChangedListener;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeTransitionListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteLegProgress;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.routeprogress.RouteLegProgress;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTransitionListener {
 

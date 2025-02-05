@@ -3,10 +3,10 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import android.content.Context;
 
 
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.android.location.engine.LocationEngine;
-import org.maplibre.navigation.android.navigation.v5.location.engine.LocationEngineProvider;
-import org.maplibre.navigation.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.location.engine.LocationEngineProvider;
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 
 class LocationEngineConductor {
 

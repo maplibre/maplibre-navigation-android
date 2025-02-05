@@ -2,7 +2,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 
 import android.app.Application;
 import android.content.Context;
-import android.location.Location;
+import org.maplibre.navigation.core.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +10,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.maplibre.geojson.Point;
-import org.maplibre.android.location.engine.LocationEngine;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.DynamicCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.BannerInstructionModel;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionModel;
@@ -20,23 +19,25 @@ import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechAnnouncement
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayer;
 import org.maplibre.navigation.android.navigation.ui.v5.voice.SpeechPlayerProvider;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
-import org.maplibre.navigation.android.navigation.v5.milestone.BannerInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.Milestone;
-import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener;
-import org.maplibre.navigation.android.navigation.v5.milestone.VoiceInstructionMilestone;
-import org.maplibre.navigation.android.navigation.v5.models.BannerInstructions;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.Camera;
-import org.maplibre.navigation.android.navigation.v5.offroute.OffRouteListener;
-import org.maplibre.navigation.android.navigation.v5.route.FasterRouteListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
-import org.maplibre.navigation.android.navigation.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.v5.utils.LocaleUtils;
-import org.maplibre.navigation.android.navigation.v5.utils.RouteUtils;
+import org.maplibre.navigation.core.location.engine.LocationEngine;
+import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
+import org.maplibre.navigation.core.milestone.Milestone;
+import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone;
+import org.maplibre.navigation.core.models.BannerInstructions;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
+import org.maplibre.navigation.core.models.UnitType;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
+import org.maplibre.navigation.core.navigation.NavigationEventListener;
+import org.maplibre.navigation.core.navigation.camera.Camera;
+import org.maplibre.navigation.core.offroute.OffRouteListener;
+import org.maplibre.navigation.core.route.FasterRouteListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
+import org.maplibre.navigation.core.utils.RouteUtils;
 
 import org.jetbrains.annotations.TestOnly;
 
@@ -246,9 +247,9 @@ public class NavigationViewModel extends AndroidViewModel {
         }
     }
 
-    private String initializeUnitType(NavigationUiOptions options) {
+    private UnitType initializeUnitType(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
-        String unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
+        UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
         if (routeOptions != null && routeOptions.getVoiceUnits() != null) {
             unitType = routeOptions.getVoiceUnits();
         }
@@ -259,14 +260,14 @@ public class NavigationViewModel extends AndroidViewModel {
         timeFormatType = options.getTimeFormatType();
     }
 
-    private int initializeRoundingIncrement(NavigationViewOptions options) {
+    private MapLibreNavigationOptions.RoundingIncrement initializeRoundingIncrement(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
         return navigationOptions.getRoundingIncrement();
     }
 
     private void initializeDistanceFormatter(NavigationViewOptions options) {
-        String unitType = initializeUnitType(options);
-        int roundingIncrement = initializeRoundingIncrement(options);
+        UnitType unitType = initializeUnitType(options);
+        MapLibreNavigationOptions.RoundingIncrement roundingIncrement = initializeRoundingIncrement(options);
         distanceFormatter = new DistanceFormatter(getApplication(), language, unitType, roundingIncrement);
     }
 
@@ -294,7 +295,7 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeNavigation(Context context, MapLibreNavigationOptions options, LocationEngine locationEngine) {
-        navigation = new MapLibreNavigation(context, options, locationEngine);
+        navigation = new MapLibreNavigation(options, locationEngine);
         addNavigationListeners();
     }
 

@@ -1,9 +1,11 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import android.location.Location;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.location.Location;
+
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 class MapWaynameProgressChangeListener implements ProgressChangeListener {
 
@@ -15,6 +17,6 @@ class MapWaynameProgressChangeListener implements ProgressChangeListener {
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-    mapWayName.updateProgress(location, routeProgress.getCurrentStepPoints());
+    mapWayName.updateProgress(location, toJvmPoints(routeProgress.getCurrentStepPoints()));
   }
 }

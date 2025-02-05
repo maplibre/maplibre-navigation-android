@@ -1,20 +1,22 @@
 package org.maplibre.navigation.android.navigation.ui.v5.camera;
 
-import android.location.Location;
+
+import static org.maplibre.geojson.common.CommonExtKt.toJvm;
+
+import org.maplibre.android.geometry.LatLng;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.core.location.Location;
 import androidx.annotation.NonNull;
 
-import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.core.models.LegStep;
 
-import org.maplibre.android.MapLibre;
-import org.maplibre.geojson.Point;
 import org.maplibre.android.camera.CameraPosition;
-import org.maplibre.android.geometry.LatLng;
 import org.maplibre.android.geometry.LatLngBounds;
 import org.maplibre.android.maps.MapLibreMap;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.SimpleCamera;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
+import org.maplibre.navigation.core.navigation.camera.RouteInformation;
+import org.maplibre.navigation.core.navigation.camera.SimpleCamera;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,10 +135,10 @@ public class DynamicCamera extends SimpleCamera {
   private CameraPosition createCameraPosition(Location location, RouteProgress routeProgress) {
     LegStep upComingStep = routeProgress.getCurrentLegProgress().getUpComingStep();
     if (upComingStep != null) {
-      Point stepManeuverPoint = upComingStep.getManeuver().getLocation();
+      Point stepManeuverPoint = toJvm(upComingStep.getManeuver().getLocation());
 
       List<LatLng> latLngs = new ArrayList<>();
-      LatLng currentLatLng = new LatLng(location);
+      LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
       LatLng maneuverLatLng = new LatLng(stepManeuverPoint.latitude(), stepManeuverPoint.longitude());
       latLngs.add(currentLatLng);
       latLngs.add(maneuverLatLng);
@@ -146,8 +148,8 @@ public class DynamicCamera extends SimpleCamera {
       }
 
       LatLngBounds cameraBounds = new LatLngBounds.Builder()
-        .includes(latLngs)
-        .build();
+          .includes(latLngs)
+          .build();
 
       int[] padding = {0, 0, 0, 0};
       return mapLibreMap.getCameraForLatLngBounds(cameraBounds, padding);

@@ -12,7 +12,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.NavigationView;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.alert.AlertView;
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants;
+import org.maplibre.navigation.core.navigation.NavigationConstants;
 
 import timber.log.Timber;
 

@@ -1,20 +1,16 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
 import android.graphics.PointF;
-import android.location.Location;
 import androidx.annotation.NonNull;
 
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.core.location.Location;
 import org.maplibre.android.style.layers.PropertyValue;
 import org.maplibre.android.style.layers.SymbolLayer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapPaddingAdjustor;
-import org.maplibre.navigation.android.navigation.ui.v5.map.MapWayName;
-import org.maplibre.navigation.android.navigation.ui.v5.map.OnWayNameChangedListener;
-import org.maplibre.navigation.android.navigation.ui.v5.map.WaynameFeatureFinder;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;

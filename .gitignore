@@ -15,3 +15,6 @@ build/
 
 #MacOS
 .DS_Store
+
+# Kotlin
+.kotlin

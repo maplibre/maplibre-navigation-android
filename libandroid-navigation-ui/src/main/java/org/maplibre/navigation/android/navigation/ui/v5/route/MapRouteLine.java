@@ -10,8 +10,8 @@ import androidx.core.content.ContextCompat;
 
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteLeg;
 import org.maplibre.geojson.Feature;
 import org.maplibre.geojson.FeatureCollection;
 import org.maplibre.geojson.LineString;
@@ -356,8 +356,8 @@ class MapRouteLine {
 
   private Feature buildWayPointFeatureFromLeg(RouteLeg leg, int index) {
     Feature feature = Feature.fromGeometry(Point.fromLngLat(
-      leg.getSteps().get(index).getManeuver().getLocation().longitude(),
-      leg.getSteps().get(index).getManeuver().getLocation().latitude()
+      leg.getSteps().get(index).getManeuver().getLocation().getLongitude(),
+      leg.getSteps().get(index).getManeuver().getLocation().getLatitude()
     ));
     feature.addStringProperty(WAYPOINT_PROPERTY_KEY, index == 0 ? WAYPOINT_ORIGIN_VALUE : WAYPOINT_DESTINATION_VALUE);
     return feature;

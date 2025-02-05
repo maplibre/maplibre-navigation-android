@@ -1,14 +1,38 @@
 ext {
+    mapLibreDeveloperId = 'maplibre'
+    mapLibreDeveloperName = 'MapLibre'
+    mapLibreDeveloperMail = 'team@maplibre.org'
+    mapLibreDeveloperOrganization = 'MapLibre'
+
     navigationArtifactGroupId = 'org.maplibre.navigation'
-    navigationArtifactId = 'android'
-    navigationArtifactTitle = 'MapLibre Navigation SDK for Android'
-    navigationArtifactDescription = 'MapLibre Navigation SDK for Android'
-    navigationDeveloperName = 'MapLibre'
-    navigationDeveloperId = 'maplibre'
-    navigationDeveloperMail = 'maplibre@maplibre.org'
+    navigationArtifactTitle = 'MapLibre Navigation SDK'
+    navigationArtifactDescription = 'MapLibre Navigation build on Kotlin Multiplatform'
+    navigationDeveloperOrganizationUrl = 'http://www.maplibre.org'
     navigationArtifactUrl = 'https://github.com/maplibre/maplibre-navigation-android'
+    navigationArtifactVcsUrl = 'https://github.com/maplibre/maplibre-navigation-android.git'
     navigationArtifactScmUrl = 'scm:git@github.com:maplibre/maplibre-navigation-android.git'
     navigationArtifactLicenseName = 'MIT'
     navigationArtifactLicenseUrl = 'https://opensource.org/license/MIT'
-    versionName = project.hasProperty('VERSION_NAME') ? project.property('VERSION_NAME') : System.getenv('VERSION_NAME')
+
+    versionName = getVersionName()
+    isSnapshot = isSnapshot()
+}
+
+def getVersionName() {
+    def version = System.getenv('VERSION')
+    def deducedVersion = isSnapshot() ? getSnapshotVersion(version) : version
+    project.logger.info("Project version detected: ${deducedVersion}")
+    return deducedVersion
+}
+
+def isSnapshot() {
+    def snapshotProp = findProperty("snapshot")
+    return snapshotProp ? snapshotProp.asBoolean() : false
+}
+
+private static def getSnapshotVersion(String version) {
+    def matcher = version =~ /^[v|V](\d+).(\d+)?.*/
+    def major = (matcher[0][1] as Integer)
+    def minor = (matcher[0][2] as Integer) + 1
+    return "${major}.${minor}.0-SNAPSHOT"
 }

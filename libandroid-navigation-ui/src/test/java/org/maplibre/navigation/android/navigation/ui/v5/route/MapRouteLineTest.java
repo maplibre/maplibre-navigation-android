@@ -24,7 +24,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 
 import org.maplibre.navigation.android.navigation.ui.v5.R;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.FeatureCollection;
 import org.maplibre.geojson.LineString;
 import org.maplibre.android.maps.Style;
@@ -79,14 +79,14 @@ public class MapRouteLineTest extends BaseTest {
     buildPrimaryRouteUpdateTask(routeLine, handlerPrimary);
 
     routeLine.draw(routes);
-    latchRunnableFeatures.await(25, TimeUnit.MILLISECONDS);
+    latchRunnableFeatures.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerFeatures).post(runnableFeatures.capture());
     runnableFeatures.getValue().run();
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerPrimary).post(runnablePrimary.capture());
     runnablePrimary.getValue().run();
 
-    latch.await(25, TimeUnit.MILLISECONDS);
+    latch.await(5000, TimeUnit.MILLISECONDS);
     verify(routeLineSource, times(3)).setGeoJson(any(FeatureCollection.class));
   }
 
@@ -109,14 +109,14 @@ public class MapRouteLineTest extends BaseTest {
     buildPrimaryRouteUpdateTask(routeLine, handlerPrimary);
 
     routeLine.draw(routes);
-    latchRunnableFeatures.await(25, TimeUnit.MILLISECONDS);
+    latchRunnableFeatures.await(100L, TimeUnit.MILLISECONDS);
     verify(handlerFeatures).post(runnableFeatures.capture());
     runnableFeatures.getValue().run();
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(100L, TimeUnit.MILLISECONDS);
     verify(handlerPrimary).post(runnablePrimary.capture());
     runnablePrimary.getValue().run();
 
-    latch.await(25, TimeUnit.MILLISECONDS);
+    latch.await(100L, TimeUnit.MILLISECONDS);
     verify(wayPointSource, times(2)).setGeoJson(any(FeatureCollection.class));
   }
 
@@ -204,10 +204,10 @@ public class MapRouteLineTest extends BaseTest {
     Handler handlerPrimary = mock(Handler.class);
     buildPrimaryRouteUpdateTask(routeLine, handlerPrimary);
     routeLine.draw(routes);
-    latchRunnableFeatures.await(25, TimeUnit.MILLISECONDS);
+    latchRunnableFeatures.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerFeatures).post(runnableFeatures.capture());
     runnableFeatures.getValue().run();
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerPrimary).post(runnablePrimary.capture());
     runnablePrimary.getValue().run();
     ArgumentCaptor<Runnable> runnableUpdatePrimary = ArgumentCaptor.forClass(Runnable.class);
@@ -215,11 +215,11 @@ public class MapRouteLineTest extends BaseTest {
     buildPrimaryRouteUpdateTask(routeLine, handlerUpdatePrimary);
 
     routeLine.updatePrimaryRouteIndex(1);
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerUpdatePrimary).post(runnableUpdatePrimary.capture());
     runnableUpdatePrimary.getValue().run();
 
-    latch.await(25, TimeUnit.MILLISECONDS);
+    latch.await(5000, TimeUnit.MILLISECONDS);
     verify(routeLineSource, times(4)).setGeoJson(any(FeatureCollection.class));
   }
 
@@ -244,10 +244,10 @@ public class MapRouteLineTest extends BaseTest {
     Handler handlerPrimary = mock(Handler.class);
     buildPrimaryRouteUpdateTask(routeLine, handlerPrimary);
     routeLine.draw(routes);
-    latchRunnableFeatures.await(25, TimeUnit.MILLISECONDS);
+    latchRunnableFeatures.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerFeatures).post(runnableFeatures.capture());
     runnableFeatures.getValue().run();
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerPrimary).post(runnablePrimary.capture());
     runnablePrimary.getValue().run();
     ArgumentCaptor<Runnable> runnableUpdatePrimary = ArgumentCaptor.forClass(Runnable.class);
@@ -255,11 +255,11 @@ public class MapRouteLineTest extends BaseTest {
     buildPrimaryRouteUpdateTask(routeLine, handlerUpdatePrimary);
 
     boolean isNewIndex = routeLine.updatePrimaryRouteIndex(3);
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerUpdatePrimary).post(runnableUpdatePrimary.capture());
     runnableUpdatePrimary.getValue().run();
 
-    latch.await(25, TimeUnit.MILLISECONDS);
+    latch.await(5000, TimeUnit.MILLISECONDS);
     assertTrue(isNewIndex);
     assertEquals(3, routeLine.retrievePrimaryRouteIndex());
   }
@@ -285,16 +285,16 @@ public class MapRouteLineTest extends BaseTest {
     Handler handlerPrimary = mock(Handler.class);
     buildPrimaryRouteUpdateTask(routeLine, handlerPrimary);
     routeLine.draw(routes);
-    latchRunnableFeatures.await(25, TimeUnit.MILLISECONDS);
+    latchRunnableFeatures.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerFeatures).post(runnableFeatures.capture());
     runnableFeatures.getValue().run();
-    latchRunnablePrimary.await(25, TimeUnit.MILLISECONDS);
+    latchRunnablePrimary.await(5000, TimeUnit.MILLISECONDS);
     verify(handlerPrimary).post(runnablePrimary.capture());
     runnablePrimary.getValue().run();
 
     boolean isNewIndex = routeLine.updatePrimaryRouteIndex(-1);
 
-    latch.await(25, TimeUnit.MILLISECONDS);
+    latch.await(5000, TimeUnit.MILLISECONDS);
     assertFalse(isNewIndex);
     assertEquals(0, routeLine.retrievePrimaryRouteIndex());
   }

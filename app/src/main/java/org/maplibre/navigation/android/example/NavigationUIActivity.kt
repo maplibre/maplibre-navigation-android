@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.geojson.Point
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
@@ -21,13 +21,13 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.core.models.UnitType
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -185,7 +185,7 @@ class NavigationUIActivity :
             this.accessToken(getString(R.string.mapbox_access_token))
             this.origin(origin)
             this.destination(destination)
-            this.voiceUnits(DirectionsCriteria.METRIC)
+            this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
             //this.user("gh")

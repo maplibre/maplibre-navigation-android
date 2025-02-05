@@ -1,18 +1,20 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import android.location.Location;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
+
+import org.maplibre.navigation.core.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsResponse;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.models.RouteOptions;
+import org.maplibre.navigation.core.models.DirectionsResponse;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.geojson.Point;
 
-import org.maplibre.navigation.android.navigation.v5.route.RouteListener;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.route.RouteListener;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import java.util.Date;
 import java.util.List;
@@ -118,7 +120,7 @@ public class NavigationViewRouter implements RouteListener {
   private void cacheRouteDestination() {
     boolean hasValidCoordinates = routeOptions != null && !routeOptions.getCoordinates().isEmpty();
     if (hasValidCoordinates) {
-      List<Point> coordinates = routeOptions.getCoordinates();
+      List<Point> coordinates = toJvmPoints(routeOptions.getCoordinates());
       int destinationCoordinate = coordinates.size() - 1;
       Point destinationPoint = coordinates.get(destinationCoordinate);
       listener.onDestinationSet(destinationPoint);

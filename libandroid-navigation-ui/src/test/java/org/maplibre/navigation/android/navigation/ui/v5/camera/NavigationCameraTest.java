@@ -8,9 +8,9 @@ import org.maplibre.android.location.modes.CameraMode;
 import org.maplibre.android.maps.MapLibreMap;
 import org.maplibre.navigation.android.navigation.ui.v5.BaseTest;
 
-import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
-import org.maplibre.navigation.android.navigation.v5.navigation.camera.RouteInformation;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.ProgressChangeListener;
+import org.maplibre.navigation.core.navigation.MapLibreNavigation;
+import org.maplibre.navigation.core.navigation.camera.RouteInformation;
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
 
 import org.junit.Test;
 

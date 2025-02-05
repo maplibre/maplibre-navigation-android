@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.android.camera.CameraPosition;
 
 @AutoValue

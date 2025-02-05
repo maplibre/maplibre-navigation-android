@@ -1,21 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5.instruction.maneuver;
 
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.ManeuverModifier;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.ManeuverType;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_RIGHT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SHARP_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_MODIFIER_UTURN;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROTARY;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_FORK;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_OFF_RAMP;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROTARY;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT;
-import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ROUNDABOUT_TURN;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -28,6 +12,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 
@@ -309,5 +294,66 @@ public class ManeuverView extends View {
             return true;
         }
         return false;
+    }
+
+    // Step Maneuver Types
+    public static final String STEP_MANEUVER_TYPE_TURN = "turn";
+    public static final String STEP_MANEUVER_TYPE_NEW_NAME = "new name";
+    public static final String STEP_MANEUVER_TYPE_DEPART = "depart";
+    public static final String STEP_MANEUVER_TYPE_ARRIVE = "arrive";
+    public static final String STEP_MANEUVER_TYPE_MERGE = "merge";
+    public static final String STEP_MANEUVER_TYPE_ON_RAMP = "on ramp";
+    public static final String STEP_MANEUVER_TYPE_OFF_RAMP = "off ramp";
+    public static final String STEP_MANEUVER_TYPE_FORK = "fork";
+    public static final String STEP_MANEUVER_TYPE_END_OF_ROAD = "end of road";
+    public static final String STEP_MANEUVER_TYPE_CONTINUE = "continue";
+    public static final String STEP_MANEUVER_TYPE_ROUNDABOUT = "roundabout";
+    public static final String STEP_MANEUVER_TYPE_ROTARY = "rotary";
+    public static final String STEP_MANEUVER_TYPE_EXIT_ROTARY = "exit rotary";
+    public static final String STEP_MANEUVER_TYPE_ROUNDABOUT_TURN = "roundabout turn";
+    public static final String STEP_MANEUVER_TYPE_NOTIFICATION = "notification";
+    public static final String STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT = "exit roundabout";
+
+    @StringDef({
+        STEP_MANEUVER_TYPE_TURN,
+        STEP_MANEUVER_TYPE_NEW_NAME,
+        STEP_MANEUVER_TYPE_DEPART,
+        STEP_MANEUVER_TYPE_ARRIVE,
+        STEP_MANEUVER_TYPE_MERGE,
+        STEP_MANEUVER_TYPE_ON_RAMP,
+        STEP_MANEUVER_TYPE_OFF_RAMP,
+        STEP_MANEUVER_TYPE_FORK,
+        STEP_MANEUVER_TYPE_END_OF_ROAD,
+        STEP_MANEUVER_TYPE_CONTINUE,
+        STEP_MANEUVER_TYPE_ROUNDABOUT,
+        STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT,
+        STEP_MANEUVER_TYPE_ROTARY,
+        STEP_MANEUVER_TYPE_ROUNDABOUT_TURN,
+        STEP_MANEUVER_TYPE_NOTIFICATION
+    })
+    public @interface ManeuverType {
+    }
+
+    // Step Maneuver Modifiers
+    public static final String STEP_MANEUVER_MODIFIER_UTURN = "uturn";
+    public static final String STEP_MANEUVER_MODIFIER_SHARP_RIGHT = "sharp right";
+    public static final String STEP_MANEUVER_MODIFIER_RIGHT = "right";
+    public static final String STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT = "slight right";
+    public static final String STEP_MANEUVER_MODIFIER_STRAIGHT = "straight";
+    public static final String STEP_MANEUVER_MODIFIER_SLIGHT_LEFT = "slight left";
+    public static final String STEP_MANEUVER_MODIFIER_LEFT = "left";
+    public static final String STEP_MANEUVER_MODIFIER_SHARP_LEFT = "sharp left";
+
+    @StringDef({
+        STEP_MANEUVER_MODIFIER_UTURN,
+        STEP_MANEUVER_MODIFIER_SHARP_RIGHT,
+        STEP_MANEUVER_MODIFIER_RIGHT,
+        STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT,
+        STEP_MANEUVER_MODIFIER_STRAIGHT,
+        STEP_MANEUVER_MODIFIER_SLIGHT_LEFT,
+        STEP_MANEUVER_MODIFIER_LEFT,
+        STEP_MANEUVER_MODIFIER_SHARP_LEFT
+    })
+    public @interface ManeuverModifier {
     }
 }

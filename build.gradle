@@ -1,4 +1,5 @@
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
 
 buildscript {
     apply from: "${rootDir}/gradle/dependencies.gradle"
@@ -16,6 +17,10 @@ buildscript {
     classpath pluginDependencies.dependencyUpdates
     classpath pluginDependencies.kotlinGradle
     classpath pluginDependencies.kotlinxSerialization
+    classpath pluginDependencies.kotlinMultiplatform
+    classpath pluginDependencies.kotlinCocoapods
+    classpath pluginDependencies.kotlinDokka
+    classpath pluginDependencies.nexus
   }
 }
 
@@ -43,4 +48,27 @@ subprojects {
 
 task clean(type: Delete) {
   delete rootProject.buildDir
+}
+
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+apply from: file("${rootDir}/gradle/publish-root.gradle")
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            useStaging = !project.ext.isSnapshot
+            stagingProfileId = sonatypeStagingProfileId
+
+            username = ossrhUsername
+            password = ossrhPassword
+
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+
+    transitionCheckOptions {
+        maxRetries = 120
+        delayBetween = Duration.ofSeconds(10)
+    }
 }

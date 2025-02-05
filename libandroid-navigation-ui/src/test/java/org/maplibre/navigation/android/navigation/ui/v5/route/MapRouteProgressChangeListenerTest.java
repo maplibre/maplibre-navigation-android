@@ -6,13 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import android.location.Location;
-
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteArrow;
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLine;
-import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteProgressChangeListener;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
-import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsRoute;
+import org.maplibre.navigation.core.routeprogress.RouteProgress;
 
 import org.junit.Test;
 
