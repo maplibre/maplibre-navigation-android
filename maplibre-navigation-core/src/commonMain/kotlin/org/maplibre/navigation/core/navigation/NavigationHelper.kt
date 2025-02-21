@@ -74,7 +74,7 @@ object NavigationHelper {
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
         val distance = TurfMeasurement.distance(location.point, snappedPosition, TurfUnit.KILOMETERS)
         if (distance > 1) {
-            Logger.i { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
+            Logger.d { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
             return TurfMeasurement.length(stepPoints, TurfUnit.METERS)
         }
 
