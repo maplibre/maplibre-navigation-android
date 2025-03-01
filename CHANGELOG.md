@@ -1,10 +1,11 @@
-## Changelog for the Maplibre Navigation SDK for Android
+Changelog for the MapLibre Navigation SDK for Android
+=====================================================
 
-Maplibre welcomes participation and contributions from everyone.
+MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
-### v5.0.0-pre1 - March 01, 2025
+### v5.0.0-pre1 - March 1, 2025
 
 - Upgrade to latest MapLibre version `11.8.1` [#144](https://github.com/maplibre/maplibre-navigation-android/pull/144)
 - Reduce production logs [#143](https://github.com/maplibre/maplibre-navigation-android/pull/143)
