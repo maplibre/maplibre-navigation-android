@@ -1,0 +1,75 @@
+[versions]
+android-gradle-plugin = "8.6.1"
+kotlin = "2.1.0"
+kotlinx-serialization-json = "1.8.0"
+kotlinx-coroutines = "1.10.1"
+kotlin-dokka = "2.0.0"
+nexus = "2.0.0"
+kermit = "2.0.5"
+maplibre = "11.6.0"
+maplibre-annotation = "3.0.1"
+maplibre-geojson = "7.0.0-pre0"
+play-services-location = "21.1.0"
+kotlin-test = "2.0.0"
+mockk = "1.13.13"
+robolectric = "4.13"
+material = "1.12.0"
+androidx-recyclerview = "1.3.2"
+androidx-constraintlayout = "2.1.4"
+androidx-cardview = "1.0.0"
+androidx-lifecycle-viewmodel = "2.8.1"
+androidx-multidex = "2.0.1"
+picasso = "2.71828"
+json = "20240303"
+timber = "5.0.1"
+autovalue = "1.11.0"
+mapbox-geojson = "5.8.0"
+mockito = "5.12.0"
+junit = "4.13.2"
+leakcanary = "2.14"
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
+kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
+
+[libraries]
+# KMP
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+maplibre-geojson = { group = "org.maplibre.gl", name = "geojson", version.ref = "maplibre-geojson" }
+maplibre-geojson-turf = { group = "org.maplibre.gl", name = "turf", version.ref = "maplibre-geojson" }
+kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+
+# Android
+maplibre = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
+maplibre-annotation = { group = "org.maplibre.gl", name = "android-plugin-annotation-v9", version.ref = "maplibre-annotation" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
+mapbox-geojson = { group = "com.mapbox.mapboxsdk", name = "mapbox-sdk-services", version.ref = "mapbox-geojson" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "androidx-cardview" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle-viewmodel" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "androidx-multidex" }
+autovalue = { group = "com.google.auto.value", name = "auto-value", version.ref = "autovalue" }
+autovalue-annotations = { group = "com.google.auto.value", name = "auto-value-annotations", version.ref = "autovalue" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+json = { group = "org.json", name = "json", version.ref = "json" }
+leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+
+# Test KMP
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin-test" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+
+# Test Android
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }

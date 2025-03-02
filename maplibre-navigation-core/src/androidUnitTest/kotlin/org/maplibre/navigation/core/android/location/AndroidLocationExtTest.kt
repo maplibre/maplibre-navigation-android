@@ -3,12 +3,14 @@ package org.maplibre.navigation.core.android.location
 import org.junit.runner.RunWith
 import org.maplibre.navigation.core.location.toLocation
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import android.location.Location as AndroidLocation
 import org.maplibre.navigation.core.location.Location as CommonLocation
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class AndroidLocationExtTest {
 
     @Test
