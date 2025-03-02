@@ -4,6 +4,9 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+- Migrate to version catalog [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
+- Migrate Gradle build files to Kotlin [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
+
 **BREAKING CHANGES:**
 - The library modules are now available on Maven Central (xxx) TODO(fabi755) linking here final stable version
 - Convert module `libandroid-navigation` to Kotlin Multiplatform. See description of [#133](https://github.com/maplibre/maplibre-navigation-android/issues/133) to get informed about all breaking changes 
