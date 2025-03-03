@@ -1,14 +1,21 @@
-## Changelog for the Maplibre Navigation SDK for Android
+Changelog for the MapLibre Navigation SDK for Android
+=====================================================
 
-Maplibre welcomes participation and contributions from everyone.
+MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v5.0.0-pre1 - March 3, 2025
+
 - Migrate to version catalog [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
 - Migrate Gradle build files to Kotlin [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
+- Upgrade to latest MapLibre version `11.8.1` [#144](https://github.com/maplibre/maplibre-navigation-android/pull/144)
+- Reduce production logs [#143](https://github.com/maplibre/maplibre-navigation-android/pull/143)
+
+### v5.0.0-pre0 - January 29, 2025
 
 **BREAKING CHANGES:**
-- The library modules are now available on Maven Central (xxx) TODO(fabi755) linking here final stable version
+- The library modules are now available on [Maven Central](https://mvnrepository.com/search?q=org.maplibre.navigation).
 - Convert module `libandroid-navigation` to Kotlin Multiplatform. See description of [#133](https://github.com/maplibre/maplibre-navigation-android/issues/133) to get informed about all breaking changes 
 - Convert module `libandroid-navigation` to Kotlin. See description of PR [#127](https://github.com/maplibre/maplibre-navigation-android/pull/127) to get informed about all breaking changes
 - Updated startNavigation() in NavigationLauncher to just use a context instead of an activity [#126](https://github.com/maplibre/maplibre-navigation-android/pull/126)
