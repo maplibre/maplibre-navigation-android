@@ -5,7 +5,7 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
-### v5.0.0-pre1 - March 1, 2025
+### v5.0.0-pre1 - March 3, 2025
 
 - Migrate to version catalog [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
 - Migrate Gradle build files to Kotlin [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
