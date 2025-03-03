@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +49,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = 34)
 public class MapRouteLineTest extends BaseTest {
   // TODO explore making tasks as Runnables and create the thread in the call-site.
   //  That way we'll be able to execute the run synchronously, avoiding `CountDownLatch`

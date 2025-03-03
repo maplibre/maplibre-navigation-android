@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'MapLibreNavigationCore'
-    spec.version                  = '0.1.0'
+    spec.version                  = '0.0.0'
     spec.homepage                 = 'https://github.com/maplibre/maplibre-navigation-android/'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
