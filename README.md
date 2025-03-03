@@ -52,18 +52,23 @@ Step 2. Add the dependency
   implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre1'
 ```
 
-To run the [samples](#sample-code) on a device or emulator, for all examples (except the Valhalla one) you need to configure your [Mapbox access token](https://www.mapbox.com/help/define-access-token/) and map tile provider URL in `developer-config.xml` generated on first Gralde run. 
 
 ## Getting Help
 
 - **Have a bug to report?** [Open an issue](https://github.com/maplibre/maplibre-navigation-android/issues). If possible, include the version of MapLibre Services, a full log, and a project that shows the issue.
 - **Have a feature request?** [Open an issue](https://github.com/maplibre/maplibre-navigation-android/issues/new). Tell us what the feature should do and why you want the feature.
 
-### <a name="sample-code">Sample code
+### Samples
 
-We've added some [examples](https://github.com/maplibre/maplibre-navigation-android/tree/main/app/src/main/java/org/maplibre/navigation/android/example) to this repo's test app. We are planning to add more to help you get started with the SDK and to inspire you.
+#### Android
 
-In order to see the map or calculate a route you need your own Maptile and Direction services.
+We have added [an Android example app](https://github.com/maplibre/maplibre-navigation-android/tree/main/app/src/main/java/org/maplibre/navigation/android/example) to this repo.
+
+The Valhalla example is aready pre-configured. All other examples needs to be configured with your own tile and direction server. This URLs needs to be set in `developer-config.xml`, which is generated on first Gradle run. 
+
+#### Multiplatform
+
+The new Kotlin Multiplatform library for iOS and Android has it's own small [sample apps](https://github.com/maplibre/maplibre-navigation-android/tree/main/sample) for all supported platforms.
 
 ### Contributing
 
