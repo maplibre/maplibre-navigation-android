@@ -51,8 +51,8 @@ open class GoogleLocationEngine(
     @SuppressLint("MissingPermission")
     override suspend fun getLastLocation(): Location? = suspendCoroutine { continuation ->
         fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { androidLocation: AndroidLocation ->
-                continuation.resume(androidLocation.toLocation())
+            .addOnSuccessListener { androidLocation: AndroidLocation? ->
+                continuation.resume(androidLocation?.toLocation())
             }
             .addOnFailureListener { exception ->
                 continuation.resumeWithException(exception)
