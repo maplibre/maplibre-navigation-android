@@ -5,6 +5,10 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v5.0.0-pre2 - March 9, 2025
+
+- Fix crash by missing last location [#148](https://github.com/maplibre/maplibre-navigation-android/pull/148)
+
 ### v5.0.0-pre1 - March 3, 2025
 
 - Migrate to version catalog [#147](https://github.com/maplibre/maplibre-navigation-android/pull/147)
