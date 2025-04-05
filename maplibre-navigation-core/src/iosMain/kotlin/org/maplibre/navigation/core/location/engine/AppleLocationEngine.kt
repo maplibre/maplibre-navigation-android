@@ -10,6 +10,10 @@ import org.maplibre.navigation.core.location.toLocation
 import platform.CoreLocation.CLLocation as AppleLocation
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
 import platform.darwin.NSObject
+import kotlin.coroutines.suspendCoroutine
+import platform.Foundation.NSError
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * A [LocationEngine] that uses the Apple CLLocationManager API.
@@ -33,6 +37,31 @@ open class AppleLocationEngine : NSObject(), LocationEngine, CLLocationManagerDe
 
     override suspend fun getLastLocation(): Location? {
         return locationFlow.firstOrNull()
+            ?: getLocation()
+                .also { currentLocation ->
+                    locationFlow.emit(currentLocation)
+                }
+    }
+
+    private suspend fun getLocation(): Location? = suspendCoroutine { continuation ->
+        val locationManager = CLLocationManager()
+        locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
+            override fun locationManager(
+                manager: CLLocationManager,
+                didUpdateLocations: List<*>
+            ) {
+                continuation.resume((didUpdateLocations.lastOrNull() as? AppleLocation?)?.toLocation())
+            }
+
+            override fun locationManager(
+                manager: CLLocationManager,
+                didFailWithError: NSError
+            ) {
+                continuation.resumeWithException(Exception(didFailWithError.localizedDescription))
+            }
+        }
+
+        locationManager.requestLocation()
     }
 
     override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
