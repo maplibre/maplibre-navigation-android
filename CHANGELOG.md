@@ -5,6 +5,10 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v5.0.0-pre3 - April 9, 2025
+
+- Fix not working AppleLocationEngine [#149](https://github.com/maplibre/maplibre-navigation-android/pull/149)
+
 ### v5.0.0-pre2 - March 9, 2025
 
 - Fix crash by missing last location [#148](https://github.com/maplibre/maplibre-navigation-android/pull/148)
