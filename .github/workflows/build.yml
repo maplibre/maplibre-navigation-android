@@ -23,7 +23,7 @@ jobs:
 
       - name: VERSION file changed
         id: version-file-changed
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v46
         with:
           files: VERSION
 

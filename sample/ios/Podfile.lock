@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.10.2)
   - MapLibre (6.10.0)
-  - MapLibreNavigationCore (0.1.0)
+  - MapLibreNavigationCore (0.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.10.2)
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   MapLibre: d668ed038aa3d139c6a305753c87cc2f62245b72
-  MapLibreNavigationCore: e4ab106c91a71c4e18b0c837e42326b4bd10f9b4
+  MapLibreNavigationCore: 42ca6209c5d43dbaa8768d4eaff76b19e8e87e42
 
 PODFILE CHECKSUM: b7a0bf4d6ffcaedbf1df1a03f4e71e7f2dd127ff
 
