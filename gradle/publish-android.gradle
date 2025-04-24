@@ -35,13 +35,12 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
+                from components.release
+
                 groupId project.ext.navigationArtifactGroupId
                 version project.ext.versionName
 
                 artifactId "${artifactId.replace("libandroid-", "")}-android"
-
-                artifact tasks.androidJavadocsJar
-                artifact tasks.androidSourcesJar
 
                 pom {
                     name = project.ext.navigationArtifactTitle
