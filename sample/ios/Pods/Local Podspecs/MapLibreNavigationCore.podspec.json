@@ -1,0 +1,20 @@
+{
+  "name": "MapLibreNavigationCore",
+  "version": "0.0.0",
+  "homepage": "https://github.com/maplibre/maplibre-navigation-android/",
+  "source": {
+    "http": ""
+  },
+  "authors": "",
+  "license": "",
+  "summary": "MapLibre navigation core library",
+  "vendored_frameworks": "MapLibreNavigationCore.xcframework",
+  "libraries": "c++",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  }
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mapbox.services.android.navigation.testapp">
+    package="org.maplibre.navigation.android.example">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -38,6 +38,20 @@
         <activity
             android:name=".SnapToRouteNavigationActivity"
             android:label="@string/title_snap_to_route">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".NavigationWithForegroundNotificationActivity"
+            android:label="@string/title_foreground_notification">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".NavigationWithCustomForegroundNotificationActivity"
+            android:label="@string/title_custom_foreground_notification">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

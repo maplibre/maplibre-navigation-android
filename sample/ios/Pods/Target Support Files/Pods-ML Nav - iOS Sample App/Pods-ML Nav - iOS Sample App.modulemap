@@ -1,0 +1,6 @@
+framework module Pods_ML_Nav___iOS_Sample_App {
+  umbrella header "Pods-ML Nav - iOS Sample App-umbrella.h"
+
+  export *
+  module * { export * }
+}

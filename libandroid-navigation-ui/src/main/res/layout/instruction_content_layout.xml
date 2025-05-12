@@ -18,7 +18,7 @@
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.mapbox.services.android.navigation.ui.v5.instruction.maneuver.ManeuverView
+        <org.maplibre.navigation.android.navigation.ui.v5.instruction.maneuver.ManeuverView
             android:id="@+id/maneuverView"
             android:layout_width="30dp"
             android:layout_height="30dp"
