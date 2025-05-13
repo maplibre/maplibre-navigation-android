@@ -19,34 +19,31 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
+import org.maplibre.android.camera.CameraPosition;
+import org.maplibre.android.location.modes.RenderMode;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.OnMapReadyCallback;
+import org.maplibre.android.maps.Style;
+import org.maplibre.geojson.Point;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator;
+import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.NavigationAlertView;
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap;
 import org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMapInstanceState;
 import org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView;
 import org.maplibre.navigation.android.navigation.ui.v5.summary.SummaryBottomSheet;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
-import org.maplibre.geojson.Point;
-import org.maplibre.android.camera.CameraPosition;
-import org.maplibre.android.location.modes.RenderMode;
-import org.maplibre.android.maps.MapView;
-import org.maplibre.android.maps.MapLibreMap;
-import org.maplibre.android.maps.OnMapReadyCallback;
-import org.maplibre.android.maps.Style;
-import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView;
-import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
-import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
-import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils;
 
 /**
  * View that creates the drop-in UI.
@@ -644,8 +641,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
     }
 
     private void establishTimeFormat(NavigationViewOptions options) {
-    @NavigationTimeFormat.Type
-    int timeFormatType = options.navigationOptions().timeFormatType();
+        int timeFormatType = options.navigationOptions().getTimeFormatType().getId();
     }
 
     private void initializeNavigationListeners(NavigationViewOptions options, NavigationViewModel navigationViewModel) {

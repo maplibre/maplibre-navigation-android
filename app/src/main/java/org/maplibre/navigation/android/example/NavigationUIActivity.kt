@@ -2,52 +2,36 @@ package org.maplibre.navigation.android.example
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Parcelable
 import android.preference.PreferenceManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
-import com.mapbox.api.directions.v5.DirectionsCriteria
-import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.services.android.navigation.testapp.databinding.ActivityNavigationUiBinding
-import com.mapbox.services.android.navigation.ui.v5.MapRouteData
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
-import com.mapbox.services.android.navigation.ui.v5.NavigationViewOptions
-import com.mapbox.services.android.navigation.ui.v5.OnNavigationReadyCallback
-import com.mapbox.services.android.navigation.ui.v5.listeners.NavigationListener
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
-import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
-import com.mapbox.services.android.navigation.v5.navigation.NavigationConstants
-import com.mapbox.services.android.navigation.v5.navigation.NavigationMapRoute
-import com.mapbox.turf.TurfConstants
-import com.mapbox.turf.TurfMeasurement
 import okhttp3.Request
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.location.LocationComponent
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.modes.CameraMode
+import org.maplibre.android.location.modes.RenderMode
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.Style
+import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
+import org.maplibre.navigation.android.navigation.ui.v5.MapRouteData
+import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
+import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewOptions
+import org.maplibre.navigation.android.navigation.ui.v5.OnNavigationReadyCallback
+import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationListener
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.UnitType
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.navigation.NavigationConstants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class NavigationUIActivity :
-    ComponentActivity(),
-    MapboxMap.OnMapClickListener, OnNavigationReadyCallback,
-    NavigationListener {
+class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener, OnNavigationReadyCallback, NavigationListener {
 
     // Navigation related variables
     private var route: DirectionsRoute? = null
@@ -279,7 +263,7 @@ class NavigationUIActivity :
         options.navigationListener(this)
         extractRoute(options)
         extractConfiguration(options)
-        options.navigationOptions(MapboxNavigationOptions.builder().build())
+        options.navigationOptions(MapLibreNavigationOptions.Builder().build())
         binding.navigationView.startNavigation(options.build())
     }
 

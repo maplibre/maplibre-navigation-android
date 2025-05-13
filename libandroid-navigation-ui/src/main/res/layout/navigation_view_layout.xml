@@ -13,7 +13,7 @@
         android:orientation="vertical"
         >
 
-        <com.mapbox.mapboxsdk.maps.MapView
+        <org.maplibre.android.maps.MapView
             android:id="@+id/navigationMapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <com.mapbox.services.android.navigation.ui.v5.RecenterButton
+        <org.maplibre.navigation.android.navigation.ui.v5.RecenterButton
             android:id="@+id/recenterBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.mapbox.services.android.navigation.ui.v5.instruction.InstructionView
+    <org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView
         android:id="@+id/instructionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="60dp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/mapbox_navigation_route_shield_layer_color"
+        android:backgroundTint="@color/maplibre_navigation_route_shield_layer_color"
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="simulate_route"
-            android:textColor="@color/mapbox_navigation_route_upcoming_maneuver_arrow_color"
+            android:textColor="@color/maplibre_navigation_route_upcoming_maneuver_arrow_color"
             app:switchPadding="4dp" />
 
         <Button

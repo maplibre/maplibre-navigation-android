@@ -310,7 +310,7 @@ public class NavigationCamera implements LifecycleObserver {
     navigation.addProgressChangeListener(progressChangeListener);
   }
 
-  public void removeProgressChangeListener(MapboxNavigation navigation) {
+  public void removeProgressChangeListener(MapLibreNavigation navigation) {
     navigation.removeProgressChangeListener(progressChangeListener);
   }
 

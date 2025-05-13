@@ -235,9 +235,9 @@ public class ManeuverView extends View {
     private void initializeColorFrom(AttributeSet attributeSet) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.ManeuverView);
         primaryColor = typedArray.getColor(R.styleable.ManeuverView_maneuverViewPrimaryColor,
-            ContextCompat.getColor(getContext(), R.color.mapbox_navigation_route_layer_blue));
+            ContextCompat.getColor(getContext(), R.color.maplibre_navigation_route_layer_blue));
         secondaryColor = typedArray.getColor(R.styleable.ManeuverView_maneuverViewSecondaryColor,
-            ContextCompat.getColor(getContext(), R.color.mapbox_navigation_route_layer_blue));
+            ContextCompat.getColor(getContext(), R.color.maplibre_navigation_route_layer_blue));
         typedArray.recycle();
     }
 

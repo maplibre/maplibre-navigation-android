@@ -111,7 +111,7 @@ public class ThemeSwitcher {
             R.style.NavigationViewLight);
     int darkTheme = styledAttributes.getResourceId(R.styleable.NavigationView_navigationDarkTheme,
             R.style.NavigationViewDark);
-    if (style.equals(MapRouteData.LIGHT_THEME)) {
+    if (style.equals(NavigationConstants.NAVIGATION_VIEW_DARK_THEME)) {
       context.setTheme(lightTheme);
     } else {
       context.setTheme(darkTheme);

@@ -112,7 +112,7 @@ class ValhallaNavigationActivity :
 //            mapboxMap
 //        )
 
-        mapboxMap.addOnMapClickListener(this)
+        mapLibreMap.addOnMapClickListener(this)
         Snackbar.make(
             findViewById(R.id.container),
             "Tap map to place destination",

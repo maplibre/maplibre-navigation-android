@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.mapbox.services.android.navigation.ui.v5.MapRouteData;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationButton;
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewModel;
 import org.maplibre.navigation.android.navigation.ui.v5.SoundButton;
@@ -787,7 +786,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
 
   public void setupStyle(String mapStyle) {
     ConstraintLayout instructionBackground = findViewById(R.id.instructionBackground);
-    if (mapStyle.equals(MapRouteData.DARK_THEME)) {
+    if (mapStyle.equals(NavigationConstants.NAVIGATION_VIEW_DARK_THEME)) {
       instructionBackground.setBackgroundColor(Color.BLACK);
       upcomingDistanceText.setTextColor(Color.WHITE);
       upcomingPrimaryText.setTextColor(Color.WHITE);
