@@ -5,6 +5,10 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v5.0.0-pre5 - May 16, 2025
+
+- Fix threading and platform characteristics for Apple location engine [#159](https://github.com/maplibre/maplibre-navigation-android/pull/159)
+
 ### v5.0.0-pre4 - April 24, 2025
 
 - Fix wrong configured UI module publishing [#155](https://github.com/maplibre/maplibre-navigation-android/pull/155)
