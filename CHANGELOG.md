@@ -5,6 +5,10 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v5.0.0-pre4 - April 24, 2025
+
+- Fix wrong configured UI module publishing [#155](https://github.com/maplibre/maplibre-navigation-android/pull/155)
+
 ### v5.0.0-pre3 - April 9, 2025
 
 - Fix not working AppleLocationEngine [#149](https://github.com/maplibre/maplibre-navigation-android/pull/149)
