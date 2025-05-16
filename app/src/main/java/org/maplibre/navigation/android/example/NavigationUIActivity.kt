@@ -31,7 +31,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener, OnNavigationReadyCallback, NavigationListener {
+class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener,
+    OnNavigationReadyCallback, NavigationListener {
 
     // Navigation related variables
     private var route: DirectionsRoute? = null
@@ -56,7 +57,12 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.navigationView.onCreate(this, savedInstanceState, this, "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ")
+        binding.navigationView.apply {
+            mapStyleUri =
+                "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ"
+            onCreate(savedInstanceState)
+            initialize(this@NavigationUIActivity)
+        }
 
 //        binding.mapView.apply {
 //            onCreate(savedInstanceState)
@@ -70,26 +76,38 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                 binding.navigationView.updateCameraRouteOverview()
             }
         }
+        val points = mutableListOf<Point>()
+//        points.add(Pair(76.928316, 43.236109))
+        points.add(Point.fromLngLat(76.933810, 43.230633))
+        points.add(Point.fromLngLat(76.920187, 43.236783))
+//        points.add(Pair(76.930137, 43.230361))
+
 
         binding.startRouteButton.setOnClickListener {
             if (isStarted) {
                 binding.navigationView.stopNavigation()
                 isStarted = false
             } else {
-                val points = mutableListOf<Pair<Double, Double>>()
-                points.add(Pair(76.930137, 43.230361))
-                points.add(Pair(76.928316, 43.236109))
-                points.add(Pair(76.920187, 43.236783))
+                isStarted = true
                 binding.navigationView.calculateRoute(
                     MapRouteData(
-                        "pk.cb243ba3-cb94-41c4-a91f-5f3074824d3a",
-                        "getString(R.string.mapbox_access_token)",
-                        points,
-                        Pair(76.930137, 43.230361),
-                        MapRouteData.DARK_THEME
-                    )
+                        "sk.eyJ1IjoicmVnaW9ubGxjIiwiYSI6ImNsZHNrM3MxbjF4cDIzcG4wcXp2MmR1c3kifQ.Sk6779T0lDSXEjt_SxqXaQ",
+                        userLocation = Point.fromLngLat(76.930137, 43.230361),
+                        stops = points,
+                        destination = Point.fromLngLat(76.930137, 43.230361),
+                    ),
+                    successCallback = {
+                        val options = NavigationViewOptions.builder()
+                        options.navigationListener(this)
+                        extractRoute(options)
+                        extractConfiguration(options)
+                        options.shouldSimulateRoute(true)
+                        options.navigationOptions(
+                            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
+                        )
+                        binding.navigationView.startNavigation(options.build())
+                    }
                 )
-                isStarted = true
             }
         }
 
@@ -259,12 +277,12 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
     }
 
     override fun onNavigationReady(isRunning: Boolean) {
-        val options = NavigationViewOptions.builder()
-        options.navigationListener(this)
-        extractRoute(options)
-        extractConfiguration(options)
-        options.navigationOptions(MapLibreNavigationOptions.Builder().build())
-        binding.navigationView.startNavigation(options.build())
+//        val options = NavigationViewOptions.builder()
+//        options.navigationListener(this)
+//        extractRoute(options)
+//        extractConfiguration(options)
+//        options.navigationOptions(MapLibreNavigationOptions.Builder().build())
+//        binding.navigationView.startNavigation(options.build())
     }
 
     override fun onCancelNavigation() {
@@ -276,10 +294,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
     }
 
     override fun onNavigationRunning() {
-        // Intentionally empty
-    }
-
-    override fun onMapReadyCallback() {
         // Intentionally empty
     }
 
@@ -299,8 +313,8 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
     }
 
     private fun finishNavigation() {
-//        NavigationLauncher.cleanUpPreferences(this)
-        binding.navigationView.onDestroy()
-//        finish()
+        NavigationLauncher.cleanUpPreferences(this)
+//        binding.navigationView.stopNavigation()
+        finish()
     }
 }

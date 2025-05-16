@@ -145,6 +145,9 @@ class NavigationWithCustomForegroundNotificationActivity : AppCompatActivity(), 
             this.destination(Point.fromLngLat(9.756259, 52.342620))
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
+            // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
+            this.user("gh")
+            this.profile("car")
             this.baseUrl(getString(R.string.base_url))
         }
 

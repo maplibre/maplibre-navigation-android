@@ -1,11 +1,12 @@
 package org.maplibre.navigation.android.navigation.ui.v5
 
+import org.maplibre.geojson.Point
+
 data class MapRouteData(
     val accessToken: String,
-    val mapStyle: String,
-    val routeList: List<Pair<Double, Double>>,
-    val userLocation: Pair<Double, Double>,
-    val mapTheme: String
+    val userLocation: Point,
+    val stops: List<Point>?,
+    val destination: Point
 ) {
     companion object {
         const val LIGHT_THEME = "light"

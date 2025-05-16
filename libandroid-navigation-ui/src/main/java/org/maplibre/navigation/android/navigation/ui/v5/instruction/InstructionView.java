@@ -50,6 +50,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.summary.list.Instruction
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone;
 import org.maplibre.navigation.core.milestone.Milestone;
 import org.maplibre.navigation.core.milestone.MilestoneEventListener;
+import org.maplibre.navigation.core.models.ManeuverModifier;
 import org.maplibre.navigation.core.models.UnitType;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions;
@@ -584,8 +585,11 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
   private void updateSubStep(BannerText subText, String primaryManeuverModifier) {
     if (shouldShowSubStep(subText)) {
       String maneuverType = subText.getType().getText();
-      String maneuverModifier = subText.getModifier().getText();
-      subManeuverView.setManeuverTypeAndModifier(maneuverType, maneuverModifier);
+      ManeuverModifier.Type maneuverModifier = subText.getModifier();
+      String maneuverModifierText;
+      if (maneuverModifier == null) maneuverModifierText = null;
+      else maneuverModifierText = maneuverModifier.getText();
+      subManeuverView.setManeuverTypeAndModifier(maneuverType, maneuverModifierText);
       Double roundaboutAngle = subText.getDegrees();
       if (roundaboutAngle != null) {
         subManeuverView.setRoundaboutAngle(roundaboutAngle.floatValue());
