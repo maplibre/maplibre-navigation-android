@@ -220,7 +220,7 @@ public class DynamicCameraTest extends BaseTest {
     when(location.getSpeedMetersPerSeconds()).thenReturn(30f);
     when(location.getBearing()).thenReturn(100f);
     when(location.getAccuracyMeters()).thenReturn(10f);
-    when(location.getTime()).thenReturn(time);
+    when(location.getTimeMilliseconds()).thenReturn(time);
     return location;
   }
 

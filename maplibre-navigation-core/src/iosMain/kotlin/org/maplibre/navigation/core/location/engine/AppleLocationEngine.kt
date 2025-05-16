@@ -2,7 +2,6 @@ package org.maplibre.navigation.core.location.engine
 
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -140,9 +139,9 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
      *
      * @param locationFlow The [MutableStateFlow] to emit location updates to.
      */
-    private class LocationDelegate(private val locationFlow: MutableStateFlow<Location?>) :
-        NSObject(),
-        CLLocationManagerDelegateProtocol {
+    private class LocationDelegate(
+        private val locationFlow: MutableStateFlow<Location?>
+    ) : NSObject(), CLLocationManagerDelegateProtocol {
 
         /**
          * Called when the location manager updates the location.

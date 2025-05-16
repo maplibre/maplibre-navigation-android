@@ -60,7 +60,7 @@ data class Location(
      * Date time of this location fix. This value is in milliseconds
      * since epoch (1970-01-01T00:00:00Z) in UTC.
      */
-    val time: Long? = null,
+    val timeMilliseconds: Long? = null,
 
     /**
      * Provider that generated this location.
