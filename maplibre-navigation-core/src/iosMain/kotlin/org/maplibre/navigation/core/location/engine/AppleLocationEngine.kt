@@ -1,25 +1,26 @@
 package org.maplibre.navigation.core.location.engine
 
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import platform.CoreLocation.CLLocationManager
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
-import platform.CoreLocation.CLLocation as AppleLocation
+import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
-import platform.darwin.NSObject
-import kotlin.coroutines.suspendCoroutine
 import platform.Foundation.NSError
+import platform.darwin.NSObject
 import kotlin.coroutines.resume
-import kotlin.time.Duration.Companion.seconds
-import kotlin.coroutines.resumeWithException
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import platform.CoreLocation.CLLocation as AppleLocation
 
 /**
  * A [LocationEngine] implementation that uses the Apple CLLocationManager API to provide
@@ -31,8 +32,10 @@ import kotlin.time.Duration
  *
  * @param getLocationTimeout The maximum duration to wait for the one-time location request.
  */
-open class AppleLocationEngine(private val getLocationTimeout: Duration = 3.seconds) :
+open class AppleLocationEngine(private val getLocationTimeout: Duration) :
     LocationEngine {
+
+    constructor() : this(getLocationTimeout = 5.seconds)
 
     /**
      * A [MutableStateFlow] that holds the current location or null if no location was emitted yet.
@@ -86,7 +89,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration = 3.seco
      */
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
         withTimeoutOrNull(timeout) {
-            suspendCoroutine { continuation ->
+            suspendCancellableCoroutine { continuation ->
                 val locationManager = CLLocationManager()
                 locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
@@ -99,8 +102,12 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration = 3.seco
                         manager: CLLocationManager,
                         didUpdateLocations: List<*>
                     ) {
-                        val location =
-                            (didUpdateLocations.lastOrNull() as? AppleLocation?)?.toLocation()
+                        // Apple calls this method multiple times, remove delegate to avoid calling
+                        // `resume` multiple times.
+                        locationManager.delegate = null
+
+                        val location = (didUpdateLocations.lastOrNull() as? AppleLocation?)
+                            ?.toLocation()
                         continuation.resume(location)
                     }
 
@@ -114,8 +121,13 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration = 3.seco
                         manager: CLLocationManager,
                         didFailWithError: NSError
                     ) {
-                        continuation.resumeWithException(Exception(didFailWithError.localizedDescription))
+                        Logger.e("AppleLocationEngine") { "Obtaining location failed. Are the location permissions granted?" }
+                        continuation.resume(null)
                     }
+                }
+
+                continuation.invokeOnCancellation {
+                    locationManager.delegate = null
                 }
 
                 locationManager.requestLocation()
@@ -149,6 +161,10 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration = 3.seco
             if (locationFlow.subscriptionCount.value == 0) {
                 manager.stopUpdatingLocation()
             }
+        }
+
+        override fun locationManager(manager: CLLocationManager, didFailWithError: NSError) {
+            Logger.e("AppleLocationEngine") { "Listening to location updates failed. Are the location permissions granted?" }
         }
     }
 }
