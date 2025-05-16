@@ -6,7 +6,7 @@ target 'ML Nav - iOS Sample App' do
   use_frameworks!
 
   pod 'MapLibre', '~> 6.10.0'
-  pod 'MapLibreNavigationCore', :path => '../../maplibre-navigation-core/build/cocoapods/publish/debug'
+  pod 'MapLibreNavigationCore', :path => '../../maplibre-navigation-core/'
   
   pod 'Alamofire', '~> 5.10.2'
   

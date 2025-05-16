@@ -1,4 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-ML Nav - iOS Sample App/Pods-ML Nav - iOS Sample App-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${PODS_ROOT}/../../../maplibre-navigation-core/build/cocoapods/framework/MapLibreNavigationCore.framework
 ${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibre/MapLibre.framework/MapLibre
-${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibreNavigationCore/MapLibreNavigationCore.framework/MapLibreNavigationCore
