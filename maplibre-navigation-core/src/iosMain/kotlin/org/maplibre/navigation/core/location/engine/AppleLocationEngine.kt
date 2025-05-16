@@ -120,6 +120,10 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
                         manager: CLLocationManager,
                         didFailWithError: NSError
                     ) {
+                        // Apple calls this method multiple times, remove delegate to avoid calling
+                        // `resume` multiple times.
+                        locationManager.delegate = null
+
                         Logger.e("AppleLocationEngine") { "Obtaining location failed. Are the location permissions granted?" }
                         continuation.resume(null)
                     }
