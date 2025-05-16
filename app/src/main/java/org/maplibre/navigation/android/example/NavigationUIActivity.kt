@@ -59,7 +59,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
         setContentView(binding.root)
         binding.navigationView.apply {
             mapStyleUri =
-                "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ"
+                "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=sda"
             onCreate(savedInstanceState)
             initialize(this@NavigationUIActivity)
         }
@@ -91,7 +91,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                 isStarted = true
                 binding.navigationView.calculateRoute(
                     MapRouteData(
-                        "sk.eyJ1IjoicmVnaW9ubGxjIiwiYSI6ImNsZHNrM3MxbjF4cDIzcG4wcXp2MmR1c3kifQ.Sk6779T0lDSXEjt_SxqXaQ",
+                        getString(R.string.mapbox_access_token),
                         userLocation = Point.fromLngLat(76.930137, 43.230361),
                         stops = points,
                         destination = Point.fromLngLat(76.930137, 43.230361),
