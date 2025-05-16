@@ -19,9 +19,10 @@
 		};
 		FDEF9C1F6AD9DB734D500565B6EB05AB /* MapLibreNavigationCore */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 6FA129506577C39C6D83416D00D8E424 /* Build configuration list for PBXAggregateTarget "MapLibreNavigationCore" */;
+			buildConfigurationList = 280DEC86EE353EF5304224F838234025 /* Build configuration list for PBXAggregateTarget "MapLibreNavigationCore" */;
 			buildPhases = (
-				44AFD97833F155AF2BEDDADD78612DDD /* [CP] Copy XCFrameworks */,
+				0BDAE66313ACFCBC6883469790952B26 /* [CP-User] Build MapLibreNavigationCore */,
+				7D294D7727285735FEE31420E36832C6 /* [CP] Copy dSYMs */,
 			);
 			dependencies = (
 			);
@@ -127,6 +128,8 @@
 		34CB2C63360DC9E5167DC0A16336FE77 /* DataRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataRequest.swift; path = Source/Core/DataRequest.swift; sourceTree = "<group>"; };
 		3DA706CD39D56882755B58E8F71BC862 /* AuthenticationInterceptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthenticationInterceptor.swift; path = Source/Features/AuthenticationInterceptor.swift; sourceTree = "<group>"; };
 		3F32D79967542EE074C6D8B8CDD8D5B2 /* DispatchQueue+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+Alamofire.swift"; path = "Source/Extensions/DispatchQueue+Alamofire.swift"; sourceTree = "<group>"; };
+		4178BCCE51C171088BF4E3D26D250F57 /* MapLibreNavigationCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapLibreNavigationCore.framework; path = build/cocoapods/framework/MapLibreNavigationCore.framework; sourceTree = "<group>"; };
+		4255F138973B95CC0D3EC340ACCB92DA /* MapLibreNavigationCore-copy-dsyms.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "MapLibreNavigationCore-copy-dsyms.sh"; sourceTree = "<group>"; };
 		4289F5A6330A43C797E7BD049678A9D5 /* RequestCompression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RequestCompression.swift; path = Source/Features/RequestCompression.swift; sourceTree = "<group>"; };
 		43E00223088E7F71B7C9D27BEBA72E73 /* AlamofireExtended.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlamofireExtended.swift; path = Source/Features/AlamofireExtended.swift; sourceTree = "<group>"; };
 		4ECDFE2B7FB86A41E603CCBCDFC0F942 /* Pods-ML Nav - iOS Sample App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ML Nav - iOS Sample App.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,11 +137,10 @@
 		4FAE065F3D8947D87E389D05D5CED4AC /* HTTPHeaders.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HTTPHeaders.swift; path = Source/Core/HTTPHeaders.swift; sourceTree = "<group>"; };
 		5725E34C60E14E6C7917FA594F910BC7 /* RedirectHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RedirectHandler.swift; path = Source/Features/RedirectHandler.swift; sourceTree = "<group>"; };
 		574581962A29DE4FA03BAD8D30FD58FC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		59B91AFDEB1691906954F95D87FB41FD /* MapLibreNavigationCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MapLibreNavigationCore.debug.xcconfig; sourceTree = "<group>"; };
 		5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F5F67A24F91CF1ED218D2C72FDF144D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		60093EF13FCCC7A2FE96745CF3873C5A /* MapLibreNavigationCore.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = MapLibreNavigationCore.xcframework; sourceTree = "<group>"; };
 		622849796F9EF0B1707D27BA8EB208B4 /* MultipartUpload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipartUpload.swift; path = Source/Features/MultipartUpload.swift; sourceTree = "<group>"; };
-		690F35138F33C58F484A1C2704492B9F /* MapLibreNavigationCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MapLibreNavigationCore.debug.xcconfig; sourceTree = "<group>"; };
 		6B34BCB7921FF2A78907A30D63776A5B /* Pods-ML Nav - iOS Sample App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ML Nav - iOS Sample App.debug.xcconfig"; sourceTree = "<group>"; };
 		6B6E1D8FC44E7EE447342798DDEAFD0E /* Concurrency.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Concurrency.swift; path = Source/Features/Concurrency.swift; sourceTree = "<group>"; };
 		6F29B2E937F0E0837B5B772AAF557BFD /* MultipartFormData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipartFormData.swift; path = Source/Features/MultipartFormData.swift; sourceTree = "<group>"; };
@@ -147,7 +149,6 @@
 		7452C7E5B9A745565AAA070A42DD9EB2 /* MapLibre.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = MapLibre.xcframework; sourceTree = "<group>"; };
 		7C7E405520F74979ED18C2624B385F09 /* StringEncoding+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "StringEncoding+Alamofire.swift"; path = "Source/Extensions/StringEncoding+Alamofire.swift"; sourceTree = "<group>"; };
 		7E3A62B950A5742DB760D4ECBF7DD70A /* Alamofire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Alamofire.debug.xcconfig; sourceTree = "<group>"; };
-		82F9599BEBDC44F9C1ABEFDBC3EC1CBD /* MapLibreNavigationCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = MapLibreNavigationCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		8365CB083E8AD0B596D5178CB973975C /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Alamofire.modulemap; sourceTree = "<group>"; };
 		8591D1B1A99891DBEAA625EC2555A3C0 /* NetworkReachabilityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkReachabilityManager.swift; path = Source/Features/NetworkReachabilityManager.swift; sourceTree = "<group>"; };
 		85C9807BC3DD75B85B93CED9B19B7219 /* MapLibre-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "MapLibre-xcframeworks.sh"; sourceTree = "<group>"; };
@@ -159,17 +160,16 @@
 		92F7EB03955AE419739820EDD5476602 /* Pods-ML Nav - iOS Sample App */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ML Nav - iOS Sample App"; path = Pods_ML_Nav___iOS_Sample_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		936426CA93C34992AA9D5A73F2EDD723 /* Session.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Session.swift; path = Source/Core/Session.swift; sourceTree = "<group>"; };
 		95DF3D9382075CB817C51AD14F6B0735 /* MapLibre.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MapLibre.release.xcconfig; sourceTree = "<group>"; };
-		99B96D4F376309264E574CE0A5ED9AE8 /* MapLibreNavigationCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MapLibreNavigationCore.release.xcconfig; sourceTree = "<group>"; };
 		9C4B5B38B98B0D22A7496D428A6479D2 /* URLSessionConfiguration+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLSessionConfiguration+Alamofire.swift"; path = "Source/Extensions/URLSessionConfiguration+Alamofire.swift"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9D9C094E08C5167D8EAF63764A99EA69 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Features/Validation.swift; sourceTree = "<group>"; };
-		A367B2AF5A439DCEA9FE7A73C0C20713 /* MapLibreNavigationCore-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "MapLibreNavigationCore-xcframeworks.sh"; sourceTree = "<group>"; };
 		A97E7872DE78EF0401897E0D461EE777 /* ServerTrustEvaluation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerTrustEvaluation.swift; path = Source/Features/ServerTrustEvaluation.swift; sourceTree = "<group>"; };
 		A987239A3005E66A85CB6C1B302C25DC /* URLConvertible+URLRequestConvertible.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLConvertible+URLRequestConvertible.swift"; path = "Source/Core/URLConvertible+URLRequestConvertible.swift"; sourceTree = "<group>"; };
 		A9BB96E0F1EC9DE92C0C87B90AF40A6B /* HTTPMethod.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HTTPMethod.swift; path = Source/Core/HTTPMethod.swift; sourceTree = "<group>"; };
 		AA0BE5B79B2A2E75F8536C2947623A64 /* Alamofire.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Alamofire.release.xcconfig; sourceTree = "<group>"; };
 		ABB17F6395FF6CB3682D24AB9F81E96B /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Core/Response.swift; sourceTree = "<group>"; };
 		ADDE8455A0844207D1630BFC048E393A /* Pods-ML Nav - iOS Sample App-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ML Nav - iOS Sample App-acknowledgements.markdown"; sourceTree = "<group>"; };
+		AFF85EBDEBAA88B30B3948F1FAF39D83 /* MapLibreNavigationCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = MapLibreNavigationCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B6D5ABFDE322F2060BCED96BA3EEF85B /* URLRequest+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLRequest+Alamofire.swift"; path = "Source/Extensions/URLRequest+Alamofire.swift"; sourceTree = "<group>"; };
 		B7FF38067CFA8CCFD68A55381792CEDB /* Protected.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Protected.swift; path = Source/Core/Protected.swift; sourceTree = "<group>"; };
 		B882EA7599DDA28FE883A4199858AEE8 /* ResourceBundle-Alamofire-Alamofire-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Alamofire-Alamofire-Info.plist"; sourceTree = "<group>"; };
@@ -190,6 +190,7 @@
 		EC4E8D993C05F82C434AFF7904CDAF71 /* RetryPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RetryPolicy.swift; path = Source/Features/RetryPolicy.swift; sourceTree = "<group>"; };
 		EC755EED896958A77BAE0DA3F2E11982 /* DownloadRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DownloadRequest.swift; path = Source/Core/DownloadRequest.swift; sourceTree = "<group>"; };
 		F5ADE130F8C81BC9D940C47DC3A8A89C /* Pods-ML Nav - iOS Sample App-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ML Nav - iOS Sample App-umbrella.h"; sourceTree = "<group>"; };
+		FA662199E6DA08C4F708F498A0CE8630 /* MapLibreNavigationCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MapLibreNavigationCore.release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,17 +221,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01D96B642C220800BD23646B06ED58B4 /* MapLibreNavigationCore */ = {
-			isa = PBXGroup;
-			children = (
-				BEADD5D57AF4AB5B97FCC4D067640DD9 /* Frameworks */,
-				E2C7D002A26995FA4B783DE68EA33B9C /* Pod */,
-				263B1078E4CC78DD2BF32AE099A4409D /* Support Files */,
-			);
-			name = MapLibreNavigationCore;
-			path = "../../../maplibre-navigation-core/build/cocoapods/publish/debug";
-			sourceTree = "<group>";
-		};
 		053BBC242060F50AF12E1C85A629BEA1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,15 +247,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		263B1078E4CC78DD2BF32AE099A4409D /* Support Files */ = {
+		1D821753B065FD25A832B84351DE2656 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				A367B2AF5A439DCEA9FE7A73C0C20713 /* MapLibreNavigationCore-xcframeworks.sh */,
-				690F35138F33C58F484A1C2704492B9F /* MapLibreNavigationCore.debug.xcconfig */,
-				99B96D4F376309264E574CE0A5ED9AE8 /* MapLibreNavigationCore.release.xcconfig */,
+				4255F138973B95CC0D3EC340ACCB92DA /* MapLibreNavigationCore-copy-dsyms.sh */,
+				59B91AFDEB1691906954F95D87FB41FD /* MapLibreNavigationCore.debug.xcconfig */,
+				FA662199E6DA08C4F708F498A0CE8630 /* MapLibreNavigationCore.release.xcconfig */,
 			);
 			name = "Support Files";
-			path = "../../../../../sample/ios/Pods/Target Support Files/MapLibreNavigationCore";
+			path = "../sample/ios/Pods/Target Support Files/MapLibreNavigationCore";
 			sourceTree = "<group>";
 		};
 		63DE58D55FE9E6052B993F2E4E9BFC56 /* Alamofire */ = {
@@ -328,6 +318,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		776959E831F9B711E3478B65DF0329A5 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9DD216B73D83167711E56F27E3D947AE /* MapLibreNavigationCore */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
 		8BC3BD1940C374A3E1401C3C5E298282 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,12 +342,15 @@
 			path = "../Target Support Files/Alamofire";
 			sourceTree = "<group>";
 		};
-		8D54672F540DF8C741317C2106DC7DFE /* Development Pods */ = {
+		9DD216B73D83167711E56F27E3D947AE /* MapLibreNavigationCore */ = {
 			isa = PBXGroup;
 			children = (
-				01D96B642C220800BD23646B06ED58B4 /* MapLibreNavigationCore */,
+				BF07B79907793CA95678295A4A96E962 /* Frameworks */,
+				D5B59C64AE758839E2DB6625A4813E4C /* Pod */,
+				1D821753B065FD25A832B84351DE2656 /* Support Files */,
 			);
-			name = "Development Pods";
+			name = MapLibreNavigationCore;
+			path = "../../../maplibre-navigation-core";
 			sourceTree = "<group>";
 		};
 		B94A26D0B3559FF370CBA9F28A617D4B /* Targets Support Files */ = {
@@ -370,10 +371,10 @@
 			path = MapLibre;
 			sourceTree = "<group>";
 		};
-		BEADD5D57AF4AB5B97FCC4D067640DD9 /* Frameworks */ = {
+		BF07B79907793CA95678295A4A96E962 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				60093EF13FCCC7A2FE96745CF3873C5A /* MapLibreNavigationCore.xcframework */,
+				4178BCCE51C171088BF4E3D26D250F57 /* MapLibreNavigationCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -402,7 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				8D54672F540DF8C741317C2106DC7DFE /* Development Pods */,
+				776959E831F9B711E3478B65DF0329A5 /* Development Pods */,
 				1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */,
 				CB1A6A34E4B1797D25851DBD475F5228 /* Pods */,
 				0CEF2B9EE385C1D35657BBD2B1439A33 /* Products */,
@@ -410,10 +411,10 @@
 			);
 			sourceTree = "<group>";
 		};
-		E2C7D002A26995FA4B783DE68EA33B9C /* Pod */ = {
+		D5B59C64AE758839E2DB6625A4813E4C /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				82F9599BEBDC44F9C1ABEFDBC3EC1CBD /* MapLibreNavigationCore.podspec */,
+				AFF85EBDEBAA88B30B3948F1FAF39D83 /* MapLibreNavigationCore.podspec */,
 			);
 			name = Pod;
 			sourceTree = "<group>";
@@ -583,6 +584,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0BDAE66313ACFCBC6883469790952B26 /* [CP-User] Build MapLibreNavigationCore */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "[CP-User] Build MapLibreNavigationCore";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "                if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n                  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \"YES\"\"\n                  exit 0\n                fi\n                set -ev\n                REPO_ROOT=\"$PODS_TARGET_SRCROOT\"\n                \"$REPO_ROOT/../gradlew\" -p \"$REPO_ROOT\" $KOTLIN_PROJECT_PATH:syncFramework                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME                     -Pkotlin.native.cocoapods.archs=\"$ARCHS\"                     -Pkotlin.native.cocoapods.configuration=\"$CONFIGURATION\"\n";
+		};
 		23B46BDEEFBE70CDA230BBD8941023A3 /* [CP] Copy XCFrameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -600,21 +611,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/MapLibre/MapLibre-xcframeworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		44AFD97833F155AF2BEDDADD78612DDD /* [CP] Copy XCFrameworks */ = {
+		7D294D7727285735FEE31420E36832C6 /* [CP] Copy dSYMs */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-xcframeworks-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-copy-dsyms-input-files.xcfilelist",
 			);
-			name = "[CP] Copy XCFrameworks";
+			name = "[CP] Copy dSYMs";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-xcframeworks-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-copy-dsyms-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-xcframeworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/MapLibreNavigationCore/MapLibreNavigationCore-copy-dsyms.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -715,6 +726,23 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		257785AF205773201E32F2520F95D3B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59B91AFDEB1691906954F95D87FB41FD /* MapLibreNavigationCore.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		43E6F219681645AA6A1DC48E87B56284 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7E3A62B950A5742DB760D4ECBF7DD70A /* Alamofire.debug.xcconfig */;
@@ -908,41 +936,6 @@
 			};
 			name = Debug;
 		};
-		85C13484220A5489371867B5CC411C3E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 690F35138F33C58F484A1C2704492B9F /* MapLibreNavigationCore.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		957F89678FDB3A20FDB84076A3072D20 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 99B96D4F376309264E574CE0A5ED9AE8 /* MapLibreNavigationCore.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		96B7F54F8F8828F7724D395FCFE845E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7E3A62B950A5742DB760D4ECBF7DD70A /* Alamofire.debug.xcconfig */;
@@ -1107,9 +1100,36 @@
 			};
 			name = Debug;
 		};
+		EE28941994581C5FBF995362016CA1FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA662199E6DA08C4F708F498A0CE8630 /* MapLibreNavigationCore.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		280DEC86EE353EF5304224F838234025 /* Build configuration list for PBXAggregateTarget "MapLibreNavigationCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				257785AF205773201E32F2520F95D3B8 /* Debug */,
+				EE28941994581C5FBF995362016CA1FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		36A1BE16B7C47E102266B2087F068AFC /* Build configuration list for PBXNativeTarget "Alamofire-Alamofire" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1142,15 +1162,6 @@
 			buildConfigurations = (
 				43E6F219681645AA6A1DC48E87B56284 /* Debug */,
 				4C6450248165267FCCE1E931FDCC492D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6FA129506577C39C6D83416D00D8E424 /* Build configuration list for PBXAggregateTarget "MapLibreNavigationCore" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				85C13484220A5489371867B5CC411C3E /* Debug */,
-				957F89678FDB3A20FDB84076A3072D20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
