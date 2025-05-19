@@ -40,6 +40,7 @@ afterEvaluate {
 
                 artifactId "${artifactId.replace("libandroid-", "")}-android"
 
+                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar") // ✅ Add this
                 artifact tasks.androidJavadocsJar
                 artifact tasks.androidSourcesJar
 
