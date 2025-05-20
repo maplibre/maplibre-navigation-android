@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import com.mapbox.core.utils.TextUtils
 import okhttp3.Request
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
@@ -359,7 +358,7 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     override fun updateWayNameVisibility(isVisible: Boolean) {
         var visible = isVisible
-        if (TextUtils.isEmpty(wayNameView.retrieveWayNameText())) {
+        if (wayNameView.retrieveWayNameText().isEmpty()) {
             visible = false
         }
         wayNameView.updateVisibility(visible)
