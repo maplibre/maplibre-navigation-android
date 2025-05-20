@@ -6,7 +6,6 @@ import org.maplibre.navigation.core.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.maplibre.geojson.Point;
