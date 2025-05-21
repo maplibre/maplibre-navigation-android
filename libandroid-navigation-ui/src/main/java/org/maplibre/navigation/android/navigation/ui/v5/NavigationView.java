@@ -238,11 +238,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
                 isMapInitialized = true;
             }
         });
-        calculateRoute();
-    }
-
-    private void calculateRoute() {
-
     }
 
     @Override

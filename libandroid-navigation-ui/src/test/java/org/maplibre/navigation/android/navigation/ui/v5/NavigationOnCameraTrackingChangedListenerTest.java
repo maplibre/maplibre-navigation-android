@@ -19,7 +19,7 @@ public class NavigationOnCameraTrackingChangedListenerTest {
     BottomSheetBehavior behavior = mock(BottomSheetBehavior.class);
     when(behavior.getState()).thenReturn(BottomSheetBehavior.STATE_EXPANDED);
     NavigationOnCameraTrackingChangedListener listener = new NavigationOnCameraTrackingChangedListener(
-      presenter, behavior
+      presenter
     );
 
     listener.onCameraTrackingDismissed();
@@ -33,7 +33,7 @@ public class NavigationOnCameraTrackingChangedListenerTest {
     BottomSheetBehavior behavior = mock(BottomSheetBehavior.class);
     when(behavior.getState()).thenReturn(BottomSheetBehavior.STATE_HIDDEN);
     NavigationOnCameraTrackingChangedListener listener = new NavigationOnCameraTrackingChangedListener(
-      presenter, behavior
+      presenter
     );
 
     listener.onCameraTrackingDismissed();

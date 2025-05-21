@@ -1,10 +1,11 @@
 package org.maplibre.navigation.android.example
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import okhttp3.Request
+import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.LocationComponent
 import org.maplibre.android.location.LocationComponentActivationOptions
@@ -44,10 +45,10 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
     private lateinit var binding: ActivityNavigationUiBinding
 
     private var simulateRoute = false
+    var mapLibreMap: MapLibreMap? = null
 
     private var isStarted = false
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,10 +59,30 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.navigationView.apply {
-            mapStyleUri =
-                "https://api.maptiler.com/maps/streets-v2-dark/style.json?key=sda"
-            onCreate(savedInstanceState)
-            initialize(this@NavigationUIActivity)
+            onCreate(savedInstanceState, mapStyleUri = "https://api.maptiler.com/maps/streets-v2/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ")
+            initialize(
+                onMapReadyCallback = {
+                    val initialMapCameraPosition =
+                        CameraPosition.Builder()
+                            .target(LatLng(43.230633, 76.933810))
+                            .zoom(16.0)
+                            .build()
+                    it.cameraPosition = initialMapCameraPosition
+                    it.setMaxZoomPreference(18.0)
+                    it.setMinZoomPreference(5.0)
+                    this@NavigationUIActivity.mapLibreMap = it
+                }
+            )
+
+        }
+
+        binding.locate.setOnClickListener {
+            val initialMapCameraPosition =
+                CameraPosition.Builder()
+                    .target(LatLng(43.230633, 76.933810))
+                    .zoom(16.0)
+                    .build()
+            mapLibreMap?.animateCamera(CameraUpdateFactory.newCameraPosition(initialMapCameraPosition))
         }
 
 //        binding.mapView.apply {
@@ -69,13 +90,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //            getMapAsync(this@NavigationUIActivity)
 //        }
 
-        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, checked ->
-            if (checked) {
-                binding.navigationView.resetCameraPosition()
-            } else {
-                binding.navigationView.updateCameraRouteOverview()
-            }
-        }
         val points = mutableListOf<Point>()
 //        points.add(Pair(76.928316, 43.236109))
         points.add(Point.fromLngLat(76.933810, 43.230633))
@@ -97,11 +111,12 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                         destination = Point.fromLngLat(76.930137, 43.230361),
                     ),
                     successCallback = {
+
                         val options = NavigationViewOptions.builder()
                         options.navigationListener(this)
+//                        options.shouldSimulateRoute(true)
                         extractRoute(options)
                         extractConfiguration(options)
-                        options.shouldSimulateRoute(true)
                         options.navigationOptions(
                             MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
                         )

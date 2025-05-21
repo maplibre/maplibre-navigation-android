@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -10,20 +9,16 @@ import androidx.annotation.UiThread
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import okhttp3.Request
-import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
-import org.maplibre.android.location.LocationComponent
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.OnMapReadyCallback
-import org.maplibre.android.maps.Projection
 import org.maplibre.android.maps.Style
 import org.maplibre.android.maps.Style.OnStyleLoaded
 import org.maplibre.geojson.Point
@@ -67,25 +62,12 @@ class NavigationRouteView @JvmOverloads constructor(
     private var navigationMap: NavigationMapLibreMap? = null
     private var onTrackingChangedListener: NavigationOnCameraTrackingChangedListener? = null
     private var mapInstanceState: NavigationMapLibreMapInstanceState? = null
-    private var initialMapCameraPosition: CameraPosition? = null
     private var isMapInitialized = false
     private var isSubscribed = false
     private lateinit var lifecycleRegistry: LifecycleRegistry
-    private var onNavigationReadyCallback: OnNavigationReadyCallback? = null
+    private var onMapReadyCallback: OnMapReadyCallback? = null
 
-    var mapLibreMap: MapLibreMap? = null
-        private set
-
-    var mapStyleUri: String? = null
-        set(value) {
-            ThemeSwitcher.setTheme(context, attrs, value)
-            instructionView.setupStyle(value)
-            field = value
-        }
-
-    private var locationComponent: LocationComponent? = null
-    private var baseCameraPosition: CameraPosition? = null
-    private var isMapReinitialized: Boolean = false
+    private var mapStyleUri: String? = null
 
     init {
         initializeView()
@@ -98,11 +80,17 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     fun onCreate(
         savedInstanceState: Bundle?,
+        mapStyleUri: String
     ) {
         mapView.onCreate(savedInstanceState)
         updatePresenterState(savedInstanceState)
         lifecycleRegistry = LifecycleRegistry(this)
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
+
+        if (mapStyleUri != null) {
+            this.mapStyleUri = mapStyleUri
+            ThemeSwitcher.setTheme(context, attrs, mapStyleUri)
+        }
     }
 
     /**
@@ -182,13 +170,9 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     @UiThread
     fun onDestroy() {
-//        shutdown()
+        shutdown()
         stopNavigation()
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
-    }
-
-    fun onDestroy2() {
-        shutdown()
     }
 
     fun onStart() {
@@ -222,14 +206,10 @@ class NavigationRouteView @JvmOverloads constructor(
      * @since 0.6.0
      */
     override fun onMapReady(mapLibreMap: MapLibreMap) {
-        this.mapLibreMap = mapLibreMap
-
-        val onStyleLoaded = OnStyleLoaded { style ->
+        val onStyleLoaded = OnStyleLoaded { _ ->
             initializeNavigationMap(mapView, mapLibreMap)
             initializeWayNameListener()
-
-            onNavigationReadyCallback?.onNavigationReady(navigationViewModel.isRunning)
-
+            onMapReadyCallback?.onMapReady(mapLibreMap)
             isMapInitialized = true
         }
 
@@ -296,8 +276,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     override fun resetCameraPosition() {
-        updateWayNameVisibility(true);
-        hideRecenterBtn()
         navigationMap?.resetPadding()
         navigationMap?.resetCameraPositionWith(NavigationCamera.NAVIGATION_TRACKING_MODE_GPS)
     }
@@ -411,49 +389,22 @@ class NavigationRouteView @JvmOverloads constructor(
      *
      * @since 0.16.0
      */
-    @SuppressLint("MissingPermission")
     @UiThread
     fun stopNavigation() {
-        instructionView.visibility = GONE
         navigationPresenter?.onNavigationStopped()
         navigationViewModel.stopNavigation()
-        baseCameraPosition?.let {
-            mapLibreMap?.cameraPosition = it
-        }
-
-        navigationMap?.removeOnCameraTrackingChangedListener(onTrackingChangedListener)
-        navigationMap?.removeRoute()
-        navigationMap?.clearMarkers()
-        mapLibreMap?.markers?.forEach {
-            mapLibreMap?.removeMarker(it)
-        }
-        navigationMap?.removeRoute()
     }
 
 
     /**
      * Should be called after [NavigationView.onCreate].
-     *
-     *
-     * This method adds the [OnNavigationReadyCallback],
-     * which will fire the ready events for this view.
-     *
-     *
-     * This method also accepts a [CameraPosition] that will be set as soon as the map is
-     * ready.  Note, this position is ignored during rotation in favor of the last known map position.
-     *
-     * @param onNavigationReadyCallback to be set to this view
-     * @param initialMapCameraPosition  to be shown once the map is ready
      */
     fun initialize(
-        onNavigationReadyCallback: OnNavigationReadyCallback,
-        initialMapCameraPosition: CameraPosition? = null
+        onMapReadyCallback: OnMapReadyCallback,
     ) {
-        this.initialMapCameraPosition = initialMapCameraPosition
+        this.onMapReadyCallback = onMapReadyCallback
         if (!isMapInitialized) {
             mapView.getMapAsync(this)
-        } else {
-            onNavigationReadyCallback.onNavigationReady(navigationViewModel.isRunning)
         }
     }
 
@@ -496,7 +447,7 @@ class NavigationRouteView @JvmOverloads constructor(
      *
      * @return recenter button
      */
-    fun retrieveRecenterButton(): NavigationButton? {
+    fun retrieveRecenterButton(): NavigationButton {
         return recenterBtn
     }
 
@@ -508,6 +459,10 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     fun retrieveAlertView(): NavigationAlertView {
         return instructionView.retrieveAlertView()
+    }
+
+    fun onRecenterClick() {
+        navigationPresenter?.onRecenterClick()
     }
 
     private fun initializeView() {
@@ -553,7 +508,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     private fun initializeNavigationMap(mapView: MapView, map: MapLibreMap) {
-        initialMapCameraPosition?.let { map.cameraPosition = it }
         navigationMap = NavigationMapLibreMap(mapView, map)
         navigationMap?.updateLocationLayerRenderMode(RenderMode.GPS)
         if (mapInstanceState != null) {
@@ -598,10 +552,10 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private val isChangingConfigurations: Boolean
         get() {
-            try {
-                return (context as FragmentActivity).isChangingConfigurations
+            return try {
+                (context as Activity).isChangingConfigurations
             } catch (exception: ClassCastException) {
-                throw ClassCastException("Please ensure that the provided Context is a valid FragmentActivity")
+                false
             }
         }
 
@@ -628,8 +582,6 @@ class NavigationRouteView @JvmOverloads constructor(
             initializeOnCameraTrackingChangedListener()
             subscribeViewModels()
         }
-
-        instructionView.visibility = VISIBLE
     }
 
     private fun initializeClickListeners() {
@@ -645,7 +597,6 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun establish(options: NavigationViewOptions) {
         val localeUtils = LocaleUtils()
         establishDistanceFormatter(localeUtils, options)
-        establishTimeFormat(options)
     }
 
     private fun establishDistanceFormatter(
@@ -681,10 +632,6 @@ class NavigationRouteView @JvmOverloads constructor(
         return localeUtils.retrieveNonNullUnitType(context, voiceUnits)
     }
 
-    private fun establishTimeFormat(options: NavigationViewOptions) {
-        val timeFormatType = options.navigationOptions().timeFormatType
-    }
-
     private fun initializeNavigationListeners(
         options: NavigationViewOptions,
         navigationViewModel: NavigationViewModel?
@@ -714,80 +661,19 @@ class NavigationRouteView @JvmOverloads constructor(
         isSubscribed = true
     }
 
-    @SuppressLint("MissingPermission")
     private fun shutdown() {
         navigationMap?.removeOnCameraTrackingChangedListener(onTrackingChangedListener)
-        navigationMap?.removeRoute()
-//        navigationViewModel?.let {
-//            it.isOffRoute.removeObservers(this)
-//            it.instructionModel.removeObservers(this)
-//            it.bannerInstructionModel.removeObservers(this)
-//            it.summaryModel.removeObservers(this)
-//            it.retrieveNavigationLocation().removeObservers(this)
-//            it.retrieveRoute().removeObservers(this)
-//            it.retrieveShouldRecordScreenshot().removeObservers(this)
-//            it.retrieveDestination().removeObservers(this)
-//        }
-        isMapInitialized = false
-        NavigationViewSubscriber(this, navigationViewModel, navigationPresenter).unsubscribe()
-        navigationViewModel.stopNavigation()
-        mapLibreMap?.markers?.forEach {
-            mapLibreMap?.removeMarker(it)
-        }
+        navigationMap?.onDestroy()
+
         navigationViewEventDispatcher?.onDestroy(navigationViewModel.retrieveNavigation())
-        mapLibreMap?.getStyle {
-            mapLibreMap?.locationComponent?.isLocationComponentEnabled = false
-        }
-//        mapView.onDestroy()
-//        mapView.getMapAsync(this)
-
-        baseCameraPosition?.let {
-            mapLibreMap?.cameraPosition = it
-        }
-
-        navigationViewModel.onDestroy(false)
-        ImageCreator.getInstance().shutdown()
-
-        navigationMap?.removeRoute()
-        navigationMap = null
-
-        isSubscribed = false
-    }
-
-    private fun shutDown2() {
-        navigationMap?.removeOnCameraTrackingChangedListener(onTrackingChangedListener)
-        NavigationViewSubscriber(this, navigationViewModel, navigationPresenter).unsubscribe()
-        navigationViewEventDispatcher?.onDestroy(navigationViewModel.retrieveNavigation())
-//        mapView.onDestroy()
-        navigationViewModel.onDestroy(false)
+        mapView.onDestroy()
+        navigationViewModel.onDestroy(isChangingConfigurations)
         ImageCreator.getInstance().shutdown()
         navigationMap = null
-    }
-
-    fun setMinZoomLevel(minZoomLevel: Double) {
-        mapLibreMap?.setMinZoomPreference(minZoomLevel)
-    }
-
-    fun setMaxZoomLevel(maxZoomLevel: Double) {
-        mapLibreMap?.setMaxZoomPreference(maxZoomLevel)
-    }
-
-    fun getProjection(): Projection? {
-        return mapLibreMap?.projection
-    }
-
-    fun addMarker(icon: Int, latitude: Double, longitude: Double, id: String) {
-//        MarkerOptions().icon(Utils.drawableToIcon(context, icon))
-        mapLibreMap?.addMarker(MarkerOptions())
-        val position = LatLng(latitude, longitude)
-//        val icon = Icon(id, BitmapFactory.decodeResource(resources, icon))
-//        val markerOptions = MarkerOptions()
-//            .position(position)
-//            .icon(icon)
     }
 
     companion object {
-        private const val MAP_INSTANCE_STATE_KEY = "navgation_mapbox_map_instance_state"
+        private const val MAP_INSTANCE_STATE_KEY = "navigation_maplibre_map_instance_state"
         private const val INVALID_STATE = 0
     }
 

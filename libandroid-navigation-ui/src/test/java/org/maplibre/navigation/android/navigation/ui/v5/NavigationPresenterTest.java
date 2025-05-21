@@ -115,7 +115,7 @@ public class NavigationPresenterTest {
   @Test
   public void onWayNameChanged_mapWayNameIsHiddenWithCollapsedBottomsheet() {
     NavigationContract.View view = mock(NavigationContract.View.class);
-    when(view.isSummaryBottomSheetHidden()).thenReturn(true);
+//    when(view.isSummaryBottomSheetHidden()).thenReturn(true);
     NavigationPresenter presenter = new NavigationPresenter(view);
 
     presenter.onWayNameChanged("some valid way name");

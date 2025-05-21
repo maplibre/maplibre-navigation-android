@@ -346,6 +346,10 @@ public class NavigationViewModel {
         }
     }
 
+    void onCleared() {
+        destroyRouter();
+    }
+
     private void destroyRouter() {
         if (router != null) {
             router.onDestroy();
