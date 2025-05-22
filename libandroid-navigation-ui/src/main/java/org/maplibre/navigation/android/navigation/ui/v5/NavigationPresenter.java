@@ -1,78 +1,77 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import org.maplibre.navigation.core.location.Location;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
+import org.maplibre.navigation.core.location.Location;
+import org.maplibre.navigation.core.models.DirectionsRoute;
 
 class NavigationPresenter {
 
-  private NavigationContract.View view;
-  private boolean resumeState;
+    private NavigationContract.View view;
+    private boolean resumeState;
+    private boolean isTrackingCamera = false;
 
-  NavigationPresenter(NavigationContract.View view) {
-    this.view = view;
-  }
-
-  void updateResumeState(boolean resumeState) {
-    this.resumeState = resumeState;
-  }
-
-  void onRecenterClick() {
-    view.updateWayNameVisibility(true);
-    view.resetCameraPosition();
-    view.hideRecenterBtn();
-  }
-
-  void onCameraTrackingDismissed() {
-      view.updateWayNameVisibility(false);
-  }
-
-  void onSummaryBottomSheetHidden() {
-      view.showRecenterBtn();
-  }
-
-  void onRouteUpdate(DirectionsRoute directionsRoute) {
-    view.drawRoute(directionsRoute);
-    if (resumeState && view.isRecenterButtonVisible()) {
-      view.updateCameraRouteOverview();
-    } else {
-      view.startCamera(directionsRoute);
+    NavigationPresenter(NavigationContract.View view) {
+        this.view = view;
     }
-  }
 
-  void onDestinationUpdate(Point point) {
-    view.addMarker(point);
-  }
-
-  void onNavigationLocationUpdate(Location location) {
-    if (resumeState && !view.isRecenterButtonVisible()) {
-      view.resumeCamera(location);
-      resumeState = false;
+    void updateResumeState(boolean resumeState) {
+        this.resumeState = resumeState;
     }
-    view.updateNavigationMap(location);
-  }
 
-  void onWayNameChanged(@NonNull String wayName) {
-    if (TextUtils.isEmpty(wayName)) {
-      view.updateWayNameVisibility(false);
-      return;
+    void onRecenterClick() {
+        view.updateWayNameVisibility(true);
+        view.resetCameraPosition();
+        view.hideRecenterBtn();
+        isTrackingCamera = true;
     }
-    view.updateWayNameView(wayName);
-    view.updateWayNameVisibility(true);
-  }
 
-  void onNavigationStopped() {
-    view.updateWayNameVisibility(false);
-  }
+    void onCameraTrackingDismissed() {
+        view.updateWayNameVisibility(false);
+        isTrackingCamera = false;
+    }
 
-  void onRouteOverviewClick() {
-    view.updateWayNameVisibility(false);
-    view.updateCameraRouteOverview();
-    view.showRecenterBtn();
-  }
+
+    void onRouteUpdate(DirectionsRoute directionsRoute) {
+        view.drawRoute(directionsRoute);
+        if (resumeState && isTrackingCamera) {
+            view.updateCameraRouteOverview();
+        } else {
+            view.startCamera(directionsRoute);
+        }
+    }
+
+    void onDestinationUpdate(Point point) {
+        view.addMarker(point);
+    }
+
+    void onNavigationLocationUpdate(Location location) {
+        if (resumeState && !isTrackingCamera) {
+            view.resumeCamera(location);
+            resumeState = false;
+        }
+        view.updateNavigationMap(location);
+    }
+
+    void onWayNameChanged(@NonNull String wayName) {
+        if (TextUtils.isEmpty(wayName)) {
+            view.updateWayNameVisibility(false);
+            return;
+        }
+        view.updateWayNameView(wayName);
+        view.updateWayNameVisibility(true);
+    }
+
+    void onNavigationStopped() {
+        view.updateWayNameVisibility(false);
+    }
+
+    void onRouteOverviewClick() {
+        view.updateWayNameVisibility(false);
+        view.updateCameraRouteOverview();
+        view.showRecenterBtn();
+    }
 }

@@ -788,17 +788,4 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
     instructionListAdapter.updateBannerListWith(routeProgress, isListShowing);
   }
 
-  public void setupStyle(String mapStyle) {
-    ConstraintLayout instructionBackground = findViewById(R.id.instructionBackground);
-    if (mapStyle.equals(NavigationConstants.NAVIGATION_VIEW_DARK_THEME)) {
-      instructionBackground.setBackgroundColor(Color.BLACK);
-      upcomingDistanceText.setTextColor(Color.WHITE);
-      upcomingPrimaryText.setTextColor(Color.WHITE);
-    } else {
-      instructionBackground.setBackgroundColor(Color.WHITE);
-      upcomingDistanceText.setTextColor(Color.BLACK);
-      upcomingPrimaryText.setTextColor(Color.BLACK);
-    }
-  }
-
 }

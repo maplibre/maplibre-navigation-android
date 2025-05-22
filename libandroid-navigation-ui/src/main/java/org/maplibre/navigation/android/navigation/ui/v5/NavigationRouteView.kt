@@ -13,16 +13,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import okhttp3.Request
-import org.maplibre.android.camera.CameraPosition
-import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
 import org.maplibre.android.maps.Style.OnStyleLoaded
+import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.Symbol
+import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.annotation.SymbolOptions
+import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator
@@ -58,7 +59,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private lateinit var recenterBtn: RecenterButton
     private lateinit var wayNameView: WayNameView
 
-    private var navigationPresenter: NavigationPresenter? = null
+    private lateinit var navigationPresenter: NavigationPresenter
     private var navigationViewEventDispatcher: NavigationViewEventDispatcher? = null
     private lateinit var navigationViewModel: NavigationViewModel
     private var navigationMap: NavigationMapLibreMap? = null
@@ -68,6 +69,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private var isSubscribed = false
     private lateinit var lifecycleRegistry: LifecycleRegistry
     private var onMapReadyCallback: OnMapReadyCallback? = null
+    private var symbolManager: SymbolManager? = null
 
     private var mapStyleUri: String? = null
 
@@ -208,7 +210,8 @@ class NavigationRouteView @JvmOverloads constructor(
      * @since 0.6.0
      */
     override fun onMapReady(mapLibreMap: MapLibreMap) {
-        val onStyleLoaded = OnStyleLoaded { _ ->
+        val onStyleLoaded = OnStyleLoaded { style ->
+            initializeSymbolManager(mapView, mapLibreMap, style)
             initializeNavigationMap(mapView, mapLibreMap)
             initializeWayNameListener()
             onMapReadyCallback?.onMapReady(mapLibreMap)
@@ -219,12 +222,11 @@ class NavigationRouteView @JvmOverloads constructor(
             ?: mapLibreMap.setStyle(ThemeSwitcher.retrieveMapStyle(context), onStyleLoaded)
     }
 
-
-    fun calculateRoute(mapRouteData: MapRouteData, successCallback: () -> Unit) {
+    fun calculateRouteAndStartNavigation(mapRouteData: MapRouteData) {
         val navigationRouteBuilder = NavigationRoute.builder(context).apply {
             this.accessToken(mapRouteData.accessToken)
             this.origin(mapRouteData.userLocation)
-            this.destination( mapRouteData.destination)
+            this.destination(mapRouteData.destination)
             mapRouteData.stops?.forEach { this.addWaypoint(it) }
             this.voiceUnits(UnitType.METRIC)
             this.language(Locale.forLanguageTag("ru"))
@@ -246,26 +248,15 @@ class NavigationRouteView @JvmOverloads constructor(
                             DirectionsResponse.fromJson(
                                 responseBody.toJson()
                             );
-                       val route = maplibreResponse.routes.first()
-
+                        val route = maplibreResponse.routes.first()
                         navigationMap?.drawRoutes(maplibreResponse.routes)
 
-                        val options = NavigationLauncherOptions.builder()
-                            .directionsRoute(route)
-                            .initialMapCameraPosition(
-                                CameraPosition.Builder().target(
-                                    LatLng(
-                                        mapRouteData.userLocation.latitude(),
-                                        mapRouteData.userLocation.longitude()
-                                    )
-                                ).build()
-                            )
-                            .lightThemeResId(R.style.TestNavigationViewLight)
-                            .darkThemeResId(R.style.TestNavigationViewDark)
-                            .build()
-                        NavigationLauncher.startNavigation(context, options)
-
-                        successCallback.invoke()
+                        val options = NavigationViewOptions.builder()
+                        options.directionsRoute(route)
+                        options.navigationOptions(
+                            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
+                        )
+                        initializeNavigation(options.build())
                     }
                 }
 
@@ -302,8 +293,21 @@ class NavigationRouteView @JvmOverloads constructor(
         navigationMap?.addDestinationMarker(position)
     }
 
-    fun addCustomMarker(symbolOptions: SymbolOptions): Symbol {
-        return navigationMap?.addCustomMarker(symbolOptions) ?: throw RuntimeException("Navigation map is null")
+    fun addSymbol(symbolOptions: SymbolOptions): Symbol {
+        return symbolManager?.create(symbolOptions)
+            ?: throw RuntimeException("Map is not initialized")
+    }
+
+    fun removeSymbol(symbol: Symbol) {
+        symbolManager?.delete(symbol)
+    }
+
+    fun addOnSymbolClickListener(listener: OnSymbolClickListener) {
+        symbolManager?.addClickListener(listener)
+    }
+
+    fun updateSymbol(symbol: Symbol) {
+        symbolManager?.update(symbol)
     }
 
     val isWayNameVisible: Boolean
@@ -382,22 +386,13 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     /**
-     * Should be called when this view is completely initialized.
-     *
-     * @param options with containing route / coordinate data
-     */
-    fun startNavigation(options: NavigationViewOptions) {
-        initializeNavigation(options)
-    }
-
-    /**
      * Call this when the navigation session needs to end navigation without finishing the whole view
      *
      * @since 0.16.0
      */
     @UiThread
     fun stopNavigation() {
-        navigationPresenter?.onNavigationStopped()
+        navigationPresenter.onNavigationStopped()
         navigationViewModel.stopNavigation()
     }
 
@@ -406,11 +401,13 @@ class NavigationRouteView @JvmOverloads constructor(
      * Should be called after [NavigationView.onCreate].
      */
     fun initialize(
+        shouldSimulateRoute: Boolean,
         onMapReadyCallback: OnMapReadyCallback,
     ) {
         this.onMapReadyCallback = onMapReadyCallback
         if (!isMapInitialized) {
             mapView.getMapAsync(this)
+            navigationViewModel.initialize(shouldSimulateRoute)
         }
     }
 
@@ -468,7 +465,7 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     fun onRecenterClick() {
-        navigationPresenter?.onRecenterClick()
+        navigationPresenter.onRecenterClick()
     }
 
     private fun initializeView() {
@@ -519,6 +516,13 @@ class NavigationRouteView @JvmOverloads constructor(
         if (mapInstanceState != null) {
             navigationMap?.restoreFrom(mapInstanceState)
             return
+        }
+    }
+
+    private fun initializeSymbolManager(mapView: MapView, mapLibreMap: MapLibreMap, style: Style) {
+        symbolManager = SymbolManager(mapView, mapLibreMap, style).apply {
+            iconAllowOverlap = true
+            iconRotationAlignment = ICON_ROTATION_ALIGNMENT_VIEWPORT
         }
     }
 
@@ -573,13 +577,14 @@ class NavigationRouteView @JvmOverloads constructor(
         if (savedInstanceState != null) {
             val navigationRunningKey = context.getString(R.string.navigation_running)
             val resumeState = savedInstanceState.getBoolean(navigationRunningKey)
-            navigationPresenter?.updateResumeState(resumeState)
+            navigationPresenter.updateResumeState(resumeState)
         }
     }
 
     private fun initializeNavigation(options: NavigationViewOptions) {
+        instructionView.isVisible = true
         establish(options)
-        navigationViewModel.initialize(options)
+        navigationViewModel.initializeNavigation(options)
         initializeNavigationListeners(options, navigationViewModel)
         setupNavigationMapLibreMap(options)
 
@@ -651,7 +656,7 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     /**
-     * Subscribes the [InstructionView] and [SummaryBottomSheet] to the [NavigationViewModel].
+     * Subscribes the [InstructionView] to the [NavigationViewModel].
      *
      *
      * Then, creates an instance of [NavigationViewSubscriber], which takes a presenter.

@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
+import static org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 
@@ -29,8 +31,8 @@ class NavigationSymbolManager {
     createSymbolFrom(options);
   }
 
-  Symbol addCustomSymbolFor(SymbolOptions options) {
-    return createSymbolFrom(options);
+  void addCustomSymbolFor(SymbolOptions options) {
+    createSymbolFrom(options);
   }
 
   void removeAllMarkerSymbols() {
@@ -49,10 +51,9 @@ class NavigationSymbolManager {
       .withIconImage(MAPLIBRE_NAVIGATION_MARKER_NAME);
   }
 
-  private Symbol createSymbolFrom(SymbolOptions options) {
+  private void createSymbolFrom(SymbolOptions options) {
     Symbol symbol = symbolManager.create(options);
     mapMarkersSymbols.add(symbol);
-    return symbol;
   }
 
   @UiThread

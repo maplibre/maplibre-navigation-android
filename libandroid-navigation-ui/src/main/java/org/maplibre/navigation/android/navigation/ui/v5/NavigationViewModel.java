@@ -133,19 +133,25 @@ public class NavigationViewModel {
     }
 
     /**
+     * This method used to initialize {@link MapLibreNavigation}.
+     */
+    void initialize(boolean shouldSimulateRoute) {
+        LocationEngine locationEngine = initializeLocationEngineFrom(shouldSimulateRoute);
+        initializeNavigation(locationEngine);
+    }
+
+    /**
      * This method will pass {@link MapLibreNavigationOptions} from the {@link NavigationViewOptions}
      * to this view model to be used to initialize {@link MapLibreNavigation}.
      *
      * @param options to init NavigationView
      */
-    void initialize(NavigationViewOptions options) {
+    void initializeNavigation(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
         if (!isRunning()) {
-            LocationEngine locationEngine = initializeLocationEngineFrom(options);
-            initializeNavigation(context, navigationOptions, locationEngine);
             addMilestones(options);
             initializeNavigationSpeechPlayer(options);
         }
@@ -180,7 +186,7 @@ public class NavigationViewModel {
     void updateRoute(DirectionsRoute route) {
         this.route.setValue(route);
         if (!isChangingConfigurations) {
-            startNavigation(route);
+            startMapLibreNavigation(route);
             updateReplayEngine(route);
             sendEventOnRerouteAlong(route);
             isOffRoute.setValue(false);
@@ -280,15 +286,13 @@ public class NavigationViewModel {
         return new SpeechPlayerProvider(context, language, voiceLanguageSupported);
     }
 
-    private LocationEngine initializeLocationEngineFrom(NavigationViewOptions options) {
-        LocationEngine locationEngine = options.locationEngine();
-        boolean shouldReplayRoute = options.shouldSimulateRoute();
-        locationEngineConductor.initializeLocationEngine(context, locationEngine, shouldReplayRoute);
+    private LocationEngine initializeLocationEngineFrom(boolean shouldSimulateRoute) {
+        locationEngineConductor.initializeLocationEngine(context, null, shouldSimulateRoute);
         return locationEngineConductor.obtainLocationEngine();
     }
 
-    private void initializeNavigation(Context context, MapLibreNavigationOptions options, LocationEngine locationEngine) {
-        navigation = new MapLibreNavigation(options, locationEngine);
+    private void initializeNavigation(LocationEngine locationEngine) {
+        navigation = new MapLibreNavigation(locationEngine);
         addNavigationListeners();
     }
 
@@ -332,7 +336,7 @@ public class NavigationViewModel {
 
     private ViewRouteListener routeEngineListener = new NavigationViewRouteEngineListener(this);
 
-    private void startNavigation(DirectionsRoute route) {
+    private void startMapLibreNavigation(DirectionsRoute route) {
         if (route != null) {
             navigation.startNavigation(route);
             voiceInstructionsToAnnounce = 0;

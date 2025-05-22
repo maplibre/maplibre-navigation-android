@@ -583,7 +583,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
 
     private void initializeNavigation(NavigationViewOptions options) {
         establish(options);
-        navigationViewModel.initialize(options);
+        navigationViewModel.initializeNavigation(options);
         initializeNavigationListeners(options, navigationViewModel);
         setupNavigationmapLibreMap(options);
 

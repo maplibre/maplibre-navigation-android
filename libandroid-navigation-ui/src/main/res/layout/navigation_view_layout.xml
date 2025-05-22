@@ -33,19 +33,12 @@
             app:maplibre_uiTiltGestures="true"
             app:maplibre_uiZoomGestures="true"/>
 
-        <ImageView
-            android:id="@+id/screenshotView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible" />
-
         <org.maplibre.navigation.android.navigation.ui.v5.RecenterButton
             android:id="@+id/recenterBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_margin="16dp"
-            android:visibility="invisible"
             app:layout_anchorGravity="top|left" />
 
         <org.maplibre.navigation.android.navigation.ui.v5.map.WayNameView
@@ -53,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:visibility="invisible"
             app:layout_anchorGravity="center|top" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -62,7 +54,7 @@
         android:id="@+id/instructionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

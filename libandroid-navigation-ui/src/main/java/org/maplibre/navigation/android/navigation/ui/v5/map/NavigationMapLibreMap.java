@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.fragment.app.FragmentActivity;
 
-import org.maplibre.android.plugins.annotation.Symbol;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
@@ -181,8 +180,8 @@ public class NavigationMapLibreMap {
    *
    * @param options for the custom {@link org.maplibre.android.plugins.annotation.Symbol}
    */
-  public Symbol addCustomMarker(SymbolOptions options) {
-    return navigationSymbolManager.addCustomSymbolFor(options);
+  public void addCustomMarker(SymbolOptions options) {
+    navigationSymbolManager.addCustomSymbolFor(options);
   }
 
   /**

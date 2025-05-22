@@ -44,7 +44,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 
     private lateinit var binding: ActivityNavigationUiBinding
 
-    private var simulateRoute = false
+    private var simulateRoute = true
     var mapLibreMap: MapLibreMap? = null
 
     private var isStarted = false
@@ -58,9 +58,11 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.navigationView.apply {
             onCreate(savedInstanceState, mapStyleUri = "https://api.maptiler.com/maps/streets-v2/style.json?key=ZkZSWT2Q0ta4f3S1VyrZ")
             initialize(
+                simulateRoute,
                 onMapReadyCallback = {
                     val initialMapCameraPosition =
                         CameraPosition.Builder()
@@ -96,6 +98,10 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
         points.add(Point.fromLngLat(76.920187, 43.236783))
 //        points.add(Pair(76.930137, 43.230361))
 
+        binding.simulateRouteSwitch.setOnCheckedChangeListener { _, isChecked ->
+            binding.navigationView.onRecenterClick()
+        }
+
 
         binding.startRouteButton.setOnClickListener {
             if (isStarted) {
@@ -103,25 +109,13 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                 isStarted = false
             } else {
                 isStarted = true
-                binding.navigationView.calculateRoute(
+                binding.navigationView.calculateRouteAndStartNavigation(
                     MapRouteData(
                         getString(R.string.mapbox_access_token),
                         userLocation = Point.fromLngLat(76.930137, 43.230361),
                         stops = points,
                         destination = Point.fromLngLat(76.930137, 43.230361),
-                    ),
-                    successCallback = {
-
-                        val options = NavigationViewOptions.builder()
-                        options.navigationListener(this)
-//                        options.shouldSimulateRoute(true)
-                        extractRoute(options)
-                        extractConfiguration(options)
-                        options.navigationOptions(
-                            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
-                        )
-                        binding.navigationView.startNavigation(options.build())
-                    }
+                    )
                 )
             }
         }
