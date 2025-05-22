@@ -135,7 +135,7 @@ public class NavigationViewModel {
     /**
      * This method used to initialize {@link MapLibreNavigation}.
      */
-    void initialize(boolean shouldSimulateRoute) {
+    void initializeNavigation(boolean shouldSimulateRoute) {
         LocationEngine locationEngine = initializeLocationEngineFrom(shouldSimulateRoute);
         initializeNavigation(locationEngine);
     }
@@ -146,7 +146,7 @@ public class NavigationViewModel {
      *
      * @param options to init NavigationView
      */
-    void initializeNavigation(NavigationViewOptions options) {
+    void initialize(NavigationViewOptions options) {
         MapLibreNavigationOptions navigationOptions = options.navigationOptions();
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);

@@ -13,6 +13,8 @@ import org.maplibre.android.location.modes.CameraMode
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
+import org.maplibre.android.plugins.annotation.SymbolOptions
+import org.maplibre.android.style.layers.Property.ICON_ANCHOR_CENTER
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.MapRouteData
@@ -44,7 +46,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 
     private lateinit var binding: ActivityNavigationUiBinding
 
-    private var simulateRoute = true
+    private var simulateRoute = false
     var mapLibreMap: MapLibreMap? = null
 
     private var isStarted = false
@@ -64,6 +66,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
             initialize(
                 simulateRoute,
                 onMapReadyCallback = {
+                    this@NavigationUIActivity.mapLibreMap = it
                     val initialMapCameraPosition =
                         CameraPosition.Builder()
                             .target(LatLng(43.230633, 76.933810))
@@ -72,7 +75,18 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                     it.cameraPosition = initialMapCameraPosition
                     it.setMaxZoomPreference(18.0)
                     it.setMinZoomPreference(5.0)
-                    this@NavigationUIActivity.mapLibreMap = it
+                    getDrawable(R.drawable.ic_car_top)?.let {
+                        mapLibreMap?.style?.addImage("DRIVER_MARKER_ICON_ID",
+                            it
+                        )
+                    }
+                    val symbolOptions = SymbolOptions()
+                        .withLatLng(LatLng(43.230361,76.930137))
+                        .withIconImage("DRIVER_MARKER_ICON_ID")
+                        .withIconAnchor(ICON_ANCHOR_CENTER)
+
+
+                    binding.navigationView.addSymbol(symbolOptions)
                 }
             )
 
@@ -99,13 +113,14 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //        points.add(Pair(76.930137, 43.230361))
 
         binding.simulateRouteSwitch.setOnCheckedChangeListener { _, isChecked ->
-            binding.navigationView.onRecenterClick()
+            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING
         }
-
 
         binding.startRouteButton.setOnClickListener {
             if (isStarted) {
                 binding.navigationView.stopNavigation()
+                binding.navigationView.retrieveNavigationMapLibreMap()?.removeRoute()
+
                 isStarted = false
             } else {
                 isStarted = true

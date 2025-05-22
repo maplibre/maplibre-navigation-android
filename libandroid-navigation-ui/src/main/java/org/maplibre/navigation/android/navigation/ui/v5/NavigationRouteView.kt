@@ -1,5 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +14,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import okhttp3.Request
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.modes.CameraMode
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
@@ -23,7 +26,7 @@ import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.annotation.SymbolOptions
-import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT
+import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator
@@ -211,6 +214,7 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         val onStyleLoaded = OnStyleLoaded { style ->
+            enableLocationComponent(mapLibreMap, style)
             initializeSymbolManager(mapView, mapLibreMap, style)
             initializeNavigationMap(mapView, mapLibreMap)
             initializeWayNameListener()
@@ -222,6 +226,27 @@ class NavigationRouteView @JvmOverloads constructor(
             ?: mapLibreMap.setStyle(ThemeSwitcher.retrieveMapStyle(context), onStyleLoaded)
     }
 
+    @SuppressLint("MissingPermission")
+    private fun enableLocationComponent(mapLibreMap: MapLibreMap, style: Style) {
+        // Get an instance of the component
+        val locationComponent = mapLibreMap.locationComponent
+
+        locationComponent.let {
+            // Activate with a built LocationComponentActivationOptions object
+            it.activateLocationComponent(
+                LocationComponentActivationOptions.builder(context, style).build(),
+            )
+
+            // Enable to make component visible
+            it.isLocationComponentEnabled = true
+
+            // Set the component's camera mode
+            it.cameraMode = CameraMode.TRACKING_GPS
+
+            // Set the component's render mode
+            it.renderMode = RenderMode.NORMAL
+        }
+    }
     fun calculateRouteAndStartNavigation(mapRouteData: MapRouteData) {
         val navigationRouteBuilder = NavigationRoute.builder(context).apply {
             this.accessToken(mapRouteData.accessToken)
@@ -407,7 +432,7 @@ class NavigationRouteView @JvmOverloads constructor(
         this.onMapReadyCallback = onMapReadyCallback
         if (!isMapInitialized) {
             mapView.getMapAsync(this)
-            navigationViewModel.initialize(shouldSimulateRoute)
+            navigationViewModel.initializeNavigation(shouldSimulateRoute)
         }
     }
 
@@ -464,10 +489,6 @@ class NavigationRouteView @JvmOverloads constructor(
         return instructionView.retrieveAlertView()
     }
 
-    fun onRecenterClick() {
-        navigationPresenter.onRecenterClick()
-    }
-
     private fun initializeView() {
         inflate(context, R.layout.navigation_view_layout, this)
         bind()
@@ -522,7 +543,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun initializeSymbolManager(mapView: MapView, mapLibreMap: MapLibreMap, style: Style) {
         symbolManager = SymbolManager(mapView, mapLibreMap, style).apply {
             iconAllowOverlap = true
-            iconRotationAlignment = ICON_ROTATION_ALIGNMENT_VIEWPORT
+            iconRotationAlignment = ICON_ROTATION_ALIGNMENT_MAP
         }
     }
 
@@ -584,7 +605,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun initializeNavigation(options: NavigationViewOptions) {
         instructionView.isVisible = true
         establish(options)
-        navigationViewModel.initializeNavigation(options)
+        navigationViewModel.initialize(options)
         initializeNavigationListeners(options, navigationViewModel)
         setupNavigationMapLibreMap(options)
 
