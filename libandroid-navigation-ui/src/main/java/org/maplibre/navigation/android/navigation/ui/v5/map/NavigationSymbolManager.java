@@ -29,8 +29,8 @@ class NavigationSymbolManager {
     createSymbolFrom(options);
   }
 
-  void addCustomSymbolFor(SymbolOptions options) {
-    createSymbolFrom(options);
+  Symbol addCustomSymbolFor(SymbolOptions options) {
+    return createSymbolFrom(options);
   }
 
   void removeAllMarkerSymbols() {
@@ -49,9 +49,10 @@ class NavigationSymbolManager {
       .withIconImage(MAPLIBRE_NAVIGATION_MARKER_NAME);
   }
 
-  private void createSymbolFrom(SymbolOptions options) {
+  private Symbol createSymbolFrom(SymbolOptions options) {
     Symbol symbol = symbolManager.create(options);
     mapMarkersSymbols.add(symbol);
+    return symbol;
   }
 
   @UiThread

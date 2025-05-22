@@ -21,6 +21,8 @@ import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
 import org.maplibre.android.maps.Style.OnStyleLoaded
+import org.maplibre.android.plugins.annotation.Symbol
+import org.maplibre.android.plugins.annotation.SymbolOptions
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator
@@ -298,6 +300,10 @@ class NavigationRouteView @JvmOverloads constructor(
 
     override fun addMarker(position: Point) {
         navigationMap?.addDestinationMarker(position)
+    }
+
+    fun addCustomMarker(symbolOptions: SymbolOptions): Symbol {
+        return navigationMap?.addCustomMarker(symbolOptions) ?: throw RuntimeException("Navigation map is null")
     }
 
     val isWayNameVisible: Boolean
