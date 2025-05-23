@@ -5,7 +5,6 @@ import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import okhttp3.Request
 import org.maplibre.android.camera.CameraPosition
-import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.location.LocationComponent
 import org.maplibre.android.location.LocationComponentActivationOptions
@@ -21,13 +20,13 @@ import org.maplibre.navigation.android.navigation.ui.v5.MapRouteData
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewOptions
 import org.maplibre.navigation.android.navigation.ui.v5.OnNavigationReadyCallback
+import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationListener
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.UnitType
-import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import retrofit2.Call
 import retrofit2.Callback
@@ -93,12 +92,13 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
         }
 
         binding.locate.setOnClickListener {
-            val initialMapCameraPosition =
-                CameraPosition.Builder()
-                    .target(LatLng(43.230633, 76.933810))
-                    .zoom(16.0)
-                    .build()
-            mapLibreMap?.animateCamera(CameraUpdateFactory.newCameraPosition(initialMapCameraPosition))
+//            val initialMapCameraPosition =
+//                CameraPosition.Builder()
+//                    .target(LatLng(43.230633, 76.933810))
+//                    .zoom(16.0)
+//                    .build()
+//            mapLibreMap?.animateCamera(CameraUpdateFactory.newCameraPosition(initialMapCameraPosition))
+            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING_GPS
         }
 
 //        binding.mapView.apply {
@@ -113,7 +113,16 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //        points.add(Pair(76.930137, 43.230361))
 
         binding.simulateRouteSwitch.setOnCheckedChangeListener { _, isChecked ->
-            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING
+//            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING
+            mapLibreMap?.locationComponent?.cameraMode = CameraMode.NONE
+            mapLibreMap?.locationComponent?.isLocationComponentEnabled = false
+            binding.navigationView.retrieveNavigationMapLibreMap()?.apply {
+                updateLocationVisibilityTo(isChecked)
+                resetCameraPositionWith(
+                    NavigationCamera.NAVIGATION_TRACKING_MODE_GPS
+                )
+            }
+
         }
 
         binding.startRouteButton.setOnClickListener {

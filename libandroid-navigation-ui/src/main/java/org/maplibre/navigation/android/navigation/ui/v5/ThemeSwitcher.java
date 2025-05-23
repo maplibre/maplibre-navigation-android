@@ -105,18 +105,6 @@ public class ThemeSwitcher {
     context.setTheme(nightModeEnabled ? darkTheme : lightTheme);
   }
 
-  static void setTheme(Context context, AttributeSet attrs, String style) {
-    TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.NavigationView);
-    int lightTheme = styledAttributes.getResourceId(R.styleable.NavigationView_navigationLightTheme,
-            R.style.NavigationViewLight);
-    int darkTheme = styledAttributes.getResourceId(R.styleable.NavigationView_navigationDarkTheme,
-            R.style.NavigationViewDark);
-    if (style.equals(NavigationConstants.NAVIGATION_VIEW_DARK_THEME)) {
-      context.setTheme(lightTheme);
-    } else {
-      context.setTheme(darkTheme);
-    }
-  }
 
   static String retrieveMapStyle(Context context) {
     TypedValue mapStyleAttr = resolveAttributeFromId(context, R.attr.navigationViewMapStyle);

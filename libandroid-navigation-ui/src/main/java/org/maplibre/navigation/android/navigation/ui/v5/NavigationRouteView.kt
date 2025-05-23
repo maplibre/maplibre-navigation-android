@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +13,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import okhttp3.Request
-import org.maplibre.android.location.LocationComponentActivationOptions
-import org.maplibre.android.location.modes.CameraMode
 import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
@@ -53,7 +50,7 @@ import java.util.Locale
 
 class NavigationRouteView @JvmOverloads constructor(
     context: Context,
-    private val attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = -1
 ) : CoordinatorLayout(context, attrs, defStyleAttr), LifecycleOwner, OnMapReadyCallback,
     NavigationContract.View {
@@ -77,6 +74,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private var mapStyleUri: String? = null
 
     init {
+        ThemeSwitcher.setTheme(context, attrs)
         initializeView()
     }
 
@@ -96,7 +94,6 @@ class NavigationRouteView @JvmOverloads constructor(
 
         if (mapStyleUri != null) {
             this.mapStyleUri = mapStyleUri
-            ThemeSwitcher.setTheme(context, attrs, mapStyleUri)
         }
     }
 
@@ -214,7 +211,6 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     override fun onMapReady(mapLibreMap: MapLibreMap) {
         val onStyleLoaded = OnStyleLoaded { style ->
-            enableLocationComponent(mapLibreMap, style)
             initializeSymbolManager(mapView, mapLibreMap, style)
             initializeNavigationMap(mapView, mapLibreMap)
             initializeWayNameListener()
@@ -226,27 +222,6 @@ class NavigationRouteView @JvmOverloads constructor(
             ?: mapLibreMap.setStyle(ThemeSwitcher.retrieveMapStyle(context), onStyleLoaded)
     }
 
-    @SuppressLint("MissingPermission")
-    private fun enableLocationComponent(mapLibreMap: MapLibreMap, style: Style) {
-        // Get an instance of the component
-        val locationComponent = mapLibreMap.locationComponent
-
-        locationComponent.let {
-            // Activate with a built LocationComponentActivationOptions object
-            it.activateLocationComponent(
-                LocationComponentActivationOptions.builder(context, style).build(),
-            )
-
-            // Enable to make component visible
-            it.isLocationComponentEnabled = true
-
-            // Set the component's camera mode
-            it.cameraMode = CameraMode.TRACKING_GPS
-
-            // Set the component's render mode
-            it.renderMode = RenderMode.NORMAL
-        }
-    }
     fun calculateRouteAndStartNavigation(mapRouteData: MapRouteData) {
         val navigationRouteBuilder = NavigationRoute.builder(context).apply {
             this.accessToken(mapRouteData.accessToken)

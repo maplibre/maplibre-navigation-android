@@ -92,7 +92,7 @@
         <item name="roundedLineCap">true</item>
     </style>
 
-    <style name="NavigationLocationLayerStyle" parent="@style/maplibre_LocationComponent">
+    <style name="NavigationLocationLayerStyle" parent="maplibre_LocationLayer">
         <item name="maplibre_trackingAnimationDurationMultiplier">2.0</item>
         <item name="maplibre_trackingGesturesManagement">true</item>
     </style>
