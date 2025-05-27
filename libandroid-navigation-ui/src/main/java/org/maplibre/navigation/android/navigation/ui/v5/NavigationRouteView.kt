@@ -459,6 +459,14 @@ class NavigationRouteView @JvmOverloads constructor(
         return instructionView.retrieveAlertView()
     }
 
+    fun showInstructionView() {
+        instructionView.isVisible = true
+    }
+
+    fun hideInstructionView() {
+        instructionView.isVisible = false
+    }
+
     fun showInstructionList() {
         instructionView.showInstructionList()
     }
