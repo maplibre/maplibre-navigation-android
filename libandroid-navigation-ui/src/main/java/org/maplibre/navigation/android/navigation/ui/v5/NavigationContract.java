@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import org.maplibre.navigation.core.location.Location;
 import org.maplibre.navigation.core.models.DirectionsRoute;
-import org.maplibre.geojson.Point;
 
 public interface NavigationContract {
 
@@ -21,8 +20,6 @@ public interface NavigationContract {
     void hideRecenterBtn();
 
     void drawRoute(DirectionsRoute directionsRoute);
-
-    void addMarker(Point point);
 
     void startCamera(DirectionsRoute directionsRoute);
 

@@ -270,13 +270,6 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
         }
     }
 
-    @Override
-    public void addMarker(Point position) {
-        if (navigationMap != null) {
-            navigationMap.addDestinationMarker(position);
-        }
-    }
-
     /**
      * Provides the current visibility of the way name view.
      *

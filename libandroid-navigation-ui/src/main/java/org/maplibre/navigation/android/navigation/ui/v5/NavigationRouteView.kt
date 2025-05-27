@@ -24,7 +24,6 @@ import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.annotation.SymbolOptions
 import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP
-import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView
@@ -289,10 +288,6 @@ class NavigationRouteView @JvmOverloads constructor(
         navigationMap?.drawRoute(directionsRoute)
     }
 
-    override fun addMarker(position: Point) {
-        navigationMap?.addDestinationMarker(position)
-    }
-
     fun addSymbol(symbolOptions: SymbolOptions): Symbol {
         return symbolManager?.create(symbolOptions)
             ?: throw RuntimeException("Map is not initialized")
@@ -464,6 +459,14 @@ class NavigationRouteView @JvmOverloads constructor(
         return instructionView.retrieveAlertView()
     }
 
+    fun showInstructionList() {
+        instructionView.showInstructionList()
+    }
+
+    fun hideInstructionList() {
+        instructionView.hideInstructionList()
+    }
+
     private fun initializeView() {
         inflate(context, R.layout.navigation_view_layout, this)
         bind()
@@ -578,7 +581,6 @@ class NavigationRouteView @JvmOverloads constructor(
     }
 
     private fun initializeNavigation(options: NavigationViewOptions) {
-        instructionView.isVisible = true
         establish(options)
         navigationViewModel.initialize(options)
         initializeNavigationListeners(options, navigationViewModel)

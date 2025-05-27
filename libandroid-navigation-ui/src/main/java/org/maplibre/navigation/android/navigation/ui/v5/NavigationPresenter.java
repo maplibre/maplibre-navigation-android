@@ -45,7 +45,8 @@ class NavigationPresenter {
     }
 
     void onDestinationUpdate(Point point) {
-        view.addMarker(point);
+        // Disabled adding destination marker
+//        view.addMarker(point);
     }
 
     void onNavigationLocationUpdate(Location location) {
