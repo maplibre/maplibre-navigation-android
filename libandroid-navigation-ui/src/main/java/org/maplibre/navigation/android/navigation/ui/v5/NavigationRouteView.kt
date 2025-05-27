@@ -23,7 +23,7 @@ import org.maplibre.android.plugins.annotation.OnSymbolClickListener
 import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
 import org.maplibre.android.plugins.annotation.SymbolOptions
-import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP
+import org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.ImageCreator
 import org.maplibre.navigation.android.navigation.ui.v5.instruction.InstructionView
@@ -529,7 +529,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun initializeSymbolManager(mapView: MapView, mapLibreMap: MapLibreMap, style: Style) {
         symbolManager = SymbolManager(mapView, mapLibreMap, style).apply {
             iconAllowOverlap = true
-            iconRotationAlignment = ICON_ROTATION_ALIGNMENT_MAP
+            iconRotationAlignment = ICON_ROTATION_ALIGNMENT_VIEWPORT
         }
     }
 
