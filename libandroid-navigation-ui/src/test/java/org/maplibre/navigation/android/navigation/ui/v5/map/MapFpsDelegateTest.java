@@ -103,6 +103,34 @@ public class MapFpsDelegateTest {
     verify(mapView).setMaximumFps(eq(maxFps));
   }
 
+  @Test
+  public void adjustFpsFor_nullModifier_thresholdSetWithNullModifier() {
+    MapView mapView = mock(MapView.class);
+    MapBatteryMonitor batteryMonitor = mock(MapBatteryMonitor.class);
+    when(batteryMonitor.isPluggedIn(any(Context.class))).thenReturn(false);
+    MapFpsDelegate delegate = new MapFpsDelegate(mapView, batteryMonitor);
+
+    // Build a RouteProgress whose current step's maneuver has a null modifier
+    RouteProgress routeProgress = mock(RouteProgress.class);
+    RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);
+    RouteStepProgress routeStepProgress = mock(RouteStepProgress.class);
+    StepManeuver currentManeuver = mock(StepManeuver.class);
+    when(currentManeuver.getModifier()).thenReturn(null);
+    LegStep currentStep = mock(LegStep.class);
+    when(currentStep.getDuration()).thenReturn(100d);
+    when(routeStepProgress.getDurationRemaining()).thenReturn(20d);
+    when(routeLegProgress.getCurrentStepProgress()).thenReturn(routeStepProgress);
+    when(routeProgress.getCurrentLegProgress()).thenReturn(routeLegProgress);
+    when(currentStep.getManeuver()).thenReturn(currentManeuver);
+    when(routeLegProgress.getCurrentStep()).thenReturn(currentStep);
+
+    int maxFps = 5;
+    delegate.updateMaxFpsThreshold(maxFps);
+    delegate.adjustFpsFor(routeProgress);
+
+    verify(mapView).setMaximumFps(eq(maxFps)) ;
+  }
+
   private RouteProgress buildRouteProgressWith(ManeuverModifier.Type maneuverModifier) {
     RouteProgress routeProgress = mock(RouteProgress.class);
     RouteLegProgress routeLegProgress = mock(RouteLegProgress.class);

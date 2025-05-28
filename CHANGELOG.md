@@ -5,6 +5,8 @@ MapLibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+- Fix crash on MapFpsDelegate, caused by null modifier [#141](https://github.com/maplibre/maplibre-navigation-android/issues/141)
+
 ### v5.0.0-pre5 - May 16, 2025
 
 - Fix threading and platform characteristics for Apple location engine [#159](https://github.com/maplibre/maplibre-navigation-android/pull/159)
