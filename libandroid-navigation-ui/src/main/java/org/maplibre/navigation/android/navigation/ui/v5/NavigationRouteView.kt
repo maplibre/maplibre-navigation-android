@@ -467,14 +467,6 @@ class NavigationRouteView @JvmOverloads constructor(
         instructionView.isVisible = false
     }
 
-    fun showInstructionList() {
-        instructionView.showInstructionList()
-    }
-
-    fun hideInstructionList() {
-        instructionView.hideInstructionList()
-    }
-
     private fun initializeView() {
         inflate(context, R.layout.navigation_view_layout, this)
         bind()

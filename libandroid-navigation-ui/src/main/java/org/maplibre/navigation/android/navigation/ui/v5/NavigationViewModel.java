@@ -152,6 +152,7 @@ public class NavigationViewModel {
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
         if (!isRunning()) {
+            addNavigationListeners();
             addMilestones(options);
             initializeNavigationSpeechPlayer(options);
         }
@@ -293,7 +294,6 @@ public class NavigationViewModel {
 
     private void initializeNavigation(LocationEngine locationEngine) {
         navigation = new MapLibreNavigation(locationEngine);
-        addNavigationListeners();
     }
 
     private void addNavigationListeners() {

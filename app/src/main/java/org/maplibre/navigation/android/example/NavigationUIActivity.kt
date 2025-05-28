@@ -124,6 +124,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
             }
 
         }
+        binding.navigationView.showInstructionView()
 
         binding.startRouteButton.setOnClickListener {
             if (isStarted) {

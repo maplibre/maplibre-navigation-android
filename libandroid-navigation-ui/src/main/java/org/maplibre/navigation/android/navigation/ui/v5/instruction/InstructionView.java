@@ -197,7 +197,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
             showRerouteState();
           } else if (isRerouting) {
             hideRerouteState();
-            alertView.showReportProblem();
+//            alertView.showReportProblem();
           }
           isRerouting = isOffRoute;
         }

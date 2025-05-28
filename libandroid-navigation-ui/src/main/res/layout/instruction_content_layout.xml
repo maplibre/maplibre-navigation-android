@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/instructionBackground"
-    android:background="#FFFFFF"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textColor="#000000"
+            android:textColor="?attr/navigationViewBannerSecondaryText"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginStart="16dp"
@@ -69,7 +68,7 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:layout_marginStart="16dp"
-            android:textColor="#000000"
+            android:textColor="?attr/navigationViewBannerPrimaryText"
             android:textSize="16sp"
             tools:text="I-580 South"/>
 
@@ -82,6 +81,7 @@
             android:lineSpacingMultiplier="0.8"
             android:textSize="14sp"
             android:visibility="gone"
+            android:textColor="?attr/navigationViewBannerSecondaryText"
             android:textStyle="bold"
             tools:text="San Jose / Cupertino"/>
 
