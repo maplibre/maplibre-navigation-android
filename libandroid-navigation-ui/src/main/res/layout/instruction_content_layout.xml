@@ -7,7 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    tools:background="?navigationViewBannerBackground">
+    android:background="?attr/navigationViewBannerBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/maneuver_layout"

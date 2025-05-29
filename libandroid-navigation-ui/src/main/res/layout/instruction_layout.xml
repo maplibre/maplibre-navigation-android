@@ -21,7 +21,7 @@
         android:id="@+id/rerouteLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#ffffff"
+        android:background="?attr/navigationViewBannerBackground"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="vertical"
