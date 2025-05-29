@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.content.res.AppCompatResources;
 import android.util.AttributeSet;
@@ -84,7 +85,7 @@ public class ThemeSwitcher {
    * @param attrs   holding custom styles if any are set
    */
   static void setTheme(Context context, AttributeSet attrs) {
-    boolean nightModeEnabled = isNightModeEnabled(context);
+    boolean nightModeEnabled = isNightModeEnabled();
 
     if (shouldSetThemeFromPreferences(context)) {
       int prefLightTheme = retrieveThemeResIdFromPreferences(context, NavigationConstants.NAVIGATION_VIEW_LIGHT_THEME);
@@ -111,10 +112,14 @@ public class ThemeSwitcher {
     return mapStyleAttr.string.toString();
   }
 
+  private static boolean isNightModeEnabled() {
+    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
+  }
+
   /**
    * Returns true if the current UI_MODE_NIGHT is enabled, false otherwise.
    */
-  private static boolean isNightModeEnabled(Context context) {
+  private static boolean isDevicesNightModeEnabled(Context context) {
     int currentNightMode = retrieveCurrentUiMode(context);
     return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
   }
