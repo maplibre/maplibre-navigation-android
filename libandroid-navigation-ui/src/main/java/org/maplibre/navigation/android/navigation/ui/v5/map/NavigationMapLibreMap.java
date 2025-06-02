@@ -619,7 +619,7 @@ public class NavigationMapLibreMap {
     LocationComponentOptions options = LocationComponentOptions.createFromAttributes(context, locationLayerStyleRes);
     LocationComponentActivationOptions activationOptions = LocationComponentActivationOptions.builder(context, style)
       .locationComponentOptions(options)
-//      .useDefaultLocationEngine(false)
+      .useDefaultLocationEngine(false)
       .build();
     locationComponent.activateLocationComponent(activationOptions);
     locationComponent.setLocationComponentEnabled(true);
