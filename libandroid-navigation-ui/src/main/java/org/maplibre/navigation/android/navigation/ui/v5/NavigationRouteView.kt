@@ -62,6 +62,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private var navigationViewEventDispatcher: NavigationViewEventDispatcher? = null
     private lateinit var navigationViewModel: NavigationViewModel
     private var navigationMap: NavigationMapLibreMap? = null
+    private var preNavigationLocationEngine: PreNavigationLocationEngine? = null
     private var onTrackingChangedListener: NavigationOnCameraTrackingChangedListener? = null
     private var mapInstanceState: NavigationMapLibreMapInstanceState? = null
     private var isMapInitialized = false
@@ -213,6 +214,7 @@ class NavigationRouteView @JvmOverloads constructor(
             initializeSymbolManager(mapView, mapLibreMap, style)
             initializeNavigationMap(mapView, mapLibreMap)
             initializeWayNameListener()
+            initializePreNavigationLocationEngine(mapLibreMap)
             onMapReadyCallback?.onMapReady(mapLibreMap)
             isMapInitialized = true
         }
@@ -243,28 +245,29 @@ class NavigationRouteView @JvmOverloads constructor(
                 Timber.d("Url: %s", (call.request() as Request).url.toString())
                 response.body()?.let { responseBody ->
                     if (responseBody.routes.isNotEmpty()) {
-                        val maplibreResponse =
-                            DirectionsResponse.fromJson(
-                                responseBody.toJson()
-                            );
-                        val route = maplibreResponse.routes.first()
-                        navigationMap?.drawRoutes(maplibreResponse.routes)
-
-                        val options = NavigationViewOptions.builder()
-                        options.directionsRoute(route)
-                        options.navigationOptions(
-                            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
-                        )
-                        initializeNavigation(options.build())
+                        val maplibreResponse = DirectionsResponse.fromJson(responseBody.toJson())
+                        startNavigation(maplibreResponse.routes)
                     }
                 }
-
             }
 
             override fun onFailure(call: Call<DirectionsResponse>, throwable: Throwable) {
                 Timber.e(throwable, "onFailure: navigation.getRoute()")
             }
         })
+    }
+
+    private fun startNavigation(routes: List<DirectionsRoute>) {
+        preNavigationLocationEngine?.stop()
+
+        val route = routes.first()
+        navigationMap?.drawRoutes(routes)
+        val options = NavigationViewOptions.builder()
+        options.directionsRoute(route)
+        options.navigationOptions(
+            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
+        )
+        initializeNavigation(options.build())
     }
 
     override fun resetCameraPosition() {
@@ -387,6 +390,7 @@ class NavigationRouteView @JvmOverloads constructor(
      */
     @UiThread
     fun stopNavigation() {
+        preNavigationLocationEngine?.start()
         navigationPresenter.onNavigationStopped()
         navigationViewModel.stopNavigation()
     }
@@ -529,6 +533,13 @@ class NavigationRouteView @JvmOverloads constructor(
         val wayNameListener = NavigationViewWayNameListener(navigationPresenter)
         navigationMap?.addOnWayNameChangedListener(wayNameListener)
     }
+
+    private fun initializePreNavigationLocationEngine(map: MapLibreMap) {
+        val locationEngine = navigationViewModel.retrieveNavigation()?.locationEngine ?: return
+        preNavigationLocationEngine = PreNavigationLocationEngine(locationEngine = locationEngine, locationComponent = map.locationComponent)
+        preNavigationLocationEngine?.start()
+    }
+
 
     private fun saveNavigationMapInstanceState(outState: Bundle) {
         navigationMap?.saveStateWith(MAP_INSTANCE_STATE_KEY, outState)
@@ -673,6 +684,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private fun shutdown() {
         navigationMap?.removeOnCameraTrackingChangedListener(onTrackingChangedListener)
         navigationMap?.onDestroy()
+        preNavigationLocationEngine?.stop()
 
         navigationViewEventDispatcher?.onDestroy(navigationViewModel.retrieveNavigation())
         mapView.onDestroy()
