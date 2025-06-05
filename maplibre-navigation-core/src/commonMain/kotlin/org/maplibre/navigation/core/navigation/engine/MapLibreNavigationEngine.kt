@@ -89,6 +89,7 @@ open class MapLibreNavigationEngine(
      *
      * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
+    // TODO: KAROL This method is access from multiple threads, we should make it thread safe
     protected fun processLocationUpdate(rawLocation: Location) {
         if (!locationValidator.isValidUpdate(rawLocation)) {
             return
@@ -184,6 +185,25 @@ open class MapLibreNavigationEngine(
     protected fun dispatchOffRoute(location: Location, isUSerOffRoute: Boolean) {
         if (isUSerOffRoute) {
             eventDispatcher.onUserOffRoute(location)
+        }
+    }
+
+    /**
+     * Manually triggers a route progress update for the specified leg and step indices.
+     * This method is used for waypoint skipping during active navigation.
+     *
+     * @param legIndex The target leg index to navigate to
+     * @param stepIndex The target step index to navigate to
+     */
+    fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
+        navigationRouteProcessor.setIndexDirectly(legIndex, stepIndex)
+        
+        // Launch in background scope to handle suspend getLastLocation call
+        backgroundScope.launch {
+            val currentLocation = locationEngine.getLastLocation()
+                ?: throw IllegalStateException("Manual route update requires active navigation with location updates")
+            
+            processLocationUpdate(currentLocation)
         }
     }
 
