@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.LocationValidator
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -36,6 +38,7 @@ open class MapLibreNavigationEngine(
         get() = mapLibreNavigation.eventDispatcher
 
     private val navigationRouteProcessor = NavigationRouteProcessor(routeUtils)
+    private val processingMutex = Mutex()
 
     private var collectLocationJob: Job? = null
 
@@ -89,26 +92,27 @@ open class MapLibreNavigationEngine(
      *
      * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
-    // TODO: KAROL This method is access from multiple threads, we should make it thread safe
-    protected fun processLocationUpdate(rawLocation: Location) {
-        if (!locationValidator.isValidUpdate(rawLocation)) {
-            return
+    suspend fun processLocationUpdate(rawLocation: Location) {
+        processingMutex.withLock {
+            if (!locationValidator.isValidUpdate(rawLocation)) {
+                return
+            }
+
+            val routeProgress = navigationRouteProcessor
+                .buildNewRouteProgress(mapLibreNavigation, rawLocation)
+
+            val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
+            val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
+            val location = findSnappedLocation(
+                mapLibreNavigation,
+                rawLocation,
+                routeProgress,
+                userOffRoute
+            )
+
+            val finalRouteProgress = updateRouteProcessorWith(routeProgress)
+            dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
         }
-
-        val routeProgress = navigationRouteProcessor
-            .buildNewRouteProgress(mapLibreNavigation, rawLocation)
-
-        val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
-        val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
-        val location = findSnappedLocation(
-            mapLibreNavigation,
-            rawLocation,
-            routeProgress,
-            userOffRoute
-        )
-
-        val finalRouteProgress = updateRouteProcessorWith(routeProgress)
-        dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
     }
 
     protected fun findTriggeredMilestones(
@@ -196,14 +200,11 @@ open class MapLibreNavigationEngine(
      * @param stepIndex The target step index to navigate to
      */
     override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
-        navigationRouteProcessor.setIndexDirectly(legIndex, stepIndex)
-        
-        // Launch in background scope to handle suspend getLastLocation call
         backgroundScope.launch {
-            val currentLocation = locationEngine.getLastLocation()
-                ?: throw IllegalStateException("Manual route update requires active navigation with location updates")
-            
-            processLocationUpdate(currentLocation)
+            locationEngine.getLastLocation()?.let { currentLocation ->
+                    navigationRouteProcessor.setIndexDirectly(legIndex, stepIndex)
+                    processLocationUpdate(currentLocation)
+            }
         }
     }
 
