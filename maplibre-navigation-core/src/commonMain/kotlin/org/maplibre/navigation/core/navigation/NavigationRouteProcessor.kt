@@ -55,18 +55,6 @@ open class NavigationRouteProcessor(
     }
 
     /**
-     * Directly sets the navigation indices for manual waypoint skipping.
-     * This bypasses the normal GPS-driven index advancement flow.
-     *
-     * @param legIndex The target leg index
-     * @param stepIndex The target step index
-     */
-    fun setIndexDirectly(legIndex: Int, stepIndex: Int) {
-        shouldUpdateToIndex = NavigationIndices(legIndex = legIndex, stepIndex = stepIndex)
-        shouldIncreaseIndex = true
-    }
-
-    /**
      * Will take a given location update and create a new [RouteProgress]
      * based on our calculations of the distances remaining.
      *
@@ -217,6 +205,19 @@ open class NavigationRouteProcessor(
         updateStepPoints(route, legIndex, stepIndex, upcomingStepIndex)
         updateIntersections()
         clearManeuverDistances(mapLibreNavigation.offRouteEngine)
+    }
+
+    /**
+     * Directly sets the navigation indices for manual waypoint skipping.
+     * This bypasses the normal GPS-driven index advancement flow.
+     *
+     * @param legIndex The target leg index
+     * @param stepIndex The target step index
+     */
+    fun setIndexDirectly(mapLibreNavigation: MapLibreNavigation, legIndex: Int, stepIndex: Int) {
+        shouldUpdateToIndex = NavigationIndices(legIndex = legIndex, stepIndex = stepIndex)
+        shouldIncreaseIndex = true
+        checkIncreaseIndex(mapLibreNavigation)
     }
 
     private fun assembleRouteProgress(route: DirectionsRoute): RouteProgress {
