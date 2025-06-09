@@ -202,8 +202,8 @@ open class MapLibreNavigationEngine(
     override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
         backgroundScope.launch {
             locationEngine.getLastLocation()?.let { currentLocation ->
-                    navigationRouteProcessor.setIndexDirectly(legIndex, stepIndex)
-                    processLocationUpdate(currentLocation)
+                navigationRouteProcessor.setIndexDirectly(mapLibreNavigation, legIndex, stepIndex)
+                processLocationUpdate(currentLocation)
             }
         }
     }

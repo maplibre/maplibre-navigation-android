@@ -264,13 +264,10 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Throws(Exception::class)
     fun setIndexDirectly_setsTargetIndices() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
-        
+
         // Set indices directly to leg 0, step 5
-        routeProcessor!!.setIndexDirectly(0, 5)
-        
-        // Check that increase index is triggered
-        routeProcessor!!.checkIncreaseIndex(navigation!!)
-        
+        routeProcessor!!.setIndexDirectly(navigation!!, 0, 5)
+
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
         assertEquals(5, progress.currentLegProgress.stepIndex)
@@ -280,18 +277,15 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Throws(Exception::class)
     fun setIndexDirectly_flagsProcessedAfterCheckIncreaseIndex() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
-        
-        // Set indices directly
-        routeProcessor!!.setIndexDirectly(0, 3)
-        
-        // Process the index change
-        routeProcessor!!.checkIncreaseIndex(navigation!!)
-        
+
+        // Set indices directly - this now automatically calls checkIncreaseIndex internally
+        routeProcessor!!.setIndexDirectly(navigation!!, 0, 3)
+
         // Verify the indices were actually updated by building new progress
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
         assertEquals(3, progress.currentLegProgress.stepIndex)
-        
+
         // Calling checkIncreaseIndex again should not change anything since flags are cleared
         routeProcessor!!.checkIncreaseIndex(navigation!!)
         val secondProgress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
@@ -303,15 +297,12 @@ class NavigationRouteProcessorTest : BaseTest() {
     @Throws(Exception::class)
     fun setIndexDirectly_multipleCallsUseLastIndices() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
-        
-        // Set indices multiple times
-        routeProcessor!!.setIndexDirectly(0, 2)
-        routeProcessor!!.setIndexDirectly(0, 4)
-        routeProcessor!!.setIndexDirectly(0, 3)
-        
-        // Process the index change
-        routeProcessor!!.checkIncreaseIndex(navigation!!)
-        
+
+        // Set indices multiple times - each call now automatically processes the change
+        routeProcessor!!.setIndexDirectly(navigation!!, 0, 2)
+        routeProcessor!!.setIndexDirectly(navigation!!, 0, 4)
+        routeProcessor!!.setIndexDirectly(navigation!!, 0, 3)
+
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
         assertEquals(3, progress.currentLegProgress.stepIndex) // Should use last set value
@@ -323,11 +314,10 @@ class NavigationRouteProcessorTest : BaseTest() {
         // Use a route with multiple legs
         navigation!!.startNavigation(buildTestDirectionsRoute("directions_two_leg_route.json"))
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
-        
-        // Advance to second leg
-        routeProcessor!!.setIndexDirectly(1, 0)
-        routeProcessor!!.checkIncreaseIndex(navigation!!)
-        
+
+        // Advance to second leg - this now automatically processes the change
+        routeProcessor!!.setIndexDirectly(navigation!!, 1, 0)
+
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(1, progress.legIndex)
         assertEquals(0, progress.currentLegProgress.stepIndex)
