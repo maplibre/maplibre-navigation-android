@@ -300,6 +300,97 @@ class MapLibreNavigationTest : BaseTest() {
         assertEquals(offRoute, navigation.offRouteEngine)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNoRoute_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        
+        val exception = kotlin.test.assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, 1)
+        }
+        
+        assertEquals("Cannot set index: no route is currently active", exception.message)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withInvalidLegIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+        
+        val exception = kotlin.test.assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(99, 0) // Invalid leg index
+        }
+        
+        assertTrue(exception.message!!.contains("Invalid leg index: 99"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNegativeLegIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+        
+        val exception = kotlin.test.assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(-1, 0) // Negative leg index
+        }
+        
+        assertTrue(exception.message!!.contains("Invalid leg index: -1"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withInvalidStepIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        val route = buildTestDirectionsRoute()
+        navigation.startNavigation(route)
+        
+        val exception = kotlin.test.assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, 999) // Invalid step index
+        }
+        
+        assertTrue(exception.message!!.contains("Invalid step index: 999"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNegativeStepIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+        
+        val exception = kotlin.test.assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, -1) // Negative step index
+        }
+        
+        assertTrue(exception.message!!.contains("Invalid step index: -1"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withValidIndices_doesNotThrowException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+        
+        // This should not throw any exceptions
+        navigation.setIndex(0, 1)
+        
+        // Verify method completed successfully (no exception thrown)
+        assertNotNull(navigation)
+    }
+
+    @Test
+    @Throws(Exception::class)  
+    fun setIndex_withMultiLegRoute_acceptsValidLegIndex() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute("directions_two_leg_route.json"))
+        
+        // Should work with the second leg
+        navigation.setIndex(1, 0)
+        
+        // Verify method completed successfully (no exception thrown)
+        assertNotNull(navigation)
+    }
+
     private fun buildMapLibreNavigation(): MapLibreNavigation {
         return MapLibreNavigation(locationEngine = mockk(relaxed = true))
     }

@@ -281,6 +281,42 @@ open class MapLibreNavigation @JvmOverloads constructor(
     }
 
     /**
+     * Manually advances navigation to the specified leg and step indices.
+     * This method is intended for waypoint skipping during active turn-by-turn navigation.
+     * 
+     * Calling this method will:
+     * 1. Immediately update the current navigation position
+     * 2. Trigger route progress recalculation  
+     * 3. Dispatch updated RouteProgress to all listeners
+     * 4. Reset off-route detection state
+     * 5. Update milestone and intersection data
+     * 
+     * @param legIndex The target leg index (0-based)
+     * @param stepIndex The target step index within the leg (0-based)
+     * @throws IllegalStateException if navigation is not currently active
+     * @throws IllegalArgumentException if indices are invalid for the current route
+     * 
+     * @since 5.1.0
+     */
+    fun setIndex(legIndex: Int, stepIndex: Int) {
+        require(route != null) { "Cannot set index: no route is currently active" }
+        require(getNavigationEngineInternal().isRunning()) { 
+            "Cannot set index: navigation is not currently running" 
+        }
+        
+        val currentRoute = route!!
+        require(legIndex >= 0 && legIndex < currentRoute.legs.size) {
+            "Invalid leg index: $legIndex. Route has ${currentRoute.legs.size} legs"
+        }
+        require(stepIndex >= 0 && stepIndex < currentRoute.legs[legIndex].steps.size) {
+            "Invalid step index: $stepIndex. Leg $legIndex has ${currentRoute.legs[legIndex].steps.size} steps"
+        }
+        
+        Logger.d { "Manual waypoint update: advancing to leg $legIndex, step $stepIndex" }
+        getNavigationEngineInternal().triggerManualRouteUpdate(legIndex, stepIndex)
+    }
+
+    /**
      * Get custom set navigation engine or create default instance if not set.
      * The use of this inconvenient method is necessary because we can not pass
      * `this` MapLibreNavigation instance by the constructor. This would cause memory leaks.

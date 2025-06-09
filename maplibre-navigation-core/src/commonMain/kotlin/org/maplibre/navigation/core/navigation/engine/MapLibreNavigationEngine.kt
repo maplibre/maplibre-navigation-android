@@ -195,7 +195,7 @@ open class MapLibreNavigationEngine(
      * @param legIndex The target leg index to navigate to
      * @param stepIndex The target step index to navigate to
      */
-    fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
+    override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
         navigationRouteProcessor.setIndexDirectly(legIndex, stepIndex)
         
         // Launch in background scope to handle suspend getLastLocation call
