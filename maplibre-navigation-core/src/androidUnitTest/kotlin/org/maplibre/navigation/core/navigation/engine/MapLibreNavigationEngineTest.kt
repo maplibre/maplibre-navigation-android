@@ -74,7 +74,7 @@ class MapLibreNavigationEngineTest : BaseTest() {
         var resultProgress: RouteProgress? = null
         mapLibreNavigation.addProgressChangeListener(object : ProgressChangeListener {
             override fun onProgressChange(location: Location, routeProgress: RouteProgress) {
-                print("Test: onProgressChange: ${routeProgress.legIndex}, ${routeProgress.stepIndex}")
+                println("Test: onProgressChange: ${routeProgress.legIndex}, ${routeProgress.stepIndex}")
                 resultProgress = routeProgress
             }
         })
@@ -86,8 +86,25 @@ class MapLibreNavigationEngineTest : BaseTest() {
         navigationEngine.triggerManualRouteUpdate(0, 5)
         testScheduler.advanceUntilIdle()
         
-        // Assert
-        assertEquals(5,resultProgress?.stepIndex)
-        assertEquals(0,resultProgress?.legIndex)
+        // Assert initial manual update
+        assertEquals(5, resultProgress?.stepIndex)
+        assertEquals(0, resultProgress?.legIndex)
+        
+        // Capture indices before location update
+        val initialStepIndex = resultProgress?.stepIndex
+        val initialLegIndex = resultProgress?.legIndex
+        
+        // Create a location update that simulates 1 second of navigation along step 5
+        // Based on step 5 geometry from directions_v5_precision_6.json, getting coordinates from Van Ness Avenue
+        val step5Location = buildDefaultLocationUpdate(-122.418498, 37.772399)  // Point from step 5 intersection
+        
+        // Execute - simulate location update 1 second later
+        coEvery { mockLocationEngine.getLastLocation() } returns step5Location
+        navigationEngine.processLocationUpdate(step5Location)
+        testScheduler.advanceUntilIdle()
+        
+        // Assert indices are preserved after location update
+        assertEquals(initialStepIndex, resultProgress?.stepIndex, "Step index should be preserved after location update")
+        assertEquals(initialLegIndex, resultProgress?.legIndex, "Leg index should be preserved after location update")
     }
 }
