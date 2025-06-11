@@ -90,6 +90,29 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
     val routeUtils: RouteUtils = RouteUtils(),
 ) {
+    /**
+     * Convenience constructor for tests. Enables injection of navigation engine mock.
+     */
+    internal constructor(
+        options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
+        locationEngine: LocationEngine,
+        cameraEngine: Camera = SimpleCamera(),
+        snapEngine: Snap = SnapToRoute(),
+        offRouteEngine: OffRoute = OffRouteDetector(),
+        fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
+        routeUtils: RouteUtils = RouteUtils(),
+        mapLibreNavigationEngine: MapLibreNavigationEngine
+    ) : this(
+        options,
+        locationEngine,
+        cameraEngine,
+        snapEngine,
+        offRouteEngine,
+        fasterRouteEngine,
+        routeUtils,
+    ) {
+        this.mapLibreNavigationEngine = mapLibreNavigationEngine
+    }
 
     private val navigationRunnerJob = Job()
     private var mapLibreNavigationEngine: NavigationEngine? = null
