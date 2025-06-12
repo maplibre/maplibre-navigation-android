@@ -270,6 +270,7 @@ class NavigationRouteProcessorTest : BaseTest() {
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
+        assertEquals(5, progress.stepIndex)
         assertEquals(5, progress.currentLegProgress.stepIndex)
     }
 
@@ -305,7 +306,7 @@ class NavigationRouteProcessorTest : BaseTest() {
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
-        assertEquals(3, progress.currentLegProgress.stepIndex) // Should use last set value
+        assertEquals(3, progress.currentLegProgress.stepIndex) // Should use the last set value
     }
 
     @Test
@@ -315,11 +316,11 @@ class NavigationRouteProcessorTest : BaseTest() {
         navigation!!.startNavigation(buildTestDirectionsRoute("directions_two_leg_route.json"))
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
-        // Advance to second leg - this now automatically processes the change
-        routeProcessor!!.setIndexDirectly(navigation!!, 1, 0)
+        // Advance to the second leg - this now automatically processes the change
+        routeProcessor!!.setIndexDirectly(navigation!!, 1, 1)
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(1, progress.legIndex)
-        assertEquals(0, progress.currentLegProgress.stepIndex)
+        assertEquals(1, progress.currentLegProgress.stepIndex)
     }
 }
