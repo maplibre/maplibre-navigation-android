@@ -214,7 +214,7 @@ open class NavigationRouteProcessor(
      * @param legIndex The target leg index
      * @param stepIndex The target step index
      */
-    fun setIndexDirectly(mapLibreNavigation: MapLibreNavigation, legIndex: Int, stepIndex: Int) {
+    fun setIndex(mapLibreNavigation: MapLibreNavigation, legIndex: Int, stepIndex: Int) {
         shouldUpdateToIndex = NavigationIndices(legIndex = legIndex, stepIndex = stepIndex)
         shouldIncreaseIndex = true
         checkIncreaseIndex(mapLibreNavigation)
