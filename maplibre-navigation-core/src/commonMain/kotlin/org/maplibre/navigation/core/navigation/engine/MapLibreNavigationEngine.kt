@@ -16,6 +16,7 @@ import org.maplibre.navigation.core.navigation.NavigationEventDispatcher
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.navigation.NavigationHelper.checkMilestones
 import org.maplibre.navigation.core.navigation.NavigationHelper.isUserOffRoute
+import org.maplibre.navigation.core.navigation.NavigationIndices
 import org.maplibre.navigation.core.navigation.NavigationRouteProcessor
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
@@ -202,7 +203,7 @@ open class MapLibreNavigationEngine(
     override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
         backgroundScope.launch {
             locationEngine.getLastLocation()?.let { currentLocation ->
-                navigationRouteProcessor.setIndex(mapLibreNavigation, legIndex, stepIndex)
+                navigationRouteProcessor.setIndex(mapLibreNavigation, NavigationIndices(legIndex, stepIndex))
                 processLocationUpdate(currentLocation)
             }
         }

@@ -211,11 +211,10 @@ open class NavigationRouteProcessor(
      * Directly sets the navigation indices for manual waypoint skipping.
      * This bypasses the normal GPS-driven index advancement flow.
      *
-     * @param legIndex The target leg index
-     * @param stepIndex The target step index
+     * @param indices The target navigation indices
      */
-    fun setIndex(mapLibreNavigation: MapLibreNavigation, legIndex: Int, stepIndex: Int) {
-        shouldUpdateToIndex = NavigationIndices(legIndex = legIndex, stepIndex = stepIndex)
+    fun setIndex(mapLibreNavigation: MapLibreNavigation, indices: NavigationIndices) {
+        shouldUpdateToIndex = indices
         shouldIncreaseIndex = true
         checkIncreaseIndex(mapLibreNavigation)
     }

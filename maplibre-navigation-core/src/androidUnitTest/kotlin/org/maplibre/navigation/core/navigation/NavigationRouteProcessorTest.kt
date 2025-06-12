@@ -266,7 +266,7 @@ class NavigationRouteProcessorTest : BaseTest() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         // Set indices directly to leg 0, step 5
-        routeProcessor!!.setIndex(navigation!!, 0, 5)
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(0, 5))
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
@@ -280,7 +280,7 @@ class NavigationRouteProcessorTest : BaseTest() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         // Set indices directly - this now automatically calls checkIncreaseIndex internally
-        routeProcessor!!.setIndex(navigation!!, 0, 3)
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(0, 3))
 
         // Verify the indices were actually updated by building new progress
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
@@ -300,9 +300,9 @@ class NavigationRouteProcessorTest : BaseTest() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         // Set indices multiple times - each call now automatically processes the change
-        routeProcessor!!.setIndex(navigation!!, 0, 2)
-        routeProcessor!!.setIndex(navigation!!, 0, 4)
-        routeProcessor!!.setIndex(navigation!!, 0, 3)
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(0, 2))
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(0, 4))
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(0, 3))
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(0, progress.legIndex)
@@ -317,7 +317,7 @@ class NavigationRouteProcessorTest : BaseTest() {
         routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
 
         // Advance to the second leg - this now automatically processes the change
-        routeProcessor!!.setIndex(navigation!!, 1, 1)
+        routeProcessor!!.setIndex(navigation!!, NavigationIndices(1, 1))
 
         val progress = routeProcessor!!.buildNewRouteProgress(navigation!!, mockk(relaxed = true))
         assertEquals(1, progress.legIndex)
