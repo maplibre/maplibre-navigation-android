@@ -306,20 +306,13 @@ open class MapLibreNavigation @JvmOverloads constructor(
     /**
      * Manually advances navigation to the specified leg and step indices.
      * This method is intended for waypoint skipping during active turn-by-turn navigation.
-     * 
-     * Calling this method will:
-     * 1. Immediately update the current navigation position
-     * 2. Trigger route progress recalculation  
-     * 3. Dispatch updated RouteProgress to all listeners
-     * 4. Reset off-route detection state
-     * 5. Update milestone and intersection data
-     * 
+     *
      * @param legIndex The target leg index (0-based)
      * @param stepIndex The target step index within the leg (0-based)
      * @throws IllegalStateException if navigation is not currently active
      * @throws IllegalArgumentException if indices are invalid for the current route
      * 
-     * @since 5.1.0
+     * @since 5.0.0
      */
     fun setIndex(legIndex: Int, stepIndex: Int) {
         require(route != null) { "Cannot set index: no route is currently active" }
