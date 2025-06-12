@@ -315,12 +315,12 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * @since 5.0.0
      */
     fun setIndex(legIndex: Int, stepIndex: Int) {
-        require(route != null) { "Cannot set index: no route is currently active" }
+        val currentRoute = route
+        require(currentRoute != null) { "Cannot set index: no route is currently active" }
         require(getNavigationEngineInternal().isRunning()) { 
             "Cannot set index: navigation is not currently running" 
         }
-        
-        val currentRoute = route!!
+
         require(legIndex >= 0 && legIndex < currentRoute.legs.size) {
             "Invalid leg index: $legIndex. Route has ${currentRoute.legs.size} legs"
         }
