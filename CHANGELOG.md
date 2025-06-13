@@ -3,9 +3,10 @@ Changelog for the MapLibre Navigation SDK for Android
 
 MapLibre welcomes participation and contributions from everyone.
 
-### unreleased
+### v5.0.0-pre6 - Jun 13, 2025
 
 - Fix crash on MapFpsDelegate, caused by null modifier [#141](https://github.com/maplibre/maplibre-navigation-android/issues/141)
+- Add explicit setting of leg/step index to MapLibreNavigation [#164](https://github.com/maplibre/maplibre-navigation-android/pull/164)
 
 ### v5.0.0-pre5 - May 16, 2025
 
