@@ -19,6 +19,9 @@
     <string name="title_valhalla_navigation">Valhalla Navigation</string>
     <string name="description_vallhalla_navigation">Use Valhalla routing server to generate directions.</string>
 
+    <string name="title_graphhopper_navigation">GraphHopper Navigation</string>
+    <string name="description_graphhopper_navigation">Use GraphHopper routing server to generate directions.</string>
+
     <string name="title_off_route_detection">Off route detection</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
 
