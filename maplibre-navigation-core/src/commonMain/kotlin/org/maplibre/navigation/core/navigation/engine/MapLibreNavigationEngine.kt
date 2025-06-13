@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.LocationValidator
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -14,6 +16,7 @@ import org.maplibre.navigation.core.navigation.NavigationEventDispatcher
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.navigation.NavigationHelper.checkMilestones
 import org.maplibre.navigation.core.navigation.NavigationHelper.isUserOffRoute
+import org.maplibre.navigation.core.navigation.NavigationIndices
 import org.maplibre.navigation.core.navigation.NavigationRouteProcessor
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
@@ -36,6 +39,7 @@ open class MapLibreNavigationEngine(
         get() = mapLibreNavigation.eventDispatcher
 
     private val navigationRouteProcessor = NavigationRouteProcessor(routeUtils)
+    private val processingMutex = Mutex()
 
     private var collectLocationJob: Job? = null
 
@@ -89,25 +93,27 @@ open class MapLibreNavigationEngine(
      *
      * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
-    protected fun processLocationUpdate(rawLocation: Location) {
-        if (!locationValidator.isValidUpdate(rawLocation)) {
-            return
+    suspend fun processLocationUpdate(rawLocation: Location) {
+        processingMutex.withLock {
+            if (!locationValidator.isValidUpdate(rawLocation)) {
+                return
+            }
+
+            val routeProgress = navigationRouteProcessor
+                .buildNewRouteProgress(mapLibreNavigation, rawLocation)
+
+            val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
+            val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
+            val location = findSnappedLocation(
+                mapLibreNavigation,
+                rawLocation,
+                routeProgress,
+                userOffRoute
+            )
+
+            val finalRouteProgress = updateRouteProcessorWith(routeProgress)
+            dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
         }
-
-        val routeProgress = navigationRouteProcessor
-            .buildNewRouteProgress(mapLibreNavigation, rawLocation)
-
-        val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
-        val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
-        val location = findSnappedLocation(
-            mapLibreNavigation,
-            rawLocation,
-            routeProgress,
-            userOffRoute
-        )
-
-        val finalRouteProgress = updateRouteProcessorWith(routeProgress)
-        dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
     }
 
     protected fun findTriggeredMilestones(
@@ -184,6 +190,22 @@ open class MapLibreNavigationEngine(
     protected fun dispatchOffRoute(location: Location, isUSerOffRoute: Boolean) {
         if (isUSerOffRoute) {
             eventDispatcher.onUserOffRoute(location)
+        }
+    }
+
+    /**
+     * Manually triggers a route progress update for the specified leg and step indices.
+     * This method is used for waypoint skipping during active navigation.
+     *
+     * @param legIndex The target leg index to navigate to
+     * @param stepIndex The target step index to navigate to
+     */
+    override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
+        backgroundScope.launch {
+            locationEngine.getLastLocation()?.let { currentLocation ->
+                navigationRouteProcessor.setIndex(mapLibreNavigation, NavigationIndices(legIndex, stepIndex))
+                processLocationUpdate(currentLocation)
+            }
         }
     }
 
