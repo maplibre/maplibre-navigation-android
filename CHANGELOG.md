@@ -3,6 +3,10 @@ Changelog for the MapLibre Navigation SDK for Android
 
 MapLibre welcomes participation and contributions from everyone.
 
+### v5.0.0-pre7 - Jun 18, 2025
+
+- Fix AppleLocationEngine by enabling background location updates [#166](https://github.com/maplibre/maplibre-navigation-android/pull/166)
+
 ### v5.0.0-pre6 - Jun 13, 2025
 
 - Fix crash on MapFpsDelegate, caused by null modifier [#141](https://github.com/maplibre/maplibre-navigation-android/issues/141)

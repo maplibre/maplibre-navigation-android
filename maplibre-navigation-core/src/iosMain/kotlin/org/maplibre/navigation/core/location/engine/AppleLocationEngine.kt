@@ -30,11 +30,12 @@ import platform.CoreLocation.CLLocation as AppleLocation
  * location. You can define a timeout for this request in the constructor.
  *
  * @param getLocationTimeout The maximum duration to wait for the one-time location request.
+ * @param enableBackgroundLocationUpdates Enables CLLocationManager's background location updates.
  */
-open class AppleLocationEngine(private val getLocationTimeout: Duration) :
+open class AppleLocationEngine(private val getLocationTimeout: Duration, private val enableBackgroundLocationUpdates: Boolean) :
     LocationEngine {
 
-    constructor() : this(getLocationTimeout = 5.seconds)
+    constructor() : this(getLocationTimeout = 5.seconds, enableBackgroundLocationUpdates = true)
 
     /**
      * A [MutableStateFlow] that holds the current location or null if no location was emitted yet.
@@ -50,6 +51,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
      * The underlying CLLocationManager instance used to fetch location updates.
      */
     private val locationManager = CLLocationManager().also { locationManager ->
+        locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         locationManager.delegate = locationDelegate
     }
 
@@ -89,7 +91,9 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
         withTimeoutOrNull(timeout) {
             suspendCancellableCoroutine { continuation ->
-                val locationManager = CLLocationManager()
+                val locationManager = CLLocationManager().also {
+                    it.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
+                }
                 locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
                      * Called when the location manager updates the location.
