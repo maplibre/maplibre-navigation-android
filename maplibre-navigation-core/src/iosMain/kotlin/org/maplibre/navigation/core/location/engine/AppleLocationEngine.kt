@@ -50,6 +50,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
      * The underlying CLLocationManager instance used to fetch location updates.
      */
     private val locationManager = CLLocationManager().also { locationManager ->
+        locationManager.allowsBackgroundLocationUpdates = true
         locationManager.delegate = locationDelegate
     }
 
@@ -89,7 +90,9 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration) :
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
         withTimeoutOrNull(timeout) {
             suspendCancellableCoroutine { continuation ->
-                val locationManager = CLLocationManager()
+                val locationManager = CLLocationManager().also {
+                    it.allowsBackgroundLocationUpdates = true
+                }
                 locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
                      * Called when the location manager updates the location.
