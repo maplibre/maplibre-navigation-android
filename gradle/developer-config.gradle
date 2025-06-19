@@ -17,6 +17,9 @@ task accessToken {
                 "    <!-- Your valhalla url (example: https://valhalla1.openstreetmap.de/route) -->\n" +
                 "    <!-- Don't use the following server in production, it is for demonstration purposes only: -->\n" +
                 "    <string name=\"valhalla_url\" translatable=\"false\">https://valhalla1.openstreetmap.de/route</string>\n" +
+                "    <!-- Instead of valhalla you can use GraphHopper for the path finding. Example: https://graphhopper.com/api/1/navigate?key=YOUR_API_KEY or a local server -->\n" +
+                "    <!-- Don't use the following API key in production, it is for demonstration purposes only: -->\n" +
+                "    <string name=\"graphhopper_url\" translatable=\"false\">https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff</string>\n" +
                 "    <!-- Your Mapbox access token (example: pk.abc...) -->\n" +
                 "    <string name=\"mapbox_access_token\" translatable=\"false\">" + mapboxAccessToken + "</string>\n" +
                 "    <!-- Map tile provider for light design (example: https://api.maptiler.com/maps/basic-v2/style.json?key=...) -->\n" +

@@ -29,6 +29,13 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:name=".GraphHopperNavigationActivity"
+            android:label="@string/title_graphhopper_navigation">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".NavigationUIActivity"
             android:label="@string/title_navigation_ui">
             <meta-data
