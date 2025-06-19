@@ -198,7 +198,7 @@ class CoreOnlyFragment : Fragment() {
         val client = OkHttpClient()
 
         val url = if (provider == "valhalla") "https://valhalla1.openstreetmap.de/route"
-            else "https://graphhopper.com/api/1/navigate/?key=YOUR_KEY"
+            else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
 
         val request = Request.Builder()
             .header("User-Agent", "ML Nav - Android Sample App")

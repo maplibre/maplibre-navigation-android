@@ -187,7 +187,7 @@ class GraphHopperNavigationActivity :
         // Create request object. Requires graphhopper_url to be set in developer-config.xml
         val request = Request.Builder()
             .header("User-Agent", "MapLibre Android Navigation SDK Demo App")
-            .url(getString(R.string.graphhopper_url) + "?key=" + getString(R.string.graphhopper_key))
+            .url(getString(R.string.graphhopper_url))
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
 
