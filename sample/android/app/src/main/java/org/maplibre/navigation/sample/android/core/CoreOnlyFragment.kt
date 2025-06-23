@@ -147,42 +147,62 @@ class CoreOnlyFragment : Fragment() {
     }
 
     private suspend fun fetchRoute(): DirectionsResponse = suspendCoroutine { continuation ->
-        val requestBody = mapOf(
-            "format" to "osrm",
-            "costing" to "auto",
-            "banner_instructions" to true,
-            "voice_instructions" to true,
-            "language" to "en-US",
-            "directions_options" to mapOf(
-                "units" to "kilometers"
-            ),
-            "costing_options" to mapOf(
-                "auto" to mapOf(
-                    "top_speed" to 130
+        val provider = "valhalla"
+
+        val requestBody = if provider == "graphhopper" {
+            mapOf(
+                "type" to "mapbox",
+                "profile" to "car",
+                "locale" to "en-US",
+                "points" to listOf(
+                    // Hannover, Germany
+                    listOf(9.6935451, 52.3758408),
+                    // Hamburg, Germany
+                    listOf(9.9769191, 53.5426183)
                 )
-            ),
-            "locations" to listOf(
-                // Hannover, Germany
-                mapOf(
-                    "lon" to 9.6935451,
-                    "lat" to 52.3758408,
-                    "type" to "break"
+                // flexible options possible via "custom_model"
+            )
+        } else {
+            mapOf(
+                "format" to "osrm",
+                "costing" to "auto",
+                "banner_instructions" to true,
+                "voice_instructions" to true,
+                "language" to "en-US",
+                "directions_options" to mapOf(
+                    "units" to "kilometers"
                 ),
-                // Hamburg, Germany
-                mapOf(
-                    "lon" to 9.9769191,
-                    "lat" to 53.5426183,
-                    "type" to "break"
+                "costing_options" to mapOf(
+                    "auto" to mapOf(
+                        "top_speed" to 130
+                    )
+                ),
+                "locations" to listOf(
+                    // Hannover, Germany
+                    mapOf(
+                        "lon" to 9.6935451,
+                        "lat" to 52.3758408,
+                        "type" to "break"
+                    ),
+                    // Hamburg, Germany
+                    mapOf(
+                        "lon" to 9.9769191,
+                        "lat" to 53.5426183,
+                        "type" to "break"
+                    )
                 )
             )
-        )
+        }
 
         val requestBodyJson = Gson().toJson(requestBody)
         val client = OkHttpClient()
 
+        val url = if (provider == "valhalla") "https://valhalla1.openstreetmap.de/route"
+            else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
+
         val request = Request.Builder()
             .header("User-Agent", "ML Nav - Android Sample App")
-            .url("https://valhalla1.openstreetmap.de/route")
+            .url(url)
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
 

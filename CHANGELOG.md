@@ -12,6 +12,12 @@ MapLibre welcomes participation and contributions from everyone.
 - Fix crash on MapFpsDelegate, caused by null modifier [#141](https://github.com/maplibre/maplibre-navigation-android/issues/141)
 - Add explicit setting of leg/step index to MapLibreNavigation [#164](https://github.com/maplibre/maplibre-navigation-android/pull/164)
 
+Added sample code on how to use the GraphHopper routing server directly in GraphHopperNavigationActivity. Please make sure to add this line to the app/main/res/values/developer-config.xml:
+
+```xml
+  <string name="graphhopper_url" translatable="false">https://graphhopper.com/api/1/navigate?key=YOUR_API_KEY</string>
+```
+
 ### v5.0.0-pre5 - May 16, 2025
 
 - Fix threading and platform characteristics for Apple location engine [#159](https://github.com/maplibre/maplibre-navigation-android/pull/159)
