@@ -81,6 +81,66 @@ class NavigationHelperTest : BaseTest() {
 
     @Test
     @Throws(Exception::class)
+    fun increaseIndex_skipsZeroDistanceStep() {
+        val routeProgress = buildRouteProgressWithZeroDistanceStep()
+        val previousIndices = NavigationIndices(0, 0)
+
+        val newIndices = increaseIndex(routeProgress, previousIndices)
+
+        assertEquals(0, newIndices.legIndex)
+        assertEquals(2, newIndices.stepIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun increaseIndex_skipsMultipleZeroDistanceSteps() {
+        val routeProgress = buildRouteProgressWithMultipleZeroDistanceSteps()
+        val previousIndices = NavigationIndices(0, 0)
+
+        val newIndices = increaseIndex(routeProgress, previousIndices)
+
+        assertEquals(0, newIndices.legIndex)
+        assertEquals(3, newIndices.stepIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun increaseIndex_skipsZeroDistanceStepAcrossLegBoundary() {
+        val routeProgress = buildRouteProgressWithZeroDistanceStepInNextLeg()
+        val previousIndices = NavigationIndices(0, 1)
+
+        val newIndices = increaseIndex(routeProgress, previousIndices)
+
+        assertEquals(1, newIndices.legIndex)
+        assertEquals(1, newIndices.stepIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun increaseIndex_stopsAtLastStepOfLastLegWhenZeroDistance() {
+        val routeProgress = buildRouteProgressWithZeroDistanceLastStep()
+        val previousIndices = NavigationIndices(0, 0)
+
+        val newIndices = increaseIndex(routeProgress, previousIndices)
+
+        assertEquals(0, newIndices.legIndex)
+        assertEquals(1, newIndices.stepIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun increaseIndex_movesToNextLegWhenLastStepOfNonLastLegHasZeroDistance() {
+        val routeProgress = buildRouteProgressWithZeroDistanceLastStepOfFirstLeg()
+        val previousIndices = NavigationIndices(0, 0)
+
+        val newIndices = increaseIndex(routeProgress, previousIndices)
+
+        assertEquals(1, newIndices.legIndex)
+        assertEquals(1, newIndices.stepIndex)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun checkMilestones_onlyTriggeredMilestonesGetReturned() {
         val routeProgress = buildMultiLegRouteProgress()
         val options = MapLibreNavigationOptions(defaultMilestonesEnabled = false)
@@ -529,6 +589,103 @@ class NavigationHelperTest : BaseTest() {
             every { annotation } returns legAnnotation
         }
         return routeLeg
+    }
+
+    private fun buildRouteProgressWithZeroDistanceStep(): RouteProgress {
+        val steps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 100.0 },
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 }, // Zero distance step
+            mockk<LegStep>(relaxed = true) { every { distance } returns 200.0 }
+        )
+        val leg = mockk<RouteLeg>(relaxed = true) {
+            every { this@mockk.steps } returns steps
+        }
+        val route = mockk<DirectionsRoute>(relaxed = true) {
+            every { legs } returns listOf(leg)
+        }
+        return mockk<RouteProgress>(relaxed = true) {
+            every { directionsRoute } returns route
+        }
+    }
+
+    private fun buildRouteProgressWithMultipleZeroDistanceSteps(): RouteProgress {
+        val steps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 100.0 },
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 }, // Zero distance step
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 }, // Another zero distance step
+            mockk<LegStep>(relaxed = true) { every { distance } returns 300.0 }
+        )
+        val leg = mockk<RouteLeg>(relaxed = true) {
+            every { this@mockk.steps } returns steps
+        }
+        val route = mockk<DirectionsRoute>(relaxed = true) {
+            every { legs } returns listOf(leg)
+        }
+        return mockk<RouteProgress>(relaxed = true) {
+            every { directionsRoute } returns route
+        }
+    }
+
+    private fun buildRouteProgressWithZeroDistanceStepInNextLeg(): RouteProgress {
+        val firstLegSteps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 100.0 },
+            mockk<LegStep>(relaxed = true) { every { distance } returns 200.0 }
+        )
+        val secondLegSteps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 }, // Zero distance step in second leg
+            mockk<LegStep>(relaxed = true) { every { distance } returns 150.0 }
+        )
+        val firstLeg = mockk<RouteLeg>(relaxed = true) {
+            every { steps } returns firstLegSteps
+        }
+        val secondLeg = mockk<RouteLeg>(relaxed = true) {
+            every { steps } returns secondLegSteps
+        }
+        val route = mockk<DirectionsRoute>(relaxed = true) {
+            every { legs } returns listOf(firstLeg, secondLeg)
+        }
+        return mockk<RouteProgress>(relaxed = true) {
+            every { directionsRoute } returns route
+        }
+    }
+
+    private fun buildRouteProgressWithZeroDistanceLastStep(): RouteProgress {
+        val steps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 100.0 },
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 } // Zero distance last step
+        )
+        val leg = mockk<RouteLeg>(relaxed = true) {
+            every { this@mockk.steps } returns steps
+        }
+        val route = mockk<DirectionsRoute>(relaxed = true) {
+            every { legs } returns listOf(leg)
+        }
+        return mockk<RouteProgress>(relaxed = true) {
+            every { directionsRoute } returns route
+        }
+    }
+
+    private fun buildRouteProgressWithZeroDistanceLastStepOfFirstLeg(): RouteProgress {
+        val firstLegSteps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 100.0 },
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 } // Zero distance last step of first leg
+        )
+        val secondLegSteps = listOf(
+            mockk<LegStep>(relaxed = true) { every { distance } returns 0.0 }, // Zero distance first step of second leg
+            mockk<LegStep>(relaxed = true) { every { distance } returns 150.0 } // Non-zero step to stop at
+        )
+        val firstLeg = mockk<RouteLeg>(relaxed = true) {
+            every { steps } returns firstLegSteps
+        }
+        val secondLeg = mockk<RouteLeg>(relaxed = true) {
+            every { steps } returns secondLegSteps
+        }
+        val route = mockk<DirectionsRoute>(relaxed = true) {
+            every { legs } returns listOf(firstLeg, secondLeg)
+        }
+        return mockk<RouteProgress>(relaxed = true) {
+            every { directionsRoute } returns route
+        }
     }
 
     companion object {

@@ -206,23 +206,28 @@ object NavigationHelper {
         previousIndices: NavigationIndices
     ): NavigationIndices {
         val route = routeProgress.directionsRoute
-        val previousStepIndex = previousIndices.stepIndex
-        val previousLegIndex = previousIndices.legIndex
         val routeLegSize = route.legs.size
-        val legStepSize = route.legs[routeProgress.legIndex].steps.size
+        var indices: NavigationIndices = previousIndices
 
-        val isOnLastLeg = previousLegIndex == routeLegSize - 1
-        val isOnLastStep = previousStepIndex == legStepSize - 1
+        do {
+            val legStepSize = route.legs[indices.legIndex].steps.size
+            val previousLegIndex = indices.legIndex
+            val previousStepIndex = indices.stepIndex
 
-        if (isOnLastStep && !isOnLastLeg) {
-            return NavigationIndices(previousLegIndex + 1, 0)
-        }
+            val isOnLastLeg = previousLegIndex == routeLegSize - 1
+            val isOnLastStep = previousStepIndex == legStepSize - 1
 
-        if (isOnLastStep) {
-            return previousIndices
-        }
+            indices = when {
+                isOnLastStep && !isOnLastLeg -> NavigationIndices(previousLegIndex + 1, 0)
+                // It's the last step of the last leg. There's nowhere to go.
+                isOnLastStep -> return indices
+                else -> NavigationIndices(previousLegIndex, previousStepIndex + 1)
+            }
 
-        return NavigationIndices(previousLegIndex, previousStepIndex + 1)
+            val currentStepDistance = route.legs[indices.legIndex].steps[indices.stepIndex].distance
+        } while (currentStepDistance <= 0.0)
+
+        return indices
     }
 
     /**
