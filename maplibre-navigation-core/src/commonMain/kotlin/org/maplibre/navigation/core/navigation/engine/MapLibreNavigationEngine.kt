@@ -209,7 +209,6 @@ open class MapLibreNavigationEngine(
         backgroundScope.launch {
             locationEngine.getLastLocation()?.let { currentLocation ->
                 navigationRouteProcessor.setIndex(mapLibreNavigation, NavigationIndices(legIndex, stepIndex))
-                processLocationUpdate(currentLocation)
                 processLocationAndIndexUpdate(currentLocation, index = NavigationIndices(legIndex, stepIndex))
             }
         }
