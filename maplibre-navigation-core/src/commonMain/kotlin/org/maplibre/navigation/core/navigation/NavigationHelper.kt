@@ -20,6 +20,7 @@ import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.geojson.turf.TurfMisc
 import org.maplibre.geojson.turf.TurfUnit
 import org.maplibre.geojson.utils.PolylineUtils
+import org.maplibre.navigation.core.models.StepManeuver
 import kotlin.jvm.JvmStatic
 
 /**
@@ -225,7 +226,8 @@ object NavigationHelper {
             }
 
             val currentStepDistance = route.legs[indices.legIndex].steps[indices.stepIndex].distance
-        } while (currentStepDistance <= 0.0)
+            val isArrive = route.legs[indices.legIndex].steps[indices.stepIndex].maneuver.type == StepManeuver.Type.ARRIVE
+        } while (!isArrive && currentStepDistance <= 0.0)
 
         return indices
     }
