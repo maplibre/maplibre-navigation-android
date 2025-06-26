@@ -53,7 +53,7 @@ open class MapLibreNavigationEngine(
         collectLocationJob?.cancel() // Cancel previous started run
 
         collectLocationJob = backgroundScope.launch {
-            processLocationUpdate(
+            processLocationAndIndexUpdate(
                 locationEngine.getLastLocation() ?: routeUtils.createFirstLocationFromRoute(route)
             )
 
@@ -62,7 +62,7 @@ open class MapLibreNavigationEngine(
                     minIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
                     maxIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
                 )
-            ).collect(::processLocationUpdate)
+            ).collect(::processLocationAndIndexUpdate)
         }
     }
 
@@ -86,15 +86,20 @@ open class MapLibreNavigationEngine(
     }
 
     /**
-     * Takes a new location model and runs all related engine checks against it
+     * Takes a new location model and route indices runs all related engine checks against it
      * (off-route, milestones, snapped location, and faster-route).
      *
      * After running through the engines, all data is submitted to [NavigationEventDispatcher].
      *
      * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
-    suspend fun processLocationUpdate(rawLocation: Location) {
+     suspend fun processLocationAndIndexUpdate(rawLocation: Location, index: NavigationIndices? = null) {
         processingMutex.withLock {
+            // Index is set inside the mutex to avoid race conditions.
+            index?.let {
+                navigationRouteProcessor.setIndex(mapLibreNavigation, it)
+            }
+
             if (!locationValidator.isValidUpdate(rawLocation)) {
                 return
             }
@@ -205,6 +210,7 @@ open class MapLibreNavigationEngine(
             locationEngine.getLastLocation()?.let { currentLocation ->
                 navigationRouteProcessor.setIndex(mapLibreNavigation, NavigationIndices(legIndex, stepIndex))
                 processLocationUpdate(currentLocation)
+                processLocationAndIndexUpdate(currentLocation, index = NavigationIndices(legIndex, stepIndex))
             }
         }
     }

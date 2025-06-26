@@ -100,7 +100,7 @@ class MapLibreNavigationEngineTest : BaseTest() {
         
         // Execute - simulate location update 1 second later
         coEvery { mockLocationEngine.getLastLocation() } returns step5Location
-        navigationEngine.processLocationUpdate(step5Location)
+        navigationEngine.processLocationAndIndexUpdate(step5Location)
         testScheduler.advanceUntilIdle()
         
         // Assert indices are preserved after a location update
