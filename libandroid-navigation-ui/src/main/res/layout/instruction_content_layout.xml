@@ -4,9 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/instructionBackground"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?attr/navigationViewBannerBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,11 +50,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
         android:layout_marginBottom="12dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/maneuver_layout"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -67,7 +64,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:includeFontPadding="false"
-            android:layout_marginStart="16dp"
+            android:layout_marginHorizontal="16dp"
             android:textColor="?attr/navigationViewBannerPrimaryText"
             android:textSize="16sp"
             tools:text="I-580 South"/>

@@ -98,7 +98,16 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //                    .zoom(16.0)
 //                    .build()
 //            mapLibreMap?.animateCamera(CameraUpdateFactory.newCameraPosition(initialMapCameraPosition))
-            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING_GPS
+            mapLibreMap?.locationComponent?.setCameraMode(
+                CameraMode.TRACKING_GPS,
+                100,
+                16.0,
+                null,
+                null,
+                null
+            )
+
+            mapLibreMap?.locationComponent?.renderMode = RenderMode.GPS
         }
 
 //        binding.mapView.apply {
@@ -130,7 +139,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
             if (isStarted) {
                 binding.navigationView.stopNavigation()
                 binding.navigationView.retrieveNavigationMapLibreMap()?.removeRoute()
-
                 isStarted = false
             } else {
                 isStarted = true
