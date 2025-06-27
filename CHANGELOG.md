@@ -3,6 +3,10 @@ Changelog for the MapLibre Navigation SDK for Android
 
 MapLibre welcomes participation and contributions from everyone.
 
+### v5.0.0-pre8 - Jun 27, 2025
+
+- Fix ignoring empty legs when increasing navigation indices [#167](https://github.com/maplibre/maplibre-navigation-android/pull/167)
+
 ### v5.0.0-pre7 - Jun 18, 2025
 
 - Fix AppleLocationEngine by enabling background location updates [#166](https://github.com/maplibre/maplibre-navigation-android/pull/166)
