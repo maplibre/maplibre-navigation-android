@@ -62,6 +62,7 @@ public class NavigationViewModel {
     private LocationEngineConductor locationEngineConductor;
     private NavigationViewEventDispatcher navigationViewEventDispatcher;
     private SpeechPlayer speechPlayer;
+    private boolean isMuted = false;
     private int voiceInstructionsToAnnounce = 0;
     private RouteProgress routeProgress;
 
@@ -114,7 +115,10 @@ public class NavigationViewModel {
     }
 
     public void setMuted(boolean isMuted) {
-        speechPlayer.setMuted(isMuted);
+        this.isMuted = isMuted;
+        if (speechPlayer != null) {
+            speechPlayer.setMuted(isMuted);
+        }
     }
 
 
@@ -243,7 +247,7 @@ public class NavigationViewModel {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
         language = localeUtils.inferDeviceLanguage(context);
         if (routeOptions != null) {
-            language = routeOptions.getLanguage();
+            language = String.valueOf(routeOptions.getLanguage());
         }
     }
 
@@ -322,7 +326,9 @@ public class NavigationViewModel {
 
     private MilestoneEventListener milestoneEventListener = (routeProgress, instruction, milestone) -> {
         NavigationViewModel.this.milestone = milestone;
-        playVoiceAnnouncement(milestone);
+        if (!isMuted) {
+            playVoiceAnnouncement(milestone);
+        }
         updateBannerInstruction(routeProgress, milestone);
         sendEventArrival(routeProgress, milestone);
     };

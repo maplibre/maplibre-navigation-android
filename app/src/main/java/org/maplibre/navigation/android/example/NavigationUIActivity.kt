@@ -84,7 +84,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                         .withIconImage("DRIVER_MARKER_ICON_ID")
                         .withIconAnchor(ICON_ANCHOR_CENTER)
 
-
                     binding.navigationView.addSymbol(symbolOptions)
                 }
             )
@@ -150,6 +149,8 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                         destination = Point.fromLngLat(76.930137, 43.230361),
                     )
                 )
+                binding.navigationView.enableNavigatorSound(false)
+
             }
         }
 

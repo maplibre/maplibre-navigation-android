@@ -410,6 +410,11 @@ class NavigationRouteView @JvmOverloads constructor(
         }
     }
 
+
+    fun enableNavigatorSound(enabled: Boolean) {
+        navigationViewModel.isMuted = !enabled
+    }
+
     /**
      * Gives the ability to manipulate the map directly for anything that might not currently be
      * supported. This returns null until the view is initialized.
