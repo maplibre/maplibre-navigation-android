@@ -210,24 +210,24 @@ object NavigationHelper {
         val routeLegSize = route.legs.size
         var indices: NavigationIndices = previousIndices
 
-        do {
-            val legStepSize = route.legs[indices.legIndex].steps.size
-            val previousLegIndex = indices.legIndex
-            val previousStepIndex = indices.stepIndex
+        val legStepSize = route.legs[indices.legIndex].steps.size
+        val previousLegIndex = indices.legIndex
+        val previousStepIndex = indices.stepIndex
 
-            val isOnLastLeg = previousLegIndex == routeLegSize - 1
-            val isOnLastStep = previousStepIndex == legStepSize - 1
+        val isOnLastLeg = previousLegIndex == routeLegSize - 1
+        val isOnLastStep = previousStepIndex == legStepSize - 1
 
-            indices = when {
-                isOnLastStep && !isOnLastLeg -> NavigationIndices(previousLegIndex + 1, 0)
-                // It's the last step of the last leg. There's nowhere to go.
-                isOnLastStep -> return indices
-                else -> NavigationIndices(previousLegIndex, previousStepIndex + 1)
-            }
+        indices = when {
+            isOnLastStep && !isOnLastLeg -> NavigationIndices(previousLegIndex + 1, 0)
+            // It's the last step of the last leg. There's nowhere to go.
+            isOnLastStep -> return indices
+            else -> NavigationIndices(previousLegIndex, previousStepIndex + 1)
+        }
 
-            val currentStepDistance = route.legs[indices.legIndex].steps[indices.stepIndex].distance
-            val isArrive = route.legs[indices.legIndex].steps[indices.stepIndex].maneuver.type == StepManeuver.Type.ARRIVE
-        } while (!isArrive && currentStepDistance <= 0.0)
+        // Then skip any zero-distance legs (waypoint legs with no actual travel)
+        while (indices.legIndex < routeLegSize - 1 && route.legs[indices.legIndex].distance <= 0.0) {
+            indices = NavigationIndices(indices.legIndex + 1, 0)
+        }
 
         return indices
     }
