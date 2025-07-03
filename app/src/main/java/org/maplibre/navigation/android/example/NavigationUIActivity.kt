@@ -99,7 +99,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //            mapLibreMap?.animateCamera(CameraUpdateFactory.newCameraPosition(initialMapCameraPosition))
             mapLibreMap?.locationComponent?.setCameraMode(
                 CameraMode.TRACKING_GPS,
-                100,
+                750,
                 16.0,
                 null,
                 null,
@@ -122,15 +122,13 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 
         binding.simulateRouteSwitch.setOnCheckedChangeListener { _, isChecked ->
 //            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING
-            mapLibreMap?.locationComponent?.cameraMode = CameraMode.NONE
-            mapLibreMap?.locationComponent?.isLocationComponentEnabled = false
-            binding.navigationView.retrieveNavigationMapLibreMap()?.apply {
-                updateLocationVisibilityTo(isChecked)
-                resetCameraPositionWith(
-                    NavigationCamera.NAVIGATION_TRACKING_MODE_GPS
-                )
-            }
+            simulateRoute = isChecked
+            if (simulateRoute) {
 
+            } else {
+
+            }
+            mapLibreMap?.locationComponent?.setCameraMode(CameraMode.TRACKING_GPS, 100, 16.0, null, null, null)
         }
         binding.navigationView.showInstructionView()
 

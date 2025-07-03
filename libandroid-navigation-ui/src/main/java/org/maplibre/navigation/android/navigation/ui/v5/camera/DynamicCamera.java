@@ -25,6 +25,7 @@ public class DynamicCamera extends SimpleCamera {
 
   private static final double MAX_CAMERA_TILT = 60d;
   private static final double MIN_CAMERA_TILT = 45d;
+  private static final double CAMERA_TILT_ZERO = 0d;
   private static final double MAX_CAMERA_ZOOM = 16d;
   private static final double MIN_CAMERA_ZOOM = 12d;
 
@@ -42,16 +43,19 @@ public class DynamicCamera extends SimpleCamera {
 
   @Override
   public double tilt(RouteInformation routeInformation) {
-    if (isShutdown) {
-      return DEFAULT_TILT;
-    }
+    // 0 tilt to optimize map performance
+    return CAMERA_TILT_ZERO;
 
-    RouteProgress progress = routeInformation.getRouteProgress();
-    if (progress != null) {
-      double distanceRemaining = progress.getCurrentLegProgress().getCurrentStepProgress().getDistanceRemaining();
-      return createTilt(distanceRemaining);
-    }
-    return super.tilt(routeInformation);
+//    if (isShutdown) {
+//      return DEFAULT_TILT;
+//    }
+//
+//    RouteProgress progress = routeInformation.getRouteProgress();
+//    if (progress != null) {
+//      double distanceRemaining = progress.getCurrentLegProgress().getCurrentStepProgress().getDistanceRemaining();
+//      return createTilt(distanceRemaining);
+//    }
+//    return super.tilt(routeInformation);
   }
 
   @Override
