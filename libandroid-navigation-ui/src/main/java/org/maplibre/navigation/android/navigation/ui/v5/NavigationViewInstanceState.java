@@ -5,26 +5,20 @@ import android.os.Parcelable;
 
 class NavigationViewInstanceState implements Parcelable {
 
-  private int bottomSheetBehaviorState;
   private int recenterButtonVisibility;
   private boolean instructionViewVisible;
   private boolean isWayNameVisible;
   private boolean isMuted;
   private String wayNameText;
 
-  NavigationViewInstanceState(int bottomSheetBehaviorState, int recenterButtonVisibility,
+  NavigationViewInstanceState(int recenterButtonVisibility,
                               boolean instructionViewVisible, boolean isWayNameVisible, String wayNameText,
                               boolean isMuted) {
-    this.bottomSheetBehaviorState = bottomSheetBehaviorState;
     this.recenterButtonVisibility = recenterButtonVisibility;
     this.instructionViewVisible = instructionViewVisible;
     this.isWayNameVisible = isWayNameVisible;
     this.wayNameText = wayNameText;
     this.isMuted = isMuted;
-  }
-
-  int getBottomSheetBehaviorState() {
-    return bottomSheetBehaviorState;
   }
 
   int getRecenterButtonVisibility() {
@@ -48,7 +42,6 @@ class NavigationViewInstanceState implements Parcelable {
   }
 
   private NavigationViewInstanceState(Parcel in) {
-    bottomSheetBehaviorState = in.readInt();
     recenterButtonVisibility = in.readInt();
     instructionViewVisible = in.readByte() != 0;
     isWayNameVisible = in.readByte() != 0;
@@ -58,7 +51,6 @@ class NavigationViewInstanceState implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    dest.writeInt(bottomSheetBehaviorState);
     dest.writeInt(recenterButtonVisibility);
     dest.writeByte((byte) (instructionViewVisible ? 1 : 0));
     dest.writeByte((byte) (isWayNameVisible ? 1 : 0));

@@ -43,10 +43,6 @@ public class NavigationLauncher {
     storeThemePreferences(options, editor);
 
     editor.apply();
-
-    Intent navigationActivity = new Intent(context, MapLibreNavigationActivity.class);
-    storeInitialMapPosition(options, navigationActivity);
-    context.startActivity(navigationActivity);
   }
 
   /**
@@ -58,13 +54,13 @@ public class NavigationLauncher {
    * @param context to retrieve {@link SharedPreferences}
    * @return {@link DirectionsRoute} stored when launching
    */
-  static DirectionsRoute extractRoute(Context context) {
+  public static DirectionsRoute extractRoute(Context context) {
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
     String directionsRouteJson = preferences.getString(NavigationConstants.NAVIGATION_VIEW_ROUTE_KEY, "");
     return DirectionsRoute.fromJson(directionsRouteJson);
   }
 
-  static void cleanUpPreferences(Context context) {
+  public static void cleanUpPreferences(Context context) {
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
     SharedPreferences.Editor editor = preferences.edit();
     editor

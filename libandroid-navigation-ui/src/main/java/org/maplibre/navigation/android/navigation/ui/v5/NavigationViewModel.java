@@ -6,7 +6,6 @@ import org.maplibre.navigation.core.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.maplibre.geojson.Point;
@@ -43,7 +42,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import java.util.List;
 
-public class NavigationViewModel extends AndroidViewModel {
+public class NavigationViewModel {
 
     private static final String EMPTY_STRING = "";
     private static final String OKHTTP_INSTRUCTION_CACHE = "okhttp-instruction-cache";
@@ -63,6 +62,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private LocationEngineConductor locationEngineConductor;
     private NavigationViewEventDispatcher navigationViewEventDispatcher;
     private SpeechPlayer speechPlayer;
+    private boolean isMuted = false;
     private int voiceInstructionsToAnnounce = 0;
     private RouteProgress routeProgress;
 
@@ -75,8 +75,10 @@ public class NavigationViewModel extends AndroidViewModel {
     private boolean isChangingConfigurations;
     private RouteUtils routeUtils = new RouteUtils();
 
-    public NavigationViewModel(Application application) {
-        super(application);
+    private Context context;
+
+    public NavigationViewModel(Context context) {
+        this.context = context;
         initializeLocationEngine();
         initializeRouter();
         this.localeUtils = new LocaleUtils();
@@ -86,7 +88,6 @@ public class NavigationViewModel extends AndroidViewModel {
         // Package private (no modifier) for testing purposes
     NavigationViewModel(Application application, MapLibreNavigation navigation,
                         NavigationViewRouter router) {
-        super(application);
         this.navigation = navigation;
         this.router = router;
     }
@@ -95,17 +96,10 @@ public class NavigationViewModel extends AndroidViewModel {
         // Package private (no modifier) for testing purposes
     NavigationViewModel(Application application, MapLibreNavigation navigation,
                         LocationEngineConductor conductor, NavigationViewEventDispatcher dispatcher, SpeechPlayer speechPlayer) {
-        super(application);
         this.navigation = navigation;
         this.locationEngineConductor = conductor;
         this.navigationViewEventDispatcher = dispatcher;
         this.speechPlayer = speechPlayer;
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        destroyRouter();
     }
 
     public void onDestroy(boolean isChangingConfigurations) {
@@ -114,13 +108,17 @@ public class NavigationViewModel extends AndroidViewModel {
             endNavigation();
             deactivateInstructionPlayer();
             isRunning = false;
+            this.route.setValue(null);
         }
         clearDynamicCameraMap();
         navigationViewEventDispatcher = null;
     }
 
     public void setMuted(boolean isMuted) {
-        speechPlayer.setMuted(isMuted);
+        this.isMuted = isMuted;
+        if (speechPlayer != null) {
+            speechPlayer.setMuted(isMuted);
+        }
     }
 
 
@@ -139,6 +137,14 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     /**
+     * This method used to initialize {@link MapLibreNavigation}.
+     */
+    void initializeNavigation(boolean shouldSimulateRoute) {
+        LocationEngine locationEngine = initializeLocationEngineFrom(shouldSimulateRoute);
+        initializeNavigation(locationEngine);
+    }
+
+    /**
      * This method will pass {@link MapLibreNavigationOptions} from the {@link NavigationViewOptions}
      * to this view model to be used to initialize {@link MapLibreNavigation}.
      *
@@ -150,8 +156,7 @@ public class NavigationViewModel extends AndroidViewModel {
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
         if (!isRunning()) {
-            LocationEngine locationEngine = initializeLocationEngineFrom(options);
-            initializeNavigation(getApplication(), navigationOptions, locationEngine);
+            addNavigationListeners();
             addMilestones(options);
             initializeNavigationSpeechPlayer(options);
         }
@@ -186,7 +191,7 @@ public class NavigationViewModel extends AndroidViewModel {
     void updateRoute(DirectionsRoute route) {
         this.route.setValue(route);
         if (!isChangingConfigurations) {
-            startNavigation(route);
+            startMapLibreNavigation(route);
             updateReplayEngine(route);
             sendEventOnRerouteAlong(route);
             isOffRoute.setValue(false);
@@ -198,7 +203,7 @@ public class NavigationViewModel extends AndroidViewModel {
         this.routeProgress = routeProgress;
         sendEventArrival(routeProgress, milestone);
         instructionModel.setValue(new InstructionModel(distanceFormatter, routeProgress));
-        summaryModel.setValue(new SummaryModel(getApplication(), distanceFormatter, routeProgress, timeFormatType));
+        summaryModel.setValue(new SummaryModel(context, distanceFormatter, routeProgress, timeFormatType));
     }
 
     void updateLocation(Location location) {
@@ -229,9 +234,8 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private void initializeRouter() {
-        MapLibreRouteFetcher onlineRouter = new MapLibreRouteFetcher(getApplication());
-        Context applicationContext = getApplication().getApplicationContext();
-        ConnectivityStatusProvider connectivityStatus = new ConnectivityStatusProvider(applicationContext);
+        MapLibreRouteFetcher onlineRouter = new MapLibreRouteFetcher(context);
+        ConnectivityStatusProvider connectivityStatus = new ConnectivityStatusProvider(context);
         router = new NavigationViewRouter(onlineRouter, connectivityStatus, routeEngineListener);
     }
 
@@ -241,15 +245,15 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private void initializeLanguage(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
-        language = localeUtils.inferDeviceLanguage(getApplication());
+        language = localeUtils.inferDeviceLanguage(context);
         if (routeOptions != null) {
-            language = routeOptions.getLanguage();
+            language = String.valueOf(routeOptions.getLanguage());
         }
     }
 
     private UnitType initializeUnitType(NavigationUiOptions options) {
         RouteOptions routeOptions = options.directionsRoute().getRouteOptions();
-        UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(getApplication());
+        UnitType unitType = localeUtils.getUnitTypeForDeviceLocale(context);
         if (routeOptions != null && routeOptions.getVoiceUnits() != null) {
             unitType = routeOptions.getVoiceUnits();
         }
@@ -268,7 +272,7 @@ public class NavigationViewModel extends AndroidViewModel {
     private void initializeDistanceFormatter(NavigationViewOptions options) {
         UnitType unitType = initializeUnitType(options);
         MapLibreNavigationOptions.RoundingIncrement roundingIncrement = initializeRoundingIncrement(options);
-        distanceFormatter = new DistanceFormatter(getApplication(), language, unitType, roundingIncrement);
+        distanceFormatter = new DistanceFormatter(context, language, unitType, roundingIncrement);
     }
 
     private void initializeNavigationSpeechPlayer(NavigationViewOptions options) {
@@ -284,19 +288,16 @@ public class NavigationViewModel extends AndroidViewModel {
 
     @NonNull
     private SpeechPlayerProvider initializeSpeechPlayerProvider(boolean voiceLanguageSupported) {
-        return new SpeechPlayerProvider(getApplication(), language, voiceLanguageSupported);
+        return new SpeechPlayerProvider(context, language, voiceLanguageSupported);
     }
 
-    private LocationEngine initializeLocationEngineFrom(NavigationViewOptions options) {
-        LocationEngine locationEngine = options.locationEngine();
-        boolean shouldReplayRoute = options.shouldSimulateRoute();
-        locationEngineConductor.initializeLocationEngine(getApplication(), locationEngine, shouldReplayRoute);
+    private LocationEngine initializeLocationEngineFrom(boolean shouldSimulateRoute) {
+        locationEngineConductor.initializeLocationEngine(context, null, shouldSimulateRoute);
         return locationEngineConductor.obtainLocationEngine();
     }
 
-    private void initializeNavigation(Context context, MapLibreNavigationOptions options, LocationEngine locationEngine) {
-        navigation = new MapLibreNavigation(options, locationEngine);
-        addNavigationListeners();
+    private void initializeNavigation(LocationEngine locationEngine) {
+        navigation = new MapLibreNavigation(locationEngine);
     }
 
     private void addNavigationListeners() {
@@ -325,7 +326,9 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private MilestoneEventListener milestoneEventListener = (routeProgress, instruction, milestone) -> {
         NavigationViewModel.this.milestone = milestone;
-        playVoiceAnnouncement(milestone);
+        if (!isMuted) {
+            playVoiceAnnouncement(milestone);
+        }
         updateBannerInstruction(routeProgress, milestone);
         sendEventArrival(routeProgress, milestone);
     };
@@ -339,7 +342,7 @@ public class NavigationViewModel extends AndroidViewModel {
 
     private ViewRouteListener routeEngineListener = new NavigationViewRouteEngineListener(this);
 
-    private void startNavigation(DirectionsRoute route) {
+    private void startMapLibreNavigation(DirectionsRoute route) {
         if (route != null) {
             navigation.startNavigation(route);
             voiceInstructionsToAnnounce = 0;
@@ -351,6 +354,10 @@ public class NavigationViewModel extends AndroidViewModel {
             LocationEngine replayEngine = locationEngineConductor.obtainLocationEngine();
             navigation.setLocationEngine(replayEngine);
         }
+    }
+
+    void onCleared() {
+        destroyRouter();
     }
 
     private void destroyRouter() {

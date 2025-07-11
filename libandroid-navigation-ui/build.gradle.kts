@@ -5,6 +5,8 @@ plugins {
 
 apply {
     from(file("${rootDir}/gradle/artifact-settings.gradle"))
+    from(file("javadoc.gradle"))
+    from(file("${rootDir}/gradle/publish-android.gradle"))
 }
 
 java {
@@ -21,7 +23,7 @@ android {
     namespace = "org.maplibre.navigation.android.navigation.ui.v5"
 
     defaultConfig {
-        compileSdk = 34
+        compileSdk = 35
         minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -116,9 +118,4 @@ configurations {
         exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
         exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
     }
-}
-
-apply {
-    from(file("javadoc.gradle"))
-    from(file("${rootDir}/gradle/publish-android.gradle"))
 }

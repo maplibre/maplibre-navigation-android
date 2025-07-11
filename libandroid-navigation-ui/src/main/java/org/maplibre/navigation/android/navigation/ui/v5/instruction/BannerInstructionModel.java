@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import org.maplibre.navigation.core.models.BannerInstructions;
 import org.maplibre.navigation.core.models.BannerText;
+import org.maplibre.navigation.core.models.ManeuverModifier;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter;
 
@@ -38,7 +39,9 @@ public class BannerInstructionModel extends InstructionModel {
   }
 
   String retrievePrimaryManeuverModifier() {
-    return primaryBannerText.getModifier().getText();
+    ManeuverModifier.Type modifier = primaryBannerText.getModifier();
+    if (modifier == null) return null;
+    return modifier.getText();
   }
 
   @Nullable
