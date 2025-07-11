@@ -1,5 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -16,6 +17,7 @@ import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.milestone.StepMilestone
 import org.maplibre.navigation.core.milestone.VoiceInstructionMilestone
+import org.maplibre.navigation.core.navigation.engine.MapLibreNavigationEngine
 import org.maplibre.navigation.core.offroute.OffRoute
 import org.maplibre.navigation.core.snap.Snap
 import org.maplibre.navigation.core.snap.SnapToRoute
@@ -24,6 +26,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotSame
 
 @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
@@ -300,8 +303,108 @@ class MapLibreNavigationTest : BaseTest() {
         assertEquals(offRoute, navigation.offRouteEngine)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNoRoute_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, 1)
+        }
+
+        assertEquals("Cannot set index: no route is currently active", exception.message)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withInvalidLegIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(99, 0) // Invalid leg index
+        }
+
+        assertTrue(exception.message!!.contains("Invalid leg index: 99"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNegativeLegIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(-1, 0) // Negative leg index
+        }
+
+        assertTrue(exception.message!!.contains("Invalid leg index: -1"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withInvalidStepIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        val route = buildTestDirectionsRoute()
+        navigation.startNavigation(route)
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, 999) // Invalid step index
+        }
+
+        assertTrue(exception.message!!.contains("Invalid step index: 999"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withNegativeStepIndex_throwsIllegalArgumentException() {
+        val navigation = buildMapLibreNavigation()
+        navigation.startNavigation(buildTestDirectionsRoute())
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            navigation.setIndex(0, -1) // Negative step index
+        }
+
+        assertTrue(exception.message!!.contains("Invalid step index: -1"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withValidIndices_doesNotThrowException() {
+        val engineMock = mockk<MapLibreNavigationEngine>(relaxed = true)
+        val navigation = buildMapLibreNavigationWithEngine(engineMock)
+        navigation.startNavigation(buildTestDirectionsRoute())
+        every { engineMock.isRunning() } returns true
+
+        // This should not throw any exceptions
+        navigation.setIndex(0, 1)
+
+        verify { engineMock.triggerManualRouteUpdate(0, 1) }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun setIndex_withMultiLegRoute_acceptsValidLegIndex() {
+        val engineMock = mockk<MapLibreNavigationEngine>(relaxed = true)
+        val navigation = buildMapLibreNavigationWithEngine(engineMock)
+        navigation.startNavigation(buildTestDirectionsRoute("directions_two_leg_route.json"))
+        every { engineMock.isRunning() } returns true
+
+        // Should work with the second leg
+        navigation.setIndex(1, 0)
+
+        verify { engineMock.triggerManualRouteUpdate(1, 0) }
+    }
+
     private fun buildMapLibreNavigation(): MapLibreNavigation {
         return MapLibreNavigation(locationEngine = mockk(relaxed = true))
+    }
+
+    private fun buildMapLibreNavigationWithEngine(navigationEngine: MapLibreNavigationEngine): MapLibreNavigation {
+        return MapLibreNavigation(
+            locationEngine = mockk(relaxed = true),
+            mapLibreNavigationEngine = navigationEngine
+        )
     }
 
     private fun buildMapLibreNavigationWithOptions(options: MapLibreNavigationOptions): MapLibreNavigation {

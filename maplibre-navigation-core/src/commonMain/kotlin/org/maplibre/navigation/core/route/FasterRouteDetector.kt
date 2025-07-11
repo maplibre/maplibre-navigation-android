@@ -123,7 +123,7 @@ open class FasterRouteDetector(
 
     private fun secondsSinceLastCheck(location: Location): Long {
         return lastCheckedLocation?.let { lastCheckedLocation ->
-            (location.time ?: 0) - (lastCheckedLocation.time ?: 0) / 1000
+            (location.timeMilliseconds ?: 0) - (lastCheckedLocation.timeMilliseconds ?: 0) / 1000
         } ?: -1
     }
 

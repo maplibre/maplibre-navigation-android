@@ -30,4 +30,6 @@ interface NavigationEngine {
      * @return true if the navigation is running, false otherwise.
      */
     fun isRunning(): Boolean
+
+    fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int)
 }

@@ -14,7 +14,7 @@ fun AndroidLocation.toLocation() = Location(
     altitude = if (hasAltitude()) altitude else null,
     bearing = if (hasBearing()) bearing else null,
     speedMetersPerSeconds = if (hasSpeed()) speed else null,
-    time = time,
+    timeMilliseconds = time,
     altitudeAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         if (hasVerticalAccuracy()) verticalAccuracyMeters else null
     else

@@ -35,6 +35,8 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
+                from components.release
+
                 groupId project.ext.navigationArtifactGroupId
                 version project.ext.versionName
 

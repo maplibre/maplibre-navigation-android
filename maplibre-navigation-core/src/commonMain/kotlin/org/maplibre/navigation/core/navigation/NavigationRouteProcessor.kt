@@ -207,6 +207,18 @@ open class NavigationRouteProcessor(
         clearManeuverDistances(mapLibreNavigation.offRouteEngine)
     }
 
+    /**
+     * Directly sets the navigation indices for manual waypoint skipping.
+     * This bypasses the normal GPS-driven index advancement flow.
+     *
+     * @param indices The target navigation indices
+     */
+    fun setIndex(mapLibreNavigation: MapLibreNavigation, indices: NavigationIndices) {
+        shouldUpdateToIndex = indices
+        shouldIncreaseIndex = true
+        checkIncreaseIndex(mapLibreNavigation)
+    }
+
     private fun assembleRouteProgress(route: DirectionsRoute): RouteProgress {
         val legIndex = indices.legIndex
         val stepIndex = indices.stepIndex

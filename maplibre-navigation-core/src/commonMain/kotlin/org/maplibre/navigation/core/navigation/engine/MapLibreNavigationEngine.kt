@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.LocationValidator
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -14,6 +16,7 @@ import org.maplibre.navigation.core.navigation.NavigationEventDispatcher
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.navigation.NavigationHelper.checkMilestones
 import org.maplibre.navigation.core.navigation.NavigationHelper.isUserOffRoute
+import org.maplibre.navigation.core.navigation.NavigationIndices
 import org.maplibre.navigation.core.navigation.NavigationRouteProcessor
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
@@ -36,6 +39,7 @@ open class MapLibreNavigationEngine(
         get() = mapLibreNavigation.eventDispatcher
 
     private val navigationRouteProcessor = NavigationRouteProcessor(routeUtils)
+    private val processingMutex = Mutex()
 
     private var collectLocationJob: Job? = null
 
@@ -49,7 +53,7 @@ open class MapLibreNavigationEngine(
         collectLocationJob?.cancel() // Cancel previous started run
 
         collectLocationJob = backgroundScope.launch {
-            processLocationUpdate(
+            processLocationAndIndexUpdate(
                 locationEngine.getLastLocation() ?: routeUtils.createFirstLocationFromRoute(route)
             )
 
@@ -58,7 +62,7 @@ open class MapLibreNavigationEngine(
                     minIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
                     maxIntervalMilliseconds = LOCATION_ENGINE_INTERVAL,
                 )
-            ).collect(::processLocationUpdate)
+            ).collect(::processLocationAndIndexUpdate)
         }
     }
 
@@ -82,32 +86,39 @@ open class MapLibreNavigationEngine(
     }
 
     /**
-     * Takes a new location model and runs all related engine checks against it
+     * Takes a new location model and route indices runs all related engine checks against it
      * (off-route, milestones, snapped location, and faster-route).
      *
      * After running through the engines, all data is submitted to [NavigationEventDispatcher].
      *
      * @param rawLocation hold location, navigation (with options), and distances away from maneuver
      */
-    protected fun processLocationUpdate(rawLocation: Location) {
-        if (!locationValidator.isValidUpdate(rawLocation)) {
-            return
+     suspend fun processLocationAndIndexUpdate(rawLocation: Location, index: NavigationIndices? = null) {
+        processingMutex.withLock {
+            // Index is set inside the mutex to avoid race conditions.
+            index?.let {
+                navigationRouteProcessor.setIndex(mapLibreNavigation, it)
+            }
+
+            if (!locationValidator.isValidUpdate(rawLocation)) {
+                return
+            }
+
+            val routeProgress = navigationRouteProcessor
+                .buildNewRouteProgress(mapLibreNavigation, rawLocation)
+
+            val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
+            val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
+            val location = findSnappedLocation(
+                mapLibreNavigation,
+                rawLocation,
+                routeProgress,
+                userOffRoute
+            )
+
+            val finalRouteProgress = updateRouteProcessorWith(routeProgress)
+            dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
         }
-
-        val routeProgress = navigationRouteProcessor
-            .buildNewRouteProgress(mapLibreNavigation, rawLocation)
-
-        val userOffRoute = determineUserOffRoute(mapLibreNavigation, rawLocation, routeProgress)
-        val milestones = findTriggeredMilestones(mapLibreNavigation, routeProgress)
-        val location = findSnappedLocation(
-            mapLibreNavigation,
-            rawLocation,
-            routeProgress,
-            userOffRoute
-        )
-
-        val finalRouteProgress = updateRouteProcessorWith(routeProgress)
-        dispatchUpdate(userOffRoute, milestones, location, finalRouteProgress)
     }
 
     protected fun findTriggeredMilestones(
@@ -184,6 +195,21 @@ open class MapLibreNavigationEngine(
     protected fun dispatchOffRoute(location: Location, isUSerOffRoute: Boolean) {
         if (isUSerOffRoute) {
             eventDispatcher.onUserOffRoute(location)
+        }
+    }
+
+    /**
+     * Manually triggers a route progress update for the specified leg and step indices.
+     * This method is used for waypoint skipping during active navigation.
+     *
+     * @param legIndex The target leg index to navigate to
+     * @param stepIndex The target step index to navigate to
+     */
+    override fun triggerManualRouteUpdate(legIndex: Int, stepIndex: Int) {
+        backgroundScope.launch {
+            locationEngine.getLastLocation()?.let { currentLocation ->
+                processLocationAndIndexUpdate(currentLocation, index = NavigationIndices(legIndex, stepIndex))
+            }
         }
     }
 

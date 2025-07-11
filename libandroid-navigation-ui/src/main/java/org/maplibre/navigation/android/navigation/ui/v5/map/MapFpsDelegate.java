@@ -111,17 +111,18 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
         }
     }
 
-    private boolean validLowFpsManeuver(RouteLegProgress routeLegProgress) {
-        String maneuverModifier = null;
-        ManeuverModifier.Type type = routeLegProgress.getCurrentStep().getManeuver().getModifier();
-        if (type != null) {
-            maneuverModifier = type.getText();
-        }
-        return maneuverModifier != null
-                && (maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_STRAIGHT)
-                || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT)
-                || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT));
+  private boolean validLowFpsManeuver(RouteLegProgress routeLegProgress) {
+    ManeuverModifier.Type modifier = routeLegProgress.getCurrentStep().getManeuver().getModifier();
+    if (modifier == null) {
+      return false;
     }
+
+    final String maneuverModifier = modifier.getText();
+    return maneuverModifier != null
+      && (maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_STRAIGHT)
+      || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT)
+      || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_RIGHT));
+  }
 
     private boolean validLowFpsDuration(RouteLegProgress routeLegProgress) {
         final double expectedStepDuration = routeLegProgress.getCurrentStep().getDuration();

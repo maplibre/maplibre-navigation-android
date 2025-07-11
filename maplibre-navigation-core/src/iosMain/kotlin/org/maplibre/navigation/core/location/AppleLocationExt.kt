@@ -16,5 +16,5 @@ fun CLLocation.toLocation() = Location(
     bearing = course.toFloat(),
     speedMetersPerSeconds = speed.toFloat(),
     accuracyMeters = horizontalAccuracy.toFloat(),
-    time = timestamp.timeIntervalSince1970.toLong()
+    timeMilliseconds = timestamp.timeIntervalSince1970.toLong() * 1000L
 )
