@@ -16,11 +16,11 @@ import org.maplibre.android.plugins.annotation.SymbolOptions
 import org.maplibre.android.style.layers.Property.ICON_ANCHOR_CENTER
 import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
-import org.maplibre.navigation.android.navigation.ui.v5.MapRouteData
+import org.maplibre.navigation.android.navigation.ui.v5.NavigationRequest
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
+import org.maplibre.navigation.android.navigation.ui.v5.RoutingService
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationViewOptions
 import org.maplibre.navigation.android.navigation.ui.v5.OnNavigationReadyCallback
-import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera
 import org.maplibre.navigation.android.navigation.ui.v5.listeners.NavigationListener
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
@@ -32,6 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.util.Locale
 
 class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener,
     OnNavigationReadyCallback, NavigationListener {
@@ -131,7 +132,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
             mapLibreMap?.locationComponent?.setCameraMode(CameraMode.TRACKING_GPS, 100, 16.0, null, null, null)
         }
         binding.navigationView.showInstructionView()
-
         binding.startRouteButton.setOnClickListener {
             if (isStarted) {
                 binding.navigationView.stopNavigation()
@@ -140,11 +140,12 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
             } else {
                 isStarted = true
                 binding.navigationView.calculateRouteAndStartNavigation(
-                    MapRouteData(
-                        getString(R.string.mapbox_access_token),
-                        userLocation = Point.fromLngLat(76.930137, 43.230361),
-                        stops = points,
-                        destination = Point.fromLngLat(76.930137, 43.230361),
+                    NavigationRequest(
+                        origin = Point.fromLngLat(76.93312659859657, 43.2283288597314),
+//                        stops = points,
+                        destination = Point.fromLngLat(76.92803341895342,43.23938818876529,),
+                        routingService = RoutingService.Mapbox(getString(R.string.base_url), getString(R.string.mapbox_access_token)),
+                        language = Locale.getDefault()
                     )
                 )
                 binding.navigationView.enableNavigatorSound(false)

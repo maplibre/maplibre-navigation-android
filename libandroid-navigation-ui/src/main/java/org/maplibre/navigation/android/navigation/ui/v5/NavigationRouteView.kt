@@ -44,7 +44,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.util.Locale
 
 
 class NavigationRouteView @JvmOverloads constructor(
@@ -223,19 +222,22 @@ class NavigationRouteView @JvmOverloads constructor(
             ?: mapLibreMap.setStyle(ThemeSwitcher.retrieveMapStyle(context), onStyleLoaded)
     }
 
-    fun calculateRouteAndStartNavigation(mapRouteData: MapRouteData) {
+    fun calculateRouteAndStartNavigation(request: NavigationRequest) {
+        val navigationSource = request.routingService
         val navigationRouteBuilder = NavigationRoute.builder(context).apply {
-            this.accessToken(mapRouteData.accessToken)
-            this.origin(mapRouteData.userLocation)
-            this.destination(mapRouteData.destination)
-            mapRouteData.stops?.forEach { this.addWaypoint(it) }
+            this.origin(request.origin)
+            this.destination(request.destination)
+            request.stops?.forEach { this.addWaypoint(it) }
             this.voiceUnits(UnitType.METRIC)
-            this.language(Locale.forLanguageTag("ru"))
+            this.language(request.language)
             this.alternatives(true)
             // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.
-//            this.user("gh")
-//            this.profile("car")
-            this.baseUrl(context.getString(R.string.base_url))
+            if (navigationSource is RoutingService.GraphHopper) {
+                this.user("gh")
+                this.profile("car")
+            }
+            this.accessToken(navigationSource.accessToken)
+            this.baseUrl(navigationSource.baseUrl)
         }
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
             override fun onResponse(
@@ -265,7 +267,9 @@ class NavigationRouteView @JvmOverloads constructor(
         val options = NavigationViewOptions.builder()
         options.directionsRoute(route)
         options.navigationOptions(
-            MapLibreNavigationOptions.Builder().withSnapToRoute(true).build()
+            MapLibreNavigationOptions.Builder()
+                .withSnapToRoute(true)
+                .build()
         )
         initializeNavigation(options.build())
     }
@@ -541,7 +545,10 @@ class NavigationRouteView @JvmOverloads constructor(
 
     private fun initializePreNavigationLocationEngine(map: MapLibreMap) {
         val locationEngine = navigationViewModel.retrieveNavigation()?.locationEngine ?: return
-        preNavigationLocationEngine = PreNavigationLocationEngine(locationEngine = locationEngine, locationComponent = map.locationComponent)
+        preNavigationLocationEngine = PreNavigationLocationEngine(
+            locationEngine = locationEngine,
+            locationComponent = map.locationComponent
+        )
         preNavigationLocationEngine?.start()
     }
 
