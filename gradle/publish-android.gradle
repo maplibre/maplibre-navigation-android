@@ -42,9 +42,12 @@ afterEvaluate {
 
                 artifactId "${artifactId.replace("libandroid-", "")}-android"
 
-                artifact(bundleReleaseAar) {
-                    builtBy bundleReleaseAar
-                }
+//                artifact(bundleReleaseAar) {
+//                    builtBy bundleReleaseAar
+//                }
+//
+//                artifact tasks.androidJavadocsJar
+//                artifact tasks.androidSourcesJar
 
                 pom {
                     name = project.ext.navigationArtifactTitle
