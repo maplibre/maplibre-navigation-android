@@ -1,6 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5
 
 import org.maplibre.geojson.Point
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import java.util.Locale
 
 data class NavigationRequest(
@@ -8,5 +9,6 @@ data class NavigationRequest(
     val stops: List<Point>? = null,
     val destination: Point,
     val routingService: RoutingService,
-    val language: Locale
+    val language: Locale,
+    val navigationOptions: MapLibreNavigationOptions = MapLibreNavigationOptions()
 )

@@ -142,7 +142,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
                 binding.navigationView.calculateRouteAndStartNavigation(
                     NavigationRequest(
                         origin = Point.fromLngLat(76.93312659859657, 43.2283288597314),
-//                        stops = points,
+                        stops = points,
                         destination = Point.fromLngLat(76.92803341895342,43.23938818876529,),
                         routingService = RoutingService.Mapbox(getString(R.string.base_url), getString(R.string.mapbox_access_token)),
                         language = Locale.getDefault()

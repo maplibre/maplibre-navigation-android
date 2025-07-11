@@ -155,6 +155,7 @@ public class NavigationViewModel {
         initializeLanguage(options);
         initializeTimeFormat(navigationOptions);
         initializeDistanceFormatter(options);
+        navigation.setOptions(navigationOptions);
         if (!isRunning()) {
             addNavigationListeners();
             addMilestones(options);

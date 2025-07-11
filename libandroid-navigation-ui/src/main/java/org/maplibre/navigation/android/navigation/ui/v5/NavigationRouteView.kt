@@ -244,11 +244,11 @@ class NavigationRouteView @JvmOverloads constructor(
                 call: Call<DirectionsResponse>,
                 response: Response<DirectionsResponse>,
             ) {
-                Timber.d("Url: %s", (call.request() as Request).url.toString())
+                Timber.d("Response: $response")
                 response.body()?.let { responseBody ->
                     if (responseBody.routes.isNotEmpty()) {
                         val maplibreResponse = DirectionsResponse.fromJson(responseBody.toJson())
-                        startNavigation(maplibreResponse.routes)
+                        startNavigation(maplibreResponse.routes, request.navigationOptions)
                     }
                 }
             }
@@ -259,18 +259,16 @@ class NavigationRouteView @JvmOverloads constructor(
         })
     }
 
-    private fun startNavigation(routes: List<DirectionsRoute>) {
+    private fun startNavigation(
+        routes: List<DirectionsRoute>,
+        navigationOptions: MapLibreNavigationOptions
+    ) {
         preNavigationLocationEngine?.stop()
-
         val route = routes.first()
         navigationMap?.drawRoutes(routes)
         val options = NavigationViewOptions.builder()
         options.directionsRoute(route)
-        options.navigationOptions(
-            MapLibreNavigationOptions.Builder()
-                .withSnapToRoute(true)
-                .build()
-        )
+        options.navigationOptions(navigationOptions)
         initializeNavigation(options.build())
     }
 
