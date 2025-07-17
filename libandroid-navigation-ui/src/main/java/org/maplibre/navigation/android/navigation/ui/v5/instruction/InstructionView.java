@@ -583,7 +583,7 @@ public class InstructionView extends RelativeLayout implements LifecycleObserver
   private void updateSubStep(BannerText subText, String primaryManeuverModifier) {
     if (shouldShowSubStep(subText)) {
       String maneuverType = subText.getType().getText();
-      String maneuverModifier = subText.getModifier().getText();
+      String maneuverModifier = subText.getModifier() == null ? null : subText.getModifier().getText();
       subManeuverView.setManeuverTypeAndModifier(maneuverType, maneuverModifier);
       Double roundaboutAngle = subText.getDegrees();
       if (roundaboutAngle != null) {
