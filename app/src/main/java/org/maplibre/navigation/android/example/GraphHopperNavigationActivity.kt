@@ -53,7 +53,7 @@ class GraphHopperNavigationActivity :
     private var simulateRoute = false
 
     // MOCK LOCATION CONFIGURATION
-    private val useMockLocation = true
+    private val useMockLocation = false
     private val mockLocation = Location(
         longitude = 13.398931, // Berlin
         latitude = 52.51096,
