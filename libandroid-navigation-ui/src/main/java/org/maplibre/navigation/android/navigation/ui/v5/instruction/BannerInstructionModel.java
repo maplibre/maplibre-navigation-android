@@ -38,10 +38,9 @@ public class BannerInstructionModel extends InstructionModel {
     return primaryBannerText.getType().getText();
   }
 
+  @Nullable
   String retrievePrimaryManeuverModifier() {
-    ManeuverModifier.Type modifier = primaryBannerText.getModifier();
-    if (modifier == null) return null;
-    return modifier.getText();
+    return primaryBannerText.getModifier() == null ? null : primaryBannerText.getModifier().getText();
   }
 
   @Nullable

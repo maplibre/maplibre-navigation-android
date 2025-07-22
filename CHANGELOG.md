@@ -3,6 +3,10 @@ Changelog for the MapLibre Navigation SDK for Android
 
 MapLibre welcomes participation and contributions from everyone.
 
+### v5.0.0-pre9 - Jul 11, 2025
+
+- Update MapLibre native to v11.12.1
+
 ### v5.0.0-pre8 - Jun 27, 2025
 
 - Fix ignoring empty legs when increasing navigation indices [#167](https://github.com/maplibre/maplibre-navigation-android/pull/167)
