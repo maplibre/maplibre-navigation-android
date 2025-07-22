@@ -62,6 +62,7 @@ class NavigationRouteView @JvmOverloads constructor(
     private lateinit var navigationViewModel: NavigationViewModel
     private var navigationMap: NavigationMapLibreMap? = null
     private var preNavigationLocationEngine: PreNavigationLocationEngine? = null
+    private var navigationRoute: NavigationRoute? = null
     private var onTrackingChangedListener: NavigationOnCameraTrackingChangedListener? = null
     private var mapInstanceState: NavigationMapLibreMapInstanceState? = null
     private var isMapInitialized = false
@@ -239,7 +240,8 @@ class NavigationRouteView @JvmOverloads constructor(
             this.accessToken(navigationSource.accessToken)
             this.baseUrl(navigationSource.baseUrl)
         }
-        navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
+        navigationRoute = navigationRouteBuilder.build()
+        navigationRoute?.getRoute(object : Callback<DirectionsResponse> {
             override fun onResponse(
                 call: Call<DirectionsResponse>,
                 response: Response<DirectionsResponse>,
@@ -393,6 +395,7 @@ class NavigationRouteView @JvmOverloads constructor(
     @UiThread
     fun stopNavigation() {
         preNavigationLocationEngine?.start()
+        navigationRoute?.cancelCall()
         navigationPresenter.onNavigationStopped()
         navigationViewModel.stopNavigation()
     }

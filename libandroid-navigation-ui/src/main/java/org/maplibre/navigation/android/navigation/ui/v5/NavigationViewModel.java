@@ -176,9 +176,8 @@ public class NavigationViewModel {
     }
 
     void stopNavigation() {
-        navigation.removeProgressChangeListener(null);
-        navigation.removeMilestoneEventListener(null);
-        navigation.stopNavigation();
+        navigation.onDestroy();
+        deactivateInstructionPlayer();
     }
 
     boolean isOffRoute() {

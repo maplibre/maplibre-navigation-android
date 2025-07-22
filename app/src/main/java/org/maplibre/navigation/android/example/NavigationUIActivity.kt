@@ -120,7 +120,6 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
         points.add(Point.fromLngLat(76.933810, 43.230633))
         points.add(Point.fromLngLat(76.920187, 43.236783))
 //        points.add(Pair(76.930137, 43.230361))
-
         binding.simulateRouteSwitch.setOnCheckedChangeListener { _, isChecked ->
 //            mapLibreMap?.locationComponent?.cameraMode = CameraMode.TRACKING
             simulateRoute = isChecked
@@ -310,7 +309,7 @@ class NavigationUIActivity : ComponentActivity(), MapLibreMap.OnMapClickListener
 //        if (::mapboxMap.isInitialized) {
 //            mapboxMap.removeOnMapClickListener(this)
 //        }
-//        binding.navigationView.onDestroy()
+        binding.navigationView.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
