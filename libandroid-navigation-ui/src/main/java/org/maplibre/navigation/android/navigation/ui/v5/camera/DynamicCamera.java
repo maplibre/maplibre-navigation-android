@@ -27,7 +27,7 @@ public class DynamicCamera extends SimpleCamera {
   private static final double MIN_CAMERA_TILT = 45d;
   private static final double CAMERA_TILT_ZERO = 0d;
   private static final double MAX_CAMERA_ZOOM = 16d;
-  private static final double MIN_CAMERA_ZOOM = 12d;
+  private static final double MIN_CAMERA_ZOOM = 14.5d;
 
   private MapLibreMap mapLibreMap;
   private LegStep currentStep;
