@@ -158,7 +158,7 @@ public final class NavigationRoute {
     }
 
     public void cancelCall() {
-        getCall().cancel();
+        mapboxDirections.cancelCall();
     }
 
     /**

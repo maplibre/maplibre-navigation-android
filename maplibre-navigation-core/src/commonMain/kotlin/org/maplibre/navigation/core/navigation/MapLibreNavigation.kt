@@ -58,7 +58,7 @@ import kotlin.jvm.JvmOverloads
  * @see MapLibreNavigationOptions
  */
 open class MapLibreNavigation @JvmOverloads constructor(
-    val options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
+    var options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
     /**
      * Navigation needs an instance of location engine in order to acquire user location information
      * and handle events based off of the current information. By default, a LOST location engine is

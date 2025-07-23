@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
+import static org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 

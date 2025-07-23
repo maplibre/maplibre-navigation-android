@@ -16,6 +16,8 @@ import static org.maplibre.android.style.layers.PropertyFactory.lineWidth;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
 import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationMapLibreMap.STREETS_LAYER_ID;
 
+import timber.log.Timber;
+
 class MapLayerInteractor {
 
   private static final float DEFAULT_WIDTH = 20f;
@@ -46,7 +48,11 @@ class MapLayerInteractor {
         lineColor(Color.WHITE)
       )
       .withSourceLayer(sourceLayer);
-    mapLibreMap.getStyle().addLayerAt(streetsLayer, LAST_INDEX);
+    try {
+        mapLibreMap.getStyle().addLayerAt(streetsLayer, LAST_INDEX);
+    } catch (Exception e) {
+      Timber.d("Style already exists");
+    }
   }
 
   private void updateLayerWithVisibility(String layerIdentifier, List<Layer> layers, boolean isVisible) {

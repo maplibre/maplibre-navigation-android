@@ -17,7 +17,6 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/instruction_background"
         android:elevation="4dp"
-        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,8 +29,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
-            app:maneuverViewPrimaryColor="?attr/navigationViewBannerManeuverPrimary"
-            app:maneuverViewSecondaryColor="?attr/navigationViewBannerManeuverSecondary"/>
+            />
 
         <TextView
             android:id="@+id/stepDistanceText"
@@ -39,7 +37,6 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textColor="?attr/navigationViewBannerSecondaryText"
             android:textSize="20sp"
             tools:text="3.2 mi"/>
 
@@ -52,7 +49,6 @@
         android:layout_marginBottom="8dp"
         android:background="?attr/navigationViewBannerBackground"
         android:elevation="4dp"
-        android:foreground="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="@+id/instructionManeuverLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +64,6 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textColor="?attr/navigationViewBannerPrimaryText"
             android:textSize="28sp"
             android:textStyle="bold"
             tools:text="Fulton St."/>
@@ -80,7 +75,6 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textColor="?attr/navigationViewBannerSecondaryText"
             android:textSize="22sp"
             android:textStyle="bold"
             tools:text="San Jose / Cupertino / Saratoga Montery / SR-1"/>
@@ -120,7 +114,6 @@
         android:id="@+id/rerouteLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/navigationViewSecondary"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="vertical"
@@ -137,7 +130,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:text="@string/rerouting"
-            android:textColor="?attr/navigationViewBannerPrimaryText"
             android:textSize="20sp"
             android:textStyle="bold"/>
 

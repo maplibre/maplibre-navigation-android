@@ -60,9 +60,9 @@ class GraphHopperNavigationActivity :
 
         binding = ActivityNavigationUiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.mapView.apply {
+        binding.navigationView.apply {
             onCreate(savedInstanceState)
-            getMapAsync(this@GraphHopperNavigationActivity)
+//            getMapAsync(this@GraphHopperNavigationActivity)
         }
 
         binding.startRouteButton.setOnClickListener {
@@ -86,18 +86,18 @@ class GraphHopperNavigationActivity :
             simulateRoute = checked
         }
 
-        binding.clearPoints.setOnClickListener {
-            if (::mapLibreMap.isInitialized) {
-                mapLibreMap.markers.forEach {
-                    mapLibreMap.removeMarker(it)
-                }
-            }
-            destination = null
-            it.visibility = View.GONE
-            binding.startRouteLayout.visibility = View.GONE
-
-            navigationMapRoute?.removeRoute()
-        }
+//        binding.clearPoints.setOnClickListener {
+//            if (::mapLibreMap.isInitialized) {
+//                mapLibreMap.markers.forEach {
+//                    mapLibreMap.removeMarker(it)
+//                }
+//            }
+//            destination = null
+//            it.visibility = View.GONE
+//            binding.startRouteLayout.visibility = View.GONE
+//
+//            navigationMapRoute?.removeRoute()
+//        }
     }
 
     override fun onMapReady(mapLibreMap: MapLibreMap) {
@@ -106,7 +106,7 @@ class GraphHopperNavigationActivity :
             Style.Builder().fromUri(getString(R.string.map_style_light))
         ) { style ->
             enableLocationComponent(style)
-            navigationMapRoute = NavigationMapRoute(binding.mapView, mapLibreMap)
+//            navigationMapRoute = NavigationMapRoute(binding.mapView, mapLibreMap)
             mapLibreMap.addOnMapClickListener(this)
 
             Snackbar.make(
@@ -143,7 +143,7 @@ class GraphHopperNavigationActivity :
         destination = Point(point.longitude, point.latitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
-        binding.clearPoints.visibility = View.VISIBLE
+//        binding.clearPoints.visibility = View.VISIBLE
         calculateRoute()
         return true
     }
@@ -187,7 +187,7 @@ class GraphHopperNavigationActivity :
         // Create request object. Requires graphhopper_url to be set in developer-config.xml
         val request = Request.Builder()
             .header("User-Agent", "MapLibre Android Navigation SDK Demo App")
-            .url(getString(R.string.graphhopper_url))
+//            .url(getString(R.string.graphhopper_url))
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
 
@@ -246,27 +246,27 @@ class GraphHopperNavigationActivity :
 
     override fun onResume() {
         super.onResume()
-        binding.mapView.onResume()
+//        binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        binding.mapView.onPause()
+//        binding.mapView.onPause()
     }
 
     override fun onStart() {
         super.onStart()
-        binding.mapView.onStart()
+//        binding.mapView.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        binding.mapView.onStop()
+//        binding.mapView.onStop()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        binding.mapView.onLowMemory()
+//        binding.mapView.onLowMemory()
     }
 
     override fun onDestroy() {
@@ -274,11 +274,11 @@ class GraphHopperNavigationActivity :
         if (::mapLibreMap.isInitialized) {
             mapLibreMap.removeOnMapClickListener(this)
         }
-        binding.mapView.onDestroy()
+//        binding.mapView.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        binding.mapView.onSaveInstanceState(outState)
+//        binding.mapView.onSaveInstanceState(outState)
     }
 }

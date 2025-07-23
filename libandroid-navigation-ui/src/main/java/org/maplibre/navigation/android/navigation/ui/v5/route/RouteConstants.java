@@ -9,12 +9,18 @@ class RouteConstants {
   static final String ROUTE_LAYER_ID = "mapbox-navigation-route-layer";
   static final String ROUTE_SHIELD_LAYER_ID = "mapbox-navigation-route-shield-layer";
   static final String WAYPOINT_SOURCE_ID = "mapbox-navigation-waypoint-source";
+
+  static final String WAYPOINT_CUSTOM_ID = "mapbox-waypoint-custom-id";
   static final String WAYPOINT_LAYER_ID = "mapbox-navigation-waypoint-layer";
   static final int TWO_POINTS = 2;
   static final int THIRTY = 30;
   static final String ARROW_BEARING = "mapbox-navigation-arrow-bearing";
   static final String ARROW_SHAFT_SOURCE_ID = "mapbox-navigation-arrow-shaft-source";
+
+  static final String ARROW_SHAFT_CUSTOM_ID = "mapbox-arrow-shaft-custom-id";
   static final String ARROW_HEAD_SOURCE_ID = "mapbox-navigation-arrow-head-source";
+
+  static final String ARROW_HEAD_CUSTOM_ID = "mapbox-arrow-head-custom-id";
   static final String ARROW_SHAFT_CASING_LINE_LAYER_ID = "mapbox-navigation-arrow-shaft-casing-layer";
   static final String ARROW_SHAFT_LINE_LAYER_ID = "mapbox-navigation-arrow-shaft-layer";
   static final String ARROW_HEAD_ICON = "mapbox-navigation-arrow-head-icon";
