@@ -95,7 +95,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
 
         withTimeoutOrNull(timeout) {
             suspendCancellableCoroutine { continuation ->
-                locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
+                val delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
                      * Called when the location manager updates the location.
                      *
@@ -138,6 +138,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
                     locationManager.delegate = null
                 }
 
+                locationManager.delegate = delegate
                 locationManager.requestLocation()
             }
         } ?: locationManager.location?.toLocation()
