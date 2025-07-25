@@ -3,6 +3,10 @@ Changelog for the MapLibre Navigation SDK for Android
 
 MapLibre welcomes participation and contributions from everyone.
 
+## Unreleased
+
+- Improve AppleLocationEngine time-out behavior [#176](https://github.com/maplibre/maplibre-navigation-android/pull/176)
+
 ### v5.0.0-pre9 - Jul 11, 2025
 
 - Update MapLibre native to v11.12.1
