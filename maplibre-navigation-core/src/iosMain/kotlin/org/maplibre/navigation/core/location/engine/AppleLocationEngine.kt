@@ -89,11 +89,12 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      * @return The current [Location] or null if unavailable or the timeout is exceeded.
      */
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
+        val locationManager = CLLocationManager().also {
+            it.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
+        }
+
         withTimeoutOrNull(timeout) {
             suspendCancellableCoroutine { continuation ->
-                val locationManager = CLLocationManager().also {
-                    it.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
-                }
                 locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
                      * Called when the location manager updates the location.
@@ -139,7 +140,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
 
                 locationManager.requestLocation()
             }
-        }
+        } ?: locationManager.location?.toLocation()
     }
 
     /**
