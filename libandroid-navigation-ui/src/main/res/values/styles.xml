@@ -92,7 +92,7 @@
         <item name="roundedLineCap">true</item>
     </style>
 
-    <style name="NavigationLocationLayerStyle" parent="@style/maplibre_LocationComponent">
+    <style name="NavigationLocationLayerStyle" parent="maplibre_LocationLayer">
         <item name="maplibre_trackingAnimationDurationMultiplier">2.0</item>
         <item name="maplibre_trackingGesturesManagement">true</item>
     </style>
@@ -155,6 +155,14 @@
         <item name="navigationViewRouteOverviewDrawable">@drawable/ic_route_preview_dark</item>
 
         <item name="navigationViewMapStyle">@string/navigation_guidance_night</item>
+    </style>
+
+    <style name="TestNavigationViewLight" parent="NavigationViewLight">
+        <item name="navigationViewMapStyle">@string/map_style_light</item>
+    </style>
+
+    <style name="TestNavigationViewDark" parent="NavigationViewDark">
+        <item name="navigationViewMapStyle">@string/map_style_dark</item>
     </style>
 
 </resources>
