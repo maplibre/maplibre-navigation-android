@@ -12,6 +12,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
+import platform.CoreLocation.CLActivityType
+import platform.CoreLocation.CLActivityTypeAutomotiveNavigation
 import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
 import platform.CoreLocation.kCLLocationAccuracyBest
@@ -54,6 +56,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      */
     private val locationManager = CLLocationManager().also { locationManager ->
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.activityType = CLActivityTypeAutomotiveNavigation
         locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         locationManager.delegate = locationDelegate
     }
@@ -94,6 +97,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
         val locationManager = CLLocationManager().also { locationManager ->
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.activityType = CLActivityTypeAutomotiveNavigation
             locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         }
 
