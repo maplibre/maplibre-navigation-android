@@ -223,7 +223,8 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ML Nav - iOS Sample App/Info.plist";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used to showing your position on current navigation route";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Using location for navigation";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Using location for navigation";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -255,7 +256,8 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ML Nav - iOS Sample App/Info.plist";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used to showing your position on current navigation route";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Using location for navigation";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Using location for navigation";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
