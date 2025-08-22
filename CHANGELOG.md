@@ -5,6 +5,9 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+### v5.0.0-pre10 - Aug 22, 2025
+
+- Use highest location provider on iOS [#178](https://github.com/maplibre/maplibre-navigation-android/pull/178)
 - Improve AppleLocationEngine time-out behavior [#176](https://github.com/maplibre/maplibre-navigation-android/pull/176)
 
 ### v5.0.0-pre9 - Jul 11, 2025

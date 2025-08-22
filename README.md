@@ -46,10 +46,10 @@ This library is available on Maven Central. To use it, add the following to your
 Step 2. Add the dependency
 ```groovy
   // Core KMP library (without UI)
-  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre4'
+  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre10'
 
   // UI library (Android only)
-  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre4'
+  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre10'
 ```
 
 
