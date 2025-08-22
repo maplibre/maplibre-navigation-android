@@ -14,6 +14,8 @@ import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
 import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
+import platform.CoreLocation.kCLLocationAccuracyBest
+import platform.CoreLocation.kCLLocationAccuracyBestForNavigation
 import platform.Foundation.NSError
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
@@ -51,6 +53,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      * The underlying CLLocationManager instance used to fetch location updates.
      */
     private val locationManager = CLLocationManager().also { locationManager ->
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         locationManager.delegate = locationDelegate
     }
@@ -89,8 +92,9 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      * @return The current [Location] or null if unavailable or the timeout is exceeded.
      */
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
-        val locationManager = CLLocationManager().also {
-            it.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
+        val locationManager = CLLocationManager().also { locationManager ->
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         }
 
         withTimeoutOrNull(timeout) {
