@@ -6,6 +6,7 @@ import org.maplibre.android.maps.MapView;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeChangedListener;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.OnTrackingModeTransitionListener;
+import org.maplibre.navigation.core.models.ManeuverModifier;
 import org.maplibre.navigation.core.navigation.MapLibreNavigation;
 import org.maplibre.navigation.core.navigation.NavigationConstants;
 import org.maplibre.navigation.core.routeprogress.ProgressChangeListener;
@@ -111,7 +112,12 @@ class MapFpsDelegate implements OnTrackingModeChangedListener, OnTrackingModeTra
   }
 
   private boolean validLowFpsManeuver(RouteLegProgress routeLegProgress) {
-    final String maneuverModifier = routeLegProgress.getCurrentStep().getManeuver().getModifier().getText();
+    ManeuverModifier.Type modifier = routeLegProgress.getCurrentStep().getManeuver().getModifier();
+    if (modifier == null) {
+      return false;
+    }
+
+    final String maneuverModifier = modifier.getText();
     return maneuverModifier != null
       && (maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_STRAIGHT)
       || maneuverModifier.equals(NavigationConstants.STEP_MANEUVER_MODIFIER_SLIGHT_LEFT)

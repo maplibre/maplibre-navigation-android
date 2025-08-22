@@ -36,7 +36,7 @@ fun Location.toAndroidLocation() = AndroidLocation(provider)
             androidLoc.speed = speed
         }
 
-        time?.let { time ->
+        timeMilliseconds?.let { time ->
             androidLoc.time = time
         }
 

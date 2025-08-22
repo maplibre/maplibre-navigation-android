@@ -125,7 +125,7 @@ open class ReplayRouteLocationConverter(
             altitude = point.altitude,
             speedMetersPerSeconds = ((speed * ONE_KM_IN_METERS) / ONE_HOUR_IN_SECONDS).toFloat(),
             accuracyMeters = 3f,
-            time = time
+            timeMilliseconds = time
         )
     }
 

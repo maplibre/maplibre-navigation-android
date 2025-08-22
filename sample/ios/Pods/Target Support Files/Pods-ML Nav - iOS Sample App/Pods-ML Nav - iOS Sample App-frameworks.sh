@@ -177,13 +177,13 @@ code_sign_if_enabled() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
+  install_framework "${PODS_ROOT}/../../../maplibre-navigation-core/build/cocoapods/framework/MapLibreNavigationCore.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibre/MapLibre.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibreNavigationCore/MapLibreNavigationCore.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
+  install_framework "${PODS_ROOT}/../../../maplibre-navigation-core/build/cocoapods/framework/MapLibreNavigationCore.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibre/MapLibre.framework"
-  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibreNavigationCore/MapLibreNavigationCore.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

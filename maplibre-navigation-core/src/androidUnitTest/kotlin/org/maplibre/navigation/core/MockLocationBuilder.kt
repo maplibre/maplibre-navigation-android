@@ -48,7 +48,7 @@ internal class MockLocationBuilder {
             longitude = lngValue,
             speedMetersPerSeconds = speedValue,
             accuracyMeters = horizontalAccuracyValue,
-            time = timeValue
+            timeMilliseconds = timeValue
         )
     }
 }

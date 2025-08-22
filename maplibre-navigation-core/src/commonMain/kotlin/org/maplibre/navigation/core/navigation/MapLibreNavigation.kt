@@ -90,6 +90,29 @@ open class MapLibreNavigation @JvmOverloads constructor(
     var fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
     val routeUtils: RouteUtils = RouteUtils(),
 ) {
+    /**
+     * Convenience constructor for tests. Enables injection of navigation engine mock.
+     */
+    internal constructor(
+        options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
+        locationEngine: LocationEngine,
+        cameraEngine: Camera = SimpleCamera(),
+        snapEngine: Snap = SnapToRoute(),
+        offRouteEngine: OffRoute = OffRouteDetector(),
+        fasterRouteEngine: FasterRoute = FasterRouteDetector(options),
+        routeUtils: RouteUtils = RouteUtils(),
+        mapLibreNavigationEngine: MapLibreNavigationEngine
+    ) : this(
+        options,
+        locationEngine,
+        cameraEngine,
+        snapEngine,
+        offRouteEngine,
+        fasterRouteEngine,
+        routeUtils,
+    ) {
+        this.mapLibreNavigationEngine = mapLibreNavigationEngine
+    }
 
     private val navigationRunnerJob = Job()
     private var mapLibreNavigationEngine: NavigationEngine? = null
@@ -278,6 +301,35 @@ open class MapLibreNavigation @JvmOverloads constructor(
 
         getNavigationEngineInternal().stopNavigation()
         eventDispatcher.onNavigationEvent(false)
+    }
+
+    /**
+     * Manually advances navigation to the specified leg and step indices.
+     * This method is intended for waypoint skipping during active turn-by-turn navigation.
+     *
+     * @param legIndex The target leg index (0-based)
+     * @param stepIndex The target step index within the leg (0-based)
+     * @throws IllegalStateException if navigation is not currently active
+     * @throws IllegalArgumentException if indices are invalid for the current route
+     * 
+     * @since 5.0.0
+     */
+    fun setIndex(legIndex: Int, stepIndex: Int) {
+        val currentRoute = route
+        require(currentRoute != null) { "Cannot set index: no route is currently active" }
+        require(getNavigationEngineInternal().isRunning()) { 
+            "Cannot set index: navigation is not currently running" 
+        }
+
+        require(legIndex >= 0 && legIndex < currentRoute.legs.size) {
+            "Invalid leg index: $legIndex. Route has ${currentRoute.legs.size} legs"
+        }
+        require(stepIndex >= 0 && stepIndex < currentRoute.legs[legIndex].steps.size) {
+            "Invalid step index: $stepIndex. Leg $legIndex has ${currentRoute.legs[legIndex].steps.size} steps"
+        }
+        
+        Logger.d { "Manual waypoint update: advancing to leg $legIndex, step $stepIndex" }
+        getNavigationEngineInternal().triggerManualRouteUpdate(legIndex, stepIndex)
     }
 
     /**

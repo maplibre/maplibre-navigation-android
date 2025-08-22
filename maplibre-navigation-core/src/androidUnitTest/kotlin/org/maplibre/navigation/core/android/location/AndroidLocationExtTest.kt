@@ -17,7 +17,7 @@ class AndroidLocationExtTest {
     fun `Convert minimum fields to common location`() {
         val androidLocation = AndroidLocation(null)
 
-        assertEquals(androidLocation.toLocation(), CommonLocation(latitude = 0.0, longitude = 0.0, time = 0))
+        assertEquals(androidLocation.toLocation(), CommonLocation(latitude = 0.0, longitude = 0.0, timeMilliseconds = 0))
     }
 
     @Test
@@ -45,7 +45,7 @@ class AndroidLocationExtTest {
                 altitude = 4.0,
                 bearing = 5.0f,
                 speedMetersPerSeconds = 6.0f,
-                time = 7,
+                timeMilliseconds = 7,
                 altitudeAccuracyMeters = 8.0f,
                 mslAltitude = 9.0,
                 mslAltitudeAccuracyMeters = 10.0f
