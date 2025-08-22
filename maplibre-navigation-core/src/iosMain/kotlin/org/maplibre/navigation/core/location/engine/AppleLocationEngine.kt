@@ -57,6 +57,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
     private val locationManager = CLLocationManager().also { locationManager ->
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.activityType = CLActivityTypeAutomotiveNavigation
+        locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         locationManager.delegate = locationDelegate
     }
@@ -98,6 +99,7 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
         val locationManager = CLLocationManager().also { locationManager ->
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             locationManager.activityType = CLActivityTypeAutomotiveNavigation
+            locationManager.pausesLocationUpdatesAutomatically = false
             locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         }
 
