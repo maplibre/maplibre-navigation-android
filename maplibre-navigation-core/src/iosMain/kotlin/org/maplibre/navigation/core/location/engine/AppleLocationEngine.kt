@@ -12,8 +12,12 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
+import platform.CoreLocation.CLActivityType
+import platform.CoreLocation.CLActivityTypeAutomotiveNavigation
 import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
+import platform.CoreLocation.kCLLocationAccuracyBest
+import platform.CoreLocation.kCLLocationAccuracyBestForNavigation
 import platform.Foundation.NSError
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
@@ -51,6 +55,9 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      * The underlying CLLocationManager instance used to fetch location updates.
      */
     private val locationManager = CLLocationManager().also { locationManager ->
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.activityType = CLActivityTypeAutomotiveNavigation
+        locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
         locationManager.delegate = locationDelegate
     }
@@ -89,12 +96,16 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
      * @return The current [Location] or null if unavailable or the timeout is exceeded.
      */
     private suspend fun getLocation(timeout: Duration): Location? = withContext(Dispatchers.Main) {
+        val locationManager = CLLocationManager().also { locationManager ->
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.activityType = CLActivityTypeAutomotiveNavigation
+            locationManager.pausesLocationUpdatesAutomatically = false
+            locationManager.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
+        }
+
         withTimeoutOrNull(timeout) {
             suspendCancellableCoroutine { continuation ->
-                val locationManager = CLLocationManager().also {
-                    it.allowsBackgroundLocationUpdates = enableBackgroundLocationUpdates
-                }
-                locationManager.delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
+                val delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
                     /**
                      * Called when the location manager updates the location.
                      *
@@ -137,9 +148,10 @@ open class AppleLocationEngine(private val getLocationTimeout: Duration, private
                     locationManager.delegate = null
                 }
 
+                locationManager.delegate = delegate
                 locationManager.requestLocation()
             }
-        }
+        } ?: locationManager.location?.toLocation()
     }
 
     /**

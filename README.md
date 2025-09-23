@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://maplibre.org/img/maplibre-logos/maplibre-logo-for-dark-bg.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://maplibre.org/img/maplibre-logos/maplibre-logo-for-light-bg.svg">
+    <img alt="MapLibre Logo" src="https://maplibre.org/img/maplibre-logos/maplibre-logo-for-light-bg.svg" width="200">
+  </picture>
+</p>
+
 MapLibre Navigation SDK for Android (and KMP)
 =============================================
 
@@ -46,10 +54,10 @@ This library is available on Maven Central. To use it, add the following to your
 Step 2. Add the dependency
 ```groovy
   // Core KMP library (without UI)
-  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre4'
+  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre10'
 
   // UI library (Android only)
-  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre4'
+  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre10'
 ```
 
 
