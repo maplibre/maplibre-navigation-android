@@ -46,7 +46,7 @@ jobs:
       - name: Release (GitHub)
         if: env.make_release
         id: github_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: ${{ env.VERSION }}
           tag_name: ${{ env.VERSION }}
