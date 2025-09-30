@@ -5,6 +5,11 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+### v5.0.0-pre11 - Aug 30, 2025
+
+- Update to latest dependencies [#182](https://github.com/maplibre/maplibre-navigation-android/pull/182)
+- Enable dependabot [#182](https://github.com/maplibre/maplibre-navigation-android/pull/182)
+
 ### v5.0.0-pre10 - Aug 22, 2025
 
 - Use highest location provider on iOS [#178](https://github.com/maplibre/maplibre-navigation-android/pull/178)
