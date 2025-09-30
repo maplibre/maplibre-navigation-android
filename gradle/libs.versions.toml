@@ -1,30 +1,29 @@
 [versions]
-android-gradle-plugin = "8.6.1"
-kotlin = "2.1.0"
-kotlinx-serialization-json = "1.8.0"
-kotlinx-coroutines = "1.10.1"
+android-gradle-plugin = "8.13.0"
+kotlin = "2.2.20"
+kotlinx-serialization-json = "1.9.0"
+kotlinx-coroutines = "1.10.2"
 kotlin-dokka = "2.0.0"
 nexus = "2.0.0"
-kermit = "2.0.5"
-maplibre = "11.12.1"
-maplibre-annotation = "3.0.1"
+kermit = "2.0.8"
+maplibre = "11.13.5"
+maplibre-annotation = "3.0.2"
 maplibre-geojson = "7.0.0-pre0"
 play-services-location = "21.3.0"
-kotlin-test = "2.1.0"
-mockk = "1.13.13"
-robolectric = "4.14.1"
-material = "1.12.0"
-androidx-recyclerview = "1.3.0"
+mockk = "1.14.5"
+robolectric = "4.16"
+material = "1.13.0"
+androidx-recyclerview = "1.4.0"
 androidx-constraintlayout = "2.2.1"
 androidx-cardview = "1.0.0"
-androidx-lifecycle-viewmodel = "2.8.7"
+androidx-lifecycle-viewmodel = "2.9.4"
 androidx-multidex = "2.0.1"
 picasso = "2.71828"
-json = "20240303"
+json = "20250517"
 timber = "5.0.1"
 autovalue = "1.11.0"
 mapbox-geojson = "5.8.0"
-mockito = "5.14.1"
+mockito = "5.20.0"
 junit = "4.13.2"
 leakcanary = "2.14"
 
@@ -65,7 +64,7 @@ json = { group = "org.json", name = "json", version.ref = "json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 # Test KMP
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin-test" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
 # Test Android
