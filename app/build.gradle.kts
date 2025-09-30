@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId = "org.maplibre.navigation.android.example"
-        compileSdk = 34
+        compileSdk = 35
         minSdk = 21
 
         versionCode = 1

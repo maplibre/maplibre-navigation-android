@@ -21,7 +21,7 @@ android {
     namespace = "org.maplibre.navigation.android.navigation.ui.v5"
 
     defaultConfig {
-        compileSdk = 34
+        compileSdk = 35
         minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
