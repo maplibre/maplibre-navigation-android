@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "8.13.0"
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 kotlin-dokka = "2.1.0"
