@@ -15,21 +15,22 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import org.maplibre.navigation.android.navigation.ui.v5.R
-import org.maplibre.navigation.core.models.LegStep
-import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.ui.v5.utils.DistanceFormatter
 import org.maplibre.navigation.android.navigation.ui.v5.utils.LocaleUtils
+import org.maplibre.navigation.android.navigation.ui.v5.utils.ManeuverUtils
 import org.maplibre.navigation.android.navigation.ui.v5.utils.time.TimeFormatter
+import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
-import org.maplibre.navigation.android.navigation.ui.v5.utils.ManeuverUtils
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import timber.log.Timber
 import java.util.Calendar
 
 /**
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
 open class MapLibreNavigationNotification(
-    context: Context,
+    private val context: Context,
     private val mapLibreNavigation: MapLibreNavigation,
     private val maneuverUtils: ManeuverUtils = ManeuverUtils()
 ) : NavigationNotification {
@@ -37,21 +38,18 @@ open class MapLibreNavigationNotification(
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     private val isTwentyFourHourFormat = DateFormat.is24HourFormat(context)
-    private val collapsedNotificationRemoteViews: RemoteViews = RemoteViews(
-        context.packageName,
-        R.layout.collapsed_navigation_notification_layout
-    )
-    private val expandedNotificationRemoteViews: RemoteViews = RemoteViews(
-        context.packageName,
-        R.layout.expanded_navigation_notification_layout
-    )
     private val distanceFormatter: DistanceFormatter = initializeDistanceFormatter(context, mapLibreNavigation)
+    private val notificationBuilder = NotificationCompat.Builder(context, NAVIGATION_NOTIFICATION_CHANNEL)
     private var notification: Notification? = null
     private var currentDistanceText: SpannableString? = null
     private var instructionText: String? = null
-    private var currentManeuverId = 0
+    private var currentManeuverId: Int? = null
+    private var formattedArrivalTime: String? = null
 
-    private val endNavigationBtnReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private val pendingOpenIntent: PendingIntent by lazy { createPendingOpenIntent(context) }
+    private val pendingCloseIntent: PendingIntent by lazy { createPendingCloseIntent(context) }
+
+    private val endNavigationBtnReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             this@MapLibreNavigationNotification.onEndNavigationBtnClick()
         }
@@ -64,12 +62,10 @@ open class MapLibreNavigationNotification(
     }
 
     override fun getNotification(): Notification {
-        return notification!!
+        return checkNotNull(notification) { "Notification has not been initialized" }
     }
 
-    override fun getNotificationId(): Int {
-        return NAVIGATION_NOTIFICATION_ID
-    }
+    override fun getNotificationId(): Int = NAVIGATION_NOTIFICATION_ID
 
     override fun updateNotification(routeProgress: RouteProgress) {
         updateNotificationViews(routeProgress)
@@ -110,34 +106,41 @@ open class MapLibreNavigationNotification(
     }
 
     private fun buildNotification(context: Context) {
-        val pendingOpenIntent = createPendingOpenIntent(context)
-        // Will trigger endNavigationBtnReceiver when clicked
-        val pendingCloseIntent = createPendingCloseIntent(context)
-        expandedNotificationRemoteViews.setOnClickPendingIntent(
-            R.id.endNavigationBtn,
-            pendingCloseIntent
-        )
+        val collapsedView = createCollapsedView(context)
+        val expandedView = createExpandedView(context)
 
-        // Sets up the top bar notification
-        val notificationBuilder =
-            NotificationCompat.Builder(context, NAVIGATION_NOTIFICATION_CHANNEL)
-                .setContentIntent(pendingOpenIntent)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setSmallIcon(R.drawable.ic_navigation)
-                .setCustomContentView(collapsedNotificationRemoteViews)
-                .setCustomBigContentView(expandedNotificationRemoteViews)
-                .setOngoing(true)
+        notificationBuilder
+            .setContentIntent(pendingOpenIntent)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setSmallIcon(R.drawable.ic_navigation)
+            .setCustomContentView(collapsedView)
+            .setCustomBigContentView(expandedView)
+            .setOngoing(true)
 
         notification = notificationBuilder.build()
     }
 
+    private fun createCollapsedView(context: Context): RemoteViews =
+        RemoteViews(context.packageName, R.layout.collapsed_navigation_notification_layout)
+
+    private fun createExpandedView(context: Context): RemoteViews =
+        RemoteViews(context.packageName, R.layout.expanded_navigation_notification_layout).apply {
+            setOnClickPendingIntent(R.id.endNavigationBtn, pendingCloseIntent)
+        }
+
     private fun createPendingOpenIntent(context: Context): PendingIntent {
-        val pm = context.packageManager
-        val intent = pm.getLaunchIntentForPackage(context.packageName)
-        intent!!.setPackage(null)
-        intent.setAction(NavigationNotification.OPEN_NAVIGATION_ACTION)
+        val intent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName)) {
+            "Unable to get launch intent for package: ${context.packageName}"
+        }
+        intent.setPackage(null)
+        intent.action = NavigationNotification.OPEN_NAVIGATION_ACTION
         return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS)
+    }
+
+    private fun createPendingCloseIntent(context: Context): PendingIntent {
+        val intent = Intent(NavigationNotification.END_NAVIGATION_ACTION)
+        return PendingIntent.getBroadcast(context, 0, intent, INTENT_FLAGS)
     }
 
     private fun registerReceiver(context: Context) {
@@ -149,125 +152,100 @@ open class MapLibreNavigationNotification(
         )
     }
 
-    /**
-     * With each location update and new routeProgress, the notification is checked and updated if any
-     * information has changed.
-     *
-     * @param routeProgress the latest RouteProgress object
-     */
-    private fun updateNotificationViews(routeProgress: RouteProgress) {
-        updateInstructionText(routeProgress.currentLegProgress.currentStep)
-        updateDistanceText(routeProgress)
-        updateArrivalTime(routeProgress)
-        val step = if (routeProgress.currentLegProgress.upComingStep != null)
-            routeProgress.currentLegProgress.upComingStep
-        else
-            routeProgress.currentLegProgress.currentStep
-        updateManeuverImage(step!!)
-
-        notificationManager.notify(
-            NAVIGATION_NOTIFICATION_ID,
-            notification
-        )
-    }
-
     private fun unregisterReceiver(context: Context) {
-        context.unregisterReceiver(endNavigationBtnReceiver)
+        try {
+            context.unregisterReceiver(endNavigationBtnReceiver)
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e, "Receiver was not registered")
+        }
         notificationManager.cancel(NAVIGATION_NOTIFICATION_ID)
-    }
-
-    private fun updateInstructionText(step: LegStep) {
-        if (hasInstructions(step) && (instructionText == null || newInstructionText(step))) {
-            instructionText = step.bannerInstructions!![0].primary.text
-            collapsedNotificationRemoteViews.setTextViewText(
-                R.id.notificationInstructionText,
-                instructionText
-            )
-            expandedNotificationRemoteViews.setTextViewText(
-                R.id.notificationInstructionText,
-                instructionText
-            )
-        }
-    }
-
-    private fun hasInstructions(step: LegStep): Boolean {
-        return !step.bannerInstructions.isNullOrEmpty()
-    }
-
-    private fun newInstructionText(step: LegStep): Boolean {
-        return instructionText != step.bannerInstructions!![0].primary.text
-    }
-
-    private fun updateDistanceText(routeProgress: RouteProgress) {
-        if (currentDistanceText == null || newDistanceText(routeProgress)) {
-            currentDistanceText = distanceFormatter.formatDistance(
-                routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
-            )
-            collapsedNotificationRemoteViews.setTextViewText(
-                R.id.notificationDistanceText,
-                currentDistanceText
-            )
-            expandedNotificationRemoteViews.setTextViewText(
-                R.id.notificationDistanceText,
-                currentDistanceText
-            )
-        }
-    }
-
-    private fun newDistanceText(routeProgress: RouteProgress): Boolean {
-        return currentDistanceText != null && currentDistanceText.toString() != distanceFormatter.formatDistance(
-            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
-        ).toString()
-    }
-
-    private fun updateArrivalTime(routeProgress: RouteProgress) {
-        val options = mapLibreNavigation.options
-        val time = Calendar.getInstance()
-        val durationRemaining = routeProgress.durationRemaining
-        val timeFormatType = options.timeFormatType
-        val arrivalTime = TimeFormatter.formatTime(
-            time,
-            durationRemaining,
-            timeFormatType,
-            isTwentyFourHourFormat
-        )
-        val formattedArrivalTime = String.format(etaFormat, arrivalTime)
-        collapsedNotificationRemoteViews.setTextViewText(
-            R.id.notificationArrivalText,
-            formattedArrivalTime
-        )
-        expandedNotificationRemoteViews.setTextViewText(
-            R.id.notificationArrivalText,
-            formattedArrivalTime
-        )
-    }
-
-    private fun updateManeuverImage(step: LegStep) {
-        if (newManeuverId(step)) {
-            val maneuverResource = maneuverUtils.getManeuverResource(step)
-            currentManeuverId = maneuverResource
-            collapsedNotificationRemoteViews.setImageViewResource(
-                R.id.maneuverImage,
-                maneuverResource
-            )
-            expandedNotificationRemoteViews.setImageViewResource(
-                R.id.maneuverImage,
-                maneuverResource
-            )
-        }
-    }
-
-    private fun newManeuverId(step: LegStep): Boolean {
-        return currentManeuverId != maneuverUtils.getManeuverResource(step)
-    }
-
-    private fun createPendingCloseIntent(context: Context): PendingIntent {
-        val endNavigationBtn = Intent(NavigationNotification.END_NAVIGATION_ACTION)
-        return PendingIntent.getBroadcast(context, 0, endNavigationBtn, INTENT_FLAGS)
     }
 
     private fun onEndNavigationBtnClick() {
         mapLibreNavigation.stopNavigation()
+    }
+
+    private fun updateNotificationViews(routeProgress: RouteProgress) {
+        val currentLegProgress = routeProgress.currentLegProgress
+        val currentStep = currentLegProgress.currentStep
+        val upcomingStep = currentLegProgress.upComingStep
+
+        updateInstructionText(currentStep)
+        updateDistanceText(currentLegProgress.currentStepProgress.distanceRemaining)
+        updateFormattedArrivalTime(routeProgress.durationRemaining)
+        updateManeuverImage(upcomingStep ?: currentStep)
+
+        // Create fresh RemoteViews to prevent action accumulation
+        val collapsedView = createCollapsedView(context)
+        val expandedView = createExpandedView(context)
+        applyValuesToRemoteViews(collapsedView, expandedView)
+
+        // Update builder with fresh RemoteViews and build notification
+        notification = notificationBuilder
+            .setCustomContentView(collapsedView)
+            .setCustomBigContentView(expandedView)
+            .build()
+            .also {
+                notificationManager.notify(NAVIGATION_NOTIFICATION_ID, it)
+            }
+    }
+
+    private fun applyValuesToRemoteViews(
+        collapsedView: RemoteViews,
+        expandedView: RemoteViews
+    ) {
+        instructionText?.let { text ->
+            collapsedView.setTextViewText(R.id.notificationInstructionText, text)
+            expandedView.setTextViewText(R.id.notificationInstructionText, text)
+        }
+
+        currentDistanceText?.let { distance ->
+            collapsedView.setTextViewText(R.id.notificationDistanceText, distance)
+            expandedView.setTextViewText(R.id.notificationDistanceText, distance)
+        }
+
+        collapsedView.setTextViewText(R.id.notificationArrivalText, formattedArrivalTime)
+        expandedView.setTextViewText(R.id.notificationArrivalText, formattedArrivalTime)
+
+        currentManeuverId?.let { id ->
+            collapsedView.setImageViewResource(R.id.maneuverImage, id)
+            expandedView.setImageViewResource(R.id.maneuverImage, id)
+        }
+    }
+
+    private fun updateFormattedArrivalTime(durationRemaining: Double){
+        val arrivalTime = TimeFormatter.formatTime(
+            Calendar.getInstance(),
+            durationRemaining,
+            mapLibreNavigation.options.timeFormatType,
+            isTwentyFourHourFormat
+        )
+        formattedArrivalTime = String.format(etaFormat, arrivalTime)
+    }
+
+    private fun updateInstructionText(step: LegStep) {
+        val instructions = step.bannerInstructions?.firstOrNull() ?: return
+        val newText = instructions.primary.text
+
+        if (instructionText != newText) {
+            instructionText = newText
+        }
+    }
+
+    private fun updateDistanceText(distanceRemaining: Double) {
+        val newDistanceText = distanceFormatter.formatDistance(distanceRemaining)
+
+        if (currentDistanceText?.toString() != newDistanceText.toString()) {
+            currentDistanceText = newDistanceText
+        }
+    }
+
+    private fun updateManeuverImage(step: LegStep) {
+        val newManeuverId = maneuverUtils.getManeuverResource(step)
+
+        if (currentManeuverId != 0) {
+            currentManeuverId = newManeuverId
+        }
     }
 
     companion object {
