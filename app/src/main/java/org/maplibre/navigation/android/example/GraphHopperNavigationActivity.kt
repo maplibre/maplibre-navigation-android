@@ -187,7 +187,7 @@ class GraphHopperNavigationActivity :
         // Create request object. Requires graphhopper_url to be set in developer-config.xml
         val request = Request.Builder()
             .header("User-Agent", "MapLibre Android Navigation SDK Demo App")
-            .url(getString(R.string.graphhopper_url))
+            .url(getString(R.string.graphhopper_url) + "?key=" + getString(R.string.graphhopper_key))
             .post(requestBodyJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
             .build()
 
@@ -215,11 +215,12 @@ class GraphHopperNavigationActivity :
                             .first()
                             .copy(
                                 routeOptions = RouteOptions(
-                                    // See ValhallaNavigationActivity why these dummy route options are necessary
-                                    baseUrl = "https://valhalla.routing",
-                                    profile = "valhalla",
-                                    user = "valhalla",
-                                    accessToken = "valhalla",
+                                    // Used for rerouting. See ValhallaNavigationActivity.
+                                    // TODO: problematic as not the original POST request is used, see #168
+                                    baseUrl = getString(R.string.graphhopper_url),
+                                    profile = "car",
+                                    user = "gh",
+                                    accessToken = "pk." + getString(R.string.graphhopper_key),
                                     voiceInstructions = true,
                                     bannerInstructions = true,
                                     language = language,
