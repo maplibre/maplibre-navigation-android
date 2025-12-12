@@ -215,7 +215,7 @@ class GraphHopperNavigationActivity :
                             .first()
                             .copy(
                                 routeOptions = RouteOptions(
-                                    // Used for rerouting. See ValhallaNavigationActivity.
+                                    // Used for rerouting. See #201.
                                     // TODO: problematic as not the original POST request is used, see #168
                                     baseUrl = getString(R.string.graphhopper_url),
                                     profile = "car",
