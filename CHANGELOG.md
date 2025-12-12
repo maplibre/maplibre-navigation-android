@@ -5,6 +5,10 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Update MapLibre native to v12.3.0
+- Bump minSdk to 23 for UI library (required by MapLibre 12.x)
+- Update other dependencies
+
 ### v5.0.0-pre11 - Aug 30, 2025
 
 - Update to latest dependencies [#182](https://github.com/maplibre/maplibre-navigation-android/pull/182)
