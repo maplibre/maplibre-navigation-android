@@ -3,7 +3,9 @@ android-gradle-plugin = "8.13.2"
 kotlin = "2.2.21"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
-kotlin-dokka = "2.1.0"
+# TODO: Update to dokka v2 configuration before update to >=2.1.0
+#noinspection NewerVersionAvailable
+kotlin-dokka = "2.0.0"
 nexus = "2.0.0"
 kermit = "2.0.8"
 maplibre = "12.3.0"
