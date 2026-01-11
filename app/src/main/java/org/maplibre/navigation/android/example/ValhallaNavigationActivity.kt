@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
+import kotlinx.serialization.json.*
 import org.maplibre.geojson.Point
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
@@ -180,35 +180,33 @@ class ValhallaNavigationActivity :
         // That would allow us to skip adding fake attributes further down as well.
         // But this is the first step to show how the newly added banner_instructions
         // and voice_instructions of Valhalla can be used to generate directions directly:
-        val requestBody = mapOf(
-            "format" to "osrm",
-            "costing" to "auto",
-            "banner_instructions" to true,
-            "voice_instructions" to true,
-            "language" to language,
-            "directions_options" to mapOf(
-                "units" to "kilometers"
-            ),
-            "costing_options" to mapOf(
-                "auto" to mapOf(
-                    "top_speed" to 130
-                )
-            ),
-            "locations" to listOf(
-                mapOf(
-                    "lon" to origin.longitude(),
-                    "lat" to origin.latitude(),
-                    "type" to "break"
-                ),
-                mapOf(
-                    "lon" to destination.longitude(),
-                    "lat" to destination.latitude(),
-                    "type" to "break"
-                )
-            )
-        )
-
-        val requestBodyJson = Gson().toJson(requestBody)
+        val requestBodyJson = buildJsonObject {
+            put("format", "osrm")
+            put("costing", "auto")
+            put("banner_instructions", true)
+            put("voice_instructions", true)
+            put("language", language)
+            putJsonObject("directions_options") {
+                put("units", "kilometers")
+            }
+            putJsonObject("costing_options") {
+                putJsonObject("auto") {
+                    put("top_speed", 130)
+                }
+            }
+            putJsonArray("locations") {
+                addJsonObject {
+                    put("lon", origin.longitude())
+                    put("lat", origin.latitude())
+                    put("type", "break")
+                }
+                addJsonObject {
+                    put("lon", destination.longitude())
+                    put("lat", destination.latitude())
+                    put("type", "break")
+                }
+            }
+        }.toString()
         val client = OkHttpClient()
 
         // Create request object. Requires valhalla_url to be set in developer-config.xml
