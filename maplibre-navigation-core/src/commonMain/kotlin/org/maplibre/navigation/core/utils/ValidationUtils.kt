@@ -19,6 +19,13 @@ object ValidationUtils {
             checkInvalidVoiceInstructions(routeOptions)
             checkInvalidBannerInstructions(routeOptions)
         }
+
+        for (leg in directionsRoute.legs) {
+            val annotation = leg.annotation
+            if (annotation?.maxSpeed != null && annotation.distance == null) {
+                throw IllegalArgumentException("Leg has maxspeed annotation but missing distance annotation")
+            }
+        }
     }
 
     private fun checkInvalidVoiceInstructions(routeOptions: RouteOptions) {

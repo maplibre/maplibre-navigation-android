@@ -44,6 +44,13 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true)
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    @Throws(Exception::class)
+    fun validDirectionsRoute_isInvalidWithoutDistance() {
+        val route = buildTestDirectionsRoute("directions_two_leg_route_without_distances.json");
+        ValidationUtils.validDirectionsRoute(route, false)
+    }
+
     @Throws(IOException::class)
     private fun buildRouteWithNullInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
