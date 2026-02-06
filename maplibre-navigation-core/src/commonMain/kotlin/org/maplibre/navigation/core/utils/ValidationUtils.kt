@@ -20,10 +20,10 @@ object ValidationUtils {
             checkInvalidBannerInstructions(routeOptions)
         }
 
-        for (leg in directionsRoute.legs) {
+        for ((index, leg) in directionsRoute.legs.withIndex()) {
             val annotation = leg.annotation
             if (annotation?.maxSpeed != null && annotation.distance == null) {
-                throw IllegalArgumentException("Leg has maxspeed annotation but missing distance annotation")
+                throw IllegalArgumentException("Leg $index has maxspeed annotation but missing distance annotation")
             }
         }
     }

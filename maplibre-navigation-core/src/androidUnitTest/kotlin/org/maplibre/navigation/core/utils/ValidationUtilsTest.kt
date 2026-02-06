@@ -7,6 +7,8 @@ import org.maplibre.navigation.core.models.RouteOptions
 import java.io.IOException
 import java.util.MissingFormatArgumentException
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ValidationUtilsTest : BaseTest() {
 
@@ -44,11 +46,14 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true)
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    @Throws(Exception::class)
+    @Test
     fun validDirectionsRoute_isInvalidWithoutDistance() {
         val route = buildTestDirectionsRoute("directions_two_leg_route_without_distances.json");
-        ValidationUtils.validDirectionsRoute(route, false)
+        val exception = assertFailsWith<IllegalArgumentException> {
+            ValidationUtils.validDirectionsRoute(route, false)
+        }
+
+        assertEquals("Leg 0 has maxspeed annotation but missing distance annotation", exception.message)
     }
 
     @Throws(IOException::class)
