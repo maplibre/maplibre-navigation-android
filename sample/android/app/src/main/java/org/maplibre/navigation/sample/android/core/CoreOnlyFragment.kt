@@ -149,7 +149,7 @@ class CoreOnlyFragment : Fragment() {
     private suspend fun fetchRoute(): DirectionsResponse = suspendCoroutine { continuation ->
         val provider = "valhalla"
 
-        val requestBody = if provider == "graphhopper" {
+        val requestBody = if (provider == "graphhopper") {
             mapOf(
                 "type" to "mapbox",
                 "profile" to "car",
