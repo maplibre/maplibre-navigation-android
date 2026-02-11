@@ -148,7 +148,6 @@ class CoreOnlyFragment : Fragment() {
 
     private suspend fun fetchRoute(): DirectionsResponse = suspendCoroutine { continuation ->
         val provider = "valhalla"
-
         val requestBodyJson = if (provider == "graphhopper") {
             buildJsonObject {
                 put("type", "mapbox")
