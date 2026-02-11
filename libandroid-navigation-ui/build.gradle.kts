@@ -105,7 +105,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
     testImplementation(libs.robolectric)
-    testImplementation(libs.json)
     testImplementation(libs.mockk)
 }
 
