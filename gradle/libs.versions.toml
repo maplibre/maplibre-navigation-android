@@ -21,7 +21,6 @@ androidx-cardview = "1.0.0"
 androidx-lifecycle-viewmodel = "2.10.0"
 androidx-multidex = "2.0.1"
 picasso = "2.71828"
-json = "20250517"
 timber = "5.0.1"
 autovalue = "1.11.1"
 mapbox-geojson = "5.8.0"
@@ -62,7 +61,6 @@ autovalue = { group = "com.google.auto.value", name = "auto-value", version.ref 
 autovalue-annotations = { group = "com.google.auto.value", name = "auto-value-annotations", version.ref = "autovalue" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-json = { group = "org.json", name = "json", version.ref = "json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 # Test KMP

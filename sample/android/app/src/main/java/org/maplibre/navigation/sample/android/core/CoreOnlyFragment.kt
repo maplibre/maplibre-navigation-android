@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
+import kotlinx.serialization.json.*
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -148,53 +148,56 @@ class CoreOnlyFragment : Fragment() {
 
     private suspend fun fetchRoute(): DirectionsResponse = suspendCoroutine { continuation ->
         val provider = "valhalla"
-
-        val requestBody = if (provider == "graphhopper") {
-            mapOf(
-                "type" to "mapbox",
-                "profile" to "car",
-                "locale" to "en-US",
-                "points" to listOf(
+        val requestBodyJson = if (provider == "graphhopper") {
+            buildJsonObject {
+                put("type", "mapbox")
+                put("profile", "car")
+                put("locale", "en-US")
+                putJsonArray("points") {
                     // Hannover, Germany
-                    listOf(9.6935451, 52.3758408),
+                    addJsonArray {
+                        add(9.6935451)
+                        add(52.3758408)
+                    }
                     // Hamburg, Germany
-                    listOf(9.9769191, 53.5426183)
-                )
+                    addJsonArray {
+                        add(9.9769191)
+                        add(53.5426183)
+                    }
+                }
                 // flexible options possible via "custom_model"
-            )
+            }.toString()
         } else {
-            mapOf(
-                "format" to "osrm",
-                "costing" to "auto",
-                "banner_instructions" to true,
-                "voice_instructions" to true,
-                "language" to "en-US",
-                "directions_options" to mapOf(
-                    "units" to "kilometers"
-                ),
-                "costing_options" to mapOf(
-                    "auto" to mapOf(
-                        "top_speed" to 130
-                    )
-                ),
-                "locations" to listOf(
+            buildJsonObject {
+                put("format", "osrm")
+                put("costing", "auto")
+                put("banner_instructions", true)
+                put("voice_instructions", true)
+                put("language", "en-US")
+                putJsonObject("directions_options") {
+                    put("units", "kilometers")
+                }
+                putJsonObject("costing_options") {
+                    putJsonObject("auto") {
+                        put("top_speed", 130)
+                    }
+                }
+                putJsonArray("locations") {
                     // Hannover, Germany
-                    mapOf(
-                        "lon" to 9.6935451,
-                        "lat" to 52.3758408,
-                        "type" to "break"
-                    ),
+                    addJsonObject {
+                        put("lon", 9.6935451)
+                        put("lat", 52.3758408)
+                        put("type", "break")
+                    }
                     // Hamburg, Germany
-                    mapOf(
-                        "lon" to 9.9769191,
-                        "lat" to 53.5426183,
-                        "type" to "break"
-                    )
-                )
-            )
+                    addJsonObject {
+                        put("lon", 9.9769191)
+                        put("lat", 53.5426183)
+                        put("type", "break")
+                    }
+                }
+            }.toString()
         }
-
-        val requestBodyJson = Gson().toJson(requestBody)
         val client = OkHttpClient()
 
         val url = if (provider == "valhalla") "https://valhalla1.openstreetmap.de/route"

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 apply {
@@ -87,6 +88,9 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // Leak Canary
     implementation(libs.leakcanary)

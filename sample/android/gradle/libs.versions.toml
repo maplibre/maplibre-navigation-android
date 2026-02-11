@@ -6,6 +6,8 @@ maplibre = "11.6.1"
 maplibre-geojson = "343269b2"
 maplibre-navigation = "411fb14c"
 
+kotlinx-serialization-json = "1.9.0"
+
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -24,6 +26,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 okhttp =  { group = "com.squareup.okhttp3", name ="okhttp", version = "4.12.0" }
 
