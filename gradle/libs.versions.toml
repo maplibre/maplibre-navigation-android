@@ -5,7 +5,7 @@ kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 # TODO: Update to dokka v2 configuration before update to >=2.1.0
 #noinspection NewerVersionAvailable
-kotlin-dokka = "2.0.0"
+kotlin-dokka = "2.1.0"
 nexus = "2.0.0"
 kermit = "2.0.8"
 maplibre = "12.3.1"
