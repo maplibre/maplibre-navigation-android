@@ -27,8 +27,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.geojson.turf.TurfUnit
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.core.location.Location
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -50,6 +52,17 @@ class GraphHopperNavigationActivity :
 
     private var simulateRoute = false
 
+    // MOCK LOCATION CONFIGURATION
+    private val useMockLocation = false
+    private val mockLocation = Location(
+        longitude = 13.398931, // Berlin
+        latitude = 52.51096,
+        accuracyMeters = 10f,
+        bearing = 0f,
+        speedMetersPerSeconds = 0f,
+        timeMilliseconds = System.currentTimeMillis()
+    )
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +80,7 @@ class GraphHopperNavigationActivity :
 
         binding.startRouteButton.setOnClickListener {
             route?.let { route ->
-                val userLocation = mapLibreMap.locationComponent.lastKnownLocation ?: return@let
+                val userLocation = getMockOrRealLocation() ?: return@let
                 val options = NavigationLauncherOptions.builder()
                     .directionsRoute(route)
                     .shouldSimulateRoute(simulateRoute)
@@ -109,9 +122,15 @@ class GraphHopperNavigationActivity :
             navigationMapRoute = NavigationMapRoute(binding.mapView, mapLibreMap)
             mapLibreMap.addOnMapClickListener(this)
 
+            val location = getMockOrRealLocation()
+            if(location != null)
+                mapLibreMap.animateCamera(CameraUpdateFactory.
+                    newLatLngZoom(LatLng(location.latitude, location.longitude), 15.0))
+
             Snackbar.make(
                 findViewById(R.id.container),
-                "Tap map to place destination",
+                if (useMockLocation) "Using mock location - Tap map to place destination"
+                else "Tap map to place destination",
                 Snackbar.LENGTH_LONG,
             ).show()
         }
@@ -139,6 +158,24 @@ class GraphHopperNavigationActivity :
         }
     }
 
+    // Helper function to get mock or real location
+    private fun getMockOrRealLocation(): Location? {
+        return if (useMockLocation) {
+            mockLocation
+        } else {
+            mapLibreMap.locationComponent.lastKnownLocation?.let { loc ->
+                Location(
+                    longitude = loc.longitude,
+                    latitude = loc.latitude,
+                    accuracyMeters = loc.accuracy,
+                    bearing = loc.bearing,
+                    speedMetersPerSeconds = loc.speed,
+                    timeMilliseconds = loc.time
+                )
+            }
+        }
+    }
+
     override fun onMapClick(point: LatLng): Boolean {
         destination = Point(point.longitude, point.latitude)
 
@@ -150,7 +187,7 @@ class GraphHopperNavigationActivity :
 
     private fun calculateRoute() {
         binding.startRouteLayout.visibility = View.GONE
-        val userLocation = mapLibreMap.locationComponent.lastKnownLocation
+        val userLocation = getMockOrRealLocation()
         val destination = destination
         if (userLocation == null) {
             Timber.d("calculateRoute: User location is null, therefore, origin can't be set.")
@@ -214,7 +251,7 @@ class GraphHopperNavigationActivity :
                             "calculateRoute GraphHopperRouting responseBodyJson: %s",
                             responseBodyJson
                         )
-                        val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson);
+                        val maplibreResponse = DirectionsResponse.fromJson(responseBodyJson)
                         this@GraphHopperNavigationActivity.route = maplibreResponse.routes
                             .first()
                             .copy(
