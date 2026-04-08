@@ -8,7 +8,7 @@ nexus = "2.0.0"
 kermit = "2.0.8"
 maplibre = "11.13.5"
 maplibre-annotation = "3.0.2"
-maplibre-geojson = "7.0.0-pre0"
+spatial-k = "0.6.1"
 play-services-location = "21.3.0"
 mockk = "1.14.5"
 robolectric = "4.16"
@@ -41,8 +41,8 @@ nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
 # KMP
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-maplibre-geojson = { group = "org.maplibre.gl", name = "geojson", version.ref = "maplibre-geojson" }
-maplibre-geojson-turf = { group = "org.maplibre.gl", name = "turf", version.ref = "maplibre-geojson" }
+spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version.ref = "spatial-k" }
+spatialk-turf = { group = "org.maplibre.spatialk", name = "turf", version.ref = "spatial-k" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 
 # Android

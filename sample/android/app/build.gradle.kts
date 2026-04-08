@@ -42,15 +42,10 @@ android {
 }
 
 dependencies {
-    implementation(libs.maplibre) {
-        // Exclude old version of GeoJSON libs
-        // At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
+    implementation(libs.maplibre)
 
     implementation(libs.maplibre.navigation.core)
-    implementation(libs.maplibre.geojson)
+    implementation(libs.spatialk.geojson)
 
     implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
