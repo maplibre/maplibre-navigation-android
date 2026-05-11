@@ -1,11 +1,13 @@
 package org.maplibre.navigation.core.navigation.camera
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.DirectionsRoute
-import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
+import org.maplibre.navigation.core.utils.Constants
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.bearingTo
+import org.maplibre.spatialk.units.Bearing
+import org.maplibre.spatialk.units.extensions.inDegrees
 
 /**
  * The default camera used by [MapLibreNavigation].
@@ -76,24 +78,26 @@ open class SimpleCamera : Camera {
 
         initialRoute = route
         routeCoordinates = generateRouteCoordinates(route)
-        initialBearing = TurfMeasurement.bearing(
-            Point(
-                longitude = routeCoordinates.first().longitude,
-                latitude = routeCoordinates.first().latitude,
-                altitude = routeCoordinates.first().altitude
-            ),
+        initialBearing = Point(
+            longitude = routeCoordinates.first().longitude,
+            latitude = routeCoordinates.first().latitude,
+            altitude = routeCoordinates.first().altitude
+        ).bearingTo(
             Point(
                 longitude = routeCoordinates[1].longitude,
                 latitude = routeCoordinates[1].latitude,
                 altitude = routeCoordinates[1].altitude
             )
         )
+            .clockwiseRotationTo(Bearing.North)
+            .inDegrees
     }
 
     private fun generateRouteCoordinates(route: DirectionsRoute?): List<Point> {
         return route?.let { rte ->
-            val lineString = LineString(rte.geometry, Constants.PRECISION_6)
-            lineString.coordinates
+            val lineString =
+                PolylineEncoding.decode(encoded = rte.geometry, precision = Constants.PRECISION_6)
+            lineString.map(::Point)
         } ?: emptyList()
     }
 

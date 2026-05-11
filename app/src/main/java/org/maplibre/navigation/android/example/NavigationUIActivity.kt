@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import org.maplibre.navigation.core.models.DirectionsResponse
-import org.maplibre.geojson.Point
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -22,12 +21,14 @@ import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
 import org.maplibre.navigation.core.models.DirectionsRoute
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.toMapLibre
 import org.maplibre.navigation.core.models.UnitType
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inMeters
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -146,8 +147,8 @@ class NavigationUIActivity :
     override fun onMapClick(point: LatLng): Boolean {
         var addMarker = true
         when {
-            destination == null -> destination = Point.fromLngLat(point.longitude, point.latitude)
-            waypoint == null -> waypoint = Point.fromLngLat(point.longitude, point.latitude)
+            destination == null -> destination = Point(point.longitude, point.latitude)
+            waypoint == null -> waypoint = Point(point.longitude, point.latitude)
             else -> {
                 Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
                 addMarker = false
@@ -175,16 +176,19 @@ class NavigationUIActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
-            binding.startRouteLayout.visibility = View.GONE
+
+
+        val origin = Point(userLocation.longitude, userLocation.latitude)
+        if (distance(origin, destination).inMeters < 50) {
+            Timber.d("calculateRoute: distance < 50 m")
+            binding.startRouteButton.visibility = View.GONE
             return
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
-            this.origin(origin)
-            this.destination(destination)
+            this.origin(origin.toMapLibre())
+            this.destination(destination.toMapLibre())
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             // If you are using this with the GraphHopper Directions API, you need to uncomment user and profile here.

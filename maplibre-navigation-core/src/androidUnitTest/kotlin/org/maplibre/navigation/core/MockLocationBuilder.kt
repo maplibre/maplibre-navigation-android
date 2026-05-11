@@ -1,12 +1,17 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
+import org.maplibre.android.annotations.Polyline
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.bearingTo
+import org.maplibre.spatialk.turf.measurement.offset
+import org.maplibre.spatialk.units.Bearing
+import org.maplibre.spatialk.units.Rotation
+import org.maplibre.spatialk.units.extensions.degrees
+import org.maplibre.spatialk.units.extensions.meters
 
 internal class MockLocationBuilder {
     fun buildDefaultMockLocationUpdate(lng: Double, lat: Double): Location {
@@ -17,22 +22,20 @@ internal class MockLocationBuilder {
         val fromLocation = Point(
             location.longitude, location.latitude, location.altitude
         )
-        return TurfMeasurement.destination(
-            fromLocation,
-            distanceAway,
-            90.0,
-            TurfUnit.METERS
-        )
+
+        return fromLocation.offset(distanceAway.meters, Bearing.North + 90.degrees)
+            .let(::Point)
     }
 
     fun buildPointAwayFromPoint(point: Point, distanceAway: Double, bearing: Double): Point {
-        return TurfMeasurement.destination(point, distanceAway, bearing, TurfUnit.METERS)
+        return point.offset(distanceAway.meters, Bearing.North + bearing.degrees)
+            .let(::Point)
     }
 
     fun createCoordinatesFromCurrentStep(progress: RouteProgress): List<Point> {
         val currentStep = progress.currentLegProgress.currentStep
-        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
-        return lineString.coordinates
+        return PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+            .map(::Point)
     }
 
     private fun buildMockLocationUpdate(

@@ -81,6 +81,7 @@ dependencies {
 
     api(libs.maplibre.annotation)
     implementation(libs.maplibre)
+    implementation(libs.maplibre.turf)
 
     // Mapbox SDKs (needed for requests)
     api(libs.mapbox.geojson)

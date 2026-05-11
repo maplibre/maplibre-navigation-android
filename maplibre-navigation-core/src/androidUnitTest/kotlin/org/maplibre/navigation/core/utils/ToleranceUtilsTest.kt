@@ -1,13 +1,14 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
-import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfUnit
-import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.models.StepIntersection
+import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.locateAlong
+import org.maplibre.spatialk.turf.measurement.midpoint
+import org.maplibre.spatialk.units.extensions.meters
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,13 +18,14 @@ class ToleranceUtilsTest : BaseTest() {
     fun dynamicRerouteDistanceTolerance_userFarAwayFromIntersection() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
-        val stepPoints = PolylineUtils.decode(
+        val stepPoints = PolylineEncoding.decode(
             route.geometry, Constants.PRECISION_6
         )
-        val midPoint = TurfMeasurement.midpoint(stepPoints[0], stepPoints[1])
+
+        val midPoint = midpoint(stepPoints[0], stepPoints[1])
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
-            midPoint,
+            Point(midPoint),
             routeProgress,
             MapLibreNavigationOptions()
         )
@@ -36,9 +38,8 @@ class ToleranceUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
         val distanceToIntersection = route.distance - 39
-        val lineString = LineString(route.geometry, Constants.PRECISION_6)
-        val closePoint =
-            TurfMeasurement.along(lineString, distanceToIntersection, TurfUnit.METERS)
+        val positions = PolylineEncoding.decode(route.geometry, Constants.PRECISION_6)
+        val closePoint = LineString(positions).locateAlong(distanceToIntersection.meters)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,
@@ -54,9 +55,8 @@ class ToleranceUtilsTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val routeProgress = buildDefaultTestRouteProgress()
         val distanceToIntersection = route.distance
-        val lineString = LineString(route.geometry, Constants.PRECISION_6)
-        val closePoint =
-            TurfMeasurement.along(lineString, distanceToIntersection, TurfUnit.METERS)
+        val positions = PolylineEncoding.decode(route.geometry, Constants.PRECISION_6)
+        val closePoint = LineString(positions).locateAlong(distanceToIntersection.meters)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
             closePoint,

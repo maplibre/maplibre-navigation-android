@@ -1,6 +1,6 @@
 package org.maplibre.navigation.core.location
 
-import org.maplibre.geojson.model.Point
+import org.maplibre.spatialk.geojson.Point
 
 /**
  * A generic model that represents a user location.

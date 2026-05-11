@@ -1,6 +1,5 @@
 package org.maplibre.navigation.core.navigation
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
@@ -23,6 +22,7 @@ import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
+import org.maplibre.spatialk.geojson.Point
 import kotlin.jvm.JvmField
 
 open class NavigationRouteProcessor(

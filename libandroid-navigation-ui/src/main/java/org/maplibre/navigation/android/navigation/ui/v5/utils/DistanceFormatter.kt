@@ -97,7 +97,11 @@ class DistanceFormatter(
      * @return true if new formatter is needed, false otherwise
      */
     @Suppress("unused")
-    fun shouldUpdate(language: String, unitType: UnitType, roundingIncrement: MapLibreNavigationOptions.RoundingIncrement): Boolean {
+    fun shouldUpdate(
+        language: String,
+        unitType: UnitType,
+        roundingIncrement: MapLibreNavigationOptions.RoundingIncrement
+    ): Boolean {
         return this.language != language || this.unitType != unitType || this.roundingIncrement != roundingIncrement
     }
 
@@ -109,7 +113,8 @@ class DistanceFormatter(
      * @return number rounded to closest rounding increment, or rounding increment if distance is less
      */
     private fun roundToClosestIncrement(distance: Double): String {
-        val roundedNumber = (Math.round(distance).toInt()) / roundingIncrement.increment * roundingIncrement.increment
+        val roundedNumber = (Math.round(distance)
+            .toInt()) / roundingIncrement.increment * roundingIncrement.increment
 
         return (if (roundedNumber < roundingIncrement.increment) roundingIncrement.increment else roundedNumber).toString()
     }

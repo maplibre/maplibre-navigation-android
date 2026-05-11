@@ -38,6 +38,7 @@ kotlin {
         commonMain.dependencies {
             api(libs.spatialk.geojson)
             api(libs.spatialk.turf)
+            api(libs.spatialk.polyline)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines)
@@ -77,6 +78,7 @@ kotlin {
             transitiveExport = false
             export(libs.spatialk.geojson)
             export(libs.spatialk.turf)
+            export(libs.spatialk.polyline)
         }
     }
 }

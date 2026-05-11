@@ -1,7 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5.camera;
 
-
-import static org.maplibre.geojson.common.CommonExtKt.toJvm;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toMapLibre;
 
 import org.maplibre.android.geometry.LatLng;
 import org.maplibre.geojson.Point;
@@ -135,7 +134,7 @@ public class DynamicCamera extends SimpleCamera {
   private CameraPosition createCameraPosition(Location location, RouteProgress routeProgress) {
     LegStep upComingStep = routeProgress.getCurrentLegProgress().getUpComingStep();
     if (upComingStep != null) {
-      Point stepManeuverPoint = toJvm(upComingStep.getManeuver().getLocation());
+      Point stepManeuverPoint = toMapLibre(upComingStep.getManeuver().getLocation());
 
       List<LatLng> latLngs = new ArrayList<>();
       LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());

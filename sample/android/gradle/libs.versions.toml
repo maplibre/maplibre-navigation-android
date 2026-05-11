@@ -1,10 +1,10 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.0"
+agp = "9.2.1"
+kotlin = "2.3.21"
 
 maplibre = "11.6.1"
 spatial-k = "0.6.1"
-maplibre-navigation = "411fb14c"
+maplibre-navigation = "5.0.0-pre13"
 
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -31,7 +31,7 @@ okhttp =  { group = "com.squareup.okhttp3", name ="okhttp", version = "4.12.0" }
 maplibre = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
 spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version.ref = "spatial-k" }
 spatialk-turf = { group = "org.maplibre.spatialk", name = "turf", version.ref = "spatial-k" }
-maplibre-navigation-core = { group = "org.maplibre.navigation", name = "maplibre-navigation-core", version.ref = "maplibre-navigation" }
+maplibre-navigation-core = { group = "org.maplibre.navigation", name = "navigation-core", version.ref = "maplibre-navigation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
+import org.maplibre.spatialk.geojson.Point
 import kotlin.math.max
 
 /**

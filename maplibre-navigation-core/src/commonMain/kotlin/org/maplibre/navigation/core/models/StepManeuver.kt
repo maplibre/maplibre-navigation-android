@@ -2,8 +2,8 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.serializer.PointSerializer
+import org.maplibre.spatialk.geojson.Point
 
 /**
  * Gives maneuver information about one [LegStep].

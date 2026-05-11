@@ -23,7 +23,7 @@ import java.util.Locale;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toMapLibre;
 import static org.mockito.Mockito.when;
 
 public class NavigationRouteTest extends BaseTest {
@@ -119,15 +119,15 @@ public class NavigationRouteTest extends BaseTest {
 
     @Test
     public void addRouteOptionsIncludedInRequest() throws Exception {
-        List<Point> coordinates = new ArrayList<>();
-        coordinates.add(Point.fromLngLat(1.0, 2.0));
-        coordinates.add(Point.fromLngLat(1.0, 5.0));
+        List<org.maplibre.spatialk.geojson.Point> coordinates = new ArrayList<>();
+        coordinates.add(new org.maplibre.spatialk.geojson.Point(1.0, 2.0, null, null));
+        coordinates.add(new org.maplibre.spatialk.geojson.Point(1.0, 5.0, null, null));
 
         RouteOptions routeOptions = new RouteOptions.Builder(
             "https://api-directions-traf.com",
             "example_user",
             NavigationRoute.PROFILE_WALKING,
-            toJvmPoints(coordinates)
+            coordinates
         )
             .withAccessToken(BaseTest.ACCESS_TOKEN)
             .withRequestUuid("XYZ_UUID")
@@ -140,8 +140,8 @@ public class NavigationRouteTest extends BaseTest {
             .build();
 
         NavigationRoute navigationRoute = NavigationRoute.builder(context, localeUtils)
-            .origin(coordinates.get(0))
-            .destination(coordinates.get(1))
+            .origin(toMapLibre(coordinates.get(0)))
+            .destination(toMapLibre(coordinates.get(1)))
             .routeOptions(routeOptions)
             .build();
 

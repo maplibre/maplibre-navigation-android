@@ -3,14 +3,15 @@ package org.maplibre.navigation.core.offroute
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertFalse
@@ -189,8 +190,8 @@ class OffRouteDetectorTest : BaseTest() {
         val currentStep: LegStep =
             routeProgress.currentLegProgress.currentStep
         val offRouteDetector = OffRouteDetector()
-        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
-        val coordinates = lineString.coordinates.toMutableList()
+        val lineString = PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+        val coordinates = lineString.map(::Point).toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -248,8 +249,8 @@ class OffRouteDetectorTest : BaseTest() {
         val currentStep: LegStep =
             routeProgress.currentLegProgress.currentStep
         val offRouteDetector = OffRouteDetector()
-        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
-        val coordinates = lineString.coordinates.toMutableList()
+        val lineString = PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+        val coordinates = lineString.map(::Point).toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -315,8 +316,8 @@ class OffRouteDetectorTest : BaseTest() {
         val currentStep: LegStep =
             routeProgress.currentLegProgress.currentStep
         val offRouteDetector = OffRouteDetector()
-        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
-        val coordinates = lineString.coordinates.toMutableList()
+        val lineString = PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+        val coordinates = lineString.map(::Point).toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -384,9 +385,8 @@ class OffRouteDetectorTest : BaseTest() {
         val routeProgress = buildDefaultTestRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
         val offRouteDetector = OffRouteDetector()
-        val lineString =
-            LineString(currentStep.geometry, Constants.PRECISION_6)
-        val coordinates = lineString.coordinates.toMutableList()
+        val lineString = PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+        val coordinates = lineString.map(::Point).toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -451,8 +451,8 @@ class OffRouteDetectorTest : BaseTest() {
         val currentStep: LegStep =
             routeProgress.currentLegProgress.currentStep
         val offRouteDetector = OffRouteDetector()
-        val lineString = LineString(currentStep.geometry, Constants.PRECISION_6)
-        val coordinates = lineString.coordinates.toMutableList()
+        val lineString = PolylineEncoding.decode(currentStep.geometry, Constants.PRECISION_6)
+        val coordinates = lineString.map(::Point).toMutableList()
 
         val firstLocationUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)

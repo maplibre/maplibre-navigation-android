@@ -1,8 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.maplibre.geojson.common.CommonExtKt.toJvm;
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toMapLibre;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -176,8 +175,8 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private Point findDestinationPoint(NavigationViewOptions options) {
-        List<Point> coordinates = toJvmPoints(options.directionsRoute().getRouteOptions().getCoordinates());
-        return coordinates.get(coordinates.size() - 1);
+        List<org.maplibre.spatialk.geojson.Point> coordinates = options.directionsRoute().getRouteOptions().getCoordinates();
+        return toMapLibre(coordinates.get(coordinates.size() - 1));
     }
 
     private DirectionsRoute buildDirectionsRoute() throws IOException {
@@ -193,15 +192,16 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private RouteOptions buildRouteOptionsWithCoordinates(DirectionsResponse response) {
-        List<Point> coordinates = new ArrayList<>();
+        List<org.maplibre.spatialk.geojson.Point> coordinates = new ArrayList<>();
         for (DirectionsWaypoint waypoint : response.getWaypoints()) {
-            coordinates.add(toJvm(waypoint.getLocation()));
+            org.maplibre.spatialk.geojson.Point location = waypoint.getLocation();
+            coordinates.add(location);
         }
         return new RouteOptions.Builder(
             Constants.BASE_API_URL,
             "user",
             "profile",
-            toJvmPoints(coordinates)
+            coordinates
         )
             .withAccessToken(ACCESS_TOKEN)
             .withRequestUuid("uuid")

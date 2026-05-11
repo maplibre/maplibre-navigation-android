@@ -1,15 +1,19 @@
 package org.maplibre.navigation.core.snap
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteLegProgress
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils.wrap
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfMisc
-import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.bearingTo
+import org.maplibre.spatialk.turf.measurement.locateAlong
+import org.maplibre.spatialk.turf.misc.nearestPointTo
+import org.maplibre.spatialk.units.Bearing
+import org.maplibre.spatialk.units.extensions.inDegrees
+import org.maplibre.spatialk.units.extensions.meters
 
 
 /**
@@ -44,7 +48,7 @@ open class SnapToRoute : Snap() {
      *
      *
      * This is done by measuring 1 meter ahead of the current step distance traveled and
-     * creating a [Point] with this distance using [TurfMeasurement.along].
+     * creating a [Point] with this distance.
      *
      *
      * If the step distance remaining is zero, the distance ahead is the first point of upcoming leg.
@@ -57,9 +61,10 @@ open class SnapToRoute : Snap() {
     private fun snapLocationBearing(location: Location, routeProgress: RouteProgress): Float? {
         return getCurrentPoint(routeProgress)?.let { currentPoint ->
             getFuturePoint(routeProgress)?.let { futurePoint ->
-                // Get bearing and convert azimuth to degrees
-                val azimuth = TurfMeasurement.bearing(currentPoint, futurePoint)
-                wrap(azimuth, 0.0, 360.0).toFloat()
+                currentPoint.bearingTo(futurePoint)
+                    .let { bearing -> Bearing.North.clockwiseRotationTo(bearing) }
+                    .inDegrees
+                    .toFloat()
                     .also { bearing -> lastSnappedBearing = bearing }
             }
         }
@@ -79,8 +84,8 @@ open class SnapToRoute : Snap() {
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         return if (stepCoordinates.size > 1) {
-            val pointFeature = TurfMisc.nearestPointOnLine(location.point, stepCoordinates)
-            val point = pointFeature.geometry as Point
+            val pointFeature = stepCoordinates.nearestPointTo(location.point)
+            val point = pointFeature.geometry
             location.copy(
                 latitude = point.latitude,
                 longitude = point.longitude
@@ -129,21 +134,19 @@ open class SnapToRoute : Snap() {
         currentLegProgress: RouteLegProgress,
         additionalDistance: Double
     ): Point? {
-        val currentStepLineString = currentLegProgress.currentStep
+        val currentStepPositions = currentLegProgress.currentStep
             .geometry
             .let { geometry ->
-                LineString(geometry, Constants.PRECISION_6)
+                PolylineEncoding.decode(encoded = geometry, precision = Constants.PRECISION_6)
             }
-            .coordinates
-            .takeIf { points -> points.isNotEmpty() }
-            ?: return null
 
-        return currentLegProgress.currentStepProgress.distanceTraveled.let { distanceTraveled ->
-            TurfMeasurement.along(
-                currentStepLineString,
-                distanceTraveled + additionalDistance,
-                TurfUnit.METERS
-            )
+        return if (currentStepPositions.size >= 2) {
+            currentLegProgress.currentStepProgress.distanceTraveled.let { distanceTraveled ->
+                val currentStepLineString = LineString(currentStepPositions)
+                currentStepLineString.locateAlong((distanceTraveled + additionalDistance).meters)
+            }
+        } else {
+            currentStepPositions.firstOrNull()?.let(::Point)
         }
     }
 
@@ -163,13 +166,17 @@ open class SnapToRoute : Snap() {
             // While first step is the same point as the last point of the current step, use the second one.
             ?.getOrNull(1)
             ?.let { firstStep ->
-                val currentStepLineString =
-                    LineString(firstStep.geometry, Constants.PRECISION_6)
-                if (currentStepLineString.coordinates.isEmpty()) {
+                val currentStepPositions =
+                    PolylineEncoding.decode(
+                        encoded = firstStep.geometry,
+                        precision = Constants.PRECISION_6
+                    )
+                if (currentStepPositions.size < 2) {
                     return@let null
                 }
 
-                TurfMeasurement.along(currentStepLineString.coordinates, 1.0, TurfUnit.METERS)
+                val currentStepLineString = LineString(currentStepPositions)
+                currentStepLineString.locateAlong(1.0.meters)
             }
     }
 }

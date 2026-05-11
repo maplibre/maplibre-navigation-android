@@ -6,7 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import org.maplibre.geojson.Point
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -20,17 +23,13 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import org.maplibre.navigation.core.navigation.*
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.International.Meters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -142,7 +141,7 @@ class ValhallaNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Point.fromLngLat(point.longitude, point.latitude)
+        destination = Point(longitude = point.longitude, latitude = point.latitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -164,8 +163,8 @@ class ValhallaNavigationActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
+        val origin = Point(longitude = userLocation.longitude, latitude = userLocation.latitude)
+        if (distance(origin, destination).toDouble(Meters) < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return
@@ -196,13 +195,13 @@ class ValhallaNavigationActivity :
             ),
             "locations" to listOf(
                 mapOf(
-                    "lon" to origin.longitude(),
-                    "lat" to origin.latitude(),
+                    "lon" to origin.longitude,
+                    "lat" to origin.latitude,
                     "type" to "break"
                 ),
                 mapOf(
-                    "lon" to destination.longitude(),
-                    "lat" to destination.latitude(),
+                    "lon" to destination.longitude,
+                    "lat" to destination.latitude,
                     "type" to "break"
                 )
             )

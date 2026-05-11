@@ -1,11 +1,10 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.spatialk.geojson.Point
 import java.io.IOException
-import java.util.MissingFormatArgumentException
 import kotlin.test.Test
 
 class ValidationUtilsTest : BaseTest() {

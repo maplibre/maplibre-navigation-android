@@ -1,10 +1,10 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest.Companion.ACCESS_TOKEN
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.spatialk.geojson.Point
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets

@@ -1,10 +1,8 @@
 package org.maplibre.navigation.android.example
 
-import android.location.Location as AndroidLocation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.maplibre.navigation.core.models.DirectionsResponse
-import org.maplibre.geojson.Point
+import okhttp3.Request
 import org.maplibre.android.location.LocationComponent
 import org.maplibre.android.location.LocationComponentActivationOptions
 import org.maplibre.android.location.OnLocationCameraTransitionListener
@@ -13,26 +11,29 @@ import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
-import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
-import org.maplibre.navigation.core.models.DirectionsRoute
-import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
-import org.maplibre.navigation.core.routeprogress.RouteProgress
-import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.notification.NavigationNotification
 import org.maplibre.navigation.android.navigation.ui.v5.notification.service.NavigationNotificationService
 import org.maplibre.navigation.android.navigation.ui.v5.notification.service.NavigationNotificationServiceConnection
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
+import org.maplibre.navigation.android.navigation.ui.v5.toMapLibre
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.Point
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import android.location.Location as AndroidLocation
 
 /**
  * This activity shows you how navigation with active foreground notification is setup.
@@ -140,9 +141,9 @@ class NavigationWithForegroundNotificationActivity : AppCompatActivity(), OnMapR
     private fun calculateRouteAndStartNavigation() {
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
-            this.origin(Point.fromLngLat(9.7536318, 52.3717979))
-            this.addWaypoint(Point.fromLngLat(9.741052, 52.360496))
-            this.destination(Point.fromLngLat(9.756259, 52.342620))
+            this.origin(Point(9.7536318, 52.3717979).toMapLibre())
+            this.addWaypoint(Point(9.741052, 52.360496).toMapLibre())
+            this.destination(Point(9.756259, 52.342620).toMapLibre())
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))

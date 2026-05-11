@@ -1,8 +1,8 @@
 package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.models.serializer.PointSerializer
+import org.maplibre.spatialk.geojson.Point
 
 /**
  * An input coordinate snapped to the roads network.

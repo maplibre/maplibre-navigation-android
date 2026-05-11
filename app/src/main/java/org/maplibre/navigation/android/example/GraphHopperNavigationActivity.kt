@@ -6,7 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import org.maplibre.geojson.model.Point
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -20,15 +23,13 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.maplibre.geojson.turf.TurfUnit
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -163,7 +164,7 @@ class GraphHopperNavigationActivity :
         }
 
         val origin = Point(userLocation.longitude, userLocation.latitude)
-        if (org.maplibre.geojson.turf.TurfMeasurement.distance(origin, destination, TurfUnit.METRES) < 50) {
+        if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return

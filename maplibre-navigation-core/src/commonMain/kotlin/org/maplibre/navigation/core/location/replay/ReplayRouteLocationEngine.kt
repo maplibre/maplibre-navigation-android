@@ -8,11 +8,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
 
 open class ReplayRouteLocationEngine(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
@@ -106,7 +106,7 @@ open class ReplayRouteLocationEngine(
         val pointList: MutableList<Point> = ArrayList()
         pointList.add(Point(longitude = lastLocation.longitude, latitude = lastLocation.latitude, lastLocation.altitude))
         pointList.add(point)
-        return LineString(pointList)
+        return LineString(*pointList.toTypedArray())
     }
 
     private fun scheduleNextDispatch() {

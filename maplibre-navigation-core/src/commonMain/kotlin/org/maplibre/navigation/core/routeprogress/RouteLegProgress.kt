@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection
+import org.maplibre.spatialk.geojson.Point
 import kotlin.math.max
 
 /**
@@ -101,9 +101,9 @@ data class RouteLegProgress(
      */
     val fractionTraveled: Float
         get() = if (routeLeg.distance > 0)
-                max(0.0, distanceTraveled / routeLeg.distance).toFloat()
-            else
-                0f
+            max(0.0, distanceTraveled / routeLeg.distance).toFloat()
+        else
+            0f
 
     /**
      * Get the previous step the user traversed along, if the user is still on the first step, this

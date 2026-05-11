@@ -6,7 +6,7 @@ import kotlinx.serialization.builtins.DoubleArraySerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import org.maplibre.geojson.model.Point
+import org.maplibre.spatialk.geojson.Point
 
 class PointSerializer : KSerializer<Point> {
     private val delegateSerializer = DoubleArraySerializer()

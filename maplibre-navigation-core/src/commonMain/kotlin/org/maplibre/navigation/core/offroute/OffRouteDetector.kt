@@ -1,17 +1,19 @@
 package org.maplibre.navigation.core.offroute
 
-import org.maplibre.navigation.core.utils.RingBuffer
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.MeasurementUtils.userTrueDistanceFromStep
+import org.maplibre.navigation.core.utils.RingBuffer
 import org.maplibre.navigation.core.utils.ToleranceUtils.dynamicOffRouteRadiusTolerance
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfMisc
-import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.turf.measurement.length
+import org.maplibre.spatialk.turf.misc.nearestPointTo
+import org.maplibre.spatialk.turf.misc.slice
+import org.maplibre.spatialk.units.extensions.inMeters
 import kotlin.jvm.JvmStatic
 import kotlin.math.max
 
@@ -76,7 +78,11 @@ open class OffRouteDetector(
         if (!validOffRoute(location, options)) {
             return false
         }
-        val currentPoint = Point(longitude = location.longitude, latitude = location.latitude, altitude = location.altitude)
+        val currentPoint = Point(
+            longitude = location.longitude,
+            latitude = location.latitude,
+            altitude = location.altitude
+        )
         val isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint)
 
         if (!isOffRoute) {
@@ -128,11 +134,14 @@ open class OffRouteDetector(
      */
     private fun validOffRoute(location: Location, options: MapLibreNavigationOptions): Boolean {
         return lastReroutePoint?.let { lastReroutePoint ->
-            val currentPoint = Point(longitude = location.longitude, latitude = location.latitude, location.altitude)
+            val currentPoint = Point(
+                longitude = location.longitude,
+                latitude = location.latitude,
+                location.altitude
+            )
 
             // Check if minimum amount of distance has been passed since last reroute
-            val distanceFromLastReroute =
-                TurfMeasurement.distance(lastReroutePoint, currentPoint, TurfUnit.METERS)
+            val distanceFromLastReroute = distance(lastReroutePoint, currentPoint).inMeters
             distanceFromLastReroute > options.offRouteMinimumDistanceMetersAfterReroute
         } ?: run {
             // This is our first update - set the last reroute point to the given location
@@ -190,7 +199,8 @@ open class OffRouteDetector(
     }
 
     private fun updateLastReroutePoint(location: Location) {
-        lastReroutePoint = Point(longitude = location.longitude, latitude = location.latitude, location.altitude)
+        lastReroutePoint =
+            Point(longitude = location.longitude, latitude = location.latitude, location.altitude)
     }
 
     /**
@@ -250,20 +260,18 @@ open class OffRouteDetector(
             return false
         }
 
-        val stepLineString = LineString(stepPoints)
+        val stepLineString = LineString(*stepPoints.toTypedArray())
         val maneuverPoint = stepPoints[stepPoints.size - 1]
 
-        val userPointOnStepFeature = TurfMisc.nearestPointOnLine(currentPoint, stepPoints)
-        val userPointOnStep = userPointOnStepFeature.geometry as Point
+        val userPointOnStepFeature = stepPoints.nearestPointTo(currentPoint)
+        val userPointOnStep = userPointOnStepFeature.geometry
         if (maneuverPoint == userPointOnStep) {
             return false
         }
 
-        val remainingStepLineString =
-            TurfMisc.lineSlice(userPointOnStep, maneuverPoint, stepLineString)
-        val userDistanceToManeuver =
-            TurfMeasurement.length(remainingStepLineString, TurfUnit.METERS)
-                .toInt()
+        val remainingStepLineString = stepLineString.slice(userPointOnStep, maneuverPoint)
+        val userDistanceToManeuver = remainingStepLineString.length().inMeters
+            .toInt()
 
         if (distancesAwayFromManeuver.isEmpty()) {
             // No move-away positions before, add the current one to history stack
@@ -272,7 +280,7 @@ open class OffRouteDetector(
             // If distance to maneuver increased (wrong way), add new position to history stack
 
             if (distancesAwayFromManeuver.size >= 3) {
-                // Replace the latest position with newest one, for keeping first position
+                // Replace the latest position with the newest one, for keeping first position
                 distancesAwayFromManeuver.removeLast()
             }
             distancesAwayFromManeuver.addLast(userDistanceToManeuver)

@@ -1,13 +1,19 @@
 package org.maplibre.navigation.core.location.replay
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfUnit
 import org.maplibre.navigation.core.utils.getCurrentSystemTimeSeconds
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.bearingTo
+import org.maplibre.spatialk.turf.measurement.length
+import org.maplibre.spatialk.turf.measurement.locateAlong
+import org.maplibre.spatialk.units.Bearing
+import org.maplibre.spatialk.units.extensions.inDegrees
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
@@ -52,7 +58,7 @@ open class ReplayRouteLocationConverter(
             return emptyList()
         }
 
-        val distanceMeters = TurfMeasurement.length(lineString, TurfUnit.METERS)
+        val distanceMeters = lineString.length().inMeters
         if (distanceMeters <= 0) {
             return emptyList()
         }
@@ -60,7 +66,7 @@ open class ReplayRouteLocationConverter(
         val points: MutableList<Point> = ArrayList()
         var i = 0.0
         while (i < distanceMeters) {
-            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
+            val point = lineString.locateAlong(i.meters)
             points.add(point)
             i += distance
         }
@@ -74,8 +80,12 @@ open class ReplayRouteLocationConverter(
 
             mockedLocations.add(
                 if (i - 1 >= 0) {
-                    val bearing = TurfMeasurement.bearing(points[i - 1], points[i])
-                    mockedLocation.copy(bearing = bearing.toFloat())
+                    val bearingDegrees = points[i - 1]
+                        .bearingTo(points[i])
+                        .clockwiseRotationTo(Bearing.North)
+                        .inDegrees
+                        .toFloat()
+                    mockedLocation.copy(bearing = bearingDegrees)
                 } else {
                     mockedLocation.copy(bearing = 0f)
                 }
@@ -98,14 +108,14 @@ open class ReplayRouteLocationConverter(
     }
 
     private fun calculateStepPoints(): List<Point> {
-        val line = LineString(
-            route.legs[currentLeg].steps[currentStep].geometry,
-            Constants.PRECISION_6
+        val positions = PolylineEncoding.decode(
+            encoded = route.legs[currentLeg].steps[currentStep].geometry,
+            precision = Constants.PRECISION_6
         )
 
         increaseIndex()
 
-        return sliceRoute(line)
+        return sliceRoute(LineString(positions))
     }
 
     private fun increaseIndex() {

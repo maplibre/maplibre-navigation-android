@@ -2,7 +2,6 @@ package org.maplibre.navigation.core.utils
 
 import io.mockk.every
 import io.mockk.mockk
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.models.BannerInstructions
@@ -10,6 +9,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.RouteOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.Point
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertFalse

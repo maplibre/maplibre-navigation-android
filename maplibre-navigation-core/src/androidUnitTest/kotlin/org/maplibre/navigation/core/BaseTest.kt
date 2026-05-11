@@ -1,9 +1,9 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.Point
 import java.io.IOException
 
 open class BaseTest {
