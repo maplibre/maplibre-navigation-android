@@ -176,8 +176,6 @@ class NavigationUIActivity :
             return
         }
 
-
-
         val origin = Point(userLocation.longitude, userLocation.latitude)
         if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")

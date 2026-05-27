@@ -78,19 +78,21 @@ open class SimpleCamera : Camera {
 
         initialRoute = route
         routeCoordinates = generateRouteCoordinates(route)
-        initialBearing = Point(
-            longitude = routeCoordinates.first().longitude,
-            latitude = routeCoordinates.first().latitude,
-            altitude = routeCoordinates.first().altitude
-        ).bearingTo(
-            Point(
-                longitude = routeCoordinates[1].longitude,
-                latitude = routeCoordinates[1].latitude,
-                altitude = routeCoordinates[1].altitude
-            )
-        )
-            .clockwiseRotationTo(Bearing.North)
-            .inDegrees
+        initialBearing = Bearing.North
+                .clockwiseRotationTo(
+                    Point(
+                        longitude = routeCoordinates.first().longitude,
+                        latitude = routeCoordinates.first().latitude,
+                        altitude = routeCoordinates.first().altitude
+                    ).bearingTo(
+                        Point(
+                            longitude = routeCoordinates[1].longitude,
+                            latitude = routeCoordinates[1].latitude,
+                            altitude = routeCoordinates[1].altitude
+                        )
+                    )
+                )
+                .inDegrees
     }
 
     private fun generateRouteCoordinates(route: DirectionsRoute?): List<Point> {

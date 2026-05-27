@@ -42,7 +42,7 @@ object MeasurementUtils {
         }
 
         if (positions.size == 1) {
-            return distance(usersRawLocation, positions.first()).toDouble(Meters)
+            return distance(usersRawLocation, positions.first()).inMeters
         }
 
         val lineString = LineString(positions)

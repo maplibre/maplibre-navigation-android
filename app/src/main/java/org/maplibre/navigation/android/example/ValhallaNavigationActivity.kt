@@ -30,6 +30,7 @@ import org.maplibre.navigation.core.models.RouteOptions
 import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.units.International.Meters
+import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -164,7 +165,7 @@ class ValhallaNavigationActivity :
         }
 
         val origin = Position(longitude = userLocation.longitude, latitude = userLocation.latitude)
-        if (distance(origin, destination).toDouble(Meters) < 50) {
+        if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return

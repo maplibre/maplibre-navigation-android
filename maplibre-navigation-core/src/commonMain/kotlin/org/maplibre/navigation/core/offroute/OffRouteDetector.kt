@@ -260,7 +260,7 @@ open class OffRouteDetector(
             return false
         }
 
-        val stepLineString = LineString(*stepPoints.toTypedArray())
+        val stepLineString = LineString(stepPoints)
         val maneuverPoint = stepPoints[stepPoints.size - 1]
 
         val userPointOnStepFeature = stepPoints.map(::Point).nearestPointTo(Point(currentPoint))

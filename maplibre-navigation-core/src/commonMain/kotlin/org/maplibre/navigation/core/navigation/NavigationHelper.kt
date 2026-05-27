@@ -78,7 +78,7 @@ object NavigationHelper {
         val distanceKilometers = distance(location.point, snappedPosition).inKilometers
         if (distanceKilometers > 1) {
             Logger.d { "Distance to step is larger than 1km, so we won't advance the step, distance: $distanceKilometers km" }
-            return LineString(*stepPoints.toTypedArray()).length().inMeters
+            return LineString(stepPoints).length().inMeters
         }
 
         val steps = directionsRoute.legs[legIndex].steps
@@ -98,7 +98,7 @@ object NavigationHelper {
             return 0.0
         }
 
-        val slicedLine = LineString(*stepPoints.toTypedArray())
+        val slicedLine = LineString(stepPoints)
             .slice(snappedPosition.coordinates, nextManeuverPosition)
         return slicedLine.length().inMeters
     }
@@ -315,7 +315,7 @@ object NavigationHelper {
             return emptyMap()
         }
 
-        val stepLineString = LineString(*stepPoints.toTypedArray())
+        val stepLineString = LineString(stepPoints)
         val distancesToIntersections = mutableMapOf<StepIntersection, Double>()
         for (intersection in intersections) {
             val intersectionPoint = intersection.location

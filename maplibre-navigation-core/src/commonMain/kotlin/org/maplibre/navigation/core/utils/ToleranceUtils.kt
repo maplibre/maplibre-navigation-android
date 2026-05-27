@@ -7,6 +7,7 @@ import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.turf.misc.nearestPointTo
 import org.maplibre.spatialk.units.International.Meters
+import org.maplibre.spatialk.units.extensions.inMeters
 import kotlin.jvm.JvmStatic
 
 object ToleranceUtils {
@@ -32,7 +33,7 @@ object ToleranceUtils {
             }
 
             val distanceToNextIntersection = distance(snappedPoint, closestIntersection)
-                .toDouble(Meters)
+                .inMeters
             if (distanceToNextIntersection <= navigationOptions.maneuverZoneRadius) {
                 return navigationOptions.offRouteThresholdRadiusMeters / 2
             }
