@@ -11,6 +11,7 @@ import org.maplibre.navigation.core.models.VoiceInstructions
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 
 
@@ -88,10 +89,10 @@ open class RouteUtils {
      * will return null.
      *
      * @param routeProgress for route coordinates and remaining waypoints
-     * @return list of remaining waypoints as [Point]s
+     * @return list of remaining waypoints as [Position]s
      * @since 0.10.0
      */
-    fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Point>? {
+    fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Position>? {
         return routeProgress.directionsRoute.routeOptions?.let { options ->
             val coordinatesSize = options.coordinates.size
             if (coordinatesSize < routeProgress.remainingWaypoints) {

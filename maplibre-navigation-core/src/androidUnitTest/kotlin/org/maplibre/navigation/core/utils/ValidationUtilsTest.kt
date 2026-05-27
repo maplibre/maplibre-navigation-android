@@ -4,6 +4,7 @@ import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import java.io.IOException
 import kotlin.test.Test
 
@@ -46,7 +47,7 @@ class ValidationUtilsTest : BaseTest() {
     @Throws(IOException::class)
     private fun buildRouteWithNullInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",
@@ -84,7 +85,7 @@ class ValidationUtilsTest : BaseTest() {
     @Throws(IOException::class)
     private fun buildRouteWithFalseVoiceInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",
@@ -122,7 +123,7 @@ class ValidationUtilsTest : BaseTest() {
     @Throws(IOException::class)
     private fun buildRouteWithFalseBannerInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",

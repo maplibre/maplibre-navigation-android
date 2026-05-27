@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
 import org.maplibre.navigation.core.utils.Constants;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -175,7 +176,7 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private Point findDestinationPoint(NavigationViewOptions options) {
-        List<org.maplibre.spatialk.geojson.Point> coordinates = options.directionsRoute().getRouteOptions().getCoordinates();
+        List<Position> coordinates = options.directionsRoute().getRouteOptions().getCoordinates();
         return toMapLibre(coordinates.get(coordinates.size() - 1));
     }
 
@@ -192,9 +193,9 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private RouteOptions buildRouteOptionsWithCoordinates(DirectionsResponse response) {
-        List<org.maplibre.spatialk.geojson.Point> coordinates = new ArrayList<>();
+        List<Position> coordinates = new ArrayList<>();
         for (DirectionsWaypoint waypoint : response.getWaypoints()) {
-            org.maplibre.spatialk.geojson.Point location = waypoint.getLocation();
+            Position location = waypoint.getLocation();
             coordinates.add(location);
         }
         return new RouteOptions.Builder(

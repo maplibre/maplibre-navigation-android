@@ -10,6 +10,7 @@ import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.RouteOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.test.assertFalse
@@ -328,11 +329,11 @@ class RouteUtilsTest : BaseTest() {
 
         assertEquals(2, remainingWaypoints?.size)
         assertEquals(
-            Point(7.890, 1.234),
+            Position(7.890, 1.234),
             remainingWaypoints?.first()
         )
         assertEquals(
-            Point(5.678, 9.012),
+            Position(5.678, 9.012),
             remainingWaypoints?.get(1)
         )
     }
@@ -413,12 +414,12 @@ class RouteUtilsTest : BaseTest() {
         every { bannerInstructionMilestone.bannerInstructions } returns bannerInstructions
     }
 
-    private fun buildCoordinateList(): List<Point> {
-        val coordinates: MutableList<Point> = ArrayList()
-        coordinates.add(Point(1.234, 5.678))
-        coordinates.add(Point(9.012, 3.456))
-        coordinates.add(Point(7.890, 1.234))
-        coordinates.add(Point(5.678, 9.012))
+    private fun buildCoordinateList(): List<Position> {
+        val coordinates: MutableList<Position> = ArrayList()
+        coordinates.add(Position(1.234, 5.678))
+        coordinates.add(Position(9.012, 3.456))
+        coordinates.add(Position(7.890, 1.234))
+        coordinates.add(Position(5.678, 9.012))
         return coordinates
     }
 }

@@ -29,6 +29,7 @@ import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.routeprogress.RouteStepProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
 import kotlin.test.Test
@@ -171,7 +172,7 @@ class NavigationHelperTest : BaseTest() {
             route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
-        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates.map(::Point))
+        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates)
 
         assertEquals(0.0, distance, DELTA)
     }
@@ -185,7 +186,7 @@ class NavigationHelperTest : BaseTest() {
             route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
-        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates.map(::Point))
+        val distance = stepDistanceRemaining(location, 0, 1, route, coordinates)
 
         assertEquals(25.0, distance, 1.0)
     }
@@ -200,7 +201,7 @@ class NavigationHelperTest : BaseTest() {
 
         val nextManeuver = nextManeuverPosition(
             0,
-            route.legs[0].steps, coordinates.map(::Point)
+            route.legs[0].steps, coordinates
         )
 
         assertTrue(nextManeuver == route.legs[0].steps[1].maneuver.location)
@@ -217,7 +218,7 @@ class NavigationHelperTest : BaseTest() {
 
         val nextManeuver = nextManeuverPosition(
             stepIndex,
-            route.legs[0].steps, coordinates.map(::Point)
+            route.legs[0].steps, coordinates
         )
 
         assertEquals(route.legs[1].steps[0].maneuver.location, nextManeuver)
@@ -260,7 +261,7 @@ class NavigationHelperTest : BaseTest() {
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
-            currentStepPoints.map(::Point), currentStepIntersections!!
+            currentStepPoints, currentStepIntersections!!
         )
 
         assertTrue(intersectionDistances.toList()[0].second == 0.0)
@@ -277,7 +278,7 @@ class NavigationHelperTest : BaseTest() {
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
-            currentStepPoints.map(::Point), currentStepIntersections!!
+            currentStepPoints, currentStepIntersections!!
         )
 
         assertTrue(currentStepIntersections.size == intersectionDistances.size)
@@ -288,7 +289,7 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_emptyStepPointsReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints: List<Point> = ArrayList()
+        val currentStepPoints: List<Position> = ArrayList()
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
@@ -303,8 +304,8 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_oneStepPointReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints: MutableList<Point> = ArrayList()
-        currentStepPoints.add(Point(1.0, 1.0))
+        val currentStepPoints: MutableList<Position> = ArrayList()
+        currentStepPoints.add(Position(1.0, 1.0))
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
@@ -325,7 +326,7 @@ class NavigationHelperTest : BaseTest() {
         val currentStepIntersections: List<StepIntersection> = ArrayList()
 
         val intersectionDistances = createDistancesToIntersections(
-            currentStepPoints.map(::Point), currentStepIntersections
+            currentStepPoints, currentStepIntersections
         )
 
         assertTrue(intersectionDistances.isEmpty())

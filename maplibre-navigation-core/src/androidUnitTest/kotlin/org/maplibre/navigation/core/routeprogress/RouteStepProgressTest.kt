@@ -91,7 +91,7 @@ class RouteStepProgressTest : BaseTest() {
 
         var i = 0.0
         while (i < stepDistance) {
-            val point = lineString.locateAlong(i.meters)
+            val point = lineString.locateAlong(i.meters).coordinates
 
             if (point == route.legs[0].steps[1].maneuver.location) {
                 return
@@ -163,7 +163,7 @@ class RouteStepProgressTest : BaseTest() {
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = lineString.locateAlong(i.meters)
+            val point = lineString.locateAlong(i.meters).coordinates
             val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
             var distance = slicedLine.length().inMeters
             distance = firstStep.distance - distance
@@ -248,7 +248,7 @@ class RouteStepProgressTest : BaseTest() {
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = lineString.locateAlong(i.meters)
+            val point = lineString.locateAlong(i.meters).coordinates
             val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
             val stepDistanceRemaining = slicedLine.length().inMeters
             val stepIndex = 0
@@ -338,7 +338,7 @@ class RouteStepProgressTest : BaseTest() {
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = lineString.locateAlong(i.meters)
+            val point = lineString.locateAlong(i.meters).coordinates
             val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
             val stepIndex = 0
             val legIndex = 0

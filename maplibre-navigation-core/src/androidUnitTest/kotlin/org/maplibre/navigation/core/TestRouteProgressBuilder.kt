@@ -9,7 +9,7 @@ import org.maplibre.navigation.core.navigation.NavigationHelper.findCurrentInter
 import org.maplibre.navigation.core.navigation.NavigationHelper.findUpcomingIntersection
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 
 internal class TestRouteProgressBuilder {
@@ -34,7 +34,7 @@ internal class TestRouteProgressBuilder {
         val currentStep = steps[stepIndex]
         val currentStepPoints = buildCurrentStepPoints(currentStep)
         val upcomingStepIndex = stepIndex + 1
-        var upcomingStepPoints: List<Point>? = null
+        var upcomingStepPoints: List<Position>? = null
         var upcomingStep: LegStep? = null
         if (upcomingStepIndex < steps.size) {
             upcomingStep = steps[upcomingStepIndex]
@@ -76,7 +76,7 @@ internal class TestRouteProgressBuilder {
         )
     }
 
-    private fun buildCurrentStepPoints(currentStep: LegStep): List<Point> {
+    private fun buildCurrentStepPoints(currentStep: LegStep): List<Position> {
         val currentStepGeometry = currentStep.geometry
         return buildStepPointsFromGeometry(currentStepGeometry)
     }
@@ -105,8 +105,7 @@ internal class TestRouteProgressBuilder {
         )
     }
 
-    private fun buildStepPointsFromGeometry(stepGeometry: String): List<Point> {
+    private fun buildStepPointsFromGeometry(stepGeometry: String): List<Position> {
         return PolylineEncoding.decode(stepGeometry, Constants.PRECISION_6)
-            .map(::Point)
     }
 }

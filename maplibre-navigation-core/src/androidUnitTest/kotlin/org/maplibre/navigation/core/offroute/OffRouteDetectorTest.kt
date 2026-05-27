@@ -9,12 +9,12 @@ import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import kotlin.test.Test
-import kotlin.test.assertTrue
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class OffRouteDetectorTest : BaseTest() {
 
@@ -71,7 +71,7 @@ class OffRouteDetectorTest : BaseTest() {
     @Test
     fun isUserOffRoute_AssertTrueWhenTooFarFromStep() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val stepManeuverPoint: Point =
+        val stepManeuverPoint: Position =
             routeProgress.directionsRoute.legs[0].steps[0].maneuver.location
         val firstUpdate =
             buildDefaultLocationUpdate(-77.0339782574523, 38.89993519985637)
@@ -97,7 +97,7 @@ class OffRouteDetectorTest : BaseTest() {
             )
         }
 
-        val stepManeuverPoint: Point =
+        val stepManeuverPoint: Position =
             routeProgress.directionsRoute.legs[0].steps[0].maneuver.location
 
         val offRouteDetector = OffRouteDetector()
@@ -121,7 +121,7 @@ class OffRouteDetectorTest : BaseTest() {
     @Test
     fun isUserOffRoute_AssertFalseWhenOnStep() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val stepManeuverPoint: Point =
+        val stepManeuverPoint: Position =
             routeProgress.directionsRoute.legs[0].steps[0].maneuver.location
         val offRouteDetector = OffRouteDetector()
         val firstUpdate =
@@ -141,7 +141,7 @@ class OffRouteDetectorTest : BaseTest() {
     @Test
     fun isUserOffRoute_AssertFalseWhenWithinRadiusAndStepLocationHasBadAccuracy() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val stepManeuverPoint: Point =
+        val stepManeuverPoint: Position =
             routeProgress.directionsRoute.legs[0].steps[0].maneuver.location
         val offRouteDetector = OffRouteDetector()
         val firstUpdate =
@@ -162,7 +162,7 @@ class OffRouteDetectorTest : BaseTest() {
     @Test
     fun isUserOffRoute_AssertFalseWhenOffRouteButCloseToUpcomingStep() {
         val routeProgress = buildDefaultTestRouteProgress()
-        val upcomingStepManeuverPoint: Point =
+        val upcomingStepManeuverPoint: Position =
             routeProgress.currentLegProgress.upComingStep!!.maneuver.location
         val callback = mockk<OffRouteCallback>(relaxed = true)
         val offRouteDetector = OffRouteDetector(callback)

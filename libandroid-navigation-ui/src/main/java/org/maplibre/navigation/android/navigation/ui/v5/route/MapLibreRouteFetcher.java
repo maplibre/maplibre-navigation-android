@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.maplibre.geojson.Point;
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.pointsToMapLibre;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.positionsToMapLibre;
 import org.maplibre.navigation.core.models.DirectionsResponse;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
@@ -16,6 +16,7 @@ import org.maplibre.navigation.core.route.RouteFetcher;
 import org.maplibre.navigation.core.route.RouteListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.core.utils.RouteUtils;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -81,12 +82,12 @@ public class MapLibreRouteFetcher extends RouteFetcher {
                 .origin(origin, bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<org.maplibre.spatialk.geojson.Point> spatialWaypoints = routeUtils.calculateRemainingWaypoints(progress);
+        List<Position> spatialWaypoints = routeUtils.calculateRemainingWaypoints(progress);
         if (spatialWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;
         }
-        List<Point> remainingWaypoints = pointsToMapLibre(spatialWaypoints);
+        List<Point> remainingWaypoints = positionsToMapLibre(spatialWaypoints);
         addDestination(remainingWaypoints, builder);
         addWaypoints(remainingWaypoints, builder);
         addWaypointNames(progress, builder);

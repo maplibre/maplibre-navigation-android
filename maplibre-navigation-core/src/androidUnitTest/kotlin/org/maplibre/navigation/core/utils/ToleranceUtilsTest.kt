@@ -4,7 +4,7 @@ import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.models.StepIntersection
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.spatialk.geojson.LineString
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import org.maplibre.spatialk.turf.measurement.locateAlong
 import org.maplibre.spatialk.turf.measurement.midpoint
@@ -25,7 +25,7 @@ class ToleranceUtilsTest : BaseTest() {
         val midPoint = midpoint(stepPoints[0], stepPoints[1])
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
-            Point(midPoint),
+            midPoint,
             routeProgress,
             MapLibreNavigationOptions()
         )
@@ -42,7 +42,7 @@ class ToleranceUtilsTest : BaseTest() {
         val closePoint = LineString(positions).locateAlong(distanceToIntersection.meters)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
-            closePoint,
+            closePoint.coordinates,
             routeProgress,
             MapLibreNavigationOptions()
         )
@@ -59,7 +59,7 @@ class ToleranceUtilsTest : BaseTest() {
         val closePoint = LineString(positions).locateAlong(distanceToIntersection.meters)
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(
-            closePoint,
+            closePoint.coordinates,
             routeProgress,
             MapLibreNavigationOptions()
         )
@@ -83,7 +83,7 @@ class ToleranceUtilsTest : BaseTest() {
     @Test
     fun dynamicRerouteDistanceTolerance_singleIntersection() {
         val routeProgress = buildDefaultTestRouteProgress().copy(
-            intersections = listOf(StepIntersection(location = Point(-122.416686, 37.783425)))
+            intersections = listOf(StepIntersection(location = Position(-122.416686, 37.783425)))
         )
 
         val tolerance = ToleranceUtils.dynamicOffRouteRadiusTolerance(

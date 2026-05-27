@@ -11,6 +11,7 @@ import org.maplibre.navigation.core.models.LegStep;
 import org.maplibre.navigation.core.models.StepIntersection;
 import org.maplibre.spatialk.geojson.Point;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.spatialk.geojson.Position;
 import org.maplibre.spatialk.polyline.PolylineEncoding;
 
 import java.util.ArrayList;
@@ -32,9 +33,9 @@ class TestRouteProgressBuilder {
                                          int legIndex) {
         List<LegStep> steps = route.getLegs().get(legIndex).getSteps();
         LegStep currentStep = steps.get(stepIndex);
-        List<Point> currentStepPoints = buildCurrentStepPoints(currentStep);
+        List<Position> currentStepPoints = buildCurrentStepPoints(currentStep);
         int upcomingStepIndex = stepIndex + 1;
-        List<Point> upcomingStepPoints = null;
+        List<Position> upcomingStepPoints = null;
         LegStep upcomingStep = null;
         if (upcomingStepIndex < steps.size()) {
             upcomingStep = steps.get(upcomingStepIndex);
@@ -64,17 +65,12 @@ class TestRouteProgressBuilder {
     }
 
     @NonNull
-    private List<Point> buildCurrentStepPoints(LegStep currentStep) {
+    private List<Position> buildCurrentStepPoints(LegStep currentStep) {
         String currentStepGeometry = currentStep.getGeometry();
         return buildStepPointsFromGeometry(currentStepGeometry);
     }
 
-    private List<Point> buildStepPointsFromGeometry(String stepGeometry) {
-        List<org.maplibre.spatialk.geojson.Position> positions = PolylineEncoding.INSTANCE.decode(stepGeometry, PRECISION_6);
-        List<Point> points = new ArrayList<>(positions.size());
-        for (org.maplibre.spatialk.geojson.Position pos : positions) {
-            points.add(new Point(pos));
-        }
-        return points;
+    private List<Position> buildStepPointsFromGeometry(String stepGeometry) {
+        return PolylineEncoding.INSTANCE.decode(stepGeometry, PRECISION_6);
     }
 }

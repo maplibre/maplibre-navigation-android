@@ -10,6 +10,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
 import org.maplibre.spatialk.geojson.Point;
 import org.maplibre.navigation.core.utils.Constants;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ class TestRouteBuilder {
     }
 
     private DirectionsRoute buildRouteWithOptions(DirectionsRoute route) throws IOException {
-        List<Point> coordinates = new ArrayList<>();
+        List<Position> coordinates = new ArrayList<>();
         RouteOptions routeOptionsWithoutVoiceInstructions = new RouteOptions.Builder(
             Constants.BASE_API_URL,
             "user",

@@ -2,8 +2,8 @@ package org.maplibre.navigation.core.utils
 
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
-import org.maplibre.navigation.core.models.StepIntersection
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.turf.misc.nearestPointTo
 import org.maplibre.spatialk.units.International.Meters
@@ -17,16 +17,16 @@ object ToleranceUtils {
      */
     @JvmStatic
     fun dynamicOffRouteRadiusTolerance(
-        snappedPoint: Point,
+        snappedPoint: Position,
         routeProgress: RouteProgress,
         navigationOptions: MapLibreNavigationOptions
     ): Double {
         val intersections = routeProgress.currentLegProgress.currentStepProgress.intersections
         if (intersections != null && intersections.size >= 2) {
-            val closestIntersectionFeature = intersections.map(StepIntersection::location)
-                .nearestPointTo(snappedPoint)
+            val closestIntersectionFeature = intersections.map { pos -> Point(pos.location) }
+                .nearestPointTo(Point(snappedPoint))
 
-            val closestIntersection = closestIntersectionFeature.geometry
+            val closestIntersection = closestIntersectionFeature.geometry.coordinates
             if (closestIntersection == snappedPoint) {
                 return navigationOptions.offRouteThresholdRadiusMeters
             }

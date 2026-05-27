@@ -5,7 +5,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import kotlin.math.max
 
 /**
@@ -41,7 +41,7 @@ data class RouteLegProgress(
      *
      * @since 0.12.0
      */
-    val currentStepPoints: List<Point>?,
+    val currentStepPoints: List<Position>?,
 
     /**
      * Provides a list of points that represent the upcoming step
@@ -49,7 +49,7 @@ data class RouteLegProgress(
      *
      * @since 0.12.0
      */
-    val upcomingStepPoints: List<Point>?,
+    val upcomingStepPoints: List<Position>?,
 
     /**
      * Provides the current annotation data for a leg segment determined by

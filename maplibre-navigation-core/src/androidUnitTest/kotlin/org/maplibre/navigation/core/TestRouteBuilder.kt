@@ -4,7 +4,7 @@ import org.maplibre.navigation.core.BaseTest.Companion.ACCESS_TOKEN
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -29,7 +29,7 @@ internal class TestRouteBuilder {
 
     @Throws(IOException::class)
     private fun buildRouteWithOptions(route: DirectionsRoute): DirectionsRoute {
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",

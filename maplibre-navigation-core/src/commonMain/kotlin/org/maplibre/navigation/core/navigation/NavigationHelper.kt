@@ -16,6 +16,7 @@ import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils
 import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.turf.measurement.length
@@ -62,7 +63,7 @@ object NavigationHelper {
         legIndex: Int,
         stepIndex: Int,
         directionsRoute: DirectionsRoute,
-        stepPoints: List<Point>
+        stepPoints: List<Position>
     ): Double {
         // If the linestring coordinate size is less than 2,the distance remaining is zero.
         if (stepPoints.size < 2) {
@@ -71,7 +72,7 @@ object NavigationHelper {
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        val snappedPosition = stepPoints.nearestPointTo(location.point).geometry
+        val snappedPosition = stepPoints.map(::Point).nearestPointTo(location.point).geometry
 
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
         val distanceKilometers = distance(location.point, snappedPosition).inKilometers
@@ -98,7 +99,7 @@ object NavigationHelper {
         }
 
         val slicedLine = LineString(*stepPoints.toTypedArray())
-            .slice(snappedPosition, nextManeuverPosition)
+            .slice(snappedPosition.coordinates, nextManeuverPosition)
         return slicedLine.length().inMeters
     }
 
@@ -249,9 +250,9 @@ object NavigationHelper {
      */
     @JvmStatic
     fun decodeStepPoints(
-        directionsRoute: DirectionsRoute, currentPoints: List<Point>,
+        directionsRoute: DirectionsRoute, currentPoints: List<Position>,
         legIndex: Int, stepIndex: Int
-    ): List<Point> {
+    ): List<Position> {
         return directionsRoute.legs
             .getOrNull(legIndex)
             ?.steps
@@ -260,7 +261,7 @@ object NavigationHelper {
                 PolylineEncoding.decode(
                     encoded = step.geometry,
                     precision = Constants.PRECISION_6
-                ).map(::Point)
+                )
             }
             ?: currentPoints
     }
@@ -306,7 +307,7 @@ object NavigationHelper {
      */
     @JvmStatic
     fun createDistancesToIntersections(
-        stepPoints: List<Point>,
+        stepPoints: List<Position>,
         intersections: List<StepIntersection>
     ): Map<StepIntersection, Double> {
         // Require at minimum two points
@@ -512,7 +513,11 @@ object NavigationHelper {
      * geometry and uses the last coordinate in the position list.
      */
     @JvmStatic
-    fun nextManeuverPosition(stepIndex: Int, steps: List<LegStep>, coords: List<Point?>): Point? {
+    fun nextManeuverPosition(
+        stepIndex: Int,
+        steps: List<LegStep>,
+        coords: List<Position?>
+    ): Position? {
         // If there is an upcoming step, use it's maneuver as the position.
         if (steps.size > (stepIndex + 1)) {
             return steps[stepIndex + 1].maneuver.location

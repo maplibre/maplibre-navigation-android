@@ -3,6 +3,7 @@ package org.maplibre.navigation.core.utils
 import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.turf.misc.nearestPointTo
@@ -23,7 +24,7 @@ object MeasurementUtils {
      * @since 0.2.0
      */
     @JvmStatic
-    fun userTrueDistanceFromStep(usersRawLocation: Point, step: LegStep): Double {
+    fun userTrueDistanceFromStep(usersRawLocation: Position, step: LegStep): Double {
         // Check that the leg step contains geometry.
         if (step.geometry.isEmpty()) {
             return 0.0
@@ -41,12 +42,12 @@ object MeasurementUtils {
         }
 
         if (positions.size == 1) {
-            return distance(usersRawLocation.coordinates, positions.first()).toDouble(Meters)
+            return distance(usersRawLocation, positions.first()).toDouble(Meters)
         }
 
         val lineString = LineString(positions)
-        val snappedPointFeature = lineString.nearestPointTo(usersRawLocation.coordinates)
-        val snappedPoint = snappedPointFeature.geometry as Point
+        val snappedPointFeature = lineString.nearestPointTo(usersRawLocation)
+        val snappedPoint = snappedPointFeature.geometry.coordinates
         if (snappedPoint.latitude.isInfinite() || snappedPoint.longitude.isInfinite()) {
             return distance(usersRawLocation, lineString).inMeters
         }

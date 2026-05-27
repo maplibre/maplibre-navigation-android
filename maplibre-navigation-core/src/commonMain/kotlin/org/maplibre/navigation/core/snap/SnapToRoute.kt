@@ -4,9 +4,9 @@ import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteLegProgress
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.core.utils.MathUtils.wrap
 import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import org.maplibre.spatialk.turf.measurement.bearingTo
 import org.maplibre.spatialk.turf.measurement.locateAlong
@@ -80,11 +80,11 @@ open class SnapToRoute : Snap() {
      * @return the altered user location
      * @since 0.4.0
      */
-    private fun snapLocationLatLng(location: Location, stepCoordinates: List<Point>): Location {
+    private fun snapLocationLatLng(location: Location, stepCoordinates: List<Position>): Location {
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         return if (stepCoordinates.size > 1) {
-            val pointFeature = stepCoordinates.nearestPointTo(location.point)
+            val pointFeature = stepCoordinates.map(::Point).nearestPointTo(location.point)
             val point = pointFeature.geometry
             location.copy(
                 latitude = point.latitude,

@@ -2,8 +2,8 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.navigation.core.models.serializer.PointSerializer
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * Gives maneuver information about one [LegStep].
@@ -19,8 +19,7 @@ data class StepManeuver(
      *
      * @since 3.0.0
      */
-    @Serializable(with = PointSerializer::class)
-    val location: Point,
+    val location: Position,
 
     /**
      * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
@@ -254,7 +253,7 @@ data class StepManeuver(
      * @param bearingAfter Number between 0 and 360 indicating the clockwise angle from true north to the direction of travel right after the maneuver.
      */
     class Builder(
-        private var location: Point,
+        private var location: Position,
         private var bearingBefore: Double,
         private var bearingAfter: Double
     ) {

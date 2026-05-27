@@ -9,6 +9,7 @@ import org.maplibre.navigation.core.utils.RingBuffer
 import org.maplibre.navigation.core.utils.ToleranceUtils.dynamicOffRouteRadiusTolerance
 import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.turf.measurement.length
 import org.maplibre.spatialk.turf.misc.nearestPointTo
@@ -78,10 +79,9 @@ open class OffRouteDetector(
         if (!validOffRoute(location, options)) {
             return false
         }
-        val currentPoint = Point(
+        val currentPoint = Position(
             longitude = location.longitude,
             latitude = location.latitude,
-            altitude = location.altitude
         )
         val isOffRoute = checkOffRouteRadius(location, routeProgress, options, currentPoint)
 
@@ -154,7 +154,7 @@ open class OffRouteDetector(
         location: Location,
         routeProgress: RouteProgress,
         options: MapLibreNavigationOptions,
-        currentPoint: Point
+        currentPoint: Position
     ): Boolean {
         val currentStep = routeProgress.currentLegProgress.currentStep
         val distanceFromCurrentStep = userTrueDistanceFromStep(
@@ -170,7 +170,7 @@ open class OffRouteDetector(
         location: Location,
         routeProgress: RouteProgress,
         options: MapLibreNavigationOptions,
-        currentPoint: Point
+        currentPoint: Position
     ): Double {
         val dynamicTolerance = dynamicOffRouteRadiusTolerance(currentPoint, routeProgress, options)
         val accuracyTolerance = (location.accuracyMeters ?: 0f) * options.deadReckoningTimeInterval
@@ -181,7 +181,7 @@ open class OffRouteDetector(
         location: Location,
         routeProgress: RouteProgress,
         distancesAwayFromManeuver: RingBuffer<Int>,
-        currentPoint: Point,
+        currentPoint: Position,
         options: MapLibreNavigationOptions
     ): Boolean {
         if (movingAwayFromManeuver(
@@ -220,7 +220,7 @@ open class OffRouteDetector(
     private fun closeToUpcomingStep(
         options: MapLibreNavigationOptions,
         callback: OffRouteCallback,
-        currentPoint: Point,
+        currentPoint: Position,
         upComingStep: LegStep
     ): Boolean {
         val distanceFromUpcomingStep = userTrueDistanceFromStep(currentPoint, upComingStep)
@@ -250,8 +250,8 @@ open class OffRouteDetector(
     private fun movingAwayFromManeuver(
         routeProgress: RouteProgress,
         distancesAwayFromManeuver: RingBuffer<Int>,
-        stepPoints: List<Point>,
-        currentPoint: Point,
+        stepPoints: List<Position>,
+        currentPoint: Position,
         options: MapLibreNavigationOptions
     ): Boolean {
         val invalidUpcomingStep = routeProgress.currentLegProgress.upComingStep == null
@@ -263,8 +263,8 @@ open class OffRouteDetector(
         val stepLineString = LineString(*stepPoints.toTypedArray())
         val maneuverPoint = stepPoints[stepPoints.size - 1]
 
-        val userPointOnStepFeature = stepPoints.nearestPointTo(currentPoint)
-        val userPointOnStep = userPointOnStepFeature.geometry
+        val userPointOnStepFeature = stepPoints.map(::Point).nearestPointTo(Point(currentPoint))
+        val userPointOnStep = userPointOnStepFeature.geometry.coordinates
         if (maneuverPoint == userPointOnStep) {
             return false
         }

@@ -14,7 +14,7 @@ import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap
 import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
 import static org.maplibre.android.style.layers.PropertyFactory.visibility;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.pointsToMapLibre;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.positionsToMapLibre;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -113,11 +113,11 @@ class MapRouteArrow {
     }
 
     private List<Point> obtainArrowPointsFrom(RouteProgress routeProgress) {
-        List<Point> reversedCurrent = new ArrayList<>(pointsToMapLibre(routeProgress.getCurrentStepPoints()));
+        List<Point> reversedCurrent = new ArrayList<>(positionsToMapLibre(routeProgress.getCurrentStepPoints()));
         Collections.reverse(reversedCurrent);
 
         LineString arrowLineCurrent = LineString.fromLngLats(reversedCurrent);
-        LineString arrowLineUpcoming = LineString.fromLngLats(pointsToMapLibre(routeProgress.getUpcomingStepPoints()));
+        LineString arrowLineUpcoming = LineString.fromLngLats(positionsToMapLibre(routeProgress.getUpcomingStepPoints()));
 
         LineString arrowCurrentSliced = TurfMisc.lineSliceAlong(arrowLineCurrent, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
         LineString arrowUpcomingSliced = TurfMisc.lineSliceAlong(arrowLineUpcoming, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);

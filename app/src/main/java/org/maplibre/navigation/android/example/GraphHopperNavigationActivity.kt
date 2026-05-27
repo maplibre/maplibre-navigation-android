@@ -27,7 +27,7 @@ import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
 import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
@@ -44,7 +44,7 @@ class GraphHopperNavigationActivity :
     private var language = Locale.getDefault().language
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
-    private var destination: Point? = null
+    private var destination: Position? = null
     private var locationComponent: LocationComponent? = null
 
     private lateinit var binding: ActivityNavigationUiBinding
@@ -141,7 +141,7 @@ class GraphHopperNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Point(point.longitude, point.latitude)
+        destination = Position(point.longitude, point.latitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -163,7 +163,7 @@ class GraphHopperNavigationActivity :
             return
         }
 
-        val origin = Point(userLocation.longitude, userLocation.latitude)
+        val origin = Position(userLocation.longitude, userLocation.latitude)
         if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE

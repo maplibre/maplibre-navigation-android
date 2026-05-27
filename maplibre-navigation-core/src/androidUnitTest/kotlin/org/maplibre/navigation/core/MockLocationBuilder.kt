@@ -1,15 +1,13 @@
 package org.maplibre.navigation.core
 
-import org.maplibre.android.annotations.Polyline
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.polyline.PolylineEncoding
-import org.maplibre.spatialk.turf.measurement.bearingTo
 import org.maplibre.spatialk.turf.measurement.offset
 import org.maplibre.spatialk.units.Bearing
-import org.maplibre.spatialk.units.Rotation
 import org.maplibre.spatialk.units.extensions.degrees
 import org.maplibre.spatialk.units.extensions.meters
 
@@ -27,7 +25,7 @@ internal class MockLocationBuilder {
             .let(::Point)
     }
 
-    fun buildPointAwayFromPoint(point: Point, distanceAway: Double, bearing: Double): Point {
+    fun buildPointAwayFromPoint(point: Position, distanceAway: Double, bearing: Double): Point {
         return point.offset(distanceAway.meters, Bearing.North + bearing.degrees)
             .let(::Point)
     }

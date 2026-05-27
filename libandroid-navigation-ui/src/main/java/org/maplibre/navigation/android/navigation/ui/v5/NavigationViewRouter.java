@@ -1,6 +1,6 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.pointsToMapLibre;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.positionsToMapLibre;
 
 import org.maplibre.navigation.core.location.Location;
 import androidx.annotation.NonNull;
@@ -15,6 +15,7 @@ import org.maplibre.geojson.Point;
 
 import org.maplibre.navigation.core.route.RouteListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.util.Date;
 import java.util.List;
@@ -120,7 +121,7 @@ public class NavigationViewRouter implements RouteListener {
   private void cacheRouteDestination() {
     boolean hasValidCoordinates = routeOptions != null && !routeOptions.getCoordinates().isEmpty();
     if (hasValidCoordinates) {
-      List<Point> coordinates = pointsToMapLibre(routeOptions.getCoordinates());
+      List<Point> coordinates = positionsToMapLibre(routeOptions.getCoordinates());
       int destinationCoordinate = coordinates.size() - 1;
       Point destinationPoint = coordinates.get(destinationCoordinate);
       listener.onDestinationSet(destinationPoint);

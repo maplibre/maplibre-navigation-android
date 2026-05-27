@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.maplibre.navigation.core.models.UnitType;
+import org.maplibre.spatialk.geojson.Position;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -119,9 +120,9 @@ public class NavigationRouteTest extends BaseTest {
 
     @Test
     public void addRouteOptionsIncludedInRequest() throws Exception {
-        List<org.maplibre.spatialk.geojson.Point> coordinates = new ArrayList<>();
-        coordinates.add(new org.maplibre.spatialk.geojson.Point(1.0, 2.0, null, null));
-        coordinates.add(new org.maplibre.spatialk.geojson.Point(1.0, 5.0, null, null));
+        List<Position> coordinates = new ArrayList<>();
+        coordinates.add(new Position(1.0, 2.0));
+        coordinates.add(new Position(1.0, 5.0));
 
         RouteOptions routeOptions = new RouteOptions.Builder(
             "https://api-directions-traf.com",
