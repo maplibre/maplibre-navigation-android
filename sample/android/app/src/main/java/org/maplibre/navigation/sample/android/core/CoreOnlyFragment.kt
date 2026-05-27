@@ -39,7 +39,7 @@ import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.sample.android.databinding.FragmentCoreOnlyBinding
 import org.maplibre.spatialk.geojson.LineString
-import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.geojson.toJson
 import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
@@ -108,8 +108,8 @@ class CoreOnlyFragment : Fragment() {
                         bannerInstructions = true,
                         language = "en-US",
                         coordinates = listOf(
-                            Point(9.6935451, 52.3758408),
-                            Point(9.9769191, 53.5426183)
+                            Position(9.6935451, 52.3758408),
+                            Position(9.9769191, 53.5426183)
                         ),
                         requestUuid = "0000-0000-0000-0000"
                     )
