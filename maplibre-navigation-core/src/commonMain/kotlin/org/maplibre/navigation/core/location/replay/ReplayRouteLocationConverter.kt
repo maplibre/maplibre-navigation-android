@@ -7,6 +7,7 @@ import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.geojson.turf.TurfMeasurement
 import org.maplibre.geojson.turf.TurfUnit
+import org.maplibre.navigation.core.utils.MathUtils.wrap
 import org.maplibre.navigation.core.utils.getCurrentSystemTimeSeconds
 
 open class ReplayRouteLocationConverter(
@@ -75,7 +76,10 @@ open class ReplayRouteLocationConverter(
             mockedLocations.add(
                 if (i - 1 >= 0) {
                     val bearing = TurfMeasurement.bearing(points[i - 1], points[i])
-                    mockedLocation.copy(bearing = bearing.toFloat())
+                    mockedLocation.copy(bearing = wrap(bearing, 0.0, 360.0).toFloat())
+                } else if (points.size > 1) {
+                    val bearing = TurfMeasurement.bearing(points[0], points[1])
+                    mockedLocation.copy(bearing = wrap(bearing, 0.0, 360.0).toFloat())
                 } else {
                     mockedLocation.copy(bearing = 0f)
                 }

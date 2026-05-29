@@ -121,10 +121,11 @@ class MapRouteArrow {
     LineString arrowCurrentSliced = TurfMisc.lineSliceAlong(arrowLineCurrent, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
     LineString arrowUpcomingSliced = TurfMisc.lineSliceAlong(arrowLineUpcoming, 0, RouteConstants.THIRTY, TurfConstants.UNIT_METERS);
 
-    Collections.reverse(arrowCurrentSliced.coordinates());
+    List<Point> reversedArrowCurrentSliced = new ArrayList<>(arrowCurrentSliced.coordinates());
+    Collections.reverse(reversedArrowCurrentSliced);
 
     List<Point> combined = new ArrayList<>();
-    combined.addAll(arrowCurrentSliced.coordinates());
+    combined.addAll(reversedArrowCurrentSliced);
     combined.addAll(arrowUpcomingSliced.coordinates());
     return combined;
   }

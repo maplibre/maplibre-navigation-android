@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
+import kotlinx.serialization.json.*
 import org.maplibre.geojson.model.Point
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
@@ -171,17 +171,21 @@ class GraphHopperNavigationActivity :
 
         // The full GraphHopper API is documented here:
         // https://docs.graphhopper.com/openapi/routing
-        val requestBody = mapOf(
-            "type" to "mapbox",
-            "profile" to "car",
-            "locale" to language,
-            "points" to listOf(
-                listOf(origin.longitude, origin.latitude),
-                listOf(destination.longitude, destination.latitude)
-            )
-        )
-
-        val requestBodyJson = Gson().toJson(requestBody)
+        val requestBodyJson = buildJsonObject {
+            put("type", "mapbox")
+            put("profile", "car")
+            put("locale", language)
+            putJsonArray("points") {
+                addJsonArray {
+                    add(origin.longitude)
+                    add(origin.latitude)
+                }
+                addJsonArray {
+                    add(destination.longitude)
+                    add(destination.latitude)
+                }
+            }
+        }.toString()
         val client = OkHttpClient()
 
         // Create request object. Requires graphhopper_url to be set in developer-config.xml

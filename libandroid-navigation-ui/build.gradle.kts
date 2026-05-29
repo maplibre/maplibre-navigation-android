@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         compileSdk = 35
-        minSdk = 21
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -105,7 +105,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
     testImplementation(libs.robolectric)
-    testImplementation(libs.json)
     testImplementation(libs.mockk)
 }
 
