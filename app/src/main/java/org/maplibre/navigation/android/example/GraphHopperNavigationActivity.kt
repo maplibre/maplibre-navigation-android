@@ -145,7 +145,7 @@ class GraphHopperNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Position(point.longitude, point.latitude)
+        destination = Position(point.longitude, point.latitude, point.altitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -167,7 +167,7 @@ class GraphHopperNavigationActivity :
             return
         }
 
-        val origin = Position(userLocation.longitude, userLocation.latitude)
+        val origin = Position(userLocation.longitude, userLocation.latitude, userLocation.altitude)
         if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE

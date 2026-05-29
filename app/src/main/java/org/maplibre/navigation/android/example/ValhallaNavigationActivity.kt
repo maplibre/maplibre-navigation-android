@@ -75,7 +75,7 @@ class ValhallaNavigationActivity :
                     .shouldSimulateRoute(simulateRoute)
                     .initialMapCameraPosition(
                         CameraPosition.Builder()
-                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude, userLocation.altitude)).build()
                     )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
@@ -142,7 +142,7 @@ class ValhallaNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Position(longitude = point.longitude, latitude = point.latitude)
+        destination = Position(longitude = point.longitude, latitude = point.latitude, altitude = point.altitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -164,7 +164,7 @@ class ValhallaNavigationActivity :
             return
         }
 
-        val origin = Position(longitude = userLocation.longitude, latitude = userLocation.latitude)
+        val origin = Position(longitude = userLocation.longitude, latitude = userLocation.latitude, userLocation.altitude)
         if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
