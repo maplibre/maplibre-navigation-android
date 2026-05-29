@@ -85,6 +85,12 @@ open class ReplayRouteLocationConverter(
                         .inDegrees
                         .toFloat()
                     mockedLocation.copy(bearing = bearingDegrees)
+                } else if (points.size > 1) {
+                    val bearingDegrees = Bearing.North
+                        .clockwiseRotationTo(points[0].bearingTo(points[1]))
+                        .inDegrees
+                        .toFloat()
+                    mockedLocation.copy(bearing = bearingDegrees)
                 } else {
                     mockedLocation.copy(bearing = 0f)
                 }

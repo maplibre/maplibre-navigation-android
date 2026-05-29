@@ -3,6 +3,8 @@ android-gradle-plugin = "9.2.1"
 kotlin = "2.3.21"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.0"
+# TODO: Update to dokka v2 configuration before update to >=2.1.0
+#noinspection NewerVersionAvailable
 kotlin-dokka = "2.0.0"
 nexus = "2.0.0"
 kermit = "2.0.8"
@@ -11,20 +13,19 @@ maplibre-turf = "6.0.1"
 maplibre-annotation = "3.0.2"
 spatial-k = "0.7.0"
 play-services-location = "21.3.0"
-mockk = "1.14.5"
+mockk = "1.14.7"
 robolectric = "4.16"
 material = "1.13.0"
 androidx-recyclerview = "1.4.0"
 androidx-constraintlayout = "2.2.1"
 androidx-cardview = "1.0.0"
-androidx-lifecycle-viewmodel = "2.9.4"
+androidx-lifecycle-viewmodel = "2.10.0"
 androidx-multidex = "2.0.1"
 picasso = "2.71828"
-json = "20250517"
 timber = "5.0.1"
-autovalue = "1.11.0"
+autovalue = "1.11.1"
 mapbox-geojson = "5.8.0"
-mockito = "5.20.0"
+mockito = "5.21.0"
 junit = "4.13.2"
 leakcanary = "2.14"
 
@@ -63,7 +64,6 @@ autovalue = { group = "com.google.auto.value", name = "auto-value", version.ref 
 autovalue-annotations = { group = "com.google.auto.value", name = "auto-value-annotations", version.ref = "autovalue" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-json = { group = "org.json", name = "json", version.ref = "json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 # Test KMP

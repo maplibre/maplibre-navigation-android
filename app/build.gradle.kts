@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 apply {
@@ -28,7 +29,7 @@ android {
     defaultConfig {
         applicationId = "org.maplibre.navigation.android.example"
         compileSdk = 35
-        minSdk = 21
+        minSdk = 23
 
         versionCode = 1
         versionName = project.properties.get("versionName") as String? ?: "0.0.0"
@@ -82,6 +83,9 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // Leak Canary
     implementation(libs.leakcanary)

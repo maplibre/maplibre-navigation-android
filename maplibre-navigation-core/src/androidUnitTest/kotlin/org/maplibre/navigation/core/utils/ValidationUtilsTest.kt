@@ -7,6 +7,8 @@ import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 import java.io.IOException
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ValidationUtilsTest : BaseTest() {
 
@@ -42,6 +44,16 @@ class ValidationUtilsTest : BaseTest() {
         val routeWithFalseBannerInstructions = buildRouteWithFalseBannerInstructions()
 
         ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true)
+    }
+
+    @Test
+    fun validDirectionsRoute_isInvalidWithoutDistance() {
+        val route = buildTestDirectionsRoute("directions_two_leg_route_without_distances.json");
+        val exception = assertFailsWith<IllegalArgumentException> {
+            ValidationUtils.validDirectionsRoute(route, false)
+        }
+
+        assertEquals("Leg 0 has maxspeed annotation but missing distance annotation", exception.message)
     }
 
     @Throws(IOException::class)

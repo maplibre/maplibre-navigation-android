@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.maplibre.navigation.core)
     implementation(libs.spatialk.geojson)
 
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
