@@ -49,7 +49,7 @@ object MeasurementUtils {
         val snappedPointFeature = lineString.nearestPointTo(usersRawLocation)
         val snappedPoint = snappedPointFeature.geometry.coordinates
         if (snappedPoint.latitude.isInfinite() || snappedPoint.longitude.isInfinite()) {
-            return distance(usersRawLocation, lineString).inMeters
+            return distance(usersRawLocation, positions.first()).inMeters
         }
 
         val distance = distance(usersRawLocation, snappedPoint).inMeters
