@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.location.engine
+package org.maplibre.navigation.core.gms.location.engine
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.location.toLocation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

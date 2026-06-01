@@ -76,6 +76,8 @@ explicitly when creating navigation:
 ```
 
 ```kotlin
+import org.maplibre.navigation.core.gms.location.engine.GoogleLocationEngine
+
 val navigation = AndroidMapLibreNavigation(
     context = context,
     locationEngine = GoogleLocationEngine(context, Looper.getMainLooper()),
