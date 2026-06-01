@@ -5,6 +5,22 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Breaking: The `LocationEngine` implemented with Google Location Services (`GoogleLocationEngine`) has been moved out of `navigation-core` to make it for Android fully FLOSS. The `navigation-core` AAR no longer references `com.google.android.gms.*` classes (which the F-Droid scanner rejects) and no longer declares the `compileOnly` dependency on `com.google.android.gms:play-services-location`. `LocationEngineProvider.getBestLocationEngine(context)` now always returns the FLOSS `MapLibreLocationEngine`. [#225](https://github.com/maplibre/maplibre-navigation-android/issues/225)
+
+  `GoogleLocationEngine` now lives in a new, optional add-on module `navigation-core-gms-android` (published as `org.maplibre.navigation:navigation-core-gms-android`). It keeps the same Kotlin package, so consumers who still want a Google Play Services backed location engine just add the dependency — no need to copy any source into their app — and pass it explicitly when configuring navigation:
+
+  ```groovy
+  // Optional, Android only. Do NOT add this to F-Droid / fully FLOSS builds.
+  implementation 'org.maplibre.navigation:navigation-core-gms-android:<version>'
+  ```
+
+  ```kotlin
+  val navigation = AndroidMapLibreNavigation(
+      context = context,
+      locationEngine = GoogleLocationEngine(context, Looper.getMainLooper()),
+  )
+  ```
+
 ### v5.0.0-pre12 - Dec 15, 2025
 
 - Update MapLibre native to v12.3.0
