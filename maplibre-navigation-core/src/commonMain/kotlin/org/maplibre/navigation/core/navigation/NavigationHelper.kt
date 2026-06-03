@@ -72,7 +72,7 @@ object NavigationHelper {
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        val snappedPosition = stepPoints.map(::Point).nearestPointTo(location.point).geometry
+        val snappedPosition = LineString(stepPoints).nearestPointTo(location.position).geometry
 
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
         val distanceKilometers = distance(location.point, snappedPosition).inKilometers

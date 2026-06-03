@@ -1,7 +1,9 @@
 package org.maplibre.navigation.core.utils
 
+import org.maplibre.navigation.core.models.StepIntersection
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.turf.measurement.distance
@@ -24,8 +26,8 @@ object ToleranceUtils {
     ): Double {
         val intersections = routeProgress.currentLegProgress.currentStepProgress.intersections
         if (intersections != null && intersections.size >= 2) {
-            val closestIntersectionFeature = intersections.map { pos -> Point(pos.location) }
-                .nearestPointTo(Point(snappedPoint))
+            val closestIntersectionFeature = LineString(intersections.map(StepIntersection::location))
+                .nearestPointTo(snappedPoint)
 
             val closestIntersection = closestIntersectionFeature.geometry.coordinates
             if (closestIntersection == snappedPoint) {

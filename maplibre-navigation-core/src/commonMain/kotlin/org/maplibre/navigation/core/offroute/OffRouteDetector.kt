@@ -267,7 +267,7 @@ open class OffRouteDetector(
         val stepLineString = LineString(stepPoints)
         val maneuverPoint = stepPoints[stepPoints.size - 1]
 
-        val userPointOnStepFeature = stepPoints.map(::Point).nearestPointTo(Point(currentPoint))
+        val userPointOnStepFeature = LineString(stepPoints).nearestPointTo(currentPoint)
         val userPointOnStep = userPointOnStepFeature.geometry.coordinates
         if (maneuverPoint == userPointOnStep) {
             return false

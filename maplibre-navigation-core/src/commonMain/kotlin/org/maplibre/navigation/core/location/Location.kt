@@ -72,6 +72,12 @@ data class Location(
     /**
      * Returns a [Point] representation of this location.
      */
+    val position: Position
+        get() = Position(longitude = longitude, latitude = latitude, altitude = altitude)
+
+    /**
+     * Returns a [Point] representation of this location.
+     */
     val point: Point
         get() = Point(longitude = longitude, latitude = latitude, altitude = altitude)
 }
