@@ -5,6 +5,7 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+### v5.0.0-pre13 - Jun 18, 2026
 
 - **Breaking**: The `LocationEngine` implemented with Google Location Services (`GoogleLocationEngine`) has been moved out of `navigation-core` to make it for Android fully FLOSS. [#225](https://github.com/maplibre/maplibre-navigation-android/issues/225)
   `GoogleLocationEngine` now lives in a new, optional add-on module `navigation-location-gms-android` (published as `org.maplibre.navigation:navigation-location-gms-android`) under the package `org.maplibre.navigation.location.gms`. Consumers who still want a Google Play Services backed location engine just add the dependency — no need to copy any source into their app — and pass it explicitly when configuring navigation:
