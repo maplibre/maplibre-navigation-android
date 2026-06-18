@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.gms.location.engine
+package org.maplibre.navigation.location.gms
 
 import android.annotation.SuppressLint
 import android.content.Context

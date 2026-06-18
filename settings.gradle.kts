@@ -17,6 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "maplibre-navigation"
 
 include(":maplibre-navigation-core")
-include(":maplibre-navigation-core-gms")
+include(":maplibre-navigation-location-gms")
 include(":libandroid-navigation-ui")
 include(":app")

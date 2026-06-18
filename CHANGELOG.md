@@ -11,7 +11,7 @@ MapLibre welcomes participation and contributions from everyone.
 
   ```groovy
   // Optional, Android only. Do NOT add this to F-Droid / fully FLOSS builds.
-  implementation 'org.maplibre.navigation:navigation-core-gms-android:<version>'
+  implementation 'org.maplibre.navigation:navigation-location-gms-android:<version>'
   ```
 
   ```kotlin

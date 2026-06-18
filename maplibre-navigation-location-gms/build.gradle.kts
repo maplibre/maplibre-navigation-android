@@ -18,7 +18,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.maplibre.navigation.core.gms"
+    namespace = "org.maplibre.navigation.location.gms"
 
     defaultConfig {
         compileSdk = 35
@@ -38,15 +38,8 @@ android {
 }
 
 dependencies {
-    // FLOSS navigation core
-    api(project(":maplibre-navigation-core"))
-
-    // Google Play Services location.
-    // This is a regular (non-optional) dependency: this module intentionally references
-    // `com.google.android.gms.*`. Apps targeting F-Droid must NOT depend on this module and
-    // should use `navigation-core` directly, which stays fully FLOSS.
-    api(libs.play.services.location)
-
+    implementation(project(":maplibre-navigation-core"))
+    implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines)
 }
 
