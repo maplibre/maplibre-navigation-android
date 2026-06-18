@@ -1,4 +1,4 @@
-package org.maplibre.navigation.core.location.engine
+package org.maplibre.navigation.location.gms
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.location.toLocation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -20,6 +21,12 @@ import kotlin.coroutines.suspendCoroutine
 
 /**
  * A [LocationEngine] that uses the Google Play Services Location API.
+ *
+ * This engine lives in the optional `navigation-core-gms` module so that the core
+ * `navigation-core` library stays free of `com.google.android.gms.*` references and
+ * remains fully FLOSS (e.g. usable in F-Droid builds). Add the `navigation-core-gms`
+ * dependency and pass an instance of this engine explicitly to navigation if you want
+ * Google Play Services backed location updates.
  *
  * @param context used to initialize the [FusedLocationProviderClient]
  * @param looper looper that is ued by the [FusedLocationProviderClient] to listen on for location updates
