@@ -57,10 +57,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.maplibre)
-
-            // Location by Play Services
-            // Will only used, when added by the client app
-            compileOnly(libs.play.services.location)
         }
     }
 

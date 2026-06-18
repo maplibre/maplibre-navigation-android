@@ -79,8 +79,6 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.cardview)
 
-    implementation(libs.play.services.location)
-
     // Logging
     implementation(libs.timber)
 
