@@ -43,15 +43,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
 }
 
-// Exclude old version of GeoJSON libs
-// At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-configurations {
-    configureEach {
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
-}
-
 apply {
     from(file("${rootDir}/gradle/publish-android.gradle"))
 }
