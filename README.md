@@ -54,10 +54,33 @@ This library is available on Maven Central. To use it, add the following to your
 Step 2. Add the dependency
 ```groovy
   // Core KMP library (without UI)
-  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre10'
+  implementation 'org.maplibre.navigation:navigation-core:5.0.0-pre13'
 
   // UI library (Android only)
-  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre10'
+  implementation 'org.maplibre.navigation:navigation-ui-android:5.0.0-pre13'
+```
+
+#### Location with Google Play Services (optional)
+
+The Android varoant of `navigation-core` is fully FLOSS, therefore Google's location library `com.google.android.gms.*` is not used by default.
+
+If you instead want location updates backed by Google Play Services
+(`FusedLocationProviderClient`), add the optional add-on module and pass `GoogleLocationEngine`
+explicitly when creating navigation:
+
+```groovy
+  // Optional, Android only — pulls in com.google.android.gms:play-services-location.
+  // Do NOT add this to F-Droid / fully FLOSS builds.
+  implementation 'org.maplibre.navigation:navigation-location-gms-android:5.0.0-pre13'
+```
+
+```kotlin
+import org.maplibre.navigation.core.gms.location.engine.GoogleLocationEngine
+
+val navigation = AndroidMapLibreNavigation(
+    context = context,
+    locationEngine = GoogleLocationEngine(context, Looper.getMainLooper()),
+)
 ```
 
 
