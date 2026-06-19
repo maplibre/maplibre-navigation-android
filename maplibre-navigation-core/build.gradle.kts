@@ -36,8 +36,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(libs.maplibre.geojson)
-            api(libs.maplibre.geojson.turf)
+            api(libs.spatialk.geojson)
+            api(libs.spatialk.turf)
+            api(libs.spatialk.polyline)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines)
@@ -71,8 +72,9 @@ kotlin {
             isStatic = false
 
             transitiveExport = false
-            export(libs.maplibre.geojson)
-            export(libs.maplibre.geojson.turf)
+            export(libs.spatialk.geojson)
+            export(libs.spatialk.turf)
+            export(libs.spatialk.polyline)
         }
     }
 }
@@ -118,11 +120,3 @@ android {
     }
 }
 
-// Exclude old version of GeoJSON libs
-// At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-configurations {
-    configureEach {
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
-}

@@ -1,6 +1,5 @@
 package org.maplibre.navigation.core
 
-import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 
 val json = Json {

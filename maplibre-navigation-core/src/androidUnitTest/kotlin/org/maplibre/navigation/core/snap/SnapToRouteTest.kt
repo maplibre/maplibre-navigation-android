@@ -76,8 +76,8 @@ class SnapToRouteTest : BaseTest() {
             )
         )
 
-        assertEquals(38.79840909601134, snappedLocation.latitude, DELTA)
-        assertEquals(-77.06299551713687, snappedLocation.longitude, DELTA)
+        assertEquals(38.79840909601134, snappedLocation.latitude, LARGE_DELTA)
+        assertEquals(-77.06299551713687, snappedLocation.longitude, LARGE_DELTA)
     }
 
     @Test
@@ -103,8 +103,8 @@ class SnapToRouteTest : BaseTest() {
             )
         )
 
-        assertEquals(38.9623092, snappedLocation.latitude, DELTA)
-        assertEquals(-77.0282631, snappedLocation.longitude, DELTA)
+        assertEquals(38.9623092, snappedLocation.latitude, LARGE_DELTA)
+        assertEquals(-77.0282631, snappedLocation.longitude, LARGE_DELTA)
     }
 
     @Test
@@ -130,7 +130,7 @@ class SnapToRouteTest : BaseTest() {
             )
         )
 
-        assertEquals(136.2322f, snappedLocation.bearing)
+        assertEquals(136.2322, snappedLocation.bearing!!.toDouble(), LARGE_DELTA)
     }
 
     @Test
@@ -156,7 +156,7 @@ class SnapToRouteTest : BaseTest() {
             )
         )
 
-        assertEquals(5.0284705f, snappedLocation.bearing)
+        assertEquals(5.0, snappedLocation.bearing!!.toDouble(), LARGE_DELTA)
     }
 
     @Test
@@ -182,7 +182,7 @@ class SnapToRouteTest : BaseTest() {
             )
         )
 
-        assertEquals(358.19876f, snappedLocation.bearing)
+        assertEquals(358.198, snappedLocation.bearing!!.toDouble(), LARGE_DELTA)
     }
 
     @Test

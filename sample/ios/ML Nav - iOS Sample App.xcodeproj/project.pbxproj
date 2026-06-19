@@ -14,7 +14,7 @@
 		48FC138F6FEFE1D7C6286257 /* Pods-ML Nav - iOS Sample App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ML Nav - iOS Sample App.debug.xcconfig"; path = "Target Support Files/Pods-ML Nav - iOS Sample App/Pods-ML Nav - iOS Sample App.debug.xcconfig"; sourceTree = "<group>"; };
 		52327AE72D31E62000C3B47D /* ML Nav - iOS Sample App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ML Nav - iOS Sample App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5329D169A01718EB3542D0AD /* Pods-ML Nav - iOS Sample App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ML Nav - iOS Sample App.release.xcconfig"; path = "Target Support Files/Pods-ML Nav - iOS Sample App/Pods-ML Nav - iOS Sample App.release.xcconfig"; sourceTree = "<group>"; };
-		F3EB4BC4D0EC6692E581A0F6 /* Pods_ML_Nav___iOS_Sample_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_ML_Nav___iOS_Sample_App.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3EB4BC4D0EC6692E581A0F6 /* Pods_ML_Nav___iOS_Sample_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ML_Nav___iOS_Sample_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -163,13 +163,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ML Nav - iOS Sample App/Pods-ML Nav - iOS Sample App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ML Nav - iOS Sample App/Pods-ML Nav - iOS Sample App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

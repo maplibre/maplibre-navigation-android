@@ -5,8 +5,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.serialization.json.*
-import org.maplibre.geojson.model.Point
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.addJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -20,15 +27,13 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.maplibre.geojson.turf.TurfUnit
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -43,7 +48,7 @@ class GraphHopperNavigationActivity :
     private var language = Locale.getDefault().language
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
-    private var destination: Point? = null
+    private var destination: Position? = null
     private var locationComponent: LocationComponent? = null
 
     private lateinit var binding: ActivityNavigationUiBinding
@@ -140,7 +145,7 @@ class GraphHopperNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Point(point.longitude, point.latitude)
+        destination = Position(point.longitude, point.latitude, point.altitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -162,8 +167,8 @@ class GraphHopperNavigationActivity :
             return
         }
 
-        val origin = Point(userLocation.longitude, userLocation.latitude)
-        if (org.maplibre.geojson.turf.TurfMeasurement.distance(origin, destination, TurfUnit.METRES) < 50) {
+        val origin = Position(userLocation.longitude, userLocation.latitude, userLocation.altitude)
+        if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return

@@ -1,16 +1,17 @@
 [versions]
-android-gradle-plugin = "8.13.2"
-kotlin = "2.2.21"
+android-gradle-plugin = "9.2.1"
+kotlin = "2.3.21"
 kotlinx-serialization-json = "1.9.0"
-kotlinx-coroutines = "1.10.2"
+kotlinx-coroutines = "1.10.0"
 # TODO: Update to dokka v2 configuration before update to >=2.1.0
 #noinspection NewerVersionAvailable
 kotlin-dokka = "2.0.0"
 nexus = "2.0.0"
 kermit = "2.0.8"
-maplibre = "12.3.1"
+maplibre = "11.13.5"
+maplibre-turf = "6.0.1"
 maplibre-annotation = "3.0.2"
-maplibre-geojson = "7.0.0-pre0"
+spatial-k = "0.7.0"
 play-services-location = "21.3.0"
 mockk = "1.14.7"
 robolectric = "4.16"
@@ -42,12 +43,14 @@ nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
 # KMP
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-maplibre-geojson = { group = "org.maplibre.gl", name = "geojson", version.ref = "maplibre-geojson" }
-maplibre-geojson-turf = { group = "org.maplibre.gl", name = "turf", version.ref = "maplibre-geojson" }
+spatialk-geojson = { group = "org.maplibre.spatialk", name = "geojson", version.ref = "spatial-k" }
+spatialk-turf = { group = "org.maplibre.spatialk", name = "turf", version.ref = "spatial-k" }
+spatialk-polyline = { group = "org.maplibre.spatialk", name = "polyline-encoding", version.ref = "spatial-k" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 
 # Android
 maplibre = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
+maplibre-turf = { group = "org.maplibre.gl", name = "android-sdk-turf", version.ref = "maplibre-turf" }
 maplibre-annotation = { group = "org.maplibre.gl", name = "android-plugin-annotation-v9", version.ref = "maplibre-annotation" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 mapbox-geojson = { group = "com.mapbox.mapboxsdk", name = "mapbox-sdk-services", version.ref = "mapbox-geojson" }

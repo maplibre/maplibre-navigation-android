@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.geojson.model.Point
+import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteLeg
 import org.maplibre.navigation.core.models.StepIntersection
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
-import org.maplibre.navigation.core.milestone.MilestoneEventListener
+import org.maplibre.spatialk.geojson.Position
 import kotlin.math.max
 
 /**
@@ -53,7 +53,7 @@ data class RouteProgress(
      *
      * @since 0.12.0
      */
-    val currentStepPoints: List<Point>,
+    val currentStepPoints: List<Position>,
 
     /**
      * Provides a list of points that represent the upcoming step
@@ -61,7 +61,7 @@ data class RouteProgress(
      *
      * @since 0.12.0
      */
-    val upcomingStepPoints: List<Point>?,
+    val upcomingStepPoints: List<Position>?,
 
     val stepIndex: Int,
 
@@ -147,7 +147,6 @@ data class RouteProgress(
         )
 
 
-
     fun toBuilder(): Builder {
         return Builder(
             directionsRoute = directionsRoute,
@@ -171,24 +170,35 @@ data class RouteProgress(
         private var directionsRoute: DirectionsRoute,
         private var legIndex: Int,
         private var distanceRemaining: Double,
-        private var currentStepPoints: List<Point>,
+        private var currentStepPoints: List<Position>,
         private var stepIndex: Int,
         private var legDistanceRemaining: Double,
         private var stepDistanceRemaining: Double
     ) {
-        private var upcomingStepPoints: List<Point>? = null
+        private var upcomingStepPoints: List<Position>? = null
         private var intersections: List<StepIntersection>? = null
         private var currentIntersection: StepIntersection? = null
         private var upcomingIntersection: StepIntersection? = null
         private var currentLegAnnotation: CurrentLegAnnotation? = null
         private var intersectionDistancesAlongStep: Map<StepIntersection, Double>? = null
 
-        fun withUpcomingStepPoints(upcomingStepPoints: List<Point>?) = apply { this.upcomingStepPoints = upcomingStepPoints }
-        fun withIntersections(intersections: List<StepIntersection>?) = apply { this.intersections = intersections }
-        fun withCurrentIntersection(currentIntersection: StepIntersection?) = apply { this.currentIntersection = currentIntersection }
-        fun withUpcomingIntersection(upcomingIntersection: StepIntersection?) = apply { this.upcomingIntersection = upcomingIntersection }
-        fun withCurrentLegAnnotation(currentLegAnnotation: CurrentLegAnnotation?) = apply { this.currentLegAnnotation = currentLegAnnotation }
-        fun withIntersectionDistancesAlongStep(intersectionDistancesAlongStep: Map<StepIntersection, Double>?) = apply { this.intersectionDistancesAlongStep = intersectionDistancesAlongStep }
+        fun withUpcomingStepPoints(upcomingStepPoints: List<Position>?) =
+            apply { this.upcomingStepPoints = upcomingStepPoints }
+
+        fun withIntersections(intersections: List<StepIntersection>?) =
+            apply { this.intersections = intersections }
+
+        fun withCurrentIntersection(currentIntersection: StepIntersection?) =
+            apply { this.currentIntersection = currentIntersection }
+
+        fun withUpcomingIntersection(upcomingIntersection: StepIntersection?) =
+            apply { this.upcomingIntersection = upcomingIntersection }
+
+        fun withCurrentLegAnnotation(currentLegAnnotation: CurrentLegAnnotation?) =
+            apply { this.currentLegAnnotation = currentLegAnnotation }
+
+        fun withIntersectionDistancesAlongStep(intersectionDistancesAlongStep: Map<StepIntersection, Double>?) =
+            apply { this.intersectionDistancesAlongStep = intersectionDistancesAlongStep }
 
         fun build(): RouteProgress {
             return RouteProgress(

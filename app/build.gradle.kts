@@ -70,12 +70,7 @@ android {
 dependencies {
     implementation(project(":libandroid-navigation-ui"))
 
-    implementation(libs.maplibre) {
-        // Exclude old version of GeoJSON libs
-        // At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
+    implementation(libs.maplibre)
 
     // Support libraries
     implementation(libs.material)

@@ -2,8 +2,8 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.model.Point
-import org.maplibre.navigation.core.models.serializer.PointSerializer
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * Object representing an intersection along the step.
@@ -18,8 +18,7 @@ data class StepIntersection(
      *
      * @since 3.0.0
      */
-    @Serializable(with = PointSerializer::class)
-    val location: Point,
+    val location: Position,
 
     /**
      * An integer list of bearing values available at the step intersection.
@@ -152,10 +151,10 @@ data class StepIntersection(
 
     /**
      * Builder class for creating `StepIntersection` instances.
-     * @param location A [Point] representing this intersection location.
+     * @param location A [Position] representing this intersection location.
      */
     class Builder(
-        private var location: Point
+        private var location: Position
     ) {
         private var bearings: List<Int>? = null
         private var classes: List<String>? = null

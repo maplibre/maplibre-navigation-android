@@ -2,8 +2,7 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.model.Point
-import org.maplibre.navigation.core.models.serializer.PointSerializer
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * Provides information connected to your request that help when a new directions request is needing
@@ -60,7 +59,7 @@ data class RouteOptions(
      *
      * @since 3.0.0
      */
-    val coordinates: List<@Serializable(with = PointSerializer::class) Point>,
+    val coordinates: List<Position>,
 
     /**
      * Whether to try to return alternative routes (true) or not (false, default). An alternative
@@ -367,7 +366,7 @@ data class RouteOptions(
         private var baseUrl: String,
         private var user: String,
         private var profile: String,
-        private var coordinates: List<@Serializable(with = PointSerializer::class) Point>,
+        private var coordinates: List<Position>,
     ) {
         private var accessToken: String? = null
         private var requestUuid: String? = null

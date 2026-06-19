@@ -4,13 +4,12 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import org.maplibre.navigation.core.models.DirectionsResponse
+import okhttp3.Request
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
@@ -21,29 +20,30 @@ import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
-import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
-import org.maplibre.navigation.core.models.DirectionsRoute
-import org.maplibre.navigation.core.offroute.OffRouteListener
-import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
-import org.maplibre.navigation.core.routeprogress.RouteProgress
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityMockNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
+import org.maplibre.navigation.android.navigation.ui.v5.toMapLibre
 import org.maplibre.navigation.core.instruction.Instruction
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.RouteMilestone
 import org.maplibre.navigation.core.milestone.Trigger
 import org.maplibre.navigation.core.milestone.TriggerProperty
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.NavigationEventListener
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.core.offroute.OffRouteListener
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inMeters
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -189,8 +189,10 @@ class MockNavigationActivity :
     override fun onMapClick(point: LatLng): Boolean {
         var addMarker = true
         when {
-            destination == null -> destination = Point.fromLngLat(point.longitude, point.latitude, point.altitude)
-            waypoint == null -> waypoint = Point.fromLngLat(point.longitude, point.latitude, point.altitude)
+            destination == null -> destination =
+                Point(point.longitude, point.latitude, point.altitude)
+
+            waypoint == null -> waypoint = Point(point.longitude, point.latitude, point.altitude)
             else -> {
                 Toast.makeText(this, "Only 2 waypoints supported", Toast.LENGTH_LONG).show()
                 addMarker = false
@@ -219,16 +221,17 @@ class MockNavigationActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude, userLocation.altitude ?: 0.0)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
+        val origin = Point(userLocation.longitude, userLocation.latitude)
+        if (distance(origin, destination).inMeters < 50) {
+            Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return
         }
 
         val navigationRouteBuilder = NavigationRoute.builder(this).apply {
             this.accessToken(getString(R.string.mapbox_access_token))
-            this.origin(origin)
-            this.destination(destination)
+            this.origin(origin.toMapLibre())
+            this.destination(destination.toMapLibre())
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
@@ -331,7 +334,7 @@ class MockNavigationActivity :
         mapLibreMap.let {
             val latLng = LatLng(52.039176, 5.550339)
             locationEngine.assignLastLocation(
-                Point.fromLngLat(latLng.longitude, latLng.latitude),
+                Point(latLng.longitude, latLng.latitude),
             )
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0))
         }

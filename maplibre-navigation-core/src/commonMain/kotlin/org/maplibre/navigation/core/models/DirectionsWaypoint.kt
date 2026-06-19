@@ -1,8 +1,8 @@
 package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.Serializable
-import org.maplibre.geojson.model.Point
-import org.maplibre.navigation.core.models.serializer.PointSerializer
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * An input coordinate snapped to the roads network.
@@ -24,6 +24,5 @@ data class DirectionsWaypoint(
      *
      * @since 3.0.0
      */
-    @Serializable(with = PointSerializer::class)
-    val location: Point? = null
+    val location: Position? = null
 )

@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createDistancesToIntersections;
 import static org.maplibre.navigation.core.navigation.NavigationHelper.createIntersectionsList;
 import static org.maplibre.navigation.core.utils.Constants.PRECISION_6;
@@ -10,10 +9,12 @@ import androidx.annotation.NonNull;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.LegStep;
 import org.maplibre.navigation.core.models.StepIntersection;
-import org.maplibre.geojson.Point;
-import org.maplibre.geojson.utils.PolylineUtils;
+import org.maplibre.spatialk.geojson.Point;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
+import org.maplibre.spatialk.geojson.Position;
+import org.maplibre.spatialk.polyline.PolylineEncoding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,9 @@ class TestRouteProgressBuilder {
                                          int legIndex) {
         List<LegStep> steps = route.getLegs().get(legIndex).getSteps();
         LegStep currentStep = steps.get(stepIndex);
-        List<Point> currentStepPoints = buildCurrentStepPoints(currentStep);
+        List<Position> currentStepPoints = buildCurrentStepPoints(currentStep);
         int upcomingStepIndex = stepIndex + 1;
-        List<Point> upcomingStepPoints = null;
+        List<Position> upcomingStepPoints = null;
         LegStep upcomingStep = null;
         if (upcomingStepIndex < steps.size()) {
             upcomingStep = steps.get(upcomingStepIndex);
@@ -44,14 +45,14 @@ class TestRouteProgressBuilder {
 
         List<StepIntersection> intersections = createIntersectionsList(currentStep, upcomingStep);
         Map<StepIntersection, Double> intersectionDistances = createDistancesToIntersections(
-            toJvmPoints(currentStepPoints), intersections
+            currentStepPoints, intersections
         );
 
         return new RouteProgress.Builder(
             route,
             legIndex,
             distanceRemaining,
-            toJvmPoints(currentStepPoints),
+            currentStepPoints,
             stepIndex,
             legDistanceRemaining,
             stepDistanceRemaining
@@ -64,12 +65,12 @@ class TestRouteProgressBuilder {
     }
 
     @NonNull
-    private List<Point> buildCurrentStepPoints(LegStep currentStep) {
+    private List<Position> buildCurrentStepPoints(LegStep currentStep) {
         String currentStepGeometry = currentStep.getGeometry();
         return buildStepPointsFromGeometry(currentStepGeometry);
     }
 
-    private List<Point> buildStepPointsFromGeometry(String stepGeometry) {
-        return toJvmPoints(PolylineUtils.decode(stepGeometry, PRECISION_6));
+    private List<Position> buildStepPointsFromGeometry(String stepGeometry) {
+        return PolylineEncoding.INSTANCE.decode(stepGeometry, PRECISION_6);
     }
 }

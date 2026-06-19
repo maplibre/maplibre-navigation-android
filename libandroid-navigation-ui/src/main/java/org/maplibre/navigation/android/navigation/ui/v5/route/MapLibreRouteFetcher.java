@@ -1,7 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
-
 import android.content.Context;
 import org.maplibre.navigation.core.location.Location;
 import android.text.TextUtils;
@@ -9,7 +7,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.geojson.Point;
+import org.maplibre.geojson.Point;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.positionsToMapLibre;
 import org.maplibre.navigation.core.models.DirectionsResponse;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.models.RouteOptions;
@@ -17,6 +16,7 @@ import org.maplibre.navigation.core.route.RouteFetcher;
 import org.maplibre.navigation.core.route.RouteListener;
 import org.maplibre.navigation.core.routeprogress.RouteProgress;
 import org.maplibre.navigation.core.utils.RouteUtils;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -79,14 +79,15 @@ public class MapLibreRouteFetcher extends RouteFetcher {
         Double bearing = location.getBearing() != null ? Float.valueOf(location.getBearing()).doubleValue() : null;
         RouteOptions options = progress.getDirectionsRoute().getRouteOptions();
         NavigationRoute.Builder builder = NavigationRoute.builder(context)
-                .origin(toMapLibrePoint(origin), bearing, BEARING_TOLERANCE)
+                .origin(origin, bearing, BEARING_TOLERANCE)
                 .routeOptions(options);
 
-        List<Point> remainingWaypoints = toMapboxPointList(toJvmPoints(routeUtils.calculateRemainingWaypoints(progress)));
-        if (remainingWaypoints == null) {
+        List<Position> spatialWaypoints = routeUtils.calculateRemainingWaypoints(progress);
+        if (spatialWaypoints == null) {
             Timber.e("An error occurred fetching a new route");
             return null;
         }
+        List<Point> remainingWaypoints = positionsToMapLibre(spatialWaypoints);
         addDestination(remainingWaypoints, builder);
         addWaypoints(remainingWaypoints, builder);
         addWaypointNames(progress, builder);
@@ -96,7 +97,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
 
     private void addDestination(List<Point> remainingWaypoints, NavigationRoute.Builder builder) {
         if (!remainingWaypoints.isEmpty()) {
-            builder.destination(toMapLibrePoint(retrieveDestinationWaypoint(remainingWaypoints)));
+            builder.destination(retrieveDestinationWaypoint(remainingWaypoints));
         }
     }
 
@@ -108,7 +109,7 @@ public class MapLibreRouteFetcher extends RouteFetcher {
     private void addWaypoints(List<Point> remainingCoordinates, NavigationRoute.Builder builder) {
         if (!remainingCoordinates.isEmpty()) {
             for (Point coordinate : remainingCoordinates) {
-                builder.addWaypoint(toMapLibrePoint(coordinate));
+                builder.addWaypoint(coordinate);
             }
         }
     }
@@ -203,27 +204,4 @@ public class MapLibreRouteFetcher extends RouteFetcher {
         }
     }
 
-    private List<Point> toMapboxPointList(List<org.maplibre.geojson.Point> pointList) {
-        List<Point> mapboxPointList = new ArrayList<>();
-        for (org.maplibre.geojson.Point point : pointList) {
-            mapboxPointList.add(toMapboxPoint(point));
-        }
-        return mapboxPointList;
-    }
-
-    private Point toMapboxPoint(org.maplibre.geojson.Point point) {
-        return Point.fromLngLat(point.longitude(), point.latitude());
-    }
-
-    private List<org.maplibre.geojson.Point> toMapLibrePointList(List<Point> pointList) {
-        List<org.maplibre.geojson.Point> mapboxPointList = new ArrayList<>();
-        for (Point point : pointList) {
-            mapboxPointList.add(toMapLibrePoint(point));
-        }
-        return mapboxPointList;
-    }
-
-    private org.maplibre.geojson.Point toMapLibrePoint(Point point) {
-        return org.maplibre.geojson.Point.fromLngLat(point.longitude(), point.latitude());
-    }
 }

@@ -28,9 +28,6 @@ import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.PropertyFactory.lineColor
 import org.maplibre.android.style.layers.PropertyFactory.lineWidth
 import org.maplibre.android.style.sources.GeoJsonSource
-import org.maplibre.geojson.common.toJvm
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
 import org.maplibre.navigation.core.location.toAndroidLocation
 import org.maplibre.navigation.core.models.BannerInstructions
@@ -41,6 +38,10 @@ import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.sample.android.databinding.FragmentCoreOnlyBinding
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.geojson.toJson
+import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -91,58 +92,63 @@ class CoreOnlyFragment : Fragment() {
         binding.tvManuever.text = "Loading..."
 
         lifecycleScope.launch {
-            val directionsResponse = fetchRoute()
-            val route = directionsResponse.routes.first().copy(
-                routeOptions = RouteOptions(
-                    // These dummy route options are not not used to create directions,
-                    // but currently they are necessary to start the navigation
-                    // and to use the banner & voice instructions.
-                    // Again, this isn't ideal, but it is a requirement of the framework.
-                    baseUrl = "https://valhalla.routing",
-                    profile = "valhalla",
-                    user = "valhalla",
-                    accessToken = "valhalla",
-                    voiceInstructions = true,
-                    bannerInstructions = true,
-                    language = "en-US",
-                    coordinates = listOf(
-                        Point(9.6935451, 52.3758408),
-                        Point(9.9769191, 53.5426183)
-                    ),
-                    requestUuid = "0000-0000-0000-0000"
+            try {
+                val directionsResponse = fetchRoute()
+                val route = directionsResponse.routes.first().copy(
+                    routeOptions = RouteOptions(
+                        // These dummy route options are not not used to create directions,
+                        // but currently they are necessary to start the navigation
+                        // and to use the banner & voice instructions.
+                        // Again, this isn't ideal, but it is a requirement of the framework.
+                        baseUrl = "https://valhalla.routing",
+                        profile = "valhalla",
+                        user = "valhalla",
+                        accessToken = "valhalla",
+                        voiceInstructions = true,
+                        bannerInstructions = true,
+                        language = "en-US",
+                        coordinates = listOf(
+                            Position(9.6935451, 52.3758408),
+                            Position(9.9769191, 53.5426183)
+                        ),
+                        requestUuid = "0000-0000-0000-0000"
+                    )
                 )
-            )
 
-            enableLocationComponent(map, style)
+                enableLocationComponent(map, style)
 
-            val locationEngine = ReplayRouteLocationEngine()
-            val options = MapLibreNavigationOptions(
-                defaultMilestonesEnabled = true
-                // Do sample stuff here
-            )
+                val locationEngine = ReplayRouteLocationEngine()
+                val options = MapLibreNavigationOptions(
+                    defaultMilestonesEnabled = true
+                    // Do sample stuff here
+                )
 
-            val mlNavigation = AndroidMapLibreNavigation(
-                context = requireContext(),
-                locationEngine = locationEngine, // Disable this, to use the real-world system location engine
-                options = options
-            )
-            mlNavigation.addProgressChangeListener { location, routeProgress ->
-                // Use `toAndroidLocation()` extension to convert the generic cross-platform location to a native Android one
-                map.locationComponent.forceLocationUpdate(location.toAndroidLocation())
+                val mlNavigation = AndroidMapLibreNavigation(
+                    context = requireContext(),
+                    locationEngine = locationEngine, // Disable this, to use the real-world system location engine
+                    options = options
+                )
+                mlNavigation.addProgressChangeListener { location, routeProgress ->
+                    // Use `toAndroidLocation()` extension to convert the generic cross-platform location to a native Android one
+                    map.locationComponent.forceLocationUpdate(location.toAndroidLocation())
 
 
-                routeProgress.currentLegProgress.currentStep.bannerInstructions?.first()
-                    ?.let { bannerInstruction: BannerInstructions ->
-                        val remainingStepDistanceMeters =
-                            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
-                        binding.tvManuever.text =
-                            "${remainingStepDistanceMeters.roundToInt()}m : ${bannerInstruction.primary.type}+${bannerInstruction.primary.modifier} ${bannerInstruction.primary.text}"
-                    }
+                    routeProgress.currentLegProgress.currentStep.bannerInstructions?.first()
+                        ?.let { bannerInstruction: BannerInstructions ->
+                            val remainingStepDistanceMeters =
+                                routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+                            binding.tvManuever.text =
+                                "${remainingStepDistanceMeters.roundToInt()}m : ${bannerInstruction.primary.type}+${bannerInstruction.primary.modifier} ${bannerInstruction.primary.text}"
+                        }
+                }
+
+                drawRoute(style, route)
+                locationEngine.assign(route)
+                mlNavigation.startNavigation(route)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                binding.tvManuever.text = "Error loading route: ${e.message}"
             }
-
-            drawRoute(style, route)
-            locationEngine.assign(route)
-            mlNavigation.startNavigation(route)
         }
     }
 
@@ -201,7 +207,7 @@ class CoreOnlyFragment : Fragment() {
         val client = OkHttpClient()
 
         val url = if (provider == "valhalla") "https://valhalla1.openstreetmap.de/route"
-            else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
+        else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
 
         val request = Request.Builder()
             .header("User-Agent", "ML Nav - Android Sample App")
@@ -222,10 +228,11 @@ class CoreOnlyFragment : Fragment() {
     }
 
     private fun drawRoute(style: Style, route: DirectionsRoute) {
-        val routeLine = LineString(route.geometry, Constants.PRECISION_6)
+        val routeLine = PolylineEncoding.decode(route.geometry, Constants.PRECISION_6)
 
-        // The `toJvm()` extension converts the LineString to the deprecated Jvm one.
-        val routeSource = GeoJsonSource("route-source", routeLine.toJvm())
+        // Use `toJson` here to receive a string instead of not compatible Spatial-K model. You can also convert the model
+        // from Spatial-K to MapLibre's GeoJSON (from maplibre-java repository) for a better performance.
+        val routeSource = GeoJsonSource("route-source", LineString(routeLine).toJson())
         style.addSource(routeSource)
 
         val routeLayer = LineLayer("route-layer", "route-source")

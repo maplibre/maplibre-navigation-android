@@ -1,6 +1,5 @@
 package org.maplibre.navigation.core.navigation
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.LegStep
@@ -23,6 +22,7 @@ import org.maplibre.navigation.core.offroute.OffRouteDetector
 import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.RouteUtils
+import org.maplibre.spatialk.geojson.Position
 import kotlin.jvm.JvmField
 
 open class NavigationRouteProcessor(
@@ -31,8 +31,8 @@ open class NavigationRouteProcessor(
 
     @JvmField
     var routeProgress: RouteProgress? = null
-    private var currentStepPoints: List<Point>? = null
-    private var upcomingStepPoints: List<Point>? = null
+    private var currentStepPoints: List<Position>? = null
+    private var upcomingStepPoints: List<Position>? = null
     private var currentIntersections: List<StepIntersection>? = null
     private var currentIntersectionDistances: Map<StepIntersection, Double>? = null
     private var currentLeg: RouteLeg? = null

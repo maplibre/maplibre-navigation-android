@@ -1,8 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.maplibre.geojson.common.CommonExtKt.toJvm;
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toMapLibre;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -23,6 +22,7 @@ import org.junit.Test;
 import org.maplibre.navigation.android.navigation.ui.v5.route.MapLibreRouteFetcher;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
 import org.maplibre.navigation.core.utils.Constants;
+import org.maplibre.spatialk.geojson.Position;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -176,8 +176,8 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private Point findDestinationPoint(NavigationViewOptions options) {
-        List<Point> coordinates = toJvmPoints(options.directionsRoute().getRouteOptions().getCoordinates());
-        return coordinates.get(coordinates.size() - 1);
+        List<Position> coordinates = options.directionsRoute().getRouteOptions().getCoordinates();
+        return toMapLibre(coordinates.get(coordinates.size() - 1));
     }
 
     private DirectionsRoute buildDirectionsRoute() throws IOException {
@@ -193,15 +193,16 @@ public class NavigationViewRouterTest extends BaseTest {
     }
 
     private RouteOptions buildRouteOptionsWithCoordinates(DirectionsResponse response) {
-        List<Point> coordinates = new ArrayList<>();
+        List<Position> coordinates = new ArrayList<>();
         for (DirectionsWaypoint waypoint : response.getWaypoints()) {
-            coordinates.add(toJvm(waypoint.getLocation()));
+            Position location = waypoint.getLocation();
+            coordinates.add(location);
         }
         return new RouteOptions.Builder(
             Constants.BASE_API_URL,
             "user",
             "profile",
-            toJvmPoints(coordinates)
+            coordinates
         )
             .withAccessToken(ACCESS_TOKEN)
             .withRequestUuid("uuid")

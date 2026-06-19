@@ -81,6 +81,7 @@ dependencies {
 
     api(libs.maplibre.annotation)
     implementation(libs.maplibre)
+    implementation(libs.maplibre.turf)
 
     // Mapbox SDKs (needed for requests)
     api(libs.mapbox.geojson)
@@ -106,15 +107,6 @@ dependencies {
     testImplementation(libs.mockito)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk)
-}
-
-// Exclude old version of GeoJSON libs
-// At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-configurations {
-    configureEach {
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
 }
 
 apply {

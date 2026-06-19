@@ -1,16 +1,19 @@
 package org.maplibre.navigation.core.routeprogress
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfMisc
-import org.maplibre.geojson.turf.TurfUnit
-import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.json
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.length
+import org.maplibre.spatialk.turf.measurement.locateAlong
+import org.maplibre.spatialk.turf.misc.slice
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 import java.io.IOException
+import kotlin.math.roundToInt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -52,11 +55,10 @@ class RouteStepProgressTest : BaseTest() {
     fun distanceRemaining_equalsStepDistanceAtBeginning() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
-        val lineString = LineString(
+        val positions = PolylineEncoding.decode(
             firstLeg.steps[5].geometry, Constants.PRECISION_6
         )
-        val stepDistance = TurfMeasurement.length(lineString, TurfUnit.METERS)
-
+        val stepDistance = LineString(positions).length().inMeters
         val stepDistanceRemaining = firstLeg.steps[5].distance
         val legDistanceRemaining = firstLeg.distance
         val distanceRemaining = route.distance
@@ -69,9 +71,8 @@ class RouteStepProgressTest : BaseTest() {
             routeProgress.currentLegProgress.currentStepProgress
 
         assertEquals(
-            stepDistance,
-            routeStepProgress.distanceRemaining,
-            LARGE_DELTA
+            stepDistance.roundToInt(),
+            routeStepProgress.distanceRemaining.roundToInt(),
         )
     }
 
@@ -81,27 +82,24 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString(
+        val positions = PolylineEncoding.decode(
             firstStep.geometry, Constants.PRECISION_6
         )
-        val stepDistance = TurfMeasurement.length(lineString, TurfUnit.METERS)
+        val lineString = LineString(positions)
+        val stepDistance = lineString.length().inMeters
         val stepSegments = 5.0
 
         var i = 0.0
         while (i < stepDistance) {
-            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
+            val point = lineString.locateAlong(i.meters).coordinates
 
             if (point == route.legs[0].steps[1].maneuver.location) {
                 return
             }
 
-            val slicedLine = TurfMisc.lineSlice(
-                point,
-                route.legs[0].steps[1].maneuver.location, lineString
-            )
+            val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
 
-            val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
+            val stepDistanceRemaining = slicedLine.length().inMeters
             val legDistanceRemaining = firstLeg.distance
             val distanceRemaining = route.distance
             val routeProgress = buildTestRouteProgress(
@@ -157,19 +155,17 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
+        val positions = PolylineEncoding.decode(firstStep.geometry, Constants.PRECISION_6)
+        val lineString = LineString(positions)
         val stepSegments = 5.0
         val distances: MutableList<Double> = ArrayList()
         val routeProgressDistancesTraveled: MutableList<Double> = ArrayList()
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
-            val slicedLine = TurfMisc.lineSlice(
-                point,
-                route.legs[0].steps[1].maneuver.location, lineString
-            )
-            var distance = TurfMeasurement.length(slicedLine, TurfUnit.METERS)
+            val point = lineString.locateAlong(i.meters).coordinates
+            val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
+            var distance = slicedLine.length().inMeters
             distance = firstStep.distance - distance
             if (distance < 0) {
                 distance = 0.0
@@ -244,20 +240,17 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
+        val positions = PolylineEncoding.decode(firstStep.geometry, Constants.PRECISION_6)
+        val lineString = LineString(positions)
         val fractionsRemaining: MutableList<Float> = ArrayList()
         val routeProgressFractionsTraveled: MutableList<Float> = ArrayList()
         val stepSegments = 5.0
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
-            val slicedLine = TurfMisc.lineSlice(
-                point,
-                route.legs[0].steps[1].maneuver.location, lineString
-            )
-            val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
+            val point = lineString.locateAlong(i.meters).coordinates
+            val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
+            val stepDistanceRemaining = slicedLine.length().inMeters
             val stepIndex = 0
             val legIndex = 0
             val legDistanceRemaining = firstLeg.distance
@@ -337,22 +330,19 @@ class RouteStepProgressTest : BaseTest() {
         val route = buildTestDirectionsRoute()
         val firstLeg = route.legs[0]
         val firstStep = route.legs[0].steps[0]
-        val lineString = LineString(firstStep.geometry, Constants.PRECISION_6)
+        val positions = PolylineEncoding.decode(firstStep.geometry, Constants.PRECISION_6)
+        val lineString = LineString(positions)
         val stepSegments = 5.0
         val fractionsRemaining: MutableList<Double> = ArrayList()
         val routeProgressDurationsTraveled: MutableList<Double> = ArrayList()
 
         var i = 0.0
         while (i < firstStep.distance) {
-            val point = TurfMeasurement.along(lineString, i, TurfUnit.METERS)
-            val slicedLine = TurfMisc.lineSlice(
-                point,
-                route.legs[0].steps[1].maneuver.location, lineString
-            )
+            val point = lineString.locateAlong(i.meters).coordinates
+            val slicedLine = lineString.slice(point, route.legs[0].steps[1].maneuver.location)
             val stepIndex = 0
             val legIndex = 0
-            val stepDistanceRemaining =
-                TurfMeasurement.length(slicedLine, TurfUnit.METERS)
+            val stepDistanceRemaining = slicedLine.length().inMeters
             val legDistanceRemaining = firstLeg.distance
             val distanceRemaining = route.distance
             val routeProgress = buildTestRouteProgress(
@@ -438,7 +428,7 @@ class RouteStepProgressTest : BaseTest() {
             routeProgress.currentLegProgress.currentStepProgress
         val currentStepTotal = route.legs[0].steps[stepIndex]
             .intersections!!.size
-        val lastStepLocation = PolylineUtils.decode(
+        val lastStepLocation = PolylineEncoding.decode(
             route.legs[0].steps[stepIndex].geometry, Constants.PRECISION_6
         )
 
