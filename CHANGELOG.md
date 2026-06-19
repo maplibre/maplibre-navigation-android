@@ -5,7 +5,7 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
-### v5.0.0-pre14 - Jun 18, 2026
+### v5.0.0-pre14 - Jun 19, 2026
 
 - **BREAKING**: The library is now based on Spatial-K instead of the WIP state of [maplibre-java](https://github.com/maplibre/maplibre-java/pull/40)
 
