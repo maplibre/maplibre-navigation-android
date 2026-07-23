@@ -2,7 +2,6 @@ package org.maplibre.navigation.core.location.replay
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -16,10 +15,10 @@ import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 
 open class ReplayRouteLocationEngine(
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : LocationEngine {
 
-    constructor(): this(CoroutineScope(Dispatchers.IO))
+    constructor(): this(CoroutineScope(Dispatchers.Default))
 
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED

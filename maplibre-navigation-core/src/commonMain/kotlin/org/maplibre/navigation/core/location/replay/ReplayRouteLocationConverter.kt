@@ -3,7 +3,6 @@ package org.maplibre.navigation.core.location.replay
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.utils.Constants
-import org.maplibre.navigation.core.utils.getCurrentSystemTimeSeconds
 import org.maplibre.spatialk.geojson.LineString
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.polyline.PolylineEncoding
@@ -14,6 +13,7 @@ import org.maplibre.spatialk.units.Bearing
 import org.maplibre.spatialk.units.extensions.inDegrees
 import org.maplibre.spatialk.units.extensions.inMeters
 import org.maplibre.spatialk.units.extensions.meters
+import kotlin.time.Clock
 
 open class ReplayRouteLocationConverter(
     private val route: DirectionsRoute,
@@ -44,7 +44,7 @@ open class ReplayRouteLocationConverter(
     }
 
     fun initializeTime() {
-        time = getCurrentSystemTimeSeconds() * ONE_SECOND_IN_MILLISECONDS
+        time = Clock.System.now().toEpochMilliseconds()
     }
 
     /**
