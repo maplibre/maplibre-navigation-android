@@ -5,6 +5,7 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Add JS, Wasm JS and JVM multiplatform exports [#231](https://github.com/maplibre/maplibre-navigation-android/pull/231)
 - Add notification property to `RouteLeg` [#230](https://github.com/maplibre/maplibre-navigation-android/pull/230)
 
 ### v5.0.0-pre14 - Jun 19, 2026

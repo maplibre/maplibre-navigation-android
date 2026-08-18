@@ -99,7 +99,8 @@ The Valhalla example is aready pre-configured. All other examples needs to be co
 
 #### Multiplatform
 
-The new Kotlin Multiplatform library for iOS and Android has it's own small [sample apps](https://github.com/maplibre/maplibre-navigation-android/tree/main/sample) for all supported platforms.
+The new Kotlin Multiplatform library supports Android, iOS, jvm, js and wasmJs as targets.
+[Sample apps](https://github.com/maplibre/maplibre-navigation-android/tree/main/sample) are available for Android and iOS respectively.
 
 ### Contributing
 

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 
 plugins {
@@ -33,6 +34,21 @@ kotlin {
             xcf.add(this)
         }
     }
+
+    js {
+        browser()
+        nodejs()
+        binaries.library()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        nodejs()
+        binaries.library()
+    }
+
+    jvm()
 
     sourceSets {
         commonMain.dependencies {
