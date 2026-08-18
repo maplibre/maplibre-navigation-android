@@ -41,7 +41,7 @@ class NotificationTest {
             """.trimIndent()
         )
 
-        val notification = routeLeg.notifications.single()
+        val notification = routeLeg.notifications!!.single()
         assertEquals(NotificationType.Violation, notification.type)
         assertEquals(NotificationType.Subtype.MaxWidth, notification.subtype)
         assertEquals(NotificationRefreshType.Static, notification.refreshType)
@@ -81,7 +81,7 @@ class NotificationTest {
             """.trimIndent()
         )
 
-        val pointNotification = routeLeg.notifications[0]
+        val pointNotification = routeLeg.notifications!![0]
         assertEquals(NotificationType.Alert, pointNotification.type)
         assertEquals(NotificationType.Subtype.CountryBorderCrossing, pointNotification.subtype)
         assertEquals(NotificationRefreshType.Dynamic, pointNotification.refreshType)
@@ -137,12 +137,12 @@ class NotificationTest {
     }
 
     @Test
-    fun routeLeg_fromJson_withoutNotifications_returnsEmptyList() {
+    fun routeLeg_fromJson_withoutNotifications_returnsNull() {
         val routeLeg = json.decodeFromString<RouteLeg>(
             """{"distance":100.0,"duration":10.0,"steps":[]}"""
         )
 
-        assertEquals(emptyList(), routeLeg.notifications)
+        assertNull(routeLeg.notifications)
     }
 
     @Test

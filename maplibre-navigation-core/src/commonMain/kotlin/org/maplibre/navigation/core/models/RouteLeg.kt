@@ -90,7 +90,7 @@ data class RouteLeg(
     /**
      * A list of notifications that are relevant to this leg
      * */
-    val notifications: List<Notification> = emptyList(),
+    val notifications: List<Notification>? = null,
 ) {
 
     /**
@@ -129,7 +129,7 @@ data class RouteLeg(
         private var incidents: List<Incident>? = null
         private var annotation: LegAnnotation? = null
         private var closures: List<Closure>? = null
-        private var notifications: List<Notification> = emptyList()
+        private var notifications: List<Notification>? = null
 
         /**
          * Sets the typical duration.
@@ -186,7 +186,7 @@ data class RouteLeg(
          * @param notifications The notifications.
          * @return The builder instance.
          */
-        fun withNotifications(notifications: List<Notification>) =
+        fun withNotifications(notifications: List<Notification>?) =
             apply { this.notifications = notifications }
 
         /**
