@@ -48,9 +48,7 @@ kotlin {
         binaries.library()
     }
 
-    jvm {
-
-    }
+    jvm()
 
     sourceSets {
         commonMain.dependencies {
