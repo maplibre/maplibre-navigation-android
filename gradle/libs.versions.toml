@@ -2,7 +2,7 @@
 android-gradle-plugin = "9.2.1"
 kotlin = "2.4.10"
 kotlinx-serialization-json = "1.11.0"
-kotlinx-coroutines = "1.10.0"
+kotlinx-coroutines = "1.11.0"
 # TODO: Update to dokka v2 configuration before update to >=2.1.0
 #noinspection NewerVersionAvailable
 kotlin-dokka = "2.2.0"
