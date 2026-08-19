@@ -33,7 +33,3 @@ nexusPublishing {
         delayBetween.set(java.time.Duration.ofSeconds(10))
     }
 }
-
-task<Delete>("clean") {
-    delete(rootProject.buildDir)
-}

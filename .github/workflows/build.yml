@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: VERSION file changed
         id: version-file-changed
@@ -46,7 +46,7 @@ jobs:
       - name: Release (GitHub)
         if: env.make_release
         id: github_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: ${{ env.VERSION }}
           tag_name: ${{ env.VERSION }}

@@ -6,7 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.serialization.json.*
-import org.maplibre.geojson.Point
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -20,17 +23,14 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import org.maplibre.navigation.core.navigation.*
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.International.Meters
+import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -45,7 +45,7 @@ class ValhallaNavigationActivity :
     private var language = Locale.getDefault().language
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
-    private var destination: Point? = null
+    private var destination: Position? = null
     private var locationComponent: LocationComponent? = null
 
     private lateinit var binding: ActivityNavigationUiBinding
@@ -75,7 +75,7 @@ class ValhallaNavigationActivity :
                     .shouldSimulateRoute(simulateRoute)
                     .initialMapCameraPosition(
                         CameraPosition.Builder()
-                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude, userLocation.altitude)).build()
                     )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
@@ -142,7 +142,7 @@ class ValhallaNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Point.fromLngLat(point.longitude, point.latitude)
+        destination = Position(longitude = point.longitude, latitude = point.latitude, altitude = point.altitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -164,8 +164,8 @@ class ValhallaNavigationActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
+        val origin = Position(longitude = userLocation.longitude, latitude = userLocation.latitude, userLocation.altitude)
+        if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return
@@ -196,13 +196,13 @@ class ValhallaNavigationActivity :
             }
             putJsonArray("locations") {
                 addJsonObject {
-                    put("lon", origin.longitude())
-                    put("lat", origin.latitude())
+                    put("lon", origin.longitude)
+                    put("lat", origin.latitude)
                     put("type", "break")
                 }
                 addJsonObject {
-                    put("lon", destination.longitude())
-                    put("lat", destination.latitude())
+                    put("lon", destination.longitude)
+                    put("lat", destination.latitude)
                     put("type", "break")
                 }
             }

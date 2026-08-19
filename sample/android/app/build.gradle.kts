@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -32,25 +31,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
-    implementation(libs.maplibre) {
-        // Exclude old version of GeoJSON libs
-        // At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
+    implementation(libs.maplibre)
 
     implementation(libs.maplibre.navigation.core)
-    implementation(libs.maplibre.geojson)
+    implementation(libs.spatialk.geojson)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)

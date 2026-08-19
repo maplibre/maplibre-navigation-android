@@ -2,23 +2,23 @@ package org.maplibre.navigation.core.location.replay
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.engine.LocationEngine
 import org.maplibre.navigation.core.models.DirectionsRoute
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 open class ReplayRouteLocationEngine(
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : LocationEngine {
 
-    constructor(): this(CoroutineScope(Dispatchers.IO))
+    constructor(): this(CoroutineScope(Dispatchers.Default))
 
     private var converter: ReplayRouteLocationConverter? = null
     private var speed = DEFAULT_SPEED
@@ -103,9 +103,9 @@ open class ReplayRouteLocationEngine(
     }
 
     private fun obtainRoute(point: Point, lastLocation: Location): LineString {
-        val pointList: MutableList<Point> = ArrayList()
-        pointList.add(Point(longitude = lastLocation.longitude, latitude = lastLocation.latitude, lastLocation.altitude))
-        pointList.add(point)
+        val pointList: MutableList<Position> = ArrayList()
+        pointList.add(Position(longitude = lastLocation.longitude, latitude = lastLocation.latitude, lastLocation.altitude))
+        pointList.add(point.coordinates)
         return LineString(pointList)
     }
 

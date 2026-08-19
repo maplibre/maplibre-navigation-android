@@ -5,6 +5,13 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Add JS, Wasm JS and JVM multiplatform exports [#231](https://github.com/maplibre/maplibre-navigation-android/pull/231)
+- Add notification property to `RouteLeg` [#230](https://github.com/maplibre/maplibre-navigation-android/pull/230)
+
+### v5.0.0-pre14 - Jun 19, 2026
+
+- **BREAKING**: The library is now based on Spatial-K instead of the WIP state of [maplibre-java](https://github.com/maplibre/maplibre-java/pull/40)
+
 ### v5.0.0-pre13 - Jun 18, 2026
 
 - **Breaking**: The `LocationEngine` implemented with Google Location Services (`GoogleLocationEngine`) has been moved out of `navigation-core` to make it for Android fully FLOSS. [#225](https://github.com/maplibre/maplibre-navigation-android/issues/225)

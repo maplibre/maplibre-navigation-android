@@ -1,11 +1,11 @@
 package org.maplibre.navigation.core.navigation
 
 import io.mockk.mockk
-import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.navigation.NavigationHelper.buildSnappedLocation
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.RouteUtils
+import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -193,9 +193,9 @@ class NavigationRouteProcessorTest : BaseTest() {
 
         // Creating a new route should trigger a new routeProgress to be built. Annotation must be reset to 0 for same location
         val testRoute2 = buildTestDirectionsRoute("directions_distance_congestion_annotation.json")
-        val decoded = PolylineUtils.decode(testRoute2.geometry, Constants.PRECISION_6)
+        val decoded = PolylineEncoding.decode(testRoute2.geometry, Constants.PRECISION_6)
             .drop(1)
-        val alteredGeometry = PolylineUtils.encode(decoded, Constants.PRECISION_6)
+        val alteredGeometry = PolylineEncoding.encode(decoded, Constants.PRECISION_6)
         navigation!!.startNavigation(testRoute2.copy(geometry = alteredGeometry))
 
         val progress3 = routeProcessor!!.buildNewRouteProgress(
