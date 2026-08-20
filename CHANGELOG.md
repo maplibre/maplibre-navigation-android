@@ -5,6 +5,7 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Fix crash caused by growing notification size [#200](https://github.com/maplibre/maplibre-navigation-android/pull/200)
 - Add JS, Wasm JS and JVM multiplatform exports [#231](https://github.com/maplibre/maplibre-navigation-android/pull/231)
 - Add notification property to `RouteLeg` [#230](https://github.com/maplibre/maplibre-navigation-android/pull/230)
 
