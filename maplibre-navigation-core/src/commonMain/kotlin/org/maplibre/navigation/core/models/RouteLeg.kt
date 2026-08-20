@@ -2,6 +2,7 @@ package org.maplibre.navigation.core.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.maplibre.navigation.core.models.notification.Notification
 
 /**
  * A route between only two [DirectionsWaypoint].
@@ -85,6 +86,11 @@ data class RouteLeg(
      * @return a list of [Incident]
      */
     val closures: List<Closure>? = null,
+
+    /**
+     * A list of notifications that are relevant to this leg
+     * */
+    val notifications: List<Notification>? = null,
 ) {
 
     /**
@@ -102,6 +108,7 @@ data class RouteLeg(
             withIncidents(incidents)
             withAnnotation(annotation)
             withClosures(closures)
+            withNotifications(notifications)
         }
     }
 
@@ -122,6 +129,7 @@ data class RouteLeg(
         private var incidents: List<Incident>? = null
         private var annotation: LegAnnotation? = null
         private var closures: List<Closure>? = null
+        private var notifications: List<Notification>? = null
 
         /**
          * Sets the typical duration.
@@ -129,7 +137,8 @@ data class RouteLeg(
          * @param durationTypical The typical duration.
          * @return The builder instance.
          */
-        fun withDurationTypical(durationTypical: Double?) = apply { this.durationTypical = durationTypical }
+        fun withDurationTypical(durationTypical: Double?) =
+            apply { this.durationTypical = durationTypical }
 
         /**
          * Sets the summary.
@@ -172,6 +181,15 @@ data class RouteLeg(
         fun withClosures(closures: List<Closure>?) = apply { this.closures = closures }
 
         /**
+         * Sets the notifications.
+         *
+         * @param notifications The notifications.
+         * @return The builder instance.
+         */
+        fun withNotifications(notifications: List<Notification>?) =
+            apply { this.notifications = notifications }
+
+        /**
          * Builds a `RouteLeg` instance with the current builder values.
          *
          * @return A new `RouteLeg` instance.
@@ -186,7 +204,8 @@ data class RouteLeg(
                 admins = admins,
                 incidents = incidents,
                 annotation = annotation,
-                closures = closures
+                closures = closures,
+                notifications = notifications
             )
         }
     }

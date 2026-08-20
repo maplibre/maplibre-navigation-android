@@ -1,6 +1,7 @@
 package org.maplibre.navigation.core.location
 
-import org.maplibre.geojson.model.Point
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * A generic model that represents a user location.
@@ -67,6 +68,12 @@ data class Location(
      */
     val provider: String? = null,
 ) {
+
+    /**
+     * Returns a [Point] representation of this location.
+     */
+    val position: Position
+        get() = Position(longitude = longitude, latitude = latitude, altitude = altitude)
 
     /**
      * Returns a [Point] representation of this location.

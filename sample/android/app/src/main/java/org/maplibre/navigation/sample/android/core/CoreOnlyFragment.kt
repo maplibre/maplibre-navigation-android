@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
+import kotlinx.serialization.json.*
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -28,9 +28,6 @@ import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.PropertyFactory.lineColor
 import org.maplibre.android.style.layers.PropertyFactory.lineWidth
 import org.maplibre.android.style.sources.GeoJsonSource
-import org.maplibre.geojson.common.toJvm
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
 import org.maplibre.navigation.core.location.toAndroidLocation
 import org.maplibre.navigation.core.models.BannerInstructions
@@ -41,6 +38,10 @@ import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.sample.android.databinding.FragmentCoreOnlyBinding
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.geojson.toJson
+import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -91,114 +92,122 @@ class CoreOnlyFragment : Fragment() {
         binding.tvManuever.text = "Loading..."
 
         lifecycleScope.launch {
-            val directionsResponse = fetchRoute()
-            val route = directionsResponse.routes.first().copy(
-                routeOptions = RouteOptions(
-                    // These dummy route options are not not used to create directions,
-                    // but currently they are necessary to start the navigation
-                    // and to use the banner & voice instructions.
-                    // Again, this isn't ideal, but it is a requirement of the framework.
-                    baseUrl = "https://valhalla.routing",
-                    profile = "valhalla",
-                    user = "valhalla",
-                    accessToken = "valhalla",
-                    voiceInstructions = true,
-                    bannerInstructions = true,
-                    language = "en-US",
-                    coordinates = listOf(
-                        Point(9.6935451, 52.3758408),
-                        Point(9.9769191, 53.5426183)
-                    ),
-                    requestUuid = "0000-0000-0000-0000"
+            try {
+                val directionsResponse = fetchRoute()
+                val route = directionsResponse.routes.first().copy(
+                    routeOptions = RouteOptions(
+                        // These dummy route options are not not used to create directions,
+                        // but currently they are necessary to start the navigation
+                        // and to use the banner & voice instructions.
+                        // Again, this isn't ideal, but it is a requirement of the framework.
+                        baseUrl = "https://valhalla.routing",
+                        profile = "valhalla",
+                        user = "valhalla",
+                        accessToken = "valhalla",
+                        voiceInstructions = true,
+                        bannerInstructions = true,
+                        language = "en-US",
+                        coordinates = listOf(
+                            Position(9.6935451, 52.3758408),
+                            Position(9.9769191, 53.5426183)
+                        ),
+                        requestUuid = "0000-0000-0000-0000"
+                    )
                 )
-            )
 
-            enableLocationComponent(map, style)
+                enableLocationComponent(map, style)
 
-            val locationEngine = ReplayRouteLocationEngine()
-            val options = MapLibreNavigationOptions(
-                defaultMilestonesEnabled = true
-                // Do sample stuff here
-            )
+                val locationEngine = ReplayRouteLocationEngine()
+                val options = MapLibreNavigationOptions(
+                    defaultMilestonesEnabled = true
+                    // Do sample stuff here
+                )
 
-            val mlNavigation = AndroidMapLibreNavigation(
-                context = requireContext(),
-                locationEngine = locationEngine, // Disable this, to use the real-world system location engine
-                options = options
-            )
-            mlNavigation.addProgressChangeListener { location, routeProgress ->
-                // Use `toAndroidLocation()` extension to convert the generic cross-platform location to a native Android one
-                map.locationComponent.forceLocationUpdate(location.toAndroidLocation())
+                val mlNavigation = AndroidMapLibreNavigation(
+                    context = requireContext(),
+                    locationEngine = locationEngine, // Disable this, to use the real-world system location engine
+                    options = options
+                )
+                mlNavigation.addProgressChangeListener { location, routeProgress ->
+                    // Use `toAndroidLocation()` extension to convert the generic cross-platform location to a native Android one
+                    map.locationComponent.forceLocationUpdate(location.toAndroidLocation())
 
 
-                routeProgress.currentLegProgress.currentStep.bannerInstructions?.first()
-                    ?.let { bannerInstruction: BannerInstructions ->
-                        val remainingStepDistanceMeters =
-                            routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
-                        binding.tvManuever.text =
-                            "${remainingStepDistanceMeters.roundToInt()}m : ${bannerInstruction.primary.type}+${bannerInstruction.primary.modifier} ${bannerInstruction.primary.text}"
-                    }
+                    routeProgress.currentLegProgress.currentStep.bannerInstructions?.first()
+                        ?.let { bannerInstruction: BannerInstructions ->
+                            val remainingStepDistanceMeters =
+                                routeProgress.currentLegProgress.currentStepProgress.distanceRemaining
+                            binding.tvManuever.text =
+                                "${remainingStepDistanceMeters.roundToInt()}m : ${bannerInstruction.primary.type}+${bannerInstruction.primary.modifier} ${bannerInstruction.primary.text}"
+                        }
+                }
+
+                drawRoute(style, route)
+                locationEngine.assign(route)
+                mlNavigation.startNavigation(route)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                binding.tvManuever.text = "Error loading route: ${e.message}"
             }
-
-            drawRoute(style, route)
-            locationEngine.assign(route)
-            mlNavigation.startNavigation(route)
         }
     }
 
     private suspend fun fetchRoute(): DirectionsResponse = suspendCoroutine { continuation ->
         val provider = "valhalla"
-
-        val requestBody = if provider == "graphhopper" {
-            mapOf(
-                "type" to "mapbox",
-                "profile" to "car",
-                "locale" to "en-US",
-                "points" to listOf(
+        val requestBodyJson = if (provider == "graphhopper") {
+            buildJsonObject {
+                put("type", "mapbox")
+                put("profile", "car")
+                put("locale", "en-US")
+                putJsonArray("points") {
                     // Hannover, Germany
-                    listOf(9.6935451, 52.3758408),
+                    addJsonArray {
+                        add(9.6935451)
+                        add(52.3758408)
+                    }
                     // Hamburg, Germany
-                    listOf(9.9769191, 53.5426183)
-                )
+                    addJsonArray {
+                        add(9.9769191)
+                        add(53.5426183)
+                    }
+                }
                 // flexible options possible via "custom_model"
-            )
+            }.toString()
         } else {
-            mapOf(
-                "format" to "osrm",
-                "costing" to "auto",
-                "banner_instructions" to true,
-                "voice_instructions" to true,
-                "language" to "en-US",
-                "directions_options" to mapOf(
-                    "units" to "kilometers"
-                ),
-                "costing_options" to mapOf(
-                    "auto" to mapOf(
-                        "top_speed" to 130
-                    )
-                ),
-                "locations" to listOf(
+            buildJsonObject {
+                put("format", "osrm")
+                put("costing", "auto")
+                put("banner_instructions", true)
+                put("voice_instructions", true)
+                put("language", "en-US")
+                putJsonObject("directions_options") {
+                    put("units", "kilometers")
+                }
+                putJsonObject("costing_options") {
+                    putJsonObject("auto") {
+                        put("top_speed", 130)
+                    }
+                }
+                putJsonArray("locations") {
                     // Hannover, Germany
-                    mapOf(
-                        "lon" to 9.6935451,
-                        "lat" to 52.3758408,
-                        "type" to "break"
-                    ),
+                    addJsonObject {
+                        put("lon", 9.6935451)
+                        put("lat", 52.3758408)
+                        put("type", "break")
+                    }
                     // Hamburg, Germany
-                    mapOf(
-                        "lon" to 9.9769191,
-                        "lat" to 53.5426183,
-                        "type" to "break"
-                    )
-                )
-            )
+                    addJsonObject {
+                        put("lon", 9.9769191)
+                        put("lat", 53.5426183)
+                        put("type", "break")
+                    }
+                }
+            }.toString()
         }
-
-        val requestBodyJson = Gson().toJson(requestBody)
         val client = OkHttpClient()
 
         val url = if (provider == "valhalla") "https://valhalla1.openstreetmap.de/route"
-            else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
+        else "https://graphhopper.com/api/1/navigate?key=7088b84f-4cee-4059-96de-fd0cbda2fdff"
 
         val request = Request.Builder()
             .header("User-Agent", "ML Nav - Android Sample App")
@@ -219,10 +228,11 @@ class CoreOnlyFragment : Fragment() {
     }
 
     private fun drawRoute(style: Style, route: DirectionsRoute) {
-        val routeLine = LineString(route.geometry, Constants.PRECISION_6)
+        val routeLine = PolylineEncoding.decode(route.geometry, Constants.PRECISION_6)
 
-        // The `toJvm()` extension converts the LineString to the deprecated Jvm one.
-        val routeSource = GeoJsonSource("route-source", routeLine.toJvm())
+        // Use `toJson` here to receive a string instead of not compatible Spatial-K model. You can also convert the model
+        // from Spatial-K to MapLibre's GeoJSON (from maplibre-java repository) for a better performance.
+        val routeSource = GeoJsonSource("route-source", LineString(routeLine).toJson())
         style.addSource(routeSource)
 
         val routeLayer = LineLayer("route-layer", "route-source")

@@ -1,8 +1,9 @@
 package org.maplibre.navigation.core.navigation
 
 import android.content.Context
+import android.os.Looper
 import org.maplibre.navigation.core.location.engine.LocationEngine
-import org.maplibre.navigation.core.location.engine.LocationEngineProvider
+import org.maplibre.navigation.core.location.engine.MapLibreLocationEngine
 import org.maplibre.navigation.core.navigation.camera.Camera
 import org.maplibre.navigation.core.navigation.camera.SimpleCamera
 import org.maplibre.navigation.core.offroute.OffRoute
@@ -24,7 +25,10 @@ import org.maplibre.navigation.core.utils.RouteUtils
 class AndroidMapLibreNavigation(
     context: Context,
     options: MapLibreNavigationOptions = MapLibreNavigationOptions(),
-    locationEngine: LocationEngine = LocationEngineProvider.getBestLocationEngine(context),
+    locationEngine: LocationEngine = MapLibreLocationEngine(
+        context = context.applicationContext,
+        looper = Looper.getMainLooper()
+    ),
     cameraEngine: Camera = SimpleCamera(),
     snapEngine: Snap = SnapToRoute(),
     offRouteEngine: OffRoute = OffRouteDetector(),

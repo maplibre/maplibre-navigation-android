@@ -1,7 +1,5 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.milestone.BannerInstructionMilestone
 import org.maplibre.navigation.core.milestone.Milestone
@@ -12,6 +10,9 @@ import org.maplibre.navigation.core.models.LegStep
 import org.maplibre.navigation.core.models.VoiceInstructions
 import org.maplibre.navigation.core.navigation.NavigationConstants
 import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.polyline.PolylineEncoding
 
 
 open class RouteUtils {
@@ -88,10 +89,10 @@ open class RouteUtils {
      * will return null.
      *
      * @param routeProgress for route coordinates and remaining waypoints
-     * @return list of remaining waypoints as [Point]s
+     * @return list of remaining waypoints as [Position]s
      * @since 0.10.0
      */
-    fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Point>? {
+    fun calculateRemainingWaypoints(routeProgress: RouteProgress): List<Position>? {
         return routeProgress.directionsRoute.routeOptions?.let { options ->
             val coordinatesSize = options.coordinates.size
             if (coordinatesSize < routeProgress.remainingWaypoints) {
@@ -144,16 +145,16 @@ open class RouteUtils {
      * @since 0.10.0
      */
     fun createFirstLocationFromRoute(route: DirectionsRoute): Location {
-        val lineString = LineString(
-            route.legs.firstOrNull()?.steps?.firstOrNull()?.geometry ?: route.geometry,
-            Constants.PRECISION_6
+        val positions = PolylineEncoding.decode(
+            encoded = route.legs.firstOrNull()?.steps?.firstOrNull()?.geometry ?: route.geometry,
+            precision = Constants.PRECISION_6,
         )
-        val firstRoutePoint = lineString.coordinates.first()
+        val firstRoutePosition = positions.first()
         return Location(
             provider = FORCED_LOCATION,
-            latitude = firstRoutePoint.latitude,
-            longitude = firstRoutePoint.longitude,
-            altitude = firstRoutePoint.altitude,
+            latitude = firstRoutePosition.latitude,
+            longitude = firstRoutePosition.longitude,
+            altitude = firstRoutePosition.altitude,
         )
     }
 
@@ -205,8 +206,8 @@ open class RouteUtils {
     ): BannerText? {
         return findCurrentBannerInstructions(currentStep, stepDistanceRemaining)
             ?.let { instructions ->
-            retrievePrimaryOrSecondaryBannerText(findPrimary, instructions)
-        }
+                retrievePrimaryOrSecondaryBannerText(findPrimary, instructions)
+            }
     }
 
     private fun retrievePrimaryOrSecondaryBannerText(

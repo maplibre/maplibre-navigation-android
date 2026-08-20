@@ -38,7 +38,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import timber.log.Timber;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.toJvmPoints;
+import static org.maplibre.navigation.android.navigation.ui.v5.GeoJsonExtKt.pointsToMapLibre;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MAX_CAMERA_ADJUSTMENT_ANIMATION_DURATION;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_TILT_ADJUSTMENT_ANIMATION_DURATION;
 import static org.maplibre.navigation.core.navigation.NavigationConstants.NAVIGATION_MIN_CAMERA_ZOOM_ADJUSTMENT_ANIMATION_DURATION;
@@ -437,7 +437,7 @@ public class NavigationCamera implements LifecycleObserver {
 
   private void animateCameraForRouteOverview(RouteInformation routeInformation, int[] padding) {
     Camera cameraEngine = navigation.getCameraEngine();
-    List<Point> routePoints = toJvmPoints(cameraEngine.overview(routeInformation));
+    List<Point> routePoints = pointsToMapLibre(cameraEngine.overview(routeInformation));
     if (!routePoints.isEmpty()) {
       animateMapLibreMapForRouteOverview(padding, routePoints);
     }

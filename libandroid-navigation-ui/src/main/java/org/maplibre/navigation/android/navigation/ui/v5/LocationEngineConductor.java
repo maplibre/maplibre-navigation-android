@@ -1,11 +1,12 @@
 package org.maplibre.navigation.android.navigation.ui.v5;
 
 import android.content.Context;
+import android.os.Looper;
 
 
 import org.maplibre.navigation.core.location.engine.LocationEngine;
+import org.maplibre.navigation.core.location.engine.MapLibreLocationEngine;
 import org.maplibre.navigation.core.models.DirectionsRoute;
-import org.maplibre.navigation.core.location.engine.LocationEngineProvider;
 import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine;
 
 class LocationEngineConductor {
@@ -35,7 +36,7 @@ class LocationEngineConductor {
     } else if (simulateRoute) {
       this.locationEngine = new ReplayRouteLocationEngine();
     } else {
-      this.locationEngine = LocationEngineProvider.getBestLocationEngine(context);
+      this.locationEngine = new MapLibreLocationEngine(context.getApplicationContext(), Looper.getMainLooper());
     }
   }
 }

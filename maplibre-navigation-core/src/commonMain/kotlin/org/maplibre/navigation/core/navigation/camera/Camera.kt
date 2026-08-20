@@ -1,7 +1,7 @@
 package org.maplibre.navigation.core.navigation.camera
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
+import org.maplibre.spatialk.geojson.Point
 
 /**
  * This class handles calculating all properties necessary to configure the camera position while

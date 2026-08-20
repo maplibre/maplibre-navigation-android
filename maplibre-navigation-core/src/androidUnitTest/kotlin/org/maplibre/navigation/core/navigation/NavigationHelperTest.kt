@@ -2,7 +2,6 @@ package org.maplibre.navigation.core.navigation
 
 import io.mockk.every
 import io.mockk.mockk
-import org.maplibre.geojson.model.Point
 import org.maplibre.geojson.utils.PolylineUtils
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.milestone.StepMilestone
@@ -29,12 +28,15 @@ import org.maplibre.navigation.core.routeprogress.RouteLegProgress
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.routeprogress.RouteStepProgress
 import org.maplibre.navigation.core.utils.Constants
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.polyline.PolylineEncoding
 import java.io.IOException
 import kotlin.test.Test
-import kotlin.test.assertTrue
-import kotlin.test.assertFalse
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotSame
+import kotlin.test.assertTrue
 
 class NavigationHelperTest : BaseTest() {
     @Test
@@ -166,7 +168,7 @@ class NavigationHelperTest : BaseTest() {
     fun stepDistanceRemaining_returnsZeroWhenPositionsEqualEachOther() {
         val route = buildMultiLegRoute()
         val location = buildDefaultLocationUpdate(-77.062996, 38.798405)
-        val coordinates = PolylineUtils.decode(
+        val coordinates = PolylineEncoding.decode(
             route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
@@ -180,7 +182,7 @@ class NavigationHelperTest : BaseTest() {
     fun stepDistanceRemaining_returnsFullLengthForLargeDistance() {
         val route = buildMultiLegRoute()
         val location = buildDefaultLocationUpdate(0.0, 0.0)
-        val coordinates = PolylineUtils.decode(
+        val coordinates = PolylineEncoding.decode(
             route.legs[0].steps[1].geometry, Constants.PRECISION_6
         )
 
@@ -193,7 +195,7 @@ class NavigationHelperTest : BaseTest() {
     @Throws(Exception::class)
     fun nextManeuverPosition_correctlyReturnsNextManeuverPosition() {
         val route = buildMultiLegRoute()
-        val coordinates = PolylineUtils.decode(
+        val coordinates = PolylineEncoding.decode(
             route.legs[0].steps[0].geometry, Constants.PRECISION_6
         )
 
@@ -210,7 +212,7 @@ class NavigationHelperTest : BaseTest() {
     fun nextManeuverPosition_correctlyReturnsNextManeuverPositionInNextLeg() {
         val route = buildMultiLegRoute()
         val stepIndex = route.legs[0].steps.size - 1
-        val coordinates = PolylineUtils.decode(
+        val coordinates = PolylineEncoding.decode(
             route.legs[0].steps[stepIndex].geometry, Constants.PRECISION_6
         )
 
@@ -219,7 +221,7 @@ class NavigationHelperTest : BaseTest() {
             route.legs[0].steps, coordinates
         )
 
-        assertTrue(nextManeuver == route.legs[1].steps[0].maneuver.location)
+        assertEquals(route.legs[1].steps[0].maneuver.location, nextManeuver)
     }
 
     @Test
@@ -253,7 +255,7 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_samePointsForDistanceCalculationsEqualZero() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints = PolylineUtils.decode(
+        val currentStepPoints = PolylineEncoding.decode(
             currentStep.geometry, Constants.PRECISION_6
         )
         val currentStepIntersections = currentStep.intersections
@@ -270,7 +272,7 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_intersectionListSizeEqualsDistanceListSize() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints = PolylineUtils.decode(
+        val currentStepPoints = PolylineEncoding.decode(
             currentStep.geometry, Constants.PRECISION_6
         )
         val currentStepIntersections = currentStep.intersections
@@ -287,7 +289,7 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_emptyStepPointsReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints: List<Point> = ArrayList()
+        val currentStepPoints: List<Position> = ArrayList()
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
@@ -302,8 +304,8 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_oneStepPointReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints: MutableList<Point> = ArrayList()
-        currentStepPoints.add(Point(1.0, 1.0))
+        val currentStepPoints: MutableList<Position> = ArrayList()
+        currentStepPoints.add(Position(1.0, 1.0))
         val currentStepIntersections = currentStep.intersections
 
         val intersectionDistances = createDistancesToIntersections(
@@ -318,7 +320,7 @@ class NavigationHelperTest : BaseTest() {
     fun createIntersectionDistanceList_emptyStepIntersectionsReturnsEmptyList() {
         val routeProgress = buildMultiLegRouteProgress()
         val currentStep: LegStep = routeProgress.currentLegProgress.currentStep
-        val currentStepPoints = PolylineUtils.decode(
+        val currentStepPoints = PolylineEncoding.decode(
             currentStep.geometry, Constants.PRECISION_6
         )
         val currentStepIntersections: List<StepIntersection> = ArrayList()

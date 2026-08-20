@@ -1,8 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
 import co.touchlab.kermit.Logger
-import org.maplibre.geojson.model.LineString
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.models.DirectionsRoute
@@ -16,11 +14,16 @@ import org.maplibre.navigation.core.routeprogress.CurrentLegAnnotation
 import org.maplibre.navigation.core.routeprogress.RouteProgress
 import org.maplibre.navigation.core.utils.Constants
 import org.maplibre.navigation.core.utils.MathUtils
-import org.maplibre.geojson.turf.TurfMeasurement
-import org.maplibre.geojson.turf.TurfMisc
-import org.maplibre.geojson.turf.TurfUnit
-import org.maplibre.geojson.utils.PolylineUtils
-import org.maplibre.navigation.core.models.StepManeuver
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.polyline.PolylineEncoding
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.turf.measurement.length
+import org.maplibre.spatialk.turf.misc.nearestPointTo
+import org.maplibre.spatialk.turf.misc.slice
+import org.maplibre.spatialk.units.extensions.inKilometers
+import org.maplibre.spatialk.units.extensions.inMeters
 import kotlin.jvm.JvmStatic
 
 /**
@@ -60,7 +63,7 @@ object NavigationHelper {
         legIndex: Int,
         stepIndex: Int,
         directionsRoute: DirectionsRoute,
-        stepPoints: List<Point>
+        stepPoints: List<Position>
     ): Double {
         // If the linestring coordinate size is less than 2,the distance remaining is zero.
         if (stepPoints.size < 2) {
@@ -69,14 +72,13 @@ object NavigationHelper {
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
-        val snappedPositionFeature = TurfMisc.nearestPointOnLine(location.point, stepPoints, TurfUnit.KILOMETERS)
-        val snappedPosition = snappedPositionFeature.geometry as Point
+        val snappedPosition = LineString(stepPoints).nearestPointTo(location.position).geometry
 
         // Check distance to route line, if it's too high, it makes no sense to snap and we assume the step distance is the whole distance of the step
-        val distance = TurfMeasurement.distance(location.point, snappedPosition, TurfUnit.KILOMETERS)
-        if (distance > 1) {
-            Logger.d { "Distance to step is larger than 1km, so we won't advance the step, distance: $distance km" }
-            return TurfMeasurement.length(stepPoints, TurfUnit.METERS)
+        val distanceKilometers = distance(location.point, snappedPosition).inKilometers
+        if (distanceKilometers > 1) {
+            Logger.d { "Distance to step is larger than 1km, so we won't advance the step, distance: $distanceKilometers km" }
+            return LineString(stepPoints).length().inMeters
         }
 
         val steps = directionsRoute.legs[legIndex].steps
@@ -96,12 +98,9 @@ object NavigationHelper {
             return 0.0
         }
 
-        val slicedLine = TurfMisc.lineSlice(
-            snappedPosition,
-            nextManeuverPosition,
-            LineString(stepPoints)
-        )
-        return TurfMeasurement.length(slicedLine, TurfUnit.METERS)
+        val slicedLine = LineString(stepPoints)
+            .slice(snappedPosition.coordinates, nextManeuverPosition)
+        return slicedLine.length().inMeters
     }
 
     /**
@@ -174,7 +173,8 @@ object NavigationHelper {
             val expectedTurnAngle =
                 MathUtils.differenceBetweenAngles(initialBearingNormalized, finalBearingNormalized)
 
-            val userBearingNormalized = MathUtils.wrap(userLocation.bearing?.toDouble() ?: 0.0, 0.0, 360.0)
+            val userBearingNormalized =
+                MathUtils.wrap(userLocation.bearing?.toDouble() ?: 0.0, 0.0, 360.0)
             val userAngleFromFinalBearing =
                 MathUtils.differenceBetweenAngles(finalBearingNormalized, userBearingNormalized)
 
@@ -237,7 +237,7 @@ object NavigationHelper {
      * return a list of [Point] representing the current step.
      *
      *
-     * This method is only used on a per-step basis as [PolylineUtils.decode]
+     * This method is only used on a per-step basis as [PolylineEncoding.decode]
      * can be a heavy operation based on the length of the step.
      *
      *
@@ -250,15 +250,18 @@ object NavigationHelper {
      */
     @JvmStatic
     fun decodeStepPoints(
-        directionsRoute: DirectionsRoute, currentPoints: List<Point>,
+        directionsRoute: DirectionsRoute, currentPoints: List<Position>,
         legIndex: Int, stepIndex: Int
-    ): List<Point> {
+    ): List<Position> {
         return directionsRoute.legs
             .getOrNull(legIndex)
             ?.steps
             ?.getOrNull(stepIndex)
             ?.let { step ->
-                PolylineUtils.decode(step.geometry, Constants.PRECISION_6)
+                PolylineEncoding.decode(
+                    encoded = step.geometry,
+                    precision = Constants.PRECISION_6
+                )
             }
             ?: currentPoints
     }
@@ -304,7 +307,7 @@ object NavigationHelper {
      */
     @JvmStatic
     fun createDistancesToIntersections(
-        stepPoints: List<Point>,
+        stepPoints: List<Position>,
         intersections: List<StepIntersection>
     ): Map<StepIntersection, Double> {
         // Require at minimum two points
@@ -320,9 +323,8 @@ object NavigationHelper {
                 distancesToIntersections[intersection] = ZERO_METERS
             } else {
                 val beginningLineString =
-                    TurfMisc.lineSlice(stepPoints.first(), intersectionPoint, stepLineString)
-                val distanceToIntersectionInMeters =
-                    TurfMeasurement.length(beginningLineString, TurfUnit.METERS)
+                    stepLineString.slice(stepPoints.first(), intersectionPoint)
+                val distanceToIntersectionInMeters = beginningLineString.length().inMeters
                 distancesToIntersections[intersection] = distanceToIntersectionInMeters
             }
         }
@@ -495,7 +497,10 @@ object NavigationHelper {
 
     @Suppress("unused")
     @JvmStatic
-    fun shouldCheckFasterRoute(navigationLocationUpdate: NavigationLocationUpdate, routeProgress: RouteProgress): Boolean {
+    fun shouldCheckFasterRoute(
+        navigationLocationUpdate: NavigationLocationUpdate,
+        routeProgress: RouteProgress
+    ): Boolean {
         val fasterRouteEngine = navigationLocationUpdate.mapLibreNavigation.fasterRouteEngine
         return fasterRouteEngine.shouldCheckFasterRoute(
             navigationLocationUpdate.location,
@@ -508,7 +513,11 @@ object NavigationHelper {
      * geometry and uses the last coordinate in the position list.
      */
     @JvmStatic
-    fun nextManeuverPosition(stepIndex: Int, steps: List<LegStep>, coords: List<Point?>): Point? {
+    fun nextManeuverPosition(
+        stepIndex: Int,
+        steps: List<LegStep>,
+        coords: List<Position?>
+    ): Position? {
         // If there is an upcoming step, use it's maneuver as the position.
         if (steps.size > (stepIndex + 1)) {
             return steps[stepIndex + 1].maneuver.location

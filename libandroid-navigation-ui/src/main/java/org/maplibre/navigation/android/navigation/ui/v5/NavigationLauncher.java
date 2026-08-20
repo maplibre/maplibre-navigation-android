@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute;
 import org.maplibre.navigation.core.models.DirectionsRoute;
 import org.maplibre.navigation.core.navigation.NavigationConstants;
@@ -53,7 +51,7 @@ public class NavigationLauncher {
    * Used to extract the route used to launch the drop-in UI.
    * <p>
    * Extracts the route {@link String} from {@link SharedPreferences} and converts
-   * it back to a {@link DirectionsRoute} object with {@link Gson}.
+   * it back to a {@link DirectionsRoute} object.
    *
    * @param context to retrieve {@link SharedPreferences}
    * @return {@link DirectionsRoute} stored when launching

@@ -1,12 +1,14 @@
 package org.maplibre.navigation.core.utils
 
-import org.maplibre.geojson.model.Point
 import org.maplibre.navigation.core.BaseTest
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import java.io.IOException
-import java.util.MissingFormatArgumentException
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ValidationUtilsTest : BaseTest() {
 
@@ -44,10 +46,20 @@ class ValidationUtilsTest : BaseTest() {
         ValidationUtils.validDirectionsRoute(routeWithFalseBannerInstructions, true)
     }
 
+    @Test
+    fun validDirectionsRoute_isInvalidWithoutDistance() {
+        val route = buildTestDirectionsRoute("directions_two_leg_route_without_distances.json");
+        val exception = assertFailsWith<IllegalArgumentException> {
+            ValidationUtils.validDirectionsRoute(route, false)
+        }
+
+        assertEquals("Leg 0 has maxspeed annotation but missing distance annotation", exception.message)
+    }
+
     @Throws(IOException::class)
     private fun buildRouteWithNullInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",
@@ -85,7 +97,7 @@ class ValidationUtilsTest : BaseTest() {
     @Throws(IOException::class)
     private fun buildRouteWithFalseVoiceInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",
@@ -123,7 +135,7 @@ class ValidationUtilsTest : BaseTest() {
     @Throws(IOException::class)
     private fun buildRouteWithFalseBannerInstructions(): DirectionsRoute {
         val route = buildTestDirectionsRoute()
-        val coordinates: List<Point> = ArrayList()
+        val coordinates: List<Position> = ArrayList()
         val routeOptionsWithoutVoiceInstructions = RouteOptions(
             baseUrl = "api://",
             user = "user",

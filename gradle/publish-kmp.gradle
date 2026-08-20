@@ -9,8 +9,8 @@ group = project.ext.navigationArtifactGroupId
 version = project.ext.versionName
 
 tasks.register('dokkaHtmlJar', Jar.class) {
-    dependsOn(dokkaHtml)
-    from(dokkaHtml)
+    dependsOn(dokkaGeneratePublicationHtml)
+    from(dokkaGeneratePublicationHtml)
     archiveClassifier.set("javadoc")
 }
 

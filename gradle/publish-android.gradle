@@ -40,7 +40,7 @@ afterEvaluate {
                 groupId project.ext.navigationArtifactGroupId
                 version project.ext.versionName
 
-                artifactId "${artifactId.replace("libandroid-", "")}-android"
+                artifactId "${artifactId.replace("libandroid-", "").replace("maplibre-", "")}-android"
 
                 pom {
                     name = project.ext.navigationArtifactTitle

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 
 plugins {
@@ -34,10 +35,26 @@ kotlin {
         }
     }
 
+    js {
+        browser()
+        nodejs()
+        binaries.library()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        nodejs()
+        binaries.library()
+    }
+
+    jvm()
+
     sourceSets {
         commonMain.dependencies {
-            api(libs.maplibre.geojson)
-            api(libs.maplibre.geojson.turf)
+            api(libs.spatialk.geojson)
+            api(libs.spatialk.turf)
+            api(libs.spatialk.polyline)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines)
@@ -56,10 +73,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.maplibre)
-
-            // Location by Play Services
-            // Will only used, when added by the client app
-            compileOnly(libs.play.services.location)
         }
     }
 
@@ -75,8 +88,9 @@ kotlin {
             isStatic = false
 
             transitiveExport = false
-            export(libs.maplibre.geojson)
-            export(libs.maplibre.geojson.turf)
+            export(libs.spatialk.geojson)
+            export(libs.spatialk.turf)
+            export(libs.spatialk.polyline)
         }
     }
 }
@@ -86,7 +100,7 @@ android {
 
     defaultConfig {
         compileSdk = 35
-        minSdk = 21
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -122,11 +136,3 @@ android {
     }
 }
 
-// Exclude old version of GeoJSON libs
-// At the moment a newer version - that supports Kotlin Multiplatform - is required to run navigation
-configurations {
-    configureEach {
-        exclude(group = "org.maplibre.gl", module = "android-sdk-geojson")
-        exclude(group = "org.maplibre.gl", module = "android-sdk-turf")
-    }
-}

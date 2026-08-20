@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import org.maplibre.geojson.Point
+import kotlinx.serialization.json.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -20,17 +23,14 @@ import org.maplibre.android.maps.Style
 import org.maplibre.navigation.android.example.databinding.ActivityNavigationUiBinding
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncher
 import org.maplibre.navigation.android.navigation.ui.v5.NavigationLauncherOptions
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.RouteOptions
-import org.maplibre.navigation.core.navigation.*
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.International.Meters
+import org.maplibre.spatialk.units.extensions.inMeters
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
@@ -45,7 +45,7 @@ class ValhallaNavigationActivity :
     private var language = Locale.getDefault().language
     private var route: DirectionsRoute? = null
     private var navigationMapRoute: NavigationMapRoute? = null
-    private var destination: Point? = null
+    private var destination: Position? = null
     private var locationComponent: LocationComponent? = null
 
     private lateinit var binding: ActivityNavigationUiBinding
@@ -75,7 +75,7 @@ class ValhallaNavigationActivity :
                     .shouldSimulateRoute(simulateRoute)
                     .initialMapCameraPosition(
                         CameraPosition.Builder()
-                            .target(LatLng(userLocation.latitude, userLocation.longitude)).build()
+                            .target(LatLng(userLocation.latitude, userLocation.longitude, userLocation.altitude)).build()
                     )
                     .lightThemeResId(R.style.TestNavigationViewLight)
                     .darkThemeResId(R.style.TestNavigationViewDark)
@@ -142,7 +142,7 @@ class ValhallaNavigationActivity :
     }
 
     override fun onMapClick(point: LatLng): Boolean {
-        destination = Point.fromLngLat(point.longitude, point.latitude)
+        destination = Position(longitude = point.longitude, latitude = point.latitude, altitude = point.altitude)
 
         mapLibreMap.addMarker(MarkerOptions().position(point))
         binding.clearPoints.visibility = View.VISIBLE
@@ -164,8 +164,8 @@ class ValhallaNavigationActivity :
             return
         }
 
-        val origin = Point.fromLngLat(userLocation.longitude, userLocation.latitude)
-        if (TurfMeasurement.distance(origin, destination, TurfConstants.UNIT_METERS) < 50) {
+        val origin = Position(longitude = userLocation.longitude, latitude = userLocation.latitude, userLocation.altitude)
+        if (distance(origin, destination).inMeters < 50) {
             Timber.d("calculateRoute: distance < 50 m")
             binding.startRouteButton.visibility = View.GONE
             return
@@ -180,35 +180,33 @@ class ValhallaNavigationActivity :
         // That would allow us to skip adding fake attributes further down as well.
         // But this is the first step to show how the newly added banner_instructions
         // and voice_instructions of Valhalla can be used to generate directions directly:
-        val requestBody = mapOf(
-            "format" to "osrm",
-            "costing" to "auto",
-            "banner_instructions" to true,
-            "voice_instructions" to true,
-            "language" to language,
-            "directions_options" to mapOf(
-                "units" to "kilometers"
-            ),
-            "costing_options" to mapOf(
-                "auto" to mapOf(
-                    "top_speed" to 130
-                )
-            ),
-            "locations" to listOf(
-                mapOf(
-                    "lon" to origin.longitude(),
-                    "lat" to origin.latitude(),
-                    "type" to "break"
-                ),
-                mapOf(
-                    "lon" to destination.longitude(),
-                    "lat" to destination.latitude(),
-                    "type" to "break"
-                )
-            )
-        )
-
-        val requestBodyJson = Gson().toJson(requestBody)
+        val requestBodyJson = buildJsonObject {
+            put("format", "osrm")
+            put("costing", "auto")
+            put("banner_instructions", true)
+            put("voice_instructions", true)
+            put("language", language)
+            putJsonObject("directions_options") {
+                put("units", "kilometers")
+            }
+            putJsonObject("costing_options") {
+                putJsonObject("auto") {
+                    put("top_speed", 130)
+                }
+            }
+            putJsonArray("locations") {
+                addJsonObject {
+                    put("lon", origin.longitude)
+                    put("lat", origin.latitude)
+                    put("type", "break")
+                }
+                addJsonObject {
+                    put("lon", destination.longitude)
+                    put("lat", destination.latitude)
+                    put("type", "break")
+                }
+            }
+        }.toString()
         val client = OkHttpClient()
 
         // Create request object. Requires valhalla_url to be set in developer-config.xml
