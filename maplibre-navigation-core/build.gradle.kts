@@ -70,10 +70,6 @@ kotlin {
             // For Android specific tests
             implementation(libs.robolectric)
         }
-
-        androidMain.dependencies {
-            implementation(libs.maplibre)
-        }
     }
 
     cocoapods {

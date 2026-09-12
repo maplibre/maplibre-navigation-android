@@ -1,77 +1,111 @@
 package org.maplibre.navigation.core.location.engine
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.LocationListener
+import android.location.LocationManager
+import android.location.LocationRequest
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import org.maplibre.android.location.engine.LocationEngineCallback
-import org.maplibre.android.location.engine.LocationEngineRequest as MapLibreLocationRequest
-import org.maplibre.android.location.engine.LocationEngineResult
-import org.maplibre.android.location.engine.MapLibreFusedLocationEngineImpl
 import org.maplibre.navigation.core.location.Location
 import org.maplibre.navigation.core.location.toLocation
-import java.lang.Exception
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 /**
- * Location engine, that using the default MapLibreLocation engine.
+ * Location engine backed directly by the platform [LocationManager].
  *
- * @param context used to initialize the underlying [MapLibreFusedLocationEngineImpl]
- * @param looper looper that is ued by the [MapLibreFusedLocationEngineImpl] to listen on for location updates
+ * Exactly one provider is subscribed per request, and its fixes are passed through unfiltered:
+ *
+ * - On Android 12+ (API 31) the system `fused` provider is used. It fuses GPS, Wi-Fi and cell
+ *   in the platform itself and does not require Google Play Services. Updates are requested
+ *   with an explicit [LocationRequest] quality, because the legacy
+ *   `requestLocationUpdates(provider, minTime, minDistance, ...)` overload implies a low-power
+ *   mode in which the fused provider never engages GPS and only delivers coarse,
+ *   network-quality fixes (roughly one every 20 seconds).
+ * - Below API 31 there is no GMS-free fused provider, so the raw GPS provider is used,
+ *   with the network provider as fallback on devices without GPS hardware.
+ *
+ * Subscribing a single provider makes client-side arbitration between conflicting GPS and
+ * network fixes unnecessary, so no filtering heuristic is applied.
+ *
+ * @param context used to obtain the [LocationManager]
+ * @param looper looper that location updates are delivered on; the main looper is used when null
  */
 open class MapLibreLocationEngine(
     context: Context,
-    private val looper: Looper?
+    private val looper: Looper?,
 ) : LocationEngine {
 
-    /**
-     * Underlying [MapLibreFusedLocationEngineImpl] that is used to fetch location and listen to location updates.
-     */
-    private val maplibreLocationEngine = MapLibreFusedLocationEngineImpl(context)
+    private val locationManager =
+        context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+    @SuppressLint("MissingPermission")
     override fun listenToLocation(request: LocationEngine.Request): Flow<Location> = callbackFlow {
-        val listener = LocationListener { location -> trySend(location.toLocation()) }
-
-        maplibreLocationEngine.requestLocationUpdates(
-            toMapLibreLocationRequest(request),
-            listener,
-            looper,
-        )
-
-        awaitClose { maplibreLocationEngine.removeLocationUpdates(listener) }
-    }
-
-    override suspend fun getLastLocation(): Location? = suspendCoroutine { continuation ->
-        maplibreLocationEngine.getLastLocation(object :
-            LocationEngineCallback<LocationEngineResult> {
-            override fun onSuccess(locationEngineResult: LocationEngineResult) {
-                continuation.resume(locationEngineResult.lastLocation?.toLocation())
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: android.location.Location) {
+                trySend(location.toLocation())
             }
 
-            override fun onFailure(exception: Exception) {
-                continuation.resumeWithException(exception)
-            }
-        })
+            // Explicit no-op overrides: the default implementations require newer API levels than minSdk
+            @Deprecated("Deprecated in LocationListener")
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
+        }
+
+        val provider = selectProvider(request.accuracy)
+        val callbackLooper = looper ?: Looper.getMainLooper()
+        Logger.d { "Requesting location updates from provider '$provider'" }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val platformRequest = LocationRequest.Builder(request.intervalMilliseconds)
+                .setQuality(
+                    when (request.accuracy) {
+                        LocationEngine.Request.Accuracy.HIGH -> LocationRequest.QUALITY_HIGH_ACCURACY
+                        LocationEngine.Request.Accuracy.MEDIUM -> LocationRequest.QUALITY_BALANCED_POWER_ACCURACY
+                        else -> LocationRequest.QUALITY_LOW_POWER
+                    }
+                )
+                .setMinUpdateDistanceMeters(request.minUpdateDistanceMeters)
+                .build()
+            val handler = Handler(callbackLooper)
+            locationManager.requestLocationUpdates(provider, platformRequest, { handler.post(it) }, listener)
+        } else {
+            // Pre-31 the provider is GPS or network, where the implied request quality is irrelevant
+            locationManager.requestLocationUpdates(
+                provider,
+                request.intervalMilliseconds,
+                request.minUpdateDistanceMeters,
+                listener,
+                callbackLooper,
+            )
+        }
+
+        awaitClose { locationManager.removeUpdates(listener) }
     }
 
-    private fun toMapLibreLocationRequest(request: LocationEngine.Request): MapLibreLocationRequest {
-        return MapLibreLocationRequest.Builder(request.intervalMilliseconds)
-            .setFastestInterval(request.intervalMilliseconds)
-            .setDisplacement(request.minUpdateDistanceMeters)
-            .setPriority(toMapLibrePriority(request.accuracy))
-            .build()
-    }
+    @SuppressLint("MissingPermission")
+    override suspend fun getLastLocation(): Location? =
+        locationManager.allProviders
+            .mapNotNull { provider -> locationManager.getLastKnownLocation(provider) }
+            .maxByOrNull { location -> location.time }
+            ?.toLocation()
 
-    private fun toMapLibrePriority(accuracy: LocationEngine.Request.Accuracy): Int {
-        return when (accuracy) {
-            LocationEngine.Request.Accuracy.LOWEST -> MapLibreLocationRequest.PRIORITY_NO_POWER
-            LocationEngine.Request.Accuracy.LOW -> MapLibreLocationRequest.PRIORITY_LOW_POWER
-            LocationEngine.Request.Accuracy.MEDIUM -> MapLibreLocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-            LocationEngine.Request.Accuracy.HIGH -> MapLibreLocationRequest.PRIORITY_HIGH_ACCURACY
+    private fun selectProvider(accuracy: LocationEngine.Request.Accuracy): String {
+        val providers = locationManager.allProviders
+        return when {
+            // A LOWEST request must not engage any sensor, like PRIORITY_NO_POWER did before
+            accuracy == LocationEngine.Request.Accuracy.LOWEST -> LocationManager.PASSIVE_PROVIDER
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                providers.contains(LocationManager.FUSED_PROVIDER) -> LocationManager.FUSED_PROVIDER
+            providers.contains(LocationManager.GPS_PROVIDER) -> LocationManager.GPS_PROVIDER
+            providers.contains(LocationManager.NETWORK_PROVIDER) -> LocationManager.NETWORK_PROVIDER
+            else -> LocationManager.PASSIVE_PROVIDER
         }
     }
 }
