@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "org.maplibre.navigation.sample.android"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "org.maplibre.navigation.sample.android"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
 
