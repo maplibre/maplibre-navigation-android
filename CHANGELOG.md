@@ -5,6 +5,8 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Allow `setIndex` on stopped navigation [#255](https://github.com/maplibre/maplibre-navigation-android/issues/255)
+
 ## v5.0.0 - Aug 26, 2026
 
 - Use `LocationEngine.Request` also in iOS implementation
