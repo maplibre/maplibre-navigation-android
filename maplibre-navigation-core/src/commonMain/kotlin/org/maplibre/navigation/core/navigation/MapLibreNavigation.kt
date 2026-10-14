@@ -1,7 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -313,14 +312,14 @@ open class MapLibreNavigation @JvmOverloads constructor(
      *
      * @param legIndex The target leg index (0-based)
      * @param stepIndex The target step index within the leg (0-based)
-     * @throws IllegalStateException if [route] is not available
+     * @throws IllegalArgumentException if [route] is not available
      * @throws IllegalArgumentException if indices are invalid for the current route
      *
      * @since 5.0.0
      */
     fun setIndex(legIndex: Int, stepIndex: Int) {
         val currentRoute = route
-        check(currentRoute != null) { "Cannot set index: no route is currently active" }
+        require(currentRoute != null) { "Cannot set index: no route is currently active" }
 
         require(legIndex >= 0 && legIndex < currentRoute.legs.size) {
             "Invalid leg index: $legIndex. Route has ${currentRoute.legs.size} legs"
