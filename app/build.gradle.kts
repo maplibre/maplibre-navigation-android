@@ -10,25 +10,25 @@ apply {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 android {
     namespace = "org.maplibre.navigation.android.example"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     defaultConfig {
         applicationId = "org.maplibre.navigation.android.example"
-        compileSdk = 35
+        compileSdk = 37
         minSdk = 23
 
         versionCode = 1

@@ -9,19 +9,19 @@ apply {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 android {
     namespace = "org.maplibre.navigation.android.navigation.ui.v5"
 
     defaultConfig {
-        compileSdk = 35
+        compileSdk = 37
         minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
