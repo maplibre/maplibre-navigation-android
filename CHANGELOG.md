@@ -5,6 +5,8 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
+- Rewrite the default Android `MapLibreLocationEngine` on top of the platform `LocationManager`, subscribing a single provider: the system `fused` provider with an explicit request quality on Android 12+, GPS below. The previous implementation (GL Native's `MapLibreFusedLocationEngineImpl`) fed unfiltered, interleaved GPS *and* network fixes into navigation — or, on devices where the deprecated `getBestProvider()` returned `fused`, only coarse low-power fixes about every 20 seconds, because the legacy `requestLocationUpdates` overload never engages GPS on the fused provider. This showed up as a frozen or jumping position during turn-by-turn navigation. As a side effect, `maplibre-navigation-core` no longer depends on `org.maplibre.gl:android-sdk`.
+
 ## v5.0.0 - Aug 26, 2026
 
 - Use `LocationEngine.Request` also in iOS implementation
