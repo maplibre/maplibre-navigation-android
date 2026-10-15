@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 android {
     namespace = "org.maplibre.navigation.sample.android"
     compileSdk = 37
@@ -24,11 +28,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
