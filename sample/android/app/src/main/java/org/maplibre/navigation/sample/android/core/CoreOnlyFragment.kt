@@ -221,7 +221,7 @@ class CoreOnlyFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val directionsResponse = DirectionsResponse.fromJson(response.body!!.string())
+                val directionsResponse = DirectionsResponse.fromJson(response.body.string())
                 continuation.resume(directionsResponse)
             }
         })

@@ -16,12 +16,12 @@ apply {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 
     androidTarget {
         publishLibraryVariants("release")
@@ -99,7 +99,7 @@ android {
     namespace = "org.maplibre.navigation.core"
 
     defaultConfig {
-        compileSdk = 35
+        compileSdk = 37
         minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
