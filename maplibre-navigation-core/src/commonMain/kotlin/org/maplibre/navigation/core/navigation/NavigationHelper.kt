@@ -31,7 +31,6 @@ import kotlin.jvm.JvmStatic
  * calculations need to be performed on it.
  */
 object NavigationHelper {
-    private const val FIRST_INTERSECTION = 0
     private const val ZERO_METERS = 0.0
     private const val TWO_POINTS = 2
 
@@ -359,7 +358,7 @@ object NavigationHelper {
         stepDistanceTraveled: Double
     ): StepIntersection? {
         for (measuredIntersection in measuredIntersections) {
-            if (measuredIntersection.first == null) return intersections[0]
+            if (measuredIntersection.first == null) return intersections.firstOrNull()
             val intersectionDistance = measuredIntersection.second
             val intersectionIndex = measuredIntersections.indexOf(measuredIntersection)
             val nextIntersectionIndex: Int = intersectionIndex + 1
@@ -374,10 +373,10 @@ object NavigationHelper {
             } else if (stepDistanceTraveled > measuredIntersection.second) {
                 return measuredIntersection.first
             } else {
-                return measuredIntersections[FIRST_INTERSECTION].first
+                return measuredIntersections.firstOrNull()?.first
             }
         }
-        return intersections[FIRST_INTERSECTION]
+        return intersections.firstOrNull()
     }
 
     /**
