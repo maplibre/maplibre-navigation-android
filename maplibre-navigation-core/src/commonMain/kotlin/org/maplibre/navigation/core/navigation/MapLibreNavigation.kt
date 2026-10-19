@@ -1,7 +1,6 @@
 package org.maplibre.navigation.core.navigation
 
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.maplibre.navigation.core.location.engine.LocationEngine
@@ -307,19 +306,20 @@ open class MapLibreNavigation @JvmOverloads constructor(
      * Manually advances navigation to the specified leg and step indices.
      * This method is intended for waypoint skipping during active turn-by-turn navigation.
      *
+     * You can call this function also on a stopped navigation state. But keep in mind that
+     * this will trigger [NavigationEngine.triggerManualRouteUpdate] and internally all necessary
+     * engines to consume the event.
+     *
      * @param legIndex The target leg index (0-based)
      * @param stepIndex The target step index within the leg (0-based)
-     * @throws IllegalStateException if navigation is not currently active
+     * @throws IllegalArgumentException if [route] is not available
      * @throws IllegalArgumentException if indices are invalid for the current route
-     * 
+     *
      * @since 5.0.0
      */
     fun setIndex(legIndex: Int, stepIndex: Int) {
         val currentRoute = route
         require(currentRoute != null) { "Cannot set index: no route is currently active" }
-        require(getNavigationEngineInternal().isRunning()) { 
-            "Cannot set index: navigation is not currently running" 
-        }
 
         require(legIndex >= 0 && legIndex < currentRoute.legs.size) {
             "Invalid leg index: $legIndex. Route has ${currentRoute.legs.size} legs"
