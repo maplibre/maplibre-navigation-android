@@ -5,9 +5,11 @@ MapLibre welcomes participation and contributions from everyone.
 
 ## Unreleased
 
-- Allow `setIndex` on stopped navigation [#255](https://github.com/maplibre/maplibre-navigation-android/issues/255)
-- Fix crash by empty intersections in `NavigationHelper.findCurrentIntersection` 
-- Rewrite the default Android `MapLibreLocationEngine` on top of the platform `LocationManager`, subscribing a single provider: the system `fused` provider with an explicit request quality on Android 12+, GPS below. The previous implementation (GL Native's `MapLibreFusedLocationEngineImpl`) fed unfiltered, interleaved GPS *and* network fixes into navigation — or, on devices where the deprecated `getBestProvider()` returned `fused`, only coarse low-power fixes about every 20 seconds, because the legacy `requestLocationUpdates` overload never engages GPS on the fused provider. This showed up as a frozen or jumping position during turn-by-turn navigation. As a side effect, `maplibre-navigation-core` no longer depends on `org.maplibre.gl:android-sdk`.
+## v5.0.1 - Sept 19, 2026
+
+- Allow `setIndex` on stopped navigation [#255](https://github.com/maplibre/maplibre-navigation-android/pull/255)
+- Fix crash by empty intersections in `NavigationHelper.findCurrentIntersection` [#261](https://github.com/maplibre/maplibre-navigation-android/pull/261)
+- Use own implementation of MapLibreLocationEngine to use GPS based fused provider. [#247](https://github.com/maplibre/maplibre-navigation-android/pull/247)
 
 ## v5.0.0 - Aug 26, 2026
 
